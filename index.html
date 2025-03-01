@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser 3 アドベンチャーゲーム</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+        }
+        #game-container {
+            width: 800px;
+            height: 600px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+    </style>
+    <!-- Phaser 3 ライブラリを読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <script>
+        // ゲームのシナリオデータ
+        const gameScenario = {
+            "scenes": {
+                "start": {
+                    "scene_id": "start",
+                    "text": "これはPhaser 3で作られたアドベンチャーゲームのデモです。\n\nあなたは謎の屋敷の前に立っています。扉は少し開いており、中から不思議な光が漏れています。",
+                    "bg_image": "mansion_exterior",
+                    "character": "",
+                    "bgm": "bgm_title",
+                    "se": "",
+                    "choices": [
+                        {
+                            "text": "屋敷に入る",
+                            "next_scene": "entrance_hall"
+                        },
+                        {
+                            "text": "周りを調べる",
+                            "next_scene": "outside_investigation"
+                        }
+                    ]
+                },
+                "entrance_hall": {
+                    "scene_id": "entrance_hall",
+                    "text": "重い扉を開けて中に入ると、広々とした玄関ホールが広がっています。\n\nホールの中央には大きな階段があり、両側には扉があります。突然、あなたの背後で扉が閉まる音がしました。",
+                    "bg_image": "entrance_hall",
+                    "character": "",
+                    "bgm": "bgm_mansion",
+                    "se": "se_door_close",
+                    "choices": [
+                        {
+                            "text": "階段を上る",
+                            "next_scene": "upstairs"
+                        },
+                        {
+                            "text": "左の扉を調べる",
+                            "next_scene": "left_door"
+                        },
+                        {
+                            "text": "右の扉を調べる",
+                            "next_scene": "right_door"
+                        }
+                    ]
+                },
+                "outside_investigation": {
+                    "scene_id": "outside_investigation",
+                    "text": "屋敷の周りを調べることにしました。\n\n庭には奇妙な形の植物が茂っており、裏手には小さな池があります。池の水面には何かが反射して光っているようです。",
+                    "bg_image": "mansion_garden",
+                    "character": "",
+                    "bgm": "bgm_garden",
+                    "se": "se_wind",
+                    "choices": [
+                        {
+                            "text": "植物を調べる",
+                            "next_scene": "strange_plants"
+                        },
+                        {
+                            "text": "池を調べる",
+                            "next_scene": "pond"
+                        },
+                        {
+                            "text": "やはり屋敷に入る",
+                            "next_scene": "entrance_hall"
+                        }
+                    ]
+                },
+                "strange_plants": {
+                    "scene_id": "strange_plants",
+                    "text": "近づいて植物を観察すると、通常の植物とはまったく違う形状をしていることがわかります。\n\n葉は半透明で、風がないにも関わらず微かに揺れています。不思議な香りがします。",
+                    "bg_image": "strange_plants",
+                    "character": "",
+                    "choices": [
+                        {
+                            "text": "香りを嗅ぐ",
+                            "next_scene": "smell_plants"
+                        },
+                        {
+                            "text": "葉に触れる",
+                            "next_scene": "touch_plants"
+                        },
+                        {
+                            "text": "池を調べる",
+                            "next_scene": "pond"
+                        }
+                    ]
+                },
+                "left_door": {
+                    "scene_id": "left_door",
+                    "text": "左側の扉を開けると、そこには広い図書室がありました。\n\n壁一面に本棚が並び、部屋の中央には大きな机があります。机の上には開かれた古い本が置かれています。",
+                    "bg_image": "library",
+                    "character": "",
+                    "choices": [
+                        {
+                            "text": "本棚を調べる",
+                            "next_scene": "bookshelves"
+                        },
+                        {
+                            "text": "机の上の本を読む",
+                            "next_scene": "read_book"
+                        },
+                        {
+                            "text": "玄関ホールに戻る",
+                            "next_scene": "entrance_hall"
+                        }
+                    ]
+                },
+                "right_door": {
+                    "scene_id": "right_door",
+                    "text": "右側の扉を開けると、ほこりっぽい食堂が現れました。\n\n長いテーブルが中央に置かれ、壁には不気味な肖像画がかかっています。テーブルの上には銀の燭台があります。",
+                    "bg_image": "dining_room",
+                    "character": "ghost",
+                    "bgm": "bgm_ghost",
+                    "se": "se_ghost",
+                    "choices": [
+                        {
+                            "text": "肖像画を調べる",
+                            "next_scene": "portrait"
+                        },
+                        {
+                            "text": "燭台を手に取る",
+                            "next_scene": "take_candle"
+                        },
+                        {
+                            "text": "玄関ホールに戻る",
+                            "next_scene": "entrance_hall"
+                        }
+                    ]
+                }
+            }
+        };
+        
+        // Phaser 3の設定
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            parent: 'game-container',
+            backgroundColor: '#000',
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+        
+        // ゲームオブジェクトを作成
+        const game = new Phaser.Game(config);
+        
+        // ゲームの状態管理
+        const gameState = {
+            currentScene: null,
+            flags: {},
+            textSpeed: 50,
+            isTextAnimating: false,
+            isChoicesShown: false,
+            currentChar: 0,
+            textTimer: null,
+            currentBgm: null,
+            textContent: "",
+            currentChoices: []
+        };
+        
+        // プリロード処理
+        function preload() {
+            // オーディオファイルのエラーを無視する設定
+            this.load.on('loaderror', (fileObj) => {
+                console.log('ファイルのロードに失敗しました:', fileObj.key);
+            });
+            
+            // スプラッシュスクリーン（ない場合はダミーを作成）
+            try {
+                this.load.image('splash', 'assets/splash.jpg');
+            } catch (e) {
+                console.log('スプラッシュ画像がないためダミーを生成します');
+            }
+            
+            // 背景画像のロード（ダミー用に色を準備）
+            const bgColors = {
+                'mansion_exterior': 0x333366,
+                'entrance_hall': 0x663333,
+                'mansion_garden': 0x336633,
+                'strange_plants': 0x339933,
+                'library': 0x996633,
+                'dining_room': 0x663366
+            };
+            
+            // 背景画像のロード（ない場合はその場で生成）
+            Object.keys(bgColors).forEach(key => {
+                try {
+                    this.load.image(key, `assets/images/${key}.jpg`);
+                } catch (e) {
+                    // 画像がない場合は動的に生成
+                    console.log(`${key}の画像がないため代替を生成します`);
+                    this.textures.generateFrameNames(key);
+                }
+            });
+            
+            // キャラクター画像のロード
+            try {
+                this.load.image('ghost', 'assets/images/ghost.png');
+            } catch (e) {
+                console.log('キャラクター画像がないためダミーを使用します');
+            }
+            
+            // UI要素のロード（この部分は最低限必要なのでダミーを作成）
+            const uiElements = ['text_window', 'choice_button', 'menu_button', 'menu_bg'];
+            uiElements.forEach(key => {
+                try {
+                    this.load.image(key, `assets/ui/${key}.png`);
+                } catch (e) {
+                    console.log(`${key}の画像がないため代替を生成します`);
+                }
+            });
+            
+            // オーディオファイルは空のダミーを作成
+            const bgmList = ['bgm_title', 'bgm_mansion', 'bgm_garden', 'bgm_ghost'];
+            const seList = ['se_click', 'se_door_close', 'se_wind', 'se_ghost'];
+            
+            // ダミーオーディオを準備（実際には読み込まない）
+            [...bgmList, ...seList].forEach(key => {
+                try {
+                    this.load.audio(key, `assets/audio/${key}.mp3`);
+                } catch (e) {
+                    console.log(`${key}のオーディオがないためダミーを使用します`);
+                }
+            });
+            
+            // ローディング表示
+            this.loadingText = this.add.text(400, 300, 'ロード中...', {
+                fontFamily: 'Arial',
+                fontSize: '24px',
+                color: '#ffffff'
+            }).setOrigin(0.5);
+        }
+        
+        // ゲーム作成処理
+        function create() {
+            this.gameScene = gameScenario.scenes; // シナリオデータを保持
+            this.gameUI = {}; // UI要素を保持するオブジェクト
+            
+            // 欠けている画像のためのダミーテクスチャを生成
+            try {
+                // 欠けている画像のためのダミーテクスチャを生成
+                createDummyTextures.call(this);  // ここでthisを明示的に渡す
+            } catch (e) {
+                console.error('ダミーテクスチャ作成エラー:', e);
+            }
+            
+            // 背景（画像がなければ単色の背景を作成）
+            if (this.textures.exists('splash')) {
+                this.gameUI.background = this.add.image(400, 300, 'splash');
+            } else {
+                this.gameUI.background = this.add.rectangle(400, 300, 800, 600, 0x222222);
+            }
+            
+            // キャラクター
+            if (this.textures.exists('ghost')) {
+                this.gameUI.character = this.add.image(400, 300, 'ghost');
+            } else {
+                // ダミーのキャラクター（半透明の円）
+                this.gameUI.character = this.add.circle(400, 300, 50, 0xffffff, 0.5);
+            }
+            this.gameUI.character.visible = false;
+            
+            // テキストウィンドウ
+            if (this.textures.exists('text_window')) {
+                this.gameUI.textWindow = this.add.image(400, 500, 'text_window');
+            } else {
+                // ダミーのテキストウィンドウ（半透明の黒い長方形）
+                this.gameUI.textWindow = this.add.rectangle(400, 500, 700, 180, 0x000000, 0.7);
+                this.gameUI.textWindow.setStrokeStyle(2, 0xffffff);
+            }
+            
+            // テキスト
+            this.gameUI.textContent = this.add.text(150, 430, '', {
+                fontFamily: 'Arial',
+                fontSize: '18px',
+                color: '#ffffff',
+                wordWrap: { width: 500 }
+            });
+            
+            // 次へインジケーター
+            this.gameUI.nextIndicator = this.add.text(680, 550, '▼', {
+                fontFamily: 'Arial',
+                fontSize: '24px',
+                color: '#ffffff'
+            });
+            this.gameUI.nextIndicator.setInteractive({ useHandCursor: true });
+            this.gameUI.nextIndicator.on('pointerdown', handleNextClick.bind(this));
+            
+            // 選択肢コンテナ
+            this.gameUI.choicesContainer = this.add.container(400, 300);
+            
+            // メニューボタン
+            if (this.textures.exists('menu_button')) {
+                this.gameUI.menuButton = this.add.image(750, 30, 'menu_button');
+            } else {
+                // ダミーのメニューボタン（テキスト付きの長方形）
+                this.gameUI.menuButton = this.add.rectangle(750, 30, 80, 30, 0x333333, 0.8);
+                this.gameUI.menuButton.setStrokeStyle(2, 0xffffff);
+                const menuText = this.add.text(750, 30, 'メニュー', {
+                    fontFamily: 'Arial',
+                    fontSize: '14px',
+                    color: '#ffffff'
+                }).setOrigin(0.5);
+                this.add.existing(menuText);
+            }
+            this.gameUI.menuButton.setInteractive({ useHandCursor: true });
+            this.gameUI.menuButton.on('pointerdown', toggleMenu.bind(this));
+            
+            // メニュー画面
+            this.gameUI.menuScreen = this.add.container(400, 300);
+            this.gameUI.menuScreen.visible = false;
+            
+            // メニュー背景
+            if (this.textures.exists('menu_bg')) {
+                const menuBg = this.add.image(0, 0, 'menu_bg');
+                this.gameUI.menuScreen.add(menuBg);
+            } else {
+                // ダミーのメニュー背景（半透明の長方形）
+                const menuBg = this.add.rectangle(0, 0, 400, 400, 0x000000, 0.9);
+                menuBg.setStrokeStyle(2, 0xffffff);
+                this.gameUI.menuScreen.add(menuBg);
+            }
+            
+            // メニュー項目
+            const saveButton = createMenuButton(this, 0, -80, 'セーブ', () => {
+                saveGame.call(this);
+                toggleMenu.call(this);
+            });
+            
+            const loadButton = createMenuButton(this, 0, -20, 'ロード', () => {
+                loadGame.call(this);
+                toggleMenu.call(this);
+            });
+            
+            const settingsButton = createMenuButton(this, 0, 40, '設定', () => {
+                showSettings.call(this);
+                toggleMenu.call(this);
+            });
+            
+            const closeButton = createMenuButton(this, 0, 100, '閉じる', () => {
+                toggleMenu.call(this);
+            });
+            
+            this.gameUI.menuScreen.add([saveButton, loadButton, settingsButton, closeButton]);
+            
+            // キーボード入力
+            this.input.keyboard.on('keydown-ENTER', handleNextClick.bind(this));
+            this.input.keyboard.on('keydown-SPACE', handleNextClick.bind(this));
+            this.input.keyboard.on('keydown-ESC', toggleMenu.bind(this));
+            
+            // アニメーション
+            this.tweens.add({
+                targets: this.gameUI.nextIndicator,
+                y: 540,
+                duration: 600,
+                yoyo: true,
+                repeat: -1
+            });
+            
+            // ダミーのオーディオマネージャーの設定
+            // ダミーのオーディオマネージャーの設定
+            try {
+                setupDummyAudio.call(this);
+            } catch (e) {
+                console.error('ダミーオーディオ設定エラー:', e);
+                
+                // エラーが発生した場合のフォールバック
+                this.dummySound = {
+                    play: () => {},
+                    stop: () => {},
+                    setVolume: () => {},
+                    setLoop: () => {},
+                    isPlaying: false
+                };
+            }
+            
+            // 最初のシーンを表示
+            showScene.call(this, 'start');
+        }
+        
+        // ダミーテクスチャの作成
+        // ダミーテクスチャの作成
+        function createDummyTextures() {
+            // thisが定義されていることを確認
+            if (!this || !this.textures) {
+                console.error('テクスチャシステムが利用できません');
+                return;
+            }
+
+            // 背景画像用のダミーテクスチャ
+            const bgColors = {
+                'mansion_exterior': 0x333366,
+                'entrance_hall': 0x663333,
+                'mansion_garden': 0x336633,
+                'strange_plants': 0x339933,
+                'library': 0x996633,
+                'dining_room': 0x663366
+            };
+            
+            // 各背景テクスチャが存在しなければダミーを作成
+            Object.entries(bgColors).forEach(([key, color]) => {
+                try {
+                    if (!this.textures || !this.textures.exists(key)) {
+                        // テクスチャシステムが利用可能か確認
+                        if (this.add && this.add.renderTexture) {
+                            const rt = this.add.renderTexture(0, 0, 800, 600);
+                            rt.fill(color, 1);
+                            if (this.textures && this.textures.addRenderTexture) {
+                                this.textures.addRenderTexture(key, rt);
+                                console.log(`ダミーの背景を作成: ${key}`);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(`テクスチャ作成エラー (${key}):`, e);
+                }
+            });
+            
+            // UI要素用のダミーテクスチャ
+            try {
+                if (this.textures && !this.textures.exists('choice_button') && this.add && this.add.renderTexture) {
+                    const rt = this.add.renderTexture(0, 0, 300, 50);
+                    rt.fill(0x333333, 0.8);
+                    this.textures.addRenderTexture('choice_button', rt);
+                }
+            } catch (e) {
+                console.error('choice_buttonテクスチャ作成エラー:', e);
+            }
+            
+            try {
+                if (this.textures && !this.textures.exists('menu_bg') && this.add && this.add.renderTexture) {
+                    const rt = this.add.renderTexture(0, 0, 400, 400);
+                    rt.fill(0x000000, 0.9);
+                    this.textures.addRenderTexture('menu_bg', rt);
+                }
+            } catch (e) {
+                console.error('menu_bgテクスチャ作成エラー:', e);
+            }
+        }
+
+        // ダミーのオーディオマネージャーのセットアップ
+        // ダミーのオーディオマネージャーのセットアップ
+        function setupDummyAudio() {
+            // thisやsoundが存在するかチェック
+            if (!this || !this.sound) {
+                console.error('サウンドシステムが利用できません');
+                return;
+            }
+
+            // 実際のサウンドオブジェクトが見つからない場合用のダミー関数
+            this.dummySound = {
+                play: () => {},
+                stop: () => {},
+                setVolume: () => {},
+                setLoop: () => {},
+                isPlaying: false
+            };
+            
+            // 元のサウンド関数を保持
+            try {
+                // オリジナルのサウンド関数をバックアップ（まだバックアップされていなければ）
+                if (this.sound && !this._originalSoundPlay && this.sound.play) {
+                    this._originalSoundPlay = this.sound.play;
+                    
+                    // プレイ関数をオーバーライド
+                    this.sound.play = (key, config) => {
+                        try {
+                            return this._originalSoundPlay.call(this.sound, key, config);
+                        } catch (e) {
+                            console.log(`サウンド ${key} は見つからないためダミー再生します`);
+                            return this.dummySound;
+                        }
+                    };
+                }
+                
+                if (this.sound && !this._originalSoundGet && this.sound.get) {
+                    this._originalSoundGet = this.sound.get;
+                    
+                    // get関数をオーバーライド
+                    this.sound.get = (key) => {
+                        try {
+                            return this._originalSoundGet.call(this.sound, key);
+                        } catch (e) {
+                            console.log(`サウンド ${key} は見つからないためダミーを返します`);
+                            return this.dummySound;
+                        }
+                    };
+                }
+            } catch (e) {
+                console.error('サウンドシステムのオーバーライド中にエラーが発生しました:', e);
+            }
+        }
+
+        // 更新処理
+        function update() {
+            // 必要に応じてゲーム状態の更新
+        }
+        
+        // メニューボタンを作成する関数
+        function createMenuButton(scene, x, y, text, callback) {
+            let button;
+            if (scene.textures.exists('choice_button')) {
+                button = scene.add.image(x, y, 'choice_button');
+                button.setScale(1.5, 1);
+            } else {
+                // ダミーのボタン（長方形）
+                button = scene.add.rectangle(x, y, 200, 50, 0x333333, 0.8);
+                button.setStrokeStyle(2, 0xffffff);
+            }
+            
+            const buttonText = scene.add.text(x, y, text, {
+                fontFamily: 'Arial',
+                fontSize: '18px',
+                color: '#ffffff'
+            }).setOrigin(0.5);
+            
+            button.setInteractive({ useHandCursor: true });
+            button.on('pointerdown', callback);
+            
+            const container = scene.add.container(0, 0, [button, buttonText]);
+            return container;
+        }
+        
+        // メニュー表示切替
+        function toggleMenu() {
+            this.gameUI.menuScreen.visible = !this.gameUI.menuScreen.visible;
+            playSe.call(this, 'se_click');
+        }
+        
+        // 設定画面表示
+        function showSettings() {
+            // 実際のゲームでは設定画面の実装をここに追加
+            alert('設定画面は実装中です');
+        }
+        
+        // シーンを表示する関数
+        function showScene(sceneId) {
+            // 現在のシーンを取得
+            const scene = this.gameScene[sceneId];
+            if (!scene) {
+                console.error(`シーンが見つかりません: ${sceneId}`);
+                return;
+            }
+            
+            // 現在のシーンを更新
+            gameState.currentScene = scene;
+            
+            // 選択肢をクリア
+            clearChoices.call(this);
+            
+            // BGMの変更
+            if (scene.bgm && scene.bgm !== gameState.currentBgm) {
+                changeBgm.call(this, scene.bgm);
+            }
+            
+            // 効果音の再生
+            if (scene.se) {
+                playSe.call(this, scene.se);
+            }
+            
+            // 背景の設定
+            if (scene.bg_image) {
+                // backgroundのタイプをチェック
+                if (this.gameUI.background.type === 'Image' && this.textures.exists(scene.bg_image)) {
+                    // Imageタイプの場合はテクスチャを設定
+                    this.tweens.add({
+                        targets: this.gameUI.background,
+                        alpha: 0,
+                        duration: 500,
+                        onComplete: () => {
+                            this.gameUI.background.setTexture(scene.bg_image);
+                            this.tweens.add({
+                                targets: this.gameUI.background,
+                                alpha: 1,
+                                duration: 500
+                            });
+                        }
+                    });
+                } else {
+                    // それ以外の場合（Rectangleなど）は色を変更
+                    const bgColors = {
+                        'mansion_exterior': 0x333366,
+                        'entrance_hall': 0x663333,
+                        'mansion_garden': 0x336633,
+                        'strange_plants': 0x339933,
+                        'library': 0x996633,
+                        'dining_room': 0x663366
+                    };
+                    
+                    const bgColor = bgColors[scene.bg_image] || 0x222222;
+                    
+                    this.tweens.add({
+                        targets: this.gameUI.background,
+                        alpha: 0,
+                        duration: 500,
+                        onComplete: () => {
+                            if (this.gameUI.background.setFillStyle) {
+                                this.gameUI.background.setFillStyle(bgColor, 1);
+                            } else if (this.gameUI.background.fillColor !== undefined) {
+                                this.gameUI.background.fillColor = bgColor;
+                            }
+                            this.tweens.add({
+                                targets: this.gameUI.background,
+                                alpha: 1,
+                                duration: 500
+                            });
+                        }
+                    });
+                }
+            }
+            
+            // キャラクターの設定
+            if (scene.character) {
+                if (this.gameUI.character.type === 'Image' && this.textures.exists(scene.character)) {
+                    // 画像タイプの場合はテクスチャを設定
+                    this.gameUI.character.setTexture(scene.character);
+                } 
+                // キャラクターを表示
+                this.gameUI.character.visible = true;
+                this.gameUI.character.alpha = 0;
+                this.tweens.add({
+                    targets: this.gameUI.character,
+                    alpha: 1,
+                    duration: 500
+                });
+            } else {
+                this.gameUI.character.visible = false;
+            }
+            
+            // テキストのアニメーション表示
+            animateText.call(this, scene.text);
+            
+            // フラグが設定されていればセット
+            if (scene.set_flag) {
+                for (const [key, value] of Object.entries(scene.set_flag)) {
+                    gameState.flags[key] = value;
+                }
+            }
+        }
+
+
+        // テキストのアニメーション表示
+        function animateText(text) {
+            // テキストアニメーション中フラグをON
+            gameState.isTextAnimating = true;
+            gameState.isChoicesShown = false;
+            gameState.currentChar = 0;
+            gameState.textContent = text;
+            
+            // タイマーが既に存在する場合はクリア
+            if (gameState.textTimer) {
+                this.time.removeEvent(gameState.textTimer);
+            }
+            
+            // テキストをクリア
+            this.gameUI.textContent.setText('');
+            
+            // 文字を1文字ずつ表示するタイマー
+            gameState.textTimer = this.time.addEvent({
+                delay: gameState.textSpeed,
+                callback: () => {
+                    if (gameState.currentChar < text.length) {
+                        let nextChar = text[gameState.currentChar];
+                        
+                        // 改行対応
+                        if (nextChar === '\n') {
+                            this.gameUI.textContent.text += '\n';
+                        } else {
+                            this.gameUI.textContent.text += nextChar;
+                        }
+                        
+                        gameState.currentChar++;
+                    } else {
+                        // アニメーション完了
+                        gameState.isTextAnimating = false;
+                        this.time.removeEvent(gameState.textTimer);
+                    }
+                },
+                callbackScope: this,
+                loop: true
+            });
+        }
+        
+        // テキストアニメーションをスキップ
+        function completeTextAnimation() {
+            if (gameState.textTimer) {
+                this.time.removeEvent(gameState.textTimer);
+            }
+            
+            this.gameUI.textContent.setText(gameState.textContent);
+            gameState.isTextAnimating = false;
+        }
+        
+        // 次へボタンの処理
+        function handleNextClick() {
+            // メニュー表示中は何もしない
+            if (this.gameUI.menuScreen.visible) {
+                return;
+            }
+            
+            // クリック効果音
+            playSe.call(this, 'se_click');
+            
+            if (gameState.isTextAnimating) {
+                // テキストアニメーション中ならスキップ
+                completeTextAnimation.call(this);
+            } else if (!gameState.isChoicesShown) {
+                // テキスト表示完了かつ選択肢が表示されていなければ選択肢を表示
+                showChoices.call(this);
+            }
+        }
+        
+        // 選択肢の表示
+        function showChoices() {
+            const scene = gameState.currentScene;
+            
+            if (!scene.choices || scene.choices.length === 0) {
+                return;
+            }
+            
+            // 選択肢を表示するフラグを立てる
+            gameState.isChoicesShown = true;
+            gameState.currentChoices = scene.choices;
+            
+            // 既存の選択肢をクリア
+            clearChoices.call(this);
+            
+            // 選択肢ボタンを作成
+            const buttonHeight = 60;
+            const startY = -((scene.choices.length - 1) * buttonHeight) / 2;
+            
+            scene.choices.forEach((choice, index) => {
+                const y = startY + index * buttonHeight;
+                
+                // 条件チェック（存在する場合）
+                let isConditionMet = true;
+                if (choice.condition) {
+                    isConditionMet = evaluateCondition(choice.condition);
+                }
+                
+                // 選択肢ボタンの作成
+                let button;
+                if (this.textures.exists('choice_button')) {
+                    button = this.add.image(0, y, 'choice_button');
+                    button.setScale(1.5, 1);
+                } else {
+                    // ダミーのボタン（長方形）
+                    button = this.add.rectangle(0, y, 300, 50, 0x333333, 0.8);
+                    button.setStrokeStyle(2, 0xffffff);
+                }
+                
+                // 選択肢のテキスト
+                const buttonText = this.add.text(0, y, choice.text, {
+                    fontFamily: 'Arial',
+                    fontSize: '16px',
+                    color: '#ffffff',
+                    align: 'center'
+                }).setOrigin(0.5);
+                
+                // 条件を満たさない場合は選択肢を無効化
+                if (!isConditionMet) {
+                    button.setAlpha(0.5);
+                    buttonText.setAlpha(0.5);
+                } else {
+                    // クリックイベント
+                    button.setInteractive({ useHandCursor: true });
+                    button.on('pointerdown', () => {
+                        // クリック効果音
+                        playSe.call(this, 'se_click');
+                        
+                        // フラグの設定
+                        if (choice.set_flag) {
+                            for (const [key, value] of Object.entries(choice.set_flag)) {
+                                gameState.flags[key] = value;
+                            }
+                        }
+                        
+                        // 次のシーンに移動
+                        showScene.call(this, choice.next_scene);
+                    });
+                }
+                
+                // 選択肢コンテナに追加
+                this.gameUI.choicesContainer.add([button, buttonText]);
+                
+                // アニメーション効果
+                button.alpha = 0;
+                buttonText.alpha = 0;
+                
+                this.tweens.add({
+                    targets: [button, buttonText],
+                    alpha: 1,
+                    duration: 300,
+                    delay: 100 * index
+                });
+            });
+        }
+        
+        // 選択肢のクリア
+        function clearChoices() {
+            this.gameUI.choicesContainer.removeAll(true);
+            gameState.isChoicesShown = false;
+        }
+        
+        // 条件式を評価する関数
+        function evaluateCondition(condition) {
+            try {
+                // 条件式を評価（単純な例）
+                return eval(condition);
+            } catch (error) {
+                console.error('条件の評価に失敗しました:', error);
+                return false;
+            }
+        }
+        
+        // BGMの変更
+        function changeBgm(bgmKey) {
+            // サウンドシステムが使えるか確認
+            if (!this.sound || !this.sound.locked) {
+                try {
+                    // 現在のBGMを停止
+                    if (gameState.currentBgm) {
+                        try {
+                            const currentSound = this.sound.get(gameState.currentBgm);
+                            if (currentSound && currentSound.stop) {
+                                currentSound.stop();
+                            }
+                        } catch (e) {
+                            console.log('BGM停止でエラーが発生しましたが、続行します');
+                        }
+                    }
+                    
+                    // 新しいBGMを再生
+                    try {
+                        this.sound.play(bgmKey, {
+                            loop: true,
+                            volume: 0.7
+                        });
+                    } catch (e) {
+                        console.log(`BGM ${bgmKey} の再生でエラーが発生しましたが、続行します`);
+                    }
+                    
+                    gameState.currentBgm = bgmKey;
+                } catch (e) {
+                    console.log('BGM処理でエラーが発生しましたが、続行します', e);
+                }
+            }
+        }
+        
+        // 効果音の再生
+        function playSe(seKey) {
+            // サウンドシステムが使えるか確認
+            if (!this.sound || !this.sound.locked) {
+                try {
+                    this.sound.play(seKey, {
+                        volume: 0.7
+                    });
+                } catch (e) {
+                    console.log(`効果音 ${seKey} の再生でエラーが発生しましたが、続行します`);
+                }
+            }
+        }
+        
+        // セーブ機能
+        function saveGame() {
+            const saveData = {
+                currentSceneId: gameState.currentScene.scene_id,
+                flags: gameState.flags,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                localStorage.setItem('phaserAdventureGameSave', JSON.stringify(saveData));
+                alert('ゲームをセーブしました。');
+            } catch (error) {
+                console.error('セーブに失敗しました:', error);
+                alert('セーブに失敗しました。');
+            }
+        }
+        
+        // ロード機能
+        function loadGame() {
+            try {
+                const saveData = localStorage.getItem('phaserAdventureGameSave');
+                if (saveData) {
+                    const parsedData = JSON.parse(saveData);
+                    
+                    // フラグを復元
+                    gameState.flags = parsedData.flags;
+                    
+                    // シーンを表示
+                    showScene.call(this, parsedData.currentSceneId);
+                    
+                    alert('ゲームをロードしました。');
+                } else {
+                    alert('セーブデータがありません。');
+                }
+            } catch (error) {
+                console.error('ロードに失敗しました:', error);
+                alert('ロードに失敗しました。');
+            }
+        }
+    </script>
+</body>
+</html>
