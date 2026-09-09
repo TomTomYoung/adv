@@ -19,3 +19,6 @@
 | [JSON_SCRIPT_SPEC.md](JSON_SCRIPT_SPEC.md) | 以前に策定した拡張先を含む設計原本 |
 
 設計原本は実装完了リストではありません。現在受け付ける構文はSCRIPT_REFERENCEと `data/schemas/` を優先してください。
+
+- [SE一覧](SE_CATALOG.md)
+- [戦闘・フィールドエフェクト一覧](EFFECT_CATALOG.md)
