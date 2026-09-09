@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q078",
+  "number": 78,
+  "title": "部品の記憶",
+  "client": "義肢職人のリン",
+  "brief": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+  "region": 8,
+  "type": "ritual",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q078_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q078_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q078_decision",
+      "x": 13,
+      "y": 8,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "腕は本人の仕事を覚えました。古い技術の記録は消さずに保存されます。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "不意の動きは止まりました。一から練習する日々を、リンが手伝います。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "便利さは減りましたが意思通りに動きます。本人が次の調整日を決めます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "義肢職人のリン",
+        "observation": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+        "belief": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+        "goal": "記憶の守護者を倒して全記録を消す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "記憶の守護者を倒して全記録を消す",
+      "alternative": "利用者に合わせて作業学習を更新する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "腕は写真に反応せず、同じ工具配置にだけ手を伸ばします。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "学習簿の項目は感情でなく距離と握力の数値です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+      "openQuestion": "部品の記憶の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q078.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q078.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q078.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q078.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q078.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q078.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "腕は写真に反応せず、同じ工具配置にだけ手を伸ばします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q078",
+          "key": "clue_a",
+          "text": "腕は写真に反応せず、同じ工具配置にだけ手を伸ばします。"
+        }
+      ]
+    },
+    "q078.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "義肢職人のリン",
+          "text": "学習簿の項目は感情でなく距離と握力の数値です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q078",
+          "key": "clue_b",
+          "text": "学習簿の項目は感情でなく距離と握力の数値です。"
+        }
+      ]
+    },
+    "q078.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "部品の記憶\n\n古い腕を付けると知らない作業をします。危険な記憶を消してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "利用者に合わせて作業学習を更新する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q078.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q078.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "腕は本人の仕事を覚えました。古い技術の記録は消さずに保存されます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q078",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "記憶の守護者を倒して全記録を消す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "不意の動きは止まりました。一から練習する日々を、リンが手伝います。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q078",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "自動補正を切り手動で使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "便利さは減りましたが意思通りに動きます。本人が次の調整日を決めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q078",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

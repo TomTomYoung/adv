@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q077",
+  "number": 77,
+  "title": "聖痕の配線",
+  "client": "機関司祭のイオ",
+  "brief": "壁の聖痕が増えています。巡礼者が触る前に調べてください。",
+  "region": 8,
+  "type": "testimony",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q077_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q077_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q077_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "巡礼は延期されました。再開時には触れてよい壁が明示されます。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "見た目は戻りました。給電を再開すると、別の釘に火花が現れます。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "誰も触れずに済みました。修理依頼の場所も柵の番号で伝えられます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "壁の聖痕が増えています。巡礼者が触る前に調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "機関司祭のイオ",
+        "observation": "壁の聖痕が増えています。巡礼者が触る前に調べてください。",
+        "belief": "壁の聖痕が増えています。巡礼者が触る前に調べてください。",
+        "goal": "壁の雷獣を倒し焦げ跡を削る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "壁の雷獣を倒し焦げ跡を削る",
+      "alternative": "給電を止め配線と壁を直す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "跡は金属釘の位置から伸び、古い漆喰にはありません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "補修図と配線図を重ねると、新しい釘が給電路を貫いています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "壁の聖痕が増えています。巡礼者が触る前に調べてください。",
+      "openQuestion": "聖痕の配線の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q077.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q077.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q077.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q077.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q077.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q077.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "跡は金属釘の位置から伸び、古い漆喰にはありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q077",
+          "key": "clue_a",
+          "text": "跡は金属釘の位置から伸び、古い漆喰にはありません。"
+        }
+      ]
+    },
+    "q077.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "機関司祭のイオ",
+          "text": "補修図と配線図を重ねると、新しい釘が給電路を貫いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q077",
+          "key": "clue_b",
+          "text": "補修図と配線図を重ねると、新しい釘が給電路を貫いています。"
+        }
+      ]
+    },
+    "q077.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "聖痕の配線\n\n壁の聖痕が増えています。巡礼者が触る前に調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "壁の雷獣を倒し焦げ跡を削る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "見た目は戻りました。給電を再開すると、別の釘に火花が現れます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q077",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "給電を止め配線と壁を直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巡礼は延期されました。再開時には触れてよい壁が明示されます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "壁を柵で囲み別の巡礼路を開く",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰も触れずに済みました。修理依頼の場所も柵の番号で伝えられます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "id": "q100",
+  "number": 100,
+  "title": "百の帰還",
+  "client": "帰還者たち",
+  "brief": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+  "region": 10,
+  "type": "finale",
+  "recommendedLevel": 10,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.completed"
+    },
+    "right": 99
+  },
+  "unlockHint": "他の99件を完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q100_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q100_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q100_decision",
+      "x": 12,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "帰還者たち",
+        "observation": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+        "belief": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+        "goal": "深淵の守護者を倒し門の鍵を独占する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "深淵の守護者を倒し門の鍵を独占する",
+      "alternative": "帰還記録を公開し迷宮を共同で管理する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "門に映るのは財宝でなく、実際に残した地図・補給・救助の記録です。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "古い銘文の征服は後世の追記で、原文には道を次へ渡すと刻まれています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+      "openQuestion": "百の帰還の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q100.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q100.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q100.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q100.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q100.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q100.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "門に映るのは財宝でなく、実際に残した地図・補給・救助の記録です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q100",
+          "key": "clue_a",
+          "text": "門に映るのは財宝でなく、実際に残した地図・補給・救助の記録です。"
+        }
+      ]
+    },
+    "q100.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "帰還者たち",
+          "text": "古い銘文の征服は後世の追記で、原文には道を次へ渡すと刻まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q100",
+          "key": "clue_b",
+          "text": "古い銘文の征服は後世の追記で、原文には道を次へ渡すと刻まれています。"
+        }
+      ]
+    },
+    "q100.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "百の帰還\n\n百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "帰還記録を公開し迷宮を共同で管理する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q100.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q100.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q100",
+                      "outcome": "informed"
+                    },
+                    {
+                      "op": "ending.set",
+                      "title": "道を次へ渡す者",
+                      "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。"
+                    },
+                    {
+                      "op": "say",
+                      "text": "百の依頼が、百の帰還の記録になりました。\n\n終幕のあとも町と迷宮へ戻れます。冒険手帳には、あなたが選んだ結末が残っています。"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "深淵の守護者を倒し門の鍵を独占する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q100",
+                      "outcome": "contract"
+                    },
+                    {
+                      "op": "ending.set",
+                      "title": "迷宮の鍵を持つ者",
+                      "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。"
+                    },
+                    {
+                      "op": "say",
+                      "text": "百の依頼が、百の帰還の記録になりました。\n\n終幕のあとも町と迷宮へ戻れます。冒険手帳には、あなたが選んだ結末が残っています。"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "最奥を封じ、救助と研究の通路だけ残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q100",
+                  "outcome": "compromise"
+                },
+                {
+                  "op": "ending.set",
+                  "title": "灯を守って帰る者",
+                  "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。"
+                },
+                {
+                  "op": "say",
+                  "text": "百の依頼が、百の帰還の記録になりました。\n\n終幕のあとも町と迷宮へ戻れます。冒険手帳には、あなたが選んだ結末が残っています。"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

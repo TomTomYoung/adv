@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q029",
+  "number": 29,
+  "title": "赤い蜜の契約",
+  "client": "養蜂家のミナ",
+  "brief": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+  "region": 3,
+  "type": "survey",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q029_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q029_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q029_decision",
+      "x": 10,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "蜂は冬を越せます。養蜂家は違約金を払いながら、地下用の暦を作ります。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "代金は入りました。春に戻った巣には、前ほど羽音がありません。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "契約先は味の違いを認めました。赤い蜜は限定品として扱われます。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "養蜂家のミナ",
+        "observation": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+        "belief": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+        "goal": "女王の護衛を倒し契約量を採る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "女王の護衛を倒し契約量を採る",
+      "alternative": "花期の違いを示して納期を延ばす",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "赤い房には幼虫用の薄い蓋が重ねられ、他の蜜と分けられています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "契約日は地上の開花暦で、地下の花はすでに一季遅れています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+      "openQuestion": "赤い蜜の契約の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q029.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q029.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q029.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q029.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q029.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q029.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "赤い房には幼虫用の薄い蓋が重ねられ、他の蜜と分けられています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q029",
+          "key": "clue_a",
+          "text": "赤い房には幼虫用の薄い蓋が重ねられ、他の蜜と分けられています。"
+        }
+      ]
+    },
+    "q029.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "養蜂家のミナ",
+          "text": "契約日は地上の開花暦で、地下の花はすでに一季遅れています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q029",
+          "key": "clue_b",
+          "text": "契約日は地上の開花暦で、地下の花はすでに一季遅れています。"
+        }
+      ]
+    },
+    "q029.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "赤い蜜の契約\n\n赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "女王の護衛を倒し契約量を採る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "代金は入りました。春に戻った巣には、前ほど羽音がありません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q029",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "花期の違いを示して納期を延ばす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q029.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q029.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "蜂は冬を越せます。養蜂家は違約金を払いながら、地下用の暦を作ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q029",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "少量だけ納め不足を別蜜で補う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "契約先は味の違いを認めました。赤い蜜は限定品として扱われます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q029",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

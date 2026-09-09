@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q019",
+  "number": 19,
+  "title": "底なしの計量器",
+  "client": "鉱山会計のルチ",
+  "brief": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+  "region": 2,
+  "type": "survey",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q019_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q019_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q019_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "過去の賃金が一部戻りました。会計は秤の横に乾燥皿を置きます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "新品でも数字は変わりました。坑主は魔物が戻ったと新しい依頼を出します。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "不公平は小さくなりました。坑夫は二度列に並ぶ手間を引き受けます。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鉱山会計のルチ",
+        "observation": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+        "belief": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+        "goal": "秤を狂わせる魔物を倒して新品に替える"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "秤を狂わせる魔物を倒して新品に替える",
+      "alternative": "乾燥重量で帳簿を計算し直す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "分銅はどの台でも一致し、濡れた袋だけが時間とともに重くなります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "坑夫の計量は乾いた朝、売却の計量は湿った夕方に集中しています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+      "openQuestion": "底なしの計量器の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q019.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q019.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q019.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q019.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q019.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q019.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "分銅はどの台でも一致し、濡れた袋だけが時間とともに重くなります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q019",
+          "key": "clue_a",
+          "text": "分銅はどの台でも一致し、濡れた袋だけが時間とともに重くなります。"
+        }
+      ]
+    },
+    "q019.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鉱山会計のルチ",
+          "text": "坑夫の計量は乾いた朝、売却の計量は湿った夕方に集中しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q019",
+          "key": "clue_b",
+          "text": "坑夫の計量は乾いた朝、売却の計量は湿った夕方に集中しています。"
+        }
+      ]
+    },
+    "q019.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "底なしの計量器\n\n同じ鉱石が毎回違う重さになります。計量室を調査してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "秤を狂わせる魔物を倒して新品に替える",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "新品でも数字は変わりました。坑主は魔物が戻ったと新しい依頼を出します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q019",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "乾燥重量で帳簿を計算し直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q019.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q019.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "過去の賃金が一部戻りました。会計は秤の横に乾燥皿を置きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q019",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "朝夕二回量って平均で取引する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "不公平は小さくなりました。坑夫は二度列に並ぶ手間を引き受けます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q019",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

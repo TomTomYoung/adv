@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q062",
+  "number": 62,
+  "title": "王の救命胴衣",
+  "client": "潜水士のナオ",
+  "brief": "宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。",
+  "region": 7,
+  "type": "rescue",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q062_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q062_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q062_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "豪華な布の見方は変わりました。王の別の失政まで消えるわけではありません。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "怒りの展示ができました。救われた老人が、展示の前で何も言わず立ちます。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "一枚の布から小さな記憶が集まりました。結論は後から書かれます。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "王の救命具は幼児用に切り分けられ、残る外布だけが豪華です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "王の救命具は幼児用に切り分けられ、残る外布だけが豪華です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "潜水士のナオ",
+        "observation": "宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。",
+        "belief": "宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。",
+        "goal": "宝庫の護衛を倒し豪華な外布だけ渡す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "宝庫の護衛を倒し豪華な外布だけ渡す",
+      "alternative": "外布と救助名簿を一緒に公開する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "刺繍の内側に浮材はなく、小さな胴回りの切断線が並びます。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "救助名簿の子供の数と、失われた浮材の片数が一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。",
+      "openQuestion": "王の救命胴衣の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "王の救命具は幼児用に切り分けられ、残る外布だけが豪華です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q062.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q062.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q062.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q062.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q062.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q062.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "刺繍の内側に浮材はなく、小さな胴回りの切断線が並びます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q062",
+          "key": "clue_a",
+          "text": "刺繍の内側に浮材はなく、小さな胴回りの切断線が並びます。"
+        }
+      ]
+    },
+    "q062.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "潜水士のナオ",
+          "text": "救助名簿の子供の数と、失われた浮材の片数が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q062",
+          "key": "clue_b",
+          "text": "救助名簿の子供の数と、失われた浮材の片数が一致します。"
+        }
+      ]
+    },
+    "q062.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "王の救命胴衣\n\n宝物庫から王の救命具を持ち帰ってください。民衆は贅沢の証だと言います。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "外布と救助名簿を一緒に公開する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q062.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q062.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "王の救命具は幼児用に切り分けられ、残る外布だけが豪華です。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "豪華な布の見方は変わりました。王の別の失政まで消えるわけではありません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q062",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "宝庫の護衛を倒し豪華な外布だけ渡す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "怒りの展示ができました。救われた老人が、展示の前で何も言わず立ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q062",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "外布を遺族へ渡し証言を集める",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一枚の布から小さな記憶が集まりました。結論は後から書かれます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q062",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

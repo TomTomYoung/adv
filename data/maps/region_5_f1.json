@@ -1,0 +1,528 @@
+{
+  "id": "region_5_f1",
+  "region": 5,
+  "floor": 1,
+  "name": "灰時計の書庫・地下1層",
+  "tiles": [
+    "###################",
+    "#.#.....#.........#",
+    "#.#.#####.#.#####.#",
+    "#.#.......#...#.#.#",
+    "#.###.#######...#.#",
+    "#...#.#.......#.#.#",
+    "###.#.#.#######.#.#",
+    "#...#.#...#.....#.#",
+    "#.#######.#.###.#.#",
+    "#.#.......#.#.#...#",
+    "#.###.#####.#.###.#",
+    "#...#...#...#.....#",
+    "###.###.#.#####.#.#",
+    "#.......#.........#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_5",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_5_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 17,
+      "y": 8,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_5_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_5_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 9,
+      "y": 7,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_5_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 4,
+      "y": 9,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_5_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 13,
+      "y": 9,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_5_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_5_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q041_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "返却日のない本：現場の痕跡",
+      "kind": "clue",
+      "quest": "q041",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q041.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q041.clue_a"
+    },
+    {
+      "id": "q041_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "返却日のない本：記録と証言",
+      "kind": "clue",
+      "quest": "q041",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q041.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q041.clue_b"
+    },
+    {
+      "id": "q041_decision",
+      "x": 15,
+      "y": 5,
+      "name": "返却日のない本：決着の場",
+      "kind": "decision",
+      "quest": "q041",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q041.stage"
+        },
+        "right": "active"
+      },
+      "script": "q041.decision"
+    },
+    {
+      "id": "q042_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "砂時計の残業：現場の痕跡",
+      "kind": "clue",
+      "quest": "q042",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q042.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q042.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q042.clue_a"
+    },
+    {
+      "id": "q042_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "砂時計の残業：記録と証言",
+      "kind": "clue",
+      "quest": "q042",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q042.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q042.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q042.clue_b"
+    },
+    {
+      "id": "q042_decision",
+      "x": 17,
+      "y": 3,
+      "name": "砂時計の残業：決着の場",
+      "kind": "decision",
+      "quest": "q042",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q042.stage"
+        },
+        "right": "active"
+      },
+      "script": "q042.decision"
+    },
+    {
+      "id": "q043_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "墨を食う火：現場の痕跡",
+      "kind": "clue",
+      "quest": "q043",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q043.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q043.clue_a"
+    },
+    {
+      "id": "q043_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "墨を食う火：記録と証言",
+      "kind": "clue",
+      "quest": "q043",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q043.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q043.clue_b"
+    },
+    {
+      "id": "q043_decision",
+      "x": 9,
+      "y": 12,
+      "name": "墨を食う火：決着の場",
+      "kind": "decision",
+      "quest": "q043",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q043.stage"
+        },
+        "right": "active"
+      },
+      "script": "q043.decision"
+    },
+    {
+      "id": "q044_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "未来の訃報：現場の痕跡",
+      "kind": "clue",
+      "quest": "q044",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q044.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q044.clue_a"
+    },
+    {
+      "id": "q044_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "未来の訃報：記録と証言",
+      "kind": "clue",
+      "quest": "q044",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q044.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q044.clue_b"
+    },
+    {
+      "id": "q044_decision",
+      "x": 10,
+      "y": 11,
+      "name": "未来の訃報：決着の場",
+      "kind": "decision",
+      "quest": "q044",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q044.stage"
+        },
+        "right": "active"
+      },
+      "script": "q044.decision"
+    },
+    {
+      "id": "q045_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "白紙の相続：現場の痕跡",
+      "kind": "clue",
+      "quest": "q045",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q045.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q045.clue_a"
+    },
+    {
+      "id": "q045_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "白紙の相続：記録と証言",
+      "kind": "clue",
+      "quest": "q045",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q045.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q045.clue_b"
+    },
+    {
+      "id": "q045_decision",
+      "x": 11,
+      "y": 10,
+      "name": "白紙の相続：決着の場",
+      "kind": "decision",
+      "quest": "q045",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q045.stage"
+        },
+        "right": "active"
+      },
+      "script": "q045.decision"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q055",
+  "number": 55,
+  "title": "値札のついた影",
+  "client": "仕立屋のミク",
+  "brief": "客の影に値札が付いて離れません。剥がす方法を探してください。",
+  "region": 6,
+  "type": "resource",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q055_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q055_clue_b",
+      "x": 4,
+      "y": 12,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q055_decision",
+      "x": 9,
+      "y": 12,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "影から札が消えました。店は試着と購入を別の色の紙へ書きます。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "客は自由になりました。店には服と保証金の差額が残ります。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "取引は元に戻りました。客は今度、何の代金か尋ねてから財布を開きます。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "影札は未返却の試着服を追う印で、客は服を買ったつもりでいます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "影札は未返却の試着服を追う印で、客は服を買ったつもりでいます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "客の影に値札が付いて離れません。剥がす方法を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "仕立屋のミク",
+        "observation": "客の影に値札が付いて離れません。剥がす方法を探してください。",
+        "belief": "客の影に値札が付いて離れません。剥がす方法を探してください。",
+        "goal": "影を追う魔物を倒し追跡糸を切る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "影を追う魔物を倒し追跡糸を切る",
+      "alternative": "保証金を代金へ充て正式に売買する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "領収書は購入でなく保証金と記され、試着期限だけが裏面にあります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "服の縫い目に追跡糸があり、影札と同じ色で光ります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "客の影に値札が付いて離れません。剥がす方法を探してください。",
+      "openQuestion": "値札のついた影の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "影札は未返却の試着服を追う印で、客は服を買ったつもりでいます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q055.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q055.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q055.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q055.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q055.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q055.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "領収書は購入でなく保証金と記され、試着期限だけが裏面にあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q055",
+          "key": "clue_a",
+          "text": "領収書は購入でなく保証金と記され、試着期限だけが裏面にあります。"
+        }
+      ]
+    },
+    "q055.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "仕立屋のミク",
+          "text": "服の縫い目に追跡糸があり、影札と同じ色で光ります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q055",
+          "key": "clue_b",
+          "text": "服の縫い目に追跡糸があり、影札と同じ色で光ります。"
+        }
+      ]
+    },
+    "q055.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "値札のついた影\n\n客の影に値札が付いて離れません。剥がす方法を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "影を追う魔物を倒し追跡糸を切る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "客は自由になりました。店には服と保証金の差額が残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q055",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "保証金を代金へ充て正式に売買する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q055.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q055.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "影札は未返却の試着服を追う印で、客は服を買ったつもりでいます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "影から札が消えました。店は試着と購入を別の色の紙へ書きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q055",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "服を返して保証金を取り戻す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "取引は元に戻りました。客は今度、何の代金か尋ねてから財布を開きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q055",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

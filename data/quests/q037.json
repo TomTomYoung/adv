@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q037",
+  "number": 37,
+  "title": "夜だけの告解",
+  "client": "告解係のオル",
+  "brief": "誰もいない夜に告解が書き込まれます。犯人を見つけてください。",
+  "region": 4,
+  "type": "testimony",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q037_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q037_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q037_decision",
+      "x": 16,
+      "y": 4,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "告解の秘密は守られました。鳥は昼の献立を覚える仕事へ移ります。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "夜の告解は止まりました。鳥は屋根へ逃げ、覚えた名前を町で鳴きます。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "告解は証拠にも噂にもされず、封じた日付だけが帳簿へ残ります。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "誰もいない夜に告解が書き込まれます。犯人を見つけてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "告解係のオル",
+        "observation": "誰もいない夜に告解が書き込まれます。犯人を見つけてください。",
+        "belief": "誰もいない夜に告解が書き込まれます。犯人を見つけてください。",
+        "goal": "書記鳥の守り獣を倒し籠を壊す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "書記鳥の守り獣を倒し籠を壊す",
+      "alternative": "鳥を移し写本を本人へ返す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "文章には鳥にしか書けない短い引っ掻き線が混じっています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "同じ日の順番が揃い、鳥の籠だけ昼の窓へ向いています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "誰もいない夜に告解が書き込まれます。犯人を見つけてください。",
+      "openQuestion": "夜だけの告解の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q037.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q037.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q037.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q037.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q037.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q037.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "文章には鳥にしか書けない短い引っ掻き線が混じっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q037",
+          "key": "clue_a",
+          "text": "文章には鳥にしか書けない短い引っ掻き線が混じっています。"
+        }
+      ]
+    },
+    "q037.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "告解係のオル",
+          "text": "同じ日の順番が揃い、鳥の籠だけ昼の窓へ向いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q037",
+          "key": "clue_b",
+          "text": "同じ日の順番が揃い、鳥の籠だけ昼の窓へ向いています。"
+        }
+      ]
+    },
+    "q037.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "夜だけの告解\n\n誰もいない夜に告解が書き込まれます。犯人を見つけてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "書記鳥の守り獣を倒し籠を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "夜の告解は止まりました。鳥は屋根へ逃げ、覚えた名前を町で鳴きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q037",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "鳥を移し写本を本人へ返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q037.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q037.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "告解の秘密は守られました。鳥は昼の献立を覚える仕事へ移ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q037",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "写本を封印して閲覧者を限る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "告解は証拠にも噂にもされず、封じた日付だけが帳簿へ残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q037",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

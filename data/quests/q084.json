@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q084",
+  "number": 84,
+  "title": "帰還信号",
+  "client": "遭難者家族のマオ",
+  "brief": "死んだはずの隊から帰還信号が届きました。発信元を探してください。",
+  "region": 9,
+  "type": "negotiation",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q084_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q084_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q084_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "生存者へ追い付きました。マオは帰還信号に現在地を付ける案を出します。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "機械は戻りました。家族は声を聴けますが、本人の行方は残ります。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "専門の隊が後を引き受けました。反復信号は中継の役に立ちます。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "死んだはずの隊から帰還信号が届きました。発信元を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "遭難者家族のマオ",
+        "observation": "死んだはずの隊から帰還信号が届きました。発信元を探してください。",
+        "belief": "死んだはずの隊から帰還信号が届きました。発信元を探してください。",
+        "goal": "信号を真似る影を倒し発信機だけ回収する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "信号を真似る影を倒し発信機だけ回収する",
+      "alternative": "信号地点から先の移動跡を追う",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "信号の間隔は完全に等しく、雑音の形まで繰り返します。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "標識の脇に新しい矢印と、手で運ばれた担架の跡が続きます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "死んだはずの隊から帰還信号が届きました。発信元を探してください。",
+      "openQuestion": "帰還信号の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q084.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q084.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q084.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q084.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q084.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q084.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "信号の間隔は完全に等しく、雑音の形まで繰り返します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q084",
+          "key": "clue_a",
+          "text": "信号の間隔は完全に等しく、雑音の形まで繰り返します。"
+        }
+      ]
+    },
+    "q084.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "遭難者家族のマオ",
+          "text": "標識の脇に新しい矢印と、手で運ばれた担架の跡が続きます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q084",
+          "key": "clue_b",
+          "text": "標識の脇に新しい矢印と、手で運ばれた担架の跡が続きます。"
+        }
+      ]
+    },
+    "q084.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰還信号\n\n死んだはずの隊から帰還信号が届きました。発信元を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "信号地点から先の移動跡を追う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "生存者へ追い付きました。マオは帰還信号に現在地を付ける案を出します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "信号を真似る影を倒し発信機だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "機械は戻りました。家族は声を聴けますが、本人の行方は残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q084",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "移動先を救助隊へ送り標識を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "専門の隊が後を引き受けました。反復信号は中継の役に立ちます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

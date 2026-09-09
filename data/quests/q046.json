@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q046",
+  "number": 46,
+  "title": "迷子の索引",
+  "client": "司書のシフ",
+  "brief": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+  "region": 5,
+  "type": "escort",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q046_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q046_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q046_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "読者は目的の本へ着きました。古い名でも検索できる札が残ります。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "出口は見えました。分類を失った本を探す時間は長くなります。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "迷子は帰れます。探していた本の場所だけは、司書に聞く仕組みです。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "司書のシフ",
+        "observation": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+        "belief": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+        "goal": "索引の番人を倒して棚を直線に並べる"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "索引の番人を倒して棚を直線に並べる",
+      "alternative": "新旧の書名を結び循環をほどく",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "頁番号は正しく、古い書名だけが次の索引を指しています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "三冊の扉頁に同じ改題日があり、新旧対照表だけ抜けています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+      "openQuestion": "迷子の索引の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q046.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q046.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q046.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q046.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q046.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q046.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "頁番号は正しく、古い書名だけが次の索引を指しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q046",
+          "key": "clue_a",
+          "text": "頁番号は正しく、古い書名だけが次の索引を指しています。"
+        }
+      ]
+    },
+    "q046.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "司書のシフ",
+          "text": "三冊の扉頁に同じ改題日があり、新旧対照表だけ抜けています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q046",
+          "key": "clue_b",
+          "text": "三冊の扉頁に同じ改題日があり、新旧対照表だけ抜けています。"
+        }
+      ]
+    },
+    "q046.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "迷子の索引\n\n索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "新旧の書名を結び循環をほどく",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q046.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q046.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "読者は目的の本へ着きました。古い名でも検索できる札が残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q046",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "索引の番人を倒して棚を直線に並べる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "出口は見えました。分類を失った本を探す時間は長くなります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q046",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "循環の途中に出口札を足す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷子は帰れます。探していた本の場所だけは、司書に聞く仕組みです。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q046",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

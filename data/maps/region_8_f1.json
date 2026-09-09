@@ -1,0 +1,528 @@
+{
+  "id": "region_8_f1",
+  "region": 8,
+  "floor": 1,
+  "name": "鉄胎の機関廟・地下1層",
+  "tiles": [
+    "###################",
+    "#.#...........#...#",
+    "#.#.###.#####.#.#.#",
+    "#.......#.........#",
+    "#.#.###############",
+    "#.#.........#.....#",
+    "#.#.###.#.#.#.###.#",
+    "#.#...#.#.#.....#.#",
+    "#.###.#.#.#######.#",
+    "#.#...#.......#...#",
+    "#.#######.###.#.#.#",
+    "#.........#...#.#.#",
+    "#####.###.##.##.#.#",
+    "#...............#.#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_8",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_8_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 12,
+      "y": 13,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_8_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_8_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 7,
+      "y": 9,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_8_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 2,
+      "y": 11,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_8_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_8_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_8_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q071_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "止まれない門番：現場の痕跡",
+      "kind": "clue",
+      "quest": "q071",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q071.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q071.clue_a"
+    },
+    {
+      "id": "q071_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "止まれない門番：記録と証言",
+      "kind": "clue",
+      "quest": "q071",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q071.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q071.clue_b"
+    },
+    {
+      "id": "q071_decision",
+      "x": 9,
+      "y": 11,
+      "name": "止まれない門番：決着の場",
+      "kind": "decision",
+      "quest": "q071",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q071.stage"
+        },
+        "right": "active"
+      },
+      "script": "q071.decision"
+    },
+    {
+      "id": "q072_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "油の洗礼：現場の痕跡",
+      "kind": "clue",
+      "quest": "q072",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q072.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q072.clue_a"
+    },
+    {
+      "id": "q072_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "油の洗礼：記録と証言",
+      "kind": "clue",
+      "quest": "q072",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q072.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q072.clue_b"
+    },
+    {
+      "id": "q072_decision",
+      "x": 11,
+      "y": 9,
+      "name": "油の洗礼：決着の場",
+      "kind": "decision",
+      "quest": "q072",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q072.stage"
+        },
+        "right": "active"
+      },
+      "script": "q072.decision"
+    },
+    {
+      "id": "q073_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "天使の予備腕：現場の痕跡",
+      "kind": "clue",
+      "quest": "q073",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q073.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q073.clue_a"
+    },
+    {
+      "id": "q073_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "天使の予備腕：記録と証言",
+      "kind": "clue",
+      "quest": "q073",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q073.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q073.clue_b"
+    },
+    {
+      "id": "q073_decision",
+      "x": 13,
+      "y": 7,
+      "name": "天使の予備腕：決着の場",
+      "kind": "decision",
+      "quest": "q073",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q073.stage"
+        },
+        "right": "active"
+      },
+      "script": "q073.decision"
+    },
+    {
+      "id": "q074_clue_a",
+      "x": 1,
+      "y": 7,
+      "name": "祈祷の順番：現場の痕跡",
+      "kind": "clue",
+      "quest": "q074",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q074.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q074.clue_a"
+    },
+    {
+      "id": "q074_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "祈祷の順番：記録と証言",
+      "kind": "clue",
+      "quest": "q074",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q074.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q074.clue_b"
+    },
+    {
+      "id": "q074_decision",
+      "x": 15,
+      "y": 5,
+      "name": "祈祷の順番：決着の場",
+      "kind": "decision",
+      "quest": "q074",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q074.stage"
+        },
+        "right": "active"
+      },
+      "script": "q074.decision"
+    },
+    {
+      "id": "q075_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "無給の聖者：現場の痕跡",
+      "kind": "clue",
+      "quest": "q075",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q075.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q075.clue_a"
+    },
+    {
+      "id": "q075_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "無給の聖者：記録と証言",
+      "kind": "clue",
+      "quest": "q075",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q075.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q075.clue_b"
+    },
+    {
+      "id": "q075_decision",
+      "x": 7,
+      "y": 13,
+      "name": "無給の聖者：決着の場",
+      "kind": "decision",
+      "quest": "q075",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q075.stage"
+        },
+        "right": "active"
+      },
+      "script": "q075.decision"
+    }
+  ]
+}

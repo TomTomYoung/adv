@@ -1,0 +1,518 @@
+{
+  "id": "region_9_f2",
+  "region": 9,
+  "floor": 2,
+  "name": "星欠けの地下観測所・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.....#...#...#.#",
+    "#.###.#.#.#.#.#.#.#",
+    "#...#.#...#...#.#.#",
+    "#.#.#.#####.###.#.#",
+    "#.#...#.......#...#",
+    "#.#####.#.###.###.#",
+    "#.....#.#.......#.#",
+    "#.###.#.#########.#",
+    "#.#.....#.........#",
+    "#.#######.######.##",
+    "#.#.......#.......#",
+    "#.#.#######.###.#.#",
+    "#...........#.....#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_9",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_9_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_9_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 3,
+      "y": 13,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_9_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 4,
+      "y": 9,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_9_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 13,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_9_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_9_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q086_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "百年前の観測者：現場の痕跡",
+      "kind": "clue",
+      "quest": "q086",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q086.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q086.clue_a"
+    },
+    {
+      "id": "q086_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "百年前の観測者：記録と証言",
+      "kind": "clue",
+      "quest": "q086",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q086.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q086.clue_b"
+    },
+    {
+      "id": "q086_decision",
+      "x": 13,
+      "y": 7,
+      "name": "百年前の観測者：決着の場",
+      "kind": "decision",
+      "quest": "q086",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q086.stage"
+        },
+        "right": "active"
+      },
+      "script": "q086.decision"
+    },
+    {
+      "id": "q087_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "願いを消す流星：現場の痕跡",
+      "kind": "clue",
+      "quest": "q087",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q087.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q087.clue_a"
+    },
+    {
+      "id": "q087_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "願いを消す流星：記録と証言",
+      "kind": "clue",
+      "quest": "q087",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q087.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q087.clue_b"
+    },
+    {
+      "id": "q087_decision",
+      "x": 15,
+      "y": 5,
+      "name": "願いを消す流星：決着の場",
+      "kind": "decision",
+      "quest": "q087",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q087.stage"
+        },
+        "right": "active"
+      },
+      "script": "q087.decision"
+    },
+    {
+      "id": "q088_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "観測窓の亀裂：現場の痕跡",
+      "kind": "clue",
+      "quest": "q088",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q088.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q088.clue_a"
+    },
+    {
+      "id": "q088_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "観測窓の亀裂：記録と証言",
+      "kind": "clue",
+      "quest": "q088",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q088.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q088.clue_b"
+    },
+    {
+      "id": "q088_decision",
+      "x": 17,
+      "y": 3,
+      "name": "観測窓の亀裂：決着の場",
+      "kind": "decision",
+      "quest": "q088",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q088.stage"
+        },
+        "right": "active"
+      },
+      "script": "q088.decision"
+    },
+    {
+      "id": "q089_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "逆さまの天球儀：現場の痕跡",
+      "kind": "clue",
+      "quest": "q089",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q089.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q089.clue_a"
+    },
+    {
+      "id": "q089_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "逆さまの天球儀：記録と証言",
+      "kind": "clue",
+      "quest": "q089",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q089.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q089.clue_b"
+    },
+    {
+      "id": "q089_decision",
+      "x": 8,
+      "y": 13,
+      "name": "逆さまの天球儀：決着の場",
+      "kind": "decision",
+      "quest": "q089",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q089.stage"
+        },
+        "right": "active"
+      },
+      "script": "q089.decision"
+    },
+    {
+      "id": "q090_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "空を返す日：現場の痕跡",
+      "kind": "clue",
+      "quest": "q090",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q090.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q090.clue_a"
+    },
+    {
+      "id": "q090_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "空を返す日：記録と証言",
+      "kind": "clue",
+      "quest": "q090",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q090.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q090.clue_b"
+    },
+    {
+      "id": "q090_decision",
+      "x": 12,
+      "y": 9,
+      "name": "空を返す日：決着の場",
+      "kind": "decision",
+      "quest": "q090",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q090.stage"
+        },
+        "right": "active"
+      },
+      "script": "q090.decision"
+    }
+  ]
+}

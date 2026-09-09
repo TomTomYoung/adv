@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q043",
+  "number": 43,
+  "title": "墨を食う火",
+  "client": "写本師のアリ",
+  "brief": "本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。",
+  "region": 5,
+  "type": "mechanism",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q043_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q043_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q043_decision",
+      "x": 9,
+      "y": 12,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "本文も訂正も読み直せます。アリは安い墨を恥じず、薬剤との組合せを記します。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "光は見えなくなりました。訂正前の間違いが正本として残ります。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "空欄は隠されませんでした。次の読者が、何を知らないか分かります。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "写本師のアリ",
+        "observation": "本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。",
+        "belief": "本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。",
+        "goal": "火の精を倒し燃えた棚を封鎖する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "火の精を倒し燃えた棚を封鎖する",
+      "alternative": "薬剤を止め控えから追記を戻す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "高価な赤字は残り、安い黒墨の追記だけが光っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "薬剤の使用記録は、予算削減で安墨へ替えた日と重なります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。",
+      "openQuestion": "墨を食う火の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q043.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q043.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q043.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q043.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q043.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q043.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "高価な赤字は残り、安い黒墨の追記だけが光っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q043",
+          "key": "clue_a",
+          "text": "高価な赤字は残り、安い黒墨の追記だけが光っています。"
+        }
+      ]
+    },
+    "q043.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "写本師のアリ",
+          "text": "薬剤の使用記録は、予算削減で安墨へ替えた日と重なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q043",
+          "key": "clue_b",
+          "text": "薬剤の使用記録は、予算削減で安墨へ替えた日と重なります。"
+        }
+      ]
+    },
+    "q043.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "墨を食う火\n\n本を焼かず文字だけ消す火が広がっています。消えた内容を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "火の精を倒し燃えた棚を封鎖する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "光は見えなくなりました。訂正前の間違いが正本として残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q043",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "薬剤を止め控えから追記を戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本文も訂正も読み直せます。アリは安い墨を恥じず、薬剤との組合せを記します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "残った文字を写し消えた箇所を空欄にする",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "空欄は隠されませんでした。次の読者が、何を知らないか分かります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

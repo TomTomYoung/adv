@@ -1,0 +1,518 @@
+{
+  "id": "region_2_f2",
+  "region": 2,
+  "floor": 2,
+  "name": "塩哭きの廃坑・地下2層",
+  "tiles": [
+    "###################",
+    "#.....#...........#",
+    "#####.###.#######.#",
+    "#...#...#.#.....#.#",
+    "#.#.###.#.#.###.#.#",
+    "#.#...#.#.#.#...#.#",
+    "#.#.#.#.#.#.#.###.#",
+    "#...#...#...#...#.#",
+    "#.#######.#.#####.#",
+    "#.#.......#.......#",
+    "#.#.#.###.#.#######",
+    "#.#.#.....#...#...#",
+    "#...###.#####.###.#",
+    "#...#.............#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_2",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_2_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_2_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 5,
+      "y": 11,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_2_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 3,
+      "y": 10,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_2_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 15,
+      "y": 11,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_2_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_2_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q016_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "無音の発破：現場の痕跡",
+      "kind": "clue",
+      "quest": "q016",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q016.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q016.clue_a"
+    },
+    {
+      "id": "q016_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "無音の発破：記録と証言",
+      "kind": "clue",
+      "quest": "q016",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q016.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q016.clue_b"
+    },
+    {
+      "id": "q016_decision",
+      "x": 9,
+      "y": 11,
+      "name": "無音の発破：決着の場",
+      "kind": "decision",
+      "quest": "q016",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q016.stage"
+        },
+        "right": "active"
+      },
+      "script": "q016.decision"
+    },
+    {
+      "id": "q017_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "二度掘られた墓：現場の痕跡",
+      "kind": "clue",
+      "quest": "q017",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q017.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q017.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q017.clue_a"
+    },
+    {
+      "id": "q017_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "二度掘られた墓：記録と証言",
+      "kind": "clue",
+      "quest": "q017",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q017.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q017.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q017.clue_b"
+    },
+    {
+      "id": "q017_decision",
+      "x": 11,
+      "y": 9,
+      "name": "二度掘られた墓：決着の場",
+      "kind": "decision",
+      "quest": "q017",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q017.stage"
+        },
+        "right": "active"
+      },
+      "script": "q017.decision"
+    },
+    {
+      "id": "q018_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "白い借金：現場の痕跡",
+      "kind": "clue",
+      "quest": "q018",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q018.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q018.clue_a"
+    },
+    {
+      "id": "q018_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "白い借金：記録と証言",
+      "kind": "clue",
+      "quest": "q018",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q018.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q018.clue_b"
+    },
+    {
+      "id": "q018_decision",
+      "x": 13,
+      "y": 7,
+      "name": "白い借金：決着の場",
+      "kind": "decision",
+      "quest": "q018",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q018.stage"
+        },
+        "right": "active"
+      },
+      "script": "q018.decision"
+    },
+    {
+      "id": "q019_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "底なしの計量器：現場の痕跡",
+      "kind": "clue",
+      "quest": "q019",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q019.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q019.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q019.clue_a"
+    },
+    {
+      "id": "q019_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "底なしの計量器：記録と証言",
+      "kind": "clue",
+      "quest": "q019",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q019.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q019.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q019.clue_b"
+    },
+    {
+      "id": "q019_decision",
+      "x": 15,
+      "y": 5,
+      "name": "底なしの計量器：決着の場",
+      "kind": "decision",
+      "quest": "q019",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q019.stage"
+        },
+        "right": "active"
+      },
+      "script": "q019.decision"
+    },
+    {
+      "id": "q020_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "坑道の王冠：現場の痕跡",
+      "kind": "clue",
+      "quest": "q020",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q020.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q020.clue_a"
+    },
+    {
+      "id": "q020_clue_b",
+      "x": 6,
+      "y": 9,
+      "name": "坑道の王冠：記録と証言",
+      "kind": "clue",
+      "quest": "q020",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q020.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q020.clue_b"
+    },
+    {
+      "id": "q020_decision",
+      "x": 17,
+      "y": 3,
+      "name": "坑道の王冠：決着の場",
+      "kind": "decision",
+      "quest": "q020",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q020.stage"
+        },
+        "right": "active"
+      },
+      "script": "q020.decision"
+    }
+  ]
+}

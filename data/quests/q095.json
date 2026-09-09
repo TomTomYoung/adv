@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q095",
+  "number": 95,
+  "title": "英雄の空白",
+  "client": "記録係のテオ",
+  "brief": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+  "region": 10,
+  "type": "resource",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q095_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q095_clue_b",
+      "x": 11,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q095_decision",
+      "x": 13,
+      "y": 8,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "一人の像を建てる計画は、帰還者の長い壁へ変わりました。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "分かりやすい記念碑が立ちました。名前のない仲間は別の場所で杯を上げます。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "英雄という語は残りませんでした。助けた手の数は失われません。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "記録係のテオ",
+        "observation": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+        "belief": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+        "goal": "記録の守護霊を倒し一人を英雄に選ぶ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "記録の守護霊を倒し一人を英雄に選ぶ",
+      "alternative": "交代した全員を英雄の記録へ載せる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "英雄の装備は体格ごとに調整跡があり、同じ日に複数の署名があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "隊の本名を並べると、英雄の行動記録に途切れがなく対応します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+      "openQuestion": "英雄の空白の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q095.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q095.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q095.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q095.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q095.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q095.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "英雄の装備は体格ごとに調整跡があり、同じ日に複数の署名があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q095",
+          "key": "clue_a",
+          "text": "英雄の装備は体格ごとに調整跡があり、同じ日に複数の署名があります。"
+        }
+      ]
+    },
+    "q095.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "記録係のテオ",
+          "text": "隊の本名を並べると、英雄の行動記録に途切れがなく対応します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q095",
+          "key": "clue_b",
+          "text": "隊の本名を並べると、英雄の行動記録に途切れがなく対応します。"
+        }
+      ]
+    },
+    "q095.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "英雄の空白\n\n帰還者名簿に英雄だけ載っていません。記録を取り戻してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "記録の守護霊を倒し一人を英雄に選ぶ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "分かりやすい記念碑が立ちました。名前のない仲間は別の場所で杯を上げます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q095",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "交代した全員を英雄の記録へ載せる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q095.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q095.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一人の像を建てる計画は、帰還者の長い壁へ変わりました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q095",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "肩書を使わず全員の行動を記録する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "英雄という語は残りませんでした。助けた手の数は失われません。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q095",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

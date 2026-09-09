@@ -1,0 +1,528 @@
+{
+  "id": "region_9_f1",
+  "region": 9,
+  "floor": 1,
+  "name": "星欠けの地下観測所・地下1層",
+  "tiles": [
+    "###################",
+    "#.#...............#",
+    "#.#######.#######.#",
+    "#.......#.......#.#",
+    "#######.###.###.#.#",
+    "#.....#...#...#...#",
+    "#.#######.#####.#.#",
+    "#.#.....#.......#.#",
+    "#.#.#.####..#.#####",
+    "#...#...#...#.....#",
+    "#.#.###.#.#######.#",
+    "#...#.#...#.....#.#",
+    "#.###.#######.#.#.#",
+    "#.............#...#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_9",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_9_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 13,
+      "y": 12,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_9_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_9_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 7,
+      "y": 9,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_9_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 1,
+      "y": 12,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_9_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 7,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_9_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_9_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q081_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "落ちてこない星：現場の痕跡",
+      "kind": "clue",
+      "quest": "q081",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q081.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q081.clue_a"
+    },
+    {
+      "id": "q081_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "落ちてこない星：記録と証言",
+      "kind": "clue",
+      "quest": "q081",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q081.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q081.clue_b"
+    },
+    {
+      "id": "q081_decision",
+      "x": 11,
+      "y": 9,
+      "name": "落ちてこない星：決着の場",
+      "kind": "decision",
+      "quest": "q081",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q081.stage"
+        },
+        "right": "active"
+      },
+      "script": "q081.decision"
+    },
+    {
+      "id": "q082_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "星売りの空瓶：現場の痕跡",
+      "kind": "clue",
+      "quest": "q082",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q082.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q082.clue_a"
+    },
+    {
+      "id": "q082_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "星売りの空瓶：記録と証言",
+      "kind": "clue",
+      "quest": "q082",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q082.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q082.clue_b"
+    },
+    {
+      "id": "q082_decision",
+      "x": 13,
+      "y": 7,
+      "name": "星売りの空瓶：決着の場",
+      "kind": "decision",
+      "quest": "q082",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q082.stage"
+        },
+        "right": "active"
+      },
+      "script": "q082.decision"
+    },
+    {
+      "id": "q083_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "地底の日食：現場の痕跡",
+      "kind": "clue",
+      "quest": "q083",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q083.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q083.clue_a"
+    },
+    {
+      "id": "q083_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "地底の日食：記録と証言",
+      "kind": "clue",
+      "quest": "q083",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q083.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q083.clue_b"
+    },
+    {
+      "id": "q083_decision",
+      "x": 15,
+      "y": 5,
+      "name": "地底の日食：決着の場",
+      "kind": "decision",
+      "quest": "q083",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q083.stage"
+        },
+        "right": "active"
+      },
+      "script": "q083.decision"
+    },
+    {
+      "id": "q084_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "帰還信号：現場の痕跡",
+      "kind": "clue",
+      "quest": "q084",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q084.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q084.clue_a"
+    },
+    {
+      "id": "q084_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "帰還信号：記録と証言",
+      "kind": "clue",
+      "quest": "q084",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q084.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q084.clue_b"
+    },
+    {
+      "id": "q084_decision",
+      "x": 9,
+      "y": 11,
+      "name": "帰還信号：決着の場",
+      "kind": "decision",
+      "quest": "q084",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q084.stage"
+        },
+        "right": "active"
+      },
+      "script": "q084.decision"
+    },
+    {
+      "id": "q085_clue_a",
+      "x": 6,
+      "y": 3,
+      "name": "方位のない羅針盤：現場の痕跡",
+      "kind": "clue",
+      "quest": "q085",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q085.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q085.clue_a"
+    },
+    {
+      "id": "q085_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "方位のない羅針盤：記録と証言",
+      "kind": "clue",
+      "quest": "q085",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q085.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q085.clue_b"
+    },
+    {
+      "id": "q085_decision",
+      "x": 17,
+      "y": 3,
+      "name": "方位のない羅針盤：決着の場",
+      "kind": "decision",
+      "quest": "q085",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q085.stage"
+        },
+        "right": "active"
+      },
+      "script": "q085.decision"
+    }
+  ]
+}

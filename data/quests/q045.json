@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q045",
+  "number": 45,
+  "title": "白紙の相続",
+  "client": "代書人のサキ",
+  "brief": "遺言状が白紙になっています。内容を復元してください。",
+  "region": 5,
+  "type": "resource",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q045_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q045_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q045_decision",
+      "x": 11,
+      "y": 10,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "復元文は参考にとどまりました。遺された人たちは、自分の名で分配を決めます。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "分配は早く済みました。署名しなかった者の異議だけが残ります。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "誰もすぐには受け取れません。サキは保管費を先に説明します。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていませんでした。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていませんでした。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "遺言状が白紙になっています。内容を復元してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "代書人のサキ",
+        "observation": "遺言状が白紙になっています。内容を復元してください。",
+        "belief": "遺言状が白紙になっています。内容を復元してください。",
+        "goal": "白紙を守る霊を倒し筆跡を正本にする"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "白紙を守る霊を倒し筆跡を正本にする",
+      "alternative": "未成立の文書と認め相続人で協議する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "署名欄に筆圧がなく、本文の跡だけが裏まで残っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "同じ紙の契約見本には同意まで加熱厳禁と記されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "遺言状が白紙になっています。内容を復元してください。",
+      "openQuestion": "白紙の相続の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていませんでした。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q045.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q045.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q045.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q045.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q045.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q045.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "署名欄に筆圧がなく、本文の跡だけが裏まで残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q045",
+          "key": "clue_a",
+          "text": "署名欄に筆圧がなく、本文の跡だけが裏まで残っています。"
+        }
+      ]
+    },
+    "q045.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "代書人のサキ",
+          "text": "同じ紙の契約見本には同意まで加熱厳禁と記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q045",
+          "key": "clue_b",
+          "text": "同じ紙の契約見本には同意まで加熱厳禁と記されています。"
+        }
+      ]
+    },
+    "q045.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "白紙の相続\n\n遺言状が白紙になっています。内容を復元してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白紙を守る霊を倒し筆跡を正本にする",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "分配は早く済みました。署名しなかった者の異議だけが残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q045",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "未成立の文書と認め相続人で協議する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていませんでした。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "復元文は参考にとどまりました。遺された人たちは、自分の名で分配を決めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "財産を一時保管し署名の証人を探す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰もすぐには受け取れません。サキは保管費を先に説明します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

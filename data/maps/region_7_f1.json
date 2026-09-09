@@ -1,0 +1,528 @@
+{
+  "id": "region_7_f1",
+  "region": 7,
+  "floor": 1,
+  "name": "黒潮の沈没城・地下1層",
+  "tiles": [
+    "###################",
+    "#.#.......#.......#",
+    "#.#.#####.###.###.#",
+    "#.#...#.....#.#...#",
+    "#.###.#####.###.#.#",
+    "#.#...#...#.....#.#",
+    "#.#.###.#.#...#####",
+    "#.#.....#.#.#.....#",
+    "#.#######.#.#####.#",
+    "#.#.....#.#.......#",
+    "#.#.###.#.#######.#",
+    "#.#...#...#.#...#.#",
+    "#.###.#...#.#.#.#.#",
+    "#.....#...#...#...#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_7",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_7_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 14,
+      "y": 11,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_7_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_7_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 9,
+      "y": 7,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_7_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 4,
+      "y": 9,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_7_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 5,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_7_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_7_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q061_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "濡れない海図：現場の痕跡",
+      "kind": "clue",
+      "quest": "q061",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q061.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q061.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q061.clue_a"
+    },
+    {
+      "id": "q061_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "濡れない海図：記録と証言",
+      "kind": "clue",
+      "quest": "q061",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q061.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q061.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q061.clue_b"
+    },
+    {
+      "id": "q061_decision",
+      "x": 9,
+      "y": 11,
+      "name": "濡れない海図：決着の場",
+      "kind": "decision",
+      "quest": "q061",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q061.stage"
+        },
+        "right": "active"
+      },
+      "script": "q061.decision"
+    },
+    {
+      "id": "q062_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "王の救命胴衣：現場の痕跡",
+      "kind": "clue",
+      "quest": "q062",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q062.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q062.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q062.clue_a"
+    },
+    {
+      "id": "q062_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "王の救命胴衣：記録と証言",
+      "kind": "clue",
+      "quest": "q062",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q062.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q062.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q062.clue_b"
+    },
+    {
+      "id": "q062_decision",
+      "x": 11,
+      "y": 9,
+      "name": "王の救命胴衣：決着の場",
+      "kind": "decision",
+      "quest": "q062",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q062.stage"
+        },
+        "right": "active"
+      },
+      "script": "q062.decision"
+    },
+    {
+      "id": "q063_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "潮に逆らう階段：現場の痕跡",
+      "kind": "clue",
+      "quest": "q063",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q063.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q063.clue_a"
+    },
+    {
+      "id": "q063_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "潮に逆らう階段：記録と証言",
+      "kind": "clue",
+      "quest": "q063",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q063.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q063.clue_b"
+    },
+    {
+      "id": "q063_decision",
+      "x": 13,
+      "y": 7,
+      "name": "潮に逆らう階段：決着の場",
+      "kind": "decision",
+      "quest": "q063",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q063.stage"
+        },
+        "right": "active"
+      },
+      "script": "q063.decision"
+    },
+    {
+      "id": "q064_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "届く砲声：現場の痕跡",
+      "kind": "clue",
+      "quest": "q064",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q064.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q064.clue_a"
+    },
+    {
+      "id": "q064_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "届く砲声：記録と証言",
+      "kind": "clue",
+      "quest": "q064",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q064.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q064.clue_b"
+    },
+    {
+      "id": "q064_decision",
+      "x": 8,
+      "y": 12,
+      "name": "届く砲声：決着の場",
+      "kind": "decision",
+      "quest": "q064",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q064.stage"
+        },
+        "right": "active"
+      },
+      "script": "q064.decision"
+    },
+    {
+      "id": "q065_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "水中の火葬：現場の痕跡",
+      "kind": "clue",
+      "quest": "q065",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q065.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q065.clue_a"
+    },
+    {
+      "id": "q065_clue_b",
+      "x": 7,
+      "y": 9,
+      "name": "水中の火葬：記録と証言",
+      "kind": "clue",
+      "quest": "q065",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q065.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q065.clue_b"
+    },
+    {
+      "id": "q065_decision",
+      "x": 15,
+      "y": 5,
+      "name": "水中の火葬：決着の場",
+      "kind": "decision",
+      "quest": "q065",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q065.stage"
+        },
+        "right": "active"
+      },
+      "script": "q065.decision"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q018",
+  "number": 18,
+  "title": "白い借金",
+  "client": "質屋のオウ",
+  "brief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+  "region": 2,
+  "type": "ritual",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q018_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q018_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q018_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "質屋のオウ",
+        "observation": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+        "belief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+        "goal": "証文を守る塩獣を倒し板を納める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "証文を守る塩獣を倒し板を納める",
+      "alternative": "完済印を写し証文を慣習通り溶かす",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "板には額だけでなく、最後の割賦に丸が刻まれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "保管棚の下には同じ大きさの溶け跡が何十枚もあります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+      "openQuestion": "白い借金の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q018.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q018.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q018.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q018.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q018.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q018.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "板には額だけでなく、最後の割賦に丸が刻まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q018",
+          "key": "clue_a",
+          "text": "板には額だけでなく、最後の割賦に丸が刻まれています。"
+        }
+      ]
+    },
+    "q018.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "質屋のオウ",
+          "text": "保管棚の下には同じ大きさの溶け跡が何十枚もあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q018",
+          "key": "clue_b",
+          "text": "保管棚の下には同じ大きさの溶け跡が何十枚もあります。"
+        }
+      ]
+    },
+    "q018.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "白い借金\n\n塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "完済印を写し証文を慣習通り溶かす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q018.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q018.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q018",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "証文を守る塩獣を倒し板を納める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q018",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "双方の前で板を割り半分ずつ渡す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q018",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

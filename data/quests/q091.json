@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q091",
+  "number": 91,
+  "title": "先に帰った足跡",
+  "client": "案内人のノア",
+  "brief": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+  "region": 10,
+  "type": "investigation",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q091_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q091_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q091_decision",
+      "x": 9,
+      "y": 12,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "足跡は予言でなく案内になりました。ノアは装備と一緒に記録も貸します。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "不気味さは減りました。使える帰路の印も見えなくなります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "二つの隊を見分けられました。古い跡は次の調査のために残ります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "案内人のノア",
+        "observation": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+        "belief": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+        "goal": "足跡を真似る影を倒して跡を消す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "足跡を真似る影を倒して跡を消す",
+      "alternative": "前の隊の記録を読み帰路を引き継ぐ",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "印は一致しますが歩幅が違い、片足を引きずった跡があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "装備台帳には前使用者と返却日の記録が残っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+      "openQuestion": "先に帰った足跡の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q091.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q091.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q091.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q091.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q091.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q091.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "印は一致しますが歩幅が違い、片足を引きずった跡があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q091",
+          "key": "clue_a",
+          "text": "印は一致しますが歩幅が違い、片足を引きずった跡があります。"
+        }
+      ]
+    },
+    "q091.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "案内人のノア",
+          "text": "装備台帳には前使用者と返却日の記録が残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q091",
+          "key": "clue_b",
+          "text": "装備台帳には前使用者と返却日の記録が残っています。"
+        }
+      ]
+    },
+    "q091.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "先に帰った足跡\n\nまだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "足跡を真似る影を倒して跡を消す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "不気味さは減りました。使える帰路の印も見えなくなります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q091",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "前の隊の記録を読み帰路を引き継ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q091.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q091.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "足跡は予言でなく案内になりました。ノアは装備と一緒に記録も貸します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q091",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "自分の足跡へ別の印を付ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "二つの隊を見分けられました。古い跡は次の調査のために残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q091",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

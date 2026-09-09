@@ -1,0 +1,528 @@
+{
+  "id": "region_10_f1",
+  "region": 10,
+  "floor": 1,
+  "name": "帰還者の深淵・地下1層",
+  "tiles": [
+    "###################",
+    "#.#...........#...#",
+    "#.##.######.###.#.#",
+    "#.........#.#...#.#",
+    "#########.#.#.###.#",
+    "#.......#.#...#...#",
+    "#.#####.#.#####.###",
+    "#.#...#.......#...#",
+    "#.#.#.#.#####.#.#.#",
+    "#...#.#.#.....#.#.#",
+    "#.###.#.#.#####.#.#",
+    "#.#.....#.........#",
+    "#.#.#####.#######.#",
+    "#.#...............#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_10",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_10_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 15,
+      "y": 10,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_10_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_10_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 7,
+      "y": 9,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_10_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 11,
+      "y": 1,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_10_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 13,
+      "y": 1,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_10_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_10_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q091_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "先に帰った足跡：現場の痕跡",
+      "kind": "clue",
+      "quest": "q091",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q091.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q091.clue_a"
+    },
+    {
+      "id": "q091_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "先に帰った足跡：記録と証言",
+      "kind": "clue",
+      "quest": "q091",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q091.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q091.clue_b"
+    },
+    {
+      "id": "q091_decision",
+      "x": 9,
+      "y": 12,
+      "name": "先に帰った足跡：決着の場",
+      "kind": "decision",
+      "quest": "q091",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q091.stage"
+        },
+        "right": "active"
+      },
+      "script": "q091.decision"
+    },
+    {
+      "id": "q092_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "出口を持つ獣：現場の痕跡",
+      "kind": "clue",
+      "quest": "q092",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q092.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q092.clue_a"
+    },
+    {
+      "id": "q092_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "出口を持つ獣：記録と証言",
+      "kind": "clue",
+      "quest": "q092",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q092.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q092.clue_b"
+    },
+    {
+      "id": "q092_decision",
+      "x": 8,
+      "y": 13,
+      "name": "出口を持つ獣：決着の場",
+      "kind": "decision",
+      "quest": "q092",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q092.stage"
+        },
+        "right": "active"
+      },
+      "script": "q092.decision"
+    },
+    {
+      "id": "q093_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "名を置く宿：現場の痕跡",
+      "kind": "clue",
+      "quest": "q093",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q093.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q093.clue_a"
+    },
+    {
+      "id": "q093_clue_b",
+      "x": 9,
+      "y": 7,
+      "name": "名を置く宿：記録と証言",
+      "kind": "clue",
+      "quest": "q093",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q093.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q093.clue_b"
+    },
+    {
+      "id": "q093_decision",
+      "x": 10,
+      "y": 11,
+      "name": "名を置く宿：決着の場",
+      "kind": "decision",
+      "quest": "q093",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q093.stage"
+        },
+        "right": "active"
+      },
+      "script": "q093.decision"
+    },
+    {
+      "id": "q094_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "帰還税：現場の痕跡",
+      "kind": "clue",
+      "quest": "q094",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q094.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q094.clue_a"
+    },
+    {
+      "id": "q094_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "帰還税：記録と証言",
+      "kind": "clue",
+      "quest": "q094",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q094.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q094.clue_b"
+    },
+    {
+      "id": "q094_decision",
+      "x": 12,
+      "y": 9,
+      "name": "帰還税：決着の場",
+      "kind": "decision",
+      "quest": "q094",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q094.stage"
+        },
+        "right": "active"
+      },
+      "script": "q094.decision"
+    },
+    {
+      "id": "q095_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "英雄の空白：現場の痕跡",
+      "kind": "clue",
+      "quest": "q095",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q095.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q095.clue_a"
+    },
+    {
+      "id": "q095_clue_b",
+      "x": 11,
+      "y": 5,
+      "name": "英雄の空白：記録と証言",
+      "kind": "clue",
+      "quest": "q095",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q095.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q095.clue_b"
+    },
+    {
+      "id": "q095_decision",
+      "x": 13,
+      "y": 8,
+      "name": "英雄の空白：決着の場",
+      "kind": "decision",
+      "quest": "q095",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q095.stage"
+        },
+        "right": "active"
+      },
+      "script": "q095.decision"
+    }
+  ]
+}

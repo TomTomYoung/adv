@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q002",
+  "number": 2,
+  "title": "骨の荷札",
+  "client": "運送人のベルト",
+  "brief": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+  "region": 1,
+  "type": "rescue",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q002_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q002_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q002_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "運送人のベルト",
+        "observation": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+        "belief": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+        "goal": "骨を守る骸兵を倒し荷札だけ渡す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "骨を守る骸兵を倒し荷札だけ渡す",
+      "alternative": "荷札と標本番号を照合して告発する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "骨には切断面を磨いた痕と、授業用の赤い番号があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "荷札の配達先は墓地ですが、受領印は営業中の骨細工店です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+      "openQuestion": "骨の荷札の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q002.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q002.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q002.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q002.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q002.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q002.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "骨には切断面を磨いた痕と、授業用の赤い番号があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q002",
+          "key": "clue_a",
+          "text": "骨には切断面を磨いた痕と、授業用の赤い番号があります。"
+        }
+      ]
+    },
+    "q002.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "運送人のベルト",
+          "text": "荷札の配達先は墓地ですが、受領印は営業中の骨細工店です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q002",
+          "key": "clue_b",
+          "text": "荷札の配達先は墓地ですが、受領印は営業中の骨細工店です。"
+        }
+      ]
+    },
+    "q002.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "骨の荷札\n\n流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "荷札と標本番号を照合して告発する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q002.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q002.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q002",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "骨を守る骸兵を倒し荷札だけ渡す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q002",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "標本だけ救い、金の流れは追わない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q002",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

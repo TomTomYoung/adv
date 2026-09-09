@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q067",
+  "number": 67,
+  "title": "人魚の筆談",
+  "client": "通訳のスイ",
+  "brief": "人魚が城門で何か訴えています。言葉を解いてください。",
+  "region": 7,
+  "type": "testimony",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q067_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q067_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q067_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "流れは穏やかになりました。スイは最初の通訳帳を図面として作ります。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "城へ入れました。人魚は荒れた水を避け、別の海域へ去ります。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "調査は遅れました。意思の全ては分からなくても、安全な間は作れます。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "人魚の記号は文字でなく水門の開閉図で、急な水圧変化を止めてほしいのです。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "人魚の記号は文字でなく水門の開閉図で、急な水圧変化を止めてほしいのです。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "人魚が城門で何か訴えています。言葉を解いてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "通訳のスイ",
+        "observation": "人魚が城門で何か訴えています。言葉を解いてください。",
+        "belief": "人魚が城門で何か訴えています。言葉を解いてください。",
+        "goal": "門番の海獣を倒し通行を優先する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "門番の海獣を倒し通行を優先する",
+      "alternative": "図を重ね水門を順番に開く",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "同じ記号は会話中でなく、弁を動かすたびに増えています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "城の配管図と並べると、丸と線が水門の位置に重なります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "人魚が城門で何か訴えています。言葉を解いてください。",
+      "openQuestion": "人魚の筆談の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "人魚の記号は文字でなく水門の開閉図で、急な水圧変化を止めてほしいのです。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q067.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q067.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q067.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q067.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q067.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q067.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "同じ記号は会話中でなく、弁を動かすたびに増えています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q067",
+          "key": "clue_a",
+          "text": "同じ記号は会話中でなく、弁を動かすたびに増えています。"
+        }
+      ]
+    },
+    "q067.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "通訳のスイ",
+          "text": "城の配管図と並べると、丸と線が水門の位置に重なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q067",
+          "key": "clue_b",
+          "text": "城の配管図と並べると、丸と線が水門の位置に重なります。"
+        }
+      ]
+    },
+    "q067.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "人魚の筆談\n\n人魚が城門で何か訴えています。言葉を解いてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "門番の海獣を倒し通行を優先する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "城へ入れました。人魚は荒れた水を避け、別の海域へ去ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q067",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "図を重ね水門を順番に開く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q067.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q067.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人魚の記号は文字でなく水門の開閉図で、急な水圧変化を止めてほしいのです。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流れは穏やかになりました。スイは最初の通訳帳を図面として作ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q067",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "城への入水を止め人魚の避難を待つ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "調査は遅れました。意思の全ては分からなくても、安全な間は作れます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q067",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

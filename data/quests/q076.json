@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q076",
+  "number": 76,
+  "title": "鉄の子守歌",
+  "client": "整備士のフウ",
+  "brief": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+  "region": 8,
+  "type": "escort",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q076_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q076_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q076_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "薬は守られ、部屋は静まりました。歌は聞きたい人が再生できる記録になります。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "音は止みました。薬師が急いで保管先を探し、一部を廃棄します。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "部屋は役目を終えました。最後の曲を聴いた整備士が、扉へ日付を記します。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "整備士のフウ",
+        "observation": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+        "belief": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+        "goal": "歌う自動人形を倒して電源を切る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "歌う自動人形を倒して電源を切る",
+      "alternative": "制御音を別回線へ移して歌を保存する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "歌の音程に合わせて送風弁が動き、音を遮ると室温が上がります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "保管庫には熱に弱い薬が移され、部屋名だけ保育室のままです。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+      "openQuestion": "鉄の子守歌の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q076.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q076.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q076.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q076.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q076.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q076.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "歌の音程に合わせて送風弁が動き、音を遮ると室温が上がります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q076",
+          "key": "clue_a",
+          "text": "歌の音程に合わせて送風弁が動き、音を遮ると室温が上がります。"
+        }
+      ]
+    },
+    "q076.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "整備士のフウ",
+          "text": "保管庫には熱に弱い薬が移され、部屋名だけ保育室のままです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q076",
+          "key": "clue_b",
+          "text": "保管庫には熱に弱い薬が移され、部屋名だけ保育室のままです。"
+        }
+      ]
+    },
+    "q076.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鉄の子守歌\n\n無人の保育室で子守歌が続いています。停止してよいか確認してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "制御音を別回線へ移して歌を保存する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q076.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q076.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "薬は守られ、部屋は静まりました。歌は聞きたい人が再生できる記録になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q076",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "歌う自動人形を倒して電源を切る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "音は止みました。薬師が急いで保管先を探し、一部を廃棄します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q076",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "薬を移してから歌を止める",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "部屋は役目を終えました。最後の曲を聴いた整備士が、扉へ日付を記します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q076",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

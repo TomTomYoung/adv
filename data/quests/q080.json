@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q080",
+  "number": 80,
+  "title": "鉄胎の継承",
+  "client": "修繕組合のセリ",
+  "brief": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+  "region": 8,
+  "type": "finale",
+  "recommendedLevel": 8,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_8"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q080_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q080_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q080_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "廟の返事は少し遅くなりました。セリは誰も一人で炉を動かせない鍵を配ります。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "廟は素早く応えました。何を止めるかも、あなたの署名を待ちます。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "灯と空調は続きました。後継者の席には、議題の札だけが置かれます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修繕組合のセリ",
+        "observation": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+        "belief": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+        "goal": "中枢守護機を倒し冒険者の命令へ統一する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "中枢守護機を倒し冒険者の命令へ統一する",
+      "alternative": "三者承認を戻して共同運営にする",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "創設記録には整備・利用・保護の三者承認が載っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+      "openQuestion": "鉄胎の継承の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q080.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q080.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q080.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q080.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q080.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q080.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q080",
+          "key": "clue_a",
+          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されています。"
+        }
+      ]
+    },
+    "q080.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "修繕組合のセリ",
+          "text": "創設記録には整備・利用・保護の三者承認が載っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q080",
+          "key": "clue_b",
+          "text": "創設記録には整備・利用・保護の三者承認が載っています。"
+        }
+      ]
+    },
+    "q080.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鉄胎の継承\n\n廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "三者承認を戻して共同運営にする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟の返事は少し遅くなりました。セリは誰も一人で炉を動かせない鍵を配ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "中枢守護機を倒し冒険者の命令へ統一する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟は素早く応えました。何を止めるかも、あなたの署名を待ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "最小機能だけ残し後継選定を延期する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯と空調は続きました。後継者の席には、議題の札だけが置かれます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q080",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

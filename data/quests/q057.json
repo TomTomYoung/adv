@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q057",
+  "number": 57,
+  "title": "無主の露店",
+  "client": "市場番のゼン",
+  "brief": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+  "region": 6,
+  "type": "testimony",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q057_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q057_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q057_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "店は残りました。一人の不在で生活全部を失わない規則も残ります。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "通路は広がりました。七人は別々に出店料を用意することになります。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "商いは続きました。ゼンは閉店後に全員が揃う時間を聞きます。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "市場番のゼン",
+        "observation": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+        "belief": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+        "goal": "店を守る荷車獣を倒し商品を撤去する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "店を守る荷車獣を倒し商品を撤去する",
+      "alternative": "共同名義で届け出て代表を輪番にする",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "帳面の仕入れ印は七種類あり、釣銭箱は一つです。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "営業時間の端ごとに違う名の休憩札が掛けられています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+      "openQuestion": "無主の露店の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q057.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q057.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q057.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q057.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q057.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q057.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "帳面の仕入れ印は七種類あり、釣銭箱は一つです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q057",
+          "key": "clue_a",
+          "text": "帳面の仕入れ印は七種類あり、釣銭箱は一つです。"
+        }
+      ]
+    },
+    "q057.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "市場番のゼン",
+          "text": "営業時間の端ごとに違う名の休憩札が掛けられています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q057",
+          "key": "clue_b",
+          "text": "営業時間の端ごとに違う名の休憩札が掛けられています。"
+        }
+      ]
+    },
+    "q057.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "無主の露店\n\n主が消えた店を撤去したいと言われました。所有者を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "店を守る荷車獣を倒し商品を撤去する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "通路は広がりました。七人は別々に出店料を用意することになります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q057",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "共同名義で届け出て代表を輪番にする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q057.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q057.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "店は残りました。一人の不在で生活全部を失わない規則も残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q057",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "期限付きの営業札を発行して名義を待つ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "商いは続きました。ゼンは閉店後に全員が揃う時間を聞きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q057",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

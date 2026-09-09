@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q066",
+  "number": 66,
+  "title": "珊瑚の軍議",
+  "client": "歴史家のオミ",
+  "brief": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+  "region": 7,
+  "type": "escort",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q066_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q066_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q066_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "殉死とされた人が生還者として戻りました。英雄譚を好む人は反発します。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "慰霊碑は立派になりました。生還した家族の証言は碑文に入りません。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "空の鎧という事実が残りました。見る人が記録を読み比べます。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "歴史家のオミ",
+        "observation": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+        "belief": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+        "goal": "鎧の亡霊を倒し英雄の遺品として納める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "鎧の亡霊を倒し英雄の遺品として納める",
+      "alternative": "避難記録と鎧を照合し最期を書き直す",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "鎧の内部に骨はなく、珊瑚は空いた襟から生えています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "議事録の時刻には船がすでに出港し、最後の署名だけ筆が異なります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+      "openQuestion": "珊瑚の軍議の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q066.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q066.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q066.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q066.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q066.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q066.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "鎧の内部に骨はなく、珊瑚は空いた襟から生えています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q066",
+          "key": "clue_a",
+          "text": "鎧の内部に骨はなく、珊瑚は空いた襟から生えています。"
+        }
+      ]
+    },
+    "q066.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "歴史家のオミ",
+          "text": "議事録の時刻には船がすでに出港し、最後の署名だけ筆が異なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q066",
+          "key": "clue_b",
+          "text": "議事録の時刻には船がすでに出港し、最後の署名だけ筆が異なります。"
+        }
+      ]
+    },
+    "q066.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "珊瑚の軍議\n\n会議室の珊瑚が人の形をしています。城の最期を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "避難記録と鎧を照合し最期を書き直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q066.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q066.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "殉死とされた人が生還者として戻りました。英雄譚を好む人は反発します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q066",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "鎧の亡霊を倒し英雄の遺品として納める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "慰霊碑は立派になりました。生還した家族の証言は碑文に入りません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q066",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "鎧を保存し確かな事実だけ展示する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "空の鎧という事実が残りました。見る人が記録を読み比べます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q066",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

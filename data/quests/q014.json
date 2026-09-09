@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q014",
+  "number": 14,
+  "title": "帰りの貨車",
+  "client": "貨車番のホド",
+  "brief": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+  "region": 2,
+  "type": "negotiation",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q014_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q014_clue_b",
+      "x": 6,
+      "y": 9,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q014_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "家族は看病できました。坑主は補償を迫られ、貨車には人用の手すりが付きます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "坑夫は密かに帰れました。次の負傷者も同じ床下に押し込まれます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "その日の搬送は終わりました。貨車番はあなたにだけ次の便の時刻を教えます。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "貨車番のホド",
+        "observation": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+        "belief": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+        "goal": "線路の魔物を退け貨車だけ引き上げる"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "線路の魔物を退け貨車だけ引き上げる",
+      "alternative": "負傷を記録し搬送便として通す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "荷台の下から包帯が出ていますが、鉱石の粉は付いていません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "作業簿では全員出勤なのに、賃金受取には家族が並んでいます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+      "openQuestion": "帰りの貨車の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q014.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q014.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q014.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q014.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q014.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q014.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "荷台の下から包帯が出ていますが、鉱石の粉は付いていません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q014",
+          "key": "clue_a",
+          "text": "荷台の下から包帯が出ていますが、鉱石の粉は付いていません。"
+        }
+      ]
+    },
+    "q014.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "貨車番のホド",
+          "text": "作業簿では全員出勤なのに、賃金受取には家族が並んでいます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q014",
+          "key": "clue_b",
+          "text": "作業簿では全員出勤なのに、賃金受取には家族が並んでいます。"
+        }
+      ]
+    },
+    "q014.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰りの貨車\n\n空のはずの貨車が重くて上がりません。積荷を確認してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "負傷を記録し搬送便として通す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q014.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q014.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "家族は看病できました。坑主は補償を迫られ、貨車には人用の手すりが付きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q014",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "線路の魔物を退け貨車だけ引き上げる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "坑夫は密かに帰れました。次の負傷者も同じ床下に押し込まれます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q014",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "荷を二回に分け誰も告発しない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "その日の搬送は終わりました。貨車番はあなたにだけ次の便の時刻を教えます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q014",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

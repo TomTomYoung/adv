@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q044",
+  "number": 44,
+  "title": "未来の訃報",
+  "client": "新聞係のユズ",
+  "brief": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+  "region": 5,
+  "type": "negotiation",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q044_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q044_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q044_decision",
+      "x": 10,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "一覧は取り消されました。救われた者の罪が消えたわけではなく、裁判が始まります。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "人々は安心しました。予定そのものを知らぬまま翌朝を迎えます。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "何人かは逃れました。残った者のため、ユズは空いた行も印刷します。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "新聞係のユズ",
+        "observation": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+        "belief": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+        "goal": "訃報の配達霊を倒し紙を処分する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "訃報の配達霊を倒し紙を処分する",
+      "alternative": "書類を公開し処刑前の審査を要求する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+      "openQuestion": "未来の訃報の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q044.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q044.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q044.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q044.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q044.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q044.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q044",
+          "key": "clue_a",
+          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号があります。"
+        }
+      ]
+    },
+    "q044.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "新聞係のユズ",
+          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q044",
+          "key": "clue_b",
+          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されています。"
+        }
+      ]
+    },
+    "q044.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "未来の訃報\n\n明日の死者一覧が届きました。名のある冒険者を救ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "書類を公開し処刑前の審査を要求する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一覧は取り消されました。救われた者の罪が消えたわけではなく、裁判が始まります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "訃報の配達霊を倒し紙を処分する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人々は安心しました。予定そのものを知らぬまま翌朝を迎えます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q044",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "名のある人へ紙を渡し避難を助ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "何人かは逃れました。残った者のため、ユズは空いた行も印刷します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

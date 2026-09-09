@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q085",
+  "number": 85,
+  "title": "方位のない羅針盤",
+  "client": "探検家のルウ",
+  "brief": "羅針盤が人を指します。地図作りに使えるか試してください。",
+  "region": 9,
+  "type": "resource",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q085_clue_a",
+      "x": 6,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q085_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q085_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "迷宮で迷っても戻る向きが分かります。ルウは方角用の盤を別に持ちます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "北は指しました。対の標を使う帰還機能は失われます。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "道案内には使えました。先導者が倒れた時の交代手順も決めます。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "羅針盤が人を指します。地図作りに使えるか試してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "探検家のルウ",
+        "observation": "羅針盤が人を指します。地図作りに使えるか試してください。",
+        "belief": "羅針盤が人を指します。地図作りに使えるか試してください。",
+        "goal": "針を引く魔物を倒し盤を磁化し直す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "針を引く魔物を倒し盤を磁化し直す",
+      "alternative": "帰還標を入口へ据え脱出具として使う",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "針は北へ向かず、荷袋を置くとその場へ止まります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "製作票には航法でなく回収用と書かれ、対の番号があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "羅針盤が人を指します。地図作りに使えるか試してください。",
+      "openQuestion": "方位のない羅針盤の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q085.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q085.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q085.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q085.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q085.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q085.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "針は北へ向かず、荷袋を置くとその場へ止まります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q085",
+          "key": "clue_a",
+          "text": "針は北へ向かず、荷袋を置くとその場へ止まります。"
+        }
+      ]
+    },
+    "q085.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "探検家のルウ",
+          "text": "製作票には航法でなく回収用と書かれ、対の番号があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q085",
+          "key": "clue_b",
+          "text": "製作票には航法でなく回収用と書かれ、対の番号があります。"
+        }
+      ]
+    },
+    "q085.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "方位のない羅針盤\n\n羅針盤が人を指します。地図作りに使えるか試してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "針を引く魔物を倒し盤を磁化し直す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "北は指しました。対の標を使う帰還機能は失われます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q085",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "帰還標を入口へ据え脱出具として使う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷宮で迷っても戻る向きが分かります。ルウは方角用の盤を別に持ちます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "標を先導者に持たせ隊を離さない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "道案内には使えました。先導者が倒れた時の交代手順も決めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

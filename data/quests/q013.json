@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q013",
+  "number": 13,
+  "title": "呼吸する鉱脈",
+  "client": "鉱石商のセイ",
+  "brief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+  "region": 2,
+  "type": "mechanism",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q013_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q013_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q013_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鉱石商のセイ",
+        "observation": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+        "belief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+        "goal": "根に巣食う魔物ごと切り開く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "根に巣食う魔物ごと切り開く",
+      "alternative": "根の通り道を残して鉱脈を迂回する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "膨張は採掘音に反応せず、地下湖の水位と同期します。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "欠片を割ると年輪状の繊維と湿った芽が現れます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+      "openQuestion": "呼吸する鉱脈の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q013.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q013.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q013.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q013.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q013.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q013.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "膨張は採掘音に反応せず、地下湖の水位と同期します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q013",
+          "key": "clue_a",
+          "text": "膨張は採掘音に反応せず、地下湖の水位と同期します。"
+        }
+      ]
+    },
+    "q013.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鉱石商のセイ",
+          "text": "欠片を割ると年輪状の繊維と湿った芽が現れます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q013",
+          "key": "clue_b",
+          "text": "欠片を割ると年輪状の繊維と湿った芽が現れます。"
+        }
+      ]
+    },
+    "q013.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "呼吸する鉱脈\n\n鉱脈が膨らむため掘れません。奥の異変を止めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "根に巣食う魔物ごと切り開く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q013",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "根の通り道を残して鉱脈を迂回する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q013.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q013.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q013",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "調査標を置いて採掘を凍結する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q013",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

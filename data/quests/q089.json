@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q089",
+  "number": 89,
+  "title": "逆さまの天球儀",
+  "client": "暦職人のツキ",
+  "brief": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+  "region": 9,
+  "type": "survey",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q089_clue_a",
+      "x": 3,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q089_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q089_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "暦は揃いました。飛ぶ日付に予定された仕事には別の日が割り当てられます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "今の暮らしとは合いました。別の観測所との換算表が必要になります。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "混乱は小さく済みました。ツキは一冊の暦に二本の欄を作ります。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "暦職人のツキ",
+        "observation": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+        "belief": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+        "goal": "天球の守り手を倒し現行暦へ歯車を削る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "天球の守り手を倒し現行暦へ歯車を削る",
+      "alternative": "正しい向きへ戻し暦の移行日を設ける",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "文字は南側から読むと正立し、持ち手の摩耗もそちらに偏っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "移設前の図では台が逆向きで、暦の補正は移設年から始まっています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+      "openQuestion": "逆さまの天球儀の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q089.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q089.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q089.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q089.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q089.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q089.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "文字は南側から読むと正立し、持ち手の摩耗もそちらに偏っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q089",
+          "key": "clue_a",
+          "text": "文字は南側から読むと正立し、持ち手の摩耗もそちらに偏っています。"
+        }
+      ]
+    },
+    "q089.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "暦職人のツキ",
+          "text": "移設前の図では台が逆向きで、暦の補正は移設年から始まっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q089",
+          "key": "clue_b",
+          "text": "移設前の図では台が逆向きで、暦の補正は移設年から始まっています。"
+        }
+      ]
+    },
+    "q089.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "逆さまの天球儀\n\n天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "天球の守り手を倒し現行暦へ歯車を削る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "今の暮らしとは合いました。別の観測所との換算表が必要になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q089",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "正しい向きへ戻し暦の移行日を設ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q089.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q089.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "暦は揃いました。飛ぶ日付に予定された仕事には別の日が割り当てられます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q089",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "二つの暦を併用し急な変更を避ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "混乱は小さく済みました。ツキは一冊の暦に二本の欄を作ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q089",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

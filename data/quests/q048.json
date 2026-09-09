@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q048",
+  "number": 48,
+  "title": "眠る校正者",
+  "client": "写本師のアリ",
+  "brief": "眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。",
+  "region": 5,
+  "type": "ritual",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q048_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q048_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q048_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "筆は止まり、校正者は眠り直しました。次の契約には校了日が入ります。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "手は止まりました。違約金をめぐる交渉を、アリが引き受けます。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "一晩だけ誤字はゼロになりました。最後の一字を直した者は、全員の名を書きます。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "写本師のアリ",
+        "observation": "眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。",
+        "belief": "眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。",
+        "goal": "自動筆の精を倒して契約を断つ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "自動筆の精を倒して契約を断つ",
+      "alternative": "追加を止め最終稿を封印する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "夜に直った行へ、昼の別筆で同じ誤りが戻されています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "契約の終了条件には全校了とあり、期限の欄が空白です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。",
+      "openQuestion": "眠る校正者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q048.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q048.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q048.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q048.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q048.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q048.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "夜に直った行へ、昼の別筆で同じ誤りが戻されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q048",
+          "key": "clue_a",
+          "text": "夜に直った行へ、昼の別筆で同じ誤りが戻されています。"
+        }
+      ]
+    },
+    "q048.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "写本師のアリ",
+          "text": "契約の終了条件には全校了とあり、期限の欄が空白です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q048",
+          "key": "clue_b",
+          "text": "契約の終了条件には全校了とあり、期限の欄が空白です。"
+        }
+      ]
+    },
+    "q048.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "眠る校正者\n\n眠った校正者の手だけが動いています。仕事を止めてよいか調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "追加を止め最終稿を封印する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "筆は止まり、校正者は眠り直しました。次の契約には校了日が入ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "自動筆の精を倒して契約を断つ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "手は止まりました。違約金をめぐる交渉を、アリが引き受けます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q048",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "交代の校正者を集め追加分を上回る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一晩だけ誤字はゼロになりました。最後の一字を直した者は、全員の名を書きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

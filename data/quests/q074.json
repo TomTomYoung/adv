@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q074",
+  "number": 74,
+  "title": "祈祷の順番",
+  "client": "鐘番のユア",
+  "brief": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+  "region": 8,
+  "type": "negotiation",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q074_clue_a",
+      "x": 1,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q074_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q074_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "扉は開きました。ユアは訂正した頁に、自分の検証日を記します。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "今回の隊は通れました。次の祈祷でも炉は熱を持ちます。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "廟は静かなまま開きました。鐘の音が戻るのは点検の後です。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鐘番のユア",
+        "observation": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+        "belief": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+        "goal": "封鎖機構を倒し順番を無視して進む"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "封鎖機構を倒し順番を無視して進む",
+      "alternative": "旧手順を試験して祈祷書を訂正する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にあります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+      "openQuestion": "祈祷の順番の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q074.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q074.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q074.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q074.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q074.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q074.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q074",
+          "key": "clue_a",
+          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっています。"
+        }
+      ]
+    },
+    "q074.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鐘番のユア",
+          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q074",
+          "key": "clue_b",
+          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にあります。"
+        }
+      ]
+    },
+    "q074.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "祈祷の順番\n\n祈祷の順番を間違えると廟が閉じます。正しい順を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "旧手順を試験して祈祷書を訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "扉は開きました。ユアは訂正した頁に、自分の検証日を記します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "封鎖機構を倒し順番を無視して進む",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "今回の隊は通れました。次の祈祷でも炉は熱を持ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q074",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "炉を止め手動で扉を開ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "廟は静かなまま開きました。鐘の音が戻るのは点検の後です。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

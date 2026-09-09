@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q030",
+  "number": 30,
+  "title": "根の向こうの朝",
+  "client": "薬師のハナ",
+  "brief": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+  "region": 3,
+  "type": "finale",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_3"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q030_clue_a",
+      "x": 5,
+      "y": 4,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q030_clue_b",
+      "x": 7,
+      "y": 9,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q030_decision",
+      "x": 12,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "地下に朝の光が差しました。守る庭と伸びる木は、同じ穴を使えます。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "庭園は形を保ちました。ハナは切り株から取れる最後の薬を保存します。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "庭園は森へ変わりました。地上の新しい薬畑には、地下の名が付けられます。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "薬師のハナ",
+        "observation": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+        "belief": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+        "goal": "根の化身を倒し成長を止める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "根の化身を倒し成長を止める",
+      "alternative": "明かり取りを補強し根をそこへ導く",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+      "openQuestion": "根の向こうの朝の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q030.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q030.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q030.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q030.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q030.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q030.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q030",
+          "key": "clue_a",
+          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げています。"
+        }
+      ]
+    },
+    "q030.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "薬師のハナ",
+          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q030",
+          "key": "clue_b",
+          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置があります。"
+        }
+      ]
+    },
+    "q030.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "根の向こうの朝\n\n地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "明かり取りを補強し根をそこへ導く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下に朝の光が差しました。守る庭と伸びる木は、同じ穴を使えます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "根の化身を倒し成長を止める",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "庭園は形を保ちました。ハナは切り株から取れる最後の薬を保存します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "人と薬草を移して根へ庭を渡す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "庭園は森へ変わりました。地上の新しい薬畑には、地下の名が付けられます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q030",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

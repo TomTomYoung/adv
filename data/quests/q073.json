@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q073",
+  "number": 73,
+  "title": "天使の予備腕",
+  "client": "義肢職人のリン",
+  "brief": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+  "region": 8,
+  "type": "mechanism",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q073_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q073_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q073_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "義肢も避難路も残りました。リンは次の腕に支えた扉の番号を刻みます。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "材料は揃いました。非常扉を開けるには、人が支える番を必要とします。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "納品は遅れました。天使の片腕は、戻るまで仮の梁に替わります。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "義肢職人のリン",
+        "observation": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+        "belief": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+        "goal": "天使の護衛を倒し腕を持ち去る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "天使の護衛を倒し腕を持ち去る",
+      "alternative": "支えを新設して余剰の腕を回収する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "非常図では像の数と、固定すべき扉の数が一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+      "openQuestion": "天使の予備腕の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q073.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q073.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q073.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q073.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q073.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q073.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q073",
+          "key": "clue_a",
+          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷があります。"
+        }
+      ]
+    },
+    "q073.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "義肢職人のリン",
+          "text": "非常図では像の数と、固定すべき扉の数が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q073",
+          "key": "clue_b",
+          "text": "非常図では像の数と、固定すべき扉の数が一致します。"
+        }
+      ]
+    },
+    "q073.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "天使の予備腕\n\n天使像の腕を回収してください。義肢の材料に使えそうです。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "天使の護衛を倒し腕を持ち去る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "材料は揃いました。非常扉を開けるには、人が支える番を必要とします。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q073",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "支えを新設して余剰の腕を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "義肢も避難路も残りました。リンは次の腕に支えた扉の番号を刻みます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "一本だけ借りて複製後に返す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "納品は遅れました。天使の片腕は、戻るまで仮の梁に替わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

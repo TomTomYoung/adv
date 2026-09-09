@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q092",
+  "number": 92,
+  "title": "出口を持つ獣",
+  "client": "救助人のヤチ",
+  "brief": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+  "region": 10,
+  "type": "rescue",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q092_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q092_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q092_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "乗っていた隊は歩いて帰りました。獣は再び、次の遭難者を探しに行きます。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "隊は救えました。動けなくなった避難所を誰かが引き上げる仕事が残ります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "中へ入らずに救助できました。隊は自分たちを運んだものを外から見ます。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "救助人のヤチ",
+        "observation": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+        "belief": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+        "goal": "外装の守護獣を倒し腹を切り開く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "外装の守護獣を倒し腹を切り開く",
+      "alternative": "救助符号で停止させ隊を降ろす",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "爪痕は生物の筋でなく金具の継ぎ目に沿っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "腹の内側から救助符号が返り、外装には避難所番号があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+      "openQuestion": "出口を持つ獣の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q092.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q092.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q092.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q092.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q092.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q092.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "爪痕は生物の筋でなく金具の継ぎ目に沿っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q092",
+          "key": "clue_a",
+          "text": "爪痕は生物の筋でなく金具の継ぎ目に沿っています。"
+        }
+      ]
+    },
+    "q092.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "救助人のヤチ",
+          "text": "腹の内側から救助符号が返り、外装には避難所番号があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q092",
+          "key": "clue_b",
+          "text": "腹の内側から救助符号が返り、外装には避難所番号があります。"
+        }
+      ]
+    },
+    "q092.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "出口を持つ獣\n\n獣の腹に出口があると聞きました。捕まった隊を救ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "救助符号で停止させ隊を降ろす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q092.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q092.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "乗っていた隊は歩いて帰りました。獣は再び、次の遭難者を探しに行きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q092",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "外装の守護獣を倒し腹を切り開く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "隊は救えました。動けなくなった避難所を誰かが引き上げる仕事が残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q092",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "獣の進路を出口まで誘導する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "中へ入らずに救助できました。隊は自分たちを運んだものを外から見ます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q092",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

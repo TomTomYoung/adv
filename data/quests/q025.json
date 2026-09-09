@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q025",
+  "number": 25,
+  "title": "地下の雨乞い",
+  "client": "水運びのピノ",
+  "brief": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+  "region": 3,
+  "type": "resource",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q025_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q025_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q025_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "雨は予定通り降りました。子供は歌を覚え、大人は弁の点検日を覚えます。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "庭は潤いましたが一角が水浸しです。次は排水の依頼が必要になります。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "祭は続きました。疲れた腕を見て、来年の担当者が自分から名乗ります。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "水運びのピノ",
+        "observation": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+        "belief": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+        "goal": "雲を抱く魔物を倒し弁をこじ開ける"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "雲を抱く魔物を倒し弁をこじ開ける",
+      "alternative": "天井番を復活させ祭を行う",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "祭具に混じって弁を回す長い鍵があり、歌詞と同じ数字が付いています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "古い祭の記録には、歌い手とは別に天井番の給金が載っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+      "openQuestion": "地下の雨乞いの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q025.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q025.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q025.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q025.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q025.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q025.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "祭具に混じって弁を回す長い鍵があり、歌詞と同じ数字が付いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q025",
+          "key": "clue_a",
+          "text": "祭具に混じって弁を回す長い鍵があり、歌詞と同じ数字が付いています。"
+        }
+      ]
+    },
+    "q025.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "水運びのピノ",
+          "text": "古い祭の記録には、歌い手とは別に天井番の給金が載っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q025",
+          "key": "clue_b",
+          "text": "古い祭の記録には、歌い手とは別に天井番の給金が載っています。"
+        }
+      ]
+    },
+    "q025.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "地下の雨乞い\n\n地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "雲を抱く魔物を倒し弁をこじ開ける",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "庭は潤いましたが一角が水浸しです。次は排水の依頼が必要になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q025",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "天井番を復活させ祭を行う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q025.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q025.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "雨は予定通り降りました。子供は歌を覚え、大人は弁の点検日を覚えます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q025",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "水を手で運び今年の祭を支える",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "祭は続きました。疲れた腕を見て、来年の担当者が自分から名乗ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q025",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

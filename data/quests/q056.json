@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q056",
+  "number": 56,
+  "title": "閉店後の拍手",
+  "client": "舞台主のトワ",
+  "brief": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+  "region": 6,
+  "type": "escort",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q056_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q056_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q056_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "夜は静まりました。初公演では本物の拍手が少し遅れて広がります。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "眠れる夜が戻りました。昼の舞台も静かになり、役者は客の息を聞きます。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "拍手は地下奥で続きました。若い役者には練習の相手ができます。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "舞台主のトワ",
+        "observation": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+        "belief": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+        "goal": "機械の精を倒し歯車を壊す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "機械の精を倒し歯車を壊す",
+      "alternative": "停止札を作り機械の役割を公表する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "拍手の強さは椅子を外すと減り、舞台を照らしても変わりません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "機械の注文書には満席を演出とあり、停止用の売約札が欠けています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+      "openQuestion": "閉店後の拍手の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q056.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q056.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q056.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q056.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q056.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q056.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "拍手の強さは椅子を外すと減り、舞台を照らしても変わりません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q056",
+          "key": "clue_a",
+          "text": "拍手の強さは椅子を外すと減り、舞台を照らしても変わりません。"
+        }
+      ]
+    },
+    "q056.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "舞台主のトワ",
+          "text": "機械の注文書には満席を演出とあり、停止用の売約札が欠けています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q056",
+          "key": "clue_b",
+          "text": "機械の注文書には満席を演出とあり、停止用の売約札が欠けています。"
+        }
+      ]
+    },
+    "q056.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "閉店後の拍手\n\n地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "停止札を作り機械の役割を公表する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q056.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q056.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "夜は静まりました。初公演では本物の拍手が少し遅れて広がります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q056",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "機械の精を倒し歯車を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "眠れる夜が戻りました。昼の舞台も静かになり、役者は客の息を聞きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q056",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "機械を稽古用へ移す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "拍手は地下奥で続きました。若い役者には練習の相手ができます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q056",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

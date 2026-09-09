@@ -1,0 +1,20 @@
+import {GameView} from './view.js';
+import {THEME_DEFAULT,applyTheme} from './theme.js';
+const select=document.querySelector('#fixture'),fields=document.querySelector('#theme-fields'),status=document.querySelector('#preview-status');
+let theme={...THEME_DEFAULT};
+const response=await fetch('data/view-fixtures.json');if(!response.ok)throw new Error('表示例を読み込めません');const fixtures=await response.json();
+const show=text=>{status.textContent=text;};
+const view=new GameView(document.querySelector('#app'),intent=>{show(`表示側が送る操作: ${JSON.stringify(intent)}`);return true;},{status:show,menu:()=>show('本番では記録メニューを表示します。'),help:()=>show('この画面は表示のみのプレビューです。'),retreat:()=>show('帰還操作をゲームへ送ります。'),sound:()=>show('音声再生は本番画面で確認できます。'),soundEnabled:()=>false});
+function render(){view.tab=select.value==='town'?'quests':select.value==='journal'?'journal':'explore';view.render(structuredClone(fixtures[select.value]));}
+for(const [key,label] of Object.entries({background:'背景',surface:'面',raised:'ボタン',ink:'本文',muted:'補助',accent:'強調',border:'枠線'})){
+  const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('input');input.type='color';input.value=theme[key];input.addEventListener('input',()=>{theme[key]=input.value;applyTheme(theme);});wrap.append(input);fields.append(wrap);
+}
+for(const [key,label,options] of [['font','書体',[['serif','明朝'],['sans-serif','ゴシック'],['monospace','等幅']]],['sidebar','隊の位置',[['right','右'],['left','左']]]]){
+  const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('select');for(const [value,text] of options)input.append(new Option(text,value));input.value=theme[key];input.addEventListener('change',()=>{theme[key]=input.value;applyTheme(theme);});wrap.append(input);fields.append(wrap);
+}
+for(const [key,label,min,max] of [['textSize','本文',16,24],['radius','角丸',0,20]]){
+  const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.value=String(theme[key]);input.style.width='65px';input.addEventListener('change',()=>{theme[key]=Math.max(min,Math.min(max,Number(input.value)));applyTheme(theme);});wrap.append(input);fields.append(wrap);
+}
+select.addEventListener('change',render);
+document.querySelector('#export-theme').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(theme,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='view-theme.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);show('本番画面の「記録 → 画面テーマを読み込む」で適用できます。');});
+applyTheme(theme);render();

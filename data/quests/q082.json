@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q082",
+  "number": 82,
+  "title": "星売りの空瓶",
+  "client": "商人のエル",
+  "brief": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+  "region": 9,
+  "type": "rescue",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q082_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q082_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q082_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "星は戻りました。エルは光の寿命と再充填の方法も売り札へ書きます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "一瞬は明るくなりました。蓄えた光はすぐ尽き、客は空瓶を持ち帰ります。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "商いは縮みました。説明を聞いた客の一部は瓶を残しました。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "商人のエル",
+        "observation": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+        "belief": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+        "goal": "光喰いを倒し瓶を強く加熱する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "光喰いを倒し瓶を強く加熱する",
+      "alternative": "適温の展示箱へ移し仕組みを示す",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "栓は開いておらず、掌で温めた瓶だけ細く光ります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "納品票には点灯温度が書かれ、展示室の温度計はそれ以下です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+      "openQuestion": "星売りの空瓶の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q082.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q082.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q082.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q082.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q082.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q082.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "栓は開いておらず、掌で温めた瓶だけ細く光ります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q082",
+          "key": "clue_a",
+          "text": "栓は開いておらず、掌で温めた瓶だけ細く光ります。"
+        }
+      ]
+    },
+    "q082.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "商人のエル",
+          "text": "納品票には点灯温度が書かれ、展示室の温度計はそれ以下です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q082",
+          "key": "clue_b",
+          "text": "納品票には点灯温度が書かれ、展示室の温度計はそれ以下です。"
+        }
+      ]
+    },
+    "q082.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "星売りの空瓶\n\n瓶詰めの星が空になりました。盗まれた光を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "適温の展示箱へ移し仕組みを示す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "星は戻りました。エルは光の寿命と再充填の方法も売り札へ書きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q082",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "光喰いを倒し瓶を強く加熱する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "一瞬は明るくなりました。蓄えた光はすぐ尽き、客は空瓶を持ち帰ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q082",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "瓶を地上へ戻して返品に応じる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "商いは縮みました。説明を聞いた客の一部は瓶を残しました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q082",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

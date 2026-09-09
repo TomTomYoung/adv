@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q051",
+  "number": 51,
+  "title": "釣銭のない店",
+  "client": "行商人のコノ",
+  "brief": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+  "region": 6,
+  "type": "investigation",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q051_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q051_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q051_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "買わない客も食べたい客も区別できました。コノは最初の説明札を書きます。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "客へ金は戻りました。その夜の食堂は鍋を一つ減らします。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "返金にも食事にも使える札ができました。店主は端数の行先を口にします。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "行商人のコノ",
+        "observation": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+        "belief": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+        "goal": "金庫の番獣を倒し釣銭を回収する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "金庫の番獣を倒し釣銭を回収する",
+      "alternative": "食堂分を選択制にして未説明分を返す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "値札には小さな椀の印があり、常連は端数を気にしません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "食堂の席札に購入額と同じ番号が記されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+      "openQuestion": "釣銭のない店の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q051.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q051.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q051.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q051.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q051.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q051.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "値札には小さな椀の印があり、常連は端数を気にしません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q051",
+          "key": "clue_a",
+          "text": "値札には小さな椀の印があり、常連は端数を気にしません。"
+        }
+      ]
+    },
+    "q051.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "行商人のコノ",
+          "text": "食堂の席札に購入額と同じ番号が記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q051",
+          "key": "clue_b",
+          "text": "食堂の席札に購入額と同じ番号が記されています。"
+        }
+      ]
+    },
+    "q051.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "釣銭のない店\n\n買物をすると釣銭が戻りません。店主に精算を求めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "金庫の番獣を倒し釣銭を回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "客へ金は戻りました。その夜の食堂は鍋を一つ減らします。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q051",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "食堂分を選択制にして未説明分を返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q051.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q051.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "買わない客も食べたい客も区別できました。コノは最初の説明札を書きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q051",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "共同食堂で精算する席を設ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "返金にも食事にも使える札ができました。店主は端数の行先を口にします。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q051",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

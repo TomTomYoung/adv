@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q004",
+  "number": 4,
+  "title": "二枚目の通行証",
+  "client": "見習い冒険者のイナ",
+  "brief": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+  "region": 1,
+  "type": "negotiation",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q004_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q004_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q004_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "姉妹は別々の証を得ました。係員には本名での再試験が課されます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "姉は帰りましたが通行証は失効しました。妹は地上で働いて再発行料を貯めます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "係員は何も聞かず姉を放しました。翌月も二人は一枚の証を握っています。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "姉妹は一枚を共有していますが、関所の係も亡き兄の資格で働いています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "姉妹は一枚を共有していますが、関所の係も亡き兄の資格で働いています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "見習い冒険者のイナ",
+        "observation": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+        "belief": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+        "goal": "関所の番犬を退け姉を連れ出す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "関所の番犬を退け姉を連れ出す",
+      "alternative": "双方の事情を記録し臨時証を交渉する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "通行証の擦れ方が違い、両方に同じ修正傷があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+      "openQuestion": "二枚目の通行証の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "姉妹は一枚を共有していますが、関所の係も亡き兄の資格で働いています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q004.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q004.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q004.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q004.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q004.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q004.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "通行証の擦れ方が違い、両方に同じ修正傷があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q004",
+          "key": "clue_a",
+          "text": "通行証の擦れ方が違い、両方に同じ修正傷があります。"
+        }
+      ]
+    },
+    "q004.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "見習い冒険者のイナ",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q004",
+          "key": "clue_b",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。"
+        }
+      ]
+    },
+    "q004.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "二枚目の通行証\n\n地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "双方の事情を記録し臨時証を交渉する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "姉妹は一枚を共有していますが、関所の係も亡き兄の資格で働いています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "姉妹は別々の証を得ました。係員には本名での再試験が課されます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "関所の番犬を退け姉を連れ出す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "姉は帰りましたが通行証は失効しました。妹は地上で働いて再発行料を貯めます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q004",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "罰金を肩代わりし事情は伏せる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "係員は何も聞かず姉を放しました。翌月も二人は一枚の証を握っています。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

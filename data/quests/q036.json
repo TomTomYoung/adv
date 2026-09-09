@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q036",
+  "number": 36,
+  "title": "七番目の歌声",
+  "client": "聖歌隊のキリ",
+  "brief": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+  "region": 4,
+  "type": "escort",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q036_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q036_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q036_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "歌手は声の代わりに指揮を執りました。七人の名が揃って礼拝録に残ります。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "合唱は純粋な生声になりました。キリは失われた低音を一人で探します。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "本番は六人、終わりは七人になりました。拍手は調律室にも届きます。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "聖歌隊のキリ",
+        "observation": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+        "belief": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+        "goal": "録音を守る影を倒し六人だけにする"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "録音を守る影を倒し六人だけにする",
+      "alternative": "録音と生歌の役割を明示して共演する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "七番目の息継ぎだけ、何度歌っても全く同じ長さです。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "裏の調律室には声を出さない指導者と、擦り切れた譜面があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+      "openQuestion": "七番目の歌声の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q036.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q036.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q036.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q036.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q036.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q036.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "七番目の息継ぎだけ、何度歌っても全く同じ長さです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q036",
+          "key": "clue_a",
+          "text": "七番目の息継ぎだけ、何度歌っても全く同じ長さです。"
+        }
+      ]
+    },
+    "q036.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "聖歌隊のキリ",
+          "text": "裏の調律室には声を出さない指導者と、擦り切れた譜面があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q036",
+          "key": "clue_b",
+          "text": "裏の調律室には声を出さない指導者と、擦り切れた譜面があります。"
+        }
+      ]
+    },
+    "q036.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "七番目の歌声\n\n六人の合唱に七人目が混じります。悪霊なら祓ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "録音と生歌の役割を明示して共演する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q036.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q036.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "歌手は声の代わりに指揮を執りました。七人の名が揃って礼拝録に残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q036",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "録音を守る影を倒し六人だけにする",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "合唱は純粋な生声になりました。キリは失われた低音を一人で探します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q036",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "録音を追悼曲として別に流す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本番は六人、終わりは七人になりました。拍手は調律室にも届きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q036",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

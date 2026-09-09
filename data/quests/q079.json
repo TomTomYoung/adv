@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q079",
+  "number": 79,
+  "title": "九十九回の再起動",
+  "client": "鐘番のユア",
+  "brief": "中央炉が再起動を繰り返します。百回目までに原因を探してください。",
+  "region": 8,
+  "type": "survey",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q079_clue_a",
+      "x": 3,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q079_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "object": "q079_decision",
+      "x": 15,
+      "y": 6,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "炉は稼働へ移りました。ユアは合格より先に、記録が残ったかを確認します。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "炉は動きました。次の異常も検出できるか、誰にも保証できません。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "出力は足りません。必要な灯を選び、記録板の交換を待ちます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻ります。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻ります。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "中央炉が再起動を繰り返します。百回目までに原因を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鐘番のユア",
+        "observation": "中央炉が再起動を繰り返します。百回目までに原因を探してください。",
+        "belief": "中央炉が再起動を繰り返します。百回目までに原因を探してください。",
+        "goal": "再起動の番機を倒し安全試験を飛ばす"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "再起動の番機を倒し安全試験を飛ばす",
+      "alternative": "記録を退避し保存領域を空ける",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "各試験の数値は正常で、最後の記録灯だけ毎回点きません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "記録板には同じ合格が九十九回分あり、空き領域がありません。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "中央炉が再起動を繰り返します。百回目までに原因を探してください。",
+      "openQuestion": "九十九回の再起動の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻ります。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q079.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q079.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q079.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q079.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q079.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q079.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "各試験の数値は正常で、最後の記録灯だけ毎回点きません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q079",
+          "key": "clue_a",
+          "text": "各試験の数値は正常で、最後の記録灯だけ毎回点きません。"
+        }
+      ]
+    },
+    "q079.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鐘番のユア",
+          "text": "記録板には同じ合格が九十九回分あり、空き領域がありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q079",
+          "key": "clue_b",
+          "text": "記録板には同じ合格が九十九回分あり、空き領域がありません。"
+        }
+      ]
+    },
+    "q079.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "九十九回の再起動\n\n中央炉が再起動を繰り返します。百回目までに原因を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "再起動の番機を倒し安全試験を飛ばす",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "炉は動きました。次の異常も検出できるか、誰にも保証できません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q079",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "記録を退避し保存領域を空ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻ります。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "炉は稼働へ移りました。ユアは合格より先に、記録が残ったかを確認します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "炉を停止し代替の小炉を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "出力は足りません。必要な灯を選び、記録板の交換を待ちます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

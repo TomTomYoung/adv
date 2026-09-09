@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q028",
+  "number": 28,
+  "title": "庭師の空席",
+  "client": "庭師のユイ",
+  "brief": "先代庭師の作業席を調べてください。残された手順が誰にも読めません。",
+  "region": 3,
+  "type": "ritual",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q028_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q028_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q028_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "弟子は自分の言葉で説明しました。ユイは文字と配置の両方を記録します。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "作業は統一されました。先代しか知らない剪定だけが、翌春に不足します。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "庭の手入れはゆっくり再開しました。分からない道具に名前札が増えていきます。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "手順は文字でなく道具の配置で、先代は読み書きのできない弟子へ教えていました。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "手順は文字でなく道具の配置で、先代は読み書きのできない弟子へ教えていました。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "先代庭師の作業席を調べてください。残された手順が誰にも読めません。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "庭師のユイ",
+        "observation": "先代庭師の作業席を調べてください。残された手順が誰にも読めません。",
+        "belief": "先代庭師の作業席を調べてください。残された手順が誰にも読めません。",
+        "goal": "席を占めた蔓獣を倒し新しい規則へ替える"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "席を占めた蔓獣を倒し新しい規則へ替える",
+      "alternative": "道具を並べて弟子と手順を再現する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "刃物の向きと水桶の位置が、日ごとの作業順と一致します。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "棚の墨文字は後から足され、実際の道具の減り方と食い違います。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "先代庭師の作業席を調べてください。残された手順が誰にも読めません。",
+      "openQuestion": "庭師の空席の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "手順は文字でなく道具の配置で、先代は読み書きのできない弟子へ教えていました。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q028.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q028.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q028.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q028.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q028.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q028.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "刃物の向きと水桶の位置が、日ごとの作業順と一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q028",
+          "key": "clue_a",
+          "text": "刃物の向きと水桶の位置が、日ごとの作業順と一致します。"
+        }
+      ]
+    },
+    "q028.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "庭師のユイ",
+          "text": "棚の墨文字は後から足され、実際の道具の減り方と食い違います。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q028",
+          "key": "clue_b",
+          "text": "棚の墨文字は後から足され、実際の道具の減り方と食い違います。"
+        }
+      ]
+    },
+    "q028.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "庭師の空席\n\n先代庭師の作業席を調べてください。残された手順が誰にも読めません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "道具を並べて弟子と手順を再現する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q028.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q028.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "手順は文字でなく道具の配置で、先代は読み書きのできない弟子へ教えていました。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "弟子は自分の言葉で説明しました。ユイは文字と配置の両方を記録します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q028",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "席を占めた蔓獣を倒し新しい規則へ替える",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "作業は統一されました。先代しか知らない剪定だけが、翌春に不足します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q028",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "席を保存し分かる手順だけ引き継ぐ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "庭の手入れはゆっくり再開しました。分からない道具に名前札が増えていきます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q028",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

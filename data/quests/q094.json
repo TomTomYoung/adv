@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q094",
+  "number": 94,
+  "title": "帰還税",
+  "client": "深層組合のモリ",
+  "brief": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+  "region": 10,
+  "type": "negotiation",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q094_clue_a",
+      "x": 3,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q094_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q094_decision",
+      "x": 12,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "巻上機は動き続け、負傷者も帰れました。宝物を多く持つ隊は少し多く払います。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "その日の帰還は無料でした。翌週の修理代を集める相談が始まります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "全員その日に上がれました。モリは立替額を、新制度の材料として記録します。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "深層組合のモリ",
+        "observation": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+        "belief": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+        "goal": "徴税の番機を倒し出口を開放する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "徴税の番機を倒し出口を開放する",
+      "alternative": "人命救助を共同費にし荷物だけ従量制へ変える",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "納付箱から修理部品の支払いが出ていますが、人も荷も同じ重さ表です。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "救助台帳には無一文の負傷者だけが待機欄へ残っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+      "openQuestion": "帰還税の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q094.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q094.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q094.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q094.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q094.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q094.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "納付箱から修理部品の支払いが出ていますが、人も荷も同じ重さ表です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q094",
+          "key": "clue_a",
+          "text": "納付箱から修理部品の支払いが出ていますが、人も荷も同じ重さ表です。"
+        }
+      ]
+    },
+    "q094.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "深層組合のモリ",
+          "text": "救助台帳には無一文の負傷者だけが待機欄へ残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q094",
+          "key": "clue_b",
+          "text": "救助台帳には無一文の負傷者だけが待機欄へ残っています。"
+        }
+      ]
+    },
+    "q094.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰還税\n\n出口で帰還税を求められます。誰が集め何に使うのか確かめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "人命救助を共同費にし荷物だけ従量制へ変える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q094.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q094.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巻上機は動き続け、負傷者も帰れました。宝物を多く持つ隊は少し多く払います。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q094",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "徴税の番機を倒し出口を開放する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "その日の帰還は無料でした。翌週の修理代を集める相談が始まります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q094",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "待機者の税を払い現行設備を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "全員その日に上がれました。モリは立替額を、新制度の材料として記録します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q094",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

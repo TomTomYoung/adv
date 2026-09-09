@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q083",
+  "number": 83,
+  "title": "地底の日食",
+  "client": "暦職人のツキ",
+  "brief": "地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。",
+  "region": 9,
+  "type": "mechanism",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q083_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q083_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q083_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "地底の昼が戻りました。ツキは欠けた日も注記して残します。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "日食は止みました。昼夜の循環も止まり、手動で灯を落とす仕事ができます。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "人々は短い薄明を休憩に使います。足場の撤去費も積み立てます。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "人工太陽の前に、放置された保守足場が周期的に回り込んでいます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "人工太陽の前に、放置された保守足場が周期的に回り込んでいます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "暦職人のツキ",
+        "observation": "地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。",
+        "belief": "地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。",
+        "goal": "太陽の影獣を倒し回転を止める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "太陽の影獣を倒し回転を止める",
+      "alternative": "足場を撤去し過去の暦を補正する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "影の縁は丸くなく、手すりと梯子の形があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "保守日誌には撤去待ちの足場があり、軌道の回転周期と一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。",
+      "openQuestion": "地底の日食の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "人工太陽の前に、放置された保守足場が周期的に回り込んでいます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q083.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q083.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q083.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q083.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q083.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q083.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "影の縁は丸くなく、手すりと梯子の形があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q083",
+          "key": "clue_a",
+          "text": "影の縁は丸くなく、手すりと梯子の形があります。"
+        }
+      ]
+    },
+    "q083.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "暦職人のツキ",
+          "text": "保守日誌には撤去待ちの足場があり、軌道の回転周期と一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q083",
+          "key": "clue_b",
+          "text": "保守日誌には撤去待ちの足場があり、軌道の回転周期と一致します。"
+        }
+      ]
+    },
+    "q083.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "地底の日食\n\n地底の太陽が欠け、暦が狂います。何が光を遮っているか調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "太陽の影獣を倒し回転を止める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日食は止みました。昼夜の循環も止まり、手動で灯を落とす仕事ができます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q083",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "足場を撤去し過去の暦を補正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地底の昼が戻りました。ツキは欠けた日も注記して残します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "影の時間を暦へ組み込んで運用する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人々は短い薄明を休憩に使います。足場の撤去費も積み立てます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

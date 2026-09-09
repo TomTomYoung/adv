@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q087",
+  "number": 87,
+  "title": "願いを消す流星",
+  "client": "見習いのハク",
+  "brief": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+  "region": 9,
+  "type": "testimony",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q087_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q087_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q087_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "願いは再び本人の仕事になりました。ハクは最初の一歩を一緒に書きます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "新しい誤認は止まりました。すでに出された札の説明は残ります。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "流星の後も言葉が残りました。叶ったかどうかは本人が書き足します。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "見習いのハク",
+        "observation": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+        "belief": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+        "goal": "願いの番人を倒し筒を壊す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "願いの番人を倒し筒を壊す",
+      "alternative": "受付札に直し願いを本人へ読み返す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はありません。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+      "openQuestion": "願いを消す流星の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q087.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q087.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q087.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q087.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q087.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q087.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q087",
+          "key": "clue_a",
+          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていません。"
+        }
+      ]
+    },
+    "q087.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "見習いのハク",
+          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q087",
+          "key": "clue_b",
+          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はありません。"
+        }
+      ]
+    },
+    "q087.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "願いを消す流星\n\n流星へ願った人が願いを忘れます。観測室を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "願いの番人を倒し筒を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "新しい誤認は止まりました。すでに出された札の説明は残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q087",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "受付札に直し願いを本人へ読み返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "願いは再び本人の仕事になりました。ハクは最初の一歩を一緒に書きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "願いを手帳へ写してから観測する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流星の後も言葉が残りました。叶ったかどうかは本人が書き足します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q047",
+  "number": 47,
+  "title": "一頁の戦争",
+  "client": "歴史家のオミ",
+  "brief": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+  "region": 5,
+  "type": "testimony",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q047_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q047_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q047_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "勝敗の一語では授業が終わらなくなりました。歴史家は二国へ同じ写しを送ります。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "謝礼と表彰状が届きました。隣国の書庫ではまた逆の依頼が出ます。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "原本の奪い合いは止まりました。解釈の争いは、紙を破らずに続きます。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "歴史家のオミ",
+        "observation": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+        "belief": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+        "goal": "軍旗の亡霊を倒し依頼国へ都合よく戻す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "軍旗の亡霊を倒し依頼国へ都合よく戻す",
+      "alternative": "両方の頁を併記し取引の記録を残す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "勝利の日時は両書で同じですが、砦の引渡日も同じです。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "交換頁には領土でなく、捕虜と冬営物資の取り決めが載っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+      "openQuestion": "一頁の戦争の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q047.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q047.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q047.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q047.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q047.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q047.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "勝利の日時は両書で同じですが、砦の引渡日も同じです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q047",
+          "key": "clue_a",
+          "text": "勝利の日時は両書で同じですが、砦の引渡日も同じです。"
+        }
+      ]
+    },
+    "q047.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "歴史家のオミ",
+          "text": "交換頁には領土でなく、捕虜と冬営物資の取り決めが載っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q047",
+          "key": "clue_b",
+          "text": "交換頁には領土でなく、捕虜と冬営物資の取り決めが載っています。"
+        }
+      ]
+    },
+    "q047.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "一頁の戦争\n\n二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "軍旗の亡霊を倒し依頼国へ都合よく戻す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "謝礼と表彰状が届きました。隣国の書庫ではまた逆の依頼が出ます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q047",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "両方の頁を併記し取引の記録を残す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q047.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q047.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "勝敗の一語では授業が終わらなくなりました。歴史家は二国へ同じ写しを送ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q047",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "交換頁を共同保管し双方へ写しを渡す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "原本の奪い合いは止まりました。解釈の争いは、紙を破らずに続きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q047",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

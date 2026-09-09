@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q090",
+  "number": 90,
+  "title": "空を返す日",
+  "client": "遭難者家族のマオ",
+  "brief": "天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。",
+  "region": 9,
+  "type": "finale",
+  "recommendedLevel": 9,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_9"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q090_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q090_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q090_decision",
+      "x": 12,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "地下で働く人も、本当の星を見ました。マオは帰らぬ名を読み終えて蓋を閉じます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "広い空が見えました。暗い作業場の人は、足を止めて夜が終わるのを待ちます。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "地下の灯は残りました。外へ出る列には、初めて空を見る人も並びます。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "生活灯と観測蓋は同じ電源を奪い合いますが、観測中だけ蓄電器から給電できます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "生活灯と観測蓋は同じ電源を奪い合いますが、観測中だけ蓄電器から給電できます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "遭難者家族のマオ",
+        "observation": "天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。",
+        "belief": "天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。",
+        "goal": "天球の主を倒し全電力で天井を開く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "天球の主を倒し全電力で天井を開く",
+      "alternative": "蓄電器を点検し時間を決めて天井を開く",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "蓄電室は空でなく、切替札が封印されているだけです。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "過去の公開観測には一時間の切替記録と生活灯の点灯記録が両方あります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。",
+      "openQuestion": "空を返す日の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "生活灯と観測蓋は同じ電源を奪い合いますが、観測中だけ蓄電器から給電できます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q090.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q090.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q090.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q090.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q090.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q090.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "蓄電室は空でなく、切替札が封印されているだけです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q090",
+          "key": "clue_a",
+          "text": "蓄電室は空でなく、切替札が封印されているだけです。"
+        }
+      ]
+    },
+    "q090.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "遭難者家族のマオ",
+          "text": "過去の公開観測には一時間の切替記録と生活灯の点灯記録が両方あります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q090",
+          "key": "clue_b",
+          "text": "過去の公開観測には一時間の切替記録と生活灯の点灯記録が両方あります。"
+        }
+      ]
+    },
+    "q090.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "空を返す日\n\n天井を開くと星が見えますが地下の生活灯が消えます。最後の操作を選んでください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "蓄電器を点検し時間を決めて天井を開く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "生活灯と観測蓋は同じ電源を奪い合いますが、観測中だけ蓄電器から給電できます。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下で働く人も、本当の星を見ました。マオは帰らぬ名を読み終えて蓋を閉じます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "天球の主を倒し全電力で天井を開く",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "広い空が見えました。暗い作業場の人は、足を止めて夜が終わるのを待ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "天井を閉じたまま地上への観測行を組む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地下の灯は残りました。外へ出る列には、初めて空を見る人も並びます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q090",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q003",
+  "number": 3,
+  "title": "逆流する鐘",
+  "client": "水門役人のソラ",
+  "brief": "晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。",
+  "region": 1,
+  "type": "mechanism",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q003_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q003_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q003_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "鐘は静まり、水売りの収入は減りましたが、下町の床は濡れなくなりました。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "夜は静かになりました。翌朝、住民は鐘の鳴らない増水を見て戸口を高くします。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "根本の放水は続きますが、避難の合図は聞こえるようになりました。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "上流の私設貯水槽が毎夜放水し、鐘は正しく危険を知らせています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "上流の私設貯水槽が毎夜放水し、鐘は正しく危険を知らせています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "水門役人のソラ",
+        "observation": "晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。",
+        "belief": "晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。",
+        "goal": "鐘に取り憑いた影を倒し鎖を断つ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "鐘に取り憑いた影を倒し鎖を断つ",
+      "alternative": "貯水槽の放水を分散させる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "鐘の浮きは壊れておらず、泥の線だけが日ごとに高くなっています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "放水記録の空白と、宿屋の湯替え時刻が一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。",
+      "openQuestion": "逆流する鐘の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "上流の私設貯水槽が毎夜放水し、鐘は正しく危険を知らせています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q003.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q003.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q003.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q003.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q003.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q003.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "鐘の浮きは壊れておらず、泥の線だけが日ごとに高くなっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q003",
+          "key": "clue_a",
+          "text": "鐘の浮きは壊れておらず、泥の線だけが日ごとに高くなっています。"
+        }
+      ]
+    },
+    "q003.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "水門役人のソラ",
+          "text": "放水記録の空白と、宿屋の湯替え時刻が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q003",
+          "key": "clue_b",
+          "text": "放水記録の空白と、宿屋の湯替え時刻が一致します。"
+        }
+      ]
+    },
+    "q003.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "逆流する鐘\n\n晴天なのに増水警鐘が鳴ります。地下の鐘を止めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "鐘に取り憑いた影を倒し鎖を断つ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "夜は静かになりました。翌朝、住民は鐘の鳴らない増水を見て戸口を高くします。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q003",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "貯水槽の放水を分散させる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q003.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q003.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "上流の私設貯水槽が毎夜放水し、鐘は正しく危険を知らせています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鐘は静まり、水売りの収入は減りましたが、下町の床は濡れなくなりました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q003",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "鐘の場所を移し住民へ警戒を頼む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "根本の放水は続きますが、避難の合図は聞こえるようになりました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q003",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

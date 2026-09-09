@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q021",
+  "number": 21,
+  "title": "種を盗む鳥",
+  "client": "庭師のユイ",
+  "brief": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+  "region": 3,
+  "type": "investigation",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q021_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q021_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q021_decision",
+      "x": 10,
+      "y": 10,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "盗難表は育苗記録に変わりました。ユイは鳥の分まで種袋を量ります。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "在庫は戻りました。暗い棚に並ぶ袋からは、芽が出ませんでした。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "新芽も在庫も少しずつ増えます。毎晩数える仕事は続きます。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "庭師のユイ",
+        "observation": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+        "belief": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+        "goal": "巣の魔物を追い払い種を全て戻す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "巣の魔物を追い払い種を全て戻す",
+      "alternative": "亀裂を育苗床にして鳥と分け合う",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "巣に種の殻がなく、くちばしに付いた土だけが残っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "盗まれた種と同じ芽が天井の亀裂から下向きに伸びています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+      "openQuestion": "種を盗む鳥の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q021.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q021.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q021.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q021.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q021.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q021.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "巣に種の殻がなく、くちばしに付いた土だけが残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q021",
+          "key": "clue_a",
+          "text": "巣に種の殻がなく、くちばしに付いた土だけが残っています。"
+        }
+      ]
+    },
+    "q021.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "庭師のユイ",
+          "text": "盗まれた種と同じ芽が天井の亀裂から下向きに伸びています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q021",
+          "key": "clue_b",
+          "text": "盗まれた種と同じ芽が天井の亀裂から下向きに伸びています。"
+        }
+      ]
+    },
+    "q021.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "種を盗む鳥\n\n地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "巣の魔物を追い払い種を全て戻す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "在庫は戻りました。暗い棚に並ぶ袋からは、芽が出ませんでした。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q021",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "亀裂を育苗床にして鳥と分け合う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q021.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q021.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "盗難表は育苗記録に変わりました。ユイは鳥の分まで種袋を量ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q021",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "半分の種を残し残りを回収する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "新芽も在庫も少しずつ増えます。毎晩数える仕事は続きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q021",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

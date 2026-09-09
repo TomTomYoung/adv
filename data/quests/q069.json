@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q069",
+  "number": 69,
+  "title": "海王の通行税",
+  "client": "漁師のハル",
+  "brief": "海王が城への通行税を取ります。代価の意味を調べてください。",
+  "region": 7,
+  "type": "survey",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q069_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q069_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f2",
+      "object": "q069_decision",
+      "x": 9,
+      "y": 12,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "門は持ちこたえました。海王は税額より先に必要な板の寸法を伝えます。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "通行は無料になりました。崩れる門を抜けるため潜水士が危険を背負います。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "道は通れました。ハルは次の船に使わない鉄板を積みます。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "海王が城への通行税を取ります。代価の意味を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "漁師のハル",
+        "observation": "海王が城への通行税を取ります。代価の意味を調べてください。",
+        "belief": "海王が城への通行税を取ります。代価の意味を調べてください。",
+        "goal": "海王の護衛を倒し徴税をやめさせる"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "海王の護衛を倒し徴税をやめさせる",
+      "alternative": "補修材を共同で運び通行条件を決める",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "払った鉄は宝庫でなく門の穴へ打ち込まれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "取り立ての量は旅人の富でなく、潮が強い日の穴の数に比例します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "海王が城への通行税を取ります。代価の意味を調べてください。",
+      "openQuestion": "海王の通行税の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q069.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q069.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q069.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q069.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q069.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q069.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "払った鉄は宝庫でなく門の穴へ打ち込まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q069",
+          "key": "clue_a",
+          "text": "払った鉄は宝庫でなく門の穴へ打ち込まれています。"
+        }
+      ]
+    },
+    "q069.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "漁師のハル",
+          "text": "取り立ての量は旅人の富でなく、潮が強い日の穴の数に比例します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q069",
+          "key": "clue_b",
+          "text": "取り立ての量は旅人の富でなく、潮が強い日の穴の数に比例します。"
+        }
+      ]
+    },
+    "q069.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "海王の通行税\n\n海王が城への通行税を取ります。代価の意味を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "海王の護衛を倒し徴税をやめさせる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "通行は無料になりました。崩れる門を抜けるため潜水士が危険を背負います。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q069",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "補修材を共同で運び通行条件を決める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q069.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q069.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "門は持ちこたえました。海王は税額より先に必要な板の寸法を伝えます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q069",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "今回の税を払い補修図を持ち帰る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "道は通れました。ハルは次の船に使わない鉄板を積みます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q069",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

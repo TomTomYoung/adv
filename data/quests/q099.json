@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q099",
+  "number": 99,
+  "title": "帰らぬ者の灯",
+  "client": "灯番組合のリネ",
+  "brief": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+  "region": 10,
+  "type": "survey",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q099_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q099_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q099_decision",
+      "x": 11,
+      "y": 10,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "帰る人は帰り、残る人には便りが届きます。リネは灯を消さず、油の補充日を決めます。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "救出者の数は増えました。地上で暮らせない人の居場所を、町が改めて作ります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "待つ家族へ言葉が届きました。次に下りる理由は、捜索から訪問へ変わります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "灯番組合のリネ",
+        "observation": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+        "belief": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+        "goal": "灯の守り手を倒し全員を地上へ連れ出す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "灯の守り手を倒し全員を地上へ連れ出す",
+      "alternative": "一人ずつ意思を確かめ連絡路を残す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "芯は新しく替えられ、油瓶には複数の生きた人の補充印があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "灯の傍の名簿は死亡日でなく、地上へ戻らないと決めた日を記しています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+      "openQuestion": "帰らぬ者の灯の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q099.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q099.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q099.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q099.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q099.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q099.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "芯は新しく替えられ、油瓶には複数の生きた人の補充印があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q099",
+          "key": "clue_a",
+          "text": "芯は新しく替えられ、油瓶には複数の生きた人の補充印があります。"
+        }
+      ]
+    },
+    "q099.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "灯番組合のリネ",
+          "text": "灯の傍の名簿は死亡日でなく、地上へ戻らないと決めた日を記しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q099",
+          "key": "clue_b",
+          "text": "灯の傍の名簿は死亡日でなく、地上へ戻らないと決めた日を記しています。"
+        }
+      ]
+    },
+    "q099.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰らぬ者の灯\n\n最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "灯の守り手を倒し全員を地上へ連れ出す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "救出者の数は増えました。地上で暮らせない人の居場所を、町が改めて作ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q099",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "一人ずつ意思を確かめ連絡路を残す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q099.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q099.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "帰る人は帰り、残る人には便りが届きます。リネは灯を消さず、油の補充日を決めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q099",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "遺品と伝言だけ預かり灯を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "待つ家族へ言葉が届きました。次に下りる理由は、捜索から訪問へ変わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q099",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2361 @@
+{
+  "scripts": {
+    "prologue": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯を持って、帰ってくる。\n\n迷宮の口に築かれた町、灯帰り。ここでは剣の腕と同じほど、道を記し、話を聞き、仲間を連れて帰る力が買われます。"
+        },
+        {
+          "op": "say",
+          "text": "ギルドの机に百の依頼が積まれています。\n\nまずは「帰らない灯番」を受注し、地下水道へ。記号のある足元、または正面を調べてください。手掛かりは冒険手帳に残ります。"
+        }
+      ]
+    },
+    "service.inn": {
+      "commands": [
+        {
+          "op": "rest",
+          "cost": 24
+        },
+        {
+          "op": "say",
+          "text": "灯を整え、町で一晩を過ごしました。手当の結果は隊の状態で確認できます。"
+        }
+      ]
+    },
+    "service.clinic": {
+      "commands": [
+        {
+          "op": "rest",
+          "cost": 0,
+          "ratio": 0.35
+        },
+        {
+          "op": "say",
+          "text": "施療所で応急手当を受けました。HP・MPは最低35%まで戻り、毒は治ります。所持金がなくても再出発できます。"
+        }
+      ]
+    },
+    "service.recruit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_member",
+            "actor": "berg"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ベルグはすでにあなたの隊にいます。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "守衛ベルグが机の上の地図を見ています。「五人目が必要なら、次の帰り道を一緒に覚えよう」"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "join",
+                  "text": "ベルグを隊へ迎える",
+                  "commands": [
+                    {
+                      "op": "party.join",
+                      "actor": "berg"
+                    },
+                    {
+                      "op": "say",
+                      "text": "ベルグが隊へ加わりました。"
+                    }
+                  ]
+                },
+                {
+                  "id": "later",
+                  "text": "今の隊で進む",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "item.potion": {
+      "commands": [
+        {
+          "op": "actor.heal",
+          "target": {
+            "ref": "local.args.target"
+          },
+          "amount": 45
+        }
+      ]
+    },
+    "item.antidote": {
+      "commands": [
+        {
+          "op": "status.remove",
+          "target": {
+            "ref": "local.args.target"
+          },
+          "status": "poison"
+        }
+      ]
+    },
+    "item.ration": {
+      "commands": [
+        {
+          "op": "actor.heal",
+          "target": "party",
+          "amount": 25
+        },
+        {
+          "op": "actor.restore_mp",
+          "target": "party",
+          "amount": 8
+        },
+        {
+          "op": "say",
+          "text": "小さな灯を囲み、糧食を分けました。HP25・MP8回復。"
+        }
+      ]
+    },
+    "item.torch": {
+      "commands": [
+        {
+          "op": "call",
+          "script": "common.refill_light"
+        },
+        {
+          "op": "map.reveal",
+          "radius": 3
+        },
+        {
+          "op": "say",
+          "text": "灯油を足しました。灯の届く範囲を地図へ書き込みます。"
+        }
+      ]
+    },
+    "common.refill_light": {
+      "commands": [
+        {
+          "op": "light.refill"
+        }
+      ]
+    },
+    "region_1_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_1_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_1_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_1_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_1_f1",
+          "x": 14,
+          "y": 11,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_1_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_1",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_1_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_1_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 5
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_1_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_1"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_1_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_1_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 45
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_1_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_1",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_1_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_1_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 5
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_1_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_1"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_1_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_1_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 45
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_2_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_2_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_2_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_2_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_2_f1",
+          "x": 13,
+          "y": 12,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_2_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_2",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_2_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_2_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 6
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_2_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_2"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_2_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_2_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 50
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_2_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_2",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_2_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_2_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 6
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_2_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_2"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_2_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_2_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 50
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_3_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_3_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_3_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_3_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_3_f1",
+          "x": 14,
+          "y": 11,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_3_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_3",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_3_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_3_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 7
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_3_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_3"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_3_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_3_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 55
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_3_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_3",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_3_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_3_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 7
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_3_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_3"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_3_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_3_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 55
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_4_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_4_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_4_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_4_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_4_f1",
+          "x": 12,
+          "y": 13,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_4_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_4",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_4_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_4_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 8
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_4_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_4"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_4_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_4_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 60
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_4_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_4",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_4_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_4_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 8
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_4_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_4"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_4_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_4_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 60
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_5_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_5_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_5_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_5_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_5_f1",
+          "x": 17,
+          "y": 8,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_5_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_5",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_5_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_5_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 9
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_5_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_5"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_5_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_5_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 65
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_5_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_5",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_5_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_5_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 9
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_5_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_5"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_5_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_5_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 65
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_6_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_6_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_6_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_6_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_6_f1",
+          "x": 14,
+          "y": 11,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_6_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_6",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_6_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_6_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 10
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_6_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_6"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_6_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_6_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 70
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_6_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_6",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_6_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_6_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 10
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_6_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_6"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_6_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_6_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 70
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_7_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_7_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_7_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_7_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_7_f1",
+          "x": 14,
+          "y": 11,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_7_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_7",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_7_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_7_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 11
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_7_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_7"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_7_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_7_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 75
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_7_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_7",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_7_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_7_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 11
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_7_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_7"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_7_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_7_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 75
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_8_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_8_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_8_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_8_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_8_f1",
+          "x": 12,
+          "y": 13,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_8_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_8",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_8_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_8_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 12
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_8_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_8"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_8_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_8_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 80
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_8_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_8",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_8_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_8_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 12
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_8_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_8"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_8_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_8_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 80
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_9_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_9_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_9_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_9_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_9_f1",
+          "x": 13,
+          "y": 12,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_9_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_9",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_9_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_9_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 13
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_9_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_9"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_9_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_9_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 85
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_9_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_9",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_9_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_9_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 13
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_9_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_9"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_9_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_9_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 85
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_10_f1.exit": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "灯帰りの町へ戻りました。"
+        },
+        {
+          "op": "town.return"
+        }
+      ]
+    },
+    "region_10_f1.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_10_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      ]
+    },
+    "region_10_f2.stairs": {
+      "commands": [
+        {
+          "op": "map.teleport",
+          "map": "region_10_f1",
+          "x": 15,
+          "y": 10,
+          "facing": "west"
+        }
+      ]
+    },
+    "region_10_f1.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_10",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_10_f1.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_10_f1.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 14
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_10_f1.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_10"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_10_f1_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_10_f1",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 90
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    },
+    "region_10_f2.cache": {
+      "commands": [
+        {
+          "op": "item.give",
+          "item": "potion",
+          "count": 2
+        },
+        {
+          "op": "item.give",
+          "item": "ration",
+          "count": 1
+        },
+        {
+          "op": "item.give",
+          "item": "key_10",
+          "count": 1
+        },
+        {
+          "op": "say",
+          "text": "箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。"
+        }
+      ]
+    },
+    "region_10_f2.fountain": {
+      "commands": [
+        {
+          "op": "party.heal_all"
+        },
+        {
+          "op": "say",
+          "text": "清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。"
+        }
+      ]
+    },
+    "region_10_f2.trap": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "石床が崩れ、細い棘が靴を掠めました。"
+        },
+        {
+          "op": "actor.damage",
+          "target": "party",
+          "amount": 14
+        },
+        {
+          "op": "status.apply",
+          "target": "nio",
+          "status": "poison"
+        },
+        {
+          "op": "say",
+          "text": "ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。"
+        }
+      ]
+    },
+    "region_10_f2.door": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "has_item",
+            "item": "key_10"
+          },
+          "then": [
+            {
+              "op": "flag.set",
+              "key": "region_10_f2_door_open",
+              "value": true
+            },
+            {
+              "op": "object.state.set",
+              "map": "region_10_f2",
+              "object": "door",
+              "state": "open"
+            },
+            {
+              "op": "gold.change",
+              "amount": 90
+            },
+            {
+              "op": "say",
+              "text": "鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "錠が掛かっています。補給箱に、この地域の鍵がありそうです。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

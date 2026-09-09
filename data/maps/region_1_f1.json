@@ -1,0 +1,528 @@
+{
+  "id": "region_1_f1",
+  "region": 1,
+  "floor": 1,
+  "name": "灯守の地下水道・地下1層",
+  "tiles": [
+    "###################",
+    "#...#.....#.......#",
+    "###.#.#.###.###.#.#",
+    "#...#.#.....#.....#",
+    "#.#####.###.#.###.#",
+    "#.....#...#.......#",
+    "#####.###.#.#.#.###",
+    "#...#...#...#.#.#.#",
+    "#.#.###.#####.#.#.#",
+    "#.#...#.......#...#",
+    "#...#############.#",
+    "#.#.#...#.......#.#",
+    "#.###.#.#.#.#####.#",
+    "#.....#...#.......#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_1",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_1_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 14,
+      "y": 11,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_1_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_1_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 9,
+      "y": 7,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_1_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 1,
+      "y": 12,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_1_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 7,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_1_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_1_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q001_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "帰らない灯番：現場の痕跡",
+      "kind": "clue",
+      "quest": "q001",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q001.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q001.clue_a"
+    },
+    {
+      "id": "q001_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "帰らない灯番：記録と証言",
+      "kind": "clue",
+      "quest": "q001",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q001.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q001.clue_b"
+    },
+    {
+      "id": "q001_decision",
+      "x": 13,
+      "y": 7,
+      "name": "帰らない灯番：決着の場",
+      "kind": "decision",
+      "quest": "q001",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "script": "q001.decision"
+    },
+    {
+      "id": "q002_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "骨の荷札：現場の痕跡",
+      "kind": "clue",
+      "quest": "q002",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q002.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q002.clue_a"
+    },
+    {
+      "id": "q002_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "骨の荷札：記録と証言",
+      "kind": "clue",
+      "quest": "q002",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q002.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q002.clue_b"
+    },
+    {
+      "id": "q002_decision",
+      "x": 11,
+      "y": 9,
+      "name": "骨の荷札：決着の場",
+      "kind": "decision",
+      "quest": "q002",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q002.stage"
+        },
+        "right": "active"
+      },
+      "script": "q002.decision"
+    },
+    {
+      "id": "q003_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "逆流する鐘：現場の痕跡",
+      "kind": "clue",
+      "quest": "q003",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q003.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q003.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q003.clue_a"
+    },
+    {
+      "id": "q003_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "逆流する鐘：記録と証言",
+      "kind": "clue",
+      "quest": "q003",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q003.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q003.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q003.clue_b"
+    },
+    {
+      "id": "q003_decision",
+      "x": 15,
+      "y": 5,
+      "name": "逆流する鐘：決着の場",
+      "kind": "decision",
+      "quest": "q003",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q003.stage"
+        },
+        "right": "active"
+      },
+      "script": "q003.decision"
+    },
+    {
+      "id": "q004_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "二枚目の通行証：現場の痕跡",
+      "kind": "clue",
+      "quest": "q004",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q004.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q004.clue_a"
+    },
+    {
+      "id": "q004_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "二枚目の通行証：記録と証言",
+      "kind": "clue",
+      "quest": "q004",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q004.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q004.clue_b"
+    },
+    {
+      "id": "q004_decision",
+      "x": 17,
+      "y": 3,
+      "name": "二枚目の通行証：決着の場",
+      "kind": "decision",
+      "quest": "q004",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q004.stage"
+        },
+        "right": "active"
+      },
+      "script": "q004.decision"
+    },
+    {
+      "id": "q005_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "甘い排水：現場の痕跡",
+      "kind": "clue",
+      "quest": "q005",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q005.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q005.clue_a"
+    },
+    {
+      "id": "q005_clue_b",
+      "x": 7,
+      "y": 9,
+      "name": "甘い排水：記録と証言",
+      "kind": "clue",
+      "quest": "q005",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q005.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q005.clue_b"
+    },
+    {
+      "id": "q005_decision",
+      "x": 8,
+      "y": 13,
+      "name": "甘い排水：決着の場",
+      "kind": "decision",
+      "quest": "q005",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q005.stage"
+        },
+        "right": "active"
+      },
+      "script": "q005.decision"
+    }
+  ]
+}

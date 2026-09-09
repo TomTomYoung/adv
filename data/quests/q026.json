@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q026",
+  "number": 26,
+  "title": "実らない約束",
+  "client": "果樹番のレイ",
+  "brief": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+  "region": 3,
+  "type": "escort",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q026_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q026_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q026_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "収穫は先になります。レイは今年の空籠を、来年の苗代として受け入れます。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "薪代は入りました。果樹園の並びには一本分の空が残ります。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "違う味の実がなることになりました。失った枝の話は、新しい木の名に残ります。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "果樹番のレイ",
+        "observation": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+        "belief": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+        "goal": "寄生獣を倒し台木を燃料にする"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "寄生獣を倒し台木を燃料にする",
+      "alternative": "売られた穂を戻して接ぎ直す",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "切り口は病気で黒くなっておらず、商人の封蝋が残っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "隣の鉢の枝は同じ樹皮を持ち、移植票の値段だけが隠されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+      "openQuestion": "実らない約束の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q026.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q026.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q026.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q026.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q026.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q026.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "切り口は病気で黒くなっておらず、商人の封蝋が残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q026",
+          "key": "clue_a",
+          "text": "切り口は病気で黒くなっておらず、商人の封蝋が残っています。"
+        }
+      ]
+    },
+    "q026.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "果樹番のレイ",
+          "text": "隣の鉢の枝は同じ樹皮を持ち、移植票の値段だけが隠されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q026",
+          "key": "clue_b",
+          "text": "隣の鉢の枝は同じ樹皮を持ち、移植票の値段だけが隠されています。"
+        }
+      ]
+    },
+    "q026.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "実らない約束\n\n同じ木だけ実りません。呪いと噂される枝を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "売られた穂を戻して接ぎ直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q026.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q026.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "収穫は先になります。レイは今年の空籠を、来年の苗代として受け入れます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q026",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "寄生獣を倒し台木を燃料にする",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "薪代は入りました。果樹園の並びには一本分の空が残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q026",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "別の木から穂を分けて育てる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "違う味の実がなることになりました。失った枝の話は、新しい木の名に残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q026",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

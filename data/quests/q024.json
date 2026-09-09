@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q024",
+  "number": 24,
+  "title": "食べられる地図",
+  "client": "採集人のノム",
+  "brief": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+  "region": 3,
+  "type": "negotiation",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q024_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q024_clue_b",
+      "x": 7,
+      "y": 8,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q024_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "消える地図は更新される地図になりました。採集人は古い写しに日付を入れます。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "地図は長持ちしました。花の咲き方が変わると、書かれた近道は危険になります。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "遠回りの地図が完成しました。初めての採集人は無事に帰ります。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "葉を食べる虫が危険な花粉に反応し、安全な道だけを残しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "葉を食べる虫が危険な花粉に反応し、安全な道だけを残しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "採集人のノム",
+        "observation": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+        "belief": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+        "goal": "地図喰いを倒し葉を薬で固める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "地図喰いを倒し葉を薬で固める",
+      "alternative": "虫の食跡を凡例にして写す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "地図の消えた道には花粉が積もり、残った道は風が通っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "虫は新しい墨を避けず、特定の花の印だけを先に食べます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+      "openQuestion": "食べられる地図の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "葉を食べる虫が危険な花粉に反応し、安全な道だけを残しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q024.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q024.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q024.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q024.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q024.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q024.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "地図の消えた道には花粉が積もり、残った道は風が通っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q024",
+          "key": "clue_a",
+          "text": "地図の消えた道には花粉が積もり、残った道は風が通っています。"
+        }
+      ]
+    },
+    "q024.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "採集人のノム",
+          "text": "虫は新しい墨を避けず、特定の花の印だけを先に食べます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q024",
+          "key": "clue_b",
+          "text": "虫は新しい墨を避けず、特定の花の印だけを先に食べます。"
+        }
+      ]
+    },
+    "q024.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "食べられる地図\n\n葉に描かれた道案内が消えます。奥へ進める地図を作ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "虫の食跡を凡例にして写す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q024.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q024.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "葉を食べる虫が危険な花粉に反応し、安全な道だけを残しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "消える地図は更新される地図になりました。採集人は古い写しに日付を入れます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q024",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "地図喰いを倒し葉を薬で固める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地図は長持ちしました。花の咲き方が変わると、書かれた近道は危険になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q024",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "安全が確かめられた道だけ刻む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "遠回りの地図が完成しました。初めての採集人は無事に帰ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q024",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

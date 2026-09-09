@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q038",
+  "number": 38,
+  "title": "聖水の沈殿",
+  "client": "施療人のネイ",
+  "brief": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+  "region": 4,
+  "type": "ritual",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q038_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q038_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q038_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "聖水は使えました。ネイは奇跡の由来とは別に清掃当番を決めます。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "不安は一度収まりました。次の給水まで患者は水を少しずつ分けます。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "治療は続きました。費用を負担した人々が交換札を見に来ます。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "施療人のネイ",
+        "observation": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+        "belief": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+        "goal": "井戸の影を祓い全ての瓶を捨てる"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "井戸の影を祓い全ての瓶を捨てる",
+      "alternative": "炭を交換し水と設備を別々に検査する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "黒い粒は炭の組織を持ち、上澄みには異臭がありません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "交換札は三月前で止まり、予備の炭箱は未開封です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+      "openQuestion": "聖水の沈殿の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q038.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q038.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q038.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q038.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q038.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q038.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "黒い粒は炭の組織を持ち、上澄みには異臭がありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q038",
+          "key": "clue_a",
+          "text": "黒い粒は炭の組織を持ち、上澄みには異臭がありません。"
+        }
+      ]
+    },
+    "q038.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "施療人のネイ",
+          "text": "交換札は三月前で止まり、予備の炭箱は未開封です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q038",
+          "key": "clue_b",
+          "text": "交換札は三月前で止まり、予備の炭箱は未開封です。"
+        }
+      ]
+    },
+    "q038.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "聖水の沈殿\n\n聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "炭を交換し水と設備を別々に検査する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q038.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q038.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "聖水は使えました。ネイは奇跡の由来とは別に清掃当番を決めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q038",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "井戸の影を祓い全ての瓶を捨てる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "不安は一度収まりました。次の給水まで患者は水を少しずつ分けます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q038",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "上澄みを生活用へ回し飲用分を買う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "治療は続きました。費用を負担した人々が交換札を見に来ます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q038",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

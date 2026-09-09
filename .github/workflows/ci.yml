@@ -1,0 +1,21 @@
+name: Validate dungeon RPG
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate all data and asset references
+        run: node tools/validate.mjs
+      - name: Check static files and view boundaries
+        run: node tools/check-static.mjs
+      - name: Exercise all quest branches and a normal campaign
+        run: node --test tests/*.test.mjs

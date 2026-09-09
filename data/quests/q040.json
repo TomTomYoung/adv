@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q040",
+  "number": 40,
+  "title": "砕けない祈り",
+  "client": "修復師のサイ",
+  "brief": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+  "region": 4,
+  "type": "finale",
+  "recommendedLevel": 4,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_4"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q040_clue_a",
+      "x": 3,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q040_clue_b",
+      "x": 8,
+      "y": 7,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q040_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "鏡は小さな記録板へ分かれました。礼拝堂は祈る場であり、証言を聞く場にもなります。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "礼拝は静かに続きます。サイは銘板に封印の数だけ刻みました。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "即座の解放は叶いませんでした。初めて、封じられた者にも審査の日が決まります。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修復師のサイ",
+        "observation": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+        "belief": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+        "goal": "鏡の主を倒し全ての声を封じ直す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "鏡の主を倒し全ての声を封じ直す",
+      "alternative": "証言を写し敵意のある影だけ退ける",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "封印文には罪名と同じ欄に異議申立の記号が刻まれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "声の一部は攻撃でなく、日付と担当者名を繰り返しています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+      "openQuestion": "砕けない祈りの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q040.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q040.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q040.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q040.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q040.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q040.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "封印文には罪名と同じ欄に異議申立の記号が刻まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q040",
+          "key": "clue_a",
+          "text": "封印文には罪名と同じ欄に異議申立の記号が刻まれています。"
+        }
+      ]
+    },
+    "q040.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "修復師のサイ",
+          "text": "声の一部は攻撃でなく、日付と担当者名を繰り返しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q040",
+          "key": "clue_b",
+          "text": "声の一部は攻撃でなく、日付と担当者名を繰り返しています。"
+        }
+      ]
+    },
+    "q040.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "砕けない祈り\n\n大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "証言を写し敵意のある影だけ退ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q040.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q040.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "鏡は小さな記録板へ分かれました。礼拝堂は祈る場であり、証言を聞く場にもなります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q040",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "鏡の主を倒し全ての声を封じ直す",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "礼拝は静かに続きます。サイは銘板に封印の数だけ刻みました。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q040",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "鏡を閉鎖区画へ移して調査を継続する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "即座の解放は叶いませんでした。初めて、封じられた者にも審査の日が決まります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q040",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

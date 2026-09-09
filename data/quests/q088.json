@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q088",
+  "number": 88,
+  "title": "観測窓の亀裂",
+  "client": "保守員のイチ",
+  "brief": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+  "region": 9,
+  "type": "ritual",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q088_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q088_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q088_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "最後の観測も安全に終えました。イチは割れた板を教材に残します。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "危険への不安はなくなりました。観測期は過ぎ、次の機会を待ちます。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "慎重すぎるとの声も出ました。点検記録は次の判断材料になります。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "保守員のイチ",
+        "observation": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+        "belief": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+        "goal": "窓の星獣を倒し全面を金属で塞ぐ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "窓の星獣を倒し全面を金属で塞ぐ",
+      "alternative": "測定板だけ交換して観測を続ける",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "亀裂は目盛線の層で止まり、背面の反射は連続しています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "断面図には測定板と耐圧窓が別部品として記されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+      "openQuestion": "観測窓の亀裂の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q088.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q088.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q088.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q088.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q088.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q088.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "亀裂は目盛線の層で止まり、背面の反射は連続しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q088",
+          "key": "clue_a",
+          "text": "亀裂は目盛線の層で止まり、背面の反射は連続しています。"
+        }
+      ]
+    },
+    "q088.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "保守員のイチ",
+          "text": "断面図には測定板と耐圧窓が別部品として記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q088",
+          "key": "clue_b",
+          "text": "断面図には測定板と耐圧窓が別部品として記されています。"
+        }
+      ]
+    },
+    "q088.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "観測窓の亀裂\n\n観測窓が割れ始めました。塞ぐと最後の観測ができません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "測定板だけ交換して観測を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "最後の観測も安全に終えました。イチは割れた板を教材に残します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "窓の星獣を倒し全面を金属で塞ぐ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "危険への不安はなくなりました。観測期は過ぎ、次の機会を待ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q088",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "観測を中止し窓全体を専門点検へ回す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "慎重すぎるとの声も出ました。点検記録は次の判断材料になります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

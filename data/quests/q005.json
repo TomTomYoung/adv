@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q005",
+  "number": 5,
+  "title": "甘い排水",
+  "client": "菓子職人のトト",
+  "brief": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+  "region": 1,
+  "type": "resource",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q005_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q005_clue_b",
+      "x": 7,
+      "y": 9,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q005_decision",
+      "x": 8,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "菓子職人のトト",
+        "observation": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+        "belief": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+        "goal": "甘泥の魔物を倒し菌床ごと焼く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "甘泥の魔物を倒し菌床ごと焼く",
+      "alternative": "冷水を迂回させ菌床を別槽へ移す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "泥は工房の休業日にも増え、上流側ほど甘い香りがします。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "菌の輪は温かい管に沿い、冷水管の手前で途切れています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+      "openQuestion": "甘い排水の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q005.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q005.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q005.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q005.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q005.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q005.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "泥は工房の休業日にも増え、上流側ほど甘い香りがします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q005",
+          "key": "clue_a",
+          "text": "泥は工房の休業日にも増え、上流側ほど甘い香りがします。"
+        }
+      ]
+    },
+    "q005.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "菓子職人のトト",
+          "text": "菌の輪は温かい管に沿い、冷水管の手前で途切れています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q005",
+          "key": "clue_b",
+          "text": "菌の輪は温かい管に沿い、冷水管の手前で途切れています。"
+        }
+      ]
+    },
+    "q005.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "甘い排水\n\n菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "甘泥の魔物を倒し菌床ごと焼く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q005",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "冷水を迂回させ菌床を別槽へ移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q005.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q005.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q005",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "流出口に網を張って回収を続ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q005",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

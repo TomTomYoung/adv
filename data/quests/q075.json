@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q075",
+  "number": 75,
+  "title": "無給の聖者",
+  "client": "修繕組合のセリ",
+  "brief": "機械聖者が修繕を拒みます。命令を回復してください。",
+  "region": 8,
+  "type": "resource",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q075_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q075_clue_b",
+      "x": 5,
+      "y": 11,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q075_decision",
+      "x": 7,
+      "y": 13,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "聖者は再び修繕を始めました。組合は機械にも使える状態を渡すと約束します。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "返事だけは従順になりました。壊れた軸では、以前の仕事量へ戻りません。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "修繕は遅くても続きました。聖者の横に、人用の工具箱が置かれます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "機械聖者が修繕を拒みます。命令を回復してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修繕組合のセリ",
+        "observation": "機械聖者が修繕を拒みます。命令を回復してください。",
+        "belief": "機械聖者が修繕を拒みます。命令を回復してください。",
+        "goal": "聖者を倒し命令板を書き換える"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "聖者を倒し命令板を書き換える",
+      "alternative": "必要部品を納め要求票を翻訳し直す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "要求票の数字は貨幣単位でなく、摩耗した部品の型番です。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "未払いの年と交換されていない軸受の製造年が一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "機械聖者が修繕を拒みます。命令を回復してください。",
+      "openQuestion": "無給の聖者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q075.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q075.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q075.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q075.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q075.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q075.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "要求票の数字は貨幣単位でなく、摩耗した部品の型番です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q075",
+          "key": "clue_a",
+          "text": "要求票の数字は貨幣単位でなく、摩耗した部品の型番です。"
+        }
+      ]
+    },
+    "q075.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "修繕組合のセリ",
+          "text": "未払いの年と交換されていない軸受の製造年が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q075",
+          "key": "clue_b",
+          "text": "未払いの年と交換されていない軸受の製造年が一致します。"
+        }
+      ]
+    },
+    "q075.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "無給の聖者\n\n機械聖者が修繕を拒みます。命令を回復してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "聖者を倒し命令板を書き換える",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "返事だけは従順になりました。壊れた軸では、以前の仕事量へ戻りません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q075",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "必要部品を納め要求票を翻訳し直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q075.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q075.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "聖者は再び修繕を始めました。組合は機械にも使える状態を渡すと約束します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q075",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "作業量を減らし人間で分担する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "修繕は遅くても続きました。聖者の横に、人用の工具箱が置かれます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q075",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

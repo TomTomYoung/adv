@@ -1,0 +1,518 @@
+{
+  "id": "region_7_f2",
+  "region": 7,
+  "floor": 2,
+  "name": "黒潮の沈没城・地下2層",
+  "tiles": [
+    "###################",
+    "#.#...#...........#",
+    "#.#.###.####.##.#.#",
+    "#.#...........#.#.#",
+    "#.#.###########.#.#",
+    "#.#.....#.......#.#",
+    "#.#.#####.#######.#",
+    "#.#.#...#.....#.#.#",
+    "#.###.#.#.###...#.#",
+    "#...#.#.#.#...#.#.#",
+    "###.#.#.#.#.#.#.#.#",
+    "#.....#...#.#...#.#",
+    "#..##.###.#.#.#.#.#",
+    "#.....#.....#.#...#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_7",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_7_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_7_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 5,
+      "y": 11,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_7_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 3,
+      "y": 10,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_7_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 13,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_7_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_7_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q066_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "珊瑚の軍議：現場の痕跡",
+      "kind": "clue",
+      "quest": "q066",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q066.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q066.clue_a"
+    },
+    {
+      "id": "q066_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "珊瑚の軍議：記録と証言",
+      "kind": "clue",
+      "quest": "q066",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q066.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q066.clue_b"
+    },
+    {
+      "id": "q066_decision",
+      "x": 15,
+      "y": 5,
+      "name": "珊瑚の軍議：決着の場",
+      "kind": "decision",
+      "quest": "q066",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q066.stage"
+        },
+        "right": "active"
+      },
+      "script": "q066.decision"
+    },
+    {
+      "id": "q067_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "人魚の筆談：現場の痕跡",
+      "kind": "clue",
+      "quest": "q067",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q067.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q067.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q067.clue_a"
+    },
+    {
+      "id": "q067_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "人魚の筆談：記録と証言",
+      "kind": "clue",
+      "quest": "q067",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q067.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q067.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q067.clue_b"
+    },
+    {
+      "id": "q067_decision",
+      "x": 17,
+      "y": 3,
+      "name": "人魚の筆談：決着の場",
+      "kind": "decision",
+      "quest": "q067",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q067.stage"
+        },
+        "right": "active"
+      },
+      "script": "q067.decision"
+    },
+    {
+      "id": "q068_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "二つの錨：現場の痕跡",
+      "kind": "clue",
+      "quest": "q068",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q068.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q068.clue_a"
+    },
+    {
+      "id": "q068_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "二つの錨：記録と証言",
+      "kind": "clue",
+      "quest": "q068",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q068.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q068.clue_b"
+    },
+    {
+      "id": "q068_decision",
+      "x": 8,
+      "y": 13,
+      "name": "二つの錨：決着の場",
+      "kind": "decision",
+      "quest": "q068",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q068.stage"
+        },
+        "right": "active"
+      },
+      "script": "q068.decision"
+    },
+    {
+      "id": "q069_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "海王の通行税：現場の痕跡",
+      "kind": "clue",
+      "quest": "q069",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q069.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q069.clue_a"
+    },
+    {
+      "id": "q069_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "海王の通行税：記録と証言",
+      "kind": "clue",
+      "quest": "q069",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q069.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q069.clue_b"
+    },
+    {
+      "id": "q069_decision",
+      "x": 9,
+      "y": 12,
+      "name": "海王の通行税：決着の場",
+      "kind": "decision",
+      "quest": "q069",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q069.stage"
+        },
+        "right": "active"
+      },
+      "script": "q069.decision"
+    },
+    {
+      "id": "q070_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "沈没城の浮上：現場の痕跡",
+      "kind": "clue",
+      "quest": "q070",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q070.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q070.clue_a"
+    },
+    {
+      "id": "q070_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "沈没城の浮上：記録と証言",
+      "kind": "clue",
+      "quest": "q070",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q070.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q070.clue_b"
+    },
+    {
+      "id": "q070_decision",
+      "x": 13,
+      "y": 7,
+      "name": "沈没城の浮上：決着の場",
+      "kind": "decision",
+      "quest": "q070",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q070.stage"
+        },
+        "right": "active"
+      },
+      "script": "q070.decision"
+    }
+  ]
+}

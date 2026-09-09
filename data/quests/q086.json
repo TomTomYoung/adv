@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q086",
+  "number": 86,
+  "title": "百年前の観測者",
+  "client": "観測士のシオ",
+  "brief": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+  "region": 9,
+  "type": "escort",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q086_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q086_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "object": "q086_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "古い観測値も現在の研究へ使えます。機械の名は観測者欄に残ります。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "日付の混乱は消えました。長い変化を追える資料も失われます。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "新旧の暦が並びました。変換を忘れない仕事が、毎日の当番に加わります。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "観測士のシオ",
+        "observation": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+        "belief": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+        "goal": "観測器の護衛を倒し古い報告を破棄する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "観測器の護衛を倒し古い報告を破棄する",
+      "alternative": "暦を更新し百年分の対応表を作る",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもありません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+      "openQuestion": "百年前の観測者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q086.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q086.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q086.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q086.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q086.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q086.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q086",
+          "key": "clue_a",
+          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもありません。"
+        }
+      ]
+    },
+    "q086.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "観測士のシオ",
+          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q086",
+          "key": "clue_b",
+          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車があります。"
+        }
+      ]
+    },
+    "q086.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "百年前の観測者\n\n百年前の日付で観測報告が続きます。書いた者を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "暦を更新し百年分の対応表を作る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "古い観測値も現在の研究へ使えます。機械の名は観測者欄に残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "観測器の護衛を倒し古い報告を破棄する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日付の混乱は消えました。長い変化を追える資料も失われます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "旧暦のまま受領し注記を付ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "新旧の暦が並びました。変換を忘れない仕事が、毎日の当番に加わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q086",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

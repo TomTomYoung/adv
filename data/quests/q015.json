@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q015",
+  "number": 15,
+  "title": "泣く塩柱",
+  "client": "坑道礼拝堂のマヤ",
+  "brief": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+  "region": 2,
+  "type": "resource",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q015_clue_a",
+      "x": 6,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q015_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q015_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "奇跡の水は瓶に収まり、名前は紙に戻りました。巡礼者は遺族への寄付を始めます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "柱は乾きました。読めなくなった名前の補償は、そのまま審査待ちになります。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "名前の一部は救えました。マヤは祭壇より先に帳簿の部屋を修理します。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "坑道礼拝堂のマヤ",
+        "observation": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+        "belief": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+        "goal": "柱に憑いた霊を祓って水を止める"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "柱に憑いた霊を祓って水を止める",
+      "alternative": "涙を受け、名簿を写して公開する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "水滴は像の目より上の亀裂から伝い、裏の棚へ落ちています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "名簿の失われた行に限って、遺族への補償記録が途切れています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+      "openQuestion": "泣く塩柱の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q015.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q015.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q015.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q015.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q015.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q015.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "水滴は像の目より上の亀裂から伝い、裏の棚へ落ちています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q015",
+          "key": "clue_a",
+          "text": "水滴は像の目より上の亀裂から伝い、裏の棚へ落ちています。"
+        }
+      ]
+    },
+    "q015.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "坑道礼拝堂のマヤ",
+          "text": "名簿の失われた行に限って、遺族への補償記録が途切れています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q015",
+          "key": "clue_b",
+          "text": "名簿の失われた行に限って、遺族への補償記録が途切れています。"
+        }
+      ]
+    },
+    "q015.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "泣く塩柱\n\n聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "柱に憑いた霊を祓って水を止める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "柱は乾きました。読めなくなった名前の補償は、そのまま審査待ちになります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q015",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "涙を受け、名簿を写して公開する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q015.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q015.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "奇跡の水は瓶に収まり、名前は紙に戻りました。巡礼者は遺族への寄付を始めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q015",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "名簿を乾かし礼拝堂へ預ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "名前の一部は救えました。マヤは祭壇より先に帳簿の部屋を修理します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q015",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

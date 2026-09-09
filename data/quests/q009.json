@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q009",
+  "number": 9,
+  "title": "鼠の避難路",
+  "client": "地下測量士のエダ",
+  "brief": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+  "region": 1,
+  "type": "survey",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q009_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q009_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q009_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "鼠は減り、崩落警報は解除されました。測量士は匂いも記すようになります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "穀物庫は守られましたが、消毒の続く地下では別の虫が増え始めます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "無駄な避難と笑う人もいました。共同倉の帳簿は、備蓄の偏りを明らかにします。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "地下測量士のエダ",
+        "observation": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+        "belief": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+        "goal": "群れの主を倒し巣を一掃する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "群れの主を倒し巣を一掃する",
+      "alternative": "消毒区画を分け、穀物庫の穴を塞ぐ",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままです。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中しています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+      "openQuestion": "鼠の避難路の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q009.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q009.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q009.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q009.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q009.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q009.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままです。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q009",
+          "key": "clue_a",
+          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままです。"
+        }
+      ]
+    },
+    "q009.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "地下測量士のエダ",
+          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q009",
+          "key": "clue_b",
+          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中しています。"
+        }
+      ]
+    },
+    "q009.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鼠の避難路\n\n鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "群れの主を倒し巣を一掃する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "穀物庫は守られましたが、消毒の続く地下では別の虫が増え始めます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q009",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "消毒区画を分け、穀物庫の穴を塞ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鼠は減り、崩落警報は解除されました。測量士は匂いも記すようになります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "避難を優先し、穀物を共同倉へ移す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "無駄な避難と笑う人もいました。共同倉の帳簿は、備蓄の偏りを明らかにします。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

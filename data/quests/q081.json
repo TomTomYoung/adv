@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q081",
+  "number": 81,
+  "title": "落ちてこない星",
+  "client": "観測士のシオ",
+  "brief": "予報された星が落ちません。地下の計算盤を調べてください。",
+  "region": 9,
+  "type": "investigation",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q081_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q081_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "object": "q081_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "避難騒ぎは収まりました。子供たちは安心して星の落ちる上映を見ます。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "予報は消えました。観測士は本物の天候記録まで失います。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "人は一日待ちました。シオは空を見た記録と盤の記録を並べます。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "予報は地上の空でなく、天井に投影する星図の落下演出の予定です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "予報は地上の空でなく、天井に投影する星図の落下演出の予定です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "予報された星が落ちません。地下の計算盤を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "観測士のシオ",
+        "observation": "予報された星が落ちません。地下の計算盤を調べてください。",
+        "belief": "予報された星が落ちません。地下の計算盤を調べてください。",
+        "goal": "星図の番獣を倒し予報盤を壊す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "星図の番獣を倒し予報盤を壊す",
+      "alternative": "星図と本当の空を分けて告知する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "方位盤の北が地理上の北と逆で、天井の投影機へ向いています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "予定表には落下の後に幕間とあり、観覧席の席数が添えられています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "予報された星が落ちません。地下の計算盤を調べてください。",
+      "openQuestion": "落ちてこない星の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "予報は地上の空でなく、天井に投影する星図の落下演出の予定です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q081.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q081.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q081.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q081.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q081.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q081.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "方位盤の北が地理上の北と逆で、天井の投影機へ向いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q081",
+          "key": "clue_a",
+          "text": "方位盤の北が地理上の北と逆で、天井の投影機へ向いています。"
+        }
+      ]
+    },
+    "q081.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "観測士のシオ",
+          "text": "予定表には落下の後に幕間とあり、観覧席の席数が添えられています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q081",
+          "key": "clue_b",
+          "text": "予定表には落下の後に幕間とあり、観覧席の席数が添えられています。"
+        }
+      ]
+    },
+    "q081.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "落ちてこない星\n\n予報された星が落ちません。地下の計算盤を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "星図の番獣を倒し予報盤を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "予報は消えました。観測士は本物の天候記録まで失います。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q081",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "星図と本当の空を分けて告知する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "予報は地上の空でなく、天井に投影する星図の落下演出の予定です。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "避難騒ぎは収まりました。子供たちは安心して星の落ちる上映を見ます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "上映を延期して観測結果を再確認する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人は一日待ちました。シオは空を見た記録と盤の記録を並べます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

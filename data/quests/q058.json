@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q058",
+  "number": 58,
+  "title": "金貨の病",
+  "client": "両替商のエン",
+  "brief": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+  "region": 6,
+  "type": "ritual",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q058_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q058_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q058_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "両替商のエン",
+        "observation": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+        "belief": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+        "goal": "金を食う魔物を倒し黒い貨幣を没収する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "金を食う魔物を倒し黒い貨幣を没収する",
+      "alternative": "取引履歴で盗難分だけ追跡する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "黒い色は水で薄れ、金貨自体の重さや材質は変わりません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "同じ袋に入った正規の領収書にも、同じ染みが付いています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+      "openQuestion": "金貨の病の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q058.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q058.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q058.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q058.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q058.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q058.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "黒い色は水で薄れ、金貨自体の重さや材質は変わりません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q058",
+          "key": "clue_a",
+          "text": "黒い色は水で薄れ、金貨自体の重さや材質は変わりません。"
+        }
+      ]
+    },
+    "q058.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "両替商のエン",
+          "text": "同じ袋に入った正規の領収書にも、同じ染みが付いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q058",
+          "key": "clue_b",
+          "text": "同じ袋に入った正規の領収書にも、同じ染みが付いています。"
+        }
+      ]
+    },
+    "q058.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "金貨の病\n\n金貨に触ると手が黒くなります。呪われた貨幣を集めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "取引履歴で盗難分だけ追跡する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q058",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "金を食う魔物を倒し黒い貨幣を没収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q058",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "同額の代貨へ交換し原貨を保管する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q058",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

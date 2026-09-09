@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q023",
+  "number": 23,
+  "title": "母樹の指輪",
+  "client": "旅人のアセ",
+  "brief": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+  "region": 3,
+  "type": "mechanism",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q023_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q023_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q023_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "アセは母の仕事を知りました。指輪は手元に、測定標は庭園に残ります。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "指輪は返りました。通路の膨らみを知らせる最後の印は失われます。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "アセは写しを身に着けました。母の名は測定記録の最初に書かれます。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "旅人のアセ",
+        "observation": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+        "belief": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+        "goal": "根守りを倒して絡んだ根を切る"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "根守りを倒して絡んだ根を切る",
+      "alternative": "測定記録を写してから輪を外す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "指輪の内側には名前でなく、前年の根の周囲が刻まれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "同じ印の輪が高さ順に並び、最新の輪だけ引き千切れています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+      "openQuestion": "母樹の指輪の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q023.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q023.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q023.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q023.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q023.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q023.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "指輪の内側には名前でなく、前年の根の周囲が刻まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q023",
+          "key": "clue_a",
+          "text": "指輪の内側には名前でなく、前年の根の周囲が刻まれています。"
+        }
+      ]
+    },
+    "q023.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "旅人のアセ",
+          "text": "同じ印の輪が高さ順に並び、最新の輪だけ引き千切れています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q023",
+          "key": "clue_b",
+          "text": "同じ印の輪が高さ順に並び、最新の輪だけ引き千切れています。"
+        }
+      ]
+    },
+    "q023.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "母樹の指輪\n\n木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "根守りを倒して絡んだ根を切る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "指輪は返りました。通路の膨らみを知らせる最後の印は失われます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q023",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "測定記録を写してから輪を外す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q023.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q023.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "アセは母の仕事を知りました。指輪は手元に、測定標は庭園に残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q023",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "指輪の写しを作り本体を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "アセは写しを身に着けました。母の名は測定記録の最初に書かれます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q023",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

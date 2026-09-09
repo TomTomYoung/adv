@@ -1,0 +1,518 @@
+{
+  "id": "region_5_f2",
+  "region": 5,
+  "floor": 2,
+  "name": "灰時計の書庫・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.........#.....#",
+    "#.###.#######.#.###",
+    "#...#.......#.#...#",
+    "###.###.###.#.###.#",
+    "#.#.#.....#.....#.#",
+    "#.#.#.###.#####.#.#",
+    "#.#.#.#...#...#.#.#",
+    "#.#.#.#.###.#.###.#",
+    "#.....#.....#.....#",
+    "#.###############.#",
+    "#.#.........#...#.#",
+    "#.#.#####.###.#.#.#",
+    "#.......#.....#...#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_5",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_5_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_5_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 5,
+      "y": 11,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_5_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 11,
+      "y": 1,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_5_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 15,
+      "y": 7,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_5_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_5_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q046_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "迷子の索引：現場の痕跡",
+      "kind": "clue",
+      "quest": "q046",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q046.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q046.clue_a"
+    },
+    {
+      "id": "q046_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "迷子の索引：記録と証言",
+      "kind": "clue",
+      "quest": "q046",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q046.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q046.clue_b"
+    },
+    {
+      "id": "q046_decision",
+      "x": 11,
+      "y": 9,
+      "name": "迷子の索引：決着の場",
+      "kind": "decision",
+      "quest": "q046",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q046.stage"
+        },
+        "right": "active"
+      },
+      "script": "q046.decision"
+    },
+    {
+      "id": "q047_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "一頁の戦争：現場の痕跡",
+      "kind": "clue",
+      "quest": "q047",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q047.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q047.clue_a"
+    },
+    {
+      "id": "q047_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "一頁の戦争：記録と証言",
+      "kind": "clue",
+      "quest": "q047",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q047.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q047.clue_b"
+    },
+    {
+      "id": "q047_decision",
+      "x": 13,
+      "y": 7,
+      "name": "一頁の戦争：決着の場",
+      "kind": "decision",
+      "quest": "q047",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q047.stage"
+        },
+        "right": "active"
+      },
+      "script": "q047.decision"
+    },
+    {
+      "id": "q048_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "眠る校正者：現場の痕跡",
+      "kind": "clue",
+      "quest": "q048",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q048.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q048.clue_a"
+    },
+    {
+      "id": "q048_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "眠る校正者：記録と証言",
+      "kind": "clue",
+      "quest": "q048",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q048.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q048.clue_b"
+    },
+    {
+      "id": "q048_decision",
+      "x": 15,
+      "y": 5,
+      "name": "眠る校正者：決着の場",
+      "kind": "decision",
+      "quest": "q048",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q048.stage"
+        },
+        "right": "active"
+      },
+      "script": "q048.decision"
+    },
+    {
+      "id": "q049_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "忘却の栞：現場の痕跡",
+      "kind": "clue",
+      "quest": "q049",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q049.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q049.clue_a"
+    },
+    {
+      "id": "q049_clue_b",
+      "x": 8,
+      "y": 7,
+      "name": "忘却の栞：記録と証言",
+      "kind": "clue",
+      "quest": "q049",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q049.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q049.clue_b"
+    },
+    {
+      "id": "q049_decision",
+      "x": 17,
+      "y": 3,
+      "name": "忘却の栞：決着の場",
+      "kind": "decision",
+      "quest": "q049",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q049.stage"
+        },
+        "right": "active"
+      },
+      "script": "q049.decision"
+    },
+    {
+      "id": "q050_clue_a",
+      "x": 6,
+      "y": 3,
+      "name": "止まった終章：現場の痕跡",
+      "kind": "clue",
+      "quest": "q050",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q050.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q050.clue_a"
+    },
+    {
+      "id": "q050_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "止まった終章：記録と証言",
+      "kind": "clue",
+      "quest": "q050",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q050.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q050.clue_b"
+    },
+    {
+      "id": "q050_decision",
+      "x": 9,
+      "y": 12,
+      "name": "止まった終章：決着の場",
+      "kind": "decision",
+      "quest": "q050",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q050.stage"
+        },
+        "right": "active"
+      },
+      "script": "q050.decision"
+    }
+  ]
+}

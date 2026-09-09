@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q006",
+  "number": 6,
+  "title": "沈んだ給金箱",
+  "client": "工事頭のガロ",
+  "brief": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+  "region": 1,
+  "type": "escort",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q006_clue_a",
+      "x": 6,
+      "y": 2,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q006_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q006_decision",
+      "x": 10,
+      "y": 10,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "工事頭のガロ",
+        "observation": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+        "belief": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+        "goal": "箱の番をする水棲獣を倒して密かに返す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "箱の番をする水棲獣を倒して密かに返す",
+      "alternative": "空箱と帳簿を職人全員の前に出す",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "箱へ結ばれた縄は切れずにほどかれ、工事頭専用の結びが残っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "箱の重さの記録は銀貨入りより軽く、中には石の音がします。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+      "openQuestion": "沈んだ給金箱の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q006.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q006.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q006.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q006.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q006.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q006.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "箱へ結ばれた縄は切れずにほどかれ、工事頭専用の結びが残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q006",
+          "key": "clue_a",
+          "text": "箱へ結ばれた縄は切れずにほどかれ、工事頭専用の結びが残っています。"
+        }
+      ]
+    },
+    "q006.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "工事頭のガロ",
+          "text": "箱の重さの記録は銀貨入りより軽く、中には石の音がします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q006",
+          "key": "clue_b",
+          "text": "箱の重さの記録は銀貨入りより軽く、中には石の音がします。"
+        }
+      ]
+    },
+    "q006.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "沈んだ給金箱\n\n給金箱を落とした職人が疑われています。沈んだ箱を回収してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "空箱と帳簿を職人全員の前に出す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q006",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "箱の番をする水棲獣を倒して密かに返す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q006",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "箱の場所を職人へ教え回収を任せる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q006",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

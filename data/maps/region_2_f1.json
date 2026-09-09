@@ -1,0 +1,528 @@
+{
+  "id": "region_2_f1",
+  "region": 2,
+  "floor": 1,
+  "name": "塩哭きの廃坑・地下1層",
+  "tiles": [
+    "###################",
+    "#.....#...........#",
+    "#####.##.##.#####.#",
+    "#...#.....#.......#",
+    "#.#.#####.#.#####.#",
+    "#.#.....#.#.#.....#",
+    "#####.#.#.###.###.#",
+    "#.....#.#.....#.#.#",
+    "#.#.#######.###...#",
+    "#.#.#.....#.....#.#",
+    "#...#.###.#.###.#.#",
+    "#.#...#.#...#...#.#",
+    "#.#..##.#####.###.#",
+    "#...........#.....#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_2",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_2_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 13,
+      "y": 12,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_2_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_2_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 3,
+      "y": 13,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_2_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 11,
+      "y": 1,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_2_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 11,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_2_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_2_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q011_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "塩の花嫁：現場の痕跡",
+      "kind": "clue",
+      "quest": "q011",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q011.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q011.clue_a"
+    },
+    {
+      "id": "q011_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "塩の花嫁：記録と証言",
+      "kind": "clue",
+      "quest": "q011",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q011.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q011.clue_b"
+    },
+    {
+      "id": "q011_decision",
+      "x": 11,
+      "y": 9,
+      "name": "塩の花嫁：決着の場",
+      "kind": "decision",
+      "quest": "q011",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q011.stage"
+        },
+        "right": "active"
+      },
+      "script": "q011.decision"
+    },
+    {
+      "id": "q012_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "三つのつるはし：現場の痕跡",
+      "kind": "clue",
+      "quest": "q012",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q012.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q012.clue_a"
+    },
+    {
+      "id": "q012_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "三つのつるはし：記録と証言",
+      "kind": "clue",
+      "quest": "q012",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q012.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q012.clue_b"
+    },
+    {
+      "id": "q012_decision",
+      "x": 13,
+      "y": 7,
+      "name": "三つのつるはし：決着の場",
+      "kind": "decision",
+      "quest": "q012",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q012.stage"
+        },
+        "right": "active"
+      },
+      "script": "q012.decision"
+    },
+    {
+      "id": "q013_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "呼吸する鉱脈：現場の痕跡",
+      "kind": "clue",
+      "quest": "q013",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q013.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q013.clue_a"
+    },
+    {
+      "id": "q013_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "呼吸する鉱脈：記録と証言",
+      "kind": "clue",
+      "quest": "q013",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q013.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q013.clue_b"
+    },
+    {
+      "id": "q013_decision",
+      "x": 15,
+      "y": 5,
+      "name": "呼吸する鉱脈：決着の場",
+      "kind": "decision",
+      "quest": "q013",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q013.stage"
+        },
+        "right": "active"
+      },
+      "script": "q013.decision"
+    },
+    {
+      "id": "q014_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "帰りの貨車：現場の痕跡",
+      "kind": "clue",
+      "quest": "q014",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q014.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q014.clue_a"
+    },
+    {
+      "id": "q014_clue_b",
+      "x": 6,
+      "y": 9,
+      "name": "帰りの貨車：記録と証言",
+      "kind": "clue",
+      "quest": "q014",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q014.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q014.clue_b"
+    },
+    {
+      "id": "q014_decision",
+      "x": 17,
+      "y": 3,
+      "name": "帰りの貨車：決着の場",
+      "kind": "decision",
+      "quest": "q014",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q014.stage"
+        },
+        "right": "active"
+      },
+      "script": "q014.decision"
+    },
+    {
+      "id": "q015_clue_a",
+      "x": 6,
+      "y": 3,
+      "name": "泣く塩柱：現場の痕跡",
+      "kind": "clue",
+      "quest": "q015",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q015.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q015.clue_a"
+    },
+    {
+      "id": "q015_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "泣く塩柱：記録と証言",
+      "kind": "clue",
+      "quest": "q015",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q015.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q015.clue_b"
+    },
+    {
+      "id": "q015_decision",
+      "x": 9,
+      "y": 11,
+      "name": "泣く塩柱：決着の場",
+      "kind": "decision",
+      "quest": "q015",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q015.stage"
+        },
+        "right": "active"
+      },
+      "script": "q015.decision"
+    }
+  ]
+}

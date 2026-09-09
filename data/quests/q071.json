@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q071",
+  "number": 71,
+  "title": "止まれない門番",
+  "client": "整備士のフウ",
+  "brief": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+  "region": 8,
+  "type": "investigation",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q071_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q071_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "object": "q071_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "門番は初めて座りました。フウは人の退職にも機械の点検を付けます。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "補修通路は通れました。組み直した門番には以前の巡回記録がありません。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "その日の補修は済みました。再起動すると、門番は同じ番号を探し始めます。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "門番は全員帰還を待ち、退職者の番号が在室のまま残っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "門番は全員帰還を待ち、退職者の番号が在室のまま残っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "整備士のフウ",
+        "observation": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+        "belief": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+        "goal": "門番を戦闘で止めて解体する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "門番を戦闘で止めて解体する",
+      "alternative": "退職番号を精算して停止させる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "人数計には姿のない番号が一つあり、巡回経路は空の更衣室で止まります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "退職届は受理済みですが、入退室盤への転記欄が空白です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+      "openQuestion": "止まれない門番の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "門番は全員帰還を待ち、退職者の番号が在室のまま残っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q071.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q071.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q071.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q071.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q071.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q071.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人数計には姿のない番号が一つあり、巡回経路は空の更衣室で止まります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q071",
+          "key": "clue_a",
+          "text": "人数計には姿のない番号が一つあり、巡回経路は空の更衣室で止まります。"
+        }
+      ]
+    },
+    "q071.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "整備士のフウ",
+          "text": "退職届は受理済みですが、入退室盤への転記欄が空白です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q071",
+          "key": "clue_b",
+          "text": "退職届は受理済みですが、入退室盤への転記欄が空白です。"
+        }
+      ]
+    },
+    "q071.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "止まれない門番\n\n門番機械が巡回をやめず補修できません。停止条件を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "門番を戦闘で止めて解体する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "補修通路は通れました。組み直した門番には以前の巡回記録がありません。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q071",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "退職番号を精算して停止させる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q071.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q071.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "門番は全員帰還を待ち、退職者の番号が在室のまま残っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "門番は初めて座りました。フウは人の退職にも機械の点検を付けます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q071",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "外部電源を切って短時間だけ補修する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "その日の補修は済みました。再起動すると、門番は同じ番号を探し始めます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q071",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

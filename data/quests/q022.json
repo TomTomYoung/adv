@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q022",
+  "number": 22,
+  "title": "緑の寝息",
+  "client": "薬師のハナ",
+  "brief": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+  "region": 3,
+  "type": "rescue",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q022_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q022_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f1",
+      "object": "q022_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "仲間は自分で目を覚ましました。薬師は採集袋に治療中の札を追加します。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "仲間は歩いて帰りましたが、治りかけた傷が再び熱を持ちます。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "原因を断定せず治療を続けました。薬師は持ち帰った胞子から薬を試します。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "眠りは毒でなく、負傷者の熱を下げる胞子の治療反応です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "眠りは毒でなく、負傷者の熱を下げる胞子の治療反応です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "薬師のハナ",
+        "observation": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+        "belief": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+        "goal": "胞子の主を倒し仲間を起こす"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "胞子の主を倒し仲間を起こす",
+      "alternative": "傷を処置し胞子が離れるのを待つ",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "眠る仲間の熱は下がり、傷の周りだけ胞子が黒くなっています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "健康な虫は花の上でも動き、傷ついた虫だけ葉陰へ運ばれています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+      "openQuestion": "緑の寝息の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "眠りは毒でなく、負傷者の熱を下げる胞子の治療反応です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q022.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q022.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q022.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q022.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q022.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q022.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "眠る仲間の熱は下がり、傷の周りだけ胞子が黒くなっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q022",
+          "key": "clue_a",
+          "text": "眠る仲間の熱は下がり、傷の周りだけ胞子が黒くなっています。"
+        }
+      ]
+    },
+    "q022.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "薬師のハナ",
+          "text": "健康な虫は花の上でも動き、傷ついた虫だけ葉陰へ運ばれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q022",
+          "key": "clue_b",
+          "text": "健康な虫は花の上でも動き、傷ついた虫だけ葉陰へ運ばれています。"
+        }
+      ]
+    },
+    "q022.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "緑の寝息\n\n薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "傷を処置し胞子が離れるのを待つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q022.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q022.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "眠りは毒でなく、負傷者の熱を下げる胞子の治療反応です。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "仲間は自分で目を覚ましました。薬師は採集袋に治療中の札を追加します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q022",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "胞子の主を倒し仲間を起こす",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "仲間は歩いて帰りましたが、治りかけた傷が再び熱を持ちます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q022",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "眠ったまま担架で薬師へ運ぶ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "原因を断定せず治療を続けました。薬師は持ち帰った胞子から薬を試します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q022",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q049",
+  "number": 49,
+  "title": "忘却の栞",
+  "client": "探検家のルウ",
+  "brief": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+  "region": 5,
+  "type": "survey",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q049_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q049_clue_b",
+      "x": 8,
+      "y": 7,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "object": "q049_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "ルウは帰路を覚えて帰りました。忘れる約束も守れたと胸を張ります。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "全て思い出せました。持ち帰るべきでない知識も、夢に現れるようになります。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "成果は少なくても隊は戻りました。ルウは次の契約で閲覧範囲を確かめます。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "探検家のルウ",
+        "observation": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+        "belief": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+        "goal": "忘却の番人を倒して栞を焼く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "忘却の番人を倒して栞を焼く",
+      "alternative": "道順を封印範囲から外し機密だけ守る",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進めます。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にあります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+      "openQuestion": "忘却の栞の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q049.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q049.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q049.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q049.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q049.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q049.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進めます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q049",
+          "key": "clue_a",
+          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進めます。"
+        }
+      ]
+    },
+    "q049.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "探検家のルウ",
+          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q049",
+          "key": "clue_b",
+          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にあります。"
+        }
+      ]
+    },
+    "q049.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "忘却の栞\n\n栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "忘却の番人を倒して栞を焼く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "全て思い出せました。持ち帰るべきでない知識も、夢に現れるようになります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q049",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "道順を封印範囲から外し機密だけ守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "ルウは帰路を覚えて帰りました。忘れる約束も守れたと胸を張ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "機密頁を置き地図だけ写して帰る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "成果は少なくても隊は戻りました。ルウは次の契約で閲覧範囲を確かめます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

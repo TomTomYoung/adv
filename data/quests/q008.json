@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q008",
+  "number": 8,
+  "title": "浮かばない棺",
+  "client": "葬送組合のヨル",
+  "brief": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+  "region": 1,
+  "type": "ritual",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q008_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q008_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q008_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "葬送組合のヨル",
+        "observation": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+        "belief": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+        "goal": "棺を押さえる魔物を倒し儀式を通す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "棺を押さえる魔物を倒し儀式を通す",
+      "alternative": "食糧を公に届け、死者を別に葬る",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "棺から防腐香ではなく燻製肉の匂いがし、釘は外から抜きやすく打たれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "水路の先には空の食器が並び、葬送船の到着日だけ火が焚かれます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+      "openQuestion": "浮かばない棺の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q008.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q008.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q008.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q008.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q008.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q008.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "棺から防腐香ではなく燻製肉の匂いがし、釘は外から抜きやすく打たれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q008",
+          "key": "clue_a",
+          "text": "棺から防腐香ではなく燻製肉の匂いがし、釘は外から抜きやすく打たれています。"
+        }
+      ]
+    },
+    "q008.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "葬送組合のヨル",
+          "text": "水路の先には空の食器が並び、葬送船の到着日だけ火が焚かれます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q008",
+          "key": "clue_b",
+          "text": "水路の先には空の食器が並び、葬送船の到着日だけ火が焚かれます。"
+        }
+      ]
+    },
+    "q008.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "浮かばない棺\n\n水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "食糧を公に届け、死者を別に葬る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q008.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q008.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q008",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "棺を押さえる魔物を倒し儀式を通す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q008",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "食糧を置き、棺だけ陸へ上げる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q008",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

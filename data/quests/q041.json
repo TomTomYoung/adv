@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q041",
+  "number": 41,
+  "title": "返却日のない本",
+  "client": "司書のシフ",
+  "brief": "返却日が消える本を回収してください。借り手が何年も戻りません。",
+  "region": 5,
+  "type": "investigation",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q041_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q041_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "object": "q041_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "行方不明者は住人として数え直されました。司書には本と人の二つの管理簿ができます。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "蔵書は戻りました。住人は居場所を失い、別の未返却本の陰へ移ります。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "本は本人の手で返りました。部屋を借りる契約は改めて交わされます。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "返却日が消える本を回収してください。借り手が何年も戻りません。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "司書のシフ",
+        "observation": "返却日が消える本を回収してください。借り手が何年も戻りません。",
+        "belief": "返却日が消える本を回収してください。借り手が何年も戻りません。",
+        "goal": "書棚の守護者を倒し本だけ回収する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "書棚の守護者を倒し本だけ回収する",
+      "alternative": "移住記録として台帳を作り直す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "貸出欄に部屋番号があり、返却箱には家賃の硬貨が入っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "奥の本棚に生活用の窪みがあり、借り手の筆跡の献立が貼られています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "返却日が消える本を回収してください。借り手が何年も戻りません。",
+      "openQuestion": "返却日のない本の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q041.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q041.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q041.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q041.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q041.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q041.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "貸出欄に部屋番号があり、返却箱には家賃の硬貨が入っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q041",
+          "key": "clue_a",
+          "text": "貸出欄に部屋番号があり、返却箱には家賃の硬貨が入っています。"
+        }
+      ]
+    },
+    "q041.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "司書のシフ",
+          "text": "奥の本棚に生活用の窪みがあり、借り手の筆跡の献立が貼られています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q041",
+          "key": "clue_b",
+          "text": "奥の本棚に生活用の窪みがあり、借り手の筆跡の献立が貼られています。"
+        }
+      ]
+    },
+    "q041.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "返却日のない本\n\n返却日が消える本を回収してください。借り手が何年も戻りません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "書棚の守護者を倒し本だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "蔵書は戻りました。住人は居場所を失い、別の未返却本の陰へ移ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q041",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "移住記録として台帳を作り直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "行方不明者は住人として数え直されました。司書には本と人の二つの管理簿ができます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "借り手に会って返却期限を相談する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本は本人の手で返りました。部屋を借りる契約は改めて交わされます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

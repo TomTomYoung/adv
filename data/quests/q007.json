@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q007",
+  "number": 7,
+  "title": "声を返す壁",
+  "client": "酒場のミレ",
+  "brief": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+  "region": 1,
+  "type": "testimony",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q007_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q007_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q007_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "酒場のミレ",
+        "observation": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+        "belief": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+        "goal": "声を真似る亡霊を退け壁を封じる"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "声を真似る亡霊を退け壁を封じる",
+      "alternative": "伝声管を開け二人を会わせる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "返事には毎回、同じ箇所で紙をめくる音が混じります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "壁の穴から地上の酒場で使う煙草の匂いが流れます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+      "openQuestion": "声を返す壁の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q007.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q007.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q007.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q007.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q007.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q007.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "返事には毎回、同じ箇所で紙をめくる音が混じります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q007",
+          "key": "clue_a",
+          "text": "返事には毎回、同じ箇所で紙をめくる音が混じります。"
+        }
+      ]
+    },
+    "q007.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "酒場のミレ",
+          "text": "壁の穴から地上の酒場で使う煙草の匂いが流れます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q007",
+          "key": "clue_b",
+          "text": "壁の穴から地上の酒場で使う煙草の匂いが流れます。"
+        }
+      ]
+    },
+    "q007.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "声を返す壁\n\n地下で亡夫の声が返ると噂されています。本人なのか確かめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "声を真似る亡霊を退け壁を封じる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q007",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "伝声管を開け二人を会わせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q007.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q007.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q007",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "声の正体を伏せ手紙だけ持ち帰る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q007",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

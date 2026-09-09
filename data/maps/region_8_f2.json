@@ -1,0 +1,518 @@
+{
+  "id": "region_8_f2",
+  "region": 8,
+  "floor": 2,
+  "name": "鉄胎の機関廟・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.......#.....#.#",
+    "#.#####.#.#.###.#.#",
+    "#.......#...#...#.#",
+    "##.##########.###.#",
+    "#...........#.#...#",
+    "#.###.###.#.#.#.#.#",
+    "#...#.....#.#.#.#.#",
+    "###.###.###...#.#.#",
+    "#...#.......#.#.#.#",
+    "#.#.##.##.###.#.#.#",
+    "#.#.#...#.#.....#.#",
+    "#.###.#.###.#####.#",
+    "#.....#...........#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_8",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_8_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_8_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 6,
+      "y": 10,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_8_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 1,
+      "y": 12,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_8_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 9,
+      "y": 11,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_8_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_8_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q076_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "鉄の子守歌：現場の痕跡",
+      "kind": "clue",
+      "quest": "q076",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q076.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q076.clue_a"
+    },
+    {
+      "id": "q076_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "鉄の子守歌：記録と証言",
+      "kind": "clue",
+      "quest": "q076",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q076.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q076.clue_b"
+    },
+    {
+      "id": "q076_decision",
+      "x": 17,
+      "y": 3,
+      "name": "鉄の子守歌：決着の場",
+      "kind": "decision",
+      "quest": "q076",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q076.stage"
+        },
+        "right": "active"
+      },
+      "script": "q076.decision"
+    },
+    {
+      "id": "q077_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "聖痕の配線：現場の痕跡",
+      "kind": "clue",
+      "quest": "q077",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q077.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q077.clue_a"
+    },
+    {
+      "id": "q077_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "聖痕の配線：記録と証言",
+      "kind": "clue",
+      "quest": "q077",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q077.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q077.clue_b"
+    },
+    {
+      "id": "q077_decision",
+      "x": 8,
+      "y": 13,
+      "name": "聖痕の配線：決着の場",
+      "kind": "decision",
+      "quest": "q077",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q077.stage"
+        },
+        "right": "active"
+      },
+      "script": "q077.decision"
+    },
+    {
+      "id": "q078_clue_a",
+      "x": 2,
+      "y": 7,
+      "name": "部品の記憶：現場の痕跡",
+      "kind": "clue",
+      "quest": "q078",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q078.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q078.clue_a"
+    },
+    {
+      "id": "q078_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "部品の記憶：記録と証言",
+      "kind": "clue",
+      "quest": "q078",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q078.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q078.clue_b"
+    },
+    {
+      "id": "q078_decision",
+      "x": 13,
+      "y": 8,
+      "name": "部品の記憶：決着の場",
+      "kind": "decision",
+      "quest": "q078",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q078.stage"
+        },
+        "right": "active"
+      },
+      "script": "q078.decision"
+    },
+    {
+      "id": "q079_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "九十九回の再起動：現場の痕跡",
+      "kind": "clue",
+      "quest": "q079",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q079.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q079.clue_a"
+    },
+    {
+      "id": "q079_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "九十九回の再起動：記録と証言",
+      "kind": "clue",
+      "quest": "q079",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q079.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q079.clue_b"
+    },
+    {
+      "id": "q079_decision",
+      "x": 15,
+      "y": 6,
+      "name": "九十九回の再起動：決着の場",
+      "kind": "decision",
+      "quest": "q079",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q079.stage"
+        },
+        "right": "active"
+      },
+      "script": "q079.decision"
+    },
+    {
+      "id": "q080_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "鉄胎の継承：現場の痕跡",
+      "kind": "clue",
+      "quest": "q080",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q080.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q080.clue_a"
+    },
+    {
+      "id": "q080_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "鉄胎の継承：記録と証言",
+      "kind": "clue",
+      "quest": "q080",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q080.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q080.clue_b"
+    },
+    {
+      "id": "q080_decision",
+      "x": 15,
+      "y": 5,
+      "name": "鉄胎の継承：決着の場",
+      "kind": "decision",
+      "quest": "q080",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q080.stage"
+        },
+        "right": "active"
+      },
+      "script": "q080.decision"
+    }
+  ]
+}

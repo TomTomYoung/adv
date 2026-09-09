@@ -1,0 +1,518 @@
+{
+  "id": "region_4_f2",
+  "region": 4,
+  "floor": 2,
+  "name": "鏡沈みの礼拝堂・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.....#.......#.#",
+    "#.#..##.#.#.#.#.#.#",
+    "#.#...#.#.#...#.#.#",
+    "#.###.#.#.#####...#",
+    "#...#.#...#...#.#.#",
+    "###.#.#####.###.#.#",
+    "#.#.#.......#...#.#",
+    "#.#.###.#.#.#.###.#",
+    "#.#.....#...#...#.#",
+    "#.#######.#.###...#",
+    "#.........#...#.#.#",
+    "#.#.#.#.#######.#.#",
+    "#.#...#...........#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_4",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_4_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_4_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 7,
+      "y": 9,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_4_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 2,
+      "y": 11,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_4_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 13,
+      "y": 11,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_4_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_4_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q036_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "七番目の歌声：現場の痕跡",
+      "kind": "clue",
+      "quest": "q036",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q036.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q036.clue_a"
+    },
+    {
+      "id": "q036_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "七番目の歌声：記録と証言",
+      "kind": "clue",
+      "quest": "q036",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q036.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q036.clue_b"
+    },
+    {
+      "id": "q036_decision",
+      "x": 15,
+      "y": 5,
+      "name": "七番目の歌声：決着の場",
+      "kind": "decision",
+      "quest": "q036",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q036.stage"
+        },
+        "right": "active"
+      },
+      "script": "q036.decision"
+    },
+    {
+      "id": "q037_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "夜だけの告解：現場の痕跡",
+      "kind": "clue",
+      "quest": "q037",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q037.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q037.clue_a"
+    },
+    {
+      "id": "q037_clue_b",
+      "x": 12,
+      "y": 3,
+      "name": "夜だけの告解：記録と証言",
+      "kind": "clue",
+      "quest": "q037",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q037.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q037.clue_b"
+    },
+    {
+      "id": "q037_decision",
+      "x": 16,
+      "y": 4,
+      "name": "夜だけの告解：決着の場",
+      "kind": "decision",
+      "quest": "q037",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q037.stage"
+        },
+        "right": "active"
+      },
+      "script": "q037.decision"
+    },
+    {
+      "id": "q038_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "聖水の沈殿：現場の痕跡",
+      "kind": "clue",
+      "quest": "q038",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q038.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q038.clue_a"
+    },
+    {
+      "id": "q038_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "聖水の沈殿：記録と証言",
+      "kind": "clue",
+      "quest": "q038",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q038.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q038.clue_b"
+    },
+    {
+      "id": "q038_decision",
+      "x": 13,
+      "y": 7,
+      "name": "聖水の沈殿：決着の場",
+      "kind": "decision",
+      "quest": "q038",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q038.stage"
+        },
+        "right": "active"
+      },
+      "script": "q038.decision"
+    },
+    {
+      "id": "q039_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "顔を売る仮面：現場の痕跡",
+      "kind": "clue",
+      "quest": "q039",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q039.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q039.clue_a"
+    },
+    {
+      "id": "q039_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "顔を売る仮面：記録と証言",
+      "kind": "clue",
+      "quest": "q039",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q039.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q039.clue_b"
+    },
+    {
+      "id": "q039_decision",
+      "x": 17,
+      "y": 3,
+      "name": "顔を売る仮面：決着の場",
+      "kind": "decision",
+      "quest": "q039",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q039.stage"
+        },
+        "right": "active"
+      },
+      "script": "q039.decision"
+    },
+    {
+      "id": "q040_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "砕けない祈り：現場の痕跡",
+      "kind": "clue",
+      "quest": "q040",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q040.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q040.clue_a"
+    },
+    {
+      "id": "q040_clue_b",
+      "x": 8,
+      "y": 7,
+      "name": "砕けない祈り：記録と証言",
+      "kind": "clue",
+      "quest": "q040",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q040.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q040.clue_b"
+    },
+    {
+      "id": "q040_decision",
+      "x": 8,
+      "y": 13,
+      "name": "砕けない祈り：決着の場",
+      "kind": "decision",
+      "quest": "q040",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q040.stage"
+        },
+        "right": "active"
+      },
+      "script": "q040.decision"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q065",
+  "number": 65,
+  "title": "水中の火葬",
+  "client": "葬送師のアオ",
+  "brief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+  "region": 7,
+  "type": "resource",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q065_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q065_clue_b",
+      "x": 7,
+      "y": 9,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q065_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "灯は遺灰と進みました。葬送師は待つ時間も儀式へ組み込みます。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "火は通りました。水面に残る油を、翌日漁師が回収します。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "海へ届く道は変わりました。遺族は火を見ながら別れを言えました。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "灯は油の膜を辿り、潮の切替で流れが途切れると消えます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "灯は油の膜を辿り、潮の切替で流れが途切れると消えます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "葬送師のアオ",
+        "observation": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+        "belief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+        "goal": "灯を呑む影を倒して強い油を流す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "灯を呑む影を倒して強い油を流す",
+      "alternative": "潮の切替を待ち供油路をつなぐ",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "供油室の潮見表は、灯の消えた時刻と一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+      "openQuestion": "水中の火葬の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "灯は油の膜を辿り、潮の切替で流れが途切れると消えます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q065.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q065.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q065.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q065.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q065.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q065.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q065",
+          "key": "clue_a",
+          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けています。"
+        }
+      ]
+    },
+    "q065.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "葬送師のアオ",
+          "text": "供油室の潮見表は、灯の消えた時刻と一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q065",
+          "key": "clue_b",
+          "text": "供油室の潮見表は、灯の消えた時刻と一致します。"
+        }
+      ]
+    },
+    "q065.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "水中の火葬\n\n水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "灯を呑む影を倒して強い油を流す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "火は通りました。水面に残る油を、翌日漁師が回収します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q065",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "潮の切替を待ち供油路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯は油の膜を辿り、潮の切替で流れが途切れると消えます。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯は遺灰と進みました。葬送師は待つ時間も儀式へ組み込みます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "灯を持ち帰り岸で弔う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "海へ届く道は変わりました。遺族は火を見ながら別れを言えました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

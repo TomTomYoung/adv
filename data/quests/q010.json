@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q010",
+  "number": 10,
+  "title": "最後の水門番",
+  "client": "灯番組合のリネ",
+  "brief": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+  "region": 1,
+  "type": "finale",
+  "recommendedLevel": 1,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_1"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q010_clue_a",
+      "x": 3,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q010_clue_b",
+      "x": 8,
+      "y": 7,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "object": "q010_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "地下の全員が上がりました。組合は責任を問われ、リネは証言台でも灯番の名を名乗ります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "地上は守られました。遅れた住人を救うため、後日もう一度水門を開ける工事が始まります。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "その夜は持ちこたえました。疲れた町の手で、次の避難計画が書き直されます。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "灯番組合のリネ",
+        "observation": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+        "belief": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+        "goal": "水門の守護獣を倒し強行閉鎖する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "水門の守護獣を倒し強行閉鎖する",
+      "alternative": "縦坑を開き、工事記録ごと全員を上げる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "塗り潰された図面に梯子の穴があり、その先から雨の匂いがします。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "水門番は避難者の人数と同じ数だけ、未使用の安全帯を隠しています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+      "openQuestion": "最後の水門番の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q010.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q010.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q010.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q010.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q010.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q010.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "塗り潰された図面に梯子の穴があり、その先から雨の匂いがします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q010",
+          "key": "clue_a",
+          "text": "塗り潰された図面に梯子の穴があり、その先から雨の匂いがします。"
+        }
+      ]
+    },
+    "q010.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "灯番組合のリネ",
+          "text": "水門番は避難者の人数と同じ数だけ、未使用の安全帯を隠しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q010",
+          "key": "clue_b",
+          "text": "水門番は避難者の人数と同じ数だけ、未使用の安全帯を隠しています。"
+        }
+      ]
+    },
+    "q010.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "最後の水門番\n\n老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "縦坑を開き、工事記録ごと全員を上げる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q010.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q010.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下の全員が上がりました。組合は責任を問われ、リネは証言台でも灯番の名を名乗ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q010",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "水門の守護獣を倒し強行閉鎖する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地上は守られました。遅れた住人を救うため、後日もう一度水門を開ける工事が始まります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q010",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "閉鎖を延期し交代で排水を続ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "その夜は持ちこたえました。疲れた町の手で、次の避難計画が書き直されます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q010",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

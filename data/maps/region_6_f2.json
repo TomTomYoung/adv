@@ -1,0 +1,518 @@
+{
+  "id": "region_6_f2",
+  "region": 6,
+  "floor": 2,
+  "name": "眠れる地下市場・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.........#.....#",
+    "#.#.#######.#.#.###",
+    "#.....#.....#.....#",
+    "#####.#.###.#####.#",
+    "#.....#.#.....#...#",
+    "#.###.#.#.###.#.#.#",
+    "#.#...#.#.#.#.#.#.#",
+    "#.#.###.#.#.#.#.#.#",
+    "#.#.....#.#.#...#.#",
+    "#.#######.#.#####.#",
+    "#.#...#.......#...#",
+    "#.#.#.#.###.#.#.###",
+    "#...#...#...#.....#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_6",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_6_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_6_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 3,
+      "y": 13,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_6_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 11,
+      "y": 1,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_6_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_6_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_6_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q056_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "閉店後の拍手：現場の痕跡",
+      "kind": "clue",
+      "quest": "q056",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q056.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q056.clue_a"
+    },
+    {
+      "id": "q056_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "閉店後の拍手：記録と証言",
+      "kind": "clue",
+      "quest": "q056",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q056.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q056.clue_b"
+    },
+    {
+      "id": "q056_decision",
+      "x": 15,
+      "y": 5,
+      "name": "閉店後の拍手：決着の場",
+      "kind": "decision",
+      "quest": "q056",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q056.stage"
+        },
+        "right": "active"
+      },
+      "script": "q056.decision"
+    },
+    {
+      "id": "q057_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "無主の露店：現場の痕跡",
+      "kind": "clue",
+      "quest": "q057",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q057.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q057.clue_a"
+    },
+    {
+      "id": "q057_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "無主の露店：記録と証言",
+      "kind": "clue",
+      "quest": "q057",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q057.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q057.clue_b"
+    },
+    {
+      "id": "q057_decision",
+      "x": 13,
+      "y": 7,
+      "name": "無主の露店：決着の場",
+      "kind": "decision",
+      "quest": "q057",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q057.stage"
+        },
+        "right": "active"
+      },
+      "script": "q057.decision"
+    },
+    {
+      "id": "q058_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "金貨の病：現場の痕跡",
+      "kind": "clue",
+      "quest": "q058",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q058.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q058.clue_a"
+    },
+    {
+      "id": "q058_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "金貨の病：記録と証言",
+      "kind": "clue",
+      "quest": "q058",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q058.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q058.clue_b"
+    },
+    {
+      "id": "q058_decision",
+      "x": 17,
+      "y": 3,
+      "name": "金貨の病：決着の場",
+      "kind": "decision",
+      "quest": "q058",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q058.stage"
+        },
+        "right": "active"
+      },
+      "script": "q058.decision"
+    },
+    {
+      "id": "q059_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "一人分の祝宴：現場の痕跡",
+      "kind": "clue",
+      "quest": "q059",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q059.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q059.clue_a"
+    },
+    {
+      "id": "q059_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "一人分の祝宴：記録と証言",
+      "kind": "clue",
+      "quest": "q059",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q059.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q059.clue_b"
+    },
+    {
+      "id": "q059_decision",
+      "x": 10,
+      "y": 11,
+      "name": "一人分の祝宴：決着の場",
+      "kind": "decision",
+      "quest": "q059",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q059.stage"
+        },
+        "right": "active"
+      },
+      "script": "q059.decision"
+    },
+    {
+      "id": "q060_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "市場の目覚まし：現場の痕跡",
+      "kind": "clue",
+      "quest": "q060",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q060.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q060.clue_a"
+    },
+    {
+      "id": "q060_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "市場の目覚まし：記録と証言",
+      "kind": "clue",
+      "quest": "q060",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q060.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q060.clue_b"
+    },
+    {
+      "id": "q060_decision",
+      "x": 11,
+      "y": 10,
+      "name": "市場の目覚まし：決着の場",
+      "kind": "decision",
+      "quest": "q060",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q060.stage"
+        },
+        "right": "active"
+      },
+      "script": "q060.decision"
+    }
+  ]
+}

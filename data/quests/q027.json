@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q027",
+  "number": 27,
+  "title": "花粉の身代金",
+  "client": "採集人のノム",
+  "brief": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+  "region": 3,
+  "type": "testimony",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q027_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q027_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "object": "q027_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "荷は無事に出ました。採集人は荷札に匂いの欄を作ります。",
+      "gold": 81,
+      "xp": 84
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "道は開きました。花粉を頼りに育つ下草が、次の季節には消えます。",
+      "gold": 101,
+      "xp": 61
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "損は小さく済みました。花の門は、香袋を持たない旅人には開いたままです。",
+      "gold": 52,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "花は荷の香料に反応して閉じ、価値のある品を選んでいるわけではありません。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "花は荷の香料に反応して閉じ、価値のある品を選んでいるわけではありません。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "採集人のノム",
+        "observation": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+        "belief": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+        "goal": "門番花を倒して根を断つ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "門番花を倒して根を断つ",
+      "alternative": "香袋を別道へ置き荷を通す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "安い香袋に花が集まり、金貨を置いても動きません。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "風上へ移した空袋にも同じように蔓が伸びています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+      "openQuestion": "花粉の身代金の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "花は荷の香料に反応して閉じ、価値のある品を選んでいるわけではありません。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q027.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q027.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q027.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q027.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q027.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q027.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "安い香袋に花が集まり、金貨を置いても動きません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q027",
+          "key": "clue_a",
+          "text": "安い香袋に花が集まり、金貨を置いても動きません。"
+        }
+      ]
+    },
+    "q027.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "採集人のノム",
+          "text": "風上へ移した空袋にも同じように蔓が伸びています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q027",
+          "key": "clue_b",
+          "text": "風上へ移した空袋にも同じように蔓が伸びています。"
+        }
+      ]
+    },
+    "q027.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "花粉の身代金\n\n出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "門番花を倒して根を断つ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "道は開きました。花粉を頼りに育つ下草が、次の季節には消えます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q027",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "香袋を別道へ置き荷を通す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q027.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q027.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "花は荷の香料に反応して閉じ、価値のある品を選んでいるわけではありません。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "荷は無事に出ました。採集人は荷札に匂いの欄を作ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q027",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "香料だけ置いて運賃を取り直す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "損は小さく済みました。花の門は、香袋を持たない旅人には開いたままです。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q027",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

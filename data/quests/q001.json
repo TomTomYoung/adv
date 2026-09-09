@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q001",
+  "number": 1,
+  "title": "帰らない灯番",
+  "client": "灯番組合のリネ",
+  "brief": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+  "region": 1,
+  "type": "investigation",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q001_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q001_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "object": "q001_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "灯番組合のリネ",
+        "observation": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+        "belief": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+        "goal": "通路の魔物を掃討して灯番を運ぶ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "通路の魔物を掃討して灯番を運ぶ",
+      "alternative": "予備油を分け、二人の帰路を照らす",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "消えた灯の芯は乾き、落ちていた油瓶だけが新品です。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "新人の靴跡は出口へ向かい、その脇に老人の杖跡が止まっています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+      "openQuestion": "帰らない灯番の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q001.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q001.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q001.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q001.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q001.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q001.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "消えた灯の芯は乾き、落ちていた油瓶だけが新品です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q001",
+          "key": "clue_a",
+          "text": "消えた灯の芯は乾き、落ちていた油瓶だけが新品です。"
+        }
+      ]
+    },
+    "q001.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "灯番組合のリネ",
+          "text": "新人の靴跡は出口へ向かい、その脇に老人の杖跡が止まっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q001",
+          "key": "clue_b",
+          "text": "新人の靴跡は出口へ向かい、その脇に老人の杖跡が止まっています。"
+        }
+      ]
+    },
+    "q001.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰らない灯番\n\n交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "通路の魔物を掃討して灯番を運ぶ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q001",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "予備油を分け、二人の帰路を照らす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q001.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q001.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q001",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "救助隊へ位置を伝えて戻る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q001",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

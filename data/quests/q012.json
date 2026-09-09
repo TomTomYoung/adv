@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q012",
+  "number": 12,
+  "title": "三つのつるはし",
+  "client": "鍛冶屋のダン",
+  "brief": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+  "region": 2,
+  "type": "rescue",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q012_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q012_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q012_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "鍛冶屋は展示札を書き直しました。名工の値は下がり、弟子の名が初めて売れます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "依頼人は満足しました。残る二本の作り手は贋作者と呼ばれ続けます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "展示は一つ増え、坑夫の仕事も進みました。銘の議論は後回しになります。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "三本とも本物で、銘は名工一人でなく工房の共同名です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "三本とも本物で、銘は名工一人でなく工房の共同名です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鍛冶屋のダン",
+        "observation": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+        "belief": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+        "goal": "坑道の番獣を倒し一番鋭い一本を選ぶ"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "坑道の番獣を倒し一番鋭い一本を選ぶ",
+      "alternative": "三人の仕事としてまとめて返す",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "柄の握り跡は三人分ですが、鍛接の印は同じ順序で刻まれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "工房の当番表には銘と同じ三つの記号が並びます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+      "openQuestion": "三つのつるはしの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "三本とも本物で、銘は名工一人でなく工房の共同名です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q012.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q012.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q012.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q012.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q012.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q012.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "柄の握り跡は三人分ですが、鍛接の印は同じ順序で刻まれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q012",
+          "key": "clue_a",
+          "text": "柄の握り跡は三人分ですが、鍛接の印は同じ順序で刻まれています。"
+        }
+      ]
+    },
+    "q012.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鍛冶屋のダン",
+          "text": "工房の当番表には銘と同じ三つの記号が並びます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q012",
+          "key": "clue_b",
+          "text": "工房の当番表には銘と同じ三つの記号が並びます。"
+        }
+      ]
+    },
+    "q012.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "三つのつるはし\n\n同じ銘のつるはしが三本あり、本物の回収を頼まれました。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "三人の仕事としてまとめて返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q012.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q012.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "三本とも本物で、銘は名工一人でなく工房の共同名です。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "鍛冶屋は展示札を書き直しました。名工の値は下がり、弟子の名が初めて売れます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q012",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "坑道の番獣を倒し一番鋭い一本を選ぶ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "依頼人は満足しました。残る二本の作り手は贋作者と呼ばれ続けます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q012",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "使える二本を坑夫へ貸し一本だけ返す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "展示は一つ増え、坑夫の仕事も進みました。銘の議論は後回しになります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q012",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

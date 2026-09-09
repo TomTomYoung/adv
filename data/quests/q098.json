@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q098",
+  "number": 98,
+  "title": "最後の一室",
+  "client": "深層組合のモリ",
+  "brief": "最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。",
+  "region": 10,
+  "type": "ritual",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q098_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q098_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q098_decision",
+      "x": 9,
+      "y": 12,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "避難路は共有され、家の位置は伏せられました。完成図にも白い余白が残ります。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "地図は埋まりました。住民は次の空白を探して荷をまとめます。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "地図は完成しませんでした。モリは未調査にも理由を書くようになります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "一室は未踏でなく、避難した人が公開を望まない居住区です。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "一室は未踏でなく、避難した人が公開を望まない居住区です。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "深層組合のモリ",
+        "observation": "最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。",
+        "belief": "最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。",
+        "goal": "門の守護者を倒し全室を踏破する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "門の守護者を倒し全室を踏破する",
+      "alternative": "住民の同意する範囲だけ地図へ載せる",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "扉の下から食事の匂いがし、封鎖札には危険でなく照会と書かれています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "古い図には道があり、住民の申立の後だけ空白になっています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。",
+      "openQuestion": "最後の一室の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "一室は未踏でなく、避難した人が公開を望まない居住区です。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q098.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q098.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q098.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q098.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q098.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q098.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "扉の下から食事の匂いがし、封鎖札には危険でなく照会と書かれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q098",
+          "key": "clue_a",
+          "text": "扉の下から食事の匂いがし、封鎖札には危険でなく照会と書かれています。"
+        }
+      ]
+    },
+    "q098.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "深層組合のモリ",
+          "text": "古い図には道があり、住民の申立の後だけ空白になっています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q098",
+          "key": "clue_b",
+          "text": "古い図には道があり、住民の申立の後だけ空白になっています。"
+        }
+      ]
+    },
+    "q098.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "最後の一室\n\n最奥の一室を開けると地図が完成します。封鎖の理由を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "住民の同意する範囲だけ地図へ載せる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q098.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q098.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "一室は未踏でなく、避難した人が公開を望まない居住区です。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "避難路は共有され、家の位置は伏せられました。完成図にも白い余白が残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q098",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "門の守護者を倒し全室を踏破する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地図は埋まりました。住民は次の空白を探して荷をまとめます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q098",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "封鎖を尊重し未調査として残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地図は完成しませんでした。モリは未調査にも理由を書くようになります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q098",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

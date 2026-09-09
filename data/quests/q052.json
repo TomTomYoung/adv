@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q052",
+  "number": 52,
+  "title": "幽霊の競り札",
+  "client": "競売人のウメ",
+  "brief": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+  "region": 6,
+  "type": "rescue",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q052_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q052_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f1",
+      "object": "q052_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "競売人のウメ",
+        "observation": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+        "belief": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+        "goal": "札の亡霊を祓って倉庫を開放する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "札の亡霊を祓って倉庫を開放する",
+      "alternative": "自動札を止め最低価格を明示する",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "入札幅は必ず同じ比率で、開始直後にだけ反応します。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "落札品は客へ渡らず、先代の名の倉庫へ戻っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+      "openQuestion": "幽霊の競り札の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q052.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q052.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q052.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q052.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q052.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q052.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入札幅は必ず同じ比率で、開始直後にだけ反応します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q052",
+          "key": "clue_a",
+          "text": "入札幅は必ず同じ比率で、開始直後にだけ反応します。"
+        }
+      ]
+    },
+    "q052.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "競売人のウメ",
+          "text": "落札品は客へ渡らず、先代の名の倉庫へ戻っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q052",
+          "key": "clue_b",
+          "text": "落札品は客へ渡らず、先代の名の倉庫へ戻っています。"
+        }
+      ]
+    },
+    "q052.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "幽霊の競り札\n\n姿のない客が毎回最高値を付けます。入札者を特定してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "自動札を止め最低価格を明示する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q052.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q052.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q052",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "札の亡霊を祓って倉庫を開放する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q052",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "自動札に予算上限を設ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q052",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

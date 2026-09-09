@@ -1,0 +1,528 @@
+{
+  "id": "region_6_f1",
+  "region": 6,
+  "floor": 1,
+  "name": "眠れる地下市場・地下1層",
+  "tiles": [
+    "###################",
+    "#.#.............#.#",
+    "#.###.###.#####.#.#",
+    "#...#.#...#.#...#.#",
+    "###.###.###...###.#",
+    "#...#...#.....#...#",
+    "#.#.#.###.#.###.#.#",
+    "#.#.....#.......#.#",
+    "#.#####.#########.#",
+    "#.......#.....#...#",
+    "###########.###.###",
+    "#.....#.....#...#.#",
+    "#.#...#.#.###.###.#",
+    "#.#.....#.........#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_6",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_6_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 14,
+      "y": 11,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_6_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 2,
+      "y": 3,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_6_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 5,
+      "y": 11,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_6_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 11,
+      "y": 1,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_6_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 11,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_6_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_6_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q051_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "釣銭のない店：現場の痕跡",
+      "kind": "clue",
+      "quest": "q051",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q051.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q051.clue_a"
+    },
+    {
+      "id": "q051_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "釣銭のない店：記録と証言",
+      "kind": "clue",
+      "quest": "q051",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q051.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q051.clue_b"
+    },
+    {
+      "id": "q051_decision",
+      "x": 13,
+      "y": 7,
+      "name": "釣銭のない店：決着の場",
+      "kind": "decision",
+      "quest": "q051",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q051.stage"
+        },
+        "right": "active"
+      },
+      "script": "q051.decision"
+    },
+    {
+      "id": "q052_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "幽霊の競り札：現場の痕跡",
+      "kind": "clue",
+      "quest": "q052",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q052.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q052.clue_a"
+    },
+    {
+      "id": "q052_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "幽霊の競り札：記録と証言",
+      "kind": "clue",
+      "quest": "q052",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q052.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q052.clue_b"
+    },
+    {
+      "id": "q052_decision",
+      "x": 11,
+      "y": 9,
+      "name": "幽霊の競り札：決着の場",
+      "kind": "decision",
+      "quest": "q052",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q052.stage"
+        },
+        "right": "active"
+      },
+      "script": "q052.decision"
+    },
+    {
+      "id": "q053_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "賞味期限の明日：現場の痕跡",
+      "kind": "clue",
+      "quest": "q053",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q053.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q053.clue_a"
+    },
+    {
+      "id": "q053_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "賞味期限の明日：記録と証言",
+      "kind": "clue",
+      "quest": "q053",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q053.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q053.clue_b"
+    },
+    {
+      "id": "q053_decision",
+      "x": 15,
+      "y": 5,
+      "name": "賞味期限の明日：決着の場",
+      "kind": "decision",
+      "quest": "q053",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q053.stage"
+        },
+        "right": "active"
+      },
+      "script": "q053.decision"
+    },
+    {
+      "id": "q054_clue_a",
+      "x": 3,
+      "y": 5,
+      "name": "夢の質草：現場の痕跡",
+      "kind": "clue",
+      "quest": "q054",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q054.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q054.clue_a"
+    },
+    {
+      "id": "q054_clue_b",
+      "x": 10,
+      "y": 5,
+      "name": "夢の質草：記録と証言",
+      "kind": "clue",
+      "quest": "q054",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q054.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q054.clue_b"
+    },
+    {
+      "id": "q054_decision",
+      "x": 17,
+      "y": 3,
+      "name": "夢の質草：決着の場",
+      "kind": "decision",
+      "quest": "q054",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q054.stage"
+        },
+        "right": "active"
+      },
+      "script": "q054.decision"
+    },
+    {
+      "id": "q055_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "値札のついた影：現場の痕跡",
+      "kind": "clue",
+      "quest": "q055",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q055.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q055.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q055.clue_a"
+    },
+    {
+      "id": "q055_clue_b",
+      "x": 4,
+      "y": 12,
+      "name": "値札のついた影：記録と証言",
+      "kind": "clue",
+      "quest": "q055",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q055.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q055.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q055.clue_b"
+    },
+    {
+      "id": "q055_decision",
+      "x": 9,
+      "y": 12,
+      "name": "値札のついた影：決着の場",
+      "kind": "decision",
+      "quest": "q055",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q055.stage"
+        },
+        "right": "active"
+      },
+      "script": "q055.decision"
+    }
+  ]
+}

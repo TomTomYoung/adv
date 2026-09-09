@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q016",
+  "number": 16,
+  "title": "無音の発破",
+  "client": "発破師のネフ",
+  "brief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+  "region": 2,
+  "type": "escort",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q016_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q016_clue_b",
+      "x": 11,
+      "y": 4,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f2",
+      "object": "q016_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "発破師のネフ",
+        "observation": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+        "belief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+        "goal": "盗人扱いの魔物を倒し強い火薬へ戻す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "盗人扱いの魔物を倒し強い火薬へ戻す",
+      "alternative": "避難区画を移して小規模発破を続ける",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "導火線は燃え切り、岩には小さな割れだけが規則的に入っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "壁の向こうに食器の棚があり、大きな振動を受けた皿だけが割れています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+      "openQuestion": "無音の発破の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q016.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q016.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q016.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q016.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q016.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q016.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "導火線は燃え切り、岩には小さな割れだけが規則的に入っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q016",
+          "key": "clue_a",
+          "text": "導火線は燃え切り、岩には小さな割れだけが規則的に入っています。"
+        }
+      ]
+    },
+    "q016.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "発破師のネフ",
+          "text": "壁の向こうに食器の棚があり、大きな振動を受けた皿だけが割れています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q016",
+          "key": "clue_b",
+          "text": "壁の向こうに食器の棚があり、大きな振動を受けた皿だけが割れています。"
+        }
+      ]
+    },
+    "q016.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "無音の発破\n\n爆発音がしない発破が続いています。火薬泥棒を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "避難区画を移して小規模発破を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q016",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "盗人扱いの魔物を倒し強い火薬へ戻す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q016",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "助手の火薬を買い取り疑いを晴らす",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q016",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

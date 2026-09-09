@@ -1,0 +1,528 @@
+{
+  "id": "region_3_f1",
+  "region": 3,
+  "floor": 1,
+  "name": "根喰みの地下庭園・地下1層",
+  "tiles": [
+    "###################",
+    "#.....#.......#...#",
+    "#####.#.#####.#.###",
+    "#...#...#...#.#...#",
+    "#.#.#######.#.###.#",
+    "#.#.......#.#.....#",
+    "#.#.#####.#.#####.#",
+    "#.#.#...#.#.....#.#",
+    "#.#...#.#.#.#####.#",
+    "#.#...#.#...#.....#",
+    "#.#####.##.##.#####",
+    "#.#...#.....#...#.#",
+    "#.#...#####.###.#.#",
+    "#...#.....#.......#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_3",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_3_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 14,
+      "y": 11,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_3_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_3_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 5,
+      "y": 11,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_3_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 1,
+      "y": 12,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_3_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 11,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_3_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_3_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q021_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "種を盗む鳥：現場の痕跡",
+      "kind": "clue",
+      "quest": "q021",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q021.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q021.clue_a"
+    },
+    {
+      "id": "q021_clue_b",
+      "x": 11,
+      "y": 4,
+      "name": "種を盗む鳥：記録と証言",
+      "kind": "clue",
+      "quest": "q021",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q021.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q021.clue_b"
+    },
+    {
+      "id": "q021_decision",
+      "x": 10,
+      "y": 10,
+      "name": "種を盗む鳥：決着の場",
+      "kind": "decision",
+      "quest": "q021",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q021.stage"
+        },
+        "right": "active"
+      },
+      "script": "q021.decision"
+    },
+    {
+      "id": "q022_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "緑の寝息：現場の痕跡",
+      "kind": "clue",
+      "quest": "q022",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q022.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q022.clue_a"
+    },
+    {
+      "id": "q022_clue_b",
+      "x": 9,
+      "y": 6,
+      "name": "緑の寝息：記録と証言",
+      "kind": "clue",
+      "quest": "q022",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q022.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q022.clue_b"
+    },
+    {
+      "id": "q022_decision",
+      "x": 11,
+      "y": 9,
+      "name": "緑の寝息：決着の場",
+      "kind": "decision",
+      "quest": "q022",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q022.stage"
+        },
+        "right": "active"
+      },
+      "script": "q022.decision"
+    },
+    {
+      "id": "q023_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "母樹の指輪：現場の痕跡",
+      "kind": "clue",
+      "quest": "q023",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q023.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q023.clue_a"
+    },
+    {
+      "id": "q023_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "母樹の指輪：記録と証言",
+      "kind": "clue",
+      "quest": "q023",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q023.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q023.clue_b"
+    },
+    {
+      "id": "q023_decision",
+      "x": 13,
+      "y": 7,
+      "name": "母樹の指輪：決着の場",
+      "kind": "decision",
+      "quest": "q023",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q023.stage"
+        },
+        "right": "active"
+      },
+      "script": "q023.decision"
+    },
+    {
+      "id": "q024_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "食べられる地図：現場の痕跡",
+      "kind": "clue",
+      "quest": "q024",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q024.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q024.clue_a"
+    },
+    {
+      "id": "q024_clue_b",
+      "x": 7,
+      "y": 8,
+      "name": "食べられる地図：記録と証言",
+      "kind": "clue",
+      "quest": "q024",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q024.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q024.clue_b"
+    },
+    {
+      "id": "q024_decision",
+      "x": 15,
+      "y": 5,
+      "name": "食べられる地図：決着の場",
+      "kind": "decision",
+      "quest": "q024",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q024.stage"
+        },
+        "right": "active"
+      },
+      "script": "q024.decision"
+    },
+    {
+      "id": "q025_clue_a",
+      "x": 4,
+      "y": 5,
+      "name": "地下の雨乞い：現場の痕跡",
+      "kind": "clue",
+      "quest": "q025",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q025.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q025.clue_a"
+    },
+    {
+      "id": "q025_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "地下の雨乞い：記録と証言",
+      "kind": "clue",
+      "quest": "q025",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q025.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q025.clue_b"
+    },
+    {
+      "id": "q025_decision",
+      "x": 17,
+      "y": 3,
+      "name": "地下の雨乞い：決着の場",
+      "kind": "decision",
+      "quest": "q025",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q025.stage"
+        },
+        "right": "active"
+      },
+      "script": "q025.decision"
+    }
+  ]
+}

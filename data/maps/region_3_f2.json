@@ -1,0 +1,518 @@
+{
+  "id": "region_3_f2",
+  "region": 3,
+  "floor": 2,
+  "name": "根喰みの地下庭園・地下2層",
+  "tiles": [
+    "###################",
+    "#.#.........#...#.#",
+    "#.#.#.#####.#.#...#",
+    "#.#.#.#...#.#.#...#",
+    "#.###.###.#.#.###.#",
+    "#...#.#...#...#.#.#",
+    "###.#.#.#######.#.#",
+    "#.#...#.#.......#.#",
+    "#.#####.#.###.#.#.#",
+    "#.............#.#.#",
+    "#.########.#..###.#",
+    "#.#...#.......#...#",
+    "#.#.#.#.#######.###",
+    "#...#.#...........#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_3",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "stairs",
+      "x": 1,
+      "y": 1,
+      "name": "地下一層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_3_f2.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_3_f2.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 9,
+      "y": 7,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_3_f2.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 4,
+      "y": 9,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_3_f2.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 13,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_3_f2.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_3_f2_door_open"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q026_clue_a",
+      "x": 7,
+      "y": 1,
+      "name": "実らない約束：現場の痕跡",
+      "kind": "clue",
+      "quest": "q026",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q026.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q026.clue_a"
+    },
+    {
+      "id": "q026_clue_b",
+      "x": 14,
+      "y": 1,
+      "name": "実らない約束：記録と証言",
+      "kind": "clue",
+      "quest": "q026",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q026.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q026.clue_b"
+    },
+    {
+      "id": "q026_decision",
+      "x": 17,
+      "y": 3,
+      "name": "実らない約束：決着の場",
+      "kind": "decision",
+      "quest": "q026",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q026.stage"
+        },
+        "right": "active"
+      },
+      "script": "q026.decision"
+    },
+    {
+      "id": "q027_clue_a",
+      "x": 1,
+      "y": 8,
+      "name": "花粉の身代金：現場の痕跡",
+      "kind": "clue",
+      "quest": "q027",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q027.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q027.clue_a"
+    },
+    {
+      "id": "q027_clue_b",
+      "x": 3,
+      "y": 13,
+      "name": "花粉の身代金：記録と証言",
+      "kind": "clue",
+      "quest": "q027",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q027.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q027.clue_b"
+    },
+    {
+      "id": "q027_decision",
+      "x": 15,
+      "y": 5,
+      "name": "花粉の身代金：決着の場",
+      "kind": "decision",
+      "quest": "q027",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q027.stage"
+        },
+        "right": "active"
+      },
+      "script": "q027.decision"
+    },
+    {
+      "id": "q028_clue_a",
+      "x": 3,
+      "y": 6,
+      "name": "庭師の空席：現場の痕跡",
+      "kind": "clue",
+      "quest": "q028",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q028.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q028.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q028.clue_a"
+    },
+    {
+      "id": "q028_clue_b",
+      "x": 5,
+      "y": 11,
+      "name": "庭師の空席：記録と証言",
+      "kind": "clue",
+      "quest": "q028",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q028.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q028.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q028.clue_b"
+    },
+    {
+      "id": "q028_decision",
+      "x": 8,
+      "y": 13,
+      "name": "庭師の空席：決着の場",
+      "kind": "decision",
+      "quest": "q028",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q028.stage"
+        },
+        "right": "active"
+      },
+      "script": "q028.decision"
+    },
+    {
+      "id": "q029_clue_a",
+      "x": 5,
+      "y": 3,
+      "name": "赤い蜜の契約：現場の痕跡",
+      "kind": "clue",
+      "quest": "q029",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q029.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q029.clue_a"
+    },
+    {
+      "id": "q029_clue_b",
+      "x": 13,
+      "y": 2,
+      "name": "赤い蜜の契約：記録と証言",
+      "kind": "clue",
+      "quest": "q029",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q029.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q029.clue_b"
+    },
+    {
+      "id": "q029_decision",
+      "x": 10,
+      "y": 11,
+      "name": "赤い蜜の契約：決着の場",
+      "kind": "decision",
+      "quest": "q029",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q029.stage"
+        },
+        "right": "active"
+      },
+      "script": "q029.decision"
+    },
+    {
+      "id": "q030_clue_a",
+      "x": 5,
+      "y": 4,
+      "name": "根の向こうの朝：現場の痕跡",
+      "kind": "clue",
+      "quest": "q030",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q030.evidence"
+              },
+              "right": "clue_a"
+            }
+          }
+        ]
+      },
+      "script": "q030.clue_a"
+    },
+    {
+      "id": "q030_clue_b",
+      "x": 7,
+      "y": 9,
+      "name": "根の向こうの朝：記録と証言",
+      "kind": "clue",
+      "quest": "q030",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "contains",
+              "left": {
+                "ref": "quests.q030.evidence"
+              },
+              "right": "clue_b"
+            }
+          }
+        ]
+      },
+      "script": "q030.clue_b"
+    },
+    {
+      "id": "q030_decision",
+      "x": 12,
+      "y": 9,
+      "name": "根の向こうの朝：決着の場",
+      "kind": "decision",
+      "quest": "q030",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q030.stage"
+        },
+        "right": "active"
+      },
+      "script": "q030.decision"
+    }
+  ]
+}

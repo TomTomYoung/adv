@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q033",
+  "number": 33,
+  "title": "映らない巡礼者",
+  "client": "宿坊のウラ",
+  "brief": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+  "region": 4,
+  "type": "mechanism",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q033_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f1",
+      "object": "q033_clue_b",
+      "x": 10,
+      "y": 5,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f1",
+      "object": "q033_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "巡礼者は仕事を取り戻しました。宿坊は鏡だけで人を決めない規則を掲げます。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "騒ぎは収まりました。外套の白い粉は、門の前にも残ります。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "巡礼者は一晩だけ休めました。翌朝、宿坊の曇り鏡が一枚直っています。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "宿坊のウラ",
+        "observation": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+        "belief": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+        "goal": "巡礼者につく影を倒し入堂を拒む"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "巡礼者につく影を倒し入堂を拒む",
+      "alternative": "外套を洗い修復師として紹介する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "裸の手は映り、外套を近づけた場所だけ鏡が白みます。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "荷物には修復工房の磨き布と、未払いの請求書があります。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+      "openQuestion": "映らない巡礼者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q033.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q033.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q033.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q033.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q033.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q033.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "裸の手は映り、外套を近づけた場所だけ鏡が白みます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q033",
+          "key": "clue_a",
+          "text": "裸の手は映り、外套を近づけた場所だけ鏡が白みます。"
+        }
+      ]
+    },
+    "q033.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "宿坊のウラ",
+          "text": "荷物には修復工房の磨き布と、未払いの請求書があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q033",
+          "key": "clue_b",
+          "text": "荷物には修復工房の磨き布と、未払いの請求書があります。"
+        }
+      ]
+    },
+    "q033.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "映らない巡礼者\n\n鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "巡礼者につく影を倒し入堂を拒む",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "騒ぎは収まりました。外套の白い粉は、門の前にも残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q033",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "外套を洗い修復師として紹介する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q033.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q033.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巡礼者は仕事を取り戻しました。宿坊は鏡だけで人を決めない規則を掲げます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q033",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "別室へ泊め鏡を使わず話を聞く",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巡礼者は一晩だけ休めました。翌朝、宿坊の曇り鏡が一枚直っています。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q033",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

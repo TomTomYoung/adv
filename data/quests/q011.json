@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q011",
+  "number": 11,
+  "title": "塩の花嫁",
+  "client": "坑夫のメル",
+  "brief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+  "region": 2,
+  "type": "investigation",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q011_clue_a",
+      "x": 2,
+      "y": 7,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q011_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "object": "q011_decision",
+      "x": 11,
+      "y": 9,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "坑夫のメル",
+        "observation": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+        "belief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+        "goal": "白い像を守る骸兵を倒して砕く"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "白い像を守る骸兵を倒して砕く",
+      "alternative": "像の塩を払い避難路を標示する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+      "openQuestion": "塩の花嫁の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q011.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q011.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q011.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q011.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q011.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q011.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q011",
+          "key": "clue_a",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っています。"
+        }
+      ]
+    },
+    "q011.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "坑夫のメル",
+          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q011",
+          "key": "clue_b",
+          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いています。"
+        }
+      ]
+    },
+    "q011.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "塩の花嫁\n\n坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白い像を守る骸兵を倒して砕く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q011",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "像の塩を払い避難路を標示する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q011.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q011.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "像を残し縄で帰路をつなぐ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

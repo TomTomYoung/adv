@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q097",
+  "number": 97,
+  "title": "生者の点呼",
+  "client": "救助人のヤチ",
+  "brief": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+  "region": 10,
+  "type": "testimony",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q097_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q097_clue_b",
+      "x": 12,
+      "y": 3,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q097_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "点呼の数が合いました。運搬人は初めて、荷物と別に帰還証を受け取ります。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "門の数は合いました。運搬人は別の入口で自分の事情を説明し続けます。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "誰も地下に残りませんでした。ヤチは仮の名前も丁寧に読み上げます。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "救助人のヤチ",
+        "observation": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+        "belief": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+        "goal": "返事に混じる影を倒し名簿の人数だけ通す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "返事に混じる影を倒し名簿の人数だけ通す",
+      "alternative": "運搬人を隊員として名簿へ加える",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "余分な荷の持ち手に新しい掌の跡があり、配給も一人分減っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "遭難地点から先にだけ別の歩幅が混じり、担架の後ろ側へ続きます。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+      "openQuestion": "生者の点呼の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q097.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q097.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q097.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q097.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q097.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q097.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "余分な荷の持ち手に新しい掌の跡があり、配給も一人分減っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q097",
+          "key": "clue_a",
+          "text": "余分な荷の持ち手に新しい掌の跡があり、配給も一人分減っています。"
+        }
+      ]
+    },
+    "q097.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "救助人のヤチ",
+          "text": "遭難地点から先にだけ別の歩幅が混じり、担架の後ろ側へ続きます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q097",
+          "key": "clue_b",
+          "text": "遭難地点から先にだけ別の歩幅が混じり、担架の後ろ側へ続きます。"
+        }
+      ]
+    },
+    "q097.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "生者の点呼\n\n点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "返事に混じる影を倒し名簿の人数だけ通す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "門の数は合いました。運搬人は別の入口で自分の事情を説明し続けます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q097",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "運搬人を隊員として名簿へ加える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q097.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q097.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "点呼の数が合いました。運搬人は初めて、荷物と別に帰還証を受け取ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q097",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "全員を仮登録し町で身元を確認する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰も地下に残りませんでした。ヤチは仮の名前も丁寧に読み上げます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q097",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

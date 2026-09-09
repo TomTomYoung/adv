@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q039",
+  "number": 39,
+  "title": "顔を売る仮面",
+  "client": "仮面師のチセ",
+  "brief": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+  "region": 4,
+  "type": "survey",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q039_clue_a",
+      "x": 3,
+      "y": 6,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q039_clue_b",
+      "x": 3,
+      "y": 13,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f2",
+      "object": "q039_decision",
+      "x": 17,
+      "y": 3,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "仮面師のチセ",
+        "observation": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+        "belief": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+        "goal": "仮面の亡霊を倒し最初の買い手へ返す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "仮面の亡霊を倒し最初の買い手へ返す",
+      "alternative": "共同所有を認め修理帳へ全員の印を残す",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "内側の額当ては交換式で、同じ顔に何人分もの汗跡があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "注文帳には個人名でなく、その日の聞き手の人数が記されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+      "openQuestion": "顔を売る仮面の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q039.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q039.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q039.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q039.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q039.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q039.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "内側の額当ては交換式で、同じ顔に何人分もの汗跡があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q039",
+          "key": "clue_a",
+          "text": "内側の額当ては交換式で、同じ顔に何人分もの汗跡があります。"
+        }
+      ]
+    },
+    "q039.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "仮面師のチセ",
+          "text": "注文帳には個人名でなく、その日の聞き手の人数が記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q039",
+          "key": "clue_b",
+          "text": "注文帳には個人名でなく、その日の聞き手の人数が記されています。"
+        }
+      ]
+    },
+    "q039.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "顔を売る仮面\n\n礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "仮面の亡霊を倒し最初の買い手へ返す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q039",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "共同所有を認め修理帳へ全員の印を残す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q039",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "原型だけ保存し人数分の複製を作る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q039",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

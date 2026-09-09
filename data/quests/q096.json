@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q096",
+  "number": 96,
+  "title": "忘れ物の隊列",
+  "client": "案内人のノア",
+  "brief": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+  "region": 10,
+  "type": "escort",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q096_clue_a",
+      "x": 7,
+      "y": 1,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q096_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f2",
+      "object": "q096_decision",
+      "x": 15,
+      "y": 5,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "次の隊が空腹で止まらずに済みます。ノアは持主欄へ次に来る人と書きます。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "町へ多くの物資が戻りました。深い曲がり角の箱は空になります。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "補給は新しくなりました。あなたの隊の荷は少し軽くなります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "案内人のノア",
+        "observation": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+        "belief": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+        "goal": "荷物を運ぶ番獣を倒して全て回収する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "荷物を運ぶ番獣を倒して全て回収する",
+      "alternative": "補給の印を付け必要な場所へ届ける",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "袋の中は宝でなく包帯と水で、残量に応じた日付があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "床の行先は宝庫でなく、遭難記録の多い曲がり角です。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+      "openQuestion": "忘れ物の隊列の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q096.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q096.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q096.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q096.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q096.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q096.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "袋の中は宝でなく包帯と水で、残量に応じた日付があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q096",
+          "key": "clue_a",
+          "text": "袋の中は宝でなく包帯と水で、残量に応じた日付があります。"
+        }
+      ]
+    },
+    "q096.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "案内人のノア",
+          "text": "床の行先は宝庫でなく、遭難記録の多い曲がり角です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q096",
+          "key": "clue_b",
+          "text": "床の行先は宝庫でなく、遭難記録の多い曲がり角です。"
+        }
+      ]
+    },
+    "q096.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "忘れ物の隊列\n\n持主のない荷物が奥へ進みます。追って持ち帰ってください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "補給の印を付け必要な場所へ届ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "次の隊が空腹で止まらずに済みます。ノアは持主欄へ次に来る人と書きます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q096",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "荷物を運ぶ番獣を倒して全て回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "町へ多くの物資が戻りました。深い曲がり角の箱は空になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q096",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "古い物を回収し同量の新しい物を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "補給は新しくなりました。あなたの隊の荷は少し軽くなります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q096",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

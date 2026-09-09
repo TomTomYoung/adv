@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q093",
+  "number": 93,
+  "title": "名を置く宿",
+  "client": "宿守のネム",
+  "brief": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+  "region": 10,
+  "type": "mechanism",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q093_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q093_clue_b",
+      "x": 9,
+      "y": 7,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_10_f1",
+      "object": "q093_decision",
+      "x": 10,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "名を戻す人も残す人も選べました。宿守は番号の横に同意日を記します。",
+      "gold": 165,
+      "xp": 140
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "名前は戻りました。隠れていた客は、別の避難先を探して宿を出ます。",
+      "gold": 185,
+      "xp": 110
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "町へは戻れました。本名を取り戻す日は、本人が決めることになります。",
+      "gold": 107,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "宿守のネム",
+        "observation": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+        "belief": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+        "goal": "名を奪う影を倒し全ての名を解放する"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "名を奪う影を倒し全ての名を解放する",
+      "alternative": "必要な人だけ匿名契約を続けられるようにする",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "客は昔の話を覚え、名前を言う時だけ入口の鈴が鳴ります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "宿帳には偽名でなく番号があり、追跡者を退けた記録が載っています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+      "openQuestion": "名を置く宿の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q093.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q093.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q093.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q093.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q093.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q093.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "客は昔の話を覚え、名前を言う時だけ入口の鈴が鳴ります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q093",
+          "key": "clue_a",
+          "text": "客は昔の話を覚え、名前を言う時だけ入口の鈴が鳴ります。"
+        }
+      ]
+    },
+    "q093.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "宿守のネム",
+          "text": "宿帳には偽名でなく番号があり、追跡者を退けた記録が載っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q093",
+          "key": "clue_b",
+          "text": "宿帳には偽名でなく番号があり、追跡者を退けた記録が載っています。"
+        }
+      ]
+    },
+    "q093.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "名を置く宿\n\n深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "名を奪う影を倒し全ての名を解放する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "名前は戻りました。隠れていた客は、別の避難先を探して宿を出ます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q093",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "必要な人だけ匿名契約を続けられるようにする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q093.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q093.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "名を戻す人も残す人も選べました。宿守は番号の横に同意日を記します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q093",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "名を預けたまま帰還証を発行する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "町へは戻れました。本名を取り戻す日は、本人が決めることになります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q093",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

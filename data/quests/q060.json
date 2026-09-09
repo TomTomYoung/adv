@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "id": "q060",
+  "number": 60,
+  "title": "市場の目覚まし",
+  "client": "市場番のゼン",
+  "brief": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+  "region": 6,
+  "type": "finale",
+  "recommendedLevel": 6,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_6"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q060_clue_a",
+      "x": 4,
+      "y": 5,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q060_clue_b",
+      "x": 14,
+      "y": 1,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f2",
+      "object": "q060_decision",
+      "x": 11,
+      "y": 10,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "市場は朝にも開きました。ゼンは門番から、二つの世界の道案内になります。",
+      "gold": 117,
+      "xp": 108
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "人と商品は通りました。守りを失った夜の見回りは、商人が自分で始めます。",
+      "gold": 137,
+      "xp": 82
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "完全な自由ではありません。地下と地上を結ぶ時刻表が配られます。",
+      "gold": 76,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "市場番のゼン",
+        "observation": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+        "belief": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+        "goal": "結界の番人を倒し自由通行にする"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "結界の番人を倒し自由通行にする",
+      "alternative": "共同保証を結び出口を開ける",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "古い契約には単独閉鎖と共同保証の二つの欄があります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "保証人の欄は空白ですが、各露店の納税額を足せば条件を満たします。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+      "openQuestion": "市場の目覚ましの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q060.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q060.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q060.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q060.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q060.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q060.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い契約には単独閉鎖と共同保証の二つの欄があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q060",
+          "key": "clue_a",
+          "text": "古い契約には単独閉鎖と共同保証の二つの欄があります。"
+        }
+      ]
+    },
+    "q060.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "市場番のゼン",
+          "text": "保証人の欄は空白ですが、各露店の納税額を足せば条件を満たします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q060",
+          "key": "clue_b",
+          "text": "保証人の欄は空白ですが、各露店の納税額を足せば条件を満たします。"
+        }
+      ]
+    },
+    "q060.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "市場の目覚まし\n\n地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "共同保証を結び出口を開ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "市場は朝にも開きました。ゼンは門番から、二つの世界の道案内になります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "結界の番人を倒し自由通行にする",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人と商品は通りました。守りを失った夜の見回りは、商人が自分で始めます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "出口を時間制にして結界を保つ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "完全な自由ではありません。地下と地上を結ぶ時刻表が配られます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q060",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

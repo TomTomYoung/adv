@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "id": "q032",
+  "number": 32,
+  "title": "片目の聖像",
+  "client": "修復師のサイ",
+  "brief": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+  "region": 4,
+  "type": "rescue",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q032_clue_a",
+      "x": 1,
+      "y": 8,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_4_f1",
+      "object": "q032_clue_b",
+      "x": 9,
+      "y": 6,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_4_f1",
+      "object": "q032_decision",
+      "x": 9,
+      "y": 11,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "像は元の顔に戻りました。地下牢の監視記録だけが、礼拝堂の外へ出ます。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "修復師は褒められました。囚人は再び祈りの目を避けて座ります。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "不完全な像が過去を語り始めました。修復費の残りは牢の整備に回ります。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修復師のサイ",
+        "observation": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+        "belief": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+        "goal": "宝玉を守る騎士霊を倒して元に戻す"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "宝玉を守る騎士霊を倒して元に戻す",
+      "alternative": "覗き管を塞ぎ透明でない目を入れる",
+      "cost": "補修用の縄と戦闘リスク"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "眼窩の奥には彫刻でない磨かれた管が通っています。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "聖像を正面から拝む位置と、牢の見張り台の角度が一致します。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+      "openQuestion": "片目の聖像の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q032.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q032.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q032.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q032.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q032.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q032.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "眼窩の奥には彫刻でない磨かれた管が通っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q032",
+          "key": "clue_a",
+          "text": "眼窩の奥には彫刻でない磨かれた管が通っています。"
+        }
+      ]
+    },
+    "q032.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "修復師のサイ",
+          "text": "聖像を正面から拝む位置と、牢の見張り台の角度が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q032",
+          "key": "clue_b",
+          "text": "聖像を正面から拝む位置と、牢の見張り台の角度が一致します。"
+        }
+      ]
+    },
+    "q032.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "片目の聖像\n\n聖像の片目を戻す依頼です。外された宝玉を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "覗き管を塞ぎ透明でない目を入れる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q032.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q032.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "像は元の顔に戻りました。地下牢の監視記録だけが、礼拝堂の外へ出ます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q032",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "宝玉を守る騎士霊を倒して元に戻す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "修復師は褒められました。囚人は再び祈りの目を避けて座ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q032",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "片目を残し由来を銘板へ刻む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "不完全な像が過去を語り始めました。修復費の残りは牢の整備に回ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q032",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

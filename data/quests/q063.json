@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "id": "q063",
+  "number": 63,
+  "title": "潮に逆らう階段",
+  "client": "城址調査団のミオ",
+  "brief": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+  "region": 7,
+  "type": "mechanism",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q063_clue_a",
+      "x": 5,
+      "y": 3,
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q063_clue_b",
+      "x": 13,
+      "y": 2,
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f1",
+      "object": "q063_decision",
+      "x": 13,
+      "y": 7,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "事情を踏まえた決着",
+      "text": "王室へ入れました。使い終えた後は浮く避難梯子へ戻します。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "依頼を優先した決着",
+      "text": "上下に動かなくなりました。次の増水では使える高さが限られます。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "別の道による決着",
+      "text": "王室への道は長くなりましたが、避難梯子の役目は残せました。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "world": {
+      "truth": "階段は転送でなく浮力で上下する避難梯子で、重りが外されています。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "階段は転送でなく浮力で上下する避難梯子で、重りが外されています。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+          "causes": [
+            "e0"
+          ]
+        },
+        {
+          "id": "e2",
+          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
+          "causes": [
+            "e1"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "城址調査団のミオ",
+        "observation": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+        "belief": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+        "goal": "階段の水獣を倒し柱へ打ち付ける"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "階段の水獣を倒し柱へ打ち付ける",
+      "alternative": "仮の重りを作り梯子を固定する",
+      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "brief",
+          "sourceEvent": "e1"
+        },
+        {
+          "id": "clue_a",
+          "sourceEvent": "e0",
+          "text": "踏み板の脇に上下の擦過痕があり、壁との継ぎ目が滑ります。"
+        },
+        {
+          "id": "clue_b",
+          "sourceEvent": "e0",
+          "text": "下部の鎖だけ新しく切られ、重りは救難用の浮標へ転用されています。"
+        },
+        {
+          "id": "decision",
+          "sourceEvent": "e2"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+      "openQuestion": "潮に逆らう階段の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "階段は転送でなく浮力で上下する避難梯子で、重りが外されています。",
+      "retroactiveTargets": [
+        "clue_a",
+        "clue_b"
+      ],
+      "gate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q063.evidence"
+            },
+            "right": "clue_a"
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q063.evidence"
+            },
+            "right": "clue_b"
+          }
+        ]
+      }
+    },
+    "beats": [
+      {
+        "id": "observation",
+        "changes": [
+          "knowledge"
+        ],
+        "script": "q063.clue_a"
+      },
+      {
+        "id": "reinterpretation",
+        "changes": [
+          "belief"
+        ],
+        "script": "q063.clue_b"
+      },
+      {
+        "id": "resolution",
+        "changes": [
+          "world",
+          "relationship"
+        ],
+        "script": "q063.decision"
+      }
+    ]
+  },
+  "scripts": {
+    "q063.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "踏み板の脇に上下の擦過痕があり、壁との継ぎ目が滑ります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q063",
+          "key": "clue_a",
+          "text": "踏み板の脇に上下の擦過痕があり、壁との継ぎ目が滑ります。"
+        }
+      ]
+    },
+    "q063.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "城址調査団のミオ",
+          "text": "下部の鎖だけ新しく切られ、重りは救難用の浮標へ転用されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q063",
+          "key": "clue_b",
+          "text": "下部の鎖だけ新しく切られ、重りは救難用の浮標へ転用されています。"
+        }
+      ]
+    },
+    "q063.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "潮に逆らう階段\n\n階段を降りても水面へ戻ります。王室へ入る道を探してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "階段の水獣を倒し柱へ打ち付ける",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "上下に動かなくなりました。次の増水では使える高さが限られます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q063",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "仮の重りを作り梯子を固定する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q063.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q063.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "階段は転送でなく浮力で上下する避難梯子で、重りが外されています。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "王室へ入れました。使い終えた後は浮く避難梯子へ戻します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q063",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "別の通気孔から迂回する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "王室への道は長くなりましたが、避難梯子の役目は残せました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q063",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
