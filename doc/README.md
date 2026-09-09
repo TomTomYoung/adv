@@ -13,6 +13,9 @@
 | [VIEW_CONTRACT.md](VIEW_CONTRACT.md) | エンジンを変更しない画面制作の契約 |
 | [QUEST_CATALOG.md](QUEST_CATALOG.md) | 100件の依頼の索引・調査から決着までの概要・分岐ごとの結末 |
 | [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md) | Notionの五層モデルと実装の対応 |
+| [MONSTER_CATALOG.md](MONSTER_CATALOG.md) | 既存の敵と追加20種の姿・発想・代表行動 |
+| [BALANCE_PLAN.md](BALANCE_PLAN.md) | 実装前の敵数値・遭遇編成・強さの検証計画 |
+| [COMPANION_CATALOG.md](COMPANION_CATALOG.md) | 仲間10人の一覧・酒場の入れ替え・保存移行計画 |
 | [JSON_SCRIPT_SPEC.md](JSON_SCRIPT_SPEC.md) | 以前に策定した拡張先を含む設計原本 |
 
 設計原本は実装完了リストではありません。現在受け付ける構文はSCRIPT_REFERENCEと `data/schemas/` を優先してください。
