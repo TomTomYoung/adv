@@ -60,4 +60,31 @@
 | guard_10 | 帰還者の深淵の迷宮獣 | dragon | 112 | 28 | 13 |
 | guard_10_elite | 帰還者の深淵の守護者 | dragon | 269 | 31 | 13 |
 
-実装後、画像一覧と検証結果をこの文書へ追記します。
+実装済み：画像一覧は下記、能力値と1,200戦の計測結果は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
+
+## 戦闘画像一覧
+
+追加20体の個別画像です。各地域の通常遭遇へ接続し、第二層には同地域の二体組も出現します。既存の依頼戦・ボス定義は保持しています。
+
+| 画像 | 魔物 | 戦闘での見分け方 |
+| --- | --- | --- |
+| <img src="../assets/images/monsters/waterwheel_beaver.webp" width="160" alt="水車ビーバー"> | 水車ビーバー | 水の尾で打つ低速の前衛 |
+| <img src="../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門ワニ"> | 水門ワニ | 初手に背の門を閉じて防御する |
+| <img src="../assets/images/monsters/drill_mole.webp" width="160" alt="ドリルモグラ"> | ドリルモグラ | 防御の一部を無視する鼻先の突進 |
+| <img src="../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="陶器アルマジロ"> | 陶器アルマジロ | 殻で物理に耐え、傷つくと丸まる |
+| <img src="../assets/images/monsters/candle_bee.webp" width="160" alt="蜜蝋ランプバチ"> | 蜜蝋ランプバチ | 灯った蜜蝋を飛ばす高速の炎術役 |
+| <img src="../assets/images/monsters/saw_mantis.webp" width="160" alt="鋸刃カマキリ"> | 鋸刃カマキリ | 薄い守りと強打を持つ攻撃役 |
+| <img src="../assets/images/monsters/kaleidoscope_owl.webp" width="160" alt="万華鏡フクロウ"> | 万華鏡フクロウ | 光の術と翼の防御を交互に使う |
+| <img src="../assets/images/monsters/glass_jellyfish.webp" width="160" alt="硝子クラゲ"> | 硝子クラゲ | 物理に強く炎に弱い硝子の刃 |
+| <img src="../assets/images/monsters/type_porcupine.webp" width="160" alt="活字ヤマアラシ"> | 活字ヤマアラシ | 活字の針を飛ばす硬い物理役 |
+| <img src="../assets/images/monsters/book_silverfish.webp" width="160" alt="書庫シミ"> | 書庫シミ | 墨の魔力を食べてMPを削る |
+| <img src="../assets/images/monsters/vault_mouse.webp" width="160" alt="金庫ネズミ"> | 金庫ネズミ | 頬の金庫を閉じて耐える |
+| <img src="../assets/images/monsters/patchwork_bagworm.webp" width="160" alt="裁縫ミノムシ"> | 裁縫ミノムシ | 傷つくと袋を縫い直して回復する |
+| <img src="../assets/images/monsters/bone_whale.webp" width="160" alt="骨くじら"> | 骨くじら | 骨片を隊全体へ撒く大型の敵 |
+| <img src="../assets/images/monsters/anchor_squid.webp" width="160" alt="碇イカ"> | 碇イカ | 錨腕の強打と固定姿勢の防御 |
+| <img src="../assets/images/monsters/battery_hermit.webp" width="160" alt="蓄電ヤドカリ"> | 蓄電ヤドカリ | 雷に耐え、放電の後は殻にこもる |
+| <img src="../assets/images/monsters/derail_centipede.webp" width="160" alt="脱線ムカデ"> | 脱線ムカデ | 突進の次の手番は姿勢を立て直す |
+| <img src="../assets/images/monsters/iris_butterfly.webp" width="160" alt="虹彩チョウ"> | 虹彩チョウ | 光線を絞って撃つ脆い魔術役 |
+| <img src="../assets/images/monsters/compass_magpie.webp" width="160" alt="羅針盤カササギ"> | 羅針盤カササギ | 尾針で守りの薄い相手を狙う |
+| <img src="../assets/images/monsters/moon_wolf.webp" width="160" alt="月輪オオカミ"> | 月輪オオカミ | 月輪で隊全体を浅く切り、牙で追う |
+| <img src="../assets/images/monsters/jackknife.webp" width="160" alt="ジャックナイフ"> | ジャックナイフ | 高速の単体斬撃。火力と薄い装甲 |

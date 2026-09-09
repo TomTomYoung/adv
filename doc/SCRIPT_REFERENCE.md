@@ -53,7 +53,7 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 - 計算: add/sub/mul/div/mod/min/max/floor/ceil/round/abs/clamp。args配列です。clampは値・下限・上限、div/modは2引数。ゼロ除算はエラーです。
 - 表示文字列: `{ "format": "所持金は{g}G", "values": { "g": { "ref": "gold" } } }`。
 
-戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratioを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
+戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratio・self.roundを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
 
 ## 実装した39命令
 
@@ -73,7 +73,7 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 | gold.change | amount。所持金は0を下回らない |
 | actor.heal / actor.damage / actor.restore_mp | target、amount。targetはactor ID、参照式、またはparty |
 | party.heal_all | 任意ratio。最低でも最大値×ratioへ回復、毒除去、灯の補充 |
-| party.join / party.leave | actor。最大5人・最低1人を維持 |
+| party.join / party.leave | actor。最大5人・最低1人の生存者を維持。joinは既存のHP・MP・状態・装備を保持し、回復しない |
 | status.apply / status.remove | target、status。状態異常の追加・削除 |
 | map.teleport | map、x、y、任意facing。実在する通行可能マスへ移動 |
 | map.reveal | radius。現在位置の周囲を探索済みにする |
@@ -114,3 +114,13 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 ## 保存互換性
 
 待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+
+## 1.1.0の戦闘データ拡張
+
+skills.targetはenemy / ally / self / all_enemies / all_allies。敵AI側ではenemiesがプレイヤー隊、alliesが敵側を意味します。全体対象は生存者だけです。MPは対象数によらず一回だけ消費します。
+
+effects.typeにはdamage / heal / guard / status / cleanseに加え、drain_mp（下限0でMP減少）とrestore_mp（上限までMP回復）があります。amountに0以上の固定値、またはformulaにformulasのIDを指定します。技能のeffectsを空配列にすると、消費MPだけを伴う予告・休み行動にできます。
+
+敵AIのtargetはself / random / weakest。self.roundは現在のラウンドです。優先度順に条件・必要MPを満たす規則を採用するので、無料のattackを最低優先度に置きます。実例はdata/enemies.jsonとdata/skills.jsonです。
+
+map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"wild_waterwheel_beaver","weight":40}]` のように正の重みを与えます。省略時は従来のencounterだけを使用します。

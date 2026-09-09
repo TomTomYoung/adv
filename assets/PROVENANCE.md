@@ -1,6 +1,6 @@
-# ADV original pixel art and score resources
+# ADV art and score resources
 
-These original dungeon images and scores were created for TomTomYoung/adv with the user's requested AIPaint and AIMusic repositories. They are newly authored geometry and musical note arrangements, with no copied third-party game artwork, recorded audio, fonts, or samples.
+The original 1.0 dungeon pixel images and scores were created for TomTomYoung/adv with the user's requested AIPaint and AIMusic repositories. They are newly authored geometry and musical note arrangements, with no copied third-party game artwork, recorded audio, fonts, or samples.
 
 ## Actual engine use
 
@@ -40,3 +40,29 @@ The game uses actual PNGs in `assets/images/` and OGGs in `assets/audio/`. Edita
 - `battle`: “The Gatekeeper Wakes”, 8 bars, 144 BPM, 13.333 seconds, six tracks, 304 notes.
 
 All six PNGs were visually inspected. Both synth renders passed AIMusic's score validation, yielded finite non-silent stereo PCM, required no limiter attenuation, and had loop boundary jumps around 0.0001. All artifact SHA-256 hashes are in `manifest.json`. Browser playback and subjective audio listening were not performed in this asset task. An initial final pluck note exceeded the score boundary by 0.1 beat; the duration was shortened and both final renders passed.
+
+## 1.1.0 character expansion (2026-09-09)
+
+Twenty new monster images and ten companion portraits were generated individually with the built-in image generator. The user explicitly requested newly drawn visuals. The Japanese specifications and full English/Japanese prompts are in `assets/source/entity-art-prompts.json`. These new illustrations are not AIPaint command drawings; the original six pixel images still use the AIPaint pipeline above.
+
+Monster concepts reference the user's [Notion RPG entity model](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd) and its monster collection. The two concepts, world adaptations and numeric plans were committed in `doc/MONSTER_CATALOG.md`, `doc/BALANCE_PLAN.md` and `doc/COMPANION_CATALOG.md` before image generation and code implementation. The exact generated pixels are not deterministic; prompts retain the regeneration brief.
+
+Images use transparent backgrounds at 1254×1254. They were visually inspected and decoded to check real alpha. Delivery uses same-size WebP encoding (FFmpeg/libwebp, quality 85, compression level 6); no cropping, repainting, alpha removal or resizing was applied. The output has fine painterly texture rather than a literal 2–3-tone cel palette. Native-resolution generation fringes, if present, are recorded in the prompt manifest.
+
+## 1.1.0 playback volume
+
+The AIMusic arrangements are unchanged. New playback derivatives increase exploration by 16 dB and battle by 13 dB, with browser default volume raised from 25% to 50%; a previously saved volume remains unchanged. Original OGGs and editable music JSON are retained.
+
+```sh
+ffmpeg -y -i assets/audio/exploration.ogg -af volume=16dB -c:a libvorbis -q:a 3 assets/audio/exploration-v2.ogg
+ffmpeg -y -i assets/audio/battle.ogg -af volume=13dB -c:a libvorbis -q:a 3 assets/audio/battle-v2.ogg
+```
+
+| File | Decoded mean | Decoded peak | Duration |
+| --- | --- | --- | --- |
+| exploration.ogg | -33.4 dBFS | -20.7 dBFS | 22.857 s |
+| exploration-v2.ogg | -17.4 dBFS | -4.8 dBFS | 22.857 s |
+| battle.ogg | -30.2 dBFS | -18.4 dBFS | 13.333 s |
+| battle-v2.ogg | -17.1 dBFS | -4.7 dBFS | 13.333 s |
+
+FFmpeg decoding and volumedetect confirm non-silent stereo audio with no clipped peaks. Mocked audio-adapter tests cover autoplay rejection/retry, stale promises during track changes, disabled/muted states, and one playback per effect revision. Actual browser/speaker listening and browser loop transitions have not been tested. The game starts with sound off and exposes the actual playback state on the sound button.

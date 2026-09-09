@@ -11,5 +11,7 @@ g.run('q001.clue_a');fixtures.dialog=projectGame(g);drain();g.run('q001.clue_b')
 const beforeBattle=g.save();g.dispatch({type:'choose',id:'contract'});fixtures.battle=projectGame(g);
 g.load(beforeBattle);g.dispatch({type:'choose',id:'informed'});drain();g.returnTown();fixtures.journal=projectGame(g);
 fixtures.journal.ending={title:'道を次へ渡す者',text:'表示例です。実際の終幕は百件の依頼を終えた後、あなたの選択によって記録されます。'};
+g.dispatch({type:'party',action:'join',actor:'toma'});fixtures.tavern=projectGame(g);
+g.dispatch({type:'travel',region:1});g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});fixtures.monsters=projectGame(g);
 for(const fixture of Object.values(fixtures)){fixture.quests=fixture.quests.slice(0,4);fixture.regions=fixture.regions.slice(0,3);}
-await fs.writeFile(path.join(root,'data/view-fixtures.json'),JSON.stringify(fixtures,null,2)+'\n');console.log('Built 6 detached view fixtures');
+await fs.writeFile(path.join(root,'data/view-fixtures.json'),JSON.stringify(fixtures,null,2)+'\n');console.log('Built 8 detached view fixtures');

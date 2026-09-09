@@ -1,5 +1,16 @@
-import {isRecord} from './expression.js';
+import {isRecord,clone} from './expression.js';
 import {commandsAt} from './script.js';
+export function migrateSave(original,data){
+  if(!isRecord(original)||original.contentVersion===data.game.version)return original;
+  const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
+  const legacy={...data,game:{...data.game,version:original.contentVersion},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
+  if(validateSave(original,legacy).length)return original;
+  const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
+  for(const [id,definition] of Object.entries(data.actors))if(!save.state.actors[id]){
+    const level=save.state.level-1;save.state.actors[id]={id,hp:definition.stats.hp+data.system.growth.hp*level,mp:definition.stats.mp+data.system.growth.mp*level,statuses:[],equipment:{}};
+  }
+  return save;
+}
 export function validateSave(save,data){
   const errors=[],fail=s=>errors.push(s),integer=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
   if(!isRecord(save)||save.saveVersion!==1||save.gameId!==data.game.id||save.contentVersion!==data.game.version)return ['作品またはセーブ形式のバージョンが一致しません'];
@@ -19,6 +30,7 @@ export function validateSave(save,data){
     const l=s.location,m=data.maps[l?.map];if(!m||m.tiles[l?.y]?.[l?.x]!=='.'||!['north','east','south','west'].includes(l?.facing))fail('位置不正');
   }else if(s.location!==null)fail('町の位置不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
+  if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');
   for(const [id,definition] of Object.entries(data.actors)){
     const actor=s.actors[id];if(!isRecord(actor)||!isRecord(actor.equipment)||!Array.isArray(actor.statuses)){fail('隊員状態不正');continue;}
     const stats={...definition.stats};for(const [key,growth] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+growth*(s.level-1);

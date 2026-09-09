@@ -62,11 +62,12 @@ export function validateContent(data){
   for(const [id,s] of Object.entries(data.scripts))commands(s.commands,`scripts.${id}`);
   for(const [id,formula] of Object.entries(data.formulas))expression(formula,`formulas.${id}`);
   for(const [id,skill] of Object.entries(data.skills)){
-    if(!['enemy','ally','self'].includes(skill.target)||!Number.isInteger(skill.mp)||skill.mp<0)fail(id,'スキル対象・MPが不正です');
-    for(const effect of skill.effects??[]){if(!['damage','heal','guard','status','cleanse'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);}
+    if(!['enemy','ally','self','all_enemies','all_allies'].includes(skill.target)||!Number.isInteger(skill.mp)||skill.mp<0)fail(id,'スキル対象・MPが不正です');
+    for(const effect of skill.effects??[]){if(!['damage','heal','guard','status','cleanse','drain_mp','restore_mp'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
   }
-  for(const [id,a] of Object.entries(data.actors))for(const skill of a.skills)reference(data.skills,skill,id);
-  for(const [id,e] of Object.entries(data.enemies))for(const rule of e.ai){reference(data.skills,rule.skill,id);if(rule.condition)expression(rule.condition,id);}
+  for(const [id,a] of Object.entries(data.actors)){for(const skill of a.skills)reference(data.skills,skill,id);if(a.portrait)reference(data.assets.images,a.portrait,id);}
+  for(const [id,e] of Object.entries(data.enemies)){reference(data.assets.images,e.sprite,id);for(const rule of e.ai){reference(data.skills,rule.skill,id);if(!['self','random','weakest'].includes(rule.target))fail(id,'敵の対象選択が不正です');if(rule.condition)expression(rule.condition,id);}}
+  if(data.game.tavern){const ids=data.game.tavern.candidates;if(!Array.isArray(ids)||new Set(ids).size!==ids.length)fail('tavern','候補一覧が不正です');else for(const id of ids)reference(data.actors,id,'tavern');}
   for(const [id,e] of Object.entries(data.encounters)){if(!e.enemies?.length)fail(id,'敵が必要です');for(const enemy of e.enemies??[])reference(data.enemies,enemy,id);}
   for(const [id,item] of Object.entries(data.items)){if(item.script)reference(data.scripts,item.script,id);if(item.battleSkill)reference(data.skills,item.battleSkill,id);}
   for(const good of data.shops.goods){reference(data.items,good.item,'shop');if(!Number.isInteger(good.price)||good.price<0)fail('shop','価格不正');}
@@ -83,6 +84,7 @@ export function validateContent(data){
       reference(data.scripts,object.script,id);if(object.condition)expression(object.condition,id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);
+    if(map.encounterPool!==undefined){if(!Array.isArray(map.encounterPool)||!map.encounterPool.length)fail(id,'遭遇候補が必要です');else for(const e of map.encounterPool){reference(data.encounters,e.encounter,id);if(!Number.isFinite(e.weight)||e.weight<=0)fail(id,'遭遇重みは正数です');}}
     const start=map.entrance;if(map.tiles[start.y]?.[start.x]!=='.')fail(id,'入口不正');
     // Ignore locked objects when checking geometric connectivity; their scripts unlock them.
     const seen=new Set([`${start.x},${start.y}`]),queue=[[start.x,start.y]];

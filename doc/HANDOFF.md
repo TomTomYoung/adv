@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-09。対象: 灯帰りの迷宮 1.0.0。
+更新日: 2026-09-09。対象: 灯帰りの迷宮 1.1.0。
 
 ## 最初に行うこと
 
@@ -19,9 +19,13 @@
 | 新しい汎用命令 | src/core/script.js、validation.js、対応Schema・テスト |
 | 表示データの項目 | src/application/projection.js、VIEW_CONTRACT |
 | 見た目と画面操作の配置 | src/view/のみ。ゲームエンジンをimportしない |
-| 保存・ブラウザ音声・キーボード | src/main.js |
+| 保存・キーボード | src/main.js |
+| 音の状態・曲の切替・再試行 | src/application/audio.js |
+| 拡張魔物・仲間の原稿 | authoring/entities.json、tools/build-entities.mjs |
 
 現行の生成コードは `authoring/quests.txt` の100行を、独立したJSONへコンパイルします。ゲーム起動時に生成やテンプレート展開はしません。生成済みJSONを直接直した後にbuild-contentを走らせると修正が失われるため、再生成する変更か手編集かを最初に決めてください。原稿変更時はbuild-content、続いてbuild-fixtures、必要ならbuild-schemasを実行します。
+
+1.1.0は魔物20体、仲間10人の肖像、酒場編成を追加しました。MONSTER_CATALOG、COMPANION_CATALOG、BALANCE_PLANを実装前にコミットし、後から画像と実測結果を追記しています。追加原稿だけの再生成はbuild-entities、計測はsimulate-balanceです。BGM新版と画像の生成プロンプトはassets/PROVENANCE.mdを参照してください。
 
 ## 維持する契約
 

@@ -10,9 +10,11 @@ for(const file of files){
     if(file.includes('/src/view/')&&/from\s*['"][^'"]*(?:\/core\/|\/application\/)/.test(source))throw Error(`View imports game runtime: ${file}`);
     if(file.includes('/src/')&&/\beval\s*\(|new\s+Function\s*\(/.test(source))throw Error(`Executable scenario code: ${file}`);
   }
+  if(file.endsWith('.webp')){const b=await fs.readFile(file);if(b.subarray(0,4).toString()!=='RIFF'||b.subarray(8,12).toString()!=='WEBP')throw Error(`Invalid WebP: ${file}`);}
+  if(file.endsWith('.ogg')){const b=await fs.readFile(file);if(b.subarray(0,4).toString()!=='OggS')throw Error(`Invalid audio: ${file}`);}
   if(file.endsWith('.json'))JSON.parse(await fs.readFile(file,'utf8'));
   if(file.endsWith('.html')){const html=await fs.readFile(file,'utf8');for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)){if(!/^(?:https?:|data:)/.test(match[1])&&!known.has(path.resolve(path.dirname(file),match[1])))throw Error(`Missing HTML asset: ${match[1]}`);}}
 }
 for(const name of ['dungeon-corridor','slime','skeleton','wraith','construct','dragon']){const b=await fs.readFile(path.join(root,`assets/images/${name}.png`));if(b.subarray(1,4).toString()!=='PNG')throw Error('Invalid PNG');}
 for(const name of ['exploration','battle']){const b=await fs.readFile(path.join(root,`assets/audio/${name}.ogg`));if(b.subarray(0,4).toString()!=='OggS')throw Error('Invalid audio');}
-console.log(`STATIC VALID: ${files.length} files, JS syntax, module paths, HTML references, PNG/OGG headers and view separation`);
+console.log(`STATIC VALID: ${files.length} files, JS syntax, module paths, HTML references, PNG/WebP/OGG headers and view separation`);

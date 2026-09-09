@@ -5,7 +5,7 @@ let theme={...THEME_DEFAULT};
 const response=await fetch('data/view-fixtures.json');if(!response.ok)throw new Error('表示例を読み込めません');const fixtures=await response.json();
 const show=text=>{status.textContent=text;};
 const view=new GameView(document.querySelector('#app'),intent=>{show(`表示側が送る操作: ${JSON.stringify(intent)}`);return true;},{status:show,menu:()=>show('本番では記録メニューを表示します。'),help:()=>show('この画面は表示のみのプレビューです。'),retreat:()=>show('帰還操作をゲームへ送ります。'),sound:()=>show('音声再生は本番画面で確認できます。'),soundEnabled:()=>false});
-function render(){view.tab=select.value==='town'?'quests':select.value==='journal'?'journal':'explore';view.render(structuredClone(fixtures[select.value]));}
+function render(){view.tab=select.value==='tavern'?'party':select.value==='town'?'quests':select.value==='journal'?'journal':'explore';view.render(structuredClone(fixtures[select.value]));}
 for(const [key,label] of Object.entries({background:'背景',surface:'面',raised:'ボタン',ink:'本文',muted:'補助',accent:'強調',border:'枠線'})){
   const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('input');input.type='color';input.value=theme[key];input.addEventListener('input',()=>{theme[key]=input.value;applyTheme(theme);});wrap.append(input);fields.append(wrap);
 }

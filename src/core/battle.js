@@ -29,7 +29,7 @@ function endBattle(engine,result){
 function applySkill(engine,source,sourceStats,target,targetStats,skill,enemySource){
   const b=engine.state.battle,s=engine.state;
   for(const effect of skill.effects){
-    if(effect.type==='guard'){if(enemySource)source.guard=true;else b.guards.push(source.id);continue;}
+    if(effect.type==='guard'){if(enemySource)target.guard=true;else if(!b.guards.includes(target.id))b.guards.push(target.id);b.log.push(`${target.name??engine.data.actors[target.id]?.name}は守りを固めた。`);continue;}
     if(!target)continue;
     const context={source:{...source,stats:sourceStats},target:{...target,stats:targetStats}};
     const amount=Math.max(0,Math.floor(effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0));
@@ -40,6 +40,8 @@ function applySkill(engine,source,sourceStats,target,targetStats,skill,enemySour
       target.hp=Math.max(0,target.hp-damage);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${target.name??engine.data.actors[target.id]?.name}に${damage}。`);
     }
     if(effect.type==='heal'){target.hp=Math.min(targetStats.hp,target.hp+amount);b.log.push(`${target.name??engine.data.actors[target.id]?.name}のHPが${amount}回復。`);}
+    if(effect.type==='drain_mp'){const spent=Math.min(target.mp,amount);target.mp-=spent;b.log.push(`${target.name??engine.data.actors[target.id]?.name}のMPが${spent}減少。`);}
+    if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,amount);target.mp+=restored;b.log.push(`${target.name??engine.data.actors[target.id]?.name}のMPが${restored}回復。`);}
     if(effect.type==='status'&&target.hp>0&&engine.random()<(effect.chance??1)&&!target.statuses.includes(effect.status)){target.statuses.push(effect.status);b.log.push(`${target.name??engine.data.actors[target.id]?.name}は${engine.data.statuses[effect.status].name}になりました。`);}
     if(effect.type==='cleanse')target.statuses=[];
   }
@@ -51,13 +53,18 @@ function enemiesTurn(engine){
   for(const enemy of [...b.enemies].sort((a,c)=>c.stats.agi-a.stats.agi)){
     if(enemy.hp<=0)continue;enemy.guard=false;
     const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)break;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp}})) && enemy.mp>=engine.data.skills[r.skill].mp);
+    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}})) && enemy.mp>=engine.data.skills[r.skill].mp);
     if(!rule)continue;
     const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
-    const targetsSelf=rule.target==='self'||skill.target==='self';
-    const target=targetsSelf?enemy:s.actors[targetId],stats=targetsSelf?enemy.stats:engine.stats(targetId);
-    applySkill(engine,enemy,enemy.stats,target,stats,skill,true);
+    let targets;
+    if(skill.target==='all_enemies')targets=alive.map(id=>[s.actors[id],engine.stats(id)]);
+    else if(skill.target==='all_allies')targets=b.enemies.filter(e=>e.hp>0).map(e=>[e,e.stats]);
+    else if(rule.target==='self'||skill.target==='self')targets=[[enemy,enemy.stats]];
+    else if(skill.target==='ally'){const friend=b.enemies.filter(e=>e.hp>0).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0];targets=[[friend,friend.stats]];}
+    else targets=[[s.actors[targetId],engine.stats(targetId)]];
+    if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
+    for(const [target,stats] of targets)applySkill(engine,enemy,enemy.stats,target,stats,skill,true);
   }
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
@@ -78,12 +85,14 @@ export function battleAction(engine,intent){
   }else{
     const skill=engine.data.skills[intent.skill];
     if(!skill||!definition.skills.includes(intent.skill)||actor.mp<skill.mp)return false;
-    let target,targetStats;
-    if(skill.target==='self'){target=actor;targetStats=engine.stats(actorId);}
+    let targets;
+    if(skill.target==='all_enemies')targets=b.enemies.filter(e=>e.hp>0).map(e=>[e,e.stats]);
+    else if(skill.target==='all_allies')targets=s.members.filter(id=>s.actors[id].hp>0).map(id=>[s.actors[id],engine.stats(id)]);
+    else if(skill.target==='self')targets=[[actor,engine.stats(actorId)]];
     else if(skill.target==='ally'){
-      target=s.actors[intent.target];if(!s.members.includes(intent.target)||!target||target.hp<=0)return false;targetStats=engine.stats(intent.target);
-    }else{target=b.enemies.find(e=>e.instance===intent.target&&e.hp>0);if(!target)return false;targetStats=target.stats;}
-    actor.mp-=skill.mp;applySkill(engine,actor,engine.stats(actorId),target,targetStats,skill,false);
+      const target=s.actors[intent.target];if(!s.members.includes(intent.target)||!target||target.hp<=0)return false;targets=[[target,engine.stats(intent.target)]];
+    }else{const target=b.enemies.find(e=>e.instance===intent.target&&e.hp>0);if(!target)return false;targets=[[target,target.stats]];}
+    actor.mp-=skill.mp;for(const [target,stats] of targets)applySkill(engine,actor,engine.stats(actorId),target,stats,skill,false);
   }
   b.acted.push(actorId);
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return true;}

@@ -1,7 +1,7 @@
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
-import {validateSave} from './save.js';
+import {validateSave,migrateSave} from './save.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
@@ -103,7 +103,9 @@ export class GameEngine {
     if(this.trigger('enter'))return true;
     const map=this.map();
     if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)){
-      this.startBattle(map.encounter,{win:[],escape:[],lose:[]});
+      let encounter=map.encounter;
+      if(map.encounterPool?.length){let roll=this.random()*map.encounterPool.reduce((sum,e)=>sum+e.weight,0);encounter=map.encounterPool.at(-1).encounter;for(const entry of map.encounterPool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
+      this.startBattle(encounter,{win:[],escape:[],lose:[]});
     }
     return true;
   }
@@ -145,6 +147,8 @@ export class GameEngine {
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;this.run(service.script);return true;
     }
+    if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
+    if(type==='unequip')return this.unequip(intent.actor,intent.slot);
     if(type==='buy'&&this.state.mode==='town'){
       const stock=this.data.shops.goods.find(g=>g.item===intent.item);if(!stock||this.state.gold<stock.price||(this.state.inventory[intent.item]??0)>=this.data.system.maxStack)return false;
       this.state.gold-=stock.price;this.give(stock.item,1);this.notify(`${this.data.items[stock.item].name}を購入しました。`);return true;
@@ -156,8 +160,24 @@ export class GameEngine {
   equip(actorId,itemId){
     const item=this.data.items[itemId],actor=this.state.actors[actorId];
     if(!this.state.members.includes(actorId)||!item?.slot||!(this.state.inventory[itemId]>0)||!actor||actor.hp<=0)return false;
-    const previous=actor.equipment[item.slot];this.give(itemId,-1);if(previous)this.give(previous,1);actor.equipment[item.slot]=itemId;
+    const previous=actor.equipment[item.slot];if(previous&&previous!==itemId&&(this.state.inventory[previous]??0)>=this.data.system.maxStack)return false;
+    this.give(itemId,-1);if(previous)this.give(previous,1);actor.equipment[item.slot]=itemId;
     const stats=this.stats(actorId);actor.hp=Math.min(actor.hp,stats.hp);actor.mp=Math.min(actor.mp,stats.mp);return true;
+  }
+  changeParty(action,actorId,replaceId){
+    const s=this.state;if(s.mode!=='town'||s.waiting||s.battle||!this.data.game.tavern?.candidates.includes(actorId))return false;
+    const next=[...s.members],at=next.indexOf(actorId);
+    if(action==='join'){if(at!==-1||next.length>=this.data.system.maxParty)return false;next.push(actorId);}
+    else if(action==='leave'){if(at===-1||next.length===1)return false;next.splice(at,1);}
+    else if(action==='swap'){const replaceAt=next.indexOf(replaceId);if(at!==-1||replaceAt===-1)return false;next[replaceAt]=actorId;}
+    else return false;
+    if(!next.some(id=>s.actors[id].hp>0))return false;
+    s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
+  }
+  unequip(actorId,slot){
+    const s=this.state,a=s.actors[actorId];if(s.mode!=='town'||s.waiting||s.battle||!a)return false;
+    const item=a.equipment[slot];if(!item||(s.inventory[item]??0)>=this.data.system.maxStack)return false;
+    delete a.equipment[slot];this.give(item,1);const stats=this.stats(actorId);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);return true;
   }
   useItem(itemId,actorId){
     const item=this.data.items[itemId];if(!item||!item.field||!(this.state.inventory[itemId]>0)||!this.state.members.includes(actorId))return false;
@@ -166,7 +186,7 @@ export class GameEngine {
   save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,state:clone(this.state)});}
   load(text){
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
-    const save=JSON.parse(text),errors=validateSave(save,this.data);
+    const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
     this.state=clone(save.state);return true;
   }

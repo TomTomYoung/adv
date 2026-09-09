@@ -27,4 +27,21 @@ HP・MP・状態異常・装備は待機中も個人ごとに保持し、入れ�
 
 作品版を1.1.0へ上げます。1.0.0の記録は旧5人の定義で検証してから追加5人の状態を作り、クエスト・既存隊員のHPや装備・乱数・会話と戦闘の継続位置を保持して移行します。未知の版や破損データは書き換えず拒否します。
 
-実装後、顔絵一覧と編成・保存の検証結果を追記します。
+実装済み：加入・待機・満員での一操作交代、待機中の装備取外し、旧版の本文・選択・戦闘中セーブの移行を検証しました。交代時の負傷・MP・毒・装備の保持、満杯の袋での装備消失防止、控えの表示データから状態を変更できないことも検査しています。
+
+## 肖像一覧
+
+各人を個別に生成した透過画像です。元の人物設定と英日プロンプトは[英日プロンプト](../assets/source/entity-art-prompts.json)に記録しています。
+
+| 肖像 | 名前 | 職業 |
+| --- | --- | --- |
+| <img src="../assets/images/portraits/ada.webp" width="140" alt="アダ"> | アダ | 剣士 |
+| <img src="../assets/images/portraits/nio.webp" width="140" alt="ニオ"> | ニオ | 斥候 |
+| <img src="../assets/images/portraits/sera.webp" width="140" alt="セラ"> | セラ | 祈祷師 |
+| <img src="../assets/images/portraits/il.webp" width="140" alt="イル"> | イル | 魔術師 |
+| <img src="../assets/images/portraits/berg.webp" width="140" alt="ベルグ"> | ベルグ | 守衛 |
+| <img src="../assets/images/portraits/luka.webp" width="140" alt="ルカ"> | ルカ | 槍使い |
+| <img src="../assets/images/portraits/toma.webp" width="140" alt="トーマ"> | トーマ | 薬師 |
+| <img src="../assets/images/portraits/mica.webp" width="140" alt="ミカ"> | ミカ | 符術師 |
+| <img src="../assets/images/portraits/dora.webp" width="140" alt="ドーラ"> | ドーラ | 盾兵 |
+| <img src="../assets/images/portraits/ren.webp" width="140" alt="レン"> | レン | 楽師 |

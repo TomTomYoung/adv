@@ -66,8 +66,8 @@ export function pump(engine){
         break;
       }
       case 'party.heal_all':engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
-      case 'party.join':if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);engine.healAll();}break;
-      case 'party.leave':if(state.members.length>1)state.members=state.members.filter(id=>id!==c.actor);break;
+      case 'party.join':if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
+      case 'party.leave':if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
       case 'status.apply':case 'status.remove':{
         for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply'){if(!a.statuses.includes(c.status))a.statuses.push(c.status);}else a.statuses=a.statuses.filter(s=>s!==c.status);}break;
       }
