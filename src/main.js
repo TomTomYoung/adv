@@ -8,7 +8,7 @@ const root=document.querySelector('#app'),dialog=document.querySelector('#system
 const PREFIX='lantern-archive:v1:';
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const btn=(text,fn)=>{const b=make('button',text);b.type='button';b.addEventListener('click',fn);return b;};
-let engine,view,data,lastModel,statusTimer,settings={volume:.5,sound:false,theme:THEME_DEFAULT};
+let engine,view,data,lastModel,statusTimer,settings={volume:.5,seVolume:.8,effects:'full',sound:false,theme:THEME_DEFAULT};
 const sound=new GameAudio({onChange:label=>view?.updateSound(label)});
 function status(text){statusElement.textContent=text;clearTimeout(statusTimer);statusTimer=setTimeout(()=>{statusElement.textContent='';},9000);}
 function storageRead(key){try{return localStorage.getItem(PREFIX+key);}catch{status('このブラウザでは自動保存を使えません。「記録」からファイルへ書き出してください。');return null;}}
@@ -16,7 +16,7 @@ function storageWrite(key,value){try{localStorage.setItem(PREFIX+key,value);retu
 function download(name,text){const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));const a=make('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function modal(title){dialog.replaceChildren();const h=make('h2',title);h.id='dialog-title';dialog.append(h);if(!dialog.open)dialog.showModal();}
 function closeButton(){dialog.append(btn('閉じる',()=>dialog.close()));dialog.lastChild.className='modal-close';}
-function syncAudio(){sound.configure(settings.sound,settings.volume);sound.sync(lastModel);}
+function syncAudio(){sound.configure(settings.sound,settings.volume,settings.seVolume);sound.sync(lastModel);}
 function toggleSound(){
   if(settings.sound&&['blocked','error'].includes(sound.state))sound.retry();
   else{settings.sound=!settings.sound;syncAudio();}
@@ -24,7 +24,7 @@ function toggleSound(){
   if(settings.sound)status('探索・戦闘BGMを再生します。音量は「記録」で調整できます。');
 }
 function render(){lastModel=projectGame(engine);view.render(lastModel);syncAudio();}
-function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed){storageWrite('auto',engine.save());render();}return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
+function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
 function restore(text){try{engine.load(text);storageWrite('auto',engine.save());dialog.close();render();status('記録を読み込みました。');}catch(error){status(error.message);}}
 function menu(){
   modal('旅の記録');dialog.append(make('p','会話・選択肢・戦闘の途中も保存できます。記録はこのブラウザに保存されます。'));
@@ -32,6 +32,8 @@ function menu(){
   const row=make('div');row.className='modal-row';row.append(btn('記録ファイルを書き出す',()=>download('lantern-archive-save.json',engine.save())));dialog.append(row);
   const label=make('label','記録ファイルを読み込む'),input=make('input');input.type='file';input.accept='.json,application/json';input.addEventListener('change',async()=>{const f=input.files[0];if(!f)return;if(f.size>data.system.maxSaveBytes){status('記録ファイルが大きすぎます。');return;}restore(await f.text());});label.append(input);dialog.append(label);
   const section=make('div');section.className='modal-section';const volumeLabel=make('label','音量'),volume=make('input');volume.type='range';volume.min='0';volume.max='100';volume.value=String(settings.volume*100);volume.addEventListener('input',()=>{settings.volume=Number(volume.value)/100;storageWrite('settings',JSON.stringify(settings));syncAudio();});volumeLabel.append(volume);section.append(volumeLabel,make('p','音量0は消音です。右上の「音：再生中」で再生状態を確認できます。'));
+  const seLabel=make('label','SE音量'),seVolume=make('input');seVolume.type='range';seVolume.min='0';seVolume.max='100';seVolume.value=String(settings.seVolume*100);seVolume.addEventListener('input',()=>{settings.seVolume=Number(seVolume.value)/100;storageWrite('settings',JSON.stringify(settings));syncAudio();});seLabel.append(seVolume);section.append(seLabel);
+  const motionLabel=make('label','画面演出'),motion=make('select');for(const [id,name] of [['full','通常'],['reduced','動きを控える'],['off','切']])motion.append(new Option(name,id));motion.value=settings.effects;motion.addEventListener('change',()=>{settings.effects=motion.value;storageWrite('settings',JSON.stringify(settings));render();});motionLabel.append(motion);section.append(motionLabel);
   const skin=make('label','画面テーマを読み込む'),skinFile=make('input');skinFile.type='file';skinFile.accept='.json';skinFile.addEventListener('change',async()=>{try{if(!skinFile.files[0]||skinFile.files[0].size>10000)throw Error('テーマファイルが大きすぎます');settings.theme=applyTheme(JSON.parse(await skinFile.files[0].text()));storageWrite('settings',JSON.stringify(settings));status('画面テーマを適用しました。');}catch(e){status(e.message);}});skin.append(skinFile);section.append(skin);
   const link=make('a','画面デザイン用プレビュー');link.href='view-preview.html';link.target='_blank';link.rel='noopener';section.append(link);dialog.append(section);
   dialog.append(btn('最初から始める',()=>{modal('新しい隊で始めますか');dialog.append(make('p','自動記録は新しい旅で置き換わります。記録1〜3と書き出したファイルは残ります。'),btn('新しい旅を始める',()=>{engine=new GameEngine(data);storageWrite('auto',engine.save());dialog.close();render();}));closeButton();}));closeButton();
@@ -47,10 +49,10 @@ function help(){modal('遊び方');for(const paragraph of [
 ])dialog.append(make('p',paragraph));closeButton();}
 function retreat(){modal('帰還印を使いますか');dialog.append(make('p',`救援費は${Math.ceil(engine.state.gold*data.system.retreatGoldRate)}Gです。受注中の依頼と手掛かりはそのまま残ります。`),btn('帰還する',()=>{dialog.close();dispatch({type:'retreat'});}));closeButton();}
 try{
-  const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);settings.sound=parsed.sound===true;settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
-  data=await loadContent();engine=new GameEngine(data);
+  const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
+  data=await loadContent();sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);
   const autosave=storageRead('auto');if(autosave){try{engine.load(autosave);}catch(error){status(`自動記録は読み込めませんでした。手動記録やファイルを読み込めます。${error.message}`);}}
-  view=new GameView(root,dispatch,{menu,help,retreat,status,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound});render();
+  view=new GameView(root,dispatch,{menu,help,retreat,status,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound});render();
   document.addEventListener('keydown',event=>{
     if(dialog.open||event.ctrlKey||event.metaKey||event.altKey||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;
     if(event.key==='Escape'){event.preventDefault();menu();return;}

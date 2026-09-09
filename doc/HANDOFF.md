@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-09。対象: 灯帰りの迷宮 1.1.0。
+更新日: 2026-09-09。対象: 灯帰りの迷宮 1.2.0。
 
 ## 最初に行うこと
 
@@ -26,6 +26,10 @@
 現行の生成コードは `authoring/quests.txt` の100行を、独立したJSONへコンパイルします。ゲーム起動時に生成やテンプレート展開はしません。生成済みJSONを直接直した後にbuild-contentを走らせると修正が失われるため、再生成する変更か手編集かを最初に決めてください。原稿変更時はbuild-content、続いてbuild-fixtures、必要ならbuild-schemasを実行します。
 
 1.1.0は魔物20体、仲間10人の肖像、酒場編成を追加しました。MONSTER_CATALOG、COMPANION_CATALOG、BALANCE_PLANを実装前にコミットし、後から画像と実測結果を追記しています。追加原稿だけの再生成はbuild-entities、計測はsimulate-balanceです。BGM新版と画像の生成プロンプトはassets/PROVENANCE.mdを参照してください。
+
+1.2.0はSE28種と表示効果24種を追加しました。SE_CATALOGとEFFECT_CATALOGを先にコミットしてあります。原稿はauthoring/presentation.json、データ更新はbuild-presentation、素材作成はtools/assets/generate-effects.mjsです。build-entities/build-contentも最後にpresentationの生成を呼ぶので拡張が消えません。
+
+瞬間演出は保存しないfeedbackへ置き、持続色だけをpresentation.layersへ保存します。旧1.0/1.1セーブの継続位置を変えず移行しています。技能AIやクエストの配列へ演出命令を差し込む場合は、保存中の命令インデックスへの影響に注意してください。ビューでは一時要素・タイマー・画像のvisibilityを必ず片付け、全体技のSEを一度だけ鳴らす契約を維持します。
 
 ## 維持する契約
 

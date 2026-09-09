@@ -1453,11 +1453,95 @@
             "asset": {
               "type": "string",
               "minLength": 1
+            },
+            "volume": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "delay": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5000
             }
           },
           "required": [
             "op",
             "asset"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "effect.play"
+            },
+            "effect": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": "string",
+              "pattern": "^(scene|screen|party|actor:[a-z][a-z0-9_]*|enemy:enemy_[0-7])$"
+            },
+            "delay": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5000
+            }
+          },
+          "required": [
+            "op",
+            "effect"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "screen.set"
+            },
+            "layer": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,31}$"
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.65
+            },
+            "shade": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "op",
+            "layer",
+            "color",
+            "opacity"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "screen.clear"
+            },
+            "layer": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "layer"
           ],
           "additionalProperties": false
         },

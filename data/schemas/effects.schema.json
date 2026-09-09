@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "灯帰り 表示演出",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "category": {
+        "enum": [
+          "script",
+          "animation",
+          "field"
+        ]
+      },
+      "duration": {
+        "type": "number",
+        "minimum": 50,
+        "maximum": 5000
+      },
+      "tracks": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 8,
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "motion"
+                },
+                "frames": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 32,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "at": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "x": {
+                        "type": "number",
+                        "minimum": -200,
+                        "maximum": 200
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": -200,
+                        "maximum": 200
+                      },
+                      "rotate": {
+                        "type": "number",
+                        "minimum": -360,
+                        "maximum": 360
+                      },
+                      "skewX": {
+                        "type": "number",
+                        "minimum": -40,
+                        "maximum": 40
+                      },
+                      "skewY": {
+                        "type": "number",
+                        "minimum": -40,
+                        "maximum": 40
+                      },
+                      "scaleX": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 3
+                      },
+                      "scaleY": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 3
+                      },
+                      "opacity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "at"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "kind",
+                "frames"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "sprite"
+                },
+                "asset": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "frames": {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 64
+                },
+                "columns": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 64
+                },
+                "cell": {
+                  "type": "integer",
+                  "minimum": 8,
+                  "maximum": 512
+                },
+                "scale": {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 3
+                }
+              },
+              "required": [
+                "kind",
+                "asset",
+                "frames",
+                "columns",
+                "cell"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "split"
+                },
+                "axis": {
+                  "enum": [
+                    "vertical",
+                    "diagonal"
+                  ]
+                },
+                "distance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "rotate": {
+                  "type": "number",
+                  "minimum": -45,
+                  "maximum": 45
+                }
+              },
+              "required": [
+                "kind",
+                "axis",
+                "distance",
+                "rotate"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "tint",
+                    "shade"
+                  ]
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-fA-F]{6}$"
+                },
+                "opacity": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.65
+                }
+              },
+              "required": [
+                "kind",
+                "color",
+                "opacity"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "palette": {
+        "type": "string",
+        "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+    },
+    "required": [
+      "name",
+      "category",
+      "duration",
+      "tracks"
+    ],
+    "additionalProperties": false
+  }
+}

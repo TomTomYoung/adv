@@ -55,7 +55,7 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 
 戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratio・self.roundを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
 
-## 実装した39命令
+## 実装した42命令
 
 | 命令 | 主なフィールドと動作 |
 | --- | --- |
@@ -85,7 +85,10 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 | quest.evidence | quest、key、text。重複しない観察結果を記録 |
 | quest.complete | quest、outcome。結末・報酬・完了数を確定 |
 | scene.background | asset。表示に渡す背景ID |
-| audio.bgm / audio.se | asset。BGM変更または効果音イベント。音はユーザー操作で有効化 |
+| audio.bgm / audio.se | asset。BGM変更または効果音イベント。audio.seはvolume（0〜1）・delay（0〜5000ms）を省略可能。音はユーザー操作で有効化 |
+| effect.play | effect、任意のtarget・delay。表示専用の効果を予約 |
+| screen.set | layer、color、opacity、任意のshade。探索画面の持続レイヤーを保存 |
+| screen.clear | layer。持続レイヤーを解除 |
 | rest | 任意cost/ratio。料金確認後、回復と毒除去・灯の補充 |
 | town.return | 町へ帰還 |
 | ending.set | title、text。終幕を手帳へ表示 |
@@ -124,3 +127,5 @@ effects.typeにはdamage / heal / guard / status / cleanseに加え、drain_mp�
 敵AIのtargetはself / random / weakest。self.roundは現在のラウンドです。優先度順に条件・必要MPを満たす規則を採用するので、無料のattackを最低優先度に置きます。実例はdata/enemies.jsonとdata/skills.jsonです。
 
 map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"wild_waterwheel_beaver","weight":40}]` のように正の重みを与えます。省略時は従来のencounterだけを使用します。
+
+1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。

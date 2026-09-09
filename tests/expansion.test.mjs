@@ -27,7 +27,7 @@ test('legacy 1.0 saves migrate at text, choice and battle waits without losing p
     if(mode==='choice')exploreSpot(g,data.quests.q001.locations[2]);
     if(mode==='battle'){exploreSpot(g,data.quests.q001.locations[2]);g.dispatch({type:'choose',id:'contract'});drain(g);}
     const saved=JSON.parse(g.save());saved.contentVersion=saved.state.contentVersion='1.0.0';for(const id of ['luka','toma','mica','dora','ren'])delete saved.state.actors[id];
-    const expected=structuredClone(saved.state),next=newGame();next.load(JSON.stringify(saved));assert.equal(next.state.contentVersion,'1.1.0');assert.deepEqual(next.state.waiting,expected.waiting);assert.deepEqual(next.state.vm,expected.vm);assert.deepEqual(next.state.battle,expected.battle);assert.equal(next.state.rng,expected.rng);assert.deepEqual(next.state.actors.ada,expected.actors.ada);assert.equal(Object.keys(next.state.actors).length,10);assert.deepEqual(validateSave(JSON.parse(next.save()),data),[]);
+    const expected=structuredClone(saved.state),next=newGame();next.load(JSON.stringify(saved));assert.equal(next.state.contentVersion,data.game.version);assert.deepEqual(next.state.waiting,expected.waiting);assert.deepEqual(next.state.vm,expected.vm);assert.deepEqual(next.state.battle,expected.battle);assert.equal(next.state.rng,expected.rng);assert.deepEqual(next.state.actors.ada,expected.actors.ada);assert.equal(Object.keys(next.state.actors).length,10);assert.deepEqual(validateSave(JSON.parse(next.save()),data),[]);
     const corrupt=structuredClone(saved);corrupt.state.actors.ada.hp=-1;const before=next.save();assert.throws(()=>next.load(JSON.stringify(corrupt)));assert.equal(next.save(),before);
   }
 });

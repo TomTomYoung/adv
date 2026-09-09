@@ -1,19 +1,20 @@
+import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
 const node=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,callback,className='',disabled=false)=>{const b=node('button',className,text);b.type='button';b.disabled=disabled;b.addEventListener('click',callback);return b;};
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
-  constructor(root,dispatch,ui){this.root=root;this.dispatch=dispatch;this.ui=ui;this.tab='quests';this.region=1;this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
+  constructor(root,dispatch,ui){this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='quests';this.region=1;this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status('現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
-    this.model=model;const focused=document.activeElement?.dataset.focus,selection=document.activeElement?.selectionStart;
+    this.ui.cancelFeedback?.();this.effects.capture();this.model=model;const focused=document.activeElement?.dataset.focus,selection=document.activeElement?.selectionStart;
     this.root.replaceChildren();
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
     brand.lastChild.append(node('h1','',model.title),node('p','',model.subtitle));
     const toolbar=node('div','toolbar');toolbar.append(button('手帳',()=>{this.tab='journal';this.render(model);}),button('記録',()=>this.ui.menu()),this.soundButton());header.append(brand,toolbar);this.root.append(header);
     const status=node('div','status-strip');for(const text of [`${model.mode==='town'?'灯帰りの町':model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
-    const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');layout.append(main,side);this.root.append(layout);
+    const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
     const allTabs=model.mode==='town'?[['quests','依頼掲示板'],['regions','迷宮へ'],['party','酒場・仲間'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','道具'],['party','隊の状態'],['journal','冒険手帳']];
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'quests':'explore';
@@ -30,6 +31,7 @@ export class GameView {
     this.sidebar(side,model);
     if(model.notice){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
     const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?'W/S 前後移動 · A/D 向き変更 · E 調べる · Enter 続き':'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
+    this.effects.present(model,this.ui.effectsMode?.()??'full');
     if(focused){const target=this.root.querySelector(`[data-focus="${focused}"]`);if(target){target.focus();if(selection!==undefined&&target.setSelectionRange)target.setSelectionRange(selection,selection);}}
   }
   quests(parent,m){
@@ -49,10 +51,11 @@ export class GameView {
   regions(parent,m){const section=node('div','panel-content');section.append(heading('DESCENT / 10 DOMAINS','潜る場所を選ぶ'));
     const list=node('div','region-list');for(const r of m.regions){const item=node('article','region-card'),count=m.quests.filter(q=>q.region===r.id&&q.stage==='completed').length;item.style.setProperty('--region-color',r.color);item.append(node('span','eyebrow',`${String(r.id).padStart(2,'0')} / 推奨 Lv.${r.recommendedLevel} / ${count}件完了`),node('h3','',r.name),node('p','',r.description),button('地下一層へ',()=>this.act({type:'travel',region:r.id}),'primary'));list.append(item);}section.append(list);parent.append(section);}
   scene(parent,m){
-    const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.append(canvas);
+    const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.dataset.fx='scene';scene.append(canvas);
     const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`B${m.dungeon.floor} / ${m.dungeon.location.x}, ${m.dungeon.location.y}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
-    if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}`));enemies.append(b);}scene.append(enemies);}
+    if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}`));enemies.append(b);}scene.append(enemies);}
+    if((this.ui.effectsMode?.()??'full')!=='off')for(const layer of m.atmosphere??[]){if(!layer.opacity)continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
   }
   explore(parent,m){
@@ -77,7 +80,7 @@ export class GameView {
   }
   soundButton(){const b=button(this.ui.soundLabel?.()??('音：'+(this.ui.soundEnabled()?'入':'切')),()=>this.ui.sound());b.dataset.audioToggle='true';return b;}
   updateSound(label){const b=this.root.querySelector('[data-audio-toggle]');if(b)b.textContent=label;}
-  portrait(a,className='actor-portrait'){if(!a.portrait){const fallback=node('span',className,a.class[0]);fallback.style.color=a.color;return fallback;}const img=node('img',className);img.src=a.portrait;img.alt=a.name;img.width=160;img.height=160;img.loading='lazy';return img;}
+  portrait(a,className='actor-portrait'){if(!a.portrait){const fallback=node('span',className,a.class[0]);fallback.style.color=a.color;return fallback;}const img=node('img',className);img.src=a.portrait;img.alt=a.name;img.dataset.fx=`actor:${a.id}`;img.width=160;img.height=160;img.loading='lazy';return img;}
   party(parent,m){
     const section=node('div','panel-content'),town=m.mode==='town';section.append(heading(town?'TAVERN / COMPANIONS':'COMPANIONS',town?(m.tavern?.name??'帰り火亭'):'冒険者の隊'));
     if(town)section.append(node('p','',m.tavern?.description??''),node('p','muted',`出発する仲間 ${m.party.length} / ${m.tavern?.maxParty??5}人。入れ替えは無料です。待機だけでは回復しません。`));

@@ -10,6 +10,7 @@ for(const file of files){
     if(file.includes('/src/view/')&&/from\s*['"][^'"]*(?:\/core\/|\/application\/)/.test(source))throw Error(`View imports game runtime: ${file}`);
     if(file.includes('/src/')&&/\beval\s*\(|new\s+Function\s*\(/.test(source))throw Error(`Executable scenario code: ${file}`);
   }
+  if(file.endsWith('.png')){const b=await fs.readFile(file);if(b.subarray(0,8).toString('hex')!=='89504e470d0a1a0a')throw Error(`Invalid PNG: ${file}`);}
   if(file.endsWith('.webp')){const b=await fs.readFile(file);if(b.subarray(0,4).toString()!=='RIFF'||b.subarray(8,12).toString()!=='WEBP')throw Error(`Invalid WebP: ${file}`);}
   if(file.endsWith('.ogg')){const b=await fs.readFile(file);if(b.subarray(0,4).toString()!=='OggS')throw Error(`Invalid audio: ${file}`);}
   if(file.endsWith('.json'))JSON.parse(await fs.readFile(file,'utf8'));

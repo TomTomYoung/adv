@@ -1,3 +1,4 @@
+import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
 import {COMMANDS} from './script.js';
 import {EXPRESSION_OPS,isRecord,pathParts} from './expression.js';
 export function validateContent(data){
@@ -40,7 +41,11 @@ export function validateContent(data){
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
       if(c.op==='scene.background')reference(data.assets.images,c.asset,at);
       if(c.op==='audio.bgm')reference(data.assets.audio,c.asset,at);
-      if(c.op==='audio.se')reference(data.assets.audio,c.asset,at);
+      if(c.op==='audio.se'){reference(data.assets.audio,c.asset,at);if(c.volume!==undefined&&(!Number.isFinite(c.volume)||c.volume<0||c.volume>1))fail(at,'音量は0〜1です');}
+      if(['audio.se','effect.play'].includes(c.op)&&c.delay!==undefined&&(!Number.isFinite(c.delay)||c.delay<0||c.delay>5000))fail(at,'遅延は0〜5000msです');
+      if(c.op==='effect.play'){reference(data.effects,c.effect,at);if(c.target!==undefined&&!targetValid(c.target))fail(at,'演出の対象が不正です');if(c.target?.startsWith('actor:'))reference(data.actors,c.target.slice(6),at);}
+      if(['screen.set','screen.clear'].includes(c.op)&&!layerNameValid(c.layer))fail(at,'レイヤー名が不正です');
+      if(c.op==='screen.set'&&(!colorValid(c.color)||!Number.isFinite(c.opacity)||c.opacity<0||c.opacity>.65||(c.shade!==undefined&&typeof c.shade!=='boolean')))fail(at,'画面レイヤーが不正です');
       if(['status.apply','status.remove'].includes(c.op))reference(data.statuses,c.status,at);
       if(c.op==='party.join'||c.op==='party.leave')reference(data.actors,c.actor,at);
       if(['set','add','random.set'].includes(c.op)){try{const p=pathParts(c.target);if(!['vars','flags','local'].includes(p[0]))fail(at,'書込先の領域が不正です');}catch(e){fail(at,e.message);}}
@@ -55,6 +60,7 @@ export function validateContent(data){
       if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1);}}
     });
   };
+  errors.push(...validatePresentation(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');

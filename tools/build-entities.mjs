@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {applyPresentation} from './build-presentation.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 const root=path.resolve(import.meta.dirname,'..');
@@ -50,6 +51,7 @@ export async function applyEntityExpansion(){
   game.migrations={'1.0.0':{actors:['ada','nio','sera','il','berg']}};
   game.services.find(s=>s.id==='recruit').detail='ベルグの話を聞いて加入を頼みます。ほかの仲間は酒場で選べます。';
   await write('data/actors.json',plan.actors);await write('data/game.json',game);await write('data/enemies.json',enemies);await write('data/encounters.json',encounters);await write('data/skills.json',skills);await write('data/formulas.json',formulas);await write('data/assets.json',assets);
+  await applyPresentation();
   console.log(`Entity expansion: ${plan.monsters.length} new species, ${Object.keys(plan.actors).length} companions`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await applyEntityExpansion();

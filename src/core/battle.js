@@ -4,7 +4,7 @@ export function startBattle(engine,id,continuations){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
   engine.state.battle={encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>({...clone(engine.data.enemies[id]),instance:`enemy_${i}`,hp:engine.data.enemies[id].stats.hp,mp:engine.data.enemies[id].stats.mp,statuses:[],guard:false})),acted:[],guards:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
-  engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);
+  engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
 }
 export function activeActor(engine){
   const s=engine.state,b=s.battle;if(!b)return null;
@@ -19,6 +19,7 @@ function endBattle(engine,result){
     if(continuation.frame){pushBranch(engine,continuation.frame,continuation.index,[continuation.lose]);pump(engine);}
     return;
   }
+  engine.eventCue(result==='win'?'victory':'escape');
   if(result==='win'){
     const gold=b.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=b.enemies.reduce((n,e)=>n+e.rewards.xp,0);
     engine.award(gold,xp);engine.notify(`勝利しました。${gold}G・${xp}EXP。`);
@@ -64,6 +65,7 @@ function enemiesTurn(engine){
     else if(skill.target==='ally'){const friend=b.enemies.filter(e=>e.hp>0).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0];targets=[[friend,friend.stats]];}
     else targets=[[s.actors[targetId],engine.stats(targetId)]];
     if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
+    engine.cue(engine.data.presentation?.bindings.skills[rule.skill],targets.map(([t])=>t.instance?`enemy:${t.instance}`:`actor:${t.id}`));
     for(const [target,stats] of targets)applySkill(engine,enemy,enemy.stats,target,stats,skill,true);
   }
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
@@ -81,6 +83,7 @@ export function battleAction(engine,intent){
   if(intent.action==='item'){
     const item=engine.data.items[intent.item],target=s.actors[intent.target];
     if(!item?.battleSkill||!(s.inventory[intent.item]>0)||!s.members.includes(intent.target)||!target||target.hp<=0)return false;
+    engine.cue(engine.data.presentation?.bindings.skills[item.battleSkill],[`actor:${intent.target}`]);
     engine.give(intent.item,-1);applySkill(engine,actor,engine.stats(actorId),target,engine.stats(intent.target),engine.data.skills[item.battleSkill],false);
   }else{
     const skill=engine.data.skills[intent.skill];
@@ -92,6 +95,7 @@ export function battleAction(engine,intent){
     else if(skill.target==='ally'){
       const target=s.actors[intent.target];if(!s.members.includes(intent.target)||!target||target.hp<=0)return false;targets=[[target,engine.stats(intent.target)]];
     }else{const target=b.enemies.find(e=>e.instance===intent.target&&e.hp>0);if(!target)return false;targets=[[target,target.stats]];}
+    engine.cue(engine.data.presentation?.bindings.skills[intent.skill],targets.map(([t])=>t.instance?`enemy:${t.instance}`:`actor:${t.id}`));
     actor.mp-=skill.mp;for(const [target,stats] of targets)applySkill(engine,actor,engine.stats(actorId),target,stats,skill,false);
   }
   b.acted.push(actorId);

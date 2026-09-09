@@ -1,5 +1,6 @@
+import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill']);
+export const COMMANDS=new Set(['say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -73,7 +74,7 @@ export function pump(engine){
       }
       case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
-      case 'light.refill':state.light=engine.data.system.lightCapacity;break;
+      case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
       case 'facing.set':state.location.facing=c.direction;break;
       case 'object.state.set':state.objects[`${c.map??state.location.map}/${c.object}`]=c.state;break;
       case 'event.mark_done':state.events[c.event]=1;break;
@@ -83,10 +84,12 @@ export function pump(engine){
       case 'quest.complete':engine.complete(c.quest,c.outcome);break;
       case 'scene.background':state.presentation.background=c.asset;break;
       case 'audio.bgm':state.presentation.music=c.asset;break;
-      case 'audio.se':state.presentation.se={asset:c.asset,revision:(state.presentation.se?.revision??0)+1};break;
+      case 'audio.se':emitFeedback(engine,{sound:c.asset,at:c.delay??engine.feedback.clock,gain:c.volume??1});break;
+      case 'effect.play':emitFeedback(engine,{effects:[c.effect],targets:[c.target??'scene'],at:c.delay??engine.feedback.clock});break;
+      case 'screen.set':case 'screen.clear':setScreenLayer(engine,c);break;
       case 'rest':{
         if(state.gold<(c.cost??0)){engine.notify('宿代が足りません。施療所で応急手当を受けられます。');break;}
-        state.gold-=c.cost??0;engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
+        engine.eventCue('recovery');state.gold-=c.cost??0;engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
       }
       case 'town.return':engine.returnTown();break;
       case 'ending.set':state.ending={title:c.title,text:c.text};break;

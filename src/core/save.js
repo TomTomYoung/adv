@@ -1,3 +1,4 @@
+import {layersValid} from './feedback-validation.js';
 import {isRecord,clone} from './expression.js';
 import {commandsAt} from './script.js';
 export function migrateSave(original,data){
@@ -29,6 +30,7 @@ export function validateSave(save,data){
   if(s.mode==='dungeon'){
     const l=s.location,m=data.maps[l?.map];if(!m||m.tiles[l?.y]?.[l?.x]!=='.'||!['north','east','south','west'].includes(l?.facing))fail('位置不正');
   }else if(s.location!==null)fail('町の位置不正');
+  if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
   if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');
   for(const [id,definition] of Object.entries(data.actors)){

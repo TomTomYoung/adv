@@ -66,3 +66,11 @@ ffmpeg -y -i assets/audio/battle.ogg -af volume=13dB -c:a libvorbis -q:a 3 asset
 | battle-v2.ogg | -17.1 dBFS | -4.7 dBFS | 13.333 s |
 
 FFmpeg decoding and volumedetect confirm non-silent stereo audio with no clipped peaks. Mocked audio-adapter tests cover autoplay rejection/retry, stale promises during track changes, disabled/muted states, and one playback per effect revision. Actual browser/speaker listening and browser loop transitions have not been tested. The game starts with sound off and exposes the actual playback state on the sound button.
+
+## 1.2.0 SE and effect animation (2026-09-09)
+
+The same pinned AIMusic engine generated 28 original sound effects from the note recipes in `authoring/presentation.json`. Each editable project is shipped in `assets/source/se/`. The actual synth output is trimmed to the last note plus its instrument release and 15ms padding, faded over 5ms at each end, normalized to a peak of 0.55, and encoded using FFmpeg/libvorbis quality 4. No recorded samples were used. Decoded OGG duration, peak, RMS and SHA-256 are in `assets/source/effects-report.json`.
+
+The same pinned AIPaint PaintCore drew eight abstract pixel effect sheets, each with eight 128×128 RGBA frames. The sheets are 1024×128. Every pixel comes from AIPaint ellipse/line commands; the small PNG encoder only serializes PaintCore.composite() output. Commands with revisions are retained in `assets/source/effects/`. `node tools/assets/generate-effects.mjs` deterministically recreates both the SE and sheets. No new character illustrations or image-generation calls are involved in this expansion.
+
+All 28 OGG files were decoded with finite, non-silent, unclipped PCM. All 8 PNGs were decoded and checked for transparency and 64 distinct nonempty frames. The first lightning draft reused some frames with equal opacity; the geometry was adjusted across frames and the final eight frames are distinct. Selected sheets were visually inspected. Browser animation, real-device listening, precise audiovisual alignment and reduced-motion integration have not been exercised in a browser.

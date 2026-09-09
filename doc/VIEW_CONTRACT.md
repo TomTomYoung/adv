@@ -31,7 +31,10 @@ HTMLの構成や絵の大きさまで変える場合は `view.js` と `style.css
 | battle | 手番、行動者、敵とHP/画像/guarded、使用可能な技能と道具、逃走可否、ログ |
 | services/inventory/shop | 施設・所持品・購入候補の表示用データ |
 | journal/log/notice/ending | 発見記録、直近ログ、通知、到達した終幕 |
-| music/se | ブラウザの音声アダプターへ渡す音声URLとイベント |
+| music | ブラウザ音声アダプターへ渡すBGM URL |
+| feedback | session・revisionと一時events。effects・sound URL/gain・targets・at |
+| effects/effectAssets | 表示専用の効果定義と画像URL辞書 |
+| atmosphere | 探索画面へ掛ける色・不透明度・shade |
 
 model.world.truth、未獲得の手掛かり本文、未選択の結末は公開ViewModelへ含めません。viewが内部stateへ到達する参照も渡しません。
 
@@ -61,3 +64,9 @@ disabledは表示上の案内に過ぎず、GameEngineも同じ条件を検査�
 background/surface/raised/ink/muted/accent/border/dangerは6桁のHEX色。fontはserif/sans-serif/monospace。sidebarはleft/right。本文16〜24、角丸0〜20、コンテンツ幅960〜1800を許可します。テーマは任意コード・任意CSS・外部URLを受け付けません。
 
 色の値を自由に変えられるため、書き出したテーマのコントラストと可読性は制作者が確認してください。本番のデータ・戦闘・保存とは独立して適用されます。
+
+## 一時演出
+
+GameViewはdata-fx属性のscene / screen / party / actor:ID / enemy:instanceを表示上の目印にします。EffectsRendererは再描画前の画像位置を保存し、倒れた敵など新しいDOMにない画像にも最後の効果を付けます。演出はbody上の操作を遮らない一時要素とWeb Animations APIを使用し、終了・中断時に取り除きます。元画像とコアの状態は変更しません。
+
+feedbackのsession/revisionが同じ場合は再生しません。通常の描画前に予約・変形を中止し、音声アダプターにもui.cancelFeedbackで同じ取消しを通知します。ui.effectsModeはfull / reduced / offを返します。OSの動き軽減も表示側で扱います。previewは固定データのfeedbackだけを差し替えて、任意の効果を再生します。

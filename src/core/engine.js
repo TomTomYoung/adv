@@ -2,18 +2,21 @@ import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
 import {validateSave,migrateSave} from './save.js';
+import {freshFeedback,beginFeedback,playCue} from './feedback.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
 export class GameEngine {
   constructor(data, seed = 20260909) {
-    this.data=data;
+    this.data=data;this.feedback=freshFeedback();
     this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,rng:(seed>>>0)||1,mode:'town',location:null,flags:{},vars:{},gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     this.state.nextScope=1;
     this.run(data.game.startScript);
   }
+  cue(id,targets){playCue(this,id,targets);}
+  eventCue(event,targets){this.cue(this.data.presentation?.bindings.events[event],targets);}
   context(extra={}) {return {...this.state,local:this.state.vm.at(-1)?.local??{},...extra};}
   value(value,extra={}) {return evaluate(value,this.context(extra));}
   random(){return random(this.state);}
@@ -56,7 +59,7 @@ export class GameEngine {
     qs.stage='completed';qs.outcome=outcome;
     this.state.vars.completed=(this.state.vars.completed??0)+1;
     const key=`region_${q.region}`;this.state.vars[key]=(this.state.vars[key]??0)+1;
-    this.award(ending.gold,ending.xp);
+    this.award(ending.gold,ending.xp);this.eventCue('complete');
     this.state.journal.push({quest:id,title:q.title,type:'outcome',text:ending.text});
     this.notify(`依頼完了：${q.title} / ${ending.label}（${ending.gold}G・${ending.xp}EXP）`);
   }
@@ -79,16 +82,18 @@ export class GameEngine {
   }
   teleport(mapId,x,y,facing='north'){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    this.eventCue(this.state.mode==='town'?'enter':'stairs');
     this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing};this.reveal();
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
   }
-  returnTown(emergency=false){
+  returnTown(emergency=false,quiet=false){
+    if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate);this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
     this.state.mode='town';this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';
   }
   defeat(){
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
-    this.state.vm=[];this.state.waiting=null;this.returnTown();this.healAll(this.data.system.recoveryRatio);
+    this.state.vm=[];this.state.waiting=null;this.returnTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
     this.notify('隊は救助されました。所持金の一部を救援費に充て、町で目覚めました。依頼は再挑戦できます。');
   }
   move(direction){
@@ -97,9 +102,10 @@ export class GameEngine {
     if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];return true;}
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
-    if(!this.walkable(this.map(),x,y)){this.notify('石壁か閉ざされた扉です。正面を調べてください。');return false;}
-    loc.x=x;loc.y=y;this.state.steps++;this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    if(!this.walkable(this.map(),x,y)){this.notify('石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
+    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
+    if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     if(this.trigger('enter'))return true;
     const map=this.map();
     if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)){
@@ -121,6 +127,7 @@ export class GameEngine {
       if(object.once&&this.state.events[key])continue;
       if(object.condition&&!this.value(object.condition))continue;
       this.state.events[key]=(this.state.events[key]??0)+1;
+      this.cue(this.data.presentation?.bindings.objects[object.kind]);
       this.run(object.script,{object:object.id,map:loc.map});return true;
     }
     return false;
@@ -128,6 +135,11 @@ export class GameEngine {
   interact(){if(this.state.mode!=='dungeon'||this.state.waiting)return false;if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
   startBattle(id,continuations){startBattle(this,id,continuations);}
   dispatch(intent){
+    beginFeedback(this);const changed=this.perform(intent);
+    if(changed)this.cue(this.data.presentation?.bindings.actions[intent.type]);
+    return changed;
+  }
+  perform(intent){
     const type=intent?.type;if(typeof type!=='string')return false;
     this.state.notice='';
     if(type==='advance')return advanceScript(this);
@@ -181,13 +193,13 @@ export class GameEngine {
   }
   useItem(itemId,actorId){
     const item=this.data.items[itemId];if(!item||!item.field||!(this.state.inventory[itemId]>0)||!this.state.members.includes(actorId))return false;
-    this.give(itemId,-1);this.run(item.script,{target:actorId});return true;
+    this.give(itemId,-1);this.eventCue('item');this.run(item.script,{target:actorId});return true;
   }
   save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,state:clone(this.state)});}
   load(text){
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.state=clone(save.state);return true;
+    this.state=clone(save.state);this.feedback=freshFeedback();return true;
   }
 }

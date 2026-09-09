@@ -20,11 +20,16 @@ export function projectGame(engine){
   const objects=map?.objects.filter(o=>(!o.condition||engine.value(o.condition))&&!(o.once&&s.events[`${map.id}/${o.id}`])).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
   const geometry=map?.tiles.map((row,y)=>Array.from(row,(tile,x)=>engine.walkable(map,x,y)?tile:'#').join(''));
+  const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};
+  const dark=d.presentation?.ambient.darkness,shade=d.presentation?.ambient.shade;
+  const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:dark?.color??'#000000',opacity:dark?Math.max(0,1-s.light/dark.threshold)*dark.maxOpacity:0,shade:false}]:[];
+  atmosphere.push(...Object.values(clone(s.presentation.layers??{})));
   return {
+    feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,level:s.level,xp:s.xp,nextXp:d.system.xpBase*s.level*(s.level+1),completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light:s.light,lightMax:d.system.lightCapacity,
     party,roster,tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),
     inventory:Object.entries(s.inventory).filter(([,n])=>n>0).map(([id,count])=>({id,count,...clone(d.items[id])})),shop:d.shops.goods.map(g=>({id:g.item,name:d.items[g.item].name,description:d.items[g.item].description,price:g.price,canBuy:s.gold>=g.price&&(s.inventory[g.item]??0)<d.system.maxStack})),
     dungeon:map?{name:map.name,region:map.region,floor:map.floor,location:clone(s.location),width:map.tiles[0].length,height:map.tiles.length,cells:map.tiles.map((row,y)=>Array.from(row,(tile,x)=>({x,y,known:seen.has(`${x},${y}`),wall:tile==='#'}))),geometry,objects,here:current,background:d.assets.images[s.presentation.background]??d.assets.images[map.background],color:d.regions[map.region-1].color}:null,
-    dialog,battle,busy:Boolean(s.waiting||s.battle),journal:clone(s.journal),log:s.log.slice(-20),notice:s.notice,ending:clone(s.ending),music:d.assets.audio[s.presentation.music]??null,se:s.presentation.se?{url:d.assets.audio[s.presentation.se.asset],revision:s.presentation.se.revision}:null
+    dialog,battle,busy:Boolean(s.waiting||s.battle),journal:clone(s.journal),log:s.log.slice(-20),notice:s.notice,ending:clone(s.ending),music:d.assets.audio[s.presentation.music]??null,se:null
   };
 }
