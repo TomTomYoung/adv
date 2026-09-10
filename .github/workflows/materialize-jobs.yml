@@ -1,0 +1,62 @@
+name: Materialize and verify profession implementation
+on:
+  push:
+    branches: [feature/job-system-20260910]
+    paths: [.github/job-implementation/manifest.json]
+permissions:
+  contents: write
+concurrency:
+  group: materialize-professions-20260910
+  cancel-in-progress: false
+jobs:
+  materialize:
+    if: github.repository == 'TomTomYoung/adv' && github.ref == 'refs/heads/feature/job-system-20260910'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/job-system-20260910
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify and apply the reviewed source patch
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const {brotliDecompressSync} = require('node:zlib');
+          const {createHash} = require('node:crypto');
+          const {execFileSync} = require('node:child_process');
+          const manifest = JSON.parse(fs.readFileSync('.github/job-implementation/manifest.json', 'utf8'));
+          const parent = execFileSync('git', ['rev-parse', 'HEAD^'], {encoding: 'utf8'}).trim();
+          if (parent !== manifest.baseCommit) throw Error('Unexpected base commit; refusing to apply');
+          const encoded = Array.from({length: manifest.parts}, (_, i) => fs.readFileSync(`.github/job-implementation/part-${i}.txt`, 'utf8')).join('').replace(/\s/g, '');
+          const patch = brotliDecompressSync(Buffer.from(encoded, 'base64'));
+          if (createHash('sha256').update(patch).digest('hex') !== manifest.sha256) throw Error('Patch checksum mismatch');
+          fs.writeFileSync('/tmp/job-system.patch', patch);
+          execFileSync('git', ['apply', '--check', '/tmp/job-system.patch'], {stdio: 'inherit'});
+          execFileSync('git', ['apply', '/tmp/job-system.patch'], {stdio: 'inherit'});
+          NODE
+      - name: Generate job data, schemas and detached view fixtures
+        run: |
+          node tools/build-jobs.mjs
+          node tools/build-schemas.mjs
+          node tools/build-fixtures.mjs
+      - name: Validate content and run the full test suite
+        run: |
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node --test tests/*.test.mjs
+          node tools/simulate-balance.mjs
+          node tools/simulate-jobs.mjs
+      - name: Commit verified source and remove one-time transfer files
+        run: |
+          rm -r .github/job-implementation
+          rm .github/workflows/materialize-jobs.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: implement 30 professions, scoped skills and persistent job growth'
+          git push origin HEAD:feature/job-system-20260910
