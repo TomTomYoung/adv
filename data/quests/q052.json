@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "自動札を止め最低価格を明示する",
       "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "札の亡霊を祓って倉庫を開放する",
       "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "自動札に予算上限を設ける",
       "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。",
       "gold": 76,
       "xp": 81
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。",
       "history": [
@@ -157,7 +157,10 @@
             "right": "clue_b"
           }
         ]
-      }
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +185,31 @@
         ],
         "script": "q052.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "札の亡霊を祓って倉庫を開放すると自動札を止め最低価格を明示するの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q052.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q052.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q052.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q052.clue_a": {
@@ -353,6 +380,331 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q052.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "幽霊の競り札\n\n姿のない客が毎回最高値を付けます。入札者を特定してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q052.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q052.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q052.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "自動札を止め最低価格を明示する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q052.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q052.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・縄1本（勝利して作業を確定した時に消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q052",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q052.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q052.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "札の亡霊を祓って倉庫を開放する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q052",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "自動札に予算上限を設ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q052",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」競売人のウメは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q052.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q052.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q052.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q052.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q052.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q052.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q052.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q052.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q052.review"
             }
           ]
         }

@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 1,
+  "id": "q138",
+  "number": 138,
+  "title": "行き止まりの探検家",
+  "client": "探索組合",
+  "brief": "不正な行き止まりの地図を訂正し、弟子イラを捜してください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q138_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "together": {
+      "label": "共同の探索",
+      "text": "イラの発見として記す範囲を決めて同行した。ナルは通行止めでなく危険度の印を描いた。",
+      "gold": 93,
+      "xp": 69
+    },
+    "talk": {
+      "label": "師弟の話合い",
+      "text": "イラは保護への礼と、嘘への抗議を別々に述べた。ナルは訂正図を本人へ渡した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "solo": {
+      "label": "距離を置く探索",
+      "text": "イラは一人で進んだ。渡した退路情報を持ち、師弟の和解を済ませた扱いにはしなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "correct": {
+      "label": "地図の訂正",
+      "text": "不正な閉鎖表示は直された。弟子の発見や和解までは請け負わず、組合へ確認できたことだけ報告した。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ナルの地図には、行き止まりの先ほど細かな休息地点があります。彼は実際には何度も進み、弟子が怪我をした時の退路を用意していました。保護の意図はあっても、探索権や選択を奪ったことは消えません。",
+      "fixedPast": "探検家ナルは、弟子を迷宮へ入れないため、未踏区画をすべて行き止まりとして報告しています。弟子イラは自分の発見を横取りされたと思い、証明のため単独で進みます。組合は不正地図の訂正と帰還者の確保を依頼します。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "探索組合",
+        "beliefsAndGoals": "探検家ナルは、弟子を迷宮へ入れないため、未踏区画をすべて行き止まりとして報告しています。弟子イラは自分の発見を横取りされたと思い、証明のため単独で進みます。組合は不正地図の訂正と帰還者の確保を依頼します。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "不正な行き止まりの地図を訂正し、弟子イラを捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "組合→旧地図の追跡／弟子の足跡→休息所→弟子との帰還判断。先へ同行する、地図を訂正して戻る、ナルを呼び当人同士で話す道があります。弟子は同行を断れる人物として扱い、その場合は退路情報だけ渡せます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q138.scene.entry"
+        },
+        {
+          "id": "pupil",
+          "script": "q138.scene.pupil"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "不正な行き止まりの地図を訂正し、弟子イラを捜してください。"
+    },
+    "reveal": {
+      "newInformation": "ナルの地図には、行き止まりの先ほど細かな休息地点があります。彼は実際には何度も進み、弟子が怪我をした時の退路を用意していました。保護の意図はあっても、探索権や選択を奪ったことは消えません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q138.scene.entry"
+      },
+      {
+        "id": "pupil",
+        "script": "q138.scene.pupil"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q138.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q138.map",
+        "meaning": "作者原稿の map に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ナルの地図は行き止まりの先ほど休息地点が細かい。弟子イラの足跡は、まさにその先へ続く。",
+        "options": [
+          {
+            "id": "map",
+            "text": "休息地点をたどる",
+            "to": "pupil",
+            "set": {
+              "map": true
+            }
+          },
+          {
+            "id": "tracks",
+            "text": "弟子の足跡を追う",
+            "to": "pupil"
+          }
+        ]
+      },
+      {
+        "id": "pupil",
+        "text": "イラは休息所で見つかった。師は何度も先を調べ、退路を準備していた。保護のためでも、探索を選ぶ権利を奪ったことは残る。",
+        "options": [
+          {
+            "id": "together",
+            "text": "功績の分担を先に合意して同行する",
+            "to": "@together"
+          },
+          {
+            "id": "talk",
+            "text": "ナルを呼び、当人同士の話合いを仲介する",
+            "to": "@talk"
+          },
+          {
+            "id": "solo",
+            "text": "同行を断るイラへ退路情報だけ渡す",
+            "to": "@solo"
+          },
+          {
+            "id": "correct",
+            "text": "地図の訂正だけを持ち帰る",
+            "to": "@correct"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q138.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q138.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ナルの地図は行き止まりの先ほど休息地点が細かい。弟子イラの足跡は、まさにその先へ続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "map",
+              "text": "休息地点をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q138.map",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q138.scene.pupil"
+                }
+              ]
+            },
+            {
+              "id": "tracks",
+              "text": "弟子の足跡を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q138.scene.pupil"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q138.scene.pupil": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q138.node",
+          "value": "pupil"
+        },
+        {
+          "op": "say",
+          "text": "イラは休息所で見つかった。師は何度も先を調べ、退路を準備していた。保護のためでも、探索を選ぶ権利を奪ったことは残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "together",
+              "text": "功績の分担を先に合意して同行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q138.end.together"
+                }
+              ]
+            },
+            {
+              "id": "talk",
+              "text": "ナルを呼び、当人同士の話合いを仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q138.end.talk"
+                }
+              ]
+            },
+            {
+              "id": "solo",
+              "text": "同行を断るイラへ退路情報だけ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q138.end.solo"
+                }
+              ]
+            },
+            {
+              "id": "correct",
+              "text": "地図の訂正だけを持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q138.end.correct"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q138.end.together": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q138.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "イラの発見として記す範囲を決めて同行した。ナルは通行止めでなく危険度の印を描いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q138",
+              "outcome": "together"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q138.end.talk": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q138.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "イラは保護への礼と、嘘への抗議を別々に述べた。ナルは訂正図を本人へ渡した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q138",
+              "outcome": "talk"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q138.end.solo": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q138.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "イラは一人で進んだ。渡した退路情報を持ち、師弟の和解を済ませた扱いにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q138",
+              "outcome": "solo"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q138.end.correct": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q138.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "不正な閉鎖表示は直された。弟子の発見や和解までは請け負わず、組合へ確認できたことだけ報告した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q138",
+              "outcome": "correct"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q138.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q138.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q138.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "together",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "イラの発見として記す範囲を決めて同行した。ナルは通行止めでなく危険度の印を描いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "talk",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "イラは保護への礼と、嘘への抗議を別々に述べた。ナルは訂正図を本人へ渡した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "solo",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "イラは一人で進んだ。渡した退路情報を持ち、師弟の和解を済ませた扱いにはしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "correct",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "不正な閉鎖表示は直された。弟子の発見や和解までは請け負わず、組合へ確認できたことだけ報告した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q138.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q138.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pupil",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q138.scene.pupil"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q138.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

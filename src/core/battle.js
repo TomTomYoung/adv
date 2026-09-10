@@ -1,3 +1,4 @@
+import {recordDefeated,recordResult} from './records.js';
 import {skillDefinitionErrors} from './job-validation.js';
 import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
@@ -6,7 +7,8 @@ import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
 export function startBattle(engine,id,continuations){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
-  engine.state.battle={encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>({...clone(engine.data.enemies[id]),instance:`enemy_${i}`,hp:engine.data.enemies[id].stats.hp,mp:engine.data.enemies[id].stats.mp,statuses:[],guard:false})),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.records.battles++;
+  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>({...clone(engine.data.enemies[id]),instance:`enemy_${i}`,hp:engine.data.enemies[id].stats.hp,mp:engine.data.enemies[id].stats.mp,statuses:[],guard:false})),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
 }
 export function activeActor(engine){
@@ -16,6 +18,7 @@ export function activeActor(engine){
 export const enemyStats=(engine,enemy)=>buffStats(engine.data,engine.state.battle,unitKey(enemy),enemy.stats);
 function endBattle(engine,result){
   const s=engine.state,b=s.battle,continuation=b.continuations;
+  recordResult(engine,result);
   s.presentation.music=b.musicBefore;s.battle=null;s.waiting=null;
   if(result==='lose'){
     engine.defeat();
@@ -81,7 +84,7 @@ function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=
       const power=(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
-      target.hp=Math.max(0,target.hp-damage);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
+      target.hp=Math.max(0,target.hp-damage);recordDefeated(engine);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
     }
     if(effect.type==='heal'){
       const multiplier=effect.itemHealing||itemId==='potion'?(powers.itemHealing??1):itemId?1:(powers.healingPower??1);
@@ -106,7 +109,7 @@ function coveredTarget(engine,target,skill){
 }
 function enemiesTurn(engine){
   const s=engine.state,b=s.battle;
-  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
+  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);recordDefeated(engine);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
   for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)){
     if(enemy.hp<=0)continue;enemy.guard=false;

@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "id": "q170",
+  "number": 170,
+  "title": "別れるための冒険",
+  "client": "旅仲間セフ",
+  "brief": "最後に一度、湖の島の野営跡を訪ねたいのです。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q170_scene",
+      "x": 9,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "send": {
+      "label": "店へ帰る仲間",
+      "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。",
+      "gold": 129,
+      "xp": 87
+    },
+    "holiday": {
+      "label": "条件のある再会",
+      "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。",
+      "gold": 129,
+      "xp": 87
+    },
+    "role": {
+      "label": "最後の一便",
+      "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "島には財宝でなく、初めて野営した時の鍋が残っています。セフは自分が食事を作ったことしか覚えられていないと考えています。同行時の救助や約束が記録されていれば、その具体的な出来事を返せます。未記録の功績を突然作りません。",
+      "fixedPast": "初期からの仲間セフが、最後に一度だけ湖の島へ行きたいと言います。故郷で店を継ぐことを決めていますが、引き留められるのが怖く、遺跡の調査依頼に見せています。主人公の過去の戦績が高いほど、セフは足を引っ張ると思っていた理由を語れます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "旅仲間セフ",
+        "beliefsAndGoals": "初期からの仲間セフが、最後に一度だけ湖の島へ行きたいと言います。故郷で店を継ぐことを決めていますが、引き留められるのが怖く、遺跡の調査依頼に見せています。主人公の過去の戦績が高いほど、セフは足を引っ張ると思っていた理由を語れます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "最後に一度、湖の島の野営跡を訪ねたいのです。"
+      }
+    ],
+    "conflict": {
+      "design": "島行き→野営跡→告白→送り出す／期間を決めて休む／残留を相談。残留は本人が別の役割を望み、双方が条件を合意した場合だけです。引留めに失敗しても関係を失敗値に固定しません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q170.scene.entry"
+        },
+        {
+          "id": "role",
+          "script": "q170.scene.role"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後に一度、湖の島の野営跡を訪ねたいのです。"
+    },
+    "reveal": {
+      "newInformation": "島には財宝でなく、初めて野営した時の鍋が残っています。セフは自分が食事を作ったことしか覚えられていないと考えています。同行時の救助や約束が記録されていれば、その具体的な出来事を返せます。未記録の功績を突然作りません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q170.scene.entry"
+      },
+      {
+        "id": "role",
+        "script": "q170.scene.role"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "セフは本篇の旅仲間NPC。既存actorの加入履歴や未記録の功績を捏造せず、パーティーを強制変更しない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q170.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "島に残ったのは財宝でなく古い鍋だった。セフは故郷で店を継ぐと決めていた。「引き留められるのが怖くて、調査と言った」",
+        "options": [
+          {
+            "id": "send",
+            "text": "故郷の店へ送り出す",
+            "to": "@send"
+          },
+          {
+            "id": "holiday",
+            "text": "再会の条件を決めた休暇を相談する",
+            "to": "@holiday"
+          },
+          {
+            "id": "role",
+            "text": "戦う以外の役割で残りたいか、本人へ聞く",
+            "to": "role"
+          }
+        ]
+      },
+      {
+        "id": "role",
+        "text": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。店を継ぐ決断を取り消す承諾ではない。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "一便だけの役割と出発日を合意する",
+            "to": "@role"
+          },
+          {
+            "id": "send",
+            "text": "今すぐ送り出す",
+            "to": "@send"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q170.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q170.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "島に残ったのは財宝でなく古い鍋だった。セフは故郷で店を継ぐと決めていた。「引き留められるのが怖くて、調査と言った」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "send",
+              "text": "故郷の店へ送り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.send"
+                }
+              ]
+            },
+            {
+              "id": "holiday",
+              "text": "再会の条件を決めた休暇を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.holiday"
+                }
+              ]
+            },
+            {
+              "id": "role",
+              "text": "戦う以外の役割で残りたいか、本人へ聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.scene.role"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q170.scene.role": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q170.node",
+          "value": "role"
+        },
+        {
+          "op": "say",
+          "text": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。店を継ぐ決断を取り消す承諾ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "一便だけの役割と出発日を合意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.role"
+                }
+              ]
+            },
+            {
+              "id": "send",
+              "text": "今すぐ送り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.send"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q170.end.send": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "send"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.end.holiday": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "holiday"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.end.role": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "role"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q170.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "send",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "holiday",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "role",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q170.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q170.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "role",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q170.scene.role"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q170.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "id": "q169",
+  "number": 169,
+  "title": "誰にも贈れない指輪",
+  "client": "騎士マオ",
+  "brief": "昔の旅仲間へ、約束の指輪を届けてください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q169_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "honest": {
+      "label": "返された指輪",
+      "text": "マオは怒り、悲しんだ。時間を置いて指輪をしまい、次の旅では本人へ行きたいか尋ねた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "soft": {
+      "label": "残す交流",
+      "text": "旅の約束への拒否は正確に伝えた。交流は残せると知ったマオは、指輪とは別に返事を書いた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "lie": {
+      "label": "所在の食い違い",
+      "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "指輪は結婚の約束ではなく、昔の冒険で交わした「帰ったらまた旅へ出る」合図でした。受取人は愛情を否定しているのでなく、昔の約束が今の意思を代わることを拒んでいます。贈れば関係値が上がる道具にはしません。",
+      "fixedPast": "仲間の騎士マオは、成人した旧友への指輪を届けてほしいと頼みます。受取人は既に別の相手との暮らしを選び、受領を拒みます。マオは返事を恐れ、自分で渡さず、主人公ならうまく言えると期待しています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "騎士マオ",
+        "beliefsAndGoals": "仲間の騎士マオは、成人した旧友への指輪を届けてほしいと頼みます。受取人は既に別の相手との暮らしを選び、受領を拒みます。マオは返事を恐れ、自分で渡さず、主人公ならうまく言えると期待しています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "昔の旅仲間へ、約束の指輪を届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "託される→旧友と面会→指輪を返す／別れの返事を託す／マオを呼ぶ。本人が会いたくない場合は呼出しを成功させません。嘘の成功報告も選べますが、指輪の所在と後の再会で矛盾が生じます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q169.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "昔の旅仲間へ、約束の指輪を届けてください。"
+    },
+    "reveal": {
+      "newInformation": "指輪は結婚の約束ではなく、昔の冒険で交わした「帰ったらまた旅へ出る」合図でした。受取人は愛情を否定しているのでなく、昔の約束が今の意思を代わることを拒んでいます。贈れば関係値が上がる道具にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q169.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q169.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "受取人は別の暮らしを選んでいた。「また旅に出ようという約束は、今の返事の代わりになりません」面会の呼出しも断った。",
+        "options": [
+          {
+            "id": "return",
+            "text": "指輪と拒否の返事をそのまま持ち帰る",
+            "to": "@honest"
+          },
+          {
+            "id": "soft",
+            "text": "拒否を曖昧にせず、今後の交流を望む言葉を添える",
+            "to": "@soft"
+          },
+          {
+            "id": "lie",
+            "text": "受け取ったと嘘をつき、指輪を持ったまま帰る",
+            "to": "@lie"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q169.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q169.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "受取人は別の暮らしを選んでいた。「また旅に出ようという約束は、今の返事の代わりになりません」面会の呼出しも断った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "指輪と拒否の返事をそのまま持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.end.honest"
+                }
+              ]
+            },
+            {
+              "id": "soft",
+              "text": "拒否を曖昧にせず、今後の交流を望む言葉を添える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.end.soft"
+                }
+              ]
+            },
+            {
+              "id": "lie",
+              "text": "受け取ったと嘘をつき、指輪を持ったまま帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.end.lie"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.end.honest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "マオは怒り、悲しんだ。時間を置いて指輪をしまい、次の旅では本人へ行きたいか尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "honest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.end.soft": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旅の約束への拒否は正確に伝えた。交流は残せると知ったマオは、指輪とは別に返事を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "soft"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.end.lie": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "lie"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q169.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "honest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "マオは怒り、悲しんだ。時間を置いて指輪をしまい、次の旅では本人へ行きたいか尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "soft",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旅の約束への拒否は正確に伝えた。交流は残せると知ったマオは、指輪とは別に返事を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lie",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q169.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q169.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q169.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

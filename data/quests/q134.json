@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 1,
+  "id": "q134",
+  "number": 134,
+  "title": "敗者の宝物庫",
+  "client": "剣士ザグ",
+  "brief": "敗者だけが入れるという宝物庫を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q134_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "sword": {
+      "label": "返した剣",
+      "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "parcel": {
+      "label": "届けた品",
+      "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "break": {
+      "label": "破られた庫",
+      "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "decline": {
+      "label": "挑戦の辞退",
+      "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言です。入口に並ぶ名札は倒した相手ではなく返却先です。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きています。",
+      "fixedPast": "剣士ザグは、敗北を認めた者だけが入れる宝物庫へ挑みます。彼はわざと決闘に負けますが扉は開きません。修道士は、ここに集められた品が敵から奪った戦利品ではなく、返してほしいと頼めなかった遺失物だと知っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "剣士ザグ",
+        "beliefsAndGoals": "剣士ザグは、敗北を認めた者だけが入れる宝物庫へ挑みます。彼はわざと決闘に負けますが扉は開きません。修道士は、ここに集められた品が敵から奪った戦利品ではなく、返してほしいと頼めなかった遺失物だと知っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "敗者だけが入れるという宝物庫を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "挑戦→模擬決闘／庫の調査→返却先と会う→扉を開く。ザグの剣でなく、自分が預かった返却可能な品でも条件を満たせます。渡す物がなければ庫番の届け物を引き受ける道があります。庫を破るなら番人戦となり、宝物の正当な受領とは別の結末です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q134.scene.entry"
+        },
+        {
+          "id": "return",
+          "script": "q134.scene.return"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "敗者だけが入れるという宝物庫を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言です。入口に並ぶ名札は倒した相手ではなく返却先です。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q134.scene.entry"
+      },
+      {
+        "id": "return",
+        "script": "q134.scene.return"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q134.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ザグは模擬決闘でわざと負けた。扉は動かない。入口の名札には、倒した相手でなく返却先が書いてある。",
+        "options": [
+          {
+            "id": "rule",
+            "text": "庫番へ名札の意味を尋ねる",
+            "to": "return"
+          },
+          {
+            "id": "break",
+            "text": "番人を退け、入口を破る",
+            "to": "@break",
+            "combat": "guard_4",
+            "escape": "entry"
+          },
+          {
+            "id": "decline",
+            "text": "庫への挑戦を辞退する",
+            "to": "@decline"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "text": "手放すのは勝敗ではなく所有の主張だった。ザグが拾った師の剣には、まだ生きている持主がいる。代わりに庫番の届け物を運ぶ道もある。",
+        "options": [
+          {
+            "id": "sword",
+            "text": "本人の同意で、師へ剣を返す",
+            "to": "@sword"
+          },
+          {
+            "id": "parcel",
+            "text": "庫番の預かり物を持主へ届ける",
+            "to": "@parcel"
+          },
+          {
+            "id": "decline",
+            "text": "返却を引き受けず辞退する",
+            "to": "@decline"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q134.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q134.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ザグは模擬決闘でわざと負けた。扉は動かない。入口の名札には、倒した相手でなく返却先が書いてある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "庫番へ名札の意味を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.scene.return"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "番人を退け、入口を破る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q134.end.break"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "庫への挑戦を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q134.scene.return": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q134.node",
+          "value": "return"
+        },
+        {
+          "op": "say",
+          "text": "手放すのは勝敗ではなく所有の主張だった。ザグが拾った師の剣には、まだ生きている持主がいる。代わりに庫番の届け物を運ぶ道もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sword",
+              "text": "本人の同意で、師へ剣を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.sword"
+                }
+              ]
+            },
+            {
+              "id": "parcel",
+              "text": "庫番の預かり物を持主へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.parcel"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "返却を引き受けず辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q134.end.sword": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "sword"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.parcel": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "parcel"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.decline": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "decline"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q134.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "sword",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "parcel",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "break",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decline",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q134.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.return"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q134.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

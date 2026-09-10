@@ -1,0 +1,1017 @@
+{
+  "schemaVersion": 1,
+  "id": "q102",
+  "number": 102,
+  "title": "弔鐘は誰のために",
+  "client": "鐘番ロウ",
+  "brief": "異国の行商人を弔う葬列を手伝ってください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q102_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "bell": {
+      "label": "五打の鐘",
+      "text": "五打が終わった。ロウは助けてくれた兵の名を語りかけ、やめた。遺族の置いた果物を、一つ持って列に加わった。",
+      "gold": 57,
+      "xp": 51
+    },
+    "hand": {
+      "label": "手鈴の葬列",
+      "text": "ロウは遺族の隣を歩き、行商人の旅の話を初めて聞いた。手鈴はその話が途切れた時だけ鳴った。",
+      "gold": 57,
+      "xp": 51
+    },
+    "silent": {
+      "label": "雑踏の中の別れ",
+      "text": "葬列は町の音に混じって進んだ。ロウは果物の名を遺族に聞き、その答えを繰り返した。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "エダが鐘楼を見上げず、地面を数えるように歩く様子を置きます。昔の合図は三打。行商人の家族が望むのは五打です。回数を変えれば記憶の問題が全部消えるわけではありません。家族は「恩返しの役に父を使わないで」とも告げます。",
+      "fixedPast": "鐘番ロウは、亡くなった異国の行商人のため鐘を鳴らしたいと頼みます。宿主エダは、鐘が昔の占領軍の合図と同じだとして反対します。ロウは若い頃、その国の兵に助けられた恩を、行商人への葬儀で返そうとしています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "鐘番ロウ",
+        "beliefsAndGoals": "鐘番ロウは、亡くなった異国の行商人のため鐘を鳴らしたいと頼みます。宿主エダは、鐘が昔の占領軍の合図と同じだとして反対します。ロウは若い頃、その国の兵に助けられた恩を、行商人への葬儀で返そうとしています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "異国の行商人を弔う葬列を手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→遺族／宿／告知板を任意順に訪問→出発時に鐘・手鈴・無音を選びます。鐘は遺族の同意が必要です。告知がなくても鳴らせますが、町の反応が変わります。鐘を断っても葬儀の手伝いは完了できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q102.scene.entry"
+        },
+        {
+          "id": "prepare",
+          "script": "q102.scene.prepare"
+        },
+        {
+          "id": "family",
+          "script": "q102.scene.family"
+        },
+        {
+          "id": "inn",
+          "script": "q102.scene.inn"
+        },
+        {
+          "id": "send",
+          "script": "q102.scene.send"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "異国の行商人を弔う葬列を手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "エダが鐘楼を見上げず、地面を数えるように歩く様子を置きます。昔の合図は三打。行商人の家族が望むのは五打です。回数を変えれば記憶の問題が全部消えるわけではありません。家族は「恩返しの役に父を使わないで」とも告げます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q102.scene.entry"
+      },
+      {
+        "id": "prepare",
+        "script": "q102.scene.prepare"
+      },
+      {
+        "id": "family",
+        "script": "q102.scene.family"
+      },
+      {
+        "id": "inn",
+        "script": "q102.scene.inn"
+      },
+      {
+        "id": "send",
+        "script": "q102.scene.send"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q102.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q102.time",
+        "meaning": "作者原稿の time に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "prepare",
+          "family",
+          "inn"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q102.notice",
+        "meaning": "作者原稿の notice に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "prepare"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q102.family",
+        "meaning": "作者原稿の family に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q102.inn",
+        "meaning": "作者原稿の inn に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "inn"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ロウは鐘の綱を撫でる。宿主エダは鐘楼を見ず、敷石を数えていた。葬列の準備は三手で終わる。誰を訪ねるか、一手ずつ選んでほしいという。",
+        "options": [
+          {
+            "id": "begin",
+            "text": "三手の準備を始める",
+            "to": "prepare",
+            "set": {
+              "time": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "prepare",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q102.time"
+              },
+              "right": 3
+            },
+            "yes": "葬列が出発する時刻になった。追加の準備はできない。",
+            "no": "遺族、宿、告知板へ向かえる。訪問か告知を確定すると一手進む。"
+          }
+        ],
+        "options": [
+          {
+            "id": "family",
+            "text": "遺族が望む送り方を聞く",
+            "to": "family",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q102.family"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "inn",
+            "text": "エダが反対する理由を聞く",
+            "to": "inn",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q102.inn"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "notice",
+            "text": "五打を鳴らす予定時刻を告知する",
+            "to": "prepare",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q102.family"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q102.notice"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            },
+            "set": {
+              "notice": true,
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "go",
+            "text": "今の準備で葬列を送る",
+            "to": "send"
+          }
+        ]
+      },
+      {
+        "id": "family",
+        "text": "「五打で送ってください。でも、恩返しの役に父を使わないで」家族は父の好きだった酸っぱい果物を供えた。",
+        "options": [
+          {
+            "id": "heard",
+            "text": "遺族の希望を預かる",
+            "to": "prepare",
+            "set": {
+              "family": true,
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  1
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "inn",
+        "text": "「三打。それで兵が来た」エダは敷石から顔を上げない。「五打なら、私が平気になると思う？」",
+        "options": [
+          {
+            "id": "heard",
+            "text": "苦手な合図を聞き、距離を取る意思を尊重する",
+            "to": "prepare",
+            "set": {
+              "inn": true,
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q102.time"
+                  },
+                  1
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "send",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q102.notice"
+              },
+              "right": true
+            },
+            "yes": "鐘の時刻は町へ伝わっている。エダの宿の戸が静かに閉じた。",
+            "no": "鐘の時刻は町へ告知していない。突然の音に驚く人がいるとロウへ伝えた。"
+          }
+        ],
+        "options": [
+          {
+            "id": "bell",
+            "text": "遺族の望む五打を鳴らす",
+            "to": "@bell",
+            "need": [
+              "family"
+            ]
+          },
+          {
+            "id": "hand",
+            "text": "鐘を断り、手鈴を持って歩く",
+            "to": "@hand"
+          },
+          {
+            "id": "silent",
+            "text": "音を添えず葬列を手伝う",
+            "to": "@silent"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q102.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q102.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ロウは鐘の綱を撫でる。宿主エダは鐘楼を見ず、敷石を数えていた。葬列の準備は三手で終わる。誰を訪ねるか、一手ずつ選んでほしいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "三手の準備を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.time",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q102.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q102.scene.prepare": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q102.node",
+          "value": "prepare"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q102.time"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "葬列が出発する時刻になった。追加の準備はできない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "遺族、宿、告知板へ向かえる。訪問か告知を確定すると一手進む。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "family",
+              "text": "遺族が望む送り方を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q102.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q102.family"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.scene.family"
+                }
+              ]
+            },
+            {
+              "id": "inn",
+              "text": "エダが反対する理由を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q102.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q102.inn"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "notice",
+              "text": "五打を鳴らす予定時刻を告知する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q102.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q102.family"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q102.notice"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.notice",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q102.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q102.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "go",
+              "text": "今の準備で葬列を送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.scene.send"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q102.scene.family": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q102.node",
+          "value": "family"
+        },
+        {
+          "op": "say",
+          "text": "「五打で送ってください。でも、恩返しの役に父を使わないで」家族は父の好きだった酸っぱい果物を供えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "heard",
+              "text": "遺族の希望を預かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.family",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q102.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q102.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q102.scene.inn": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q102.node",
+          "value": "inn"
+        },
+        {
+          "op": "say",
+          "text": "「三打。それで兵が来た」エダは敷石から顔を上げない。「五打なら、私が平気になると思う？」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "heard",
+              "text": "苦手な合図を聞き、距離を取る意思を尊重する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.inn",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q102.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q102.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q102.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q102.scene.send": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q102.node",
+          "value": "send"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q102.notice"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鐘の時刻は町へ伝わっている。エダの宿の戸が静かに閉じた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "鐘の時刻は町へ告知していない。突然の音に驚く人がいるとロウへ伝えた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bell",
+              "text": "遺族の望む五打を鳴らす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q102.family"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.end.bell"
+                }
+              ]
+            },
+            {
+              "id": "hand",
+              "text": "鐘を断り、手鈴を持って歩く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.end.hand"
+                }
+              ]
+            },
+            {
+              "id": "silent",
+              "text": "音を添えず葬列を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q102.end.silent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q102.end.bell": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q102.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "五打が終わった。ロウは助けてくれた兵の名を語りかけ、やめた。遺族の置いた果物を、一つ持って列に加わった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q102",
+              "outcome": "bell"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q102.end.hand": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q102.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ロウは遺族の隣を歩き、行商人の旅の話を初めて聞いた。手鈴はその話が途切れた時だけ鳴った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q102",
+              "outcome": "hand"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q102.end.silent": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q102.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "葬列は町の音に混じって進んだ。ロウは果物の名を遺族に聞き、その答えを繰り返した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q102",
+              "outcome": "silent"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q102.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q102.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q102.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "bell",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "五打が終わった。ロウは助けてくれた兵の名を語りかけ、やめた。遺族の置いた果物を、一つ持って列に加わった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hand",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ロウは遺族の隣を歩き、行商人の旅の話を初めて聞いた。手鈴はその話が途切れた時だけ鳴った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "silent",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "葬列は町の音に混じって進んだ。ロウは果物の名を遺族に聞き、その答えを繰り返した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q102.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q102.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "prepare",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q102.scene.prepare"
+                    }
+                  ]
+                },
+                {
+                  "equals": "family",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q102.scene.family"
+                    }
+                  ]
+                },
+                {
+                  "equals": "inn",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q102.scene.inn"
+                    }
+                  ]
+                },
+                {
+                  "equals": "send",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q102.scene.send"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q102.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

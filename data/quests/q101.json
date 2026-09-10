@@ -1,0 +1,741 @@
+{
+  "schemaVersion": 1,
+  "id": "q101",
+  "number": 101,
+  "title": "三度目の戸締まり",
+  "client": "鍵屋の娘ミナ",
+  "brief": "裏口が毎晩開きます。今夜の見張りをお願いします。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q101_scene",
+      "x": 2,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "report": {
+      "label": "開錠を報告",
+      "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "quiet": {
+      "label": "秘密を保つ",
+      "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "visit": {
+      "label": "二軒の店",
+      "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "見張ると、父が自分で鍵を開けています。盗難ではなく、娘に必要とされる口実です。ただし、引き出しには娘の新店用の鍵も作られています。父が嘘をつく場面を先に、娘の名を刻んだ鍵を後で見せ、妨害と送り出したさが同居する人物にします。",
+      "fixedPast": "鍵屋の娘ミナが、毎晩開いている裏口の見張りを頼みます。父ガロは「閉め忘れる者に店は渡せん」と引退を延ばしています。ミナは継ぎたいのではなく、自分の店を出したいのですが、父を一人にすることを言い出せません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "鍵屋の娘ミナ",
+        "beliefsAndGoals": "鍵屋の娘ミナが、毎晩開いている裏口の見張りを頼みます。父ガロは「閉め忘れる者に店は渡せん」と引退を延ばしています。ミナは継ぎたいのではなく、自分の店を出したいのですが、父を一人にすることを言い出せません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "裏口が毎晩開きます。今夜の見張りをお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "受注→夜番→父に話す／朝まで黙る→娘への報告です。告発は目撃だけで可能です。両者の話を知れば、食事の日を決めて別居する案を出せます。娘の希望を聞かずに同居や継承を勝手に確約する選択はありません。見張りを中断すれば翌晩やり直せます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q101.scene.entry"
+        },
+        {
+          "id": "wish",
+          "script": "q101.scene.wish"
+        },
+        {
+          "id": "watch",
+          "script": "q101.scene.watch"
+        },
+        {
+          "id": "father",
+          "script": "q101.scene.father"
+        },
+        {
+          "id": "agreement",
+          "script": "q101.scene.agreement"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "裏口が毎晩開きます。今夜の見張りをお願いします。"
+    },
+    "reveal": {
+      "newInformation": "見張ると、父が自分で鍵を開けています。盗難ではなく、娘に必要とされる口実です。ただし、引き出しには娘の新店用の鍵も作られています。父が嘘をつく場面を先に、娘の名を刻んだ鍵を後で見せ、妨害と送り出したさが同居する人物にします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q101.scene.entry"
+      },
+      {
+        "id": "wish",
+        "script": "q101.scene.wish"
+      },
+      {
+        "id": "watch",
+        "script": "q101.scene.watch"
+      },
+      {
+        "id": "father",
+        "script": "q101.scene.father"
+      },
+      {
+        "id": "agreement",
+        "script": "q101.scene.agreement"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q101.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q101.mina_wish",
+        "meaning": "作者原稿の mina_wish に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "wish"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q101.saw_unlock",
+        "meaning": "作者原稿の saw_unlock に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q101.promise",
+        "meaning": "作者原稿の promise に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "agreement"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ミナは父の作業台を避け、裏口の鍵だけを差し出した。「盗まれた物は、まだないんです」",
+        "options": [
+          {
+            "id": "wish",
+            "text": "店をどうしたいか、ミナに尋ねる",
+            "to": "wish"
+          },
+          {
+            "id": "watch",
+            "text": "裏口で夜番をする",
+            "to": "watch"
+          }
+        ]
+      },
+      {
+        "id": "wish",
+        "text": "「自分の店を出したい。でも、父を一人にする話になると……」ミナは鍵を握り直した。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "希望を聞いたうえで見張りへ",
+            "to": "watch",
+            "set": {
+              "mina_wish": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "text": "閉店後、父ガロが内側から鍵を開けた。外を確かめ、また作業台へ戻る。侵入者はいない。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "ガロに開けた理由を尋ねる",
+            "to": "father",
+            "set": {
+              "saw_unlock": true
+            }
+          },
+          {
+            "id": "report",
+            "text": "朝、目撃した行為をミナへ伝える",
+            "to": "@report"
+          },
+          {
+            "id": "quiet",
+            "text": "今夜のことを伏せて夜番を終える",
+            "to": "@quiet"
+          }
+        ]
+      },
+      {
+        "id": "father",
+        "text": "「あの子が出ていくと、戸締まりまで静かになる」ガロは引き出しを開けた。新しい店の名を彫った鍵がある。「渡すつもりでは、あるんだ」",
+        "options": [
+          {
+            "id": "wish",
+            "text": "ミナ本人の希望を聞きに行く",
+            "to": "wish"
+          },
+          {
+            "id": "visit",
+            "text": "週一度の食事を二人に提案する",
+            "to": "agreement",
+            "need": [
+              "mina_wish"
+            ]
+          },
+          {
+            "id": "report",
+            "text": "開錠の事実だけを報告する",
+            "to": "@report"
+          },
+          {
+            "id": "quiet",
+            "text": "父の秘密を守る",
+            "to": "@quiet"
+          }
+        ]
+      },
+      {
+        "id": "agreement",
+        "text": "ミナは別居を、ガロは毎週水曜の食事を望んだ。二人とも、相手の店を継ぐことは条件にしないと答えた。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "二人が承諾した訪問の約束を取り持つ",
+            "to": "@visit",
+            "set": {
+              "promise": "wednesday"
+            }
+          },
+          {
+            "id": "decline",
+            "text": "約束の仲介はせず、目撃だけ伝える",
+            "to": "@report"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q101.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ミナは父の作業台を避け、裏口の鍵だけを差し出した。「盗まれた物は、まだないんです」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "店をどうしたいか、ミナに尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.wish"
+                }
+              ]
+            },
+            {
+              "id": "watch",
+              "text": "裏口で夜番をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.wish": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "wish"
+        },
+        {
+          "op": "say",
+          "text": "「自分の店を出したい。でも、父を一人にする話になると……」ミナは鍵を握り直した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "希望を聞いたうえで見張りへ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.mina_wish",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.watch": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "watch"
+        },
+        {
+          "op": "say",
+          "text": "閉店後、父ガロが内側から鍵を開けた。外を確かめ、また作業台へ戻る。侵入者はいない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "ガロに開けた理由を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.saw_unlock",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.scene.father"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "朝、目撃した行為をミナへ伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "今夜のことを伏せて夜番を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.father": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "father"
+        },
+        {
+          "op": "say",
+          "text": "「あの子が出ていくと、戸締まりまで静かになる」ガロは引き出しを開けた。新しい店の名を彫った鍵がある。「渡すつもりでは、あるんだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "ミナ本人の希望を聞きに行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.wish"
+                }
+              ]
+            },
+            {
+              "id": "visit",
+              "text": "週一度の食事を二人に提案する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q101.mina_wish"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.agreement"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "開錠の事実だけを報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "父の秘密を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.agreement": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "agreement"
+        },
+        {
+          "op": "say",
+          "text": "ミナは別居を、ガロは毎週水曜の食事を望んだ。二人とも、相手の店を継ぐことは条件にしないと答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "二人が承諾した訪問の約束を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.promise",
+                  "value": "wednesday"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.end.visit"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "約束の仲介はせず、目撃だけ伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q101.end.report": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "report"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.end.quiet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "quiet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.end.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "visit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q101.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "quiet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "visit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q101.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wish",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.wish"
+                    }
+                  ]
+                },
+                {
+                  "equals": "watch",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.watch"
+                    }
+                  ]
+                },
+                {
+                  "equals": "father",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.father"
+                    }
+                  ]
+                },
+                {
+                  "equals": "agreement",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.agreement"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

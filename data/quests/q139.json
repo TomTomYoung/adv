@@ -1,0 +1,536 @@
+{
+  "schemaVersion": 1,
+  "id": "q139",
+  "number": 139,
+  "title": "ふたつの出口",
+  "client": "救助責任者セナ",
+  "brief": "崩落坑道の二方向から声がします。救助手順を決めてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q139_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "many": {
+      "label": "人数を優先",
+      "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "wounded": {
+      "label": "静かな室を先に",
+      "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "both": {
+      "label": "二つの帰還口",
+      "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分けます。片側には声を出せない負傷者がいます。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続けます。",
+      "fixedPast": "崩落した坑道の二方向で救難の声がします。救助責任者セナは人数の多い側を優先し、地質師は水位の低い側を急ぐべきだと言います。声の片方は反響ですが、二組の生存者は本当に別の場所にいます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "救助責任者セナ",
+        "beliefsAndGoals": "崩落した坑道の二方向で救難の声がします。救助責任者セナは人数の多い側を優先し、地質師は水位の低い側を急ぐべきだと言います。声の片方は反響ですが、二組の生存者は本当に別の場所にいます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "崩落坑道の二方向から声がします。救助手順を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "分岐点→声の測定／掘削開始→片室の救出→残室への対応。先に排水し空気を通せば、道具二組を使って両方を救えます。道具不足なら応援を呼ぶ間、空気を通す維持作業が必要です。片側だけ救う場合は残室の救援継続を明示します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q139.scene.entry"
+        },
+        {
+          "id": "rooms",
+          "script": "q139.scene.rooms"
+        },
+        {
+          "id": "air",
+          "script": "q139.scene.air"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "崩落坑道の二方向から声がします。救助手順を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分けます。片側には声を出せない負傷者がいます。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続けます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q139.scene.entry"
+      },
+      {
+        "id": "rooms",
+        "script": "q139.scene.rooms"
+      },
+      {
+        "id": "air",
+        "script": "q139.scene.air"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q139.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q139.measured",
+        "meaning": "作者原稿の measured に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。反響だけで人数を決めるのは危うい。",
+        "options": [
+          {
+            "id": "measure",
+            "text": "壁へ器を当て、声と振動を測る",
+            "to": "rooms",
+            "set": {
+              "measured": true
+            }
+          },
+          {
+            "id": "many",
+            "text": "声の多い側から掘り始める",
+            "to": "@many"
+          }
+        ]
+      },
+      {
+        "id": "rooms",
+        "text": "声の一部は反響だったが、生存者は二室にいる。静かな側には声を出せない負傷者がいた。先に排水と送気を行えば応援を待てる。",
+        "options": [
+          {
+            "id": "wounded",
+            "text": "負傷者側を先に救い、残室は応援へ引き継ぐ",
+            "to": "@wounded"
+          },
+          {
+            "id": "air",
+            "text": "排水と送気を行い、両側の救助を準備する",
+            "to": "air"
+          },
+          {
+            "id": "many",
+            "text": "人数の多い側を先に救う",
+            "to": "@many"
+          }
+        ]
+      },
+      {
+        "id": "air",
+        "text": "空気は通った。縄二つで両室の作業を同時に始めるか、一方の送気を保ちながら応援班を呼べる。",
+        "options": [
+          {
+            "id": "tools",
+            "text": "縄二つを使って両室を救出する",
+            "to": "@both",
+            "cost": {
+              "rope": 2
+            }
+          },
+          {
+            "id": "help",
+            "text": "送気を維持し、応援班と交代して両室を救う",
+            "to": "@both"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q139.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。反響だけで人数を決めるのは危うい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "measure",
+              "text": "壁へ器を当て、声と振動を測る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q139.measured",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.scene.rooms"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "声の多い側から掘り始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.many"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q139.scene.rooms": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "rooms"
+        },
+        {
+          "op": "say",
+          "text": "声の一部は反響だったが、生存者は二室にいる。静かな側には声を出せない負傷者がいた。先に排水と送気を行えば応援を待てる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wounded",
+              "text": "負傷者側を先に救い、残室は応援へ引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.wounded"
+                }
+              ]
+            },
+            {
+              "id": "air",
+              "text": "排水と送気を行い、両側の救助を準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.air"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "人数の多い側を先に救う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.many"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q139.scene.air": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "air"
+        },
+        {
+          "op": "say",
+          "text": "空気は通った。縄二つで両室の作業を同時に始めるか、一方の送気を保ちながら応援班を呼べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tools",
+              "text": "縄二つを使って両室を救出する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "縄 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.end.both"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "送気を維持し、応援班と交代して両室を救う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.both"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q139.end.many": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "many"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.end.wounded": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "wounded"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.end.both": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "both"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q139.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "many",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wounded",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "both",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q139.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q139.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rooms",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q139.scene.rooms"
+                    }
+                  ]
+                },
+                {
+                  "equals": "air",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q139.scene.air"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

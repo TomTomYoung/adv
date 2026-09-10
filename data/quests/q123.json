@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "id": "q123",
+  "number": 123,
+  "title": "討伐数ゼロの勲章",
+  "client": "城門の守備隊長",
+  "brief": "避難者三組が通る間、門を守ってください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q123_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "all": {
+      "label": "門を通った家々",
+      "text": "三組とも帰った。アムの勲章の裏には敵の名でなく家々の名が彫られた。倒した敵の記録は、別の戦果欄へ残された。",
+      "gold": 81,
+      "xp": 63
+    },
+    "partial": {
+      "label": "救援の継続",
+      "text": "通せた組とまだ橋の向こうにいる組を分けて報告した。アムは功績を隠さず、不足も隠さず後続へ旗を渡した。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "敵は橋の腐肉鬼で、追撃すれば勝利と引き換えに門の守りが薄くなります。アムは最初、敵の数を数えています。避難の途中から、手を離してはぐれた人の数を数え始めます。危険を生むのは善意の不足ではなく、異なる達成指標です。",
+      "fixedPast": "城門の守備隊長が、避難者を通す間の足止めを頼みます。義勇兵アムは一頭も倒せなければ臆病者と思われると焦ります。医師は戦闘の腕より、戻って来る担架の少なさを評価します。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "城門の守備隊長",
+        "beliefsAndGoals": "城門の守備隊長が、避難者を通す間の足止めを頼みます。義勇兵アムは一頭も倒せなければ臆病者と思われると焦ります。医師は戦闘の腕より、戻って来る担架の少なさを評価します。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "避難者三組が通る間、門を守ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "城門→第一組→第二組→最後の組→門閉鎖。各区間で防衛、誘導障害物、追撃を選びます。追撃した区間は避難が一段遅れ、次区間の応援を呼べます。三組を運べなくても救えた人数を確定し、救援継続へ移る終端があります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q123.scene.entry"
+        },
+        {
+          "id": "gate",
+          "script": "q123.scene.gate"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "避難者三組が通る間、門を守ってください。"
+    },
+    "reveal": {
+      "newInformation": "敵は橋の腐肉鬼で、追撃すれば勝利と引き換えに門の守りが薄くなります。アムは最初、敵の数を数えています。避難の途中から、手を離してはぐれた人の数を数え始めます。危険を生むのは善意の不足ではなく、異なる達成指標です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q123.scene.entry"
+      },
+      {
+        "id": "gate",
+        "script": "q123.scene.gate"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q123.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q123.groups",
+        "meaning": "作者原稿の groups に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "gate"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q123.chased",
+        "meaning": "作者原稿の chased に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "gate"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "義勇兵アムは敵を数える。医師は担架の空きを数える。三組の避難者を通す仕事で、討伐数は達成条件ではない。",
+        "options": [
+          {
+            "id": "start",
+            "text": "三組の避難を始める",
+            "to": "gate",
+            "set": {
+              "groups": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q123.groups"
+              },
+              "right": 3
+            },
+            "yes": "三組とも門を通った。追撃に出る必要はない。",
+            "no": "次の避難組が橋に近づく。追撃を選んだ区間では避難は進まない。"
+          }
+        ],
+        "options": [
+          {
+            "id": "escort",
+            "text": "敵を障害物で止め、一組を門へ導く",
+            "to": "gate",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q123.groups"
+              },
+              "right": 3
+            },
+            "set": {
+              "groups": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q123.groups"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "chase",
+            "text": "敵を追撃する。今回は避難が進まない",
+            "to": "gate",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q123.groups"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q123.chased"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            },
+            "combat": "story_123",
+            "escape": "gate",
+            "set": {
+              "chased": true
+            }
+          },
+          {
+            "id": "close",
+            "text": "全三組を確認し、橋を閉ざす",
+            "to": "@all",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q123.groups"
+              },
+              "right": 3
+            }
+          },
+          {
+            "id": "help",
+            "text": "ここまでの避難を報告し、後続の救援へ委ねる",
+            "to": "@partial"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q123.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q123.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "義勇兵アムは敵を数える。医師は担架の空きを数える。三組の避難者を通す仕事で、討伐数は達成条件ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "start",
+              "text": "三組の避難を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q123.groups",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q123.scene.gate"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q123.scene.gate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q123.node",
+          "value": "gate"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q123.groups"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三組とも門を通った。追撃に出る必要はない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "次の避難組が橋に近づく。追撃を選んだ区間では避難は進まない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "敵を障害物で止め、一組を門へ導く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q123.groups"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q123.groups",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q123.groups"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q123.scene.gate"
+                }
+              ]
+            },
+            {
+              "id": "chase",
+              "text": "敵を追撃する。今回は避難が進まない",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q123.groups"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q123.chased"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_123",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q123.chased",
+                      "value": true
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q123.scene.gate"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q123.scene.gate"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "全三組を確認し、橋を閉ざす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q123.groups"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q123.end.all"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "ここまでの避難を報告し、後続の救援へ委ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q123.end.partial"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q123.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q123.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三組とも帰った。アムの勲章の裏には敵の名でなく家々の名が彫られた。倒した敵の記録は、別の戦果欄へ残された。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q123",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q123.end.partial": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q123.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "通せた組とまだ橋の向こうにいる組を分けて報告した。アムは功績を隠さず、不足も隠さず後続へ旗を渡した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q123",
+              "outcome": "partial"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q123.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q123.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q123.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "all",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "三組とも帰った。アムの勲章の裏には敵の名でなく家々の名が彫られた。倒した敵の記録は、別の戦果欄へ残された。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "partial",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "通せた組とまだ橋の向こうにいる組を分けて報告した。アムは功績を隠さず、不足も隠さず後続へ旗を渡した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q123.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q123.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "gate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q123.scene.gate"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q123.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

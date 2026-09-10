@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "id": "q165",
+  "number": 165,
+  "title": "仲間を外す依頼",
+  "client": "商人リナ",
+  "brief": "魔術師イルが同席しない場で、商談をしたいのです。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q165_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "secret": {
+      "label": "伏せた援助",
+      "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "open": {
+      "label": "本人の返済条件",
+      "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "decline": {
+      "label": "客として頼む",
+      "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "カイルの前では値段の話しかしない商人が、不在時には彼の苦手な料理を覚えています。秘密の援助を受けるかどうかは本人の問題です。主人公が同席条件を満たせば何をしてもよい、とはしません。",
+      "fixedPast": "商人リナは、護衛隊の魔法剣士カイルを外して商談へ来てほしいと頼みます。カイルの出自への差別を疑わせますが、彼はリナが昔支援した弟で、家族に仕事を救われたくないと言い続けています。リナは助けたいが、支配していた頃へ戻りたくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "商人リナ",
+        "beliefsAndGoals": "商人リナは、護衛隊の魔法剣士カイルを外して商談へ来てほしいと頼みます。カイルの出自への差別を疑わせますが、彼はリナが昔支援した弟で、家族に仕事を救われたくないと言い続けています。リナは助けたいが、支配していた頃へ戻りたくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "魔術師イルが同席しない場で、商談をしたいのです。"
+      }
+    ],
+    "conflict": {
+      "design": "招待→同席の理由を聞く／一時的に別行動→援助案→本人への確認または秘密の受領。本人を外したくなければ公開商談へ切り替えられます。秘密の援助は短期利益がありますが、後に相手から知られた場合の説明を残します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q165.scene.entry"
+        },
+        {
+          "id": "private",
+          "script": "q165.scene.private"
+        },
+        {
+          "id": "public",
+          "script": "q165.scene.public"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "魔術師イルが同席しない場で、商談をしたいのです。"
+    },
+    "reveal": {
+      "newInformation": "カイルの前では値段の話しかしない商人が、不在時には彼の苦手な料理を覚えています。秘密の援助を受けるかどうかは本人の問題です。主人公が同席条件を満たせば何をしてもよい、とはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q165.scene.entry"
+      },
+      {
+        "id": "private",
+        "script": "q165.scene.private"
+      },
+      {
+        "id": "public",
+        "script": "q165.scene.public"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "原稿のカイルを既存actorイルへ置換。本人不在はmembersを読む。強制離脱は行わず公開商談を常に選べる。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q165.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "リナはイルの前だと値段の話しかしない。外して話す理由を尋ねると、「弟は家族に仕事を救われたくないと言うんです」と答えた。",
+        "options": [
+          {
+            "id": "private",
+            "text": "イルが隊にいない場で援助の話を聞く",
+            "to": "private",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "has_member",
+                "actor": "il"
+              }
+            }
+          },
+          {
+            "id": "open",
+            "text": "隊員を外さず、公開の商談に切り替える",
+            "to": "public"
+          },
+          {
+            "id": "decline",
+            "text": "秘密の援助は受けず、客としての依頼を頼む",
+            "to": "@decline"
+          }
+        ]
+      },
+      {
+        "id": "private",
+        "text": "リナは弟の苦手な料理を今も覚えていた。助けたいが、昔のように支配したくないという。本人へ知らせず受け取ることもできるが、説明の責任が残る。",
+        "options": [
+          {
+            "id": "secret",
+            "text": "本人に知らせず補給の援助を受ける",
+            "to": "@secret"
+          },
+          {
+            "id": "ask",
+            "text": "本人へ知らせて返済条件を相談する",
+            "to": "public"
+          },
+          {
+            "id": "decline",
+            "text": "援助を辞退する",
+            "to": "@decline"
+          }
+        ]
+      },
+      {
+        "id": "public",
+        "text": "イルは公開の援助なら返済日を自分で決めたいと言った。リナも条件に同意した。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "双方の決めた援助契約を取り持つ",
+            "to": "@open"
+          },
+          {
+            "id": "decline",
+            "text": "今回は援助を辞退する",
+            "to": "@decline"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q165.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "リナはイルの前だと値段の話しかしない。外して話す理由を尋ねると、「弟は家族に仕事を救われたくないと言うんです」と答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "private",
+              "text": "イルが隊にいない場で援助の話を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_member",
+                      "actor": "il"
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.private"
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "text": "隊員を外さず、公開の商談に切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.public"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "秘密の援助は受けず、客としての依頼を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q165.scene.private": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "private"
+        },
+        {
+          "op": "say",
+          "text": "リナは弟の苦手な料理を今も覚えていた。助けたいが、昔のように支配したくないという。本人へ知らせず受け取ることもできるが、説明の責任が残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "本人に知らせず補給の援助を受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.secret"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "本人へ知らせて返済条件を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.public"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "援助を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q165.scene.public": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "public"
+        },
+        {
+          "op": "say",
+          "text": "イルは公開の援助なら返済日を自分で決めたいと言った。リナも条件に同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "双方の決めた援助契約を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.open"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "今回は援助を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q165.end.secret": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "secret"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.end.open": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "open"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.end.decline": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "decline"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q165.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "secret",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "open",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decline",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q165.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "private",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.private"
+                    }
+                  ]
+                },
+                {
+                  "equals": "public",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.public"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "取引履歴で盗難分だけ追跡する",
       "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "金を食う魔物を倒し黒い貨幣を没収する",
       "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "同額の代貨へ交換し原貨を保管する",
       "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。",
       "gold": 76,
       "xp": 81
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。",
       "history": [
@@ -157,7 +157,10 @@
             "right": "clue_b"
           }
         ]
-      }
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +185,31 @@
         ],
         "script": "q058.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "金を食う魔物を倒し黒い貨幣を没収すると取引履歴で盗難分だけ追跡するの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q058.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q058.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q058.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q058.clue_a": {
@@ -326,6 +353,304 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q058.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "金貨の病\n\n金貨に触ると手が黒くなります。呪われた貨幣を集めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q058.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q058.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q058.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "取引履歴で盗難分だけ追跡する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q058",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q058.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "金を食う魔物を倒し黒い貨幣を没収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q058",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "同額の代貨へ交換し原貨を保管する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q058",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」両替商のエンは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q058.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q058.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q058.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q058.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q058.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q058.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q058.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q058.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q058.review"
             }
           ]
         }

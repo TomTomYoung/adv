@@ -1,0 +1,451 @@
+{
+  "schemaVersion": 1,
+  "id": "q154",
+  "number": 154,
+  "title": "鍵を盗まない泥棒",
+  "client": "盗賊エノ",
+  "brief": "鍵は盗まず、その持主を一晩足止めしてほしいのです。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q154_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "steal": {
+      "label": "奪った札",
+      "text": "利益は得た。庫番が追うのは総額だけでなく、返せなくなった遺品の持主の札だった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "capture": {
+      "label": "庫を守る捕縛",
+      "text": "預り品を避難させてエノを捕らえた。庫番は最後に金額でなく、返却先の残った札を数えた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "cancel": {
+      "label": "足止めの拒否",
+      "text": "盗みの報酬は受け取らなかった。予告を受けた庫番は、持主に転移具を使わせない手配をした。",
+      "gold": 0,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "宴会の招待先が空の倉庫と重なり、鍵穴のない扉が持主の足元にだけ現れます。盗賊は「誰も傷つかない」と説明しますが、預り品には取り戻せない遺品もあります。財宝を一括の無人格な金として扱いません。",
+      "fixedPast": "盗賊エノが、財宝庫の鍵を盗まずに一晩だけ持ち主を足止めしてほしいと頼みます。鍵は持主がいる場所を庫の入口にする転移具です。エノは鍵を奪うのでなく、持主を自分の倉庫へ誘い込むつもりです。庫番は中に預けた他人の品まで危険にさらしたくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "盗賊エノ",
+        "beliefsAndGoals": "盗賊エノが、財宝庫の鍵を盗まずに一晩だけ持ち主を足止めしてほしいと頼みます。鍵は持主がいる場所を庫の入口にする転移具です。エノは鍵を奪うのでなく、持主を自分の倉庫へ誘い込むつもりです。庫番は中に預けた他人の品まで危険にさらしたくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "鍵は盗まず、その持主を一晩足止めしてほしいのです。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→会場下見／持主の護衛→仕掛けを知る→盗みに協力／庫番と捕縛を組む／契約を破棄。協力しても個々の所有者を知る機会を残します。捕縛は庫番の同意と預り品を避難させる準備が必要です。失敗すれば脱出か自首で終結します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q154.scene.entry"
+        },
+        {
+          "id": "keeper",
+          "script": "q154.scene.keeper"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鍵は盗まず、その持主を一晩足止めしてほしいのです。"
+    },
+    "reveal": {
+      "newInformation": "宴会の招待先が空の倉庫と重なり、鍵穴のない扉が持主の足元にだけ現れます。盗賊は「誰も傷つかない」と説明しますが、預り品には取り戻せない遺品もあります。財宝を一括の無人格な金として扱いません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q154.scene.entry"
+      },
+      {
+        "id": "keeper",
+        "script": "q154.scene.keeper"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q154.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "招待先は空の倉庫だった。鍵穴のない入口が持主の足元にだけ現れる。鍵は持主のいる場所を財宝庫へつなぐ道具だ。",
+        "options": [
+          {
+            "id": "steal",
+            "text": "預り品も含まれると知って盗みに協力する",
+            "to": "@steal"
+          },
+          {
+            "id": "keeper",
+            "text": "庫番へ計画を知らせる",
+            "to": "keeper"
+          },
+          {
+            "id": "cancel",
+            "text": "契約を破棄し、被害の予告だけ残す",
+            "to": "@cancel"
+          }
+        ]
+      },
+      {
+        "id": "keeper",
+        "text": "庫番は捕縛に同意したが、まず他人の遺品を安全な場所へ移したいと言う。エノを誘う前に、持主の札を照合する。",
+        "options": [
+          {
+            "id": "secure",
+            "text": "預り品を避難させてから捕縛を組む",
+            "to": "@capture",
+            "combat": "guard_6",
+            "escape": "@cancel",
+            "loss": "@cancel"
+          },
+          {
+            "id": "cancel",
+            "text": "捕縛を引き受けず、契約を破棄する",
+            "to": "@cancel"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q154.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q154.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "招待先は空の倉庫だった。鍵穴のない入口が持主の足元にだけ現れる。鍵は持主のいる場所を財宝庫へつなぐ道具だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "steal",
+              "text": "預り品も含まれると知って盗みに協力する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q154.end.steal"
+                }
+              ]
+            },
+            {
+              "id": "keeper",
+              "text": "庫番へ計画を知らせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q154.scene.keeper"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "契約を破棄し、被害の予告だけ残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q154.end.cancel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q154.scene.keeper": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q154.node",
+          "value": "keeper"
+        },
+        {
+          "op": "say",
+          "text": "庫番は捕縛に同意したが、まず他人の遺品を安全な場所へ移したいと言う。エノを誘う前に、持主の札を照合する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secure",
+              "text": "預り品を避難させてから捕縛を組む",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q154.end.capture"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q154.end.cancel"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q154.end.cancel"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "捕縛を引き受けず、契約を破棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q154.end.cancel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q154.end.steal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q154.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "利益は得た。庫番が追うのは総額だけでなく、返せなくなった遺品の持主の札だった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q154",
+              "outcome": "steal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q154.end.capture": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q154.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "預り品を避難させてエノを捕らえた。庫番は最後に金額でなく、返却先の残った札を数えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q154",
+              "outcome": "capture"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q154.end.cancel": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q154.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盗みの報酬は受け取らなかった。予告を受けた庫番は、持主に転移具を使わせない手配をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q154",
+              "outcome": "cancel"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q154.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q154.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q154.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "steal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "利益は得た。庫番が追うのは総額だけでなく、返せなくなった遺品の持主の札だった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "capture",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "預り品を避難させてエノを捕らえた。庫番は最後に金額でなく、返却先の残った札を数えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cancel",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盗みの報酬は受け取らなかった。予告を受けた庫番は、持主に転移具を使わせない手配をした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q154.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q154.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "keeper",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q154.scene.keeper"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q154.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

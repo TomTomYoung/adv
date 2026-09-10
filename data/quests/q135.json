@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 1,
+  "id": "q135",
+  "number": 135,
+  "title": "水底の朝食",
+  "client": "潜水具職人アネ",
+  "brief": "沈んだ祖母の宿で、朝食が続く理由を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q135_scene",
+      "x": 9,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "終わった朝食",
+      "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "lift": {
+      "label": "新しい宿の給仕",
+      "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。",
+      "gold": 93,
+      "xp": 69
+    },
+    "break": {
+      "label": "回収された魔石",
+      "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "鍋を動かすのは祖母の幽霊でなく、同じ三つの作業だけを繰り返す給仕人形です。パンを出し、湯を注ぎ、客の返事を待ちます。洪水前に最後の客が返事をしないまま避難したため、区切りを失っています。食器は毎日同じ位置で、食材は乾いた幻です。",
+      "fixedPast": "沈んだ宿の食堂に、毎朝湯気が立つという。潜水具職人アネは調査を頼みます。祖母の宿が怪談になって客を呼ぶことを嫌う一方、誰かが今も火を守っているなら会いたいと思っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "潜水具職人アネ",
+        "beliefsAndGoals": "沈んだ宿の食堂に、毎朝湯気が立つという。潜水具職人アネは調査を頼みます。祖母の宿が怪談になって客を呼ぶことを嫌う一方、誰かが今も火を守っているなら会いたいと思っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "沈んだ祖母の宿で、朝食が続く理由を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "潜水→食堂→人形を壊す／返事を探す／運び上げる。停止は正しい呼びかけへの応答、移設は職人の準備と浮力具が条件です。空気不足なら撤退して道具を補充でき、人形は待機を続けます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q135.scene.entry"
+        },
+        {
+          "id": "reply",
+          "script": "q135.scene.reply"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "沈んだ祖母の宿で、朝食が続く理由を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "鍋を動かすのは祖母の幽霊でなく、同じ三つの作業だけを繰り返す給仕人形です。パンを出し、湯を注ぎ、客の返事を待ちます。洪水前に最後の客が返事をしないまま避難したため、区切りを失っています。食器は毎日同じ位置で、食材は乾いた幻です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q135.scene.entry"
+      },
+      {
+        "id": "reply",
+        "script": "q135.scene.reply"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q135.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "食堂の鍋から湯気が立つ。給仕人形はパンを出し、湯を注ぎ、返事を待つ。同じ皿の位置が何年も変わっていない。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "最後の呼びかけを聞く",
+            "to": "reply"
+          },
+          {
+            "id": "lift",
+            "text": "アネと浮力具を準備し、地上へ運ぶ（縄一つ）",
+            "to": "@lift",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "break",
+            "text": "人形を壊し、魔石だけ回収する",
+            "to": "@break"
+          }
+        ]
+      },
+      {
+        "id": "reply",
+        "text": "「朝食はこれで、よろしいですか」最後の客は洪水で避難し、返事を残さなかった。食材は乾いた幻で、祖母の幽霊ではない。",
+        "options": [
+          {
+            "id": "answer",
+            "text": "朝食を終える返事をする",
+            "to": "@stop"
+          },
+          {
+            "id": "lift",
+            "text": "返事を急がず、浮力具で移設する（縄一つ）",
+            "to": "@lift",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "back",
+            "text": "空気を補充して考え直す",
+            "to": "entry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q135.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q135.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "食堂の鍋から湯気が立つ。給仕人形はパンを出し、湯を注ぎ、返事を待つ。同じ皿の位置が何年も変わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "最後の呼びかけを聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "アネと浮力具を準備し、地上へ運ぶ（縄一つ）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.end.lift"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "人形を壊し、魔石だけ回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.end.break"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q135.scene.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q135.node",
+          "value": "reply"
+        },
+        {
+          "op": "say",
+          "text": "「朝食はこれで、よろしいですか」最後の客は洪水で避難し、返事を残さなかった。食材は乾いた幻で、祖母の幽霊ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "answer",
+              "text": "朝食を終える返事をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "返事を急がず、浮力具で移設する（縄一つ）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.end.lift"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "空気を補充して考え直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q135.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.end.lift": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "lift"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q135.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "stop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lift",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "break",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q135.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q135.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "reply",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q135.scene.reply"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,618 @@
+{
+  "schemaVersion": 1,
+  "id": "q162",
+  "number": 162,
+  "title": "騎士の盾を借りる",
+  "client": "騎士エルド",
+  "brief": "姪の成人式へ家の盾を届けてください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q162_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "ceremony": {
+      "label": "盾と進路",
+      "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。",
+      "gold": 129,
+      "xp": 87
+    },
+    "workshop": {
+      "label": "船を守る盾",
+      "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。",
+      "gold": 129,
+      "xp": 87
+    },
+    "return": {
+      "label": "受領を強いない",
+      "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "道中の橋で荷車が倒れ、盾を足場にすれば救助できますが家紋が傷つきます。姪の職業選択は到着前から手紙で知れるようにし、盾をどう使ったかが後の会話の根拠になります。騎士だから必ず正しく、職人だから誓いを捨てるという構造にはしません。",
+      "fixedPast": "騎士エルドは、姪の成人式まで家の盾を運んでほしいと頼みます。盾には領民を守る誓いが刻まれています。姪は騎士にならず船大工になるつもりで、エルドは盾を受け取れば気が変わると期待しています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "騎士エルド",
+        "beliefsAndGoals": "騎士エルドは、姪の成人式まで家の盾を運んでほしいと頼みます。盾には領民を守る誓いが刻まれています。姪は騎士にならず船大工になるつもりで、エルドは盾を受け取れば気が変わると期待しています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "姪の成人式へ家の盾を届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "受領→橋の事故→盾を使う／別の資材で救助／応援へ引継ぎ→成人式。資材不足でも盾使用か引継ぎが可能です。盾の傷を隠すか説明するかも選べ、後で修理痕が見つかる場合は嘘の履歴を残します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q162.scene.entry"
+        },
+        {
+          "id": "tell",
+          "script": "q162.scene.tell"
+        },
+        {
+          "id": "ceremony",
+          "script": "q162.scene.ceremony"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "姪の成人式へ家の盾を届けてください。"
+    },
+    "reveal": {
+      "newInformation": "道中の橋で荷車が倒れ、盾を足場にすれば救助できますが家紋が傷つきます。姪の職業選択は到着前から手紙で知れるようにし、盾をどう使ったかが後の会話の根拠になります。騎士だから必ず正しく、職人だから誓いを捨てるという構造にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q162.scene.entry"
+      },
+      {
+        "id": "tell",
+        "script": "q162.scene.tell"
+      },
+      {
+        "id": "ceremony",
+        "script": "q162.scene.ceremony"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q162.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.scar",
+        "meaning": "作者原稿の scar に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.told",
+        "meaning": "作者原稿の told に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "tell"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.lied",
+        "meaning": "作者原稿の lied に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "tell"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人を渡せるが、家紋は傷つく。",
+        "options": [
+          {
+            "id": "shield",
+            "text": "盾を足場にして救助する",
+            "to": "tell",
+            "set": {
+              "scar": true
+            }
+          },
+          {
+            "id": "rope",
+            "text": "縄一つで別の足場を組む",
+            "to": "ceremony",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "help",
+            "text": "応援へ位置を渡し、救助を引き継ぐ",
+            "to": "ceremony"
+          }
+        ]
+      },
+      {
+        "id": "tell",
+        "text": "盾に家紋を横切る傷ができた。受取人へどう話すかを選ぶ。",
+        "options": [
+          {
+            "id": "truth",
+            "text": "救助で使ったことを説明する",
+            "to": "ceremony",
+            "set": {
+              "told": true
+            }
+          },
+          {
+            "id": "hide",
+            "text": "傷の事情は伏せる",
+            "to": "ceremony",
+            "set": {
+              "lied": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "ceremony",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q162.lied"
+              },
+              "right": true
+            },
+            "yes": "姪は修理痕に気づき、事情を伏せたことを尋ねた。盾が勝手に無傷へ戻った扱いにはできない。",
+            "no": "姪は盾を受け取ることと、騎士になることを別々に答えたいと言った。"
+          }
+        ],
+        "options": [
+          {
+            "id": "ceremony",
+            "text": "進路を変える条件を付けず、式で盾を渡す",
+            "to": "@ceremony"
+          },
+          {
+            "id": "workshop",
+            "text": "本人の希望で工房の防護板として渡す",
+            "to": "@workshop"
+          },
+          {
+            "id": "return",
+            "text": "家の象徴を強いず、エルドへ返す",
+            "to": "@return"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q162.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人を渡せるが、家紋は傷つく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shield",
+              "text": "盾を足場にして救助する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.scar",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.tell"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "縄一つで別の足場を組む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "応援へ位置を渡し、救助を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q162.scene.tell": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "tell"
+        },
+        {
+          "op": "say",
+          "text": "盾に家紋を横切る傷ができた。受取人へどう話すかを選ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "truth",
+              "text": "救助で使ったことを説明する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.told",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "hide",
+              "text": "傷の事情は伏せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.lied",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q162.scene.ceremony": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "ceremony"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q162.lied"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姪は修理痕に気づき、事情を伏せたことを尋ねた。盾が勝手に無傷へ戻った扱いにはできない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "姪は盾を受け取ることと、騎士になることを別々に答えたいと言った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ceremony",
+              "text": "進路を変える条件を付けず、式で盾を渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "workshop",
+              "text": "本人の希望で工房の防護板として渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.workshop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "家の象徴を強いず、エルドへ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.return"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q162.end.ceremony": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "ceremony"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.end.workshop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "workshop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q162.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "ceremony",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "workshop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q162.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q162.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "tell",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q162.scene.tell"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ceremony",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q162.scene.ceremony"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q162.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

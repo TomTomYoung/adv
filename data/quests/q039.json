@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "共同所有を認め修理帳へ全員の印を残す",
       "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "仮面の亡霊を倒し最初の買い手へ返す",
       "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "原型だけ保存し人数分の複製を作る",
       "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。",
       "gold": 60,
       "xp": 69
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。",
       "history": [
@@ -157,7 +157,10 @@
             "right": "clue_b"
           }
         ]
-      }
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +185,31 @@
         ],
         "script": "q039.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "仮面の亡霊を倒し最初の買い手へ返すと共同所有を認め修理帳へ全員の印を残すの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q039.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q039.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q039.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q039.clue_a": {
@@ -326,6 +353,304 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q039.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "顔を売る仮面\n\n礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q039.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q039.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q039.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "仮面の亡霊を倒し最初の買い手へ返す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q039",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "共同所有を認め修理帳へ全員の印を残す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q039",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q039.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "原型だけ保存し人数分の複製を作る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q039",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」仮面師のチセは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q039.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q039.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q039.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q039.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q039.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q039.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q039.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q039.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q039.review"
             }
           ]
         }

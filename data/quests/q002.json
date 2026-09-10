@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "荷札と標本番号を照合して告発する",
       "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "骨を守る骸兵を倒し荷札だけ渡す",
       "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "標本だけ救い、金の流れは追わない",
       "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。",
       "gold": 37,
       "xp": 51
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
       "history": [
@@ -157,7 +157,10 @@
             "right": "clue_b"
           }
         ]
-      }
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +185,31 @@
         ],
         "script": "q002.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "骨を守る骸兵を倒し荷札だけ渡すと荷札と標本番号を照合して告発するの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q002.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q002.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q002.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q002.clue_a": {
@@ -353,6 +380,331 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "骨の荷札\n\n流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q002.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q002.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q002.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "荷札と標本番号を照合して告発する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q002.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q002.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・縄1本（勝利して作業を確定した時に消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q002",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q002.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q002.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "骨を守る骸兵を倒し荷札だけ渡す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q002",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "標本だけ救い、金の流れは追わない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q002",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」運送人のベルトは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q002.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q002.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q002.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q002.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q002.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q002.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q002.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q002.review"
             }
           ]
         }

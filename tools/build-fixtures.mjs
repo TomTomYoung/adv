@@ -7,7 +7,7 @@ const root=path.resolve(import.meta.dirname,'..'),data=await loadContent(file=>f
 const g=new GameEngine(data),drain=()=>{while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});};drain();
 g.dispatch({type:'accept',id:'q001'});const fixtures={town:projectGame(g)};
 g.dispatch({type:'travel',region:1});fixtures.dungeon=projectGame(g);
-g.run('q001.clue_a');fixtures.dialog=projectGame(g);drain();g.run('q001.clue_b');drain();g.run('q001.decision');drain();fixtures.choice=projectGame(g);
+g.run('q001.clue_a');fixtures.dialog=projectGame(g);drain();g.run('q001.clue_b');drain();g.run('q001.visit');drain();fixtures.choice=projectGame(g);
 const beforeBattle=g.save();g.dispatch({type:'choose',id:'contract'});fixtures.battle=projectGame(g);
 g.load(beforeBattle);g.dispatch({type:'choose',id:'informed'});drain();g.returnTown();fixtures.journal=projectGame(g);
 fixtures.journal.ending={title:'道を次へ渡す者',text:'表示例です。実際の終幕は百件の依頼を終えた後、あなたの選択によって記録されます。'};

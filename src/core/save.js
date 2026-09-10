@@ -3,11 +3,30 @@ import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
 import {isRecord,clone} from './expression.js';
 import {commandsAt} from './script.js';
+import {freshRecords,snapshotRecords,recordsValid} from './records.js';
+function addScenarioState(save,data){
+  const s=save.state;
+  for(const id of Object.keys(data.quests))s.quests[id]??={stage:'available',evidence:[],outcome:null};
+  s.records=freshRecords(false);
+  if(s.battle){
+    s.records.battles=1;
+    // An old save has no trustworthy pre-save kills. Do not count its dead enemies again.
+    s.battle.recordedKills=s.battle.enemies.filter(e=>e.hp===0).map(e=>e.instance);
+  }
+  for(const [id,q] of Object.entries(s.quests))if(q.stage==='active')s.records.baselines[id]=snapshotRecords(s.records);
+}
 export function migrateSave(original,data){
   if(!isRecord(original)||original.contentVersion===data.game.version)return original;
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
+  const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
+  if(migration.scenarioRevision){
+    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,recordVersion:undefined}};
+    if(validateSave(original,legacy).length)return original;
+    const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
+    addScenarioState(save,data);return save;
+  }
   // Old records must pass their old growth limits before any normalization.
-  const legacy={...data,jobs:undefined,game:{...data.game,version:original.contentVersion},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
+  const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
   if(validateSave(original,legacy).length)return original;
   const save=clone(original),s=save.state;
   save.contentVersion=data.game.version;s.contentVersion=data.game.version;
@@ -25,6 +44,7 @@ export function migrateSave(original,data){
     }
   }
   if(data.jobs&&s.battle){s.battle.buffs=[];s.battle.covers=[];s.battle.analyzed=[];}
+  addScenarioState(save,data);
 
   return save;
 }
@@ -41,6 +61,7 @@ export function validateSave(save,data){
     if(typeof v==='number'&&!Number.isFinite(v))fail('数値不正');
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
+  if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
   if(!['town','dungeon'].includes(s.mode))fail('モード不正');
   for(const [key,min,max] of [['gold',0,1e9],['xp',0,1e9],['level',1,data.system.maxLevel],['steps',0,1e9],['light',0,data.system.lightCapacity],['rng',1,4294967295]])if(!integer(s[key],min,max))fail(`${key}不正`);
   if(s.mode==='dungeon'){
@@ -60,6 +81,7 @@ export function validateSave(save,data){
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
+    if(data.game.recordVersion===1&&qs.stage==='active'&&!s.records?.baselines?.[id])fail('受注時の戦績がありません');
     const evidenceKeys=q.locations.filter(loc=>loc.role!=='decision').map(loc=>loc.role);
     if(qs.evidence.some(e=>!evidenceKeys.includes(e))||new Set(qs.evidence).size!==qs.evidence.length)fail('証拠不正');
     if(qs.stage==='completed'?!q.outcomes[qs.outcome]:qs.outcome!==null)fail('結末不正');
@@ -78,6 +100,7 @@ export function validateSave(save,data){
     const b=s.battle,e=data.encounters[b?.encounter];
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
+      if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&e.hp===0))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
       b.enemies.forEach((enemy,i)=>{const def=data.enemies[e.enemies[i]];if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;

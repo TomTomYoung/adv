@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "id": "q129",
+  "number": 129,
+  "title": "傷を見せない隊長",
+  "client": "隊長ノエと副官",
+  "brief": "最後の砦への出撃を支援してください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q129_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "captain": {
+      "label": "隊長の作戦",
+      "text": "砦は確保された。退任を決めるのはノエ自身に残ったが、補給庫の鍵は副官へ預けた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "deputy": {
+      "label": "委ねた指揮",
+      "text": "副官の計画として戦果が記録された。ノエは勲章でなく、長年自分だけが持った補給庫の鍵を渡した。",
+      "gold": 81,
+      "xp": 63
+    },
+    "retreat": {
+      "label": "再編の帰還",
+      "text": "作戦は完了しなかった。後退をまとめた仕事は消さず、次の指揮系統を部隊で確認した。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "手袋を外さず地図を押さえる隊長を見せます。高い討伐実績は指揮の根拠ですが、現在HPはそれとは別です。回復前に傷を目撃した者だけが具体的な状態を話せます。回復しても、任せられなかった関係は自動修復しません。",
+      "fixedPast": "隊長ノエは、部下を連れて最後の砦の魔物を討ちたいと言います。彼女は負傷を隠し、退任を弱さと思っています。副官は昇進を望んでいますが、そのために隊長の傷を暴いたと思われたくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "隊長ノエと副官",
+        "beliefsAndGoals": "隊長ノエは、部下を連れて最後の砦の魔物を討ちたいと言います。彼女は負傷を隠し、退任を弱さと思っています。副官は昇進を望んでいますが、そのために隊長の傷を暴いたと思われたくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "最後の砦への出撃を支援してください。"
+      }
+    ],
+    "conflict": {
+      "design": "作戦→治療／偵察／出撃→隊長指揮／副官指揮→帰還。HP不足は出撃前に説明し、治療か指揮変更を選べます。本人の秘密を部下へ公表しなくても、休養を提案できます。敗北・撤退でも副官が後退をまとめた履歴は残します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q129.scene.entry"
+        },
+        {
+          "id": "plan",
+          "script": "q129.scene.plan"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後の砦への出撃を支援してください。"
+    },
+    "reveal": {
+      "newInformation": "手袋を外さず地図を押さえる隊長を見せます。高い討伐実績は指揮の根拠ですが、現在HPはそれとは別です。回復前に傷を目撃した者だけが具体的な状態を話せます。回復しても、任せられなかった関係は自動修復しません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q129.scene.entry"
+      },
+      {
+        "id": "plan",
+        "script": "q129.scene.plan"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "ノエは出撃パーティーのactorではなく物語NPC。本人の負傷・治療は有限の場面状態で表現。プレイヤーHPから推測しない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q129.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q129.wound_seen",
+        "meaning": "作者原稿の wound_seen に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q129.treated",
+        "meaning": "作者原稿の treated に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ノエは手袋を外さず地図を押さえる。副官は指揮を望むが、傷を暴いて昇進するのは避けたいと言った。",
+        "options": [
+          {
+            "id": "treat",
+            "text": "本人の許可で治療に立ち会う",
+            "to": "plan",
+            "cost": {
+              "potion": 1
+            },
+            "set": {
+              "wound_seen": true,
+              "treated": true
+            }
+          },
+          {
+            "id": "plan",
+            "text": "負傷の公表を求めず、指揮分担を話す",
+            "to": "plan"
+          }
+        ]
+      },
+      {
+        "id": "plan",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q129.wound_seen"
+              },
+              "right": true
+            },
+            "yes": "治療の場で傷を見た。回復しても、任せられなかった関係まで治るわけではない。",
+            "no": "本人は負傷を認め、未治療では出撃できないと説明した。傷を直接見た証言にはしない。"
+          }
+        ],
+        "options": [
+          {
+            "id": "captain",
+            "text": "治療を済ませた隊長の作戦で出撃する",
+            "to": "@captain",
+            "need": [
+              "treated"
+            ],
+            "combat": "story_129",
+            "escape": "@retreat",
+            "loss": "@retreat"
+          },
+          {
+            "id": "deputy",
+            "text": "本人の承諾で副官へ指揮を渡して出撃する",
+            "to": "@deputy",
+            "combat": "story_129",
+            "escape": "@retreat",
+            "loss": "@retreat"
+          },
+          {
+            "id": "treat",
+            "text": "治療の準備へ戻る",
+            "to": "entry"
+          },
+          {
+            "id": "retreat",
+            "text": "出撃を見送り部隊を再編する",
+            "to": "@retreat"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q129.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q129.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ノエは手袋を外さず地図を押さえる。副官は指揮を望むが、傷を暴いて昇進するのは避けたいと言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "treat",
+              "text": "本人の許可で治療に立ち会う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "potion",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "傷薬 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "potion",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q129.wound_seen",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q129.treated",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q129.scene.plan"
+                }
+              ]
+            },
+            {
+              "id": "plan",
+              "text": "負傷の公表を求めず、指揮分担を話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q129.scene.plan"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q129.scene.plan": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q129.node",
+          "value": "plan"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q129.wound_seen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "治療の場で傷を見た。回復しても、任せられなかった関係まで治るわけではない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "本人は負傷を認め、未治療では出撃できないと説明した。傷を直接見た証言にはしない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "captain",
+              "text": "治療を済ませた隊長の作戦で出撃する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q129.treated"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_129",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q129.end.captain"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q129.end.retreat"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q129.end.retreat"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "deputy",
+              "text": "本人の承諾で副官へ指揮を渡して出撃する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_129",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q129.end.deputy"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q129.end.retreat"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q129.end.retreat"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "treat",
+              "text": "治療の準備へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q129.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "出撃を見送り部隊を再編する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q129.end.retreat"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q129.end.captain": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q129.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "砦は確保された。退任を決めるのはノエ自身に残ったが、補給庫の鍵は副官へ預けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q129",
+              "outcome": "captain"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q129.end.deputy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q129.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "副官の計画として戦果が記録された。ノエは勲章でなく、長年自分だけが持った補給庫の鍵を渡した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q129",
+              "outcome": "deputy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q129.end.retreat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q129.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "作戦は完了しなかった。後退をまとめた仕事は消さず、次の指揮系統を部隊で確認した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q129",
+              "outcome": "retreat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q129.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q129.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q129.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "captain",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "砦は確保された。退任を決めるのはノエ自身に残ったが、補給庫の鍵は副官へ預けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "deputy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "副官の計画として戦果が記録された。ノエは勲章でなく、長年自分だけが持った補給庫の鍵を渡した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retreat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "作戦は完了しなかった。後退をまとめた仕事は消さず、次の指揮系統を部隊で確認した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q129.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q129.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "plan",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q129.scene.plan"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q129.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

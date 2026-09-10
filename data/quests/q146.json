@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q146",
+  "number": 146,
+  "title": "染め直せない軍服",
+  "client": "染物屋ニア",
+  "brief": "染めても軍の色へ戻る服を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q146_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "release": {
+      "label": "選べる色",
+      "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "coat": {
+      "label": "裏地の旧色",
+      "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "keep": {
+      "label": "着る日を選ぶ",
+      "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "服には誓いを結んだ全員の小さな刺繍があります。相手は上官一人でなく、生き残った同僚たちでした。退役兵は故郷で軍歴を隠したいのですが、同僚は見捨てられるように感じます。染色の成功を、友情の断絶の強制にはしません。",
+      "fixedPast": "染物屋ニアは、退役兵の軍服が何色を重ねても元の色へ戻るため、魔力処理を頼みます。服は部隊の誓約に染められ、本人が除隊を認めても、誓いの相手が解放していません。元上官は戦死し、手続の相手がいません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "染物屋ニア",
+        "beliefsAndGoals": "染物屋ニアは、退役兵の軍服が何色を重ねても元の色へ戻るため、魔力処理を頼みます。服は部隊の誓約に染められ、本人が除隊を認めても、誓いの相手が解放していません。元上官は戦死し、手続の相手がいません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "染めても軍の色へ戻る服を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "染物屋→刺繍の調査→旧同僚を訪問→誓約解除／外套へ仕立て直し／軍服を保管。解除は本人の意思と相手の同意、仕立直しは生地を切るため戦闘装備としての能力を失います。どちらも選ばず私服を新調できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q146.scene.entry"
+        },
+        {
+          "id": "friends",
+          "script": "q146.scene.friends"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "染めても軍の色へ戻る服を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "服には誓いを結んだ全員の小さな刺繍があります。相手は上官一人でなく、生き残った同僚たちでした。退役兵は故郷で軍歴を隠したいのですが、同僚は見捨てられるように感じます。染色の成功を、友情の断絶の強制にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q146.scene.entry"
+      },
+      {
+        "id": "friends",
+        "script": "q146.scene.friends"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q146.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "軍服の刺繍は上官一人のものではない。誓いを結んだ同僚たち全員の印があった。退役兵は軍歴を隠したいが、同僚は見捨てられたくない。",
+        "options": [
+          {
+            "id": "friends",
+            "text": "生き残った同僚と本人の意思を確かめる",
+            "to": "friends"
+          },
+          {
+            "id": "coat",
+            "text": "本人の同意で生地を切り、外套へ仕立てる",
+            "to": "@coat"
+          },
+          {
+            "id": "keep",
+            "text": "軍服は保管し、私服で暮らす",
+            "to": "@keep"
+          }
+        ]
+      },
+      {
+        "id": "friends",
+        "text": "同僚は再会を約束できるなら誓約を解くと答えた。本人も軍服を着ずに会いたいと言う。",
+        "options": [
+          {
+            "id": "release",
+            "text": "双方の同意で誓約を解除し、色を選び直す",
+            "to": "@release"
+          },
+          {
+            "id": "keep",
+            "text": "誓約を解かず服を保管する",
+            "to": "@keep"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q146.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q146.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "軍服の刺繍は上官一人のものではない。誓いを結んだ同僚たち全員の印があった。退役兵は軍歴を隠したいが、同僚は見捨てられたくない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "friends",
+              "text": "生き残った同僚と本人の意思を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.scene.friends"
+                }
+              ]
+            },
+            {
+              "id": "coat",
+              "text": "本人の同意で生地を切り、外套へ仕立てる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.coat"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "軍服は保管し、私服で暮らす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.keep"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q146.scene.friends": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q146.node",
+          "value": "friends"
+        },
+        {
+          "op": "say",
+          "text": "同僚は再会を約束できるなら誓約を解くと答えた。本人も軍服を着ずに会いたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "release",
+              "text": "双方の同意で誓約を解除し、色を選び直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.release"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "誓約を解かず服を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.keep"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q146.end.release": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "release"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.end.coat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "coat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.end.keep": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "keep"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q146.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "release",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "coat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "keep",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q146.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q146.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "friends",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q146.scene.friends"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q146.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

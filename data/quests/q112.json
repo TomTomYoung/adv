@@ -1,0 +1,604 @@
+{
+  "schemaVersion": 1,
+  "id": "q112",
+  "number": 112,
+  "title": "置いていく灯",
+  "client": "監督リオ",
+  "brief": "灯の乏しい坑道に残る三人を救出してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q112_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "delegate": {
+      "label": "救助班への委任",
+      "text": "地上班が救助を引き継いだ。リオは救助費の精算より先に、帰ってきた三人の名前を確かめた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "lighten": {
+      "label": "荷を置く救助",
+      "text": "装備は残したが三人は上がった。リオは置いてきた荷を、人を置いた数のようには数えなかった。",
+      "gold": 69,
+      "xp": 57
+    },
+    "supply": {
+      "label": "灯を継ぐ救助",
+      "text": "中継灯を使い、三人と装備を運び出した。最後に消す灯だけは、リオが戻って確かめた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "relay": {
+      "label": "戻る場所の灯",
+      "text": "リオの灯を目印に援軍が下りた。置いた灯は、戻る約束を示すものになった。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "帰路の壁には、昔の救助でリオが残した目印があります。先に放置の痕跡として見せ、後に彼が援軍を連れて戻った日付も見つかります。過去の失敗を必ず捏造に反転させず、救えなかった事実と戻ろうとした行為を両方残します。",
+      "fixedPast": "坑夫三人の救出を、監督リオが求めます。救助班の灯は出口まで足りません。リオは全員を連れ帰ることに固執し、負傷者自身は「歩ける二人を先に」と言います。かつて一人を置いた経験から、監督は相談そのものを放棄と受け取っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "監督リオ",
+        "beliefsAndGoals": "坑夫三人の救出を、監督リオが求めます。救助班の灯は出口まで足りません。リオは全員を連れ帰ることに固執し、負傷者自身は「歩ける二人を先に」と言います。かつて一人を置いた経験から、監督は相談そのものを放棄と受け取っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "灯の乏しい坑道に残る三人を救出してください。"
+      }
+    ],
+    "conflict": {
+      "design": "下降→負傷者へ到達→一斉退避／補給探索／連絡役を先行。補給探索の前に灯火の不足を表示します。`F.signal`があれば安全区画に負傷者を置き、明示した一回の往復で援軍を呼べます。戦闘に敗れれば地上班が救出を引き継ぎ、委任の結末になります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q112.scene.entry"
+        },
+        {
+          "id": "supply",
+          "script": "q112.scene.supply"
+        },
+        {
+          "id": "signal",
+          "script": "q112.scene.signal"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "灯の乏しい坑道に残る三人を救出してください。"
+    },
+    "reveal": {
+      "newInformation": "帰路の壁には、昔の救助でリオが残した目印があります。先に放置の痕跡として見せ、後に彼が援軍を連れて戻った日付も見つかります。過去の失敗を必ず捏造に反転させず、救えなかった事実と戻ろうとした行為を両方残します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q112.scene.entry"
+      },
+      {
+        "id": "supply",
+        "script": "q112.scene.supply"
+      },
+      {
+        "id": "signal",
+        "script": "q112.scene.signal"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q112.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "出口までの灯が足りない。負傷者が「歩ける二人を先に」と言うと、リオは首を振った。昔の救助で残した印に、戻った日付が重なっている。",
+        "options": [
+          {
+            "id": "supply",
+            "text": "脇道の魔物を退け、灯油庫へ向かう",
+            "to": "supply",
+            "combat": "guard_2",
+            "escape": "entry",
+            "loss": "@delegate"
+          },
+          {
+            "id": "signal",
+            "text": "地上との連絡手順を確かめる",
+            "to": "signal"
+          },
+          {
+            "id": "lighten",
+            "text": "全員で装備を捨て、身軽になって退避する",
+            "to": "@lighten"
+          }
+        ]
+      },
+      {
+        "id": "supply",
+        "text": "庫の灯油は空だった。自分たちの予備灯油が一つあれば、古い中継灯を点けて荷まで運び出せる。",
+        "options": [
+          {
+            "id": "oil",
+            "text": "予備灯油一つで中継灯を点ける",
+            "to": "@supply",
+            "cost": {
+              "torch": 1
+            }
+          },
+          {
+            "id": "back",
+            "text": "別の救助手順へ戻る",
+            "to": "entry"
+          }
+        ]
+      },
+      {
+        "id": "signal",
+        "text": "連絡役が地上へ一往復すれば援軍が来る。安全区画を確かめ、三人に説明すると分割救助に同意した。リオは今度は自分が負傷者と残ると言った。",
+        "options": [
+          {
+            "id": "relay",
+            "text": "連絡役を送り、一往復で援軍を呼ぶ",
+            "to": "@relay"
+          },
+          {
+            "id": "delegate",
+            "text": "地上班へ救助全体を委ねる",
+            "to": "@delegate"
+          },
+          {
+            "id": "lighten",
+            "text": "全員一緒の軽装退避を選ぶ",
+            "to": "@lighten"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q112.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q112.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "出口までの灯が足りない。負傷者が「歩ける二人を先に」と言うと、リオは首を振った。昔の救助で残した印に、戻った日付が重なっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "supply",
+              "text": "脇道の魔物を退け、灯油庫へ向かう",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q112.scene.supply"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q112.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q112.end.delegate"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "signal",
+              "text": "地上との連絡手順を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.scene.signal"
+                }
+              ]
+            },
+            {
+              "id": "lighten",
+              "text": "全員で装備を捨て、身軽になって退避する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.end.lighten"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q112.scene.supply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q112.node",
+          "value": "supply"
+        },
+        {
+          "op": "say",
+          "text": "庫の灯油は空だった。自分たちの予備灯油が一つあれば、古い中継灯を点けて荷まで運び出せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "oil",
+              "text": "予備灯油一つで中継灯を点ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "torch",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "松明 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "torch",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q112.end.supply"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "別の救助手順へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q112.scene.signal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q112.node",
+          "value": "signal"
+        },
+        {
+          "op": "say",
+          "text": "連絡役が地上へ一往復すれば援軍が来る。安全区画を確かめ、三人に説明すると分割救助に同意した。リオは今度は自分が負傷者と残ると言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relay",
+              "text": "連絡役を送り、一往復で援軍を呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.end.relay"
+                }
+              ]
+            },
+            {
+              "id": "delegate",
+              "text": "地上班へ救助全体を委ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.end.delegate"
+                }
+              ]
+            },
+            {
+              "id": "lighten",
+              "text": "全員一緒の軽装退避を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.end.lighten"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q112.end.delegate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q112.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地上班が救助を引き継いだ。リオは救助費の精算より先に、帰ってきた三人の名前を確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q112",
+              "outcome": "delegate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q112.end.lighten": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q112.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "装備は残したが三人は上がった。リオは置いてきた荷を、人を置いた数のようには数えなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q112",
+              "outcome": "lighten"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q112.end.supply": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q112.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "中継灯を使い、三人と装備を運び出した。最後に消す灯だけは、リオが戻って確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q112",
+              "outcome": "supply"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q112.end.relay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q112.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "リオの灯を目印に援軍が下りた。置いた灯は、戻る約束を示すものになった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q112",
+              "outcome": "relay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q112.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q112.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q112.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "delegate",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地上班が救助を引き継いだ。リオは救助費の精算より先に、帰ってきた三人の名前を確かめた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lighten",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "装備は残したが三人は上がった。リオは置いてきた荷を、人を置いた数のようには数えなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "supply",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "中継灯を使い、三人と装備を運び出した。最後に消す灯だけは、リオが戻って確かめた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "relay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "リオの灯を目印に援軍が下りた。置いた灯は、戻る約束を示すものになった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q112.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q112.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "supply",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q112.scene.supply"
+                    }
+                  ]
+                },
+                {
+                  "equals": "signal",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q112.scene.signal"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q112.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

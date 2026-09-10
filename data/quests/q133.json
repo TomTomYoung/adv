@@ -1,0 +1,443 @@
+{
+  "schemaVersion": 1,
+  "id": "q133",
+  "number": 133,
+  "title": "一段足りない階段",
+  "client": "建築師ドマ",
+  "brief": "設計図より一段少ない階段を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q133_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "save": {
+      "label": "重さのある図面",
+      "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "stairs": {
+      "label": "毎日の階段",
+      "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台です。図面は人が歩く時でなく葬列の状態を描いています。擦れた肩の高さの溝と、靴跡のない段を先に見せます。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論です。",
+      "fixedPast": "地下礼拝堂へ向かう階段が、何度数えても設計図より一段少ない。建築師ドマは師匠の図面を守りたいと調査を頼みます。同行の石工は図面の誤りを疑い、ドマはそれを侮辱と受け取ります。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "建築師ドマ",
+        "beliefsAndGoals": "地下礼拝堂へ向かう階段が、何度数えても設計図より一段少ない。建築師ドマは師匠の図面を守りたいと調査を頼みます。同行の石工は図面の誤りを疑い、ドマはそれを侮辱と受け取ります。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "設計図より一段少ない階段を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "階段の計測→図面の読み直し／実物の試験→荷台を下ろす→礼拝堂。錘を人の代わりに載せる道と、石工の手動固定で下りる道があります。能力不足は共同作業か道具の調達で代替できます。準備なしに踏めば落下直前の退避となり、再準備へ戻します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q133.scene.entry"
+        },
+        {
+          "id": "warning",
+          "script": "q133.scene.warning"
+        },
+        {
+          "id": "platform",
+          "script": "q133.scene.platform"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "設計図より一段少ない階段を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台です。図面は人が歩く時でなく葬列の状態を描いています。擦れた肩の高さの溝と、靴跡のない段を先に見せます。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q133.scene.entry"
+      },
+      {
+        "id": "warning",
+        "script": "q133.scene.warning"
+      },
+      {
+        "id": "platform",
+        "script": "q133.scene.platform"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q133.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "一段には靴跡がなく、肩の高さに擦れた溝があった。ドマは師の図面の誤りを認めまいとする。",
+        "options": [
+          {
+            "id": "weight",
+            "text": "人を載せず錘で試す",
+            "to": "platform"
+          },
+          {
+            "id": "fix",
+            "text": "石工と協力し、荷台を手動で固定する",
+            "to": "platform"
+          },
+          {
+            "id": "step",
+            "text": "準備をせず踏んでみる",
+            "to": "warning"
+          }
+        ]
+      },
+      {
+        "id": "warning",
+        "text": "足元が沈み始め、石工が腕を引いた。落下の前に戻れたが、次は重量か固定を確かめる必要がある。",
+        "options": [
+          {
+            "id": "back",
+            "text": "準備をやり直す",
+            "to": "entry"
+          }
+        ]
+      },
+      {
+        "id": "platform",
+        "text": "重い棺を載せる時だけ下がる荷台だった。図面は葬列の状態を描いていたが、重さの説明がない。",
+        "options": [
+          {
+            "id": "save",
+            "text": "荷台を保存し、重量条件を図面へ追記する",
+            "to": "@save"
+          },
+          {
+            "id": "stairs",
+            "text": "機構を通常の参拝階段に改修する",
+            "to": "@stairs"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q133.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "一段には靴跡がなく、肩の高さに擦れた溝があった。ドマは師の図面の誤りを認めまいとする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weight",
+              "text": "人を載せず錘で試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.platform"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "石工と協力し、荷台を手動で固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.platform"
+                }
+              ]
+            },
+            {
+              "id": "step",
+              "text": "準備をせず踏んでみる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.warning"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q133.scene.warning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "warning"
+        },
+        {
+          "op": "say",
+          "text": "足元が沈み始め、石工が腕を引いた。落下の前に戻れたが、次は重量か固定を確かめる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "準備をやり直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q133.scene.platform": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "platform"
+        },
+        {
+          "op": "say",
+          "text": "重い棺を載せる時だけ下がる荷台だった。図面は葬列の状態を描いていたが、重さの説明がない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "save",
+              "text": "荷台を保存し、重量条件を図面へ追記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.end.save"
+                }
+              ]
+            },
+            {
+              "id": "stairs",
+              "text": "機構を通常の参拝階段に改修する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.end.stairs"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q133.end.save": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q133",
+              "outcome": "save"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q133.end.stairs": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q133",
+              "outcome": "stairs"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q133.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q133.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "save",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stairs",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q133.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "warning",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.warning"
+                    }
+                  ]
+                },
+                {
+                  "equals": "platform",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.platform"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

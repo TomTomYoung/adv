@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 1,
+  "id": "q151",
+  "number": 151,
+  "title": "暗殺者の遅刻",
+  "client": "領主の側近",
+  "brief": "祝宴へ来る暗殺者を警戒してください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q151_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "中止した祝宴",
+      "text": "命を守るため宴を止めた。側近の偽装は別に追及され、逃げた役者は後日、誰も倒れない芝居を演じた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "decoy": {
+      "label": "危険を承知した囮",
+      "text": "政敵を捕らえた。領主を危険にさらした計画も公になり、勝利宣伝だけでは閉じられない報告になった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "injured": {
+      "label": "負傷後の救援",
+      "text": "警戒の不足を突かれた。負傷者を救援し、偽装を見抜いた功績で被害を上書きしない報告を残した。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "側近は入口より客席の反応を気にし、合図の楽曲を何度も延長させます。衣装部屋の刃のない短剣で芝居の企みを示し、その後、給仕が本物の結界切断具を見つけます。偽装を見抜いたから安全、という二度目の思い込みを揺らします。",
+      "fixedPast": "領主の側近が、祝宴へ来る暗殺者の捕縛を依頼します。予告時刻を過ぎても現れません。側近は領主への同情を集めるため、偽の襲撃を仕込んでいました。雇われた役者は直前に危険を悟って逃げ、本物の政敵だけが計画を知って会場に残っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "領主の側近",
+        "beliefsAndGoals": "領主の側近が、祝宴へ来る暗殺者の捕縛を依頼します。予告時刻を過ぎても現れません。側近は領主への同情を集めるため、偽の襲撃を仕込んでいました。雇われた役者は直前に危険を悟って逃げ、本物の政敵だけが計画を知って会場に残っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "祝宴へ来る暗殺者を警戒してください。"
+      }
+    ],
+    "conflict": {
+      "design": "祝宴→舞台裏／役者を追う／給仕を守る→領主へ警告／宴を止める／囮として続行。続行は本人の同意と防衛準備が必要です。偽装の暴露だけを先行すると混乱が起き、本物を追う経路が変わります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q151.scene.entry"
+        },
+        {
+          "id": "stage",
+          "script": "q151.scene.stage"
+        },
+        {
+          "id": "danger",
+          "script": "q151.scene.danger"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祝宴へ来る暗殺者を警戒してください。"
+    },
+    "reveal": {
+      "newInformation": "側近は入口より客席の反応を気にし、合図の楽曲を何度も延長させます。衣装部屋の刃のない短剣で芝居の企みを示し、その後、給仕が本物の結界切断具を見つけます。偽装を見抜いたから安全、という二度目の思い込みを揺らします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q151.scene.entry"
+      },
+      {
+        "id": "stage",
+        "script": "q151.scene.stage"
+      },
+      {
+        "id": "danger",
+        "script": "q151.scene.danger"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q151.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q151.fake",
+        "meaning": "作者原稿の fake に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q151.real",
+        "meaning": "作者原稿の real に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "stage"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q151.guard",
+        "meaning": "作者原稿の guard に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "danger"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "予告時刻を過ぎても暗殺者は来ない。側近は入口でなく客席を見て、同じ楽曲を延長させる。",
+        "options": [
+          {
+            "id": "stage",
+            "text": "舞台裏を調べる",
+            "to": "stage",
+            "set": {
+              "fake": true
+            }
+          },
+          {
+            "id": "servant",
+            "text": "怯えた給仕を守り、話を聞く",
+            "to": "danger",
+            "set": {
+              "real": true
+            }
+          },
+          {
+            "id": "stop",
+            "text": "危険が確定する前に宴の中止を提案する",
+            "to": "@stop"
+          }
+        ]
+      },
+      {
+        "id": "stage",
+        "text": "刃のない短剣と役者の台本があった。側近は同情を集める偽の襲撃を企てたが、役者は逃げていた。",
+        "options": [
+          {
+            "id": "servant",
+            "text": "芝居と分かっても給仕の訴えを確かめる",
+            "to": "danger",
+            "set": {
+              "real": true
+            }
+          },
+          {
+            "id": "expose",
+            "text": "偽装だけを暴露して、警戒を解いてしまう",
+            "to": "@injured"
+          },
+          {
+            "id": "stop",
+            "text": "宴を止め、偽装の責任を調べる",
+            "to": "@stop"
+          }
+        ]
+      },
+      {
+        "id": "danger",
+        "text": "給仕は本物の結界切断具を見つけた。計画を知った政敵は会場に残る。領主は危険を聞き、防衛を整えた囮に限り同意した。",
+        "options": [
+          {
+            "id": "prepare",
+            "text": "退路と防衛配置を整える",
+            "to": "danger",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q151.guard"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "guard": true
+            }
+          },
+          {
+            "id": "decoy",
+            "text": "本人の同意と防衛のもと囮を続ける",
+            "to": "@decoy",
+            "need": [
+              "guard"
+            ],
+            "combat": "guard_6",
+            "escape": "@stop",
+            "loss": "@injured"
+          },
+          {
+            "id": "stop",
+            "text": "本人の同意があっても宴は中止する",
+            "to": "@stop"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q151.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q151.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "予告時刻を過ぎても暗殺者は来ない。側近は入口でなく客席を見て、同じ楽曲を延長させる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stage",
+              "text": "舞台裏を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q151.fake",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q151.scene.stage"
+                }
+              ]
+            },
+            {
+              "id": "servant",
+              "text": "怯えた給仕を守り、話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q151.real",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q151.scene.danger"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "危険が確定する前に宴の中止を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q151.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q151.scene.stage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q151.node",
+          "value": "stage"
+        },
+        {
+          "op": "say",
+          "text": "刃のない短剣と役者の台本があった。側近は同情を集める偽の襲撃を企てたが、役者は逃げていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "servant",
+              "text": "芝居と分かっても給仕の訴えを確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q151.real",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q151.scene.danger"
+                }
+              ]
+            },
+            {
+              "id": "expose",
+              "text": "偽装だけを暴露して、警戒を解いてしまう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q151.end.injured"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "宴を止め、偽装の責任を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q151.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q151.scene.danger": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q151.node",
+          "value": "danger"
+        },
+        {
+          "op": "say",
+          "text": "給仕は本物の結界切断具を見つけた。計画を知った政敵は会場に残る。領主は危険を聞き、防衛を整えた囮に限り同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "prepare",
+              "text": "退路と防衛配置を整える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q151.guard"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q151.guard",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q151.scene.danger"
+                }
+              ]
+            },
+            {
+              "id": "decoy",
+              "text": "本人の同意と防衛のもと囮を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q151.guard"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q151.end.decoy"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q151.end.stop"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q151.end.injured"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "本人の同意があっても宴は中止する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q151.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q151.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q151.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "命を守るため宴を止めた。側近の偽装は別に追及され、逃げた役者は後日、誰も倒れない芝居を演じた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q151",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q151.end.decoy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q151.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "政敵を捕らえた。領主を危険にさらした計画も公になり、勝利宣伝だけでは閉じられない報告になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q151",
+              "outcome": "decoy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q151.end.injured": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q151.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "警戒の不足を突かれた。負傷者を救援し、偽装を見抜いた功績で被害を上書きしない報告を残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q151",
+              "outcome": "injured"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q151.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q151.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q151.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "stop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "命を守るため宴を止めた。側近の偽装は別に追及され、逃げた役者は後日、誰も倒れない芝居を演じた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decoy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "政敵を捕らえた。領主を危険にさらした計画も公になり、勝利宣伝だけでは閉じられない報告になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "injured",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "警戒の不足を突かれた。負傷者を救援し、偽装を見抜いた功績で被害を上書きしない報告を残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q151.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q151.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stage",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q151.scene.stage"
+                    }
+                  ]
+                },
+                {
+                  "equals": "danger",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q151.scene.danger"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q151.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

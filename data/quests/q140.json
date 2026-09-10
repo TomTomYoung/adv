@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "id": "q140",
+  "number": 140,
+  "title": "迷宮の休業日",
+  "client": "探索組合",
+  "brief": "迷宮の罠が止まる日の事情を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q140_scene",
+      "x": 9,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "loot": {
+      "label": "休みの日の略取",
+      "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "treaty": {
+      "label": "限られた入域",
+      "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "close": {
+      "label": "修理のための閉鎖",
+      "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "leave": {
+      "label": "調査して退く",
+      "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かります。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物です。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではありません。",
+      "fixedPast": "毎週同じ日に迷宮の罠が止まる理由を、探索組合が調べています。罠を修理する小鬼の整備隊には休業日があり、人間がその日だけ財宝を持ち出すため、責任者ボロは休みを撤廃しようとしています。部下は疲れて事故を起こし始めています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "探索組合",
+        "beliefsAndGoals": "毎週同じ日に迷宮の罠が止まる理由を、探索組合が調べています。罠を修理する小鬼の整備隊には休業日があり、人間がその日だけ財宝を持ち出すため、責任者ボロは休みを撤廃しようとしています。部下は疲れて事故を起こし始めています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "迷宮の罠が止まる日の事情を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "停止した罠→財宝庫へ急ぐ／整備区画へ入る→事故または会談→略取・入域協定・一時閉鎖。救助だけでも会談は始められますが、協定には持出品を申告する必要があります。交渉決裂なら外へ退くか、敵対する整備隊と戦って脱出します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q140.scene.entry"
+        },
+        {
+          "id": "talk",
+          "script": "q140.scene.talk"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "迷宮の罠が止まる日の事情を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かります。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物です。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではありません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q140.scene.entry"
+      },
+      {
+        "id": "talk",
+        "script": "q140.scene.talk"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q140.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休業をなくそうとしていた。",
+        "options": [
+          {
+            "id": "loot",
+            "text": "止まった罠を通り、持出品を得て帰る",
+            "to": "@loot"
+          },
+          {
+            "id": "rescue",
+            "text": "疲れた整備員の事故を手伝う",
+            "to": "talk"
+          },
+          {
+            "id": "talk",
+            "text": "整備区画で入域の条件を聞く",
+            "to": "talk"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "text": "ボロは侵入を歓迎していない。だが休みがなくなれば事故が増える。持出品を申告し、入域日を限る協定なら検討すると言った。",
+        "options": [
+          {
+            "id": "declare",
+            "text": "持出品を申告し、入域制限を受け入れる",
+            "to": "@treaty"
+          },
+          {
+            "id": "close",
+            "text": "修理期間の一時閉鎖を組合へ提案する",
+            "to": "@close"
+          },
+          {
+            "id": "leave",
+            "text": "協定を結ばず、今回は調査だけで帰る",
+            "to": "@leave"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q140.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q140.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休業をなくそうとしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "loot",
+              "text": "止まった罠を通り、持出品を得て帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.loot"
+                }
+              ]
+            },
+            {
+              "id": "rescue",
+              "text": "疲れた整備員の事故を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "talk",
+              "text": "整備区画で入域の条件を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q140.scene.talk": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q140.node",
+          "value": "talk"
+        },
+        {
+          "op": "say",
+          "text": "ボロは侵入を歓迎していない。だが休みがなくなれば事故が増える。持出品を申告し、入域日を限る協定なら検討すると言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "declare",
+              "text": "持出品を申告し、入域制限を受け入れる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.treaty"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "修理期間の一時閉鎖を組合へ提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.close"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "協定を結ばず、今回は調査だけで帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q140.end.loot": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "loot"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.treaty": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "treaty"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.close": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "close"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q140.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "loot",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "treaty",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "close",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q140.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q140.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "talk",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q140.scene.talk"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

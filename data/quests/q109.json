@@ -1,0 +1,500 @@
+{
+  "schemaVersion": 1,
+  "id": "q109",
+  "number": 109,
+  "title": "火のない鍛冶場",
+  "client": "老鍛冶師エン",
+  "brief": "弟子に見つからないよう、炉材を運んでください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q109_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "rest": {
+      "label": "火を休める",
+      "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。",
+      "gold": 57,
+      "xp": 51
+    },
+    "tools": {
+      "label": "暮らしの鍛冶場",
+      "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。",
+      "gold": 57,
+      "xp": 51
+    },
+    "inherit": {
+      "label": "二人の銘",
+      "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "床には重い剣でなく、小さな留め金の試作品が増えています。師は戦具を作れなくても、暮らしの道具なら仕事を続けられると知っていますが、名工の看板を下ろせません。能力の高い主人公が一度鍛造を代行しても、この選択は解決しません。",
+      "fixedPast": "老鍛冶師エンが、弟子に見つからないよう炉材の運搬を頼みます。炉は壊れていません。手が震えるため火を入れず、注文を断る口実を作っています。弟子セドは技術を教わりたい一方、師が自分を信用していないと感じています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "老鍛冶師エン",
+        "beliefsAndGoals": "老鍛冶師エンが、弟子に見つからないよう炉材の運搬を頼みます。炉は壊れていません。手が震えるため火を入れず、注文を断る口実を作っています。弟子セドは技術を教わりたい一方、師が自分を信用していないと感じています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "弟子に見つからないよう、炉材を運んでください。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→師の試作を手伝う／弟子へ嘘の伝言をする→次の注文への回答。弟子に任せる、生活道具へ転向する、一旦休業する道があります。弟子の独立を望む場合、無期限の介護役に留める条件は設けません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q109.scene.entry"
+        },
+        {
+          "id": "smith",
+          "script": "q109.scene.smith"
+        },
+        {
+          "id": "pupil",
+          "script": "q109.scene.pupil"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "弟子に見つからないよう、炉材を運んでください。"
+    },
+    "reveal": {
+      "newInformation": "床には重い剣でなく、小さな留め金の試作品が増えています。師は戦具を作れなくても、暮らしの道具なら仕事を続けられると知っていますが、名工の看板を下ろせません。能力の高い主人公が一度鍛造を代行しても、この選択は解決しません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q109.scene.entry"
+      },
+      {
+        "id": "smith",
+        "script": "q109.scene.smith"
+      },
+      {
+        "id": "pupil",
+        "script": "q109.scene.pupil"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q109.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "炉は壊れていない。床に増えているのは剣ではなく、鍋の留め金だった。エンの手が袋の口で震えた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "本人に仕事の様子を尋ねる",
+            "to": "smith"
+          },
+          {
+            "id": "rest",
+            "text": "新しい注文を断り、休業の返金を手伝う",
+            "to": "@rest"
+          }
+        ]
+      },
+      {
+        "id": "smith",
+        "text": "「名工の看板で、鍋の取手を売れるかね」エンは小さな試作品なら作れると話した。弟子セドは主作業を覚えたが、独立も望んでいる。",
+        "options": [
+          {
+            "id": "pupil",
+            "text": "セドが望む引継ぎを聞く",
+            "to": "pupil"
+          },
+          {
+            "id": "tools",
+            "text": "生活道具へ仕事を変える意思をエンに確かめる",
+            "to": "@tools"
+          },
+          {
+            "id": "rest",
+            "text": "今は休業し、前払い金を返す",
+            "to": "@rest"
+          }
+        ]
+      },
+      {
+        "id": "pupil",
+        "text": "セドは主作業を引き受け、二人の銘を付けたいと答えた。「いつか独立する。それまで教えてくれますか」師はうなずいた。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "独立を妨げない条件で引継ぎを結ぶ",
+            "to": "@inherit"
+          },
+          {
+            "id": "back",
+            "text": "まだ決めず師へ戻る",
+            "to": "smith"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q109.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "炉は壊れていない。床に増えているのは剣ではなく、鍋の留め金だった。エンの手が袋の口で震えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "本人に仕事の様子を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.smith"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "新しい注文を断り、休業の返金を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.rest"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q109.scene.smith": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "smith"
+        },
+        {
+          "op": "say",
+          "text": "「名工の看板で、鍋の取手を売れるかね」エンは小さな試作品なら作れると話した。弟子セドは主作業を覚えたが、独立も望んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pupil",
+              "text": "セドが望む引継ぎを聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.pupil"
+                }
+              ]
+            },
+            {
+              "id": "tools",
+              "text": "生活道具へ仕事を変える意思をエンに確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.tools"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "今は休業し、前払い金を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.rest"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q109.scene.pupil": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "pupil"
+        },
+        {
+          "op": "say",
+          "text": "セドは主作業を引き受け、二人の銘を付けたいと答えた。「いつか独立する。それまで教えてくれますか」師はうなずいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "独立を妨げない条件で引継ぎを結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.inherit"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "まだ決めず師へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.smith"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q109.end.rest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "rest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.end.tools": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "tools"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.end.inherit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "inherit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q109.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "rest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "tools",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "inherit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q109.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "smith",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.smith"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pupil",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.pupil"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

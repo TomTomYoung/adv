@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 1,
+  "id": "q199",
+  "number": 199,
+  "title": "帰らない依頼人",
+  "client": "時計師の娘ミル",
+  "brief": "父が頼んだ部品を受け取りたいので、家まで届けてください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q199_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "small": {
+      "label": "それぞれの時計",
+      "text": "部品は小時計へ分かれた。窓に返った時計は少しずつ違う時を示し、ミルは次の修理を受け取った。",
+      "gold": 165,
+      "xp": 105
+    },
+    "store": {
+      "label": "決める日を残す",
+      "text": "配送は精算し、部品はミルへ残した。塔の夢を相続の義務にせず、工房の鍵を本人に返した。",
+      "gold": 165,
+      "xp": 105
+    },
+    "tower": {
+      "label": "町が引き受ける塔",
+      "text": "町が部品と維持を引き受けて塔を直した。ミルは小時計の工房を続け、塔だけに父の記憶を預けなかった。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "部品は巨大時計だけでなく、何十個もの小時計にも使えます。父の机には、娘へ修理を頼む近所の品が増えています。父は娘の道を知らなかったのでなく、自分の夢を諦めきれませんでした。遺言を万能の和解装置にはしません。",
+      "fixedPast": "長い探索を終えて戻ると、依頼した時計師が亡くなっています。探した部品を受け取る娘は、父の巨大時計を完成させるつもりがありません。父は町のどこからでも見える時計を望み、娘は小さな修理店で客の顔を見て働きたいのです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "時計師の娘ミル",
+        "beliefsAndGoals": "長い探索を終えて戻ると、依頼した時計師が亡くなっています。探した部品を受け取る娘は、父の巨大時計を完成させるつもりがありません。父は町のどこからでも見える時計を望み、娘は小さな修理店で客の顔を見て働きたいのです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "父が頼んだ部品を受け取りたいので、家まで届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "帰還→訃報→娘と工房を訪問→部品を渡す／町へ共同製作を提案／保管。共同製作なら娘が参加しなくても町が維持を担えるかを確認します。娘が拒めば部品の買上げを別に交渉し、所有を奪いません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q199.scene.entry"
+        },
+        {
+          "id": "future",
+          "script": "q199.scene.future"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "父が頼んだ部品を受け取りたいので、家まで届けてください。"
+    },
+    "reveal": {
+      "newInformation": "部品は巨大時計だけでなく、何十個もの小時計にも使えます。父の机には、娘へ修理を頼む近所の品が増えています。父は娘の道を知らなかったのでなく、自分の夢を諦めきれませんでした。遺言を万能の和解装置にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q199.scene.entry"
+      },
+      {
+        "id": "future",
+        "script": "q199.scene.future"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q199.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q199.consent",
+        "meaning": "作者原稿の consent に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "future"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "時計師は部品の到着前に亡くなっていた。ミルは大時計塔の完成より、近所から預かった小時計の修理を望む。配送の仕事は塔を完成させなくても精算される。",
+        "options": [
+          {
+            "id": "handoff",
+            "text": "娘へ部品を渡し、使い道の希望を聞く",
+            "to": "future"
+          }
+        ]
+      },
+      {
+        "id": "future",
+        "text": "部品を相続するのはミルだ。町が塔を望むなら部品の買い取りと維持当番を用意し、本人に選んでもらう。",
+        "options": [
+          {
+            "id": "small",
+            "text": "小時計の修理に使う意思を支える",
+            "to": "@small"
+          },
+          {
+            "id": "store",
+            "text": "今は決めず、娘の保管に任せる",
+            "to": "@store"
+          },
+          {
+            "id": "plan",
+            "text": "町の維持当番を決め、娘へ買い取りを相談する",
+            "to": "future",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q199.consent"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "consent": true
+            },
+            "textAfter": "維持当番が決まり、ミルは40Gでの譲渡なら自分の工房を続けられると同意した。"
+          },
+          {
+            "id": "tower",
+            "text": "40Gで部品を買い取り、町の塔へ使う",
+            "to": "@tower",
+            "need": [
+              "consent"
+            ],
+            "cost": {
+              "gold": 40
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q199.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q199.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "時計師は部品の到着前に亡くなっていた。ミルは大時計塔の完成より、近所から預かった小時計の修理を望む。配送の仕事は塔を完成させなくても精算される。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "handoff",
+              "text": "娘へ部品を渡し、使い道の希望を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q199.scene.future"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q199.scene.future": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q199.node",
+          "value": "future"
+        },
+        {
+          "op": "say",
+          "text": "部品を相続するのはミルだ。町が塔を望むなら部品の買い取りと維持当番を用意し、本人に選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "small",
+              "text": "小時計の修理に使う意思を支える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q199.end.small"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "今は決めず、娘の保管に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q199.end.store"
+                }
+              ]
+            },
+            {
+              "id": "plan",
+              "text": "町の維持当番を決め、娘へ買い取りを相談する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q199.consent"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q199.consent",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "維持当番が決まり、ミルは40Gでの譲渡なら自分の工房を続けられると同意した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q199.scene.future"
+                }
+              ]
+            },
+            {
+              "id": "tower",
+              "text": "40Gで部品を買い取り、町の塔へ使う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q199.consent"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q199.end.tower"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q199.end.small": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q199.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "部品は小時計へ分かれた。窓に返った時計は少しずつ違う時を示し、ミルは次の修理を受け取った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q199",
+              "outcome": "small"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q199.end.store": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q199.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "配送は精算し、部品はミルへ残した。塔の夢を相続の義務にせず、工房の鍵を本人に返した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q199",
+              "outcome": "store"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q199.end.tower": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q199.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "町が部品と維持を引き受けて塔を直した。ミルは小時計の工房を続け、塔だけに父の記憶を預けなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q199",
+              "outcome": "tower"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q199.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q199.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q199.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "small",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "部品は小時計へ分かれた。窓に返った時計は少しずつ違う時を示し、ミルは次の修理を受け取った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "store",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "配送は精算し、部品はミルへ残した。塔の夢を相続の義務にせず、工房の鍵を本人に返した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "tower",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "町が部品と維持を引き受けて塔を直した。ミルは小時計の工房を続け、塔だけに父の記憶を預けなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q199.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q199.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "future",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q199.scene.future"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q199.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

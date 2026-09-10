@@ -1,0 +1,506 @@
+{
+  "schemaVersion": 1,
+  "id": "q130",
+  "number": 130,
+  "title": "最弱の王",
+  "client": "案内役の新米テオ",
+  "brief": "苔冠王の群れから村を守ってください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q130_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "holes": {
+      "label": "境界の管理",
+      "text": "穴を塞いで住居を守った。群れは外に残り、テオは次の点検当番を頼んだ。",
+      "gold": 81,
+      "xp": 63
+    },
+    "seal": {
+      "label": "王冠の封印",
+      "text": "冠を封じると群れは散った。テオの武勇談は王の大きさでなく、見落としかけた三つ目の穴から始まった。",
+      "gold": 81,
+      "xp": 63
+    },
+    "study": {
+      "label": "冠の護送",
+      "text": "冠は研究者へ届いた。討伐数と冠の受渡しは別々に記録され、テオは運ぶ方にも仕事があると知った。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "王を倒すと別の小型個体が苔冠を拾い、同じ侵入が続きます。王という呼称から単独の支配者を想像させ、実際は王冠が誘導具だと分かります。テオは見栄を捨てるだけでなく、弱い相手にも観察が必要だと学びます。",
+      "fixedPast": "冒険者組合は、低級魔物を束ねる苔冠王の討伐を依頼します。熟練者は弱い敵に時間を使いたがりません。案内役の新米テオは大物を倒したいと焦りますが、村を困らせるのは王の強さではなく、細かな通路を使う群れの連携です。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "案内役の新米テオ",
+        "beliefsAndGoals": "冒険者組合は、低級魔物を束ねる苔冠王の討伐を依頼します。熟練者は弱い敵に時間を使いたがりません。案内役の新米テオは大物を倒したいと焦りますが、村を困らせるのは王の強さではなく、細かな通路を使う群れの連携です。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "苔冠王の群れから村を守ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "襲撃防衛→王を倒す／通路を調べる→冠の処理。冠を封印すれば群れは散ります。穴を塞げば居住地だけ守れます。冠を研究者へ預けるなら運搬中の護衛が追加されます。討伐だけを続ける道も回数上限で再相談へ戻し、無限報酬にしません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q130.scene.entry"
+        },
+        {
+          "id": "crown",
+          "script": "q130.scene.crown"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "苔冠王の群れから村を守ってください。"
+    },
+    "reveal": {
+      "newInformation": "王を倒すと別の小型個体が苔冠を拾い、同じ侵入が続きます。王という呼称から単独の支配者を想像させ、実際は王冠が誘導具だと分かります。テオは見栄を捨てるだけでなく、弱い相手にも観察が必要だと学びます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q130.scene.entry"
+      },
+      {
+        "id": "crown",
+        "script": "q130.scene.crown"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q130.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "弱い王を倒せば終わる、とテオは槍を回す。通路の奥では三つの小穴から別々の物音がした。",
+        "options": [
+          {
+            "id": "king",
+            "text": "王と呼ばれる個体を倒す",
+            "to": "crown",
+            "combat": "story_130",
+            "escape": "entry"
+          },
+          {
+            "id": "holes",
+            "text": "三つの抜け道を塞ぐ",
+            "to": "@holes",
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "crown",
+        "text": "倒れた王の苔冠を別の小型個体が拾い、群れがまた同じ方向を向いた。冠が誘導具なのだ。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "冠を封じて群れを散らす",
+            "to": "@seal"
+          },
+          {
+            "id": "study",
+            "text": "研究者へ運ぶ道を護衛する",
+            "to": "@study",
+            "combat": "story_130",
+            "escape": "crown"
+          },
+          {
+            "id": "holes",
+            "text": "冠は残し、住居への穴を塞ぐ",
+            "to": "@holes",
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q130.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q130.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "弱い王を倒せば終わる、とテオは槍を回す。通路の奥では三つの小穴から別々の物音がした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "king",
+              "text": "王と呼ばれる個体を倒す",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_130",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q130.scene.crown"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q130.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "holes",
+              "text": "三つの抜け道を塞ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q130.end.holes"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q130.scene.crown": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q130.node",
+          "value": "crown"
+        },
+        {
+          "op": "say",
+          "text": "倒れた王の苔冠を別の小型個体が拾い、群れがまた同じ方向を向いた。冠が誘導具なのだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "冠を封じて群れを散らす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q130.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "study",
+              "text": "研究者へ運ぶ道を護衛する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_130",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q130.end.study"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q130.scene.crown"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "holes",
+              "text": "冠は残し、住居への穴を塞ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q130.end.holes"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q130.end.holes": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q130.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "穴を塞いで住居を守った。群れは外に残り、テオは次の点検当番を頼んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q130",
+              "outcome": "holes"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q130.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q130.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "冠を封じると群れは散った。テオの武勇談は王の大きさでなく、見落としかけた三つ目の穴から始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q130",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q130.end.study": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q130.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "冠は研究者へ届いた。討伐数と冠の受渡しは別々に記録され、テオは運ぶ方にも仕事があると知った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q130",
+              "outcome": "study"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q130.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q130.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q130.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "holes",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "穴を塞いで住居を守った。群れは外に残り、テオは次の点検当番を頼んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "冠を封じると群れは散った。テオの武勇談は王の大きさでなく、見落としかけた三つ目の穴から始まった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "study",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "冠は研究者へ届いた。討伐数と冠の受渡しは別々に記録され、テオは運ぶ方にも仕事があると知った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q130.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q130.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "crown",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q130.scene.crown"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q130.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

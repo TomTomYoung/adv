@@ -1,0 +1,587 @@
+{
+  "schemaVersion": 1,
+  "id": "q172",
+  "number": 172,
+  "title": "名前を返す井戸",
+  "client": "織工ルイ",
+  "brief": "井戸へ失った名前を、本人と取り戻す方法を探してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q172_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "restore": {
+      "label": "二つの名の返還",
+      "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "new": {
+      "label": "本人が選ぶ新名",
+      "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "井戸を封じる",
+      "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "衣類には二種類の名の刺繍があります。ルイは家の期待から逃れるため「誰も昔の私を呼ばないで」と願い、井戸は本人の記憶まで奪いました。願いの曲解を本人の責任だけにせず、取引内容を説明しなかった主の企みとします。",
+      "fixedPast": "井戸から水を汲んだ織工ルイが、自分の名を思い出せなくなります。母は古い名を教えますが、本人は成人後に別の名を選んでいます。井戸の主は、名と引き換えに願いを叶えたと主張し、ルイが何を願ったかも返そうとしません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "織工ルイ",
+        "beliefsAndGoals": "井戸から水を汲んだ織工ルイが、自分の名を思い出せなくなります。母は古い名を教えますが、本人は成人後に別の名を選んでいます。井戸の主は、名と引き換えに願いを叶えたと主張し、ルイが何を願ったかも返そうとしません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "井戸へ失った名前を、本人と取り戻す方法を探してください。"
+      }
+    ],
+    "conflict": {
+      "design": "工房→母／作品市→井戸→元の名を返させる／新たな名を本人が選ぶ／主を封じる。二つの名を知れば取引の対象を特定できます。新たな名はプレイヤーが勝手に付けず本人が決めます。交渉決裂は封印の戦闘または退避へつなぎます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q172.scene.entry"
+        },
+        {
+          "id": "well",
+          "script": "q172.scene.well"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "井戸へ失った名前を、本人と取り戻す方法を探してください。"
+    },
+    "reveal": {
+      "newInformation": "衣類には二種類の名の刺繍があります。ルイは家の期待から逃れるため「誰も昔の私を呼ばないで」と願い、井戸は本人の記憶まで奪いました。願いの曲解を本人の責任だけにせず、取引内容を説明しなかった主の企みとします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q172.scene.entry"
+      },
+      {
+        "id": "well",
+        "script": "q172.scene.well"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q172.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q172.old",
+        "meaning": "作者原稿の old に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q172.chosen",
+        "meaning": "作者原稿の chosen に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。",
+        "options": [
+          {
+            "id": "mother",
+            "text": "母から昔の名を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q172.old"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "old": true
+            }
+          },
+          {
+            "id": "market",
+            "text": "作品市で本人が選んだ名を確かめる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q172.chosen"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "chosen": true
+            }
+          },
+          {
+            "id": "well",
+            "text": "井戸の主と話す",
+            "to": "well"
+          }
+        ]
+      },
+      {
+        "id": "well",
+        "text": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。説明のない取引を、願った側だけの責任にはできない。",
+        "options": [
+          {
+            "id": "restore",
+            "text": "二つの名から取引の対象を示し、返還を求める",
+            "to": "@restore",
+            "need": [
+              "old",
+              "chosen"
+            ]
+          },
+          {
+            "id": "new",
+            "text": "今の名をルイ本人が選ぶ意思を尊重する",
+            "to": "@new"
+          },
+          {
+            "id": "seal",
+            "text": "主を封じ、水源を別に手配する",
+            "to": "@seal",
+            "combat": "guard_8",
+            "escape": "well"
+          },
+          {
+            "id": "back",
+            "text": "名の聞き取りへ戻る",
+            "to": "entry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q172.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q172.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "mother",
+              "text": "母から昔の名を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q172.old"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q172.old",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "market",
+              "text": "作品市で本人が選んだ名を確かめる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q172.chosen"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q172.chosen",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "well",
+              "text": "井戸の主と話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.well"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q172.scene.well": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q172.node",
+          "value": "well"
+        },
+        {
+          "op": "say",
+          "text": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。説明のない取引を、願った側だけの責任にはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "restore",
+              "text": "二つの名から取引の対象を示し、返還を求める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q172.old"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q172.chosen"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.end.restore"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "今の名をルイ本人が選ぶ意思を尊重する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.end.new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "主を封じ、水源を別に手配する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q172.end.seal"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.well"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "名の聞き取りへ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q172.end.restore": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "restore"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q172.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "restore",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q172.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "well",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.well"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

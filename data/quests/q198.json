@@ -1,0 +1,783 @@
+{
+  "schemaVersion": 1,
+  "id": "q198",
+  "number": 198,
+  "title": "旅の終わりの道標",
+  "client": "道標職人ユノ",
+  "brief": "旅の終わりに立てる道標へ、どの道を示すか決めてください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q198_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "many": {
+      "label": "選べる道標",
+      "text": "行先だけでなく用途と時間、危険が並んだ。旅人は自分の荷を見てから、違う矢印の方へ歩き出した。",
+      "gold": 165,
+      "xp": 105
+    },
+    "short": {
+      "label": "急ぐ人の道",
+      "text": "短い道と足場の注意を刻んだ。荷車に向くとは書かず、ユノは別の道標を作る余地を残した。",
+      "gold": 165,
+      "xp": 105
+    },
+    "safe": {
+      "label": "遠回りの道",
+      "text": "水場と広い迂回路を刻んだ。時間がかかることも添え、急ぐ旅人にはその負担が見えるようにした。",
+      "gold": 165,
+      "xp": 105
+    },
+    "draft": {
+      "label": "確かめるための仮標",
+      "text": "推測を通行保証にせず、仮標に聞取り先を書いた。完成を急がないことも職人の仕事になった。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "過去に主人公が開いた道は、利用者に応じて価値が違います。救った橋も、荷車には狭い場合があります。景色を順に見せ、同じ山の姿が行き先によって変わることを、地図の表現の問題へ重ねます。",
+      "fixedPast": "帰郷する地図師が、三つの分かれ道へ最後の道標を立てる仕事を頼みます。町、鉱山、避難集落はそれぞれ自分の道を太く描いてほしい。最短路、商売の道、安全な道が一致せず、地図師は中立なら一本の正解を示せると信じています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "道標職人ユノ",
+        "beliefsAndGoals": "帰郷する地図師が、三つの分かれ道へ最後の道標を立てる仕事を頼みます。町、鉱山、避難集落はそれぞれ自分の道を太く描いてほしい。最短路、商売の道、安全な道が一致せず、地図師は中立なら一本の正解を示せると信じています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "旅の終わりに立てる道標へ、どの道を示すか決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→三者への聞取り→道の確認→一本を推奨／用途別に示す／未確認を明記する。全部歩けなければ未確認の表示を選べます。安全性を断言するには該当区間の確認が必要で、名声だけでは認めません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q198.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "旅の終わりに立てる道標へ、どの道を示すか決めてください。"
+    },
+    "reveal": {
+      "newInformation": "過去に主人公が開いた道は、利用者に応じて価値が違います。救った橋も、荷車には狭い場合があります。景色を順に見せ、同じ山の姿が行き先によって変わることを、地図の表現の問題へ重ねます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q198.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q198.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q198.trade",
+        "meaning": "作者原稿の trade に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q198.refuge",
+        "meaning": "作者原稿の refuge に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q198.pilgrim",
+        "meaning": "作者原稿の pilgrim に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q198.fast",
+        "meaning": "作者原稿の fast に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q198.safe",
+        "meaning": "作者原稿の safe に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "商人は最短路を、避難民は安全な遠回りを、巡礼者は井戸を通る道を求めている。一つの「正しい道」では用事が違う。",
+        "options": [
+          {
+            "id": "trade",
+            "text": "商人の荷と所要時間を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q198.trade"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "trade": true
+            }
+          },
+          {
+            "id": "refuge",
+            "text": "避難民の歩幅と危険を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q198.refuge"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "refuge": true
+            }
+          },
+          {
+            "id": "pilgrim",
+            "text": "巡礼者の水場を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q198.pilgrim"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "pilgrim": true
+            }
+          },
+          {
+            "id": "fast",
+            "text": "短い峠道を実際に歩いて確認する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q198.fast"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "fast": true
+            },
+            "textAfter": "短いが足場が狭い。荷車と幼い子には別の道が要ると書き留めた。"
+          },
+          {
+            "id": "safe",
+            "text": "井戸を経る迂回路を歩いて確認する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q198.safe"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "safe": true
+            },
+            "textAfter": "井戸と広い道を確認した。遠回りの所要時間も測り、最短とは書かなかった。"
+          },
+          {
+            "id": "many",
+            "text": "確認した用途・時間・危険を並べて刻む",
+            "to": "@many",
+            "need": [
+              "trade",
+              "refuge",
+              "pilgrim",
+              "fast",
+              "safe"
+            ]
+          },
+          {
+            "id": "short",
+            "text": "確認済みの最短路だけを刻む",
+            "to": "@short",
+            "need": [
+              "fast"
+            ]
+          },
+          {
+            "id": "safeonly",
+            "text": "確認済みの安全な迂回路を刻む",
+            "to": "@safe",
+            "need": [
+              "safe"
+            ]
+          },
+          {
+            "id": "draft",
+            "text": "未確認の道を断定せず、聞取り用の仮標を置く",
+            "to": "@draft"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q198.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q198.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "商人は最短路を、避難民は安全な遠回りを、巡礼者は井戸を通る道を求めている。一つの「正しい道」では用事が違う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trade",
+              "text": "商人の荷と所要時間を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q198.trade"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q198.trade",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "refuge",
+              "text": "避難民の歩幅と危険を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q198.refuge"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q198.refuge",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pilgrim",
+              "text": "巡礼者の水場を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q198.pilgrim"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q198.pilgrim",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "fast",
+              "text": "短い峠道を実際に歩いて確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q198.fast"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q198.fast",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "短いが足場が狭い。荷車と幼い子には別の道が要ると書き留めた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "safe",
+              "text": "井戸を経る迂回路を歩いて確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q198.safe"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q198.safe",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "井戸と広い道を確認した。遠回りの所要時間も測り、最短とは書かなかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "確認した用途・時間・危険を並べて刻む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.trade"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.refuge"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.pilgrim"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.fast"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.safe"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q198.end.many"
+                }
+              ]
+            },
+            {
+              "id": "short",
+              "text": "確認済みの最短路だけを刻む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.fast"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q198.end.short"
+                }
+              ]
+            },
+            {
+              "id": "safeonly",
+              "text": "確認済みの安全な迂回路を刻む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q198.safe"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q198.end.safe"
+                }
+              ]
+            },
+            {
+              "id": "draft",
+              "text": "未確認の道を断定せず、聞取り用の仮標を置く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q198.end.draft"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q198.end.many": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q198.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行先だけでなく用途と時間、危険が並んだ。旅人は自分の荷を見てから、違う矢印の方へ歩き出した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q198",
+              "outcome": "many"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q198.end.short": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q198.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "短い道と足場の注意を刻んだ。荷車に向くとは書かず、ユノは別の道標を作る余地を残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q198",
+              "outcome": "short"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q198.end.safe": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q198.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "水場と広い迂回路を刻んだ。時間がかかることも添え、急ぐ旅人にはその負担が見えるようにした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q198",
+              "outcome": "safe"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q198.end.draft": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q198.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "推測を通行保証にせず、仮標に聞取り先を書いた。完成を急がないことも職人の仕事になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q198",
+              "outcome": "draft"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q198.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q198.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q198.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "many",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "行先だけでなく用途と時間、危険が並んだ。旅人は自分の荷を見てから、違う矢印の方へ歩き出した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "short",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "短い道と足場の注意を刻んだ。荷車に向くとは書かず、ユノは別の道標を作る余地を残した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "safe",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "水場と広い迂回路を刻んだ。時間がかかることも添え、急ぐ旅人にはその負担が見えるようにした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "draft",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "推測を通行保証にせず、仮標に聞取り先を書いた。完成を急がないことも職人の仕事になった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q198.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q198.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q198.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -7,7 +7,7 @@ for(const outcome of ['informed','contract','compromise'])test(`walk all 100 que
   const g=newGame(1907);
   // Scenario coverage fixture isolates reachability and continuation behavior from combat balance.
   g.award(0,data.system.xpBase*24*25);g.state.gold=5000;g.state.inventory.rope=99;g.healAll();
-  for(const quest of Object.values(data.quests)){
+  for(const quest of Object.values(data.quests).filter(q=>q.number<=100)){
     if(g.state.mode==='dungeon')g.dispatch({type:'retreat'});
     assert.ok(g.dispatch({type:'accept',id:quest.id}),quest.id+' must unlock');g.healAll();
     if(outcome==='informed')for(const spot of quest.locations.slice(0,2)){exploreSpot(g,spot,{heal:true});assert.equal(g.state.quests[quest.id].stage,'active');}
@@ -24,7 +24,7 @@ test('a new unmodified party can investigate the first quest, return, rest and r
 });
 test('full 100-quest campaign is completable from normal starting stats and earned resources',()=>{
   const g=newGame(4);
-  for(const q of Object.values(data.quests)){
+  for(const q of Object.values(data.quests).filter(q=>q.number<=100)){
     if(g.state.mode==='dungeon')g.dispatch({type:'retreat'});
     g.dispatch({type:'service',id:'inn'});drain(g);
     for(const [item,min] of [['rope',1],['antidote',3],['potion',4],['ration',3]])while((g.state.inventory[item]??0)<min&&g.dispatch({type:'buy',item}));

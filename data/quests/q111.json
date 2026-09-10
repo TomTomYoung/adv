@@ -1,0 +1,663 @@
+{
+  "schemaVersion": 1,
+  "id": "q111",
+  "number": 111,
+  "title": "白旗の荷馬車",
+  "client": "御者ハンナ",
+  "brief": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q111_scene",
+      "x": 2,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "home": {
+      "label": "返却を次便へ残す",
+      "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。",
+      "gold": 69,
+      "xp": 57
+    },
+    "anonymous": {
+      "label": "名のない返却",
+      "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。",
+      "gold": 69,
+      "xp": 57
+    },
+    "named": {
+      "label": "名を添えた返却",
+      "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "峠の検問は布ではなく、返却農具の刻印を確認します。グスが恥じるのは敗北ではなく、徴発に自分も加わったことです。柄に残る印を彼が指で隠す場面を先に置き、持ち主の名を聞かれた時に事情を明かします。",
+      "fixedPast": "御者ハンナは、白い布を掲げた荷馬車の護衛を依頼します。荷は敵対領へ返す農具です。息子を失った雇い主は和解を望みますが、荷台に乗る元兵士グスは、白旗を掲げることを降伏と思い、布を何度も下ろします。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "御者ハンナ",
+        "beliefsAndGoals": "御者ハンナは、白い布を掲げた荷馬車の護衛を依頼します。荷は敵対領へ返す農具です。息子を失った雇い主は和解を望みますが、荷台に乗る元兵士グスは、白旗を掲げることを降伏と思い、布を何度も下ろします。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "出発→野盗のいる本道／迂回の渡し→検問→引渡し。本道の戦闘から逃げれば渡しへ移れます。グスの名を出すには本人の同意が必要です。農具の由来が不明なら現地の職人へ照合を頼み、引渡しを待機できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q111.scene.entry"
+        },
+        {
+          "id": "ferry",
+          "script": "q111.scene.ferry"
+        },
+        {
+          "id": "gate",
+          "script": "q111.scene.gate"
+        },
+        {
+          "id": "name",
+          "script": "q111.scene.name"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "峠の検問は布ではなく、返却農具の刻印を確認します。グスが恥じるのは敗北ではなく、徴発に自分も加わったことです。柄に残る印を彼が指で隠す場面を先に置き、持ち主の名を聞かれた時に事情を明かします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q111.scene.entry"
+      },
+      {
+        "id": "ferry",
+        "script": "q111.scene.ferry"
+      },
+      {
+        "id": "gate",
+        "script": "q111.scene.gate"
+      },
+      {
+        "id": "name",
+        "script": "q111.scene.name"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q111.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q111.flag",
+        "meaning": "作者原稿の flag に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "元兵士グスが白旗を下ろした。農具の柄に触れた指が、焼印を隠す。",
+        "options": [
+          {
+            "id": "flag",
+            "text": "白旗を掲げて本道を進む",
+            "to": "gate",
+            "combat": "guard_2",
+            "escape": "ferry",
+            "set": {
+              "flag": "white"
+            }
+          },
+          {
+            "id": "ferry",
+            "text": "旗を包み、渡しを迂回する",
+            "to": "ferry",
+            "set": {
+              "flag": "covered"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ferry",
+        "text": "迂回した荷馬車が渡しへ着いた。農具は傷まなかったが、予定より遅い。「名前さえ聞かれなければ」とグスが漏らす。",
+        "options": [
+          {
+            "id": "cross",
+            "text": "渡しを越えて検問へ",
+            "to": "gate"
+          },
+          {
+            "id": "home",
+            "text": "今回は荷を持って引き返す",
+            "to": "@home"
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q111.flag"
+              },
+              "right": "white"
+            },
+            "yes": "番兵は武器を下げたまま近づいた。",
+            "no": "番兵は荷を止め、先に刻印を見せるよう求めた。"
+          },
+          "照合するのは旗でなく農具だ。グスは自分も徴発に加わったと明かした。"
+        ],
+        "options": [
+          {
+            "id": "anonymous",
+            "text": "農具だけを照合し、匿名で返す",
+            "to": "@anonymous"
+          },
+          {
+            "id": "name",
+            "text": "グスが名を出す意思を確かめる",
+            "to": "name"
+          },
+          {
+            "id": "home",
+            "text": "返却を次便へ延ばし引き返す",
+            "to": "@home"
+          }
+        ]
+      },
+      {
+        "id": "name",
+        "text": "「俺の名で返してくれ。直しに来る話も、俺がする」グスは焼印から指を離した。感謝だけを受け取れる返却ではない。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "本人の名と修繕の申し出を伝える",
+            "to": "@named"
+          },
+          {
+            "id": "anonymous",
+            "text": "責任の話は本人に任せ、農具は匿名で返す",
+            "to": "@anonymous"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q111.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "元兵士グスが白旗を下ろした。農具の柄に触れた指が、焼印を隠す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "flag",
+              "text": "白旗を掲げて本道を進む",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q111.flag",
+                      "value": "white"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.gate"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.ferry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ferry",
+              "text": "旗を包み、渡しを迂回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q111.flag",
+                  "value": "covered"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.scene.ferry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.ferry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "ferry"
+        },
+        {
+          "op": "say",
+          "text": "迂回した荷馬車が渡しへ着いた。農具は傷まなかったが、予定より遅い。「名前さえ聞かれなければ」とグスが漏らす。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cross",
+              "text": "渡しを越えて検問へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.gate"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "今回は荷を持って引き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.home"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.gate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "gate"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q111.flag"
+            },
+            "right": "white"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "番兵は武器を下げたまま近づいた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "番兵は荷を止め、先に刻印を見せるよう求めた。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "照合するのは旗でなく農具だ。グスは自分も徴発に加わったと明かした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "anonymous",
+              "text": "農具だけを照合し、匿名で返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.anonymous"
+                }
+              ]
+            },
+            {
+              "id": "name",
+              "text": "グスが名を出す意思を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.name"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "返却を次便へ延ばし引き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.home"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.name": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "name"
+        },
+        {
+          "op": "say",
+          "text": "「俺の名で返してくれ。直しに来る話も、俺がする」グスは焼印から指を離した。感謝だけを受け取れる返却ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "本人の名と修繕の申し出を伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.named"
+                }
+              ]
+            },
+            {
+              "id": "anonymous",
+              "text": "責任の話は本人に任せ、農具は匿名で返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.anonymous"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q111.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.end.anonymous": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "anonymous"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.end.named": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "named"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q111.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "anonymous",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "named",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q111.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ferry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.ferry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "gate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.gate"
+                    }
+                  ]
+                },
+                {
+                  "equals": "name",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.name"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

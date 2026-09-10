@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 1,
+  "id": "q194",
+  "number": 194,
+  "title": "売れた故郷",
+  "client": "移動集落の住人サナ",
+  "brief": "売られた故郷の契約を調べてください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q194_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "season": {
+      "label": "巡る観光地",
+      "text": "季節ごとに巡る契約へ変えた。降りる家は別の暮らしを選び、移動する窓の灯りが遠ざかった。",
+      "gold": 165,
+      "xp": 105
+    },
+    "buy": {
+      "label": "住人の共同所有",
+      "text": "建物を共同所有へ戻した。住人は維持費も引き受け、次の塩場までの当番を決めた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "move": {
+      "label": "離れた故郷",
+      "text": "希望者は降りた。建物が売られたことと人の行先を分け、動く故郷の灯りを陸から見送った。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "村人は「いつもの揺れ」が変わったことで、進路変更を知ります。商会は観光地へ固定したいが、巨獣は定期的に塩地へ行かなければ衰弱します。伝承として聞いた巡回が、生存の条件だったと分かります。",
+      "fixedPast": "巨獣の背に建つ移動村が、獣ごと商会へ売却されます。村の代表は借金を返して住民を救いたい。一方、獣使いは巨獣の行きたい季節の道を守りたいと、移動路の調査を頼みます。売買は建物の権利でも、獣や住民の意思の所有ではありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "移動集落の住人サナ",
+        "beliefsAndGoals": "巨獣の背に建つ移動村が、獣ごと商会へ売却されます。村の代表は借金を返して住民を救いたい。一方、獣使いは巨獣の行きたい季節の道を守りたいと、移動路の調査を頼みます。売買は建物の権利でも、獣や住民の意思の所有ではありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "売られた故郷の契約を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "売却後の護衛→路の調査→商会の計画提示→季節巡回を契約へ加える／住民が下りる／買戻し。買戻しは十分な資金と住民の承認が必要です。資金がなくても巡回権や退去費用を交渉できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q194.scene.entry"
+        },
+        {
+          "id": "talk",
+          "script": "q194.scene.talk"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "売られた故郷の契約を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "村人は「いつもの揺れ」が変わったことで、進路変更を知ります。商会は観光地へ固定したいが、巨獣は定期的に塩地へ行かなければ衰弱します。伝承として聞いた巡回が、生存の条件だったと分かります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q194.scene.entry"
+      },
+      {
+        "id": "talk",
+        "script": "q194.scene.talk"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q194.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q194.survey",
+        "meaning": "作者原稿の survey に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "talk"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "巨大獣の背の家々を商人が買った。売られたのは建物で、人ではない。獣は塩の道を巡る必要があるのに、観光地として固定する計画だった。",
+        "options": [
+          {
+            "id": "survey",
+            "text": "獣の通る塩場と契約書を照合する",
+            "to": "talk",
+            "set": {
+              "survey": true
+            }
+          },
+          {
+            "id": "leave",
+            "text": "住人の希望を聞き、移住を相談する",
+            "to": "talk"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "text": [
+          "サナたちは移動を続けたい。降りたい家もあり、その人たちまで拘束する契約には同意しない。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q194.survey"
+              },
+              "right": true
+            },
+            "yes": "塩場の調査を示すと、商人も固定すれば獣を弱らせると認めた。",
+            "no": "固定が可能かはまだ調べていない。契約の修正には巡回の根拠が必要だ。"
+          }
+        ],
+        "options": [
+          {
+            "id": "survey",
+            "text": "獣の通る塩場を実地調査する",
+            "to": "talk",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q194.survey"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "survey": true
+            }
+          },
+          {
+            "id": "season",
+            "text": "季節巡回と希望者の下船を条件に契約を直す",
+            "to": "@season",
+            "need": [
+              "survey"
+            ]
+          },
+          {
+            "id": "buy",
+            "text": "120Gを負担し、住人の共同所有へ買い戻す",
+            "to": "@buy",
+            "cost": {
+              "gold": 120
+            },
+            "need": [
+              "survey"
+            ]
+          },
+          {
+            "id": "move",
+            "text": "希望する住人の移住を助ける",
+            "to": "@move"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q194.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q194.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "巨大獣の背の家々を商人が買った。売られたのは建物で、人ではない。獣は塩の道を巡る必要があるのに、観光地として固定する計画だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "survey",
+              "text": "獣の通る塩場と契約書を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q194.survey",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q194.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "住人の希望を聞き、移住を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q194.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q194.scene.talk": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q194.node",
+          "value": "talk"
+        },
+        {
+          "op": "say",
+          "text": "サナたちは移動を続けたい。降りたい家もあり、その人たちまで拘束する契約には同意しない。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q194.survey"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "塩場の調査を示すと、商人も固定すれば獣を弱らせると認めた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "固定が可能かはまだ調べていない。契約の修正には巡回の根拠が必要だ。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "survey",
+              "text": "獣の通る塩場を実地調査する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q194.survey"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q194.survey",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q194.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "season",
+              "text": "季節巡回と希望者の下船を条件に契約を直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q194.survey"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q194.end.season"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "120Gを負担し、住人の共同所有へ買い戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q194.survey"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 120
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・G 120消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -120
+                },
+                {
+                  "op": "jump",
+                  "script": "q194.end.buy"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "希望する住人の移住を助ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q194.end.move"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q194.end.season": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "季節ごとに巡る契約へ変えた。降りる家は別の暮らしを選び、移動する窓の灯りが遠ざかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q194",
+              "outcome": "season"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q194.end.buy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "建物を共同所有へ戻した。住人は維持費も引き受け、次の塩場までの当番を決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q194",
+              "outcome": "buy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q194.end.move": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "希望者は降りた。建物が売られたことと人の行先を分け、動く故郷の灯りを陸から見送った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q194",
+              "outcome": "move"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q194.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q194.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "season",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "季節ごとに巡る契約へ変えた。降りる家は別の暮らしを選び、移動する窓の灯りが遠ざかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "buy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "建物を共同所有へ戻した。住人は維持費も引き受け、次の塩場までの当番を決めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "move",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "希望者は降りた。建物が売られたことと人の行先を分け、動く故郷の灯りを陸から見送った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q194.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q194.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "talk",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q194.scene.talk"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q194.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

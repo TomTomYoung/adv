@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "像の塩を払い避難路を標示する",
       "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "白い像を守る骸兵を倒して砕く",
       "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "像を残し縄で帰路をつなぐ",
       "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。",
       "gold": 44,
       "xp": 57
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
       "history": [
@@ -140,24 +140,15 @@
         "clue_b"
       ],
       "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q011.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q011.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      }
+        "op": "contains",
+        "left": {
+          "ref": "quests.q011.evidence"
+        },
+        "right": "clue_a"
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +173,31 @@
         ],
         "script": "q011.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "白い像を守る骸兵を倒して砕くと像の塩を払い避難路を標示するの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q011.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q011.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q011.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q011.clue_a": {
@@ -326,6 +341,268 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "塩の花嫁\n\n坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q011.evidence"
+            },
+            "right": "clue_a"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q011.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白い像を守る骸兵を倒して砕く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q011",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "像の塩を払い避難路を標示する",
+              "condition": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q011.evidence"
+                },
+                "right": "clue_a"
+              },
+              "requirement": "現場の根拠を確認",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q011.evidence"
+                },
+                "right": "clue_a"
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "像を残し縄で帰路をつなぐ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」坑夫のメルは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q011.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q011.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q011.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q011.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q011.review"
             }
           ]
         }

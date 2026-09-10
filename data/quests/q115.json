@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "id": "q115",
+  "number": 115,
+  "title": "追手のいない逃亡",
+  "client": "料理人サビ",
+  "brief": "行先を誰にも知らせず、港まで護衛してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q115_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "secret": {
+      "label": "秘密の出発",
+      "text": "港までの護衛は済んだ。追手は現れず、包丁の包みだけがサビの膝に残った。",
+      "gold": 69,
+      "xp": 57
+    },
+    "farewell": {
+      "label": "挨拶して発つ",
+      "text": "船の時刻に間に合った。サビは厨房の失敗を心配する話を、少しだけ短くした。",
+      "gold": 69,
+      "xp": 57
+    },
+    "stay": {
+      "label": "別の立場",
+      "text": "サビは常勤へ戻らず、時折助言する立場を話し合った。助手の献立はそのまま食卓へ出た。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "道中の影は追手ではなく、忘れた包丁を届ける助手です。助手は自分の献立を試せる喜びと師への敬意を両方持ちます。包丁が丁寧に研がれていることを見せてから、厨房が通常営業していると伝えます。",
+      "fixedPast": "高級料理人サビが、誰にも行先を知らせず港まで護衛してほしいと頼みます。宮廷から逃げていると思わせますが、雇い主は退職を認めています。サビは、自分がいなければ厨房が崩れると信じ、追われることで必要とされていた証拠を得たいのです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "料理人サビ",
+        "beliefsAndGoals": "高級料理人サビが、誰にも行先を知らせず港まで護衛してほしいと頼みます。宮廷から逃げていると思わせますが、雇い主は退職を認めています。サビは、自分がいなければ厨房が崩れると信じ、追われることで必要とされていた証拠を得たいのです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "行先を誰にも知らせず、港まで護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "裏門→隠密路／市場→助手に遭遇→港。助手を追い払って秘密を守る、事情を確かめる、本人の同意で厨房へ一度戻る道があります。戻っても船を逃さない便を事前に確認できます。無理に改心させなくても護衛は完了します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q115.scene.entry"
+        },
+        {
+          "id": "knife",
+          "script": "q115.scene.knife"
+        },
+        {
+          "id": "farewell",
+          "script": "q115.scene.farewell"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "行先を誰にも知らせず、港まで護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "道中の影は追手ではなく、忘れた包丁を届ける助手です。助手は自分の献立を試せる喜びと師への敬意を両方持ちます。包丁が丁寧に研がれていることを見せてから、厨房が通常営業していると伝えます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q115.scene.entry"
+      },
+      {
+        "id": "knife",
+        "script": "q115.scene.knife"
+      },
+      {
+        "id": "farewell",
+        "script": "q115.scene.farewell"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q115.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "裏道の影が近づく。サビは追手だと言うが、影は包丁の包みを掲げた助手だった。",
+        "options": [
+          {
+            "id": "send",
+            "text": "助手を追い返し、港へ急ぐ",
+            "to": "@secret"
+          },
+          {
+            "id": "listen",
+            "text": "包丁を届けた理由を聞く",
+            "to": "knife"
+          }
+        ]
+      },
+      {
+        "id": "knife",
+        "text": "包丁は丁寧に研がれている。「退職は承知しています。厨房も動いてます」助手は自分の献立が試せると嬉しそうだった。",
+        "options": [
+          {
+            "id": "port",
+            "text": "包丁を受け取り、そのまま港へ",
+            "to": "@secret"
+          },
+          {
+            "id": "farewell",
+            "text": "次の船に間に合う挨拶をサビへ提案する",
+            "to": "farewell"
+          }
+        ]
+      },
+      {
+        "id": "farewell",
+        "text": "サビは厨房へ一度寄ると答えた。助手の料理を食べると、塩加減に文句を付ける。助手は初めて直さなかった。",
+        "options": [
+          {
+            "id": "sail",
+            "text": "別れを告げ、予定の便で発つ",
+            "to": "@farewell"
+          },
+          {
+            "id": "stay",
+            "text": "サビが望む別の立場を雇い主と相談する",
+            "to": "@stay"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q115.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q115.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "裏道の影が近づく。サビは追手だと言うが、影は包丁の包みを掲げた助手だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "send",
+              "text": "助手を追い返し、港へ急ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.end.secret"
+                }
+              ]
+            },
+            {
+              "id": "listen",
+              "text": "包丁を届けた理由を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.scene.knife"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q115.scene.knife": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q115.node",
+          "value": "knife"
+        },
+        {
+          "op": "say",
+          "text": "包丁は丁寧に研がれている。「退職は承知しています。厨房も動いてます」助手は自分の献立が試せると嬉しそうだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "port",
+              "text": "包丁を受け取り、そのまま港へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.end.secret"
+                }
+              ]
+            },
+            {
+              "id": "farewell",
+              "text": "次の船に間に合う挨拶をサビへ提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.scene.farewell"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q115.scene.farewell": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q115.node",
+          "value": "farewell"
+        },
+        {
+          "op": "say",
+          "text": "サビは厨房へ一度寄ると答えた。助手の料理を食べると、塩加減に文句を付ける。助手は初めて直さなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sail",
+              "text": "別れを告げ、予定の便で発つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.end.farewell"
+                }
+              ]
+            },
+            {
+              "id": "stay",
+              "text": "サビが望む別の立場を雇い主と相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q115.end.stay"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q115.end.secret": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q115.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "港までの護衛は済んだ。追手は現れず、包丁の包みだけがサビの膝に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q115",
+              "outcome": "secret"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q115.end.farewell": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q115.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "船の時刻に間に合った。サビは厨房の失敗を心配する話を、少しだけ短くした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q115",
+              "outcome": "farewell"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q115.end.stay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q115.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "サビは常勤へ戻らず、時折助言する立場を話し合った。助手の献立はそのまま食卓へ出た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q115",
+              "outcome": "stay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q115.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q115.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q115.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "secret",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "港までの護衛は済んだ。追手は現れず、包丁の包みだけがサビの膝に残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "farewell",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "船の時刻に間に合った。サビは厨房の失敗を心配する話を、少しだけ短くした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "サビは常勤へ戻らず、時折助言する立場を話し合った。助手の献立はそのまま食卓へ出た。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q115.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q115.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "knife",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q115.scene.knife"
+                    }
+                  ]
+                },
+                {
+                  "equals": "farewell",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q115.scene.farewell"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q115.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

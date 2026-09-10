@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "id": "q181",
+  "number": 181,
+  "title": "白い矢筒",
+  "client": "新任の弓兵隊長",
+  "brief": "敵陣へ矢文を届ける護衛をお願いします。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q181_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "meet": {
+      "label": "短い休戦",
+      "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "rescue": {
+      "label": "誤射からの救援",
+      "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "withdraw": {
+      "label": "別の伝達路",
+      "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "古参が矢尻を外す動作を、戦闘準備不足に見せます。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かります。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されません。",
+      "fixedPast": "弓兵隊長は、敵陣へ矢文を届ける護衛を頼みます。白い矢筒は停戦使者の印ですが、新任隊長はその意味を知らず、古参の臆病さと思っています。古参は部下の前で訂正して隊長の面目を潰したくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "新任の弓兵隊長",
+        "beliefsAndGoals": "弓兵隊長は、敵陣へ矢文を届ける護衛を頼みます。白い矢筒は停戦使者の印ですが、新任隊長はその意味を知らず、古参の臆病さと思っています。古参は部下の前で訂正して隊長の面目を潰したくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "敵陣へ矢文を届ける護衛をお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "準備→古参へ質問／直ちに前線→信号交換→対面／撤回。慣習を知り通達すれば安全な会談路、通達なしなら誤射の騒動から救援場面へ移ります。返礼がなければ勝手に停戦成立とせず戻れます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q181.scene.entry"
+        },
+        {
+          "id": "signal",
+          "script": "q181.scene.signal"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "敵陣へ矢文を届ける護衛をお願いします。"
+    },
+    "reveal": {
+      "newInformation": "古参が矢尻を外す動作を、戦闘準備不足に見せます。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かります。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q181.scene.entry"
+      },
+      {
+        "id": "signal",
+        "script": "q181.scene.signal"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q181.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q181.notice",
+        "meaning": "作者原稿の notice に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "古参から慣習を聞き、傭兵へも通達する",
+            "to": "signal",
+            "set": {
+              "notice": true
+            }
+          },
+          {
+            "id": "front",
+            "text": "通達せず直ちに前へ出る",
+            "to": "@rescue"
+          },
+          {
+            "id": "withdraw",
+            "text": "今の伝達は撤回する",
+            "to": "@withdraw"
+          }
+        ]
+      },
+      {
+        "id": "signal",
+        "text": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。",
+        "options": [
+          {
+            "id": "meet",
+            "text": "遺体回収に限った短い休戦を結ぶ",
+            "to": "@meet"
+          },
+          {
+            "id": "withdraw",
+            "text": "対面せず撤回する",
+            "to": "@withdraw"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q181.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q181.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "古参から慣習を聞き、傭兵へも通達する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q181.notice",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.scene.signal"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "通達せず直ちに前へ出る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.rescue"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今の伝達は撤回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q181.scene.signal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q181.node",
+          "value": "signal"
+        },
+        {
+          "op": "say",
+          "text": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "遺体回収に限った短い休戦を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.meet"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "対面せず撤回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q181.end.meet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "meet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.end.rescue": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "rescue"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.end.withdraw": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "withdraw"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q181.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "meet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "withdraw",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q181.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q181.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "signal",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q181.scene.signal"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q181.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

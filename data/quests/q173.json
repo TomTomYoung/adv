@@ -1,0 +1,505 @@
+{
+  "schemaVersion": 1,
+  "id": "q173",
+  "number": 173,
+  "title": "夜だけ帰る兵士",
+  "client": "寡婦テラ",
+  "brief": "夜だけ帰宅する夫に似た姿を確かめてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q173_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "guest": {
+      "label": "自分の料理を頼む客",
+      "text": "二人は客としての滞在に同意した。精霊は夫の好物ではない料理を頼み、テラは考えてから台所へ向かった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "part": {
+      "label": "記憶を墓地へ",
+      "text": "記憶は墓地へ戻った。帰宅の音はなくなり、テラは戸を閉じる時刻を自分で決めた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "copy": {
+      "label": "続く模倣",
+      "text": "安らぎはあった。古い家具を動かす話が出ると精霊は返事ができず、夫としての暮らしに限界が見えた。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "夫の悪い癖を知らず、良い思い出だけを正確に演じます。妻は早くから別物と気づいていますが、帰ってくる音を失いたくありません。精霊にも、誰かにならなければ家に居場所がないという誤認があります。",
+      "fixedPast": "寡婦テラは、戦死した夫が毎夜帰宅するので身元を確かめてほしいと頼みます。帰る姿は夫に似ていますが、家へ入る前に必ず土を払います。正体は夫の記憶を拾った墓守の精霊で、残された約束を果たせば夫になれると信じています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "寡婦テラ",
+        "beliefsAndGoals": "寡婦テラは、戦死した夫が毎夜帰宅するので身元を確かめてほしいと頼みます。帰る姿は夫に似ていますが、家へ入る前に必ず土を払います。正体は夫の記憶を拾った墓守の精霊で、残された約束を果たせば夫になれると信じています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "夜だけ帰宅する夫に似た姿を確かめてください。"
+      }
+    ],
+    "conflict": {
+      "design": "夜の訪問→会話／墓地調査→妻と精霊を別々に話させる→別れ・客として滞在・模倣継続。客扱いには双方の同意が必要です。嘘を続ける道もありますが、夫の家財を処分するなど模倣不能の変化が後日の試練になります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q173.scene.entry"
+        },
+        {
+          "id": "spirit",
+          "script": "q173.scene.spirit"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "夜だけ帰宅する夫に似た姿を確かめてください。"
+    },
+    "reveal": {
+      "newInformation": "夫の悪い癖を知らず、良い思い出だけを正確に演じます。妻は早くから別物と気づいていますが、帰ってくる音を失いたくありません。精霊にも、誰かにならなければ家に居場所がないという誤認があります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q173.scene.entry"
+      },
+      {
+        "id": "spirit",
+        "script": "q173.scene.spirit"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q173.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q173.wife",
+        "meaning": "作者原稿の wife に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "spirit"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "姿は戸口で必ず土を払う。良い思い出は正確だが、夫の悪い癖を一つも知らない。墓守の精霊が記憶を拾っていた。",
+        "options": [
+          {
+            "id": "wife",
+            "text": "テラ本人の思いを聞く",
+            "to": "spirit",
+            "set": {
+              "wife": true
+            }
+          },
+          {
+            "id": "spirit",
+            "text": "精霊に、ここへ来る理由を聞く",
+            "to": "spirit"
+          }
+        ]
+      },
+      {
+        "id": "spirit",
+        "text": "「約束を全部果たせば、あの人になれる」精霊は居場所を求めていた。テラは別物と気づいていたが、帰ってくる音を失いたくなかった。",
+        "options": [
+          {
+            "id": "guest",
+            "text": "双方に、夫でなく客としての滞在を相談する",
+            "to": "@guest",
+            "need": [
+              "wife"
+            ]
+          },
+          {
+            "id": "part",
+            "text": "墓地へ帰る別れを取り持つ",
+            "to": "@part"
+          },
+          {
+            "id": "copy",
+            "text": "当面は夫を模倣する暮らしを続ける",
+            "to": "@copy"
+          },
+          {
+            "id": "wife",
+            "text": "テラの意思を改めて聞く",
+            "to": "spirit",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q173.wife"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "wife": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q173.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q173.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "姿は戸口で必ず土を払う。良い思い出は正確だが、夫の悪い癖を一つも知らない。墓守の精霊が記憶を拾っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wife",
+              "text": "テラ本人の思いを聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q173.wife",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q173.scene.spirit"
+                }
+              ]
+            },
+            {
+              "id": "spirit",
+              "text": "精霊に、ここへ来る理由を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q173.scene.spirit"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q173.scene.spirit": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q173.node",
+          "value": "spirit"
+        },
+        {
+          "op": "say",
+          "text": "「約束を全部果たせば、あの人になれる」精霊は居場所を求めていた。テラは別物と気づいていたが、帰ってくる音を失いたくなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guest",
+              "text": "双方に、夫でなく客としての滞在を相談する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q173.wife"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q173.end.guest"
+                }
+              ]
+            },
+            {
+              "id": "part",
+              "text": "墓地へ帰る別れを取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q173.end.part"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "当面は夫を模倣する暮らしを続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q173.end.copy"
+                }
+              ]
+            },
+            {
+              "id": "wife",
+              "text": "テラの意思を改めて聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q173.wife"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q173.wife",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q173.scene.spirit"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q173.end.guest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q173.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人は客としての滞在に同意した。精霊は夫の好物ではない料理を頼み、テラは考えてから台所へ向かった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q173",
+              "outcome": "guest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q173.end.part": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q173.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "記憶は墓地へ戻った。帰宅の音はなくなり、テラは戸を閉じる時刻を自分で決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q173",
+              "outcome": "part"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q173.end.copy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q173.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "安らぎはあった。古い家具を動かす話が出ると精霊は返事ができず、夫としての暮らしに限界が見えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q173",
+              "outcome": "copy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q173.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q173.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q173.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "guest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二人は客としての滞在に同意した。精霊は夫の好物ではない料理を頼み、テラは考えてから台所へ向かった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "part",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "記憶は墓地へ戻った。帰宅の音はなくなり、テラは戸を閉じる時刻を自分で決めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "copy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "安らぎはあった。古い家具を動かす話が出ると精霊は返事ができず、夫としての暮らしに限界が見えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q173.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q173.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "spirit",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q173.scene.spirit"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q173.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

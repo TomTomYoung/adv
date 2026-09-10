@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "id": "q152",
+  "number": 152,
+  "title": "密書を読ませる仕事",
+  "client": "密偵カナ",
+  "brief": "目立つ封の密書を、敵の目を避けて運んでください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q152_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "sealed": {
+      "label": "密封した配達",
+      "text": "密書は読まれず届いた。表面の命令は守ったが、包囲を解く別案が必要になった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "decoy": {
+      "label": "承知した囮",
+      "text": "敵に偽計画が渡った。伝令は新しい封を押す前に、今度は何を守るのか尋ねた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "betray": {
+      "label": "知らされなかった役",
+      "text": "密書は読まれた。救出の時間を稼いでも、伝令を無断で失敗役にした裏切りは関係に残った。",
+      "gold": 117,
+      "xp": 81
+    },
+    "revise": {
+      "label": "計画の撤回",
+      "text": "救出計画は遅れた。誰が何を知るかを決め直し、伝令を勝手に囮へ戻さなかった。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "カナは安全な道を提案されるたび理由を変えて反対します。封の模様と別の捨て文書が一致し、漏洩が予定されていると分かります。伝令は囮になること自体より、知らされず失敗者にされることへ怒ります。",
+      "fixedPast": "密偵カナは、敵の目を避けて密書を運べと頼みます。しかし彼女は敵に読ませることを狙い、わざと目立つ封をしています。書かれた偽の移動計画で敵兵を空の谷へ引き、包囲された味方を逃がすためです。同行の若い伝令は、秘密を守る仕事に誇りを持っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "密偵カナ",
+        "beliefsAndGoals": "密偵カナは、敵の目を避けて密書を運べと頼みます。しかし彼女は敵に読ませることを狙い、わざと目立つ封をしています。書かれた偽の移動計画で敵兵を空の谷へ引き、包囲された味方を逃がすためです。同行の若い伝令は、秘密を守る仕事に誇りを持っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "目立つ封の密書を、敵の目を避けて運んでください。"
+      }
+    ],
+    "conflict": {
+      "design": "密書受領→尾行の確認→密封を守って届ける／計画を承知して奪わせる／別の偽情報を交渉。囮戦で逃げても、密書を残したかで結果が違います。本人の同意なく囮を続ける道は選べますが、その裏切りを関係へ残します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q152.scene.entry"
+        },
+        {
+          "id": "plan",
+          "script": "q152.scene.plan"
+        },
+        {
+          "id": "decoy",
+          "script": "q152.scene.decoy"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "目立つ封の密書を、敵の目を避けて運んでください。"
+    },
+    "reveal": {
+      "newInformation": "カナは安全な道を提案されるたび理由を変えて反対します。封の模様と別の捨て文書が一致し、漏洩が予定されていると分かります。伝令は囮になること自体より、知らされず失敗者にされることへ怒ります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q152.scene.entry"
+      },
+      {
+        "id": "plan",
+        "script": "q152.scene.plan"
+      },
+      {
+        "id": "decoy",
+        "script": "q152.scene.decoy"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q152.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q152.consent",
+        "meaning": "作者原稿の consent に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "plan"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "カナは安全な道を勧めるたび反対する。同じ封の捨て文書には、兵を空の谷へ誘う偽の計画があった。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "密封を守り、そのまま届ける",
+            "to": "@sealed"
+          },
+          {
+            "id": "ask",
+            "text": "漏洩を狙っているのか本人へ聞く",
+            "to": "plan"
+          }
+        ]
+      },
+      {
+        "id": "plan",
+        "text": "包囲された味方を逃がすため敵に読ませたいという。若い伝令は「囮より、知らずに失敗者にされるのが嫌だ」と怒った。",
+        "options": [
+          {
+            "id": "consent",
+            "text": "伝令へ計画と報告の扱いを説明して同意を得る",
+            "to": "decoy",
+            "set": {
+              "consent": true
+            }
+          },
+          {
+            "id": "secret",
+            "text": "伝令に知らせず密書を奪わせる",
+            "to": "@betray"
+          },
+          {
+            "id": "revise",
+            "text": "漏洩役を含めた別計画へ交渉し直す",
+            "to": "@revise"
+          }
+        ]
+      },
+      {
+        "id": "decoy",
+        "text": "伝令は失敗報告にも本人の条件を添えることに同意した。囮の場で密書を残すか、守って退くかは明示して選べる。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "密書を残して離脱する",
+            "to": "@decoy"
+          },
+          {
+            "id": "fight",
+            "text": "密書を守って突破する。逃走でも封を保持する",
+            "to": "@sealed",
+            "combat": "guard_6",
+            "escape": "@sealed"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q152.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q152.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "カナは安全な道を勧めるたび反対する。同じ封の捨て文書には、兵を空の谷へ誘う偽の計画があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "密封を守り、そのまま届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q152.end.sealed"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "漏洩を狙っているのか本人へ聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q152.scene.plan"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q152.scene.plan": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q152.node",
+          "value": "plan"
+        },
+        {
+          "op": "say",
+          "text": "包囲された味方を逃がすため敵に読ませたいという。若い伝令は「囮より、知らずに失敗者にされるのが嫌だ」と怒った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consent",
+              "text": "伝令へ計画と報告の扱いを説明して同意を得る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q152.consent",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q152.scene.decoy"
+                }
+              ]
+            },
+            {
+              "id": "secret",
+              "text": "伝令に知らせず密書を奪わせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q152.end.betray"
+                }
+              ]
+            },
+            {
+              "id": "revise",
+              "text": "漏洩役を含めた別計画へ交渉し直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q152.end.revise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q152.scene.decoy": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q152.node",
+          "value": "decoy"
+        },
+        {
+          "op": "say",
+          "text": "伝令は失敗報告にも本人の条件を添えることに同意した。囮の場で密書を残すか、守って退くかは明示して選べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "密書を残して離脱する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q152.end.decoy"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "密書を守って突破する。逃走でも封を保持する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q152.end.sealed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q152.end.sealed"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q152.end.sealed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q152.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "密書は読まれず届いた。表面の命令は守ったが、包囲を解く別案が必要になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q152",
+              "outcome": "sealed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q152.end.decoy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q152.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "敵に偽計画が渡った。伝令は新しい封を押す前に、今度は何を守るのか尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q152",
+              "outcome": "decoy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q152.end.betray": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q152.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "密書は読まれた。救出の時間を稼いでも、伝令を無断で失敗役にした裏切りは関係に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q152",
+              "outcome": "betray"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q152.end.revise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q152.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "救出計画は遅れた。誰が何を知るかを決め直し、伝令を勝手に囮へ戻さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q152",
+              "outcome": "revise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q152.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q152.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q152.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "sealed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "密書は読まれず届いた。表面の命令は守ったが、包囲を解く別案が必要になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decoy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "敵に偽計画が渡った。伝令は新しい封を押す前に、今度は何を守るのか尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "betray",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "密書は読まれた。救出の時間を稼いでも、伝令を無断で失敗役にした裏切りは関係に残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "revise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "救出計画は遅れた。誰が何を知るかを決め直し、伝令を勝手に囮へ戻さなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q152.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q152.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "plan",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q152.scene.plan"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decoy",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q152.scene.decoy"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q152.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

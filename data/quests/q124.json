@@ -1,0 +1,713 @@
+{
+  "schemaVersion": 1,
+  "id": "q124",
+  "number": 124,
+  "title": "二度死んだ大猪",
+  "client": "村の鍛冶屋",
+  "brief": "同じ大猪の討伐報告が二度届きました。比較してください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q124_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "twins": {
+      "label": "二頭分の報告",
+      "text": "二人に討伐報酬が認められた。飼主への請求は別に残り、猟師たちは牙を左右揃えて飾った。",
+      "gold": 81,
+      "xp": 63
+    },
+    "fraud": {
+      "label": "訂正を求められる報告",
+      "text": "告発の後、左右の牙を並べた訂正要求が届いた。調査料の精算と、誤った名指しの責任は別に残った。",
+      "gold": 81,
+      "xp": 63
+    },
+    "unknown": {
+      "label": "留保した報告",
+      "text": "支払いは保留となった。鍛冶屋は二本の牙を預かり、次の比較ができるよう別々の札を付けた。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "牙の欠け方は似ていますが、左右が反対です。最初の報告だけで片方を嘘つきにできない証拠を見せます。飼主が二頭分の餌桶を一つずつ隠す姿を置き、復活怪異の仮説から、同一視された二個体へ読みを変えます。",
+      "fixedPast": "村の鍛冶屋は、大猪の討伐報告が二度届いたので調査を求めます。二人の猟師は互いを詐欺師と呼んでいます。しかし猪は双子で、同じ焼印を付けられた家畜が野生化したものでした。元の飼主は被害弁償を恐れ、名乗りません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "村の鍛冶屋",
+        "beliefsAndGoals": "村の鍛冶屋は、大猪の討伐報告が二度届いたので調査を求めます。二人の猟師は互いを詐欺師と呼んでいます。しかし猪は双子で、同じ焼印を付けられた家畜が野生化したものでした。元の飼主は被害弁償を恐れ、名乗りません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "同じ大猪の討伐報告が二度届きました。比較してください。"
+      }
+    ],
+    "conflict": {
+      "design": "報告の比較→猟師二人／飼主の納屋→残る被害の確認→結論。二つの牙を比較すれば飼主を知らなくても双子説を確定できます。納屋へ入る許可が得られなければ公開の家畜市記録で代替できます。確信がなければ保留報告も可能です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q124.scene.entry"
+        },
+        {
+          "id": "owner",
+          "script": "q124.scene.owner"
+        },
+        {
+          "id": "report",
+          "script": "q124.scene.report"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ大猪の討伐報告が二度届きました。比較してください。"
+    },
+    "reveal": {
+      "newInformation": "牙の欠け方は似ていますが、左右が反対です。最初の報告だけで片方を嘘つきにできない証拠を見せます。飼主が二頭分の餌桶を一つずつ隠す姿を置き、復活怪異の仮説から、同一視された二個体へ読みを変えます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q124.scene.entry"
+      },
+      {
+        "id": "owner",
+        "script": "q124.scene.owner"
+      },
+      {
+        "id": "report",
+        "script": "q124.scene.report"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q124.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q124.left",
+        "meaning": "作者原稿の left に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q124.right",
+        "meaning": "作者原稿の right に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q124.owner",
+        "meaning": "作者原稿の owner に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "owner"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "二人の猟師が互いを詐欺師と呼ぶ。似た牙が並ぶが、欠けた側が違う。",
+        "options": [
+          {
+            "id": "left",
+            "text": "一人目の左牙を調べる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q124.left"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "left": true
+            },
+            "textAfter": "左側の先端に古い欠けがある。"
+          },
+          {
+            "id": "right",
+            "text": "二人目の右牙を調べる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q124.right"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "right": true
+            },
+            "textAfter": "同じ形の欠けが右側にある。同じ一本ではない。"
+          },
+          {
+            "id": "owner",
+            "text": "公開の家畜市記録を照合する",
+            "to": "owner"
+          },
+          {
+            "id": "report",
+            "text": "現在の証拠で報告する",
+            "to": "report"
+          }
+        ]
+      },
+      {
+        "id": "owner",
+        "text": "同じ焼印の双子が二頭売られていた。元の飼主は弁償を恐れ、餌桶を一つずつ納屋へ隠していた。",
+        "options": [
+          {
+            "id": "record",
+            "text": "記録を持ち帰る",
+            "to": "report",
+            "set": {
+              "owner": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "報告は猟師への支払いと飼主の弁償を左右する。分からない点を保留することもできる。",
+        "options": [
+          {
+            "id": "twins",
+            "text": "二つの牙、または市の記録を根拠に二頭と報告する",
+            "to": "@twins",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "and",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q124.left"
+                      },
+                      "right": true
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q124.right"
+                      },
+                      "right": true
+                    }
+                  ]
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q124.owner"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "fraud",
+            "text": "比較を十分にせず、一人を詐欺師として告発する",
+            "to": "@fraud"
+          },
+          {
+            "id": "unknown",
+            "text": "同一個体か不明として保留報告する",
+            "to": "@unknown"
+          },
+          {
+            "id": "back",
+            "text": "比較へ戻る",
+            "to": "entry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q124.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q124.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "二人の猟師が互いを詐欺師と呼ぶ。似た牙が並ぶが、欠けた側が違う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "left",
+              "text": "一人目の左牙を調べる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q124.left"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q124.left",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "左側の先端に古い欠けがある。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q124.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "right",
+              "text": "二人目の右牙を調べる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q124.right"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q124.right",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "同じ形の欠けが右側にある。同じ一本ではない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q124.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "owner",
+              "text": "公開の家畜市記録を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.scene.owner"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "現在の証拠で報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.scene.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q124.scene.owner": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q124.node",
+          "value": "owner"
+        },
+        {
+          "op": "say",
+          "text": "同じ焼印の双子が二頭売られていた。元の飼主は弁償を恐れ、餌桶を一つずつ納屋へ隠していた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "記録を持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q124.owner",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q124.scene.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q124.scene.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q124.node",
+          "value": "report"
+        },
+        {
+          "op": "say",
+          "text": "報告は猟師への支払いと飼主の弁償を左右する。分からない点を保留することもできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "twins",
+              "text": "二つの牙、または市の記録を根拠に二頭と報告する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "or",
+                    "args": [
+                      {
+                        "op": "and",
+                        "args": [
+                          {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.quest.q124.left"
+                            },
+                            "right": true
+                          },
+                          {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.quest.q124.right"
+                            },
+                            "right": true
+                          }
+                        ]
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q124.owner"
+                        },
+                        "right": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.end.twins"
+                }
+              ]
+            },
+            {
+              "id": "fraud",
+              "text": "比較を十分にせず、一人を詐欺師として告発する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.end.fraud"
+                }
+              ]
+            },
+            {
+              "id": "unknown",
+              "text": "同一個体か不明として保留報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.end.unknown"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "比較へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q124.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q124.end.twins": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q124.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人に討伐報酬が認められた。飼主への請求は別に残り、猟師たちは牙を左右揃えて飾った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q124",
+              "outcome": "twins"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q124.end.fraud": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q124.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "告発の後、左右の牙を並べた訂正要求が届いた。調査料の精算と、誤った名指しの責任は別に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q124",
+              "outcome": "fraud"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q124.end.unknown": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q124.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "支払いは保留となった。鍛冶屋は二本の牙を預かり、次の比較ができるよう別々の札を付けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q124",
+              "outcome": "unknown"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q124.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q124.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q124.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "twins",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二人に討伐報酬が認められた。飼主への請求は別に残り、猟師たちは牙を左右揃えて飾った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fraud",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "告発の後、左右の牙を並べた訂正要求が届いた。調査料の精算と、誤った名指しの責任は別に残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "unknown",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "支払いは保留となった。鍛冶屋は二本の牙を預かり、次の比較ができるよう別々の札を付けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q124.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q124.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "owner",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q124.scene.owner"
+                    }
+                  ]
+                },
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q124.scene.report"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q124.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

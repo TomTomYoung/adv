@@ -1,0 +1,729 @@
+{
+  "schemaVersion": 1,
+  "id": "q136",
+  "number": 136,
+  "title": "翻訳しない扉",
+  "client": "言語学者トゥリ",
+  "brief": "文字は読めるのに開かない扉を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q136_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "study": {
+      "label": "記録室への案内",
+      "text": "扉は記録室への道を開いた。トゥリは論文の冒頭に訳文でなく、「お名前は？」と書いた。",
+      "gold": 93,
+      "xp": 69
+    },
+    "shelter": {
+      "label": "宿直室の一夜",
+      "text": "宿直室へ案内された。トゥリは保存食を受け取り、まず礼を言った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "break": {
+      "label": "別の入口",
+      "text": "守護者を退けて穴を開けた。来訪の許可は得ておらず、研究者は損傷箇所を記録する仕事を負った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "leave": {
+      "label": "扉の外へ",
+      "text": "扉は別れの挨拶を返した。トゥリはそれを訳し終えてから、自分でも返事をした。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "古い録音石では、番人が名前を聞き返しています。辞書通りの単語だけを唱えても会話になりません。扉は正確な発音より、聞き返しへの応答を待っています。ただし誰でも無条件で入れるのではなく、訪問理由を申告する規則があります。",
+      "fixedPast": "言語学者トゥリは、読めるのに開かない遺跡の扉を調べています。傭兵は通行料の暗号と思い、供物を積みます。扉の文は命令でも謎でもなく、来訪者が自分の名を名乗る挨拶です。学者は翻訳の正しさに固執し、対話の場として扱えていません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "言語学者トゥリ",
+        "beliefsAndGoals": "言語学者トゥリは、読めるのに開かない遺跡の扉を調べています。傭兵は通行料の暗号と思い、供物を積みます。扉の文は命令でも謎でもなく、来訪者が自分の名を名乗る挨拶です。学者は翻訳の正しさに固執し、対話の場として扱えていません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "文字は読めるのに開かない扉を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "扉→辞書調査／録音／試しに返事→用件の申告→内部。早期に会話と見抜けば調査を省けます。偽名でも通れますが、記録に残る名が変わります。破壊は別の入口を作る代わりに封印守護者との戦闘を招きます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q136.scene.entry"
+        },
+        {
+          "id": "record",
+          "script": "q136.scene.record"
+        },
+        {
+          "id": "purpose",
+          "script": "q136.scene.purpose"
+        },
+        {
+          "id": "refused",
+          "script": "q136.scene.refused"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "文字は読めるのに開かない扉を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "古い録音石では、番人が名前を聞き返しています。辞書通りの単語だけを唱えても会話になりません。扉は正確な発音より、聞き返しへの応答を待っています。ただし誰でも無条件で入れるのではなく、訪問理由を申告する規則があります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q136.scene.entry"
+      },
+      {
+        "id": "record",
+        "script": "q136.scene.record"
+      },
+      {
+        "id": "purpose",
+        "script": "q136.scene.purpose"
+      },
+      {
+        "id": "refused",
+        "script": "q136.scene.refused"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q136.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q136.name",
+        "meaning": "作者原稿の name に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "record"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "扉は来訪者へ同じ文を繰り返す。傭兵の供物には反応しない。辞書には挨拶の語が並んでいた。",
+        "options": [
+          {
+            "id": "reply",
+            "text": "試しに自分の名で挨拶する",
+            "to": "purpose",
+            "set": {
+              "name": "real"
+            }
+          },
+          {
+            "id": "record",
+            "text": "録音石の会話を聞く",
+            "to": "record"
+          },
+          {
+            "id": "alias",
+            "text": "旅の仮名を名乗って挨拶する",
+            "to": "purpose",
+            "set": {
+              "name": "alias"
+            }
+          },
+          {
+            "id": "break",
+            "text": "封印を破り、守護者と戦う",
+            "to": "@break",
+            "combat": "guard_4",
+            "escape": "entry"
+          }
+        ]
+      },
+      {
+        "id": "record",
+        "text": "番人が「お名前は？」と聞き返していた。正しい単語を唱えるより、返事を続ける必要がある。",
+        "options": [
+          {
+            "id": "reply",
+            "text": "名乗り返す",
+            "to": "purpose",
+            "set": {
+              "name": "real"
+            }
+          }
+        ]
+      },
+      {
+        "id": "purpose",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q136.name"
+              },
+              "right": "alias"
+            },
+            "yes": "旅の仮名が来訪帳へ刻まれた。",
+            "no": "名乗った名が来訪帳へ刻まれた。"
+          },
+          "「ご用件は？」扉は次の返事を待つ。"
+        ],
+        "options": [
+          {
+            "id": "study",
+            "text": "記録を研究したいと伝える",
+            "to": "@study"
+          },
+          {
+            "id": "shelter",
+            "text": "一夜の避難を求める",
+            "to": "@shelter"
+          },
+          {
+            "id": "loot",
+            "text": "財宝を略奪したいと伝える",
+            "to": "refused"
+          }
+        ]
+      },
+      {
+        "id": "refused",
+        "text": "「その用途では許可できません」扉は理由を告げた。別の用件を考えるか帰れる。",
+        "options": [
+          {
+            "id": "again",
+            "text": "用件を考え直す",
+            "to": "purpose"
+          },
+          {
+            "id": "leave",
+            "text": "入場を辞退する",
+            "to": "@leave"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q136.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q136.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "扉は来訪者へ同じ文を繰り返す。傭兵の供物には反応しない。辞書には挨拶の語が並んでいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "試しに自分の名で挨拶する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q136.name",
+                  "value": "real"
+                },
+                {
+                  "op": "jump",
+                  "script": "q136.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "録音石の会話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.scene.record"
+                }
+              ]
+            },
+            {
+              "id": "alias",
+              "text": "旅の仮名を名乗って挨拶する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q136.name",
+                  "value": "alias"
+                },
+                {
+                  "op": "jump",
+                  "script": "q136.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "封印を破り、守護者と戦う",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q136.end.break"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q136.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q136.scene.record": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q136.node",
+          "value": "record"
+        },
+        {
+          "op": "say",
+          "text": "番人が「お名前は？」と聞き返していた。正しい単語を唱えるより、返事を続ける必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "名乗り返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q136.name",
+                  "value": "real"
+                },
+                {
+                  "op": "jump",
+                  "script": "q136.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q136.scene.purpose": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q136.node",
+          "value": "purpose"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q136.name"
+            },
+            "right": "alias"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旅の仮名が来訪帳へ刻まれた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "名乗った名が来訪帳へ刻まれた。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "「ご用件は？」扉は次の返事を待つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "study",
+              "text": "記録を研究したいと伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.end.study"
+                }
+              ]
+            },
+            {
+              "id": "shelter",
+              "text": "一夜の避難を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.end.shelter"
+                }
+              ]
+            },
+            {
+              "id": "loot",
+              "text": "財宝を略奪したいと伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.scene.refused"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q136.scene.refused": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q136.node",
+          "value": "refused"
+        },
+        {
+          "op": "say",
+          "text": "「その用途では許可できません」扉は理由を告げた。別の用件を考えるか帰れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "text": "用件を考え直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "入場を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q136.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q136.end.study": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q136.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "扉は記録室への道を開いた。トゥリは論文の冒頭に訳文でなく、「お名前は？」と書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q136",
+              "outcome": "study"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q136.end.shelter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q136.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "宿直室へ案内された。トゥリは保存食を受け取り、まず礼を言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q136",
+              "outcome": "shelter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q136.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q136.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "守護者を退けて穴を開けた。来訪の許可は得ておらず、研究者は損傷箇所を記録する仕事を負った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q136",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q136.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q136.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "扉は別れの挨拶を返した。トゥリはそれを訳し終えてから、自分でも返事をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q136",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q136.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q136.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q136.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "study",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "扉は記録室への道を開いた。トゥリは論文の冒頭に訳文でなく、「お名前は？」と書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "shelter",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "宿直室へ案内された。トゥリは保存食を受け取り、まず礼を言った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "break",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "守護者を退けて穴を開けた。来訪の許可は得ておらず、研究者は損傷箇所を記録する仕事を負った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "扉は別れの挨拶を返した。トゥリはそれを訳し終えてから、自分でも返事をした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q136.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q136.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "record",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q136.scene.record"
+                    }
+                  ]
+                },
+                {
+                  "equals": "purpose",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q136.scene.purpose"
+                    }
+                  ]
+                },
+                {
+                  "equals": "refused",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q136.scene.refused"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q136.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

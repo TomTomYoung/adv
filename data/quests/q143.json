@@ -1,0 +1,441 @@
+{
+  "schemaVersion": 1,
+  "id": "q143",
+  "number": 143,
+  "title": "辛くない火吹き料理",
+  "client": "料理祭の店主メメ",
+  "brief": "火吹き料理を今年も出すため、準備を手伝ってください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q143_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "fire": {
+      "label": "炎を続ける店",
+      "text": "代役が火を吹き、客は食べる前に笑った。休暇中の精霊は客席へ座り、料理を注文した。",
+      "gold": 105,
+      "xp": 75
+    },
+    "taste": {
+      "label": "火を吹かない名物",
+      "text": "料理の味で常連が付き始めた。休んでいる精霊だけが、炎のない皿へ文句を付けた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "shift": {
+      "label": "休憩のある厨房",
+      "text": "助手が演出の休み時間を説明した。忙しいが続けられる仕事になり、精霊は客席で自分の料理を食べた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "客は辛さを恐れながら注文し、炎が出ない一皿を子どもが美味しそうに食べます。味はもともと穏やかです。メメが守りたいのは伝統だけでなく、食べる前に客が笑う瞬間。助手は、それを味への裏切りと狭く見ています。",
+      "fixedPast": "料理祭の店主メメは、火を吹く名物料理の香辛料を集めてほしいと頼みます。助手は味より派手な演出を売ることを嫌います。名物の炎は香辛料でなく、皿の底の小さな精霊が作っています。精霊は休暇を要求し、当日だけ火を出しません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "料理祭の店主メメ",
+        "beliefsAndGoals": "料理祭の店主メメは、火を吹く名物料理の香辛料を集めてほしいと頼みます。助手は味より派手な演出を売ることを嫌います。名物の炎は香辛料でなく、皿の底の小さな精霊が作っています。精霊は休暇を要求し、当日だけ火を出しません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "火吹き料理を今年も出すため、準備を手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "仕入れ→試食／精霊と話す→献立の決定→祭。代役精霊を雇って炎を守る、味だけで勝負する、時間ごとに演出を休ませる道があります。代役には費用、交代制には店主と助手の役割合意が必要です。収集に失敗しても普通の材料で出店できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q143.scene.entry"
+        },
+        {
+          "id": "roles",
+          "script": "q143.scene.roles"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "火吹き料理を今年も出すため、準備を手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "客は辛さを恐れながら注文し、炎が出ない一皿を子どもが美味しそうに食べます。味はもともと穏やかです。メメが守りたいのは伝統だけでなく、食べる前に客が笑う瞬間。助手は、それを味への裏切りと狭く見ています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q143.scene.entry"
+      },
+      {
+        "id": "roles",
+        "script": "q143.scene.roles"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q143.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "炎のない皿を子供がおいしそうに食べる。辛さは穏やかで、炎は皿底の精霊が出していた。今日は休暇がほしいという。",
+        "options": [
+          {
+            "id": "hire",
+            "text": "40Gで代役の精霊を雇い、炎を守る",
+            "to": "@fire",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "taste",
+            "text": "普通の皿に替え、味だけで出店する",
+            "to": "@taste"
+          },
+          {
+            "id": "roles",
+            "text": "店主と助手に交代制の役割を相談する",
+            "to": "roles"
+          }
+        ]
+      },
+      {
+        "id": "roles",
+        "text": "メメは演出の時間を区切り、助手は休憩時間を客へ説明すると答えた。精霊はまとまった休憩が取れるなら引き受ける。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "三者の役割と休憩を確定する",
+            "to": "@shift"
+          },
+          {
+            "id": "taste",
+            "text": "調整をやめ、味だけの出店にする",
+            "to": "@taste"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q143.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q143.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "炎のない皿を子供がおいしそうに食べる。辛さは穏やかで、炎は皿底の精霊が出していた。今日は休暇がほしいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hire",
+              "text": "40Gで代役の精霊を雇い、炎を守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q143.end.fire"
+                }
+              ]
+            },
+            {
+              "id": "taste",
+              "text": "普通の皿に替え、味だけで出店する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q143.end.taste"
+                }
+              ]
+            },
+            {
+              "id": "roles",
+              "text": "店主と助手に交代制の役割を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q143.scene.roles"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q143.scene.roles": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q143.node",
+          "value": "roles"
+        },
+        {
+          "op": "say",
+          "text": "メメは演出の時間を区切り、助手は休憩時間を客へ説明すると答えた。精霊はまとまった休憩が取れるなら引き受ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "三者の役割と休憩を確定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q143.end.shift"
+                }
+              ]
+            },
+            {
+              "id": "taste",
+              "text": "調整をやめ、味だけの出店にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q143.end.taste"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q143.end.fire": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q143.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "代役が火を吹き、客は食べる前に笑った。休暇中の精霊は客席へ座り、料理を注文した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q143",
+              "outcome": "fire"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q143.end.taste": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q143.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "料理の味で常連が付き始めた。休んでいる精霊だけが、炎のない皿へ文句を付けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q143",
+              "outcome": "taste"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q143.end.shift": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q143.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "助手が演出の休み時間を説明した。忙しいが続けられる仕事になり、精霊は客席で自分の料理を食べた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q143",
+              "outcome": "shift"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q143.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q143.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q143.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "fire",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "代役が火を吹き、客は食べる前に笑った。休暇中の精霊は客席へ座り、料理を注文した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "taste",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "料理の味で常連が付き始めた。休んでいる精霊だけが、炎のない皿へ文句を付けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "shift",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "助手が演出の休み時間を説明した。忙しいが続けられる仕事になり、精霊は客席で自分の料理を食べた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q143.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q143.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q143.scene.roles"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q143.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

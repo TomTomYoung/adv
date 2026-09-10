@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q184",
+  "number": 184,
+  "title": "捕虜の鍋",
+  "client": "捕虜収容所の料理係",
+  "brief": "なくなった大鍋を捜してください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q184_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "take": {
+      "label": "鍋の没収",
+      "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "other": {
+      "label": "距離のある食事",
+      "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "joint": {
+      "label": "火加減の相談",
+      "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "捕虜は空腹でも配膳に手を付けず、鍋から同じ香草の匂いがすると近づきます。政治的な意味はありますが、慣れない味や調理法への拒否も混ざっています。全員を一つの信念で動かさず、一人は単純に焦げた食事が嫌だと明かします。",
+      "fixedPast": "捕虜収容所の料理係が、盗まれた大鍋の捜索を頼みます。鍋は敵兵の料理人ジャルが隠し、断食している捕虜へ故郷の料理を作ろうとしています。監督は食事拒否を反抗と考え、ジャルは相手の食べ物を口にすれば屈服だと思っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "捕虜収容所の料理係",
+        "beliefsAndGoals": "捕虜収容所の料理係が、盗まれた大鍋の捜索を頼みます。鍋は敵兵の料理人ジャルが隠し、断食している捕虜へ故郷の料理を作ろうとしています。監督は食事拒否を反抗と考え、ジャルは相手の食べ物を口にすれば屈服だと思っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "なくなった大鍋を捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "捜索→隠し厨房→没収／別鍋を貸す／共同炊事を交渉。共同には検査と本人の協力が必要です。材料が不足すれば似た料理でよいか捕虜へ相談できます。拒否されたら普通食と別鍋を併存させられます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q184.scene.entry"
+        },
+        {
+          "id": "joint",
+          "script": "q184.scene.joint"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "なくなった大鍋を捜してください。"
+    },
+    "reveal": {
+      "newInformation": "捕虜は空腹でも配膳に手を付けず、鍋から同じ香草の匂いがすると近づきます。政治的な意味はありますが、慣れない味や調理法への拒否も混ざっています。全員を一つの信念で動かさず、一人は単純に焦げた食事が嫌だと明かします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q184.scene.entry"
+      },
+      {
+        "id": "joint",
+        "script": "q184.scene.joint"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q184.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。",
+        "options": [
+          {
+            "id": "take",
+            "text": "規律を優先して鍋を没収する",
+            "to": "@take"
+          },
+          {
+            "id": "other",
+            "text": "別鍋を貸し、普通食と並行して作る",
+            "to": "@other"
+          },
+          {
+            "id": "joint",
+            "text": "検査と本人の協力を条件に共同炊事を相談する",
+            "to": "joint"
+          }
+        ]
+      },
+      {
+        "id": "joint",
+        "text": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "共同炊事の手順を確定する",
+            "to": "@joint"
+          },
+          {
+            "id": "other",
+            "text": "同じ厨房にはせず別鍋で並行する",
+            "to": "@other"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q184.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q184.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "規律を優先して鍋を没収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.take"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "別鍋を貸し、普通食と並行して作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.other"
+                }
+              ]
+            },
+            {
+              "id": "joint",
+              "text": "検査と本人の協力を条件に共同炊事を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.scene.joint"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q184.scene.joint": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q184.node",
+          "value": "joint"
+        },
+        {
+          "op": "say",
+          "text": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "共同炊事の手順を確定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "同じ厨房にはせず別鍋で並行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.other"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q184.end.take": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "take"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.end.other": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "other"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q184.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "take",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "other",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q184.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q184.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q184.scene.joint"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q184.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

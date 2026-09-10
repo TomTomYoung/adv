@@ -1,0 +1,521 @@
+{
+  "schemaVersion": 1,
+  "id": "q179",
+  "number": 179,
+  "title": "墓を増やす庭",
+  "client": "墓守",
+  "brief": "生きている人の墓標が育つ庭を調べてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q179_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "starve": {
+      "label": "枯れた標の監視",
+      "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "burn": {
+      "label": "根を断つ焼却",
+      "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "damage": {
+      "label": "家へ届いた火",
+      "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びます。最初に庭の木目が家の床板へ続く異常を示します。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要があります。",
+      "fixedPast": "墓守の庭に、まだ生きている村人の墓標が育ちます。墓守は凶兆として伐採を頼み、裕福な村人は自分の標だけを買い取ろうとします。庭は未来を予知するのでなく、名を刻まれた者が墓を受け入れると寿命を奪う捕食者です。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "墓守",
+        "beliefsAndGoals": "墓守の庭に、まだ生きている村人の墓標が育ちます。墓守は凶兆として伐採を頼み、裕福な村人は自分の標だけを買い取ろうとします。庭は未来を予知するのでなく、名を刻まれた者が墓を受け入れると寿命を奪う捕食者です。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "生きている人の墓標が育つ庭を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "墓地→三家の訪問を任意順→標の回収／拒絶の宣言→根の処理。焼く前に家との根を断つ条件を知れ、無警告の破壊には住居被害が出ます。全員が標を拒めば庭を飢えさせられます。買主が拒まなければその家の救援戦へ分岐します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q179.scene.entry"
+        },
+        {
+          "id": "houses",
+          "script": "q179.scene.houses"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "生きている人の墓標が育つ庭を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びます。最初に庭の木目が家の床板へ続く異常を示します。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要があります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q179.scene.entry"
+      },
+      {
+        "id": "houses",
+        "script": "q179.scene.houses"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q179.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q179.homes",
+        "meaning": "作者原稿の homes に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "houses"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。",
+        "options": [
+          {
+            "id": "begin",
+            "text": "墓守と三軒を訪ねる",
+            "to": "houses",
+            "set": {
+              "homes": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "houses",
+        "text": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "次の一軒で、標を受け入れない意思を確認する",
+            "to": "houses",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q179.homes"
+              },
+              "right": 3
+            },
+            "set": {
+              "homes": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q179.homes"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "starve",
+            "text": "三軒の拒絶で庭を飢えさせる",
+            "to": "@starve",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q179.homes"
+              },
+              "right": 3
+            }
+          },
+          {
+            "id": "cut",
+            "text": "家へ伸びる根を全て断ってから焼く",
+            "to": "@burn",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "rush",
+            "text": "家との根を断たず今すぐ焼く（住居にも被害）",
+            "to": "@damage"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q179.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q179.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "墓守と三軒を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q179.homes",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q179.scene.houses": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q179.node",
+          "value": "houses"
+        },
+        {
+          "op": "say",
+          "text": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "次の一軒で、標を受け入れない意思を確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q179.homes"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q179.homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q179.homes"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses"
+                }
+              ]
+            },
+            {
+              "id": "starve",
+              "text": "三軒の拒絶で庭を飢えさせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q179.homes"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.end.starve"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "家へ伸びる根を全て断ってから焼く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.end.burn"
+                }
+              ]
+            },
+            {
+              "id": "rush",
+              "text": "家との根を断たず今すぐ焼く（住居にも被害）",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.end.damage"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q179.end.starve": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "starve"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.end.burn": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "burn"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.end.damage": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "damage"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q179.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "starve",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "burn",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "damage",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q179.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q179.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "houses",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q179.scene.houses"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q179.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -39,7 +39,9 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 }
 ```
 
-条件なしの選択肢を一つ以上残します。条件を満たさない選択肢は無効表示になり、エンジンでも実行を拒否します。
+conditionもvisibleWhenもない選択肢を一つ以上残します。条件を満たさない選択肢は無効表示になり、エンジンでも実行を拒否します。
+
+`visibleWhen` が偽の選択肢は表示しません。`condition` は表示した選択肢の実行条件です。どちらもコアで再検査するため、非表示のIDを送っても実行できません。本文でまだ教えていない結論を、無効ボタンで先に見せないために使います。
 
 ## 値と条件式
 
@@ -55,15 +57,16 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 
 戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratio・self.roundを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
 
-## 実装した42命令
+## 実装した45命令
 
 | 命令 | 主なフィールドと動作 |
 | --- | --- |
 | say / narrate | text、任意でname/speaker。本文を表示し、advanceまで待機 |
-| choice | options[]のid/text/commands、任意condition/requirement。chooseまで待機 |
+| choice | options[]のid/text/commands、任意condition/visibleWhen/requirement。chooseまで待機 |
 | if | condition、then[]、else[]。両枝を配列として定義 |
 | switch | value、cases[{equals,commands}]、default[] |
 | call | script、任意args。新しいlocal.argsを持つ呼出 |
+| jump | script。現在の呼出を置き換え、localを引き継ぐ。反復しても呼出スタックを積まない |
 | return | 現在の呼出全体を終了。呼出側の次命令へ |
 | set / add | target、value。vars/flags/localだけに直接書込 |
 | flag.set | key、value。flags領域への書込 |
@@ -92,6 +95,7 @@ JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範�
 | rest | 任意cost/ratio。料金確認後、回復と毒除去・灯の補充 |
 | town.return | 町へ帰還 |
 | ending.set | title、text。終幕を手帳へ表示 |
+| job.change / job.action | actorとjob / ability。職業変更・探索特技の共通検査を実行 |
 | light.refill | 灯だけを満タンにする。HPや毒は変更しない |
 
 battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行して呼出側へ戻ります。全滅時は共通の救助・町帰還を行い、敗北した呼出スタックを破棄したうえでon_loseだけを町で実行します。敗北後に元の成功処理へ戻ることはありません。3つの配列を全て定義してください。
@@ -108,15 +112,31 @@ battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行し�
 
 ## 依頼を追加する
 
-既存q001.jsonを参考に、新しいid/title/client/brief/locations/outcomes/model/scriptsを用意し、マップに調査イベントを設け、game.files.questsへ登録します。通常のエンジンは件数を固定していません。本作の検査には納品要件として100件のassertがあるため、意図的な増量時はその期待値も更新します。
+既存q001.jsonを参考に、新しいid/title/client/brief/locations/outcomes/model/scriptsを用意し、マップに調査イベントを設け、game.files.questsへ登録します。通常のエンジンは件数を固定していません。本作の検査には納品要件として200件のassertがあるため、意図的な増量時はその期待値も更新します。
 
-locationsのroleが証拠キーの一覧にもなります（decision以外）。クエストの獲得証拠キーはそこへ登録してください。現行ビューは本作向けに「手掛かり2つ」と表示するため、別の個数を使う作品ではビューのラベルも変更します。
+locationsのroleが証拠キーの一覧にもなります（decision以外）。クエストの獲得証拠キーはそこへ登録してください。ビューはevidenceTotalで実際の調査地点数を表示します。証拠地点がない場面型は「相談・調査」と表示します。
 
 作者用model.world.truthと各結末は未解決時のプレイViewModelへ出しません。ただしJSON自体はブラウザへ配信されます。これは作品データの分離であり、不正解析への秘匿機構ではありません。
 
 ## 保存互換性
 
 待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+
+## 1.3.1の戦績と場面継続
+
+`record_count` は `metric` に battles / wins / escapes / losses / kills / encounters を取り、killsには敵ID、encountersには遭遇IDを `id` として指定します。任意の `sinceQuest` は受注時との差分です。例：
+
+```json
+{"op":"gte","left":{"op":"record_count","metric":"kills","id":"moor_wolf","sinceQuest":"q121"},"right":1}
+```
+
+撃破は敵個体のHPが0になった時点で一度集計し、途中逃走・敗北でも取り消しません。遭遇勝利は全敵を倒して勝利した時だけ増えます。無戦闘の交渉・誘導・木標競技では増えません。`records` はスクリプトから書換えできません。
+
+未受注で基準点のない差分はundefinedです。旧記録からの移行では `records.historyComplete=false` とし、過去の討伐数をゼロと断定しません。移行後に観測した数だけを集計します。再受注・追跡変更では基準点を取り直しません。
+
+追加依頼の現在場面は `flags.quest.<id>.node`、固有の選択・発言・行動履歴も同じ名前空間へ保存します。`quests.<id>.stage/outcome` と同じ意味のフラグは作りません。反復はjump、完了済み再訪は結果の表示だけにします。outcomesの任意requiresはquest.complete時にも検査します。
+
+旧100件の配信済みscript IDと配列順は互換用に残しています。1.3.0から本文・選択・戦闘待ちを読み込むと、その継続を最後まで進め、次の現地訪問から改稿後の経路へ接続します。
 
 ## 1.1.0の戦闘データ拡張
 

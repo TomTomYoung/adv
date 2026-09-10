@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 1,
+  "id": "q177",
+  "number": 177,
+  "title": "嘘をつかない鏡",
+  "client": "鏡を売る商人",
+  "brief": "未来を映すという鏡の警備と、客の苦情対応をお願いします。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q177_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "notice": {
+      "label": "時刻未確認の告知",
+      "text": "予言としての販売を止めた。像の日時は未確定と明記し、客へ決断を急がないよう伝えた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "correct": {
+      "label": "公開した時差",
+      "text": "宣伝は訂正された。誤った予言で決断した客への説明と補償は、別の仕事として始まった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "window": {
+      "label": "遠方への覗き窓",
+      "text": "同意した相手の場所を映す窓になった。店番は未来を問う客へ「どこを見たいのですか」と尋ねた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "close": {
+      "label": "鏡の店の閉鎖",
+      "text": "営業は止まった。像を壊して証拠まで失わず、過去の取引を調べられるよう残した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "映った旗が現地では昨日降ろされたものだと分かります。運命を告げられた客が、必要のない決断を始めます。予言への反証を探すのでなく、映像の時刻と場所を確かめる謎です。",
+      "fixedPast": "商人が、未来を映す鏡の警備を頼みます。映像は必ず本当になると宣伝していますが、鏡が見せるのは既に起きた遠方の出来事です。輸送が遅いため知らせより先に映り、未来と誤解されています。商人は当初信じていましたが、途中で気づいても宣伝を変えませんでした。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "鏡を売る商人",
+        "beliefsAndGoals": "商人が、未来を映す鏡の警備を頼みます。映像は必ず本当になると宣伝していますが、鏡が見せるのは既に起きた遠方の出来事です。輸送が遅いため知らせより先に映り、未来と誤解されています。商人は当初信じていましたが、途中で気づいても宣伝を変えませんでした。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "未来を映すという鏡の警備と、客の苦情対応をお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "警備→像の観察／配達所の照合→商人へ指摘→公開訂正／覗き窓として販売／営業停止。証拠不足なら「時刻未確認」と告知する暫定案があります。装置を壊して証拠まで失う道は、真相証明と別に扱います。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q177.scene.entry"
+        },
+        {
+          "id": "proof",
+          "script": "q177.scene.proof"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "未来を映すという鏡の警備と、客の苦情対応をお願いします。"
+    },
+    "reveal": {
+      "newInformation": "映った旗が現地では昨日降ろされたものだと分かります。運命を告げられた客が、必要のない決断を始めます。予言への反証を探すのでなく、映像の時刻と場所を確かめる謎です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q177.scene.entry"
+      },
+      {
+        "id": "proof",
+        "script": "q177.scene.proof"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q177.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q177.proof",
+        "meaning": "作者原稿の proof に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "鏡の旗は、現地では昨日降ろされた旗だという配達人が来た。像が来る時刻と、知らせが来る時刻に差がある。",
+        "options": [
+          {
+            "id": "compare",
+            "text": "配達所で場所と日付を照合する",
+            "to": "proof",
+            "set": {
+              "proof": true
+            }
+          },
+          {
+            "id": "notice",
+            "text": "時刻未確認と暫定告知し、宣伝を保留する",
+            "to": "@notice"
+          },
+          {
+            "id": "close",
+            "text": "営業を停止して調査を続ける",
+            "to": "@close"
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "text": "映っているのは遠方で既に起きた出来事だった。商人は途中で気づいたが、未来という宣伝を変えていなかった。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "未来ではないと公開訂正する",
+            "to": "@correct"
+          },
+          {
+            "id": "window",
+            "text": "相手の同意した場所だけを見る窓として売る",
+            "to": "@window"
+          },
+          {
+            "id": "close",
+            "text": "用途を替えず営業を停止する",
+            "to": "@close"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q177.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q177.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "鏡の旗は、現地では昨日降ろされた旗だという配達人が来た。像が来る時刻と、知らせが来る時刻に差がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "compare",
+              "text": "配達所で場所と日付を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q177.proof",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q177.scene.proof"
+                }
+              ]
+            },
+            {
+              "id": "notice",
+              "text": "時刻未確認と暫定告知し、宣伝を保留する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q177.end.notice"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "営業を停止して調査を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q177.end.close"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q177.scene.proof": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q177.node",
+          "value": "proof"
+        },
+        {
+          "op": "say",
+          "text": "映っているのは遠方で既に起きた出来事だった。商人は途中で気づいたが、未来という宣伝を変えていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "未来ではないと公開訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q177.end.correct"
+                }
+              ]
+            },
+            {
+              "id": "window",
+              "text": "相手の同意した場所だけを見る窓として売る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q177.end.window"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "用途を替えず営業を停止する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q177.end.close"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q177.end.notice": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q177.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "予言としての販売を止めた。像の日時は未確定と明記し、客へ決断を急がないよう伝えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q177",
+              "outcome": "notice"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q177.end.correct": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q177.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "宣伝は訂正された。誤った予言で決断した客への説明と補償は、別の仕事として始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q177",
+              "outcome": "correct"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q177.end.window": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q177.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "同意した相手の場所を映す窓になった。店番は未来を問う客へ「どこを見たいのですか」と尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q177",
+              "outcome": "window"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q177.end.close": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q177.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "営業は止まった。像を壊して証拠まで失わず、過去の取引を調べられるよう残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q177",
+              "outcome": "close"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q177.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q177.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q177.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "notice",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "予言としての販売を止めた。像の日時は未確定と明記し、客へ決断を急がないよう伝えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "correct",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "宣伝は訂正された。誤った予言で決断した客への説明と補償は、別の仕事として始まった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "window",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "同意した相手の場所を映す窓になった。店番は未来を問う客へ「どこを見たいのですか」と尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "close",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "営業は止まった。像を壊して証拠まで失わず、過去の取引を調べられるよう残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q177.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q177.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "proof",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q177.scene.proof"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q177.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

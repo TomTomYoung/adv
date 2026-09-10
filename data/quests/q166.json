@@ -1,0 +1,698 @@
+{
+  "schemaVersion": 1,
+  "id": "q166",
+  "number": 166,
+  "title": "最後の一撃を譲れ",
+  "client": "弟子戦士ルウ",
+  "brief": "石喰い獣の試験に立ち会ってください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q166_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "joint": {
+      "label": "役割に応じる配属",
+      "text": "討伐と救助を別々に評価され、ルウは役割に合った配属を得た。記念写真の中央へ荷担ぎを呼んだ。",
+      "gold": 129,
+      "xp": 87
+    },
+    "lie": {
+      "label": "借りた戦果の報告",
+      "text": "短期の合格は得た。客観的な戦績は書き換わらず、報告の嘘は今後の照合で問われる。",
+      "gold": 129,
+      "xp": 87
+    },
+    "interview": {
+      "label": "撤退の面談",
+      "text": "勝利を偽らず、判断の面談を受けた。試験官は次の訓練で何を確かめるかルウと決めた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "retry": {
+      "label": "遅い受験",
+      "text": "試験を延期した。師は中央の立ち位置を空け、次の訓練をルウ自身に選ばせた。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "受験規則を早く読めば共同討伐が認められると分かります。師は知らなかったのでなく、自分が受けた厳しい試験を価値の基準にしています。戦闘中のルウが救助に回る場面を、功績を逃した失敗とも成長とも読めるようにします。",
+      "fixedPast": "弟子戦士ルウは、故郷の試験のため石喰い獣を倒した実績が必要です。師は最後の一撃だけ譲ればよいと考えますが、ルウはそれを自分の力と認められません。試験官は単独撃破より、危険を判断し協力を求められるかを重視しています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "弟子戦士ルウ",
+        "beliefsAndGoals": "弟子戦士ルウは、故郷の試験のため石喰い獣を倒した実績が必要です。師は最後の一撃だけ譲ればよいと考えますが、ルウはそれを自分の力と認められません。試験官は単独撃破より、危険を判断し協力を求められるかを重視しています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "石喰い獣の試験に立ち会ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "受験相談→規則照会／訓練→固定遭遇→功績をどう報告するか。救助役でも合格を求められます。敗北すれば再訓練、撤退を正直に報告すれば判断についての面談へ進めます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q166.scene.entry"
+        },
+        {
+          "id": "trial",
+          "script": "q166.scene.trial"
+        },
+        {
+          "id": "report",
+          "script": "q166.scene.report"
+        },
+        {
+          "id": "interview",
+          "script": "q166.scene.interview"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "石喰い獣の試験に立ち会ってください。"
+    },
+    "reveal": {
+      "newInformation": "受験規則を早く読めば共同討伐が認められると分かります。師は知らなかったのでなく、自分が受けた厳しい試験を価値の基準にしています。戦闘中のルウが救助に回る場面を、功績を逃した失敗とも成長とも読めるようにします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q166.scene.entry"
+      },
+      {
+        "id": "trial",
+        "script": "q166.scene.trial"
+      },
+      {
+        "id": "report",
+        "script": "q166.scene.report"
+      },
+      {
+        "id": "interview",
+        "script": "q166.scene.interview"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q166.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q166.rules",
+        "meaning": "作者原稿の rules に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q166.won",
+        "meaning": "作者原稿の won に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "trial"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "師は最後の一撃を譲ればいいと言う。ルウは、それを単独の力とは認められない。試験規則を先に読むこともできる。",
+        "options": [
+          {
+            "id": "rules",
+            "text": "共同討伐と救助の評価を規則で確認する",
+            "to": "trial",
+            "set": {
+              "rules": true
+            }
+          },
+          {
+            "id": "trial",
+            "text": "先に固定遭遇へ向かう",
+            "to": "trial"
+          }
+        ]
+      },
+      {
+        "id": "trial",
+        "text": "ルウは荷担ぎの救助に回る。通常戦闘の最後の一撃をルウのものと偽って記録はしない。戦うのはあなたの隊だ。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "石喰い獣への対処を試みる",
+            "to": "report",
+            "combat": "story_166",
+            "escape": "interview",
+            "loss": "interview",
+            "set": {
+              "won": true
+            }
+          },
+          {
+            "id": "train",
+            "text": "受験を延期して訓練へ戻る",
+            "to": "@retry"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q166.rules"
+              },
+              "right": true
+            },
+            "yes": "共同作業と危険判断も試験の対象だと知っている。",
+            "no": "試験官は今、共同作業と救助も評価すると説明した。師の基準だけが規則ではなかった。"
+          }
+        ],
+        "options": [
+          {
+            "id": "honest",
+            "text": "隊の討伐とルウの救助を分けて正直に報告する",
+            "to": "@joint"
+          },
+          {
+            "id": "lie",
+            "text": "隊の戦果をルウの単独撃破だったと報告する",
+            "to": "@lie"
+          }
+        ]
+      },
+      {
+        "id": "interview",
+        "text": "作戦は完遂できなかった。撤退した判断について試験官へ話せる。勝利の報告に変えることはできない。",
+        "options": [
+          {
+            "id": "honest",
+            "text": "撤退と救助の判断を報告し、面談を受ける",
+            "to": "@interview"
+          },
+          {
+            "id": "retry",
+            "text": "再訓練を選ぶ",
+            "to": "@retry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q166.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q166.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "師は最後の一撃を譲ればいいと言う。ルウは、それを単独の力とは認められない。試験規則を先に読むこともできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rules",
+              "text": "共同討伐と救助の評価を規則で確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q166.rules",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q166.scene.trial"
+                }
+              ]
+            },
+            {
+              "id": "trial",
+              "text": "先に固定遭遇へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.scene.trial"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q166.scene.trial": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q166.node",
+          "value": "trial"
+        },
+        {
+          "op": "say",
+          "text": "ルウは荷担ぎの救助に回る。通常戦闘の最後の一撃をルウのものと偽って記録はしない。戦うのはあなたの隊だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "石喰い獣への対処を試みる",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_166",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q166.won",
+                      "value": true
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.report"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.interview"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.interview"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "train",
+              "text": "受験を延期して訓練へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.end.retry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q166.scene.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q166.node",
+          "value": "report"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q166.rules"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "共同作業と危険判断も試験の対象だと知っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "試験官は今、共同作業と救助も評価すると説明した。師の基準だけが規則ではなかった。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "honest",
+              "text": "隊の討伐とルウの救助を分けて正直に報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "lie",
+              "text": "隊の戦果をルウの単独撃破だったと報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.end.lie"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q166.scene.interview": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q166.node",
+          "value": "interview"
+        },
+        {
+          "op": "say",
+          "text": "作戦は完遂できなかった。撤退した判断について試験官へ話せる。勝利の報告に変えることはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "honest",
+              "text": "撤退と救助の判断を報告し、面談を受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.end.interview"
+                }
+              ]
+            },
+            {
+              "id": "retry",
+              "text": "再訓練を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q166.end.retry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q166.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q166.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "討伐と救助を別々に評価され、ルウは役割に合った配属を得た。記念写真の中央へ荷担ぎを呼んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q166",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q166.end.lie": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q166.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "短期の合格は得た。客観的な戦績は書き換わらず、報告の嘘は今後の照合で問われる。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q166",
+              "outcome": "lie"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q166.end.interview": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q166.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "勝利を偽らず、判断の面談を受けた。試験官は次の訓練で何を確かめるかルウと決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q166",
+              "outcome": "interview"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q166.end.retry": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q166.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "試験を延期した。師は中央の立ち位置を空け、次の訓練をルウ自身に選ばせた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q166",
+              "outcome": "retry"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q166.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q166.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q166.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "討伐と救助を別々に評価され、ルウは役割に合った配属を得た。記念写真の中央へ荷担ぎを呼んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lie",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "短期の合格は得た。客観的な戦績は書き換わらず、報告の嘘は今後の照合で問われる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "interview",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "勝利を偽らず、判断の面談を受けた。試験官は次の訓練で何を確かめるかルウと決めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retry",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "試験を延期した。師は中央の立ち位置を空け、次の訓練をルウ自身に選ばせた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q166.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "trial",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.trial"
+                    }
+                  ]
+                },
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.report"
+                    }
+                  ]
+                },
+                {
+                  "equals": "interview",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q166.scene.interview"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q166.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

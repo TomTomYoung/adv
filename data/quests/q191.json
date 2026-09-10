@@ -1,0 +1,577 @@
+{
+  "schemaVersion": 1,
+  "id": "q191",
+  "number": 191,
+  "title": "勇者を通さない門",
+  "client": "名の知られた勇者の従者",
+  "brief": "主人が城門を通れません。門番との話を仲介してください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q191_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "represent": {
+      "label": "用件を持つ代表",
+      "text": "交渉できる範囲を町と決めて入った。次の門で勇者は、名乗る前に「おはよう」と言った。",
+      "gold": 165,
+      "xp": 105
+    },
+    "guard": {
+      "label": "護衛の資格",
+      "text": "護衛として入った。契約の署名は町の代表へ残し、勇者は待合の椅子に腰を下ろした。",
+      "gold": 165,
+      "xp": 105
+    },
+    "force": {
+      "label": "破った門の責任",
+      "text": "門は突破したが、交渉の資格は得なかった。損害と警戒を残し、名声だけで仕事が進むと思ったことを見直した。",
+      "gold": 165,
+      "xp": 105
+    },
+    "leave": {
+      "label": "用件を持ち帰る",
+      "text": "今日は通らなかった。従者は委任状の用紙を受け取り、町で説明する内容を書き始めた。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "荷運びは素通りし、英雄だけが拒まれる構図で侮辱を感じさせます。入口の小さな用件札と、通った者の荷札が対応します。依頼人は自分の交渉力を補うため、主人公の名声を代理権の代わりに使おうとしていました。",
+      "fixedPast": "「戦功ある者だけが通れる」と言われる古門が、名高い冒険者を拒みます。門番は故障と思い調査を求めます。門は戦果でなく、入口で表明した用件に対応する資格を確かめています。討伐の英雄が、交易交渉の代表として来ても、その権限は持っていません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "名の知られた勇者の従者",
+        "beliefsAndGoals": "「戦功ある者だけが通れる」と言われる古門が、名高い冒険者を拒みます。門番は故障と思い調査を求めます。門は戦果でなく、入口で表明した用件に対応する資格を確かめています。討伐の英雄が、交易交渉の代表として来ても、その権限は持っていません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "主人が城門を通れません。門番との話を仲介してください。"
+      }
+    ],
+    "conflict": {
+      "design": "門前→観察／門番との対話→代表権を得る／護衛として入り直す／門を破る。用件の変更は内部で行える行為も変えます。護衛で入って勝手に契約すれば、後で交渉が無効とされます。破壊は警備戦と外交上の損失を先に示します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q191.scene.entry"
+        },
+        {
+          "id": "purpose",
+          "script": "q191.scene.purpose"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "主人が城門を通れません。門番との話を仲介してください。"
+    },
+    "reveal": {
+      "newInformation": "荷運びは素通りし、英雄だけが拒まれる構図で侮辱を感じさせます。入口の小さな用件札と、通った者の荷札が対応します。依頼人は自分の交渉力を補うため、主人公の名声を代理権の代わりに使おうとしていました。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q191.scene.entry"
+      },
+      {
+        "id": "purpose",
+        "script": "q191.scene.purpose"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q191.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q191.mandate",
+        "meaning": "作者原稿の mandate に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "purpose"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "商人は荷札を、使者は委任状を見せて通った。勇者は名と討伐歴を告げるが、門番は「今日は何のために」と聞き直す。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "必要な資格と用件を聞く",
+            "to": "purpose"
+          },
+          {
+            "id": "force",
+            "text": "門の守備を破って入る",
+            "to": "@force",
+            "combat": "guard_10",
+            "escape": "entry"
+          },
+          {
+            "id": "leave",
+            "text": "今日は入城を取りやめる",
+            "to": "@leave"
+          }
+        ]
+      },
+      {
+        "id": "purpose",
+        "text": "門は強さを測らない。町の代表として交渉するには町の委任が要る。護衛なら入れるが、契約を結ぶ権限までは得られない。",
+        "options": [
+          {
+            "id": "mandate",
+            "text": "町へ用件を説明し、委任状を受け取る",
+            "to": "purpose",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q191.mandate"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "mandate": true
+            }
+          },
+          {
+            "id": "represent",
+            "text": "委任の範囲を示して代表として入る",
+            "to": "@represent",
+            "need": [
+              "mandate"
+            ]
+          },
+          {
+            "id": "guard",
+            "text": "署名はせず、依頼主の護衛として入る",
+            "to": "@guard"
+          },
+          {
+            "id": "leave",
+            "text": "入城を取りやめ、用件を考え直す",
+            "to": "@leave"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q191.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q191.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "商人は荷札を、使者は委任状を見せて通った。勇者は名と討伐歴を告げるが、門番は「今日は何のために」と聞き直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "必要な資格と用件を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q191.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "門の守備を破って入る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q191.end.force"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q191.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "今日は入城を取りやめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q191.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q191.scene.purpose": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q191.node",
+          "value": "purpose"
+        },
+        {
+          "op": "say",
+          "text": "門は強さを測らない。町の代表として交渉するには町の委任が要る。護衛なら入れるが、契約を結ぶ権限までは得られない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "mandate",
+              "text": "町へ用件を説明し、委任状を受け取る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q191.mandate"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q191.mandate",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q191.scene.purpose"
+                }
+              ]
+            },
+            {
+              "id": "represent",
+              "text": "委任の範囲を示して代表として入る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q191.mandate"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q191.end.represent"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "署名はせず、依頼主の護衛として入る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q191.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "入城を取りやめ、用件を考え直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q191.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q191.end.represent": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q191.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "交渉できる範囲を町と決めて入った。次の門で勇者は、名乗る前に「おはよう」と言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q191",
+              "outcome": "represent"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q191.end.guard": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q191.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "護衛として入った。契約の署名は町の代表へ残し、勇者は待合の椅子に腰を下ろした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q191",
+              "outcome": "guard"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q191.end.force": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q191.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門は突破したが、交渉の資格は得なかった。損害と警戒を残し、名声だけで仕事が進むと思ったことを見直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q191",
+              "outcome": "force"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q191.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q191.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今日は通らなかった。従者は委任状の用紙を受け取り、町で説明する内容を書き始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q191",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q191.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q191.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q191.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "represent",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "交渉できる範囲を町と決めて入った。次の門で勇者は、名乗る前に「おはよう」と言った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guard",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "護衛として入った。契約の署名は町の代表へ残し、勇者は待合の椅子に腰を下ろした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "force",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門は突破したが、交渉の資格は得なかった。損害と警戒を残し、名声だけで仕事が進むと思ったことを見直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今日は通らなかった。従者は委任状の用紙を受け取り、町で説明する内容を書き始めた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q191.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q191.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "purpose",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q191.scene.purpose"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q191.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q144",
+  "number": 144,
+  "title": "祭の悪役",
+  "client": "悪竜役のジル",
+  "brief": "切られた舞台衣装を調べ、公演の続け方を相談してください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q144_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "light": {
+      "label": "二人で起きる悪竜",
+      "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。",
+      "gold": 105,
+      "xp": 75
+    },
+    "wit": {
+      "label": "知恵比べの舞台",
+      "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "retire": {
+      "label": "最後の悪竜",
+      "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "観客は勇者より、毎年負けても起き上がる悪竜を待っています。ジルは人気を失いたくないため、苦しい動きを増やしていました。裏地に何度も補強した縫い跡を先に見せ、破損が敵意だけでは読めないようにします。",
+      "fixedPast": "悪竜役の役者ジルが、壊された衣装の調査を頼みます。若い勇者役は主役を奪われると嫉妬していますが、切ったのは衣装係です。重すぎる新衣装でジルが倒れる前に止めようとし、本人は好意を侮辱と思います。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "悪竜役のジル",
+        "beliefsAndGoals": "悪竜役の役者ジルが、壊された衣装の調査を頼みます。若い勇者役は主役を奪われると嫉妬していますが、切ったのは衣装係です。重すぎる新衣装でジルが倒れる前に止めようとし、本人は好意を侮辱と思います。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "切られた舞台衣装を調べ、公演の続け方を相談してください。"
+      }
+    ],
+    "conflict": {
+      "design": "衣装調査→関係者の聞き取り→試演→軽量化して決闘／知恵比べへ変更／引退公演。破損の弁償と舞台の安全を別々に決めます。手掛かりが少なくても、危険を見た時点で軽量化を提案できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q144.scene.entry"
+        },
+        {
+          "id": "play",
+          "script": "q144.scene.play"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "切られた舞台衣装を調べ、公演の続け方を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "観客は勇者より、毎年負けても起き上がる悪竜を待っています。ジルは人気を失いたくないため、苦しい動きを増やしていました。裏地に何度も補強した縫い跡を先に見せ、破損が敵意だけでは読めないようにします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q144.scene.entry"
+      },
+      {
+        "id": "play",
+        "script": "q144.scene.play"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q144.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名乗り出る。「倒れる前に止めたかった」",
+        "options": [
+          {
+            "id": "trial",
+            "text": "破損の弁償を別に残し、安全な試演をする",
+            "to": "play"
+          },
+          {
+            "id": "retire",
+            "text": "本人の希望を確かめ、引退公演にする",
+            "to": "@retire"
+          }
+        ]
+      },
+      {
+        "id": "play",
+        "text": "軽い衣装なら起き上がれる。観客が待つのは派手な転倒より、毎年負けても起きる悪竜だった。若手にも見せ場を渡せる。",
+        "options": [
+          {
+            "id": "light",
+            "text": "軽量化して若手と決闘を演じる",
+            "to": "@light"
+          },
+          {
+            "id": "wit",
+            "text": "体力勝負から知恵比べの芝居へ変える",
+            "to": "@wit"
+          },
+          {
+            "id": "retire",
+            "text": "今回を最後の公演にする",
+            "to": "@retire"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q144.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q144.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名乗り出る。「倒れる前に止めたかった」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trial",
+              "text": "破損の弁償を別に残し、安全な試演をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.scene.play"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "本人の希望を確かめ、引退公演にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.retire"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q144.scene.play": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q144.node",
+          "value": "play"
+        },
+        {
+          "op": "say",
+          "text": "軽い衣装なら起き上がれる。観客が待つのは派手な転倒より、毎年負けても起きる悪竜だった。若手にも見せ場を渡せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "light",
+              "text": "軽量化して若手と決闘を演じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.light"
+                }
+              ]
+            },
+            {
+              "id": "wit",
+              "text": "体力勝負から知恵比べの芝居へ変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.wit"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "今回を最後の公演にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.retire"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q144.end.light": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "light"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.end.wit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "wit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.end.retire": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "retire"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q144.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "light",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retire",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q144.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q144.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "play",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q144.scene.play"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q144.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

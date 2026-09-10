@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "id": "q128",
+  "number": 128,
+  "title": "鎧を食う蛾",
+  "client": "武器商ベル",
+  "brief": "武具庫の鉄喰い蛾を退治してください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q128_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "fight": {
+      "label": "武具庫の掃討",
+      "text": "蛾と巣の核を除いた。薬の原因までは解明されず、ベルは次の入荷を隔離して調べることになった。",
+      "gold": 81,
+      "xp": 63
+    },
+    "replica": {
+      "label": "複製の餌鎧",
+      "text": "出費で祖伝の鎧と庫内品を守った。ベルは薬の回収を始め、下働きは謝る手を止めた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "heirloom": {
+      "label": "歯形の鎧",
+      "text": "巣の核を除いた。下働きが鎧の歯形を見て初めて笑い、当主もそれを咎めなかった。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "古い錆びた鍋だけが無傷で残っています。最初に手入れ不足の笑い話として見せ、蛾が磨いた金属ではなく薬の布へ集まる実演で意味を変えます。ベルは自分が売った薬だと知り、返品より高価な退治道具を勧めてしまいます。",
+      "fixedPast": "武具庫を襲う鉄喰い蛾の退治を、武器商ベルが求めます。騎士家の当主は祖伝の鎧を守りたい。下働きの少女は、自分が磨きすぎて蛾を寄せたと思い込みます。実際には、最近の防錆薬に含まれる魔鉱が誘引物です。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "武器商ベル",
+        "beliefsAndGoals": "武具庫を襲う鉄喰い蛾の退治を、武器商ベルが求めます。騎士家の当主は祖伝の鎧を守りたい。下働きの少女は、自分が磨きすぎて蛾を寄せたと思い込みます。実際には、最近の防錆薬に含まれる魔鉱が誘引物です。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "武具庫の鉄喰い蛾を退治してください。"
+      }
+    ],
+    "conflict": {
+      "design": "武具庫→捕虫／薬の試験→餌鎧を選ぶ→巣の処理。複製鎧は費用、祖伝の鎧は当主の同意が必要です。餌を使わない場合は難しい固定戦闘で核へ到達します。途中退却なら倉庫の隔離を維持し再挑戦できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q128.scene.entry"
+        },
+        {
+          "id": "test",
+          "script": "q128.scene.test"
+        },
+        {
+          "id": "heirloom",
+          "script": "q128.scene.heirloom"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "武具庫の鉄喰い蛾を退治してください。"
+    },
+    "reveal": {
+      "newInformation": "古い錆びた鍋だけが無傷で残っています。最初に手入れ不足の笑い話として見せ、蛾が磨いた金属ではなく薬の布へ集まる実演で意味を変えます。ベルは自分が売った薬だと知り、返品より高価な退治道具を勧めてしまいます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q128.scene.entry"
+      },
+      {
+        "id": "test",
+        "script": "q128.scene.test"
+      },
+      {
+        "id": "heirloom",
+        "script": "q128.scene.heirloom"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q128.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "磨かれた鎧に穴があり、錆びた鍋だけ無傷だ。下働きは磨きすぎたせいだと謝る。",
+        "options": [
+          {
+            "id": "test",
+            "text": "防錆薬を染ませた布で誘引を試す",
+            "to": "test"
+          },
+          {
+            "id": "fight",
+            "text": "餌を使わず巣へ進み、核を除く",
+            "to": "@fight",
+            "combat": "story_128",
+            "escape": "entry"
+          }
+        ]
+      },
+      {
+        "id": "test",
+        "text": "蛾は金属でなく薬の布へ集まる。ベルは自分が売った薬だと認めた。餌にする鎧を選ぶ。",
+        "options": [
+          {
+            "id": "replica",
+            "text": "40Gで複製鎧を用意し、巣の核を除く",
+            "to": "@replica",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "ask",
+            "text": "祖伝の鎧を餌にする意思を当主へ確かめる",
+            "to": "heirloom"
+          },
+          {
+            "id": "fight",
+            "text": "餌を使わない討伐へ戻る",
+            "to": "@fight",
+            "combat": "story_128",
+            "escape": "entry"
+          }
+        ]
+      },
+      {
+        "id": "heirloom",
+        "text": "「中身のない名誉より、使える道具を守る」当主は歯形が残ることを承知し、鎧の使用に同意した。",
+        "options": [
+          {
+            "id": "use",
+            "text": "鎧を餌にして巣の核を除く",
+            "to": "@heirloom"
+          },
+          {
+            "id": "back",
+            "text": "犠牲を確定せず別の方法を選ぶ",
+            "to": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q128.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q128.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "磨かれた鎧に穴があり、錆びた鍋だけ無傷だ。下働きは磨きすぎたせいだと謝る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "防錆薬を染ませた布で誘引を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q128.scene.test"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "餌を使わず巣へ進み、核を除く",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_128",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q128.end.fight"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q128.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q128.scene.test": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q128.node",
+          "value": "test"
+        },
+        {
+          "op": "say",
+          "text": "蛾は金属でなく薬の布へ集まる。ベルは自分が売った薬だと認めた。餌にする鎧を選ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "replica",
+              "text": "40Gで複製鎧を用意し、巣の核を除く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q128.end.replica"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "祖伝の鎧を餌にする意思を当主へ確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q128.scene.heirloom"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "餌を使わない討伐へ戻る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_128",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q128.end.fight"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q128.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q128.scene.heirloom": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q128.node",
+          "value": "heirloom"
+        },
+        {
+          "op": "say",
+          "text": "「中身のない名誉より、使える道具を守る」当主は歯形が残ることを承知し、鎧の使用に同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "use",
+              "text": "鎧を餌にして巣の核を除く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q128.end.heirloom"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "犠牲を確定せず別の方法を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q128.scene.test"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q128.end.fight": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q128.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "蛾と巣の核を除いた。薬の原因までは解明されず、ベルは次の入荷を隔離して調べることになった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q128",
+              "outcome": "fight"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q128.end.replica": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q128.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "出費で祖伝の鎧と庫内品を守った。ベルは薬の回収を始め、下働きは謝る手を止めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q128",
+              "outcome": "replica"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q128.end.heirloom": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q128.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巣の核を除いた。下働きが鎧の歯形を見て初めて笑い、当主もそれを咎めなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q128",
+              "outcome": "heirloom"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q128.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q128.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q128.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "fight",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "蛾と巣の核を除いた。薬の原因までは解明されず、ベルは次の入荷を隔離して調べることになった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "replica",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "出費で祖伝の鎧と庫内品を守った。ベルは薬の回収を始め、下働きは謝る手を止めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "heirloom",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巣の核を除いた。下働きが鎧の歯形を見て初めて笑い、当主もそれを咎めなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q128.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q128.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "test",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q128.scene.test"
+                    }
+                  ]
+                },
+                {
+                  "equals": "heirloom",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q128.scene.heirloom"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q128.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

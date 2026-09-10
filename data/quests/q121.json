@@ -1,0 +1,759 @@
+{
+  "schemaVersion": 1,
+  "id": "q121",
+  "number": 121,
+  "title": "百匹目の狼",
+  "client": "牧場主と老猟師バスク",
+  "brief": "羊を襲う狼への対処をお願いします。老猟師が最後の一頭を望んでいます。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q121_scene",
+      "x": 2,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "together": {
+      "label": "共猟の報告",
+      "text": "狼の被害は止まった。最後の一撃を誰の功績にするか、バスクが自分で娘へ話した。猟帳の次の頁には兄の名を書いた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "alone": {
+      "label": "誓いに加えない討伐",
+      "text": "あなたの隊が倒した狼を、猟師の百頭目とは呼ばなかった。羊は囲いへ戻り、誓いの扱いはバスクに残った。",
+      "gold": 81,
+      "xp": 63
+    },
+    "retire": {
+      "label": "猟帳を閉じる",
+      "text": "今夜は囲いが羊を守る。狼は残り、次の防衛当番が必要だ。娘は閉じた猟帳を本棚へ戻した。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "父の猟帳には九十九の印がありますが、最後の印だけ何度も書き直されています。百頭を達成できないのではなく、達成すれば兄を忘れるのではないかと恐れています。狼は実際に羊を襲っており、猟師の事情を知っても防衛の必要は消えません。",
+      "fixedPast": "牧場主の依頼で狼を追うと、老猟師バスクが最後の一頭だけ譲れと言います。彼は百頭倒せば亡き兄への弔いが済むと誓い、今は九十九頭です。牧場主は数字より今夜の羊を守ってほしく、バスクの娘は誓いが終わった後の父を心配しています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "牧場主と老猟師バスク",
+        "beliefsAndGoals": "牧場主の依頼で狼を追うと、老猟師バスクが最後の一頭だけ譲れと言います。彼は百頭倒せば亡き兄への弔いが済むと誓い、今は九十九頭です。牧場主は数字より今夜の羊を守ってほしく、バスクの娘は誓いが終わった後の父を心配しています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "羊を襲う狼への対処をお願いします。老猟師が最後の一頭を望んでいます。"
+      }
+    ],
+    "conflict": {
+      "design": "牧場→巣の追跡／囲い修繕→バスクとの対話→共猟／単独討伐／防衛と引退。共猟は生存して同行する本人が必要です。退却なら囲いへ戻れます。修繕のみでも今夜の防衛を達成できますが、狼は後日の地域危険として残ります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q121.scene.entry"
+        },
+        {
+          "id": "talk",
+          "script": "q121.scene.talk"
+        },
+        {
+          "id": "report",
+          "script": "q121.scene.report"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "羊を襲う狼への対処をお願いします。老猟師が最後の一頭を望んでいます。"
+    },
+    "reveal": {
+      "newInformation": "父の猟帳には九十九の印がありますが、最後の印だけ何度も書き直されています。百頭を達成できないのではなく、達成すれば兄を忘れるのではないかと恐れています。狼は実際に羊を襲っており、猟師の事情を知っても防衛の必要は消えません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q121.scene.entry"
+      },
+      {
+        "id": "talk",
+        "script": "q121.scene.talk"
+      },
+      {
+        "id": "report",
+        "script": "q121.scene.report"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q121.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q121.fence",
+        "meaning": "作者原稿の fence に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q121.method",
+        "meaning": "作者原稿の method に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "talk"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "バスクの猟帳には九十九の印がある。最後の印だけ、何度も消してある。「百にしたら、兄を忘れそうでな」娘は帳面を捨てようとはしなかった。",
+        "options": [
+          {
+            "id": "fence",
+            "text": "縄一つで囲いを修繕し、今夜の防衛を作る",
+            "to": "talk",
+            "cost": {
+              "rope": 1
+            },
+            "set": {
+              "fence": true
+            }
+          },
+          {
+            "id": "talk",
+            "text": "猟師と次の一頭について話す",
+            "to": "talk"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "op": "record_count",
+                "metric": "kills",
+                "id": "moor_wolf",
+                "sinceQuest": "q121"
+              },
+              "right": 1
+            },
+            "yes": "今回あなたの隊が倒した狼は記録に残っている。猟師の過去九十九頭には加えない。",
+            "no": "牧場への危険はまだ残る。共猟ではバスクは現場を案内し、戦闘はあなたの隊が担当する。"
+          }
+        ],
+        "options": [
+          {
+            "id": "hunt",
+            "text": "バスクと現場へ行き、功績の語り方は本人に委ねる",
+            "to": "report",
+            "combat": "story_121",
+            "escape": "talk",
+            "set": {
+              "method": "together"
+            }
+          },
+          {
+            "id": "alone",
+            "text": "自分の隊だけで討伐する",
+            "to": "report",
+            "combat": "story_121",
+            "escape": "talk",
+            "set": {
+              "method": "alone"
+            }
+          },
+          {
+            "id": "retire",
+            "text": "囲いで今夜を守り、引退の意思を尊重する",
+            "to": "@retire",
+            "need": [
+              "fence"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "今回の隊の撃破記録に狼が一頭加わった。牧場の被害への対処と、猟師本人の誓いは別々に報告する。",
+        "options": [
+          {
+            "id": "together",
+            "text": "共猟での各人の役割を報告する",
+            "to": "@together",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q121.method"
+                  },
+                  "right": "together"
+                },
+                {
+                  "op": "gte",
+                  "left": {
+                    "op": "record_count",
+                    "metric": "kills",
+                    "id": "moor_wolf",
+                    "sinceQuest": "q121"
+                  },
+                  "right": 1
+                }
+              ]
+            }
+          },
+          {
+            "id": "alone",
+            "text": "隊による討伐として報告する",
+            "to": "@alone",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q121.method"
+                  },
+                  "right": "alone"
+                },
+                {
+                  "op": "gte",
+                  "left": {
+                    "op": "record_count",
+                    "metric": "kills",
+                    "id": "moor_wolf",
+                    "sinceQuest": "q121"
+                  },
+                  "right": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q121.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q121.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "バスクの猟帳には九十九の印がある。最後の印だけ、何度も消してある。「百にしたら、兄を忘れそうでな」娘は帳面を捨てようとはしなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fence",
+              "text": "縄一つで囲いを修繕し、今夜の防衛を作る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q121.fence",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q121.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "talk",
+              "text": "猟師と次の一頭について話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q121.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q121.scene.talk": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q121.node",
+          "value": "talk"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "op": "record_count",
+              "metric": "kills",
+              "id": "moor_wolf",
+              "sinceQuest": "q121"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今回あなたの隊が倒した狼は記録に残っている。猟師の過去九十九頭には加えない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "牧場への危険はまだ残る。共猟ではバスクは現場を案内し、戦闘はあなたの隊が担当する。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hunt",
+              "text": "バスクと現場へ行き、功績の語り方は本人に委ねる",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_121",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q121.method",
+                      "value": "together"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.report"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.talk"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "alone",
+              "text": "自分の隊だけで討伐する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_121",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q121.method",
+                      "value": "alone"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.report"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.talk"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "囲いで今夜を守り、引退の意思を尊重する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q121.fence"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q121.end.retire"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q121.scene.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q121.node",
+          "value": "report"
+        },
+        {
+          "op": "say",
+          "text": "今回の隊の撃破記録に狼が一頭加わった。牧場の被害への対処と、猟師本人の誓いは別々に報告する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "together",
+              "text": "共猟での各人の役割を報告する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q121.method"
+                        },
+                        "right": "together"
+                      },
+                      {
+                        "op": "gte",
+                        "left": {
+                          "op": "record_count",
+                          "metric": "kills",
+                          "id": "moor_wolf",
+                          "sinceQuest": "q121"
+                        },
+                        "right": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q121.end.together"
+                }
+              ]
+            },
+            {
+              "id": "alone",
+              "text": "隊による討伐として報告する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q121.method"
+                        },
+                        "right": "alone"
+                      },
+                      {
+                        "op": "gte",
+                        "left": {
+                          "op": "record_count",
+                          "metric": "kills",
+                          "id": "moor_wolf",
+                          "sinceQuest": "q121"
+                        },
+                        "right": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q121.end.alone"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q121.end.together": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q121.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "狼の被害は止まった。最後の一撃を誰の功績にするか、バスクが自分で娘へ話した。猟帳の次の頁には兄の名を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q121",
+              "outcome": "together"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q121.end.alone": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q121.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "あなたの隊が倒した狼を、猟師の百頭目とは呼ばなかった。羊は囲いへ戻り、誓いの扱いはバスクに残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q121",
+              "outcome": "alone"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q121.end.retire": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q121.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今夜は囲いが羊を守る。狼は残り、次の防衛当番が必要だ。娘は閉じた猟帳を本棚へ戻した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q121",
+              "outcome": "retire"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q121.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q121.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q121.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "together",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "狼の被害は止まった。最後の一撃を誰の功績にするか、バスクが自分で娘へ話した。猟帳の次の頁には兄の名を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "alone",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "あなたの隊が倒した狼を、猟師の百頭目とは呼ばなかった。羊は囲いへ戻り、誓いの扱いはバスクに残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retire",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今夜は囲いが羊を守る。狼は残り、次の防衛当番が必要だ。娘は閉じた猟帳を本棚へ戻した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q121.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "talk",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.talk"
+                    }
+                  ]
+                },
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q121.scene.report"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q121.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

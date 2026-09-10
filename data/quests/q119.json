@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 1,
+  "id": "q119",
+  "number": 119,
+  "title": "寝返りの見張り",
+  "client": "商隊長デク",
+  "brief": "見張り番ラナが夜ごと抜け出します。事情を確かめてください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q119_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "guard": {
+      "label": "商隊の防衛",
+      "text": "荷は通った。弟は逃れ、姉弟は離れたままだった。丘には豆を除いた包みが残っていなかった。",
+      "gold": 69,
+      "xp": 57
+    },
+    "parley": {
+      "label": "身元を引き受ける",
+      "text": "弟は団を離れた。ラナは返済と住居を相談し始め、商隊長は進路を教えた責任の話を後日へ残した。",
+      "gold": 69,
+      "xp": 57
+    },
+    "detour": {
+      "label": "迂回の護衛",
+      "text": "荷の到着は遅れた。野盗問題は残り、弟が豆のない包みを持ち帰ったことだけは分かった。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "盗賊の接近は本物です。ラナを善意だけで免罪せず、無断で商隊の進路を教えた失策を明かします。弟は約束した交渉相手だけを連れず、別の団員も来ています。最初に姉が弟の食べられない豆を避けて包む手つきを置きます。",
+      "fixedPast": "商隊長デクは、見張り番ラナが夜ごと丘へ抜けるので内通を疑っています。ラナは野盗の弟と接触し、襲撃をやめさせようとしています。弟は姉を戻したいのではなく、仲間を捨てて安全な側へ移った姉への怒りを持っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "商隊長デク",
+        "beliefsAndGoals": "商隊長デクは、見張り番ラナが夜ごと丘へ抜けるので内通を疑っています。ラナは野盗の弟と接触し、襲撃をやめさせようとしています。弟は姉を戻したいのではなく、仲間を捨てて安全な側へ移った姉への怒りを持っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "見張り番ラナが夜ごと抜け出します。事情を確かめてください。"
+      }
+    ],
+    "conflict": {
+      "design": "夜番→尾行／直接質問→商隊へ報告→警戒戦／会談／道変更。会談は警戒を解かずに行えます。弟が要求する通行料を拒めば戦闘か迂回です。ラナを拘束しても自動的に敵の位置を知ることにはなりません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q119.scene.entry"
+        },
+        {
+          "id": "sister",
+          "script": "q119.scene.sister"
+        },
+        {
+          "id": "guard",
+          "script": "q119.scene.guard"
+        },
+        {
+          "id": "parley",
+          "script": "q119.scene.parley"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "見張り番ラナが夜ごと抜け出します。事情を確かめてください。"
+    },
+    "reveal": {
+      "newInformation": "盗賊の接近は本物です。ラナを善意だけで免罪せず、無断で商隊の進路を教えた失策を明かします。弟は約束した交渉相手だけを連れず、別の団員も来ています。最初に姉が弟の食べられない豆を避けて包む手つきを置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q119.scene.entry"
+      },
+      {
+        "id": "sister",
+        "script": "q119.scene.sister"
+      },
+      {
+        "id": "guard",
+        "script": "q119.scene.guard"
+      },
+      {
+        "id": "parley",
+        "script": "q119.scene.parley"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q119.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q119.warned",
+        "meaning": "作者原稿の warned に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "sister"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ラナは豆を避けて包んだ食事を持って丘へ行く。受け取った男の背後に、武装した仲間が見えた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "ラナへ直接尋ねる",
+            "to": "sister"
+          },
+          {
+            "id": "warn",
+            "text": "見た武装集団を商隊へ報告する",
+            "to": "guard",
+            "set": {
+              "warned": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "sister",
+        "text": "相手は野盗の弟だった。ラナは襲撃を止めたくて進路を教えたという。弟は約束した人数より多く連れてきた。",
+        "options": [
+          {
+            "id": "warn",
+            "text": "商隊へ進路漏洩を知らせる",
+            "to": "guard",
+            "set": {
+              "warned": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "guard",
+        "text": "警戒は整った。会談をしても武装と見張りは解かない。ラナの善意だけで危険が消えた扱いにはできない。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "野盗を退け、商隊を通す",
+            "to": "@guard",
+            "combat": "guard_2",
+            "escape": "guard"
+          },
+          {
+            "id": "parley",
+            "text": "警戒を保った会談で弟へ離脱を提案する",
+            "to": "parley"
+          },
+          {
+            "id": "detour",
+            "text": "到着の遅れを承知して道を変える",
+            "to": "@detour"
+          }
+        ]
+      },
+      {
+        "id": "parley",
+        "text": "弟は離脱するならラナに身元を引き受けてほしいと言う。ラナは負担を聞き、それでも承諾した。通行料は商隊へ要求しないと約束する。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "二人の合意を見届け、隊を安全に通す",
+            "to": "@parley"
+          },
+          {
+            "id": "detour",
+            "text": "約束に商隊を委ねず迂回する",
+            "to": "@detour"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q119.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q119.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ラナは豆を避けて包んだ食事を持って丘へ行く。受け取った男の背後に、武装した仲間が見えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "ラナへ直接尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q119.scene.sister"
+                }
+              ]
+            },
+            {
+              "id": "warn",
+              "text": "見た武装集団を商隊へ報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q119.warned",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q119.scene.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q119.scene.sister": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q119.node",
+          "value": "sister"
+        },
+        {
+          "op": "say",
+          "text": "相手は野盗の弟だった。ラナは襲撃を止めたくて進路を教えたという。弟は約束した人数より多く連れてきた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "商隊へ進路漏洩を知らせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q119.warned",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q119.scene.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q119.scene.guard": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q119.node",
+          "value": "guard"
+        },
+        {
+          "op": "say",
+          "text": "警戒は整った。会談をしても武装と見張りは解かない。ラナの善意だけで危険が消えた扱いにはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "野盗を退け、商隊を通す",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q119.end.guard"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q119.scene.guard"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "parley",
+              "text": "警戒を保った会談で弟へ離脱を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q119.scene.parley"
+                }
+              ]
+            },
+            {
+              "id": "detour",
+              "text": "到着の遅れを承知して道を変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q119.end.detour"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q119.scene.parley": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q119.node",
+          "value": "parley"
+        },
+        {
+          "op": "say",
+          "text": "弟は離脱するならラナに身元を引き受けてほしいと言う。ラナは負担を聞き、それでも承諾した。通行料は商隊へ要求しないと約束する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "二人の合意を見届け、隊を安全に通す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q119.end.parley"
+                }
+              ]
+            },
+            {
+              "id": "detour",
+              "text": "約束に商隊を委ねず迂回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q119.end.detour"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q119.end.guard": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q119.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷は通った。弟は逃れ、姉弟は離れたままだった。丘には豆を除いた包みが残っていなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q119",
+              "outcome": "guard"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q119.end.parley": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q119.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟は団を離れた。ラナは返済と住居を相談し始め、商隊長は進路を教えた責任の話を後日へ残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q119",
+              "outcome": "parley"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q119.end.detour": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q119.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷の到着は遅れた。野盗問題は残り、弟が豆のない包みを持ち帰ったことだけは分かった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q119",
+              "outcome": "detour"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q119.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q119.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q119.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "guard",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "荷は通った。弟は逃れ、姉弟は離れたままだった。丘には豆を除いた包みが残っていなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "parley",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "弟は団を離れた。ラナは返済と住居を相談し始め、商隊長は進路を教えた責任の話を後日へ残した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "detour",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "荷の到着は遅れた。野盗問題は残り、弟が豆のない包みを持ち帰ったことだけは分かった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q119.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q119.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sister",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q119.scene.sister"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guard",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q119.scene.guard"
+                    }
+                  ]
+                },
+                {
+                  "equals": "parley",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q119.scene.parley"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q119.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

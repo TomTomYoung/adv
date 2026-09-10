@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "id": "q193",
+  "number": 193,
+  "title": "祈りの届かない場所",
+  "client": "谷の若者ルネ",
+  "brief": "祈りの効かない谷から、病人が治療を受ける道を作ってください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q193_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "migrate": {
+      "label": "希望者の移住",
+      "text": "出る人を送り、残る人の安全も尊重した。ルネは帰省の日を長老と決めてから境を越えた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "clinic": {
+      "label": "境界の治療小屋",
+      "text": "往復できる治療小屋が開いた。谷の安全は残り、光の戻った護符を預ける小箱が入口に置かれた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "local": {
+      "label": "谷でできる看護",
+      "text": "祈りが効いたことにはせず、食事と介助を助けた。外の治療を望む声は未解決のまま引き継いだ。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "護符は消えるのでなく、谷の境界を越えるとまた灯ります。効かないことが信仰の否定ではなく、地域固有の遮断だと示します。セイは救いたい思いと、自分の力が必要とされる場所へ連れ出したい願いを区別できていません。",
+      "fixedPast": "巡礼師セイは、祈祷が使えない谷から住民を移住させようとします。谷の人々は、呪いと神罰も届かない安全を選んで住んでいます。外で治療を受けたい若者と、追われてここへ来た老人で希望が割れます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "谷の若者ルネ",
+        "beliefsAndGoals": "巡礼師セイは、祈祷が使えない谷から住民を移住させようとします。谷の人々は、呪いと神罰も届かない安全を選んで住んでいます。外で治療を受けたい若者と、追われてここへ来た老人で希望が割れます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "祈りの効かない谷から、病人が治療を受ける道を作ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "谷へ入る→住民の個別相談→全体移住を求める／境界外の治療拠点／現地の生活支援。拠点は物資と往復の護衛が条件です。希望しない者を自動同行にしません。護衛戦から退けば谷へ戻り、再調整できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q193.scene.entry"
+        },
+        {
+          "id": "consent",
+          "script": "q193.scene.consent"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祈りの効かない谷から、病人が治療を受ける道を作ってください。"
+    },
+    "reveal": {
+      "newInformation": "護符は消えるのでなく、谷の境界を越えるとまた灯ります。効かないことが信仰の否定ではなく、地域固有の遮断だと示します。セイは救いたい思いと、自分の力が必要とされる場所へ連れ出したい願いを区別できていません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q193.scene.entry"
+      },
+      {
+        "id": "consent",
+        "script": "q193.scene.consent"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": "祈り・呪いの遮断は本依頼の谷の場面設定。既存マップ全体の魔法使用制限は変更しない。"
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q193.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "この谷では祈りも呪いも届かない。追われて逃げ込んだ年長者には、それが安全だった。境界の外へ出た護符だけが淡く光る。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "出たい人と残りたい人を別々に聞く",
+            "to": "consent"
+          },
+          {
+            "id": "local",
+            "text": "移住は決めず、谷内の看護を手伝う",
+            "to": "@local"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "ルネと希望者は治療を望み、長老は残る。全員を移す同意はない。境界外の小屋なら、往復を望む人が使える。",
+        "options": [
+          {
+            "id": "migrate",
+            "text": "希望者だけの移住を支える",
+            "to": "@migrate"
+          },
+          {
+            "id": "clinic",
+            "text": "糧食一つを携え、治療小屋への護衛をする",
+            "to": "@clinic",
+            "cost": {
+              "ration": 1
+            },
+            "combat": "guard_10",
+            "escape": "consent",
+            "loss": "consent"
+          },
+          {
+            "id": "local",
+            "text": "今は谷内の看護を手伝う",
+            "to": "@local"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q193.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q193.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "この谷では祈りも呪いも届かない。追われて逃げ込んだ年長者には、それが安全だった。境界の外へ出た護符だけが淡く光る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "出たい人と残りたい人を別々に聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q193.scene.consent"
+                }
+              ]
+            },
+            {
+              "id": "local",
+              "text": "移住は決めず、谷内の看護を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q193.end.local"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q193.scene.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q193.node",
+          "value": "consent"
+        },
+        {
+          "op": "say",
+          "text": "ルネと希望者は治療を望み、長老は残る。全員を移す同意はない。境界外の小屋なら、往復を望む人が使える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "migrate",
+              "text": "希望者だけの移住を支える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q193.end.migrate"
+                }
+              ]
+            },
+            {
+              "id": "clinic",
+              "text": "糧食一つを携え、治療小屋への護衛をする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費・戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "ration",
+                      "count": 1
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q193.end.clinic"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q193.scene.consent"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q193.scene.consent"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "local",
+              "text": "今は谷内の看護を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q193.end.local"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q193.end.migrate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "出る人を送り、残る人の安全も尊重した。ルネは帰省の日を長老と決めてから境を越えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q193",
+              "outcome": "migrate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q193.end.clinic": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "往復できる治療小屋が開いた。谷の安全は残り、光の戻った護符を預ける小箱が入口に置かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q193",
+              "outcome": "clinic"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q193.end.local": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祈りが効いたことにはせず、食事と介助を助けた。外の治療を望む声は未解決のまま引き継いだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q193",
+              "outcome": "local"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q193.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q193.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "migrate",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "出る人を送り、残る人の安全も尊重した。ルネは帰省の日を長老と決めてから境を越えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "clinic",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "往復できる治療小屋が開いた。谷の安全は残り、光の戻った護符を預ける小箱が入口に置かれた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "local",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祈りが効いたことにはせず、食事と介助を助けた。外の治療を望む声は未解決のまま引き継いだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q193.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q193.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "consent",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q193.scene.consent"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q193.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

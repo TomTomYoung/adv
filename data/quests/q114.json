@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "id": "q114",
+  "number": 114,
+  "title": "二人分の通行料",
+  "client": "旅芸人ネラ",
+  "brief": "一人に二人分を求める渡し守と話してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q114_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "pay": {
+      "label": "二人分の渡河",
+      "text": "早く渡れた。対岸の舞を見た渡し守は、今度は二人へ拍手を送った。",
+      "gold": 69,
+      "xp": 57
+    },
+    "exception": {
+      "label": "例外の一行",
+      "text": "渡し守は重量と結界を別の欄へ書いた。二人へ送られた拍手を、ネラは訂正しなかった。",
+      "gold": 69,
+      "xp": 57
+    },
+    "dismiss": {
+      "label": "対岸の輪郭",
+      "text": "渡り終えてから姉の輪郭が戻った。ネラは誰もいない舟へ一礼し、舞を始めた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "walk": {
+      "label": "別の渡しへ",
+      "text": "ネラは迂回を選んだ。合意のないまま渡し守の手順を変えず、二人の輪郭が岸を離れた。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "渡し守は金を欲しているだけではありません。呪具の人数で救命具を積み、過去の転覆以来手順を変えられません。分身には体重も溺死もありませんが、川の結界には反応します。重さと境界の人数を別に検証できる場面を置きます。",
+      "fixedPast": "旅芸人ネラは、一人なのに二人分を要求する渡し守の調停を頼みます。渡し守は足跡を数える呪具を信じています。ネラには亡姉の舞を映す分身が付き、舞台では二人として扱われるのに、支払時だけ一人と言うことを指摘されます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "旅芸人ネラ",
+        "beliefsAndGoals": "旅芸人ネラは、一人なのに二人分を要求する渡し守の調停を頼みます。渡し守は足跡を数える呪具を信じています。ネラには亡姉の舞を映す分身が付き、舞台では二人として扱われるのに、支払時だけ一人と言うことを指摘されます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "一人に二人分を求める渡し守と話してください。"
+      }
+    ],
+    "conflict": {
+      "design": "桟橋→支払う／実演する／別の渡しへ回る。二つの試験をすれば救命具一つと結界代だけの例外料金を提案できます。渡し守は無料にはせず、根拠を帳面に残します。分身を消す道はネラ本人が承諾した時だけです。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q114.scene.entry"
+        },
+        {
+          "id": "dismiss",
+          "script": "q114.scene.dismiss"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "一人に二人分を求める渡し守と話してください。"
+    },
+    "reveal": {
+      "newInformation": "渡し守は金を欲しているだけではありません。呪具の人数で救命具を積み、過去の転覆以来手順を変えられません。分身には体重も溺死もありませんが、川の結界には反応します。重さと境界の人数を別に検証できる場面を置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q114.scene.entry"
+      },
+      {
+        "id": "dismiss",
+        "script": "q114.scene.dismiss"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q114.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q114.weight",
+        "meaning": "作者原稿の weight に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q114.boundary",
+        "meaning": "作者原稿の boundary に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ネラの隣に亡姉の舞を映す分身が立つ。渡し守は人数の呪具を指した。「転覆以来、救命具は数字どおりに積む」",
+        "options": [
+          {
+            "id": "weight",
+            "text": "空舟と乗船時の重さを比べる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q114.weight"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "weight": true
+            },
+            "textAfter": "分身を呼んでも舟の沈み方は変わらない。"
+          },
+          {
+            "id": "boundary",
+            "text": "岸の結界で分身を実演する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q114.boundary"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "boundary": true
+            },
+            "textAfter": "分身が結界を通る時にも、呪具は一人分を数えた。"
+          },
+          {
+            "id": "pay",
+            "text": "二人分40Gを払う",
+            "to": "@pay",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "exception",
+            "text": "救命具一つと結界代の例外料金20Gを提案する",
+            "to": "@exception",
+            "need": [
+              "weight",
+              "boundary"
+            ],
+            "cost": {
+              "gold": 20
+            }
+          },
+          {
+            "id": "dismiss",
+            "text": "本人に分身を一時消せるか相談する",
+            "to": "dismiss"
+          }
+        ]
+      },
+      {
+        "id": "dismiss",
+        "text": "ネラはこの渡河の間だけ分身を消すと答えた。姉の舞はできなくなるが、対岸で呼び戻せる。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "分身を消して一人分10Gで渡る",
+            "to": "@dismiss",
+            "cost": {
+              "gold": 10
+            }
+          },
+          {
+            "id": "walk",
+            "text": "払わず別の渡しへ回る",
+            "to": "@walk"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q114.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q114.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ネラの隣に亡姉の舞を映す分身が立つ。渡し守は人数の呪具を指した。「転覆以来、救命具は数字どおりに積む」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weight",
+              "text": "空舟と乗船時の重さを比べる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q114.weight"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q114.weight",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "分身を呼んでも舟の沈み方は変わらない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q114.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "boundary",
+              "text": "岸の結界で分身を実演する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q114.boundary"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q114.boundary",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "分身が結界を通る時にも、呪具は一人分を数えた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q114.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pay",
+              "text": "二人分40Gを払う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q114.end.pay"
+                }
+              ]
+            },
+            {
+              "id": "exception",
+              "text": "救命具一つと結界代の例外料金20Gを提案する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q114.weight"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q114.boundary"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q114.end.exception"
+                }
+              ]
+            },
+            {
+              "id": "dismiss",
+              "text": "本人に分身を一時消せるか相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q114.scene.dismiss"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q114.scene.dismiss": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q114.node",
+          "value": "dismiss"
+        },
+        {
+          "op": "say",
+          "text": "ネラはこの渡河の間だけ分身を消すと答えた。姉の舞はできなくなるが、対岸で呼び戻せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "分身を消して一人分10Gで渡る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 10
+                  }
+                ]
+              },
+              "requirement": "G 10消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -10
+                },
+                {
+                  "op": "jump",
+                  "script": "q114.end.dismiss"
+                }
+              ]
+            },
+            {
+              "id": "walk",
+              "text": "払わず別の渡しへ回る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q114.end.walk"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q114.end.pay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q114.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "早く渡れた。対岸の舞を見た渡し守は、今度は二人へ拍手を送った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q114",
+              "outcome": "pay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q114.end.exception": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q114.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "渡し守は重量と結界を別の欄へ書いた。二人へ送られた拍手を、ネラは訂正しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q114",
+              "outcome": "exception"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q114.end.dismiss": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q114.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "渡り終えてから姉の輪郭が戻った。ネラは誰もいない舟へ一礼し、舞を始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q114",
+              "outcome": "dismiss"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q114.end.walk": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q114.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ネラは迂回を選んだ。合意のないまま渡し守の手順を変えず、二人の輪郭が岸を離れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q114",
+              "outcome": "walk"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q114.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q114.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q114.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "pay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "早く渡れた。対岸の舞を見た渡し守は、今度は二人へ拍手を送った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "exception",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "渡し守は重量と結界を別の欄へ書いた。二人へ送られた拍手を、ネラは訂正しなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "dismiss",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "渡り終えてから姉の輪郭が戻った。ネラは誰もいない舟へ一礼し、舞を始めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "walk",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ネラは迂回を選んだ。合意のないまま渡し守の手順を変えず、二人の輪郭が岸を離れた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q114.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q114.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "dismiss",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q114.scene.dismiss"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q114.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

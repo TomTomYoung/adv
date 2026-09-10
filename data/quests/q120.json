@@ -1,0 +1,790 @@
+{
+  "schemaVersion": 1,
+  "id": "q120",
+  "number": 120,
+  "title": "最後尾の旗",
+  "client": "巡礼団の先導役",
+  "brief": "遅れている人々を、聖門まで連れてきてください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q120_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "enter": {
+      "label": "門の内の列",
+      "text": "巡礼団は入場した。先着組も後着組も写真に残した。老婆は若者の旗を取り上げず、持ち方だけを直した。",
+      "gold": 69,
+      "xp": 57
+    },
+    "outside": {
+      "label": "門外の祈り",
+      "text": "門は閉じていた。翌朝の入場券を受け取り、今夜は門外で祈った。写真の背景は違っても、最後尾まで写っていた。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "最後尾の旗は、脱落者を示す印ではなく、集団がまだ続いていると知らせるものです。旧写真には毎年、同じ老婆が旗を持っています。彼女は長年の世話役で、今年初めて助けられる側になりました。",
+      "fixedPast": "巡礼団の先導役が、遅れている人々を連れてくるよう頼みます。団長は全員で聖門をくぐることを誇りにし、最後尾の老婆は足の遅さを隠して皆を先へ行かせます。若い旗持ちは、先頭だけが写真に残る式典で認められたいと思っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "巡礼団の先導役",
+        "beliefsAndGoals": "巡礼団の先導役が、遅れている人々を連れてくるよう頼みます。団長は全員で聖門をくぐることを誇りにし、最後尾の老婆は足の遅さを隠して皆を先へ行かせます。若い旗持ちは、先頭だけが写真に残る式典で認められたいと思っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "遅れている人々を、聖門まで連れてきてください。"
+      }
+    ],
+    "conflict": {
+      "design": "先頭→最後尾→歩調統一／二隊分割／車を借りる→聖門。車は費用と本人の承諾が条件です。分割なら先着組が門番へ延長を頼めますが、確約ではありません。間に合わなくても門外で祈りを行う終端があります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q120.scene.entry"
+        },
+        {
+          "id": "road",
+          "script": "q120.scene.road"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "遅れている人々を、聖門まで連れてきてください。"
+    },
+    "reveal": {
+      "newInformation": "最後尾の旗は、脱落者を示す印ではなく、集団がまだ続いていると知らせるものです。旧写真には毎年、同じ老婆が旗を持っています。彼女は長年の世話役で、今年初めて助けられる側になりました。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q120.scene.entry"
+      },
+      {
+        "id": "road",
+        "script": "q120.scene.road"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q120.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q120.leg",
+        "meaning": "作者原稿の leg に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "road"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q120.time",
+        "meaning": "作者原稿の time に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "road"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q120.rear",
+        "meaning": "作者原稿の rear に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "road"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q120.split",
+        "meaning": "作者原稿の split に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "road"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "三つの山道区間を進む。急ぐ区間は一刻、歩調を揃える区間は二刻。門は四刻まで開く。読む時間では時計は進まない。老婆が持つ最後尾の旗には、古い写真と同じ継ぎがあった。",
+        "options": [
+          {
+            "id": "start",
+            "text": "三つの区間を歩く準備をする",
+            "to": "road",
+            "set": {
+              "leg": 0,
+              "time": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "road",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q120.leg"
+              },
+              "right": 3
+            },
+            "yes": "聖門へ着いた。到着した時計で開門を確かめる。",
+            "no": "若い旗持ちは先頭に立ちたいと言う。老婆は皆を先へ行かせようとする。旗は、まだ集団が続く印だ。"
+          }
+        ],
+        "options": [
+          {
+            "id": "slow",
+            "text": "全員で歩調を揃える（二刻）",
+            "to": "road",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q120.leg"
+              },
+              "right": 3
+            },
+            "set": {
+              "leg": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.leg"
+                  },
+                  1
+                ]
+              },
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.time"
+                  },
+                  2
+                ]
+              },
+              "rear": true
+            }
+          },
+          {
+            "id": "fast",
+            "text": "二隊に分かれ、先着組を門へ送る（一刻）",
+            "to": "road",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q120.leg"
+              },
+              "right": 3
+            },
+            "set": {
+              "leg": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.leg"
+                  },
+                  1
+                ]
+              },
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.time"
+                  },
+                  1
+                ]
+              },
+              "split": true
+            }
+          },
+          {
+            "id": "cart",
+            "text": "本人の承諾で車を借り、この区間を一刻で進む（20G）",
+            "to": "road",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q120.leg"
+              },
+              "right": 3
+            },
+            "cost": {
+              "gold": 20
+            },
+            "set": {
+              "leg": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.leg"
+                  },
+                  1
+                ]
+              },
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q120.time"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "enter",
+            "text": "四刻以内の到着として入場する",
+            "to": "@enter",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q120.leg"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "lte",
+                  "left": {
+                    "ref": "flags.quest.q120.time"
+                  },
+                  "right": 4
+                }
+              ]
+            }
+          },
+          {
+            "id": "outside",
+            "text": "閉門後、門外で祈って翌朝を待つ",
+            "to": "@outside",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q120.leg"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q120.time"
+                  },
+                  "right": 5
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q120.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q120.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "三つの山道区間を進む。急ぐ区間は一刻、歩調を揃える区間は二刻。門は四刻まで開く。読む時間では時計は進まない。老婆が持つ最後尾の旗には、古い写真と同じ継ぎがあった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "start",
+              "text": "三つの区間を歩く準備をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.leg",
+                  "value": 0
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.time",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q120.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q120.scene.road": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q120.node",
+          "value": "road"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q120.leg"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "聖門へ着いた。到着した時計で開門を確かめる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "若い旗持ちは先頭に立ちたいと言う。老婆は皆を先へ行かせようとする。旗は、まだ集団が続く印だ。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "slow",
+              "text": "全員で歩調を揃える（二刻）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q120.leg"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.leg",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.leg"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.time"
+                      },
+                      2
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.rear",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q120.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "fast",
+              "text": "二隊に分かれ、先着組を門へ送る（一刻）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q120.leg"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.leg",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.leg"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.split",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q120.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "cart",
+              "text": "本人の承諾で車を借り、この区間を一刻で進む（20G）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q120.leg"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.leg",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.leg"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q120.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q120.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q120.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "enter",
+              "text": "四刻以内の到着として入場する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q120.leg"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "lte",
+                        "left": {
+                          "ref": "flags.quest.q120.time"
+                        },
+                        "right": 4
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q120.end.enter"
+                }
+              ]
+            },
+            {
+              "id": "outside",
+              "text": "閉門後、門外で祈って翌朝を待つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q120.leg"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q120.time"
+                        },
+                        "right": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q120.end.outside"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q120.end.enter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q120.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巡礼団は入場した。先着組も後着組も写真に残した。老婆は若者の旗を取り上げず、持ち方だけを直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q120",
+              "outcome": "enter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q120.end.outside": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q120.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門は閉じていた。翌朝の入場券を受け取り、今夜は門外で祈った。写真の背景は違っても、最後尾まで写っていた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q120",
+              "outcome": "outside"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q120.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q120.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q120.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "enter",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巡礼団は入場した。先着組も後着組も写真に残した。老婆は若者の旗を取り上げず、持ち方だけを直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "outside",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門は閉じていた。翌朝の入場券を受け取り、今夜は門外で祈った。写真の背景は違っても、最後尾まで写っていた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q120.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q120.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "road",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q120.scene.road"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q120.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

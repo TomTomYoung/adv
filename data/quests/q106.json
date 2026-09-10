@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "id": "q106",
+  "number": 106,
+  "title": "パン泥棒の影",
+  "client": "夜市のパン屋",
+  "brief": "姿のないパン泥棒を何とかしてください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q106_scene",
+      "x": 2,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "seal": {
+      "label": "影を封じる",
+      "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "meal": {
+      "label": "空腹を認める",
+      "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。",
+      "gold": 57,
+      "xp": 51
+    },
+    "guard": {
+      "label": "一晩の見張り",
+      "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "追うほど影は小さな抜け道へ逃げます。最初は怪物らしい輪郭だけを見せ、次に寝た主人と同じ傷のある手を映します。影を戻す儀式は、主人が自分の空腹を口にした後だけ成立します。説明は術師か古い祭具の実演から得られます。",
+      "fixedPast": "パン屋が、姿のない盗人の捕縛を求めます。犯人は夜勤の荷運びから剝がれた影です。この町の影術では、主人が認めない欲求が影へ移ります。荷運びは家族に心配させまいと食事を抜き、影だけが飢えを認めています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "夜市のパン屋",
+        "beliefsAndGoals": "パン屋が、姿のない盗人の捕縛を求めます。犯人は夜勤の荷運びから剝がれた影です。この町の影術では、主人が認めない欲求が影へ移ります。荷運びは家族に心配させまいと食事を抜き、影だけが飢えを認めています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "姿のないパン泥棒を何とかしてください。"
+      }
+    ],
+    "conflict": {
+      "design": "追跡→捕獲罠／主人の捜索→夕食の場。罠で封じるなら影封じの代金を支払います。主人と食べるならパンと`F.admitted`が必要です。説得を拒まれたら、一晩だけ店を守り翌日に話し直せます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q106.scene.entry"
+        },
+        {
+          "id": "owner",
+          "script": "q106.scene.owner"
+        },
+        {
+          "id": "meal",
+          "script": "q106.scene.meal"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "姿のないパン泥棒を何とかしてください。"
+    },
+    "reveal": {
+      "newInformation": "追うほど影は小さな抜け道へ逃げます。最初は怪物らしい輪郭だけを見せ、次に寝た主人と同じ傷のある手を映します。影を戻す儀式は、主人が自分の空腹を口にした後だけ成立します。説明は術師か古い祭具の実演から得られます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q106.scene.entry"
+      },
+      {
+        "id": "owner",
+        "script": "q106.scene.owner"
+      },
+      {
+        "id": "meal",
+        "script": "q106.scene.meal"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q106.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "地面を這う影がパンを抱えて逃げる。影の手には古い傷があり、荷運びの男の手にも同じ傷があった。",
+        "options": [
+          {
+            "id": "owner",
+            "text": "荷運びの男を訪ねる",
+            "to": "owner"
+          },
+          {
+            "id": "seal",
+            "text": "影封じを30Gで手配する",
+            "to": "@seal",
+            "cost": {
+              "gold": 30
+            }
+          },
+          {
+            "id": "guard",
+            "text": "今夜だけ店を守り、話は翌晩へ",
+            "to": "@guard"
+          }
+        ]
+      },
+      {
+        "id": "owner",
+        "text": "男は夕食を抜いていた。「家族には足りてると言ったんだ」術師は、影が主人の認めない欲求を引き受けると説明した。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "空腹を本人の言葉で家族へ伝えてもらう",
+            "to": "meal"
+          },
+          {
+            "id": "guard",
+            "text": "今は説得を打ち切り、一晩の見張りをする",
+            "to": "@guard"
+          }
+        ]
+      },
+      {
+        "id": "meal",
+        "text": "男は家族へ「腹が減った」と言った。家族は責めずに席を空けた。パンの代わりにもなる糧食が一つ必要だ。",
+        "options": [
+          {
+            "id": "eat",
+            "text": "糧食一つを出し、本人と夕食を取る",
+            "to": "@meal",
+            "cost": {
+              "ration": 1
+            }
+          },
+          {
+            "id": "guard",
+            "text": "食事の支度を家族へ頼み、今夜は店を守る",
+            "to": "@guard"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q106.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "地面を這う影がパンを抱えて逃げる。影の手には古い傷があり、荷運びの男の手にも同じ傷があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "owner",
+              "text": "荷運びの男を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.owner"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "影封じを30Gで手配する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "今夜だけ店を守り、話は翌晩へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q106.scene.owner": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "owner"
+        },
+        {
+          "op": "say",
+          "text": "男は夕食を抜いていた。「家族には足りてると言ったんだ」術師は、影が主人の認めない欲求を引き受けると説明した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "空腹を本人の言葉で家族へ伝えてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "今は説得を打ち切り、一晩の見張りをする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q106.scene.meal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "meal"
+        },
+        {
+          "op": "say",
+          "text": "男は家族へ「腹が減った」と言った。家族は責めずに席を空けた。パンの代わりにもなる糧食が一つ必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "eat",
+              "text": "糧食一つを出し、本人と夕食を取る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.end.meal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "食事の支度を家族へ頼み、今夜は店を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q106.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.end.meal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "meal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.end.guard": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "guard"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q106.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "meal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guard",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q106.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q106.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "owner",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q106.scene.owner"
+                    }
+                  ]
+                },
+                {
+                  "equals": "meal",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q106.scene.meal"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

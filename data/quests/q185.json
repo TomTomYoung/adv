@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "id": "q185",
+  "number": 185,
+  "title": "橋を落とさない理由",
+  "client": "撤退軍と橋守ネヴ",
+  "brief": "追手を止める橋の封鎖時刻を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q185_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "families": {
+      "label": "両国の荷車",
+      "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "boat": {
+      "label": "別の渡し",
+      "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。",
+      "gold": 153,
+      "xp": 99
+    },
+    "early": {
+      "label": "部隊を先に退く",
+      "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "橋守は人の顔より荷車の車輪を見ています。目印は故郷で修理した車輪の印で、言葉や軍服では帰還者を判別できません。最後の荷車に敵兵も混じり、避難者を守るため装備を置いています。",
+      "fixedPast": "撤退軍は、追手を止めるため古い橋の封鎖を命じます。橋守ネヴは最後まで閉鎖を拒み、兵に裏切り者と疑われます。彼が待つのは敵でなく、反対岸へ出稼ぎに行った両国の家族です。指揮官にも、待つほど部隊を危険にさらす責任があります。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "撤退軍と橋守ネヴ",
+        "beliefsAndGoals": "撤退軍は、追手を止めるため古い橋の封鎖を命じます。橋守ネヴは最後まで閉鎖を拒み、兵に裏切り者と疑われます。彼が待つのは敵でなく、反対岸へ出稼ぎに行った両国の家族です。指揮官にも、待つほど部隊を危険にさらす責任があります。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "追手を止める橋の封鎖時刻を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "橋頭→荷車確認→通過を待つ／即時封鎖／別の渡河を支援→撤退。戦闘で時間を稼ぐ、舟を費用で確保する、最後の組を別隊へ託す代案があります。逃走した場合は自軍撤退へ移り、通せた組だけを記録します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q185.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "追手を止める橋の封鎖時刻を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "橋守は人の顔より荷車の車輪を見ています。目印は故郷で修理した車輪の印で、言葉や軍服では帰還者を判別できません。最後の荷車に敵兵も混じり、避難者を守るため装備を置いています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q185.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q185.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ネヴが待つのは両国の出稼ぎ家族だ。車輪の修理印で荷車を見分ける。最後の車には、装備を置いた敵兵も混じるという。",
+        "options": [
+          {
+            "id": "hold",
+            "text": "戦って通過の時間を稼ぐ",
+            "to": "@families",
+            "combat": "guard_9",
+            "escape": "@early",
+            "loss": "@early"
+          },
+          {
+            "id": "boat",
+            "text": "40Gで舟を確保し、別の渡河へ移す",
+            "to": "@boat",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "early",
+            "text": "即時封鎖し、自軍を守って残る救援を引き継ぐ",
+            "to": "@early"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q185.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q185.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ネヴが待つのは両国の出稼ぎ家族だ。車輪の修理印で荷車を見分ける。最後の車には、装備を置いた敵兵も混じるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hold",
+              "text": "戦って通過の時間を稼ぐ",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q185.end.families"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.end.early"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.end.early"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "boat",
+              "text": "40Gで舟を確保し、別の渡河へ移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.end.boat"
+                }
+              ]
+            },
+            {
+              "id": "early",
+              "text": "即時封鎖し、自軍を守って残る救援を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q185.end.early"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q185.end.families": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "families"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.end.boat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "boat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.end.early": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "early"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q185.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "families",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "boat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "early",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q185.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q185.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q185.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q156",
+  "number": 156,
+  "title": "降伏しない人質",
+  "client": "外交官救出隊",
+  "brief": "領境の砦にいる外交官ユセを迎えてください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q156_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "only": {
+      "label": "外交官だけの退去",
+      "text": "説得を受けたユセは出た。任務は果たしたが、砦の危険が増すことを救援窓口へ伝えた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "all": {
+      "label": "印でなくなる人",
+      "text": "避難を組んで砦を出た。安全地帯でユセが立っても、もう誰も砲撃停止の印として見なかった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "stay": {
+      "label": "交代の必要",
+      "text": "ユセは残った。無期限に一人へ頼らず、交代する外交官と避難交渉を探す仕事を残した。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "牢には内側から開けられる扉があり、食器は他の避難者と同じです。捕虜でないと即断させず、移動の自由と安全の保証が別だと示します。砦側も彼を政治的盾として利用しており、永久の避難所ではありません。",
+      "fixedPast": "領境の砦から、捕われた外交官ユセを救えと命じられます。本人は退出を拒みます。砦にいることで、外の軍が砲撃を控える条件になっているからです。救出隊長は命令違反を恐れ、ユセは自分の存在だけで市民を守れると過信しています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "外交官救出隊",
+        "beliefsAndGoals": "領境の砦から、捕われた外交官ユセを救えと命じられます。本人は退出を拒みます。砦にいることで、外の軍が砲撃を控える条件になっているからです。救出隊長は命令違反を恐れ、ユセは自分の存在だけで市民を守れると過信しています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "領境の砦にいる外交官ユセを迎えてください。"
+      }
+    ],
+    "conflict": {
+      "design": "潜入→本人と対面→即時連出し／避難条件の交渉／外軍への伝言。即時連出しは本人が拒否し、説得か強制を選ぶ場合の対立を明示します。避難が整えば本人は自発的に出ます。交渉失敗時は一部避難か現状維持を選べます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q156.scene.entry"
+        },
+        {
+          "id": "terms",
+          "script": "q156.scene.terms"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "領境の砦にいる外交官ユセを迎えてください。"
+    },
+    "reveal": {
+      "newInformation": "牢には内側から開けられる扉があり、食器は他の避難者と同じです。捕虜でないと即断させず、移動の自由と安全の保証が別だと示します。砦側も彼を政治的盾として利用しており、永久の避難所ではありません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q156.scene.entry"
+      },
+      {
+        "id": "terms",
+        "script": "q156.scene.terms"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q156.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "牢の扉は内側から開く。ユセは、ここにいることで砲撃を止めていると言った。出る自由と、その後の安全は別だった。",
+        "options": [
+          {
+            "id": "only",
+            "text": "市民の保証は残ると説明したうえで、本人だけの退去を説得する",
+            "to": "@only"
+          },
+          {
+            "id": "terms",
+            "text": "外軍と砦へ避難条件を伝える",
+            "to": "terms"
+          },
+          {
+            "id": "stay",
+            "text": "本人の残留を認め、交代要員を探す",
+            "to": "@stay"
+          }
+        ]
+      },
+      {
+        "id": "terms",
+        "text": "両軍は避難路と一時停戦の条件を確認した。ユセ一人を永遠の砲撃停止の印にはできない。市民とともに出るなら本人も承諾した。",
+        "options": [
+          {
+            "id": "evacuate",
+            "text": "合意した避難を実行し、本人も連れ出す",
+            "to": "@all"
+          },
+          {
+            "id": "stay",
+            "text": "条件を実行せず、今は残留する",
+            "to": "@stay"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q156.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q156.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "牢の扉は内側から開く。ユセは、ここにいることで砲撃を止めていると言った。出る自由と、その後の安全は別だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "only",
+              "text": "市民の保証は残ると説明したうえで、本人だけの退去を説得する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q156.end.only"
+                }
+              ]
+            },
+            {
+              "id": "terms",
+              "text": "外軍と砦へ避難条件を伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q156.scene.terms"
+                }
+              ]
+            },
+            {
+              "id": "stay",
+              "text": "本人の残留を認め、交代要員を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q156.end.stay"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q156.scene.terms": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q156.node",
+          "value": "terms"
+        },
+        {
+          "op": "say",
+          "text": "両軍は避難路と一時停戦の条件を確認した。ユセ一人を永遠の砲撃停止の印にはできない。市民とともに出るなら本人も承諾した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evacuate",
+              "text": "合意した避難を実行し、本人も連れ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q156.end.all"
+                }
+              ]
+            },
+            {
+              "id": "stay",
+              "text": "条件を実行せず、今は残留する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q156.end.stay"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q156.end.only": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q156.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "説得を受けたユセは出た。任務は果たしたが、砦の危険が増すことを救援窓口へ伝えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q156",
+              "outcome": "only"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q156.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q156.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "避難を組んで砦を出た。安全地帯でユセが立っても、もう誰も砲撃停止の印として見なかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q156",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q156.end.stay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q156.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ユセは残った。無期限に一人へ頼らず、交代する外交官と避難交渉を探す仕事を残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q156",
+              "outcome": "stay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q156.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q156.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q156.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "only",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "説得を受けたユセは出た。任務は果たしたが、砦の危険が増すことを救援窓口へ伝えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "all",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "避難を組んで砦を出た。安全地帯でユセが立っても、もう誰も砲撃停止の印として見なかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ユセは残った。無期限に一人へ頼らず、交代する外交官と避難交渉を探す仕事を残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q156.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q156.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "terms",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q156.scene.terms"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q156.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

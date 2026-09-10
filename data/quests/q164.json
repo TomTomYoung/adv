@@ -1,0 +1,546 @@
+{
+  "schemaVersion": 1,
+  "id": "q164",
+  "number": 164,
+  "title": "吟遊詩人抜きの宴",
+  "client": "帰り火亭の常連",
+  "brief": "楽師レンに内緒で、送別会の言葉を準備したいのです。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q164_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "secret": {
+      "label": "不器用な送辞",
+      "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "explain": {
+      "label": "サプライズをやめる",
+      "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。",
+      "gold": 129,
+      "xp": 87
+    },
+    "listen": {
+      "label": "最後まで聞く宴",
+      "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。",
+      "gold": 129,
+      "xp": 87
+    },
+    "song": {
+      "label": "歌になった送辞",
+      "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "本人のいない席では失敗談が悪口に聞こえますが、客はその話を送辞にするため本人の傷つく部分を削っています。ペルにも、沈黙が怖くて歌い始める理由があります。聞き耳で断片だけ得た時と、客に尋ねた時で認識を分けます。",
+      "fixedPast": "宿の常連は、いつも皆を歌へ巻き込む吟遊詩人ペルに内緒で送別会を開きたいと言います。本人は仲間外れを疑います。客は嫌っているのではなく、彼の前では話の途中でも歌にされるため、一度自分たちの言葉を揃えたいのです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "帰り火亭の常連",
+        "beliefsAndGoals": "宿の常連は、いつも皆を歌へ巻き込む吟遊詩人ペルに内緒で送別会を開きたいと言います。本人は仲間外れを疑います。客は嫌っているのではなく、彼の前では話の途中でも歌にされるため、一度自分たちの言葉を揃えたいのです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "楽師レンに内緒で、送別会の言葉を準備したいのです。"
+      }
+    ],
+    "conflict": {
+      "design": "準備依頼→ペルを別用事へ案内／事情を説明／席へ同伴→送別会。本人不在は準備会話の条件にだけ使い、追放を強制しません。話を漏らした場合はサプライズでなく、本人も準備に加わる会へ変わります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q164.scene.entry"
+        },
+        {
+          "id": "prepare",
+          "script": "q164.scene.prepare"
+        },
+        {
+          "id": "together",
+          "script": "q164.scene.together"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "楽師レンに内緒で、送別会の言葉を準備したいのです。"
+    },
+    "reveal": {
+      "newInformation": "本人のいない席では失敗談が悪口に聞こえますが、客はその話を送辞にするため本人の傷つく部分を削っています。ペルにも、沈黙が怖くて歌い始める理由があります。聞き耳で断片だけ得た時と、客に尋ねた時で認識を分けます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q164.scene.entry"
+      },
+      {
+        "id": "prepare",
+        "script": "q164.scene.prepare"
+      },
+      {
+        "id": "together",
+        "script": "q164.scene.together"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "原稿のペルを既存の楽師レンへ置換。不在判定はmembersを直接読む。秘密の準備ができなくても公開の会へ進める。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q164.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "客は、レンの前だと話の途中で歌にされると困っていた。嫌っているのではなく、自分たちの言葉を揃えたいという。",
+        "options": [
+          {
+            "id": "secret",
+            "text": "レンが出撃隊にいない間に、秘密の準備を聞く",
+            "to": "prepare",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "has_member",
+                "actor": "ren"
+              }
+            }
+          },
+          {
+            "id": "explain",
+            "text": "レンに事情を説明し、一緒に準備する",
+            "to": "@explain"
+          },
+          {
+            "id": "bring",
+            "text": "本人も同席する形の会へ変える",
+            "to": "together"
+          }
+        ]
+      },
+      {
+        "id": "prepare",
+        "text": "失敗談から、本人の傷つく部分を皆で削る。不在時に聞いた断片を悪口と決めつけず、一つの送辞へ揃えた。",
+        "options": [
+          {
+            "id": "party",
+            "text": "秘密を守って送別会を開く",
+            "to": "@secret"
+          }
+        ]
+      },
+      {
+        "id": "together",
+        "text": "レンが沈黙に耐えかね、歌い始めようとした。客はまだ自分の言葉を言い終えていない。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "客の言葉を最後まで待ってもらう",
+            "to": "@listen"
+          },
+          {
+            "id": "song",
+            "text": "歌で間を埋めるに任せる",
+            "to": "@song"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q164.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "客は、レンの前だと話の途中で歌にされると困っていた。嫌っているのではなく、自分たちの言葉を揃えたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "レンが出撃隊にいない間に、秘密の準備を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_member",
+                      "actor": "ren"
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "explain",
+              "text": "レンに事情を説明し、一緒に準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.explain"
+                }
+              ]
+            },
+            {
+              "id": "bring",
+              "text": "本人も同席する形の会へ変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.together"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q164.scene.prepare": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "prepare"
+        },
+        {
+          "op": "say",
+          "text": "失敗談から、本人の傷つく部分を皆で削る。不在時に聞いた断片を悪口と決めつけず、一つの送辞へ揃えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "party",
+              "text": "秘密を守って送別会を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.secret"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q164.scene.together": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "together"
+        },
+        {
+          "op": "say",
+          "text": "レンが沈黙に耐えかね、歌い始めようとした。客はまだ自分の言葉を言い終えていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "客の言葉を最後まで待ってもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.listen"
+                }
+              ]
+            },
+            {
+              "id": "song",
+              "text": "歌で間を埋めるに任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.song"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q164.end.secret": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "secret"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.explain": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "explain"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.listen": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "listen"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.song": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "song"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q164.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "secret",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "explain",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "listen",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "song",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q164.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "prepare",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.prepare"
+                    }
+                  ]
+                },
+                {
+                  "equals": "together",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.together"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
