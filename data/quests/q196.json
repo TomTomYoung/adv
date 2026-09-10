@@ -6,7 +6,7 @@
   "client": "広場の記録係",
   "brief": "英雄像の名を変える相談を手伝ってください。",
   "region": 10,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -60,14 +60,23 @@
       }
     ],
     "conflict": {
-      "design": "改刻相談→本人／遺族／基金→名を追加／像を共同記念物へ変更／現状と別碑を併存。共同化には功績確認と維持主体が必要です。証言が割れた名は、断定せず未確定の説明を添えます。"
+      "request": "英雄像の名を変える相談を手伝ってください。",
+      "progression": "救助者を訪ねて名前の公開許可を受け、寄付への依存を残すか共同管理へ変える。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q196.scene.entry"
+          "script": "q196.flow.entry"
+        },
+        {
+          "id": "names",
+          "script": "q196.flow.names"
+        },
+        {
+          "id": "fund",
+          "script": "q196.flow.fund"
         }
       ]
     },
@@ -76,16 +85,25 @@
     },
     "reveal": {
       "newInformation": "像の台座の下には、多数の手形があります。最初は建設労働者の印に見せ、救助時に手をつないだ者たちの記念と明かします。一人の象徴が人を助けた事実もあり、名を削れば支援が自動的に公平になるわけではありません。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q196.scene.entry"
+        "script": "q196.flow.entry"
+      },
+      {
+        "id": "names",
+        "script": "q196.flow.names"
+      },
+      {
+        "id": "fund",
+        "script": "q196.flow.fund"
       }
     ],
     "adaptation": {
@@ -96,130 +114,76 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q196.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q196.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q196.a",
-        "meaning": "作者原稿の a に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q196.b",
-        "meaning": "作者原稿の b に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q196.fund",
-        "meaning": "作者原稿の fund に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "像の台座に救助者たちの小さな手形がある。名は一人だけだ。英雄本人は賛成したが、支援者は有名な名を失うと寄付が減ると言う。",
+        "text": "英雄像の足元に、小さな救助者の手形がある。英雄は名前の追加に賛成だが、寄付者は有名な名を失うことを恐れる。",
         "options": [
           {
-            "id": "witness_a",
-            "text": "川側の救助者へ、名前と役割を確かめる",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q196.a"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "a": true
-            }
-          },
-          {
-            "id": "witness_b",
-            "text": "広場側の記録と照合する",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q196.b"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "b": true
-            }
-          },
-          {
-            "id": "fund",
-            "text": "寄付者と共同管理の費用を相談する",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q196.fund"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "fund": true
-            }
-          },
-          {
-            "id": "common",
-            "text": "確認した名を載せ、共同の記念物へ変える",
-            "to": "@common",
-            "need": [
-              "a",
-              "b",
-              "fund"
-            ]
-          },
-          {
-            "id": "add",
-            "text": "英雄の名を残し、確認した救助者を追記する",
-            "to": "@add",
-            "need": [
-              "a",
-              "b"
-            ]
+            "id": "people",
+            "text": "手形を残した救助者を訪ねる",
+            "to": "names"
           },
           {
             "id": "dual",
-            "text": "未確認の名は断定せず、手形を伝える別碑を建てる",
+            "text": "未確認の名を断定せず、手形の別碑を作る",
             "to": "@dual"
           }
         ]
+      },
+      {
+        "id": "names",
+        "text": "川で助けた人と広場で運んだ人が集まり、互いの役割を確かめた。名を載せることにも同意した。",
+        "options": [
+          {
+            "id": "add",
+            "text": "英雄の名を残し、同意した救助者の名を追記する",
+            "to": "@add"
+          },
+          {
+            "id": "fund",
+            "text": "共同の記念物にするため維持費を相談する",
+            "to": "fund"
+          },
+          {
+            "id": "unknown",
+            "text": "名の掲載は見送り、手形を別碑へ残す",
+            "to": "@dual"
+          }
+        ]
+      },
+      {
+        "id": "fund",
+        "text": "寄付者は名が変われば従来の額は出せないと言う。住民は掃除と修理の小口負担を引き受けると申し出た。",
+        "options": [
+          {
+            "id": "common",
+            "text": "役割と費用を住民へ分け、共同管理を結ぶ",
+            "to": "@common"
+          },
+          {
+            "id": "add",
+            "text": "従来の支援を保ち、救助者を追記する",
+            "to": "@add"
+          }
+        ]
       }
-    ]
+    ],
+    "progression": "救助者を訪ねて名前の公開許可を受け、寄付への依存を残すか共同管理へ変える。",
+    "flowVersion": 2,
+    "entryScript": "q196.flow.visit",
+    "choiceContract": {
+      "progression": "救助者を訪ねて名前の公開許可を受け、寄付への依存を残すか共同管理へ変える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q196.scene.entry": {
@@ -564,6 +528,343 @@
                 {
                   "op": "jump",
                   "script": "q196.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q196.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q196.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "英雄像の足元に、小さな救助者の手形がある。英雄は名前の追加に賛成だが、寄付者は有名な名を失うことを恐れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "people",
+              "text": "手形を残した救助者を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.names"
+                }
+              ]
+            },
+            {
+              "id": "dual",
+              "text": "未確認の名を断定せず、手形の別碑を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.end.dual"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q196.flow.names": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q196.node",
+          "value": "names"
+        },
+        {
+          "op": "say",
+          "text": "川で助けた人と広場で運んだ人が集まり、互いの役割を確かめた。名を載せることにも同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "add",
+              "text": "英雄の名を残し、同意した救助者の名を追記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.end.add"
+                }
+              ]
+            },
+            {
+              "id": "fund",
+              "text": "共同の記念物にするため維持費を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.fund"
+                }
+              ]
+            },
+            {
+              "id": "unknown",
+              "text": "名の掲載は見送り、手形を別碑へ残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.end.dual"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q196.flow.fund": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q196.node",
+          "value": "fund"
+        },
+        {
+          "op": "say",
+          "text": "寄付者は名が変われば従来の額は出せないと言う。住民は掃除と修理の小口負担を引き受けると申し出た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "common",
+              "text": "役割と費用を住民へ分け、共同管理を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.end.common"
+                }
+              ]
+            },
+            {
+              "id": "add",
+              "text": "従来の支援を保ち、救助者を追記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q196.flow.end.add"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q196.flow.end.common": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q196.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "共同管理の碑になった。英雄は自分の名より先に、子供が触れられる高さの小さな手形を指した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q196",
+              "outcome": "common"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q196.flow.end.add": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q196.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "英雄の名の下に救助者の名が増えた。有名な名が集める支援と、他の働きを両方残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q196",
+              "outcome": "add"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q196.flow.end.dual": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q196.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "名前を推測で埋めず、手形と救助の事実を別碑で伝えた。分からない欄は、これから調べる場所として残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q196",
+              "outcome": "dual"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q196.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q196.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q196.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "common",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "共同管理の碑になった。英雄は自分の名より先に、子供が触れられる高さの小さな手形を指した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "add",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "英雄の名の下に救助者の名が増えた。有名な名が集める支援と、他の働きを両方残した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "dual",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "名前を推測で埋めず、手形と救助の事実を別碑で伝えた。分からない欄は、これから調べる場所として残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q196"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q196.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q196.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q196.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "names",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q196.flow.names"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fund",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q196.flow.fund"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q196.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

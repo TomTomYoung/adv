@@ -6,7 +6,7 @@
   "client": "探検家のルウ",
   "brief": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
   "region": 5,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "道順を封印範囲から外し機密だけ守る",
+      "label": "別紙で出口へ戻り、封印範囲の修正を届ける",
       "text": "ルウは帰路を覚えて帰りました。忘れる約束も守れたと胸を張ります。",
       "gold": 105,
       "xp": 100
     },
     "contract": {
-      "label": "忘却の番人を倒して栞を焼く",
+      "label": "機密の封印も含め、栞を焼く",
       "text": "全て思い出せました。持ち帰るべきでない知識も、夢に現れるようになります。",
       "gold": 125,
       "xp": 75
     },
     "compromise": {
-      "label": "機密頁を置き地図だけ写して帰る",
+      "label": "機密頁を置き、壁の道順だけ紙へ写す",
       "text": "成果は少なくても隊は戻りました。ルウは次の契約で閲覧範囲を確かめます。",
       "gold": 68,
       "xp": 75
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "探検家のルウ",
         "observation": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
         "belief": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
-        "goal": "忘却の番人を倒して栞を焼く"
+        "goal": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "忘却の番人を倒して栞を焼く",
-      "alternative": "道順を封印範囲から外し機密だけ守る",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "栞を挟むと道を忘れます。必要な頁だけ持ち帰ってください。",
+      "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q049.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進めます。"
+          "id": "scope",
+          "script": "q049.flow.scope"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にあります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "test",
+          "script": "q049.flow.test"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "observerSwap",
       "newInformation": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "scope"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q049.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q049.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q049.clue_a"
+        "id": "entry",
+        "script": "q049.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q049.clue_b"
+        "id": "scope",
+        "script": "q049.flow.scope"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q049.decision"
+        "id": "test",
+        "script": "q049.flow.test"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "忘却の番人を倒して栞を焼くと道順を封印範囲から外し機密だけ守るの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q049.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q049.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q049.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q049.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。",
+    "flowVersion": 2,
+    "entryScript": "q049.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "栞を挟んだ直後、帰りの道が思い出せなくなった。手元には部屋番号だけ残る。",
+        "options": [
+          {
+            "id": "remove",
+            "text": "栞を一時外して道順を確かめる",
+            "to": "scope"
+          },
+          {
+            "id": "burn",
+            "text": "機密の封印も含め、栞を焼く",
+            "to": "@contract"
+          },
+          {
+            "id": "map",
+            "text": "機密頁を置き、壁の道順だけ紙へ写す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "scope",
+        "text": "道を読み直せた。$truth 栞の封印枠は、機密と見取り図を同じ頁として囲んでいる。",
+        "options": [
+          {
+            "id": "split",
+            "text": "見取り図を別紙へ移し、機密だけ封印する",
+            "to": "test"
+          },
+          {
+            "id": "leave",
+            "text": "文書を置き、道順の写しだけ持ち帰る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "test",
+        "text": "栞を戻しても別紙の道順は読める。機密の文字だけが思い出せない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "別紙で出口へ戻り、封印範囲の修正を届ける",
+            "to": "@informed"
+          },
+          {
+            "id": "undo",
+            "text": "文書を保管庫へ戻し、地図だけで帰る",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q049.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q049.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "栞を挟んだ直後、帰りの道が思い出せなくなった。手元には部屋番号だけ残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "remove",
+              "text": "栞を一時外して道順を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.scope"
+                }
+              ]
+            },
+            {
+              "id": "burn",
+              "text": "機密の封印も含め、栞を焼く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "map",
+              "text": "機密頁を置き、壁の道順だけ紙へ写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.scope": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "scope"
+        },
+        {
+          "op": "say",
+          "text": "道を読み直せた。栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じています。 栞の封印枠は、機密と見取り図を同じ頁として囲んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "見取り図を別紙へ移し、機密だけ封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.test"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "文書を置き、道順の写しだけ持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.test": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "test"
+        },
+        {
+          "op": "say",
+          "text": "栞を戻しても別紙の道順は読める。機密の文字だけが思い出せない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "別紙で出口へ戻り、封印範囲の修正を届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "undo",
+              "text": "文書を保管庫へ戻し、地図だけで帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ルウは帰路を覚えて帰りました。忘れる約束も守れたと胸を張ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "全て思い出せました。持ち帰るべきでない知識も、夢に現れるようになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "成果は少なくても隊は戻りました。ルウは次の契約で閲覧範囲を確かめます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q049.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ルウは帰路を覚えて帰りました。忘れる約束も守れたと胸を張ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "全て思い出せました。持ち帰るべきでない知識も、夢に現れるようになります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "成果は少なくても隊は戻りました。ルウは次の契約で閲覧範囲を確かめます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q049"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q049.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q049.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scope",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.scope"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.test"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q049.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

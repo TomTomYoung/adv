@@ -15,15 +15,21 @@ function addScenarioState(save,data){
   }
   for(const [id,q] of Object.entries(s.quests))if(q.stage==='active')s.records.baselines[id]=snapshotRecords(s.records);
 }
+function keepLegacyRoutes(save,data,migration){
+  if(!migration.legacyQuestRouting)return;
+  const routes=save.state.flags.legacyQuestRoutes??={};
+  for(const [id,q] of Object.entries(save.state.quests))if(q.stage==='active'&&data.quests[id]?.model.flowVersion===2)routes[id]=true;
+}
 export function migrateSave(original,data){
   if(!isRecord(original)||original.contentVersion===data.game.version)return original;
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
   const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
   if(migration.scenarioRevision){
-    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,recordVersion:undefined}};
+    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,recordVersion:migration.preserveRecords?data.game.recordVersion:undefined}};
     if(validateSave(original,legacy).length)return original;
     const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
-    addScenarioState(save,data);return save;
+    if(!migration.preserveRecords)addScenarioState(save,data);
+    keepLegacyRoutes(save,data,migration);return save;
   }
   // Old records must pass their old growth limits before any normalization.
   const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
@@ -45,6 +51,7 @@ export function migrateSave(original,data){
   }
   if(data.jobs&&s.battle){s.battle.buffs=[];s.battle.covers=[];s.battle.analyzed=[];}
   addScenarioState(save,data);
+  keepLegacyRoutes(save,data,migration);
 
   return save;
 }

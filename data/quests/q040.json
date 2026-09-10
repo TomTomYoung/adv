@@ -6,7 +6,7 @@
   "client": "修復師のサイ",
   "brief": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
   "region": 4,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": {
     "op": "gte",
@@ -41,22 +41,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "証言を写し敵意のある影だけ退ける",
+      "label": "写しを守り、敵意のある影だけ退ける",
       "text": "鏡は小さな記録板へ分かれました。礼拝堂は祈る場であり、証言を聞く場にもなります。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "鏡の主を倒し全ての声を封じ直す",
+      "label": "鏡の主を倒し、全ての声を封じ直す",
       "text": "礼拝は静かに続きます。サイは銘板に封印の数だけ刻みました。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "鏡を閉鎖区画へ移して調査を継続する",
+      "label": "鏡を閉鎖区画へ移し、調査を続ける",
       "text": "即座の解放は叶いませんでした。初めて、封じられた者にも審査の日が決まります。",
       "gold": 60,
       "xp": 69
+    },
+    "fragment": {
+      "gold": 93,
+      "xp": 69,
+      "label": "聞き取れた断片だけ記録して鏡を保管する",
+      "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
     }
   },
   "model": {
@@ -75,13 +81,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +90,7 @@
         "name": "修復師のサイ",
         "observation": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
         "belief": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
-        "goal": "鏡の主を倒し全ての声を封じ直す"
+        "goal": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。"
       },
       {
         "id": "party",
@@ -107,30 +106,27 @@
       }
     ],
     "conflict": {
-      "request": "鏡の主を倒し全ての声を封じ直す",
-      "alternative": "証言を写し敵意のある影だけ退ける",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "大鏡を壊せば封印が解けると分かりました。封じられた声をどう扱うか決めてください。",
+      "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q040.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "封印文には罪名と同じ欄に異議申立の記号が刻まれています。"
+          "id": "witness",
+          "script": "q040.flow.witness"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "声の一部は攻撃でなく、日付と担当者名を繰り返しています。"
+          "id": "shadow",
+          "script": "q040.flow.shadow"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "after",
+          "script": "q040.flow.after"
         }
       ]
     },
@@ -142,80 +138,140 @@
       "operator": "frameShift",
       "newInformation": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "shadow"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q040.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q040.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q040.clue_a"
+        "id": "entry",
+        "script": "q040.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q040.clue_b"
+        "id": "witness",
+        "script": "q040.flow.witness"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q040.decision"
+        "id": "shadow",
+        "script": "q040.flow.shadow"
+      },
+      {
+        "id": "after",
+        "script": "q040.flow.after"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "鏡の主を倒し全ての声を封じ直すと証言を写し敵意のある影だけ退けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q040.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q040.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q040.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q040.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q040.testimony",
+        "meaning": "各場面に明記した testimony の行為・合意の記録",
+        "writer": [
+          "witness"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。",
+    "flowVersion": 2,
+    "entryScript": "q040.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "大鏡の声は一つではない。助けを求める声と、こちらを呪う声が交互に来る。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "一つずつ声を聞き、返事をする",
+            "to": "witness"
+          },
+          {
+            "id": "seal",
+            "text": "鏡の主を倒し、全ての声を封じ直す",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "isolate",
+            "text": "鏡を閉鎖区画へ移し、調査を続ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "text": "追放された者が門の閉じた日を語った。続く影はその名を消せと命じる。",
+        "options": [
+          {
+            "id": "copy",
+            "text": "証言を鏡の外の紙へ写す",
+            "to": "shadow",
+            "set": {
+              "testimony": true
+            }
+          },
+          {
+            "id": "fight",
+            "text": "写さずに敵意のある影を退ける",
+            "to": "after",
+            "combat": true
+          },
+          {
+            "id": "move",
+            "text": "ここでは選別せず、閉鎖区画へ運ぶ",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "shadow",
+        "text": "$truth 写しを証人へ預けた。残った影は紙を狙って鏡から出る。",
+        "options": [
+          {
+            "id": "defend",
+            "text": "写しを守り、敵意のある影だけ退ける",
+            "to": "@informed",
+            "combat": true
+          },
+          {
+            "id": "remove",
+            "text": "写しと鏡を閉鎖区画へ運ぶ",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "after",
+        "text": "影は退いたが、声は一緒に途切れた。日付だけは覚えている。完全な証言として書くことはできない。",
+        "options": [
+          {
+            "id": "fragment",
+            "text": "聞き取れた断片だけ記録して鏡を保管する",
+            "to": "@fragment"
+          },
+          {
+            "id": "seal",
+            "text": "残る声も封じ直す",
+            "to": "@contract"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q040.clue_a": {
@@ -683,6 +739,517 @@
             {
               "op": "jump",
               "script": "q040.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q040.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q040.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "大鏡の声は一つではない。助けを求める声と、こちらを呪う声が交互に来る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "一つずつ声を聞き、返事をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.witness"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "鏡の主を倒し、全ての声を封じ直す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q040.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "isolate",
+              "text": "鏡を閉鎖区画へ移し、調査を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q040.flow.witness": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q040.node",
+          "value": "witness"
+        },
+        {
+          "op": "say",
+          "text": "追放された者が門の閉じた日を語った。続く影はその名を消せと命じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "copy",
+              "text": "証言を鏡の外の紙へ写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q040.testimony",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q040.flow.shadow"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "写さずに敵意のある影を退ける",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q040.flow.after"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "ここでは選別せず、閉鎖区画へ運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q040.flow.shadow": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q040.node",
+          "value": "shadow"
+        },
+        {
+          "op": "say",
+          "text": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じています。 写しを証人へ預けた。残った影は紙を狙って鏡から出る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "defend",
+              "text": "写しを守り、敵意のある影だけ退ける",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q040.flow.end.informed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "写しと鏡を閉鎖区画へ運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q040.flow.after": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q040.node",
+          "value": "after"
+        },
+        {
+          "op": "say",
+          "text": "影は退いたが、声は一緒に途切れた。日付だけは覚えている。完全な証言として書くことはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fragment",
+              "text": "聞き取れた断片だけ記録して鏡を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.end.fragment"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "残る声も封じ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q040.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q040.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鏡は小さな記録板へ分かれました。礼拝堂は祈る場であり、証言を聞く場にもなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q040",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q040.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "礼拝は静かに続きます。サイは銘板に封印の数だけ刻みました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q040",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q040.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "即座の解放は叶いませんでした。初めて、封じられた者にも審査の日が決まります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q040",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q040.flow.end.fragment": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q040",
+              "outcome": "fragment"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q040.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q040.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鏡は小さな記録板へ分かれました。礼拝堂は祈る場であり、証言を聞く場にもなります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "礼拝は静かに続きます。サイは銘板に封印の数だけ刻みました。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "即座の解放は叶いませんでした。初めて、封じられた者にも審査の日が決まります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fragment",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q040"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q040.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q040.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q040.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "witness",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q040.flow.witness"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shadow",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q040.flow.shadow"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "after",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q040.flow.after"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q040.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

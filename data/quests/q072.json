@@ -6,7 +6,7 @@
   "client": "機関司祭のイオ",
   "brief": "新しい洗礼油で機械が震えます。聖別が足りないのか調べてください。",
   "region": 8,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "下層用の油へ替え儀式は別に続ける",
+      "label": "下層用油へ交換し、儀式を保守の合否から分ける",
       "text": "機械は静まりました。司祭は祝福と整備の記録を別々に付けます。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "震える機械獣を倒し油を全て捨てる",
+      "label": "今ある油を全て廃棄する",
       "text": "危険は止まりました。再稼働まで、手で鐘を鳴らす日が続きます。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "部屋を温めて今ある油を使う",
+      "label": "暖房を維持し、今の油を使い続ける",
       "text": "当座は動きました。燃料代を見た司祭が、次の発注を変えます。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "機関司祭のイオ",
         "observation": "新しい洗礼油で機械が震えます。聖別が足りないのか調べてください。",
         "belief": "新しい洗礼油で機械が震えます。聖別が足りないのか調べてください。",
-        "goal": "震える機械獣を倒し油を全て捨てる"
+        "goal": "新しい洗礼油で機械が震えます。聖別が足りないのか調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "震える機械獣を倒し油を全て捨てる",
-      "alternative": "下層用の油へ替え儀式は別に続ける",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "新しい洗礼油で機械が震えます。聖別が足りないのか調べてください。",
+      "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q072.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "上層では同じ油で動き、下層だけ軸が重くなっています。"
+          "id": "warm",
+          "script": "q072.flow.warm"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "納入票の推奨温度は地上の工場用で、下層の温度を下回りません。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "oil",
+          "script": "q072.flow.oil"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "evidenceRecode",
       "newInformation": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していません。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "oil"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q072.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q072.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q072.clue_a"
+        "id": "entry",
+        "script": "q072.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q072.clue_b"
+        "id": "warm",
+        "script": "q072.flow.warm"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q072.decision"
+        "id": "oil",
+        "script": "q072.flow.oil"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "震える機械獣を倒し油を全て捨てると下層用の油へ替え儀式は別に続けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q072.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q072.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q072.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q072.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。",
+    "flowVersion": 2,
+    "entryScript": "q072.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。",
+        "options": [
+          {
+            "id": "heat",
+            "text": "震える機械の部屋を温める",
+            "to": "warm"
+          },
+          {
+            "id": "oil",
+            "text": "油の適温表示を持って職人へ行く",
+            "to": "oil"
+          },
+          {
+            "id": "discard",
+            "text": "今ある油を全て廃棄する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "warm",
+        "text": "部屋が温まると機械が動き出した。祈祷は追加していない。",
+        "options": [
+          {
+            "id": "keep",
+            "text": "暖房を維持し、今の油を使い続ける",
+            "to": "@compromise"
+          },
+          {
+            "id": "change",
+            "text": "寒さに合う油へ替える相談をする",
+            "to": "oil"
+          }
+        ]
+      },
+      {
+        "id": "oil",
+        "text": "$truth 職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。",
+        "options": [
+          {
+            "id": "separate",
+            "text": "下層用油へ交換し、儀式を保守の合否から分ける",
+            "to": "@informed"
+          },
+          {
+            "id": "heat",
+            "text": "油の交換を見送り、部屋を温めて運用する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q072.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q072.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "heat",
+              "text": "震える機械の部屋を温める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.warm"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "油の適温表示を持って職人へ行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.oil"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "今ある油を全て廃棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.warm": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "warm"
+        },
+        {
+          "op": "say",
+          "text": "部屋が温まると機械が動き出した。祈祷は追加していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "keep",
+              "text": "暖房を維持し、今の油を使い続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "change",
+              "text": "寒さに合う油へ替える相談をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.oil"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.oil": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "oil"
+        },
+        {
+          "op": "say",
+          "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していません。 職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "separate",
+              "text": "下層用油へ交換し、儀式を保守の合否から分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "油の交換を見送り、部屋を温めて運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "機械は静まりました。司祭は祝福と整備の記録を別々に付けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "危険は止まりました。再稼働まで、手で鐘を鳴らす日が続きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "当座は動きました。燃料代を見た司祭が、次の発注を変えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q072.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "機械は静まりました。司祭は祝福と整備の記録を別々に付けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "危険は止まりました。再稼働まで、手で鐘を鳴らす日が続きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "当座は動きました。燃料代を見た司祭が、次の発注を変えます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q072"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q072.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q072.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warm",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.flow.warm"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "oil",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.flow.oil"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q072.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

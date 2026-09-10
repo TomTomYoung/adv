@@ -6,7 +6,7 @@
   "client": "庭師のユイ",
   "brief": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
   "region": 3,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "亀裂を育苗床にして鳥と分け合う",
+      "label": "光の落ちる場所へ育苗床を作る",
       "text": "盗難表は育苗記録に変わりました。ユイは鳥の分まで種袋を量ります。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "巣の魔物を追い払い種を全て戻す",
+      "label": "巣の魔物を追い払い、種を全て回収する",
       "text": "在庫は戻りました。暗い棚に並ぶ袋からは、芽が出ませんでした。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "半分の種を残し残りを回収する",
+      "label": "芽を残し、まだ埋まっていない半分を回収する",
       "text": "新芽も在庫も少しずつ増えます。毎晩数える仕事は続きます。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "庭師のユイ",
         "observation": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
         "belief": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
-        "goal": "巣の魔物を追い払い種を全て戻す"
+        "goal": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "巣の魔物を追い払い種を全て戻す",
-      "alternative": "亀裂を育苗床にして鳥と分け合う",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地下庭園の種が毎晩盗まれます。羽根をたどって取り戻してください。",
+      "progression": "鳥の運搬を追跡し、返す種と育てる種を現場で分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q021.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "巣に種の殻がなく、くちばしに付いた土だけが残っています。"
+          "id": "crack",
+          "script": "q021.flow.crack"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "盗まれた種と同じ芽が天井の亀裂から下向きに伸びています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "nursery",
+          "script": "q021.flow.nursery"
         }
       ]
     },
@@ -136,80 +122,124 @@
       "operator": "causeSwap",
       "newInformation": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "nursery"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q021.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q021.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q021.clue_a"
+        "id": "entry",
+        "script": "q021.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q021.clue_b"
+        "id": "crack",
+        "script": "q021.flow.crack"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q021.decision"
+        "id": "nursery",
+        "script": "q021.flow.nursery"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "巣の魔物を追い払い種を全て戻すと亀裂を育苗床にして鳥と分け合うの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q021.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q021.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q021.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q021.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q021.watched",
+        "meaning": "各場面に明記した watched の行為・合意の記録",
+        "writer": [
+          "crack"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "鳥の運搬を追跡し、返す種と育てる種を現場で分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "鳥の運搬を追跡し、返す種と育てる種を現場で分ける。",
+    "flowVersion": 2,
+    "entryScript": "q021.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "鳥が種を一粒くわえた。畑主は網を持っている。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "鳥を捕まえず、行先を追う",
+            "to": "crack"
+          },
+          {
+            "id": "nest",
+            "text": "巣の魔物を追い払い、種を全て回収する",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "crack",
+        "text": "鳥は亀裂の光へ種を埋め、別の種を取りに戻った。すでに芽の出た粒もある。",
+        "options": [
+          {
+            "id": "half",
+            "text": "芽を残し、まだ埋まっていない半分を回収する",
+            "to": "@compromise"
+          },
+          {
+            "id": "mark",
+            "text": "発芽した位置に印を付けて畑主を呼ぶ",
+            "to": "nursery"
+          },
+          {
+            "id": "wait",
+            "text": "次の運搬も見届ける",
+            "to": "crack",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q021.watched"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "watched": true
+            },
+            "textAfter": "次の鳥も同じ亀裂へ種を置いた。食べ殻は一つも残らない。"
+          }
+        ]
+      },
+      {
+        "id": "nursery",
+        "text": "$truth 畑主は畑へ移す苗だけを選び、鳥の持分を残すと決めた。",
+        "options": [
+          {
+            "id": "beds",
+            "text": "光の落ちる場所へ育苗床を作る",
+            "to": "@informed"
+          },
+          {
+            "id": "half",
+            "text": "設備は作らず、種を半分ずつ分ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q021.clue_a": {
@@ -651,6 +681,400 @@
             {
               "op": "jump",
               "script": "q021.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q021.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q021.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "鳥が種を一粒くわえた。畑主は網を持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "鳥を捕まえず、行先を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q021.flow.crack"
+                }
+              ]
+            },
+            {
+              "id": "nest",
+              "text": "巣の魔物を追い払い、種を全て回収する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q021.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q021.flow.crack": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q021.node",
+          "value": "crack"
+        },
+        {
+          "op": "say",
+          "text": "鳥は亀裂の光へ種を埋め、別の種を取りに戻った。すでに芽の出た粒もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "half",
+              "text": "芽を残し、まだ埋まっていない半分を回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q021.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "mark",
+              "text": "発芽した位置に印を付けて畑主を呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q021.flow.nursery"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "次の運搬も見届ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q021.watched"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q021.watched",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "次の鳥も同じ亀裂へ種を置いた。食べ殻は一つも残らない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q021.flow.crack"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q021.flow.nursery": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q021.node",
+          "value": "nursery"
+        },
+        {
+          "op": "say",
+          "text": "鳥は種を食べず、光の届く亀裂へ運んで発芽させています。 畑主は畑へ移す苗だけを選び、鳥の持分を残すと決めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "beds",
+              "text": "光の落ちる場所へ育苗床を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q021.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "half",
+              "text": "設備は作らず、種を半分ずつ分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q021.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q021.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盗難表は育苗記録に変わりました。ユイは鳥の分まで種袋を量ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q021",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q021.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "在庫は戻りました。暗い棚に並ぶ袋からは、芽が出ませんでした。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q021",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q021.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新芽も在庫も少しずつ増えます。毎晩数える仕事は続きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q021",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q021.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q021.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q021.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盗難表は育苗記録に変わりました。ユイは鳥の分まで種袋を量ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "在庫は戻りました。暗い棚に並ぶ袋からは、芽が出ませんでした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "新芽も在庫も少しずつ増えます。毎晩数える仕事は続きます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q021"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q021.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q021.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q021.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crack",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q021.flow.crack"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "nursery",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q021.flow.nursery"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q021.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

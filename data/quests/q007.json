@@ -6,7 +6,7 @@
   "client": "酒場のミレ",
   "brief": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
   "region": 1,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "伝声管を開け二人を会わせる",
+      "label": "伝声管を開き、二人を会わせる",
       "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "声を真似る亡霊を退け壁を封じる",
+      "label": "壁を封じ、声を止める",
       "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "声の正体を伏せ手紙だけ持ち帰る",
+      "label": "姿は見せなくてよいので手紙を預かる",
       "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "酒場のミレ",
         "observation": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
         "belief": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
-        "goal": "声を真似る亡霊を退け壁を封じる"
+        "goal": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "声を真似る亡霊を退け壁を封じる",
-      "alternative": "伝声管を開け二人を会わせる",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
+      "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q007.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "返事には毎回、同じ箇所で紙をめくる音が混じります。"
+          "id": "reply",
+          "script": "q007.flow.reply"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "壁の穴から地上の酒場で使う煙草の匂いが流れます。"
+          "id": "pipe",
+          "script": "q007.flow.pipe"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "meeting",
+          "script": "q007.flow.meeting"
         }
       ]
     },
@@ -136,80 +126,121 @@
       "operator": "identitySplit",
       "newInformation": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "pipe",
+        "meeting"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q007.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q007.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q007.clue_a"
+        "id": "entry",
+        "script": "q007.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q007.clue_b"
+        "id": "reply",
+        "script": "q007.flow.reply"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q007.decision"
+        "id": "pipe",
+        "script": "q007.flow.pipe"
+      },
+      {
+        "id": "meeting",
+        "script": "q007.flow.meeting"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "声を真似る亡霊を退け壁を封じると伝声管を開け二人を会わせるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q007.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q007.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q007.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q007.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。",
+    "flowVersion": 2,
+    "entryScript": "q007.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "壁が亡き夫の声で手紙を読む。ミレは、その次の言葉を知っている。",
+        "options": [
+          {
+            "id": "reply",
+            "text": "手紙にない質問を壁へ返す",
+            "to": "reply"
+          },
+          {
+            "id": "listen",
+            "text": "声が途切れる箇所を聞く",
+            "to": "pipe"
+          },
+          {
+            "id": "seal",
+            "text": "壁を封じ、声を止める",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "reply",
+        "text": "声が止まり、紙を落とす音がした。「兄さんなら、何て答えるだろう」。ミレが壁へ手を置いた。",
+        "options": [
+          {
+            "id": "name",
+            "text": "弟本人の言葉で話してほしいと頼む",
+            "to": "meeting"
+          },
+          {
+            "id": "letters",
+            "text": "姿は見せなくてよいので手紙を預かる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "pipe",
+        "text": "$a 煙の漏れる伝声管の先で、弟が古い便箋を抱えていた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "弟にミレへ会う意思を聞く",
+            "to": "meeting"
+          },
+          {
+            "id": "carry",
+            "text": "正体を明かさず便箋だけ持ち帰る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "meeting",
+        "text": "弟は自分の名で謝りたいと答え、ミレも会うと決めた。$truth",
+        "options": [
+          {
+            "id": "open",
+            "text": "伝声管を開き、二人を会わせる",
+            "to": "@informed"
+          },
+          {
+            "id": "letter",
+            "text": "対面を取りやめ、手紙だけ届ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q007.clue_a": {
@@ -651,6 +682,412 @@
             {
               "op": "jump",
               "script": "q007.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q007.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q007.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "壁が亡き夫の声で手紙を読む。ミレは、その次の言葉を知っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "手紙にない質問を壁へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "listen",
+              "text": "声が途切れる箇所を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.pipe"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "壁を封じ、声を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.flow.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q007.node",
+          "value": "reply"
+        },
+        {
+          "op": "say",
+          "text": "声が止まり、紙を落とす音がした。「兄さんなら、何て答えるだろう」。ミレが壁へ手を置いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "name",
+              "text": "弟本人の言葉で話してほしいと頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.meeting"
+                }
+              ]
+            },
+            {
+              "id": "letters",
+              "text": "姿は見せなくてよいので手紙を預かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.flow.pipe": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q007.node",
+          "value": "pipe"
+        },
+        {
+          "op": "say",
+          "text": "返事には毎回、同じ箇所で紙をめくる音が混じります。 煙の漏れる伝声管の先で、弟が古い便箋を抱えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "弟にミレへ会う意思を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.meeting"
+                }
+              ]
+            },
+            {
+              "id": "carry",
+              "text": "正体を明かさず便箋だけ持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.flow.meeting": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q007.node",
+          "value": "meeting"
+        },
+        {
+          "op": "say",
+          "text": "弟は自分の名で謝りたいと答え、ミレも会うと決めた。壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "伝声管を開き、二人を会わせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "letter",
+              "text": "対面を取りやめ、手紙だけ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q007.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q007.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q007",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q007.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q007.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q007",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q007.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q007.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q007",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q007.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q007.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q007.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q007"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q007.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q007.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.flow.reply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "pipe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.flow.pipe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meeting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.flow.meeting"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q007.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

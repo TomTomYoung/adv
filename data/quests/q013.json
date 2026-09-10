@@ -6,7 +6,7 @@
   "client": "鉱石商のセイ",
   "brief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
   "region": 2,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "根の通り道を残して鉱脈を迂回する",
+      "label": "湖へ続く根を避け、迂回坑の線を引く",
       "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "根に巣食う魔物ごと切り開く",
+      "label": "根を切り、採掘を続ける",
       "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "調査標を置いて採掘を凍結する",
+      "label": "調査標を置き、今日の採掘を凍結する",
       "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "鉱石商のセイ",
         "observation": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
         "belief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
-        "goal": "根に巣食う魔物ごと切り開く"
+        "goal": "鉱脈が膨らむため掘れません。奥の異変を止めてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "根に巣食う魔物ごと切り開く",
-      "alternative": "根の通り道を残して鉱脈を迂回する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+      "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q013.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "膨張は採掘音に反応せず、地下湖の水位と同期します。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "欠片を割ると年輪状の繊維と湿った芽が現れます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "root",
+          "script": "q013.flow.root"
         }
       ]
     },
@@ -136,68 +118,80 @@
       "operator": "ruleReveal",
       "newInformation": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "root"
       ],
-      "gate": {
-        "op": "contains",
-        "left": {
-          "ref": "quests.q013.evidence"
-        },
-        "right": "clue_b"
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q013.clue_a"
+        "id": "entry",
+        "script": "q013.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q013.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q013.decision"
+        "id": "root",
+        "script": "q013.flow.root"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "根に巣食う魔物ごと切り開くと根の通り道を残して鉱脈を迂回するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q013.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q013.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q013.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q013.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。",
+    "flowVersion": 2,
+    "entryScript": "q013.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "採掘前の塩が脈打つ。坑夫は試し穴を開けるか尋ねた。",
+        "options": [
+          {
+            "id": "sample",
+            "text": "表面だけ薄く削り、水の動きを見る",
+            "to": "root"
+          },
+          {
+            "id": "stop",
+            "text": "調査標を置き、今日の採掘を凍結する",
+            "to": "@compromise"
+          },
+          {
+            "id": "cut",
+            "text": "根を切り、採掘を続ける",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "root",
+        "text": "$b 刃を外すと根の水が戻る。$truth",
+        "options": [
+          {
+            "id": "trace",
+            "text": "湖へ続く根を避け、迂回坑の線を引く",
+            "to": "@informed"
+          },
+          {
+            "id": "stop",
+            "text": "根の調査を専門家へ渡し、採掘を止める",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q013.clue_a": {
@@ -603,6 +597,304 @@
             {
               "op": "jump",
               "script": "q013.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q013.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q013.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "採掘前の塩が脈打つ。坑夫は試し穴を開けるか尋ねた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sample",
+              "text": "表面だけ薄く削り、水の動きを見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q013.flow.root"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "調査標を置き、今日の採掘を凍結する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q013.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "根を切り、採掘を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q013.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.flow.root": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q013.node",
+          "value": "root"
+        },
+        {
+          "op": "say",
+          "text": "欠片を割ると年輪状の繊維と湿った芽が現れます。 刃を外すと根の水が戻る。鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trace",
+              "text": "湖へ続く根を避け、迂回坑の線を引く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q013.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "根の調査を専門家へ渡し、採掘を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q013.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q013.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q013"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q013.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q013.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q013.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "root",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q013.flow.root"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q013.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

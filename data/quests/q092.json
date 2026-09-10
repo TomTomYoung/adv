@@ -6,7 +6,7 @@
   "client": "救助人のヤチ",
   "brief": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
   "region": 10,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "救助符号で停止させ隊を降ろす",
+      "label": "停止符号を送り、扉から隊を降ろす",
       "text": "乗っていた隊は歩いて帰りました。獣は再び、次の遭難者を探しに行きます。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "外装の守護獣を倒し腹を切り開く",
+      "label": "外装の守護獣を倒し、腹を切り開く",
       "text": "隊は救えました。動けなくなった避難所を誰かが引き上げる仕事が残ります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "獣の進路を出口まで誘導する",
+      "label": "角ごとに灯を見せ、出口まで先導する",
       "text": "中へ入らずに救助できました。隊は自分たちを運んだものを外から見ます。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "救助人のヤチ",
         "observation": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
         "belief": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
-        "goal": "外装の守護獣を倒し腹を切り開く"
+        "goal": "獣の腹に出口があると聞きました。捕まった隊を救ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "外装の守護獣を倒し腹を切り開く",
-      "alternative": "救助符号で停止させ隊を降ろす",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "獣の腹に出口があると聞きました。捕まった隊を救ってください。",
+      "progression": "動く避難所を止める対話と出口へ誘導する追走が別経路になり、内部への応答を確認する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q092.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "爪痕は生物の筋でなく金具の継ぎ目に沿っています。"
+          "id": "reply",
+          "script": "q092.flow.reply"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "腹の内側から救助符号が返り、外装には避難所番号があります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "route",
+          "script": "q092.flow.route"
         }
       ]
     },
@@ -136,80 +122,101 @@
       "operator": "evidenceRecode",
       "newInformation": "獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "reply"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q092.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q092.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q092.clue_a"
+        "id": "entry",
+        "script": "q092.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q092.clue_b"
+        "id": "reply",
+        "script": "q092.flow.reply"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q092.decision"
+        "id": "route",
+        "script": "q092.flow.route"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "外装の守護獣を倒し腹を切り開くと救助符号で停止させ隊を降ろすの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q092.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q092.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q092.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q092.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "動く避難所を止める対話と出口へ誘導する追走が別経路になり、内部への応答を確認する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "動く避難所を止める対話と出口へ誘導する追走が別経路になり、内部への応答を確認する。",
+    "flowVersion": 2,
+    "entryScript": "q092.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "獣の腹から金属を叩く音が三つ返る。足は遅いが出口と逆へ進んでいる。",
+        "options": [
+          {
+            "id": "signal",
+            "text": "救助符号を三つ叩き返す",
+            "to": "reply"
+          },
+          {
+            "id": "lead",
+            "text": "出口側へ灯を掲げて誘導する",
+            "to": "route"
+          },
+          {
+            "id": "cut",
+            "text": "外装の守護獣を倒し、腹を切り開く",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "reply",
+        "text": "同じ三打が返り、腹の扉に避難所番号が点いた。$truth",
+        "options": [
+          {
+            "id": "stop",
+            "text": "停止符号を送り、扉から隊を降ろす",
+            "to": "@informed"
+          },
+          {
+            "id": "guide",
+            "text": "乗ったまま出口へ運んでもらう",
+            "to": "route"
+          }
+        ]
+      },
+      {
+        "id": "route",
+        "text": "獣は灯へ向きを変えた。分かれ道では灯を見失わない側へ回る必要がある。",
+        "options": [
+          {
+            "id": "walk",
+            "text": "角ごとに灯を見せ、出口まで先導する",
+            "to": "@compromise"
+          },
+          {
+            "id": "signal",
+            "text": "ここで救助符号を送り、停止を頼む",
+            "to": "reply"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q092.clue_a": {
@@ -705,6 +712,376 @@
             {
               "op": "jump",
               "script": "q092.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q092.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q092.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "獣の腹から金属を叩く音が三つ返る。足は遅いが出口と逆へ進んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "signal",
+              "text": "救助符号を三つ叩き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "lead",
+              "text": "出口側へ灯を掲げて誘導する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.route"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "外装の守護獣を倒し、腹を切り開く",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q092.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q092.flow.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q092.node",
+          "value": "reply"
+        },
+        {
+          "op": "say",
+          "text": "同じ三打が返り、腹の扉に避難所番号が点いた。獣は移動避難所の外装で、腹の扉から保護された隊が乗っています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stop",
+              "text": "停止符号を送り、扉から隊を降ろす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "guide",
+              "text": "乗ったまま出口へ運んでもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.route"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q092.flow.route": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q092.node",
+          "value": "route"
+        },
+        {
+          "op": "say",
+          "text": "獣は灯へ向きを変えた。分かれ道では灯を見失わない側へ回る必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "角ごとに灯を見せ、出口まで先導する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "signal",
+              "text": "ここで救助符号を送り、停止を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q092.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q092.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "乗っていた隊は歩いて帰りました。獣は再び、次の遭難者を探しに行きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q092",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q092.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "隊は救えました。動けなくなった避難所を誰かが引き上げる仕事が残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q092",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q092.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "中へ入らずに救助できました。隊は自分たちを運んだものを外から見ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q092",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q092.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q092.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q092.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "乗っていた隊は歩いて帰りました。獣は再び、次の遭難者を探しに行きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "隊は救えました。動けなくなった避難所を誰かが引き上げる仕事が残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "中へ入らずに救助できました。隊は自分たちを運んだものを外から見ます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q092"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q092.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q092.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q092.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q092.flow.reply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "route",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q092.flow.route"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q092.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

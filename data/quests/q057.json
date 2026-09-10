@@ -6,7 +6,7 @@
   "client": "市場番のゼン",
   "brief": "主が消えた店を撤去したいと言われました。所有者を探してください。",
   "region": 6,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "共同名義で届け出て代表を輪番にする",
+      "label": "共同名義と代表の輪番を届け出る",
       "text": "店は残りました。一人の不在で生活全部を失わない規則も残ります。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "店を守る荷車獣を倒し商品を撤去する",
+      "label": "無主の露店として商品を撤去する",
       "text": "通路は広がりました。七人は別々に出店料を用意することになります。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "期限付きの営業札を発行して名義を待つ",
+      "label": "期限付き営業札を発行し、名義を待つ",
       "text": "商いは続きました。ゼンは閉店後に全員が揃う時間を聞きます。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "市場番のゼン",
         "observation": "主が消えた店を撤去したいと言われました。所有者を探してください。",
         "belief": "主が消えた店を撤去したいと言われました。所有者を探してください。",
-        "goal": "店を守る荷車獣を倒し商品を撤去する"
+        "goal": "主が消えた店を撤去したいと言われました。所有者を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "店を守る荷車獣を倒し商品を撤去する",
-      "alternative": "共同名義で届け出て代表を輪番にする",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "主が消えた店を撤去したいと言われました。所有者を探してください。",
+      "progression": "露店の一日を時間順に見て交代制を知る経路と、営業を先に保護して名義を整える経路。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q057.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "帳面の仕入れ印は七種類あり、釣銭箱は一つです。"
+          "id": "noon",
+          "script": "q057.flow.noon"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "営業時間の端ごとに違う名の休憩札が掛けられています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "assembly",
+          "script": "q057.flow.assembly"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "identitySplit",
       "newInformation": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "assembly"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q057.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q057.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q057.clue_a"
+        "id": "entry",
+        "script": "q057.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q057.clue_b"
+        "id": "noon",
+        "script": "q057.flow.noon"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q057.decision"
+        "id": "assembly",
+        "script": "q057.flow.assembly"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "店を守る荷車獣を倒し商品を撤去すると共同名義で届け出て代表を輪番にするの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q057.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q057.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q057.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q057.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "露店の一日を時間順に見て交代制を知る経路と、営業を先に保護して名義を整える経路。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "露店の一日を時間順に見て交代制を知る経路と、営業を先に保護して名義を整える経路。",
+    "flowVersion": 2,
+    "entryScript": "q057.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "朝の売り手は「主ではない」と答えた。昼には別の売り手が来るという。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "昼の引継ぎまで店に付き添う",
+            "to": "noon"
+          },
+          {
+            "id": "permit",
+            "text": "期限付き営業札を発行し、名義を待つ",
+            "to": "@compromise"
+          },
+          {
+            "id": "clear",
+            "text": "無主の露店として商品を撤去する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "noon",
+        "text": "昼の売り手も店を所有していないと言う。二人は同じ売上袋へ釣銭を入れ、夕方の人へ渡す。",
+        "options": [
+          {
+            "id": "evening",
+            "text": "夕方の売り手も呼び、営業の単位を聞く",
+            "to": "assembly"
+          },
+          {
+            "id": "permit",
+            "text": "ひとまず期限付きの営業札を出す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "assembly",
+        "text": "$truth 三人は共同名義に賛成し、代表は曜日で替えたいと答えた。",
+        "options": [
+          {
+            "id": "register",
+            "text": "共同名義と代表の輪番を届け出る",
+            "to": "@informed"
+          },
+          {
+            "id": "temporary",
+            "text": "正式な名義を待ち、期限付き札を出す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q057.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q057.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q057.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q057.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "朝の売り手は「主ではない」と答えた。昼には別の売り手が来るという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "昼の引継ぎまで店に付き添う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.noon"
+                }
+              ]
+            },
+            {
+              "id": "permit",
+              "text": "期限付き営業札を発行し、名義を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "clear",
+              "text": "無主の露店として商品を撤去する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q057.flow.noon": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q057.node",
+          "value": "noon"
+        },
+        {
+          "op": "say",
+          "text": "昼の売り手も店を所有していないと言う。二人は同じ売上袋へ釣銭を入れ、夕方の人へ渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evening",
+              "text": "夕方の売り手も呼び、営業の単位を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.assembly"
+                }
+              ]
+            },
+            {
+              "id": "permit",
+              "text": "ひとまず期限付きの営業札を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q057.flow.assembly": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q057.node",
+          "value": "assembly"
+        },
+        {
+          "op": "say",
+          "text": "店は交代制の共同露店で、各人が主と名乗らないため無主と記録されました。 三人は共同名義に賛成し、代表は曜日で替えたいと答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "register",
+              "text": "共同名義と代表の輪番を届け出る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "text": "正式な名義を待ち、期限付き札を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q057.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q057.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "店は残りました。一人の不在で生活全部を失わない規則も残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q057",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q057.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "通路は広がりました。七人は別々に出店料を用意することになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q057",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q057.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "商いは続きました。ゼンは閉店後に全員が揃う時間を聞きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q057",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q057.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q057.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q057.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "店は残りました。一人の不在で生活全部を失わない規則も残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "通路は広がりました。七人は別々に出店料を用意することになります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "商いは続きました。ゼンは閉店後に全員が揃う時間を聞きます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q057"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q057.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q057.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q057.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "noon",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q057.flow.noon"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "assembly",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q057.flow.assembly"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q057.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "行商人のコノ",
   "brief": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
   "region": 6,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "食堂分を選択制にして未説明分を返す",
+      "label": "支払い時に食堂分へ参加するか選べる札を作る",
       "text": "買わない客も食べたい客も区別できました。コノは最初の説明札を書きます。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "金庫の番獣を倒し釣銭を回収する",
+      "label": "精算の仕組みを変えず、釣銭だけ返してもらう",
       "text": "客へ金は戻りました。その夜の食堂は鍋を一つ減らします。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "共同食堂で精算する席を設ける",
+      "label": "共同食堂に返金と食事を選べる精算席を作る",
       "text": "返金にも食事にも使える札ができました。店主は端数の行先を口にします。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "行商人のコノ",
         "observation": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
         "belief": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
-        "goal": "金庫の番獣を倒し釣銭を回収する"
+        "goal": "買物をすると釣銭が戻りません。店主に精算を求めてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "金庫の番獣を倒し釣銭を回収する",
-      "alternative": "食堂分を選択制にして未説明分を返す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "買物をすると釣銭が戻りません。店主に精算を求めてください。",
+      "progression": "釣銭の請求から閉店後の食堂へ同行し、精算と今後の同意を別々に取り付ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q051.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "値札には小さな椀の印があり、常連は端数を気にしません。"
+          "id": "meal",
+          "script": "q051.flow.meal"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "食堂の席札に購入額と同じ番号が記されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "consent",
+          "script": "q051.flow.consent"
         }
       ]
     },
@@ -136,80 +122,95 @@
       "operator": "causeSwap",
       "newInformation": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "meal"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q051.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q051.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q051.clue_a"
+        "id": "entry",
+        "script": "q051.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q051.clue_b"
+        "id": "meal",
+        "script": "q051.flow.meal"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q051.decision"
+        "id": "consent",
+        "script": "q051.flow.consent"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "金庫の番獣を倒し釣銭を回収すると食堂分を選択制にして未説明分を返すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q051.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q051.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q051.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q051.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "釣銭の請求から閉店後の食堂へ同行し、精算と今後の同意を別々に取り付ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "釣銭の請求から閉店後の食堂へ同行し、精算と今後の同意を別々に取り付ける。",
+    "flowVersion": 2,
+    "entryScript": "q051.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "初めて買った客にだけ、釣銭の行先が説明されていない。店主は閉店後に来てほしいという。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "閉店まで待って精算先へ同行する",
+            "to": "meal"
+          },
+          {
+            "id": "recover",
+            "text": "精算の仕組みを変えず、釣銭だけ返してもらう",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "meal",
+        "text": "$truth 常連は食堂で食べ、初来店の客は予定を知らずに帰っていた。",
+        "options": [
+          {
+            "id": "seat",
+            "text": "共同食堂に返金と食事を選べる精算席を作る",
+            "to": "@compromise"
+          },
+          {
+            "id": "refund",
+            "text": "説明されなかった客へ釣銭を返す",
+            "to": "consent"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "未説明分の精算が終わった。店主は前払いの仕組みを残したいと言う。",
+        "options": [
+          {
+            "id": "optin",
+            "text": "支払い時に食堂分へ参加するか選べる札を作る",
+            "to": "@informed"
+          },
+          {
+            "id": "desk",
+            "text": "販売時の変更はせず、食堂の精算席を続ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q051.clue_a": {
@@ -651,6 +652,347 @@
             {
               "op": "jump",
               "script": "q051.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q051.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q051.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "初めて買った客にだけ、釣銭の行先が説明されていない。店主は閉店後に来てほしいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "閉店まで待って精算先へ同行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.meal"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "精算の仕組みを変えず、釣銭だけ返してもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q051.flow.meal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q051.node",
+          "value": "meal"
+        },
+        {
+          "op": "say",
+          "text": "釣銭は閉店後の共同食堂への前払いで、初来店者への説明だけが省かれています。 常連は食堂で食べ、初来店の客は予定を知らずに帰っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seat",
+              "text": "共同食堂に返金と食事を選べる精算席を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "refund",
+              "text": "説明されなかった客へ釣銭を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.consent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q051.flow.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q051.node",
+          "value": "consent"
+        },
+        {
+          "op": "say",
+          "text": "未説明分の精算が終わった。店主は前払いの仕組みを残したいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "optin",
+              "text": "支払い時に食堂分へ参加するか選べる札を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "desk",
+              "text": "販売時の変更はせず、食堂の精算席を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q051.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q051.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "買わない客も食べたい客も区別できました。コノは最初の説明札を書きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q051",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q051.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "客へ金は戻りました。その夜の食堂は鍋を一つ減らします。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q051",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q051.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "返金にも食事にも使える札ができました。店主は端数の行先を口にします。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q051",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q051.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q051.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q051.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "買わない客も食べたい客も区別できました。コノは最初の説明札を書きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "客へ金は戻りました。その夜の食堂は鍋を一つ減らします。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "返金にも食事にも使える札ができました。店主は端数の行先を口にします。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q051"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q051.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q051.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q051.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q051.flow.meal"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q051.flow.consent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q051.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

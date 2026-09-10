@@ -6,7 +6,7 @@
   "client": "整備士のフウ",
   "brief": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
   "region": 8,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "制御音を別回線へ移して歌を保存する",
+      "label": "空調信号を別回線へ移し、歌は録音して保存する",
       "text": "薬は守られ、部屋は静まりました。歌は聞きたい人が再生できる記録になります。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "歌う自動人形を倒して電源を切る",
+      "label": "人形の電源を切って歌を止める",
       "text": "音は止みました。薬師が急いで保管先を探し、一部を廃棄します。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "薬を移してから歌を止める",
+      "label": "薬の移送を確認して歌を止める",
       "text": "部屋は役目を終えました。最後の曲を聴いた整備士が、扉へ日付を記します。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "整備士のフウ",
         "observation": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
         "belief": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
-        "goal": "歌う自動人形を倒して電源を切る"
+        "goal": "無人の保育室で子守歌が続いています。停止してよいか確認してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "歌う自動人形を倒して電源を切る",
-      "alternative": "制御音を別回線へ移して歌を保存する",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "無人の保育室で子守歌が続いています。停止してよいか確認してください。",
+      "progression": "歌を止める前の空調切替と薬の移送を選び、同じ停止でも保管条件を変える。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q076.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "歌の音程に合わせて送風弁が動き、音を遮ると室温が上がります。"
+          "id": "control",
+          "script": "q076.flow.control"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "保管庫には熱に弱い薬が移され、部屋名だけ保育室のままです。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "moved",
+          "script": "q076.flow.moved"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "pathHide",
       "newInformation": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "control"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q076.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q076.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q076.clue_a"
+        "id": "entry",
+        "script": "q076.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q076.clue_b"
+        "id": "control",
+        "script": "q076.flow.control"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q076.decision"
+        "id": "moved",
+        "script": "q076.flow.moved"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "歌う自動人形を倒して電源を切ると制御音を別回線へ移して歌を保存するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q076.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q076.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q076.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q076.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "歌を止める前の空調切替と薬の移送を選び、同じ停止でも保管条件を変える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "歌を止める前の空調切替と薬の移送を選び、同じ停止でも保管条件を変える。",
+    "flowVersion": 2,
+    "entryScript": "q076.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "子守歌が保育室の空調灯と同じ拍で続く。棚には温度管理の必要な薬がある。",
+        "options": [
+          {
+            "id": "line",
+            "text": "歌の信号線を空調盤まで追う",
+            "to": "control"
+          },
+          {
+            "id": "medicine",
+            "text": "薬を別の冷蔵庫へ運ぶ",
+            "to": "moved"
+          },
+          {
+            "id": "off",
+            "text": "人形の電源を切って歌を止める",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "control",
+        "text": "$truth 別回線へ制御音を送れば、歌の音量を自由に変えられる。",
+        "options": [
+          {
+            "id": "rewire",
+            "text": "空調信号を別回線へ移し、歌は録音して保存する",
+            "to": "@informed"
+          },
+          {
+            "id": "move",
+            "text": "配線を触らず、薬を先に移す",
+            "to": "moved"
+          }
+        ]
+      },
+      {
+        "id": "moved",
+        "text": "薬は別の冷蔵庫へ収まった。歌を止めても温度の影響を受ける薬はない。",
+        "options": [
+          {
+            "id": "stop",
+            "text": "薬の移送を確認して歌を止める",
+            "to": "@compromise"
+          },
+          {
+            "id": "keep",
+            "text": "歌を残すため、制御線を調べ直す",
+            "to": "control"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q076.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q076.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q076.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q076.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "子守歌が保育室の空調灯と同じ拍で続く。棚には温度管理の必要な薬がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "line",
+              "text": "歌の信号線を空調盤まで追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.control"
+                }
+              ]
+            },
+            {
+              "id": "medicine",
+              "text": "薬を別の冷蔵庫へ運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.moved"
+                }
+              ]
+            },
+            {
+              "id": "off",
+              "text": "人形の電源を切って歌を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q076.flow.control": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q076.node",
+          "value": "control"
+        },
+        {
+          "op": "say",
+          "text": "歌は子供の眠りでなく、保育室の空調を一定に保つ制御信号です。 別回線へ制御音を送れば、歌の音量を自由に変えられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rewire",
+              "text": "空調信号を別回線へ移し、歌は録音して保存する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "配線を触らず、薬を先に移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.moved"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q076.flow.moved": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q076.node",
+          "value": "moved"
+        },
+        {
+          "op": "say",
+          "text": "薬は別の冷蔵庫へ収まった。歌を止めても温度の影響を受ける薬はない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stop",
+              "text": "薬の移送を確認して歌を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "歌を残すため、制御線を調べ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q076.flow.control"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q076.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "薬は守られ、部屋は静まりました。歌は聞きたい人が再生できる記録になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q076",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q076.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "音は止みました。薬師が急いで保管先を探し、一部を廃棄します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q076",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q076.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "部屋は役目を終えました。最後の曲を聴いた整備士が、扉へ日付を記します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q076",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q076.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q076.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q076.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "薬は守られ、部屋は静まりました。歌は聞きたい人が再生できる記録になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "音は止みました。薬師が急いで保管先を探し、一部を廃棄します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "部屋は役目を終えました。最後の曲を聴いた整備士が、扉へ日付を記します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q076"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q076.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q076.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q076.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "control",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q076.flow.control"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "moved",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q076.flow.moved"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q076.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

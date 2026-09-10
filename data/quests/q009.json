@@ -6,7 +6,7 @@
   "client": "地下測量士のエダ",
   "brief": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
   "region": 1,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "消毒区画を分け、穀物庫の穴を塞ぐ",
+      "label": "二つの施工を通しで点検する",
       "text": "鼠は減り、崩落警報は解除されました。測量士は匂いも記すようになります。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "群れの主を倒し巣を一掃する",
+      "label": "群れの主を倒して巣を一掃する",
       "text": "穀物庫は守られましたが、消毒の続く地下では別の虫が増え始めます。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "避難を優先し、穀物を共同倉へ移す",
+      "label": "穀物を共同倉へ移し、避難を優先する",
       "text": "無駄な避難と笑う人もいました。共同倉の帳簿は、備蓄の偏りを明らかにします。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "地下測量士のエダ",
         "observation": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
         "belief": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
-        "goal": "群れの主を倒し巣を一掃する"
+        "goal": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "群れの主を倒し巣を一掃する",
-      "alternative": "消毒区画を分け、穀物庫の穴を塞ぐ",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "鼠が一斉に地上へ逃げました。崩落の前触れか確かめてください。",
+      "progression": "原因の観察後は消毒区画の分割と倉庫の補修を任意順で施工する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q009.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままです。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中しています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "work",
+          "script": "q009.flow.work"
         }
       ]
     },
@@ -136,80 +118,139 @@
       "operator": "observerSwap",
       "newInformation": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "work"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q009.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q009.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q009.clue_a"
+        "id": "entry",
+        "script": "q009.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q009.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q009.decision"
+        "id": "work",
+        "script": "q009.flow.work"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "群れの主を倒し巣を一掃すると消毒区画を分け、穀物庫の穴を塞ぐの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q009.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q009.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q009.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q009.zones",
+        "meaning": "各場面に明記した zones の行為・合意の記録",
+        "writer": [
+          "work"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q009.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q009.holes",
+        "meaning": "各場面に明記した holes の行為・合意の記録",
+        "writer": [
+          "work"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "原因の観察後は消毒区画の分割と倉庫の補修を任意順で施工する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "原因の観察後は消毒区画の分割と倉庫の補修を任意順で施工する。",
+    "flowVersion": 2,
+    "entryScript": "q009.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "鼠が新しい石灰の線を避け、穀物庫へ列を作っている。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "鼠の列を追い、石灰の両側を見比べる",
+            "to": "work"
+          },
+          {
+            "id": "hunt",
+            "text": "群れの主を倒して巣を一掃する",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "grain",
+            "text": "穀物を共同倉へ移し、避難を優先する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "text": "$truth 消毒を一度に広げると逃げ場がなくなる。区画を分け、穀物庫の入口も閉じる必要がある。",
+        "options": [
+          {
+            "id": "zones",
+            "text": "作業員と消毒区画を分ける",
+            "to": "work",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q009.zones"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "zones": true
+            }
+          },
+          {
+            "id": "holes",
+            "text": "穀物庫の小穴を補修する",
+            "to": "work",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q009.holes"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "holes": true
+            }
+          },
+          {
+            "id": "check",
+            "text": "二つの施工を通しで点検する",
+            "to": "@informed",
+            "need": [
+              "zones",
+              "holes"
+            ]
+          },
+          {
+            "id": "move",
+            "text": "施工を打ち切り、穀物の移動へ切り替える",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q009.clue_a": {
@@ -651,6 +692,403 @@
             {
               "op": "jump",
               "script": "q009.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q009.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "鼠が新しい石灰の線を避け、穀物庫へ列を作っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "鼠の列を追い、石灰の両側を見比べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "群れの主を倒して巣を一掃する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q009.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "grain",
+              "text": "穀物を共同倉へ移し、避難を優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.work": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q009.node",
+          "value": "work"
+        },
+        {
+          "op": "say",
+          "text": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指しています。 消毒を一度に広げると逃げ場がなくなる。区画を分け、穀物庫の入口も閉じる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "zones",
+              "text": "作業員と消毒区画を分ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q009.zones"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q009.zones",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "holes",
+              "text": "穀物庫の小穴を補修する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q009.holes"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q009.holes",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "check",
+              "text": "二つの施工を通しで点検する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q009.zones"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q009.holes"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「作業員と消毒区画を分ける」・先に「穀物庫の小穴を補修する」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "施工を打ち切り、穀物の移動へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鼠は減り、崩落警報は解除されました。測量士は匂いも記すようになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "穀物庫は守られましたが、消毒の続く地下では別の虫が増え始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "無駄な避難と笑う人もいました。共同倉の帳簿は、備蓄の偏りを明らかにします。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q009.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鼠は減り、崩落警報は解除されました。測量士は匂いも記すようになります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "穀物庫は守られましたが、消毒の続く地下では別の虫が増え始めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "無駄な避難と笑う人もいました。共同倉の帳簿は、備蓄の偏りを明らかにします。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q009"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q009.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q009.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.flow.work"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q009.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

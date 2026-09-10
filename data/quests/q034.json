@@ -6,7 +6,7 @@
   "client": "商人のロア",
   "brief": "罪を赦す証書を取り戻してください。日付が明日になっています。",
   "region": 4,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "予約票と書き足しを分けて返す",
+      "label": "予約票と書き足しを区別して返す",
       "text": "商人は支払いと償いを別に求められました。礼拝堂は書式を変えます。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "証書を奪った亡霊を倒して原本を渡す",
+      "label": "原本の記載を検めず商人へ渡す",
       "text": "商人は赦されたと触れ回りました。祈祷師には未収の帳簿だけが残ります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "証書を預かり被害者との面会を仲立ちする",
+      "label": "原本を保全して面会を取り持つ",
       "text": "赦しの紙より先に、返す品物が決まりました。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "商人のロア",
         "observation": "罪を赦す証書を取り戻してください。日付が明日になっています。",
         "belief": "罪を赦す証書を取り戻してください。日付が明日になっています。",
-        "goal": "証書を奪った亡霊を倒して原本を渡す"
+        "goal": "罪を赦す証書を取り戻してください。日付が明日になっています。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "証書を奪った亡霊を倒して原本を渡す",
-      "alternative": "予約票と書き足しを分けて返す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "罪を赦す証書を取り戻してください。日付が明日になっています。",
+      "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q034.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "文末には祈祷予定とあり、赦免の語だけ別の墨です。"
+          "id": "reserved",
+          "script": "q034.flow.reserved"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "控えには明日の代金が未収と記されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "consent",
+          "script": "q034.flow.consent"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "referenceSwap",
       "newInformation": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "reserved"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q034.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q034.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q034.clue_a"
+        "id": "entry",
+        "script": "q034.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q034.clue_b"
+        "id": "reserved",
+        "script": "q034.flow.reserved"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q034.decision"
+        "id": "consent",
+        "script": "q034.flow.consent"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "証書を奪った亡霊を倒して原本を渡すと予約票と書き足しを分けて返すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q034.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q034.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q034.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q034.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。",
+    "flowVersion": 2,
+    "entryScript": "q034.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "証書が祭壇へ置かれている。商人はそれを今夜の謝罪の代わりに掲げたいと言う。",
+        "options": [
+          {
+            "id": "read",
+            "text": "原本の支払欄を読む",
+            "to": "reserved"
+          },
+          {
+            "id": "recover",
+            "text": "原本の記載を検めず商人へ渡す",
+            "to": "@contract"
+          },
+          {
+            "id": "meeting",
+            "text": "原本を一時預かり、被害者との面会を提案する",
+            "to": "consent"
+          }
+        ]
+      },
+      {
+        "id": "reserved",
+        "text": "$truth 「支払済」は別の墨で書き足されていた。",
+        "options": [
+          {
+            "id": "separate",
+            "text": "予約票と書き足しを区別して返す",
+            "to": "@informed"
+          },
+          {
+            "id": "face",
+            "text": "書類の返却より先に、本人同士の面会を組む",
+            "to": "consent"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "被害者は証書を見せる会ではなく、自分たちの話を聞く会なら出ると答えた。商人も了承した。",
+        "options": [
+          {
+            "id": "arrange",
+            "text": "原本を保全して面会を取り持つ",
+            "to": "@compromise"
+          },
+          {
+            "id": "document",
+            "text": "面会は延期し、証書の性質を明記して返す",
+            "to": "reserved"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q034.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q034.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q034.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q034.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "証書が祭壇へ置かれている。商人はそれを今夜の謝罪の代わりに掲げたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "read",
+              "text": "原本の支払欄を読む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.reserved"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "原本の記載を検めず商人へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "meeting",
+              "text": "原本を一時預かり、被害者との面会を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.consent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q034.flow.reserved": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q034.node",
+          "value": "reserved"
+        },
+        {
+          "op": "say",
+          "text": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っています。 「支払済」は別の墨で書き足されていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "separate",
+              "text": "予約票と書き足しを区別して返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "face",
+              "text": "書類の返却より先に、本人同士の面会を組む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.consent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q034.flow.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q034.node",
+          "value": "consent"
+        },
+        {
+          "op": "say",
+          "text": "被害者は証書を見せる会ではなく、自分たちの話を聞く会なら出ると答えた。商人も了承した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "arrange",
+              "text": "原本を保全して面会を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "document",
+              "text": "面会は延期し、証書の性質を明記して返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q034.flow.reserved"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q034.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "商人は支払いと償いを別に求められました。礼拝堂は書式を変えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q034",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q034.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "商人は赦されたと触れ回りました。祈祷師には未収の帳簿だけが残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q034",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q034.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "赦しの紙より先に、返す品物が決まりました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q034",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q034.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q034.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "商人は支払いと償いを別に求められました。礼拝堂は書式を変えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "商人は赦されたと触れ回りました。祈祷師には未収の帳簿だけが残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "赦しの紙より先に、返す品物が決まりました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q034"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q034.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q034.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q034.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reserved",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q034.flow.reserved"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q034.flow.consent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q034.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

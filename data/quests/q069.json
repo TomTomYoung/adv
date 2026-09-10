@@ -6,7 +6,7 @@
   "client": "漁師のハル",
   "brief": "海王が城への通行税を取ります。代価の意味を調べてください。",
   "region": 7,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "補修材を共同で運び通行条件を決める",
+      "label": "船ごとに補修材を運ぶ当番と通行条件を結ぶ",
       "text": "門は持ちこたえました。海王は税額より先に必要な板の寸法を伝えます。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "海王の護衛を倒し徴税をやめさせる",
+      "label": "海王の護衛を倒し、徴税をやめさせる",
       "text": "通行は無料になりました。崩れる門を抜けるため潜水士が危険を背負います。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "今回の税を払い補修図を持ち帰る",
+      "label": "補修図だけ持ち帰る",
       "text": "道は通れました。ハルは次の船に使わない鉄板を積みます。",
       "gold": 83,
       "xp": 87
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "漁師のハル",
         "observation": "海王が城への通行税を取ります。代価の意味を調べてください。",
         "belief": "海王が城への通行税を取ります。代価の意味を調べてください。",
-        "goal": "海王の護衛を倒し徴税をやめさせる"
+        "goal": "海王が城への通行税を取ります。代価の意味を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "海王の護衛を倒し徴税をやめさせる",
-      "alternative": "補修材を共同で運び通行条件を決める",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "海王が城への通行税を取ります。代価の意味を調べてください。",
+      "progression": "税を払って通った後にも補修作業へ参加でき、通行料から共同維持へ交渉を進める。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q069.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "払った鉄は宝庫でなく門の穴へ打ち込まれています。"
+          "id": "passed",
+          "script": "q069.flow.passed"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "取り立ての量は旅人の富でなく、潮が強い日の穴の数に比例します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "work",
+          "script": "q069.flow.work"
         }
       ]
     },
@@ -136,80 +122,141 @@
       "operator": "observerSwap",
       "newInformation": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "work"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q069.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q069.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q069.clue_a"
+        "id": "entry",
+        "script": "q069.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q069.clue_b"
+        "id": "passed",
+        "script": "q069.flow.passed"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q069.decision"
+        "id": "work",
+        "script": "q069.flow.work"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "海王の護衛を倒し徴税をやめさせると補修材を共同で運び通行条件を決めるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q069.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q069.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q069.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q069.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q069.paid",
+        "meaning": "各場面に明記した paid の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "税を払って通った後にも補修作業へ参加でき、通行料から共同維持へ交渉を進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "税を払って通った後にも補修作業へ参加でき、通行料から共同維持へ交渉を進める。",
+    "flowVersion": 2,
+    "entryScript": "q069.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "海王は鉄片を求め、その場で城門の穴へ打ち込んでいる。",
+        "options": [
+          {
+            "id": "pay",
+            "text": "補修税20Gを払い、門を通る",
+            "to": "passed",
+            "cost": {
+              "gold": 20
+            },
+            "set": {
+              "paid": true
+            }
+          },
+          {
+            "id": "help",
+            "text": "崩れた門を一緒に支える",
+            "to": "work"
+          },
+          {
+            "id": "force",
+            "text": "海王の護衛を倒し、徴税をやめさせる",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "passed",
+        "text": "通行は済んだ。振り返ると海王は一人で次の穴を塞いでいる。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "補修図だけ持ち帰る",
+            "to": "@compromise"
+          },
+          {
+            "id": "return",
+            "text": "通った後で補修を手伝いに戻る",
+            "to": "work"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "text": "$truth 運搬を分担すれば、各人が門前で止められずに済む。",
+        "options": [
+          {
+            "id": "shared",
+            "text": "船ごとに補修材を運ぶ当番と通行条件を結ぶ",
+            "to": "@informed"
+          },
+          {
+            "id": "single",
+            "text": "今回は税20Gを払い、補修図を持ち帰る",
+            "to": "@compromise",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q069.paid"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "gold": 20
+            }
+          },
+          {
+            "id": "leave",
+            "text": "支払済みの通行として補修図を持ち帰る",
+            "to": "@compromise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q069.paid"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q069.clue_a": {
@@ -651,6 +698,446 @@
             {
               "op": "jump",
               "script": "q069.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q069.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q069.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "海王は鉄片を求め、その場で城門の穴へ打ち込んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pay",
+              "text": "補修税20Gを払い、門を通る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q069.paid",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q069.flow.passed"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "崩れた門を一緒に支える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "海王の護衛を倒し、徴税をやめさせる",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q069.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q069.flow.passed": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q069.node",
+          "value": "passed"
+        },
+        {
+          "op": "say",
+          "text": "通行は済んだ。振り返ると海王は一人で次の穴を塞いでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "補修図だけ持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "通った後で補修を手伝いに戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q069.flow.work": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q069.node",
+          "value": "work"
+        },
+        {
+          "op": "say",
+          "text": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいます。 運搬を分担すれば、各人が門前で止められずに済む。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shared",
+              "text": "船ごとに補修材を運ぶ当番と通行条件を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "single",
+              "text": "今回は税20Gを払い、補修図を持ち帰る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q069.paid"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q069.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "支払済みの通行として補修図を持ち帰る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q069.paid"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q069.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門は持ちこたえました。海王は税額より先に必要な板の寸法を伝えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q069",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q069.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "通行は無料になりました。崩れる門を抜けるため潜水士が危険を背負います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q069",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q069.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "道は通れました。ハルは次の船に使わない鉄板を積みます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q069",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q069.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q069.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q069.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門は持ちこたえました。海王は税額より先に必要な板の寸法を伝えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "通行は無料になりました。崩れる門を抜けるため潜水士が危険を背負います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "道は通れました。ハルは次の船に使わない鉄板を積みます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q069"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q069.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q069.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q069.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "passed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q069.flow.passed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q069.flow.work"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q069.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

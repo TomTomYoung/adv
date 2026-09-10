@@ -6,7 +6,7 @@
   "client": "修繕組合のセリ",
   "brief": "機械聖者が修繕を拒みます。命令を回復してください。",
   "region": 8,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,22 +35,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "必要部品を納め要求票を翻訳し直す",
+      "label": "部品名と補給先へ要求票を翻訳し直す",
       "text": "聖者は再び修繕を始めました。組合は機械にも使える状態を渡すと約束します。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "聖者を倒し命令板を書き換える",
+      "label": "聖者を倒し、命令板を書き換える",
       "text": "返事だけは従順になりました。壊れた軸では、以前の仕事量へ戻りません。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "作業量を減らし人間で分担する",
+      "label": "作業を人間へ分け、聖者の稼働量を下げる",
       "text": "修繕は遅くても続きました。聖者の横に、人用の工具箱が置かれます。",
       "gold": 91,
       "xp": 93
+    },
+    "once": {
+      "gold": 141,
+      "xp": 93,
+      "label": "今回は修理だけで終える",
+      "text": "聖者は仕事へ戻った。翻訳されなかった給付票は同じ窓口へ残り、次の補給では人が付き添う必要がある。"
     }
   },
   "model": {
@@ -69,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +84,7 @@
         "name": "修繕組合のセリ",
         "observation": "機械聖者が修繕を拒みます。命令を回復してください。",
         "belief": "機械聖者が修繕を拒みます。命令を回復してください。",
-        "goal": "聖者を倒し命令板を書き換える"
+        "goal": "機械聖者が修繕を拒みます。命令を回復してください。"
       },
       {
         "id": "party",
@@ -101,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "聖者を倒し命令板を書き換える",
-      "alternative": "必要部品を納め要求票を翻訳し直す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "機械聖者が修繕を拒みます。命令を回復してください。",
+      "progression": "報酬交渉として届いた要求を部品の現物と照合し、補給か人への作業移管を行う。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q075.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "要求票の数字は貨幣単位でなく、摩耗した部品の型番です。"
+          "id": "parts",
+          "script": "q075.flow.parts"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "未払いの年と交換されていない軸受の製造年が一致します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "running",
+          "script": "q075.flow.running"
         }
       ]
     },
@@ -136,80 +128,101 @@
       "operator": "frameShift",
       "newInformation": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "parts"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q075.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q075.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q075.clue_a"
+        "id": "entry",
+        "script": "q075.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q075.clue_b"
+        "id": "parts",
+        "script": "q075.flow.parts"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q075.decision"
+        "id": "running",
+        "script": "q075.flow.running"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "聖者を倒し命令板を書き換えると必要部品を納め要求票を翻訳し直すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q075.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q075.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q075.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q075.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "報酬交渉として届いた要求を部品の現物と照合し、補給か人への作業移管を行う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "報酬交渉として届いた要求を部品の現物と照合し、補給か人への作業移管を行う。",
+    "flowVersion": 2,
+    "entryScript": "q075.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "聖者は給付票を差し出し、硬貨を受け取らない。欠けた歯車が足元に置かれている。",
+        "options": [
+          {
+            "id": "gear",
+            "text": "給付票の図と歯車を重ねる",
+            "to": "parts"
+          },
+          {
+            "id": "share",
+            "text": "作業を人間へ分け、聖者の稼働量を下げる",
+            "to": "@compromise"
+          },
+          {
+            "id": "rewrite",
+            "text": "聖者を倒し、命令板を書き換える",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "parts",
+        "text": "$truth 倉に必要な歯車はあるが、金銭の要求として処理され補給されていなかった。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "倉から歯車を運び、補給口へ納める",
+            "to": "running"
+          },
+          {
+            "id": "reduce",
+            "text": "補給を見送り、作業を人へ移す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "running",
+        "text": "聖者が動いた。給付票の表題が変わらなければ、次の部品も金の窓口へ行ってしまう。",
+        "options": [
+          {
+            "id": "translate",
+            "text": "部品名と補給先へ要求票を翻訳し直す",
+            "to": "@informed"
+          },
+          {
+            "id": "once",
+            "text": "今回は修理だけで終える",
+            "to": "@once"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q075.clue_a": {
@@ -651,6 +664,411 @@
             {
               "op": "jump",
               "script": "q075.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q075.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q075.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "聖者は給付票を差し出し、硬貨を受け取らない。欠けた歯車が足元に置かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gear",
+              "text": "給付票の図と歯車を重ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.parts"
+                }
+              ]
+            },
+            {
+              "id": "share",
+              "text": "作業を人間へ分け、聖者の稼働量を下げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "rewrite",
+              "text": "聖者を倒し、命令板を書き換える",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q075.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q075.flow.parts": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q075.node",
+          "value": "parts"
+        },
+        {
+          "op": "say",
+          "text": "聖者は報酬でなく部品補給を要求し、給付欄を賃金と誤訳されています。 倉に必要な歯車はあるが、金銭の要求として処理され補給されていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "倉から歯車を運び、補給口へ納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.running"
+                }
+              ]
+            },
+            {
+              "id": "reduce",
+              "text": "補給を見送り、作業を人へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q075.flow.running": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q075.node",
+          "value": "running"
+        },
+        {
+          "op": "say",
+          "text": "聖者が動いた。給付票の表題が変わらなければ、次の部品も金の窓口へ行ってしまう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "translate",
+              "text": "部品名と補給先へ要求票を翻訳し直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "once",
+              "text": "今回は修理だけで終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q075.flow.end.once"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q075.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "聖者は再び修繕を始めました。組合は機械にも使える状態を渡すと約束します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q075",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q075.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "返事だけは従順になりました。壊れた軸では、以前の仕事量へ戻りません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q075",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q075.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "修繕は遅くても続きました。聖者の横に、人用の工具箱が置かれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q075",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q075.flow.end.once": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "聖者は仕事へ戻った。翻訳されなかった給付票は同じ窓口へ残り、次の補給では人が付き添う必要がある。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q075",
+              "outcome": "once"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q075.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q075.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "聖者は再び修繕を始めました。組合は機械にも使える状態を渡すと約束します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "返事だけは従順になりました。壊れた軸では、以前の仕事量へ戻りません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "修繕は遅くても続きました。聖者の横に、人用の工具箱が置かれます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "once",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "聖者は仕事へ戻った。翻訳されなかった給付票は同じ窓口へ残り、次の補給では人が付き添う必要がある。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q075"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q075.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q075.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q075.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "parts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q075.flow.parts"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "running",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q075.flow.running"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q075.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "薬師のハナ",
   "brief": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
   "region": 3,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "傷を処置し胞子が離れるのを待つ",
+      "label": "本人が目を開けるまで待ち、帰りを支える",
       "text": "仲間は自分で目を覚ましました。薬師は採集袋に治療中の札を追加します。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "胞子の主を倒し仲間を起こす",
+      "label": "胞子の主を倒してすぐ起こす",
       "text": "仲間は歩いて帰りましたが、治りかけた傷が再び熱を持ちます。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "眠ったまま担架で薬師へ運ぶ",
+      "label": "眠ったまま薬師の担架へ移す",
       "text": "原因を断定せず治療を続けました。薬師は持ち帰った胞子から薬を試します。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "薬師のハナ",
         "observation": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
         "belief": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
-        "goal": "胞子の主を倒し仲間を起こす"
+        "goal": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "胞子の主を倒し仲間を起こす",
-      "alternative": "傷を処置し胞子が離れるのを待つ",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "薬草を採りに行った仲間が眠ったままです。眠りの原因を探してください。",
+      "progression": "眠りを妨げず負傷者を手当てする看護で、回復を待つか搬送するかを繰り返し判断する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q022.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "眠る仲間の熱は下がり、傷の周りだけ胞子が黒くなっています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "健康な虫は花の上でも動き、傷ついた虫だけ葉陰へ運ばれています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "watch",
+          "script": "q022.flow.watch"
         }
       ]
     },
@@ -135,81 +117,145 @@
     "reveal": {
       "operator": "evidenceRecode",
       "newInformation": "眠りは毒でなく、負傷者の熱を下げる胞子の治療反応です。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q022.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q022.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q022.clue_a"
+        "id": "entry",
+        "script": "q022.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q022.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q022.decision"
+        "id": "watch",
+        "script": "q022.flow.watch"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "胞子の主を倒し仲間を起こすと傷を処置し胞子が離れるのを待つの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q022.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q022.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q022.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q022.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q022.round",
+        "meaning": "各場面に明記した round の行為・合意の記録",
+        "writer": [
+          "entry",
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "眠りを妨げず負傷者を手当てする看護で、回復を待つか搬送するかを繰り返し判断する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "眠りを妨げず負傷者を手当てする看護で、回復を待つか搬送するかを繰り返し判断する。",
+    "flowVersion": 2,
+    "entryScript": "q022.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "眠る仲間の額は冷たいが、腕には深い傷がある。胞子はその傷の周りだけへ集まっている。",
+        "options": [
+          {
+            "id": "dress",
+            "text": "傷を洗い、包帯を巻く",
+            "to": "watch",
+            "set": {
+              "round": 0
+            }
+          },
+          {
+            "id": "wake",
+            "text": "胞子の主を倒してすぐ起こす",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "carry",
+            "text": "眠ったまま薬師の担架へ移す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q022.round"
+              },
+              "right": 0
+            },
+            "yes": "包帯へ血が滲む。胞子を払わず、呼吸を確かめた。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q022.round"
+                },
+                "right": 1
+              },
+              "yes": "熱が下がり、傷口が閉じ始めた。薬師は治療反応だと説明する。",
+              "no": "傷の熱が引き、胞子が自分から離れた。本人の指が動く。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "observe",
+            "text": "次の検温まで付き添う",
+            "to": "watch",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.flow.q022.round"
+              },
+              "right": 2
+            },
+            "set": {
+              "round": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.flow.q022.round"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "awake",
+            "text": "本人が目を開けるまで待ち、帰りを支える",
+            "to": "@informed",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.flow.q022.round"
+              },
+              "right": 2
+            }
+          },
+          {
+            "id": "transport",
+            "text": "途中から薬師へ搬送を引き継ぐ",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q022.clue_a": {
@@ -705,6 +751,411 @@
             {
               "op": "jump",
               "script": "q022.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q022.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q022.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "眠る仲間の額は冷たいが、腕には深い傷がある。胞子はその傷の周りだけへ集まっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dress",
+              "text": "傷を洗い、包帯を巻く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q022.round",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q022.flow.watch"
+                }
+              ]
+            },
+            {
+              "id": "wake",
+              "text": "胞子の主を倒してすぐ起こす",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q022.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "carry",
+              "text": "眠ったまま薬師の担架へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q022.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q022.flow.watch": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q022.node",
+          "value": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q022.round"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "包帯へ血が滲む。胞子を払わず、呼吸を確かめた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q022.round"
+                },
+                "right": 1
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "熱が下がり、傷口が閉じ始めた。薬師は治療反応だと説明する。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "傷の熱が引き、胞子が自分から離れた。本人の指が動く。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "observe",
+              "text": "次の検温まで付き添う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.flow.q022.round"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q022.round",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q022.round"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q022.flow.watch"
+                }
+              ]
+            },
+            {
+              "id": "awake",
+              "text": "本人が目を開けるまで待ち、帰りを支える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.flow.q022.round"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q022.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "transport",
+              "text": "途中から薬師へ搬送を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q022.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q022.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "仲間は自分で目を覚ましました。薬師は採集袋に治療中の札を追加します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q022",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q022.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "仲間は歩いて帰りましたが、治りかけた傷が再び熱を持ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q022",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q022.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "原因を断定せず治療を続けました。薬師は持ち帰った胞子から薬を試します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q022",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q022.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q022.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q022.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "仲間は自分で目を覚ましました。薬師は採集袋に治療中の札を追加します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "仲間は歩いて帰りましたが、治りかけた傷が再び熱を持ちます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "原因を断定せず治療を続けました。薬師は持ち帰った胞子から薬を試します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q022"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q022.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q022.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q022.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q022.flow.watch"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q022.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

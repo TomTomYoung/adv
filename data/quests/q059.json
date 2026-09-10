@@ -6,7 +6,7 @@
   "client": "料理人のキク",
   "brief": "地下の宴会室に百人前が届きます。予約した一人を探してください。",
   "region": 6,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "共同炊事の契約へ切り替える",
+      "label": "宴会予約を共同炊事の契約へ切り替える",
       "text": "祝宴は短く、食堂は長く続くことになりました。一人の借金は百人の当番へ変わります。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "食糧を狙う獣を倒し予約通り宴を開く",
+      "label": "食糧を狙う獣を倒し、予約通り宴を開く",
       "text": "その夜は全員が満腹でした。予約者は翌朝、支払いのため市場を去ります。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "料理を保存食へ替え配給する",
+      "label": "料理を保存食へ作り替えて配給する",
       "text": "祝う席はできませんでした。数日分の食事が、それぞれの荷物へ入ります。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "料理人のキク",
         "observation": "地下の宴会室に百人前が届きます。予約した一人を探してください。",
         "belief": "地下の宴会室に百人前が届きます。予約した一人を探してください。",
-        "goal": "食糧を狙う獣を倒し予約通り宴を開く"
+        "goal": "地下の宴会室に百人前が届きます。予約した一人を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "食糧を狙う獣を倒し予約通り宴を開く",
-      "alternative": "共同炊事の契約へ切り替える",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地下の宴会室に百人前が届きます。予約した一人を探してください。",
+      "progression": "百人の料理を作り始めてから支払人の事情が分かり、宴会・共同炊事・保存食へ工程を分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q059.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "席には名前の代わりに仕事道具が描かれ、主賓席はありません。"
+          "id": "guests",
+          "script": "q059.flow.guests"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "予約者の財布は空ですが、賄い当番の応募は百人分あります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "kitchen",
+          "script": "q059.flow.kitchen"
         }
       ]
     },
@@ -136,80 +122,101 @@
       "operator": "observerSwap",
       "newInformation": "一人の予約者が百人の失業者を招き、支払いだけを自分の名で背負っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "guests"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q059.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q059.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q059.clue_a"
+        "id": "entry",
+        "script": "q059.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q059.clue_b"
+        "id": "guests",
+        "script": "q059.flow.guests"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q059.decision"
+        "id": "kitchen",
+        "script": "q059.flow.kitchen"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "食糧を狙う獣を倒し予約通り宴を開くと共同炊事の契約へ切り替えるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q059.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q059.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q059.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q059.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "百人の料理を作り始めてから支払人の事情が分かり、宴会・共同炊事・保存食へ工程を分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "百人の料理を作り始めてから支払人の事情が分かり、宴会・共同炊事・保存食へ工程を分ける。",
+    "flowVersion": 2,
+    "entryScript": "q059.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "予約は一人、料理は百人分。会場の外で、仕事道具を持った客が待っている。",
+        "options": [
+          {
+            "id": "prepare",
+            "text": "調理場へ入り、来る客に合わせて支度する",
+            "to": "guests"
+          },
+          {
+            "id": "guard",
+            "text": "食糧を狙う獣を倒し、予約通り宴を開く",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "preserve",
+            "text": "料理を保存食へ作り替えて配給する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "guests",
+        "text": "$truth 招かれた人々も料理を手伝えると言う。予約者は自分だけが支払うと譲らない。",
+        "options": [
+          {
+            "id": "share",
+            "text": "支払だけでなく炊事を共同で続ける案を出す",
+            "to": "kitchen"
+          },
+          {
+            "id": "packs",
+            "text": "一夜の宴をやめ、保存食の配給へ替える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "text": "客は片付けと炊事の当番、予約者は初回の材料費を引き受けた。次回の費用も一人に背負わせないと確認した。",
+        "options": [
+          {
+            "id": "contract",
+            "text": "宴会予約を共同炊事の契約へ切り替える",
+            "to": "@informed"
+          },
+          {
+            "id": "rations",
+            "text": "継続契約はせず、保存食にして配る",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q059.clue_a": {
@@ -651,6 +658,376 @@
             {
               "op": "jump",
               "script": "q059.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q059.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q059.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "予約は一人、料理は百人分。会場の外で、仕事道具を持った客が待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "prepare",
+              "text": "調理場へ入り、来る客に合わせて支度する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.guests"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "食糧を狙う獣を倒し、予約通り宴を開く",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q059.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "preserve",
+              "text": "料理を保存食へ作り替えて配給する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q059.flow.guests": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q059.node",
+          "value": "guests"
+        },
+        {
+          "op": "say",
+          "text": "一人の予約者が百人の失業者を招き、支払いだけを自分の名で背負っています。 招かれた人々も料理を手伝えると言う。予約者は自分だけが支払うと譲らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "支払だけでなく炊事を共同で続ける案を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.kitchen"
+                }
+              ]
+            },
+            {
+              "id": "packs",
+              "text": "一夜の宴をやめ、保存食の配給へ替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q059.flow.kitchen": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q059.node",
+          "value": "kitchen"
+        },
+        {
+          "op": "say",
+          "text": "客は片付けと炊事の当番、予約者は初回の材料費を引き受けた。次回の費用も一人に背負わせないと確認した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "宴会予約を共同炊事の契約へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rations",
+              "text": "継続契約はせず、保存食にして配る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q059.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q059.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祝宴は短く、食堂は長く続くことになりました。一人の借金は百人の当番へ変わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q059",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q059.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その夜は全員が満腹でした。予約者は翌朝、支払いのため市場を去ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q059",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q059.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祝う席はできませんでした。数日分の食事が、それぞれの荷物へ入ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q059",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q059.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q059.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q059.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祝宴は短く、食堂は長く続くことになりました。一人の借金は百人の当番へ変わります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その夜は全員が満腹でした。予約者は翌朝、支払いのため市場を去ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祝う席はできませんでした。数日分の食事が、それぞれの荷物へ入ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q059"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q059.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q059.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q059.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guests",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q059.flow.guests"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "kitchen",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q059.flow.kitchen"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q059.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "聖歌隊のキリ",
   "brief": "祈りの声が一日遅れて返ります。誰の声か確かめてください。",
   "region": 4,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "水晶を直し記録の仕組みを公開する",
+      "label": "録音と再生の切替を直し、仕組みを見せる",
       "text": "祈りは記録として聞かれました。奇跡を失った人も、亡き家族の声を聞きに来ます。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "声の守護霊を倒し水晶を割る",
+      "label": "録音水晶を割って声を止める",
       "text": "遅れる声は止みました。もう聞けない声を惜しむ人が、小さな破片を拾います。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "録音日を掲げて再生を続ける",
+      "label": "昨日の録音と表示して再生を続ける",
       "text": "礼拝堂は過去と現在を分けて祈る場所になりました。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "聖歌隊のキリ",
         "observation": "祈りの声が一日遅れて返ります。誰の声か確かめてください。",
         "belief": "祈りの声が一日遅れて返ります。誰の声か確かめてください。",
-        "goal": "声の守護霊を倒し水晶を割る"
+        "goal": "祈りの声が一日遅れて返ります。誰の声か確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "声の守護霊を倒し水晶を割る",
-      "alternative": "水晶を直し記録の仕組みを公開する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "祈りの声が一日遅れて返ります。誰の声か確かめてください。",
+      "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q031.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "返る声には昨日落とした燭台の音まで含まれます。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "水晶の台座には日付の歯車があり、一日分だけずれています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "night",
+          "script": "q031.flow.night"
         }
       ]
     },
@@ -136,80 +118,108 @@
       "operator": "causeSwap",
       "newInformation": "礼拝堂の録音水晶が夜間に前日の声を再生しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "night"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q031.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q031.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q031.clue_a"
+        "id": "entry",
+        "script": "q031.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q031.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q031.decision"
+        "id": "night",
+        "script": "q031.flow.night"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "声の守護霊を倒し水晶を割ると水晶を直し記録の仕組みを公開するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q031.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q031.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q031.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q031.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q031.retested",
+        "meaning": "各場面に明記した retested の行為・合意の記録",
+        "writer": [
+          "night"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。",
+    "flowVersion": 2,
+    "entryScript": "q031.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "昨日の祈りが今日返ってくる。水晶の横には録音用の小さな窪みがある。",
+        "options": [
+          {
+            "id": "record",
+            "text": "今日の日付を水晶へ吹き込む",
+            "to": "night"
+          },
+          {
+            "id": "break",
+            "text": "録音水晶を割って声を止める",
+            "to": "@contract"
+          },
+          {
+            "id": "date",
+            "text": "昨日の録音と表示して再生を続ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "night",
+        "text": "夜の礼拝が始まり、自分の言った日付が流れた。$truth",
+        "options": [
+          {
+            "id": "repair",
+            "text": "録音と再生の切替を直し、仕組みを見せる",
+            "to": "@informed"
+          },
+          {
+            "id": "notice",
+            "text": "機構はそのままに、録音日を掲げる",
+            "to": "@compromise"
+          },
+          {
+            "id": "again",
+            "text": "別の日付でも試す",
+            "to": "night",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q031.retested"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "retested": true
+            },
+            "textAfter": "二度目も録音した順に遅れて聞こえた。祈りへの回答が選ばれているわけではない。"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q031.clue_a": {
@@ -651,6 +661,339 @@
             {
               "op": "jump",
               "script": "q031.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q031.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q031.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "昨日の祈りが今日返ってくる。水晶の横には録音用の小さな窪みがある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "今日の日付を水晶へ吹き込む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q031.flow.night"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "録音水晶を割って声を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q031.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "date",
+              "text": "昨日の録音と表示して再生を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q031.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q031.flow.night": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q031.node",
+          "value": "night"
+        },
+        {
+          "op": "say",
+          "text": "夜の礼拝が始まり、自分の言った日付が流れた。礼拝堂の録音水晶が夜間に前日の声を再生しています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "録音と再生の切替を直し、仕組みを見せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q031.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "notice",
+              "text": "機構はそのままに、録音日を掲げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q031.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "again",
+              "text": "別の日付でも試す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q031.retested"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q031.retested",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "二度目も録音した順に遅れて聞こえた。祈りへの回答が選ばれているわけではない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.flow.night"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q031.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祈りは記録として聞かれました。奇跡を失った人も、亡き家族の声を聞きに来ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q031",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q031.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "遅れる声は止みました。もう聞けない声を惜しむ人が、小さな破片を拾います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q031",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q031.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "礼拝堂は過去と現在を分けて祈る場所になりました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q031",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q031.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q031.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祈りは記録として聞かれました。奇跡を失った人も、亡き家族の声を聞きに来ます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "遅れる声は止みました。もう聞けない声を惜しむ人が、小さな破片を拾います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "礼拝堂は過去と現在を分けて祈る場所になりました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q031"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q031.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q031.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q031.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "night",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q031.flow.night"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q031.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

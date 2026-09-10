@@ -6,7 +6,7 @@
   "client": "葬送組合のヨル",
   "brief": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
   "region": 1,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "食糧を公に届け、死者を別に葬る",
+      "label": "二つの荷の行先を届け出て、別々に送り出す",
       "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "棺を押さえる魔物を倒し儀式を通す",
+      "label": "魔物を退け、積荷を確かめず儀式を進める",
       "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "食糧を置き、棺だけ陸へ上げる",
+      "label": "食糧を下ろし、棺だけ陸へ上げる",
       "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "葬送組合のヨル",
         "observation": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
         "belief": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
-        "goal": "棺を押さえる魔物を倒し儀式を通す"
+        "goal": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "棺を押さえる魔物を倒し儀式を通す",
-      "alternative": "食糧を公に届け、死者を別に葬る",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
+      "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q008.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "棺から防腐香ではなく燻製肉の匂いがし、釘は外から抜きやすく打たれています。"
+          "id": "food",
+          "script": "q008.flow.food"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "水路の先には空の食器が並び、葬送船の到着日だけ火が焚かれます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "processions",
+          "script": "q008.flow.processions"
         }
       ]
     },
@@ -136,80 +122,113 @@
       "operator": "valueInvert",
       "newInformation": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "food"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q008.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q008.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q008.clue_a"
+        "id": "entry",
+        "script": "q008.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q008.clue_b"
+        "id": "food",
+        "script": "q008.flow.food"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q008.decision"
+        "id": "processions",
+        "script": "q008.flow.processions"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "棺を押さえる魔物を倒し儀式を通すと食糧を公に届け、死者を別に葬るの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q008.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q008.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q008.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q008.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q008.shore",
+        "meaning": "各場面に明記した shore の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。",
+    "flowVersion": 2,
+    "entryScript": "q008.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "棺は水に沈み、葬列が止まった。下流では避難民が火を焚いて待っている。",
+        "options": [
+          {
+            "id": "inspect",
+            "text": "棺を岸へ寄せ、重い底板を調べる",
+            "to": "food"
+          },
+          {
+            "id": "ritual",
+            "text": "魔物を退け、積荷を確かめず儀式を進める",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "shore",
+            "text": "儀式を止め、陸から運ぶ準備をする",
+            "to": "food",
+            "set": {
+              "shore": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "food",
+        "text": "$a 底の食糧を見た葬送人は、避難民へ届ける荷だと認めた。死者の遺族は別に弔ってほしいという。",
+        "options": [
+          {
+            "id": "unload",
+            "text": "食糧を下ろし、棺だけ陸へ上げる",
+            "to": "@compromise"
+          },
+          {
+            "id": "separate",
+            "text": "食糧便と葬列を分ける相談をする",
+            "to": "processions"
+          }
+        ]
+      },
+      {
+        "id": "processions",
+        "text": "遺族は葬列、避難民は食糧の引取りに同意した。密輸が明るみに出れば搬送人への処分は残る。",
+        "options": [
+          {
+            "id": "declare",
+            "text": "二つの荷の行先を届け出て、別々に送り出す",
+            "to": "@informed"
+          },
+          {
+            "id": "quiet",
+            "text": "届け出をせず、荷を岸で引き渡す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q008.clue_a": {
@@ -651,6 +670,381 @@
             {
               "op": "jump",
               "script": "q008.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q008.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q008.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "棺は水に沈み、葬列が止まった。下流では避難民が火を焚いて待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "inspect",
+              "text": "棺を岸へ寄せ、重い底板を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q008.flow.food"
+                }
+              ]
+            },
+            {
+              "id": "ritual",
+              "text": "魔物を退け、積荷を確かめず儀式を進める",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q008.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "shore",
+              "text": "儀式を止め、陸から運ぶ準備をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q008.shore",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.flow.food"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.flow.food": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q008.node",
+          "value": "food"
+        },
+        {
+          "op": "say",
+          "text": "棺から防腐香ではなく燻製肉の匂いがし、釘は外から抜きやすく打たれています。 底の食糧を見た葬送人は、避難民へ届ける荷だと認めた。死者の遺族は別に弔ってほしいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "unload",
+              "text": "食糧を下ろし、棺だけ陸へ上げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q008.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "食糧便と葬列を分ける相談をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q008.flow.processions"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.flow.processions": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q008.node",
+          "value": "processions"
+        },
+        {
+          "op": "say",
+          "text": "遺族は葬列、避難民は食糧の引取りに同意した。密輸が明るみに出れば搬送人への処分は残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "declare",
+              "text": "二つの荷の行先を届け出て、別々に送り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q008.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "届け出をせず、荷を岸で引き渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q008.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q008.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q008",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q008.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q008.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q008",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q008.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q008.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q008",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q008.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q008.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q008.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q008"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q008.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q008.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "food",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.flow.food"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "processions",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.flow.processions"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q008.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

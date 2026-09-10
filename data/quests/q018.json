@@ -6,7 +6,7 @@
   "client": "質屋のオウ",
   "brief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
   "region": 2,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "完済印を写し証文を慣習通り溶かす",
+      "label": "板を慣習通り溶かし、写しを届ける",
       "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "証文を守る塩獣を倒し板を納める",
+      "label": "証文を回収して質屋へ納める",
       "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "双方の前で板を割り半分ずつ渡す",
+      "label": "双方の前で板を割り、半分ずつ渡す",
       "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "質屋のオウ",
         "observation": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
         "belief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
-        "goal": "証文を守る塩獣を倒し板を納める"
+        "goal": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "証文を守る塩獣を倒し板を納める",
-      "alternative": "完済印を写し証文を慣習通り溶かす",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+      "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q018.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "板には額だけでなく、最後の割賦に丸が刻まれています。"
+          "id": "ritual",
+          "script": "q018.flow.ritual"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "保管棚の下には同じ大きさの溶け跡が何十枚もあります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "meeting",
+          "script": "q018.flow.meeting"
         }
       ]
     },
@@ -136,68 +122,100 @@
       "operator": "valueInvert",
       "newInformation": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "ritual"
       ],
-      "gate": {
-        "op": "contains",
-        "left": {
-          "ref": "quests.q018.evidence"
-        },
-        "right": "clue_a"
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q018.clue_a"
+        "id": "entry",
+        "script": "q018.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q018.clue_b"
+        "id": "ritual",
+        "script": "q018.flow.ritual"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q018.decision"
+        "id": "meeting",
+        "script": "q018.flow.meeting"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "証文を守る塩獣を倒し板を納めると完済印を写し証文を慣習通り溶かすの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q018.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q018.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q018.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q018.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。",
+    "flowVersion": 2,
+    "entryScript": "q018.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "返済者が塩の証文を水へ沈めようとしている。板の端には今日の完済印がある。",
+        "options": [
+          {
+            "id": "copy",
+            "text": "沈める前に完済印だけ紙へ写す",
+            "to": "ritual"
+          },
+          {
+            "id": "seize",
+            "text": "証文を回収して質屋へ納める",
+            "to": "@contract"
+          },
+          {
+            "id": "both",
+            "text": "質屋を呼び、二人の前で扱いを相談する",
+            "to": "meeting"
+          }
+        ]
+      },
+      {
+        "id": "ritual",
+        "text": "$truth 返済者は、印の写しを質屋へ渡すことに同意した。",
+        "options": [
+          {
+            "id": "dissolve",
+            "text": "板を慣習通り溶かし、写しを届ける",
+            "to": "@informed"
+          },
+          {
+            "id": "call",
+            "text": "儀礼を止め、質屋をこの場へ呼ぶ",
+            "to": "meeting"
+          }
+        ]
+      },
+      {
+        "id": "meeting",
+        "text": "質屋は原本を、返済者は消える証を求める。二人とも、ここで板を半分に割る案なら受け入れるという。",
+        "options": [
+          {
+            "id": "split",
+            "text": "双方の前で板を割り、半分ずつ渡す",
+            "to": "@compromise"
+          },
+          {
+            "id": "stamp",
+            "text": "完済印の写しを残す案を説明する",
+            "to": "ritual"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q018.clue_a": {
@@ -603,6 +621,358 @@
             {
               "op": "jump",
               "script": "q018.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q018.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "返済者が塩の証文を水へ沈めようとしている。板の端には今日の完済印がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "copy",
+              "text": "沈める前に完済印だけ紙へ写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.ritual"
+                }
+              ]
+            },
+            {
+              "id": "seize",
+              "text": "証文を回収して質屋へ納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "質屋を呼び、二人の前で扱いを相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.meeting"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.flow.ritual": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "ritual"
+        },
+        {
+          "op": "say",
+          "text": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。 返済者は、印の写しを質屋へ渡すことに同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dissolve",
+              "text": "板を慣習通り溶かし、写しを届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "call",
+              "text": "儀礼を止め、質屋をこの場へ呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.meeting"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.flow.meeting": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "meeting"
+        },
+        {
+          "op": "say",
+          "text": "質屋は原本を、返済者は消える証を求める。二人とも、ここで板を半分に割る案なら受け入れるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "双方の前で板を割り、半分ずつ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "stamp",
+              "text": "完済印の写しを残す案を説明する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q018.flow.ritual"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q018.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q018"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q018.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q018.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ritual",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.flow.ritual"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meeting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.flow.meeting"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q018.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

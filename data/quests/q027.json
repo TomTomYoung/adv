@@ -6,7 +6,7 @@
   "client": "採集人のノム",
   "brief": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
   "region": 3,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "香袋を別道へ置き荷を通す",
+      "label": "荷車を通し、迂回した香袋も届ける",
       "text": "荷は無事に出ました。採集人は荷札に匂いの欄を作ります。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "門番花を倒して根を断つ",
+      "label": "門番花の根を断つ",
       "text": "道は開きました。花粉を頼りに育つ下草が、次の季節には消えます。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "香料だけ置いて運賃を取り直す",
+      "label": "香料を置き、無臭の荷だけ通して運賃を直す",
       "text": "損は小さく済みました。花の門は、香袋を持たない旅人には開いたままです。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "採集人のノム",
         "observation": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
         "belief": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
-        "goal": "門番花を倒して根を断つ"
+        "goal": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "門番花を倒して根を断つ",
-      "alternative": "香袋を別道へ置き荷を通す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "出口を塞ぐ花の群れが荷を要求します。通れる道を探してください。",
+      "progression": "荷物を一つずつ門へ近づける試験で、香袋だけを別経路へ移す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q027.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "安い香袋に花が集まり、金貨を置いても動きません。"
+          "id": "silver",
+          "script": "q027.flow.silver"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "風上へ移した空袋にも同じように蔓が伸びています。"
+          "id": "scent",
+          "script": "q027.flow.scent"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "cross",
+          "script": "q027.flow.cross"
         }
       ]
     },
@@ -135,81 +125,119 @@
     "reveal": {
       "operator": "identitySplit",
       "newInformation": "花は荷の香料に反応して閉じ、価値のある品を選んでいるわけではありません。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q027.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q027.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q027.clue_a"
+        "id": "entry",
+        "script": "q027.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q027.clue_b"
+        "id": "silver",
+        "script": "q027.flow.silver"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q027.decision"
+        "id": "scent",
+        "script": "q027.flow.scent"
+      },
+      {
+        "id": "cross",
+        "script": "q027.flow.cross"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "門番花を倒して根を断つと香袋を別道へ置き荷を通すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q027.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q027.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q027.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q027.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "荷物を一つずつ門へ近づける試験で、香袋だけを別経路へ移す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "荷物を一つずつ門へ近づける試験で、香袋だけを別経路へ移す。",
+    "flowVersion": 2,
+    "entryScript": "q027.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "花の門は高価な箱の前で閉じた。荷には香袋と無臭の銀器が同梱されている。",
+        "options": [
+          {
+            "id": "silver",
+            "text": "銀器だけ門へ近づける",
+            "to": "silver"
+          },
+          {
+            "id": "scent",
+            "text": "香袋だけ門へ近づける",
+            "to": "scent"
+          },
+          {
+            "id": "cut",
+            "text": "門番花の根を断つ",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "silver",
+        "text": "銀器には花弁が動かない。商人は値段で選んでいるわけではなさそうだと首をかしげた。",
+        "options": [
+          {
+            "id": "scent",
+            "text": "残った香袋を近づける",
+            "to": "scent"
+          },
+          {
+            "id": "leave",
+            "text": "香料を置き、無臭の荷だけ通して運賃を直す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "scent",
+        "text": "香袋を近づけた時だけ門が閉じる。離すと開いた。",
+        "options": [
+          {
+            "id": "detour",
+            "text": "香袋を横道へ移し、花の向きを変える",
+            "to": "cross"
+          },
+          {
+            "id": "abandon",
+            "text": "香料を置き、通る荷だけで運賃を計算する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "cross",
+        "text": "花は横道の香りを追い、主通路が開いた。荷車を通した後で香袋を回収できる。",
+        "options": [
+          {
+            "id": "retrieve",
+            "text": "荷車を通し、迂回した香袋も届ける",
+            "to": "@informed"
+          },
+          {
+            "id": "leave",
+            "text": "香袋の回収を断り、残りだけ届ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q027.clue_a": {
@@ -651,6 +679,412 @@
             {
               "op": "jump",
               "script": "q027.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q027.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q027.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "花の門は高価な箱の前で閉じた。荷には香袋と無臭の銀器が同梱されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "silver",
+              "text": "銀器だけ門へ近づける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.silver"
+                }
+              ]
+            },
+            {
+              "id": "scent",
+              "text": "香袋だけ門へ近づける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.scent"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "門番花の根を断つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q027.flow.silver": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q027.node",
+          "value": "silver"
+        },
+        {
+          "op": "say",
+          "text": "銀器には花弁が動かない。商人は値段で選んでいるわけではなさそうだと首をかしげた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "scent",
+              "text": "残った香袋を近づける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.scent"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "香料を置き、無臭の荷だけ通して運賃を直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q027.flow.scent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q027.node",
+          "value": "scent"
+        },
+        {
+          "op": "say",
+          "text": "香袋を近づけた時だけ門が閉じる。離すと開いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "detour",
+              "text": "香袋を横道へ移し、花の向きを変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.cross"
+                }
+              ]
+            },
+            {
+              "id": "abandon",
+              "text": "香料を置き、通る荷だけで運賃を計算する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q027.flow.cross": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q027.node",
+          "value": "cross"
+        },
+        {
+          "op": "say",
+          "text": "花は横道の香りを追い、主通路が開いた。荷車を通した後で香袋を回収できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "retrieve",
+              "text": "荷車を通し、迂回した香袋も届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "香袋の回収を断り、残りだけ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q027.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q027.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷は無事に出ました。採集人は荷札に匂いの欄を作ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q027",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q027.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "道は開きました。花粉を頼りに育つ下草が、次の季節には消えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q027",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q027.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "損は小さく済みました。花の門は、香袋を持たない旅人には開いたままです。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q027",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q027.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q027.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q027.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "荷は無事に出ました。採集人は荷札に匂いの欄を作ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "道は開きました。花粉を頼りに育つ下草が、次の季節には消えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "損は小さく済みました。花の門は、香袋を持たない旅人には開いたままです。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q027"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q027.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q027.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q027.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "silver",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q027.flow.silver"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q027.flow.scent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cross",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q027.flow.cross"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q027.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

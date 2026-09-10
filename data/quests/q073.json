@@ -6,7 +6,7 @@
   "client": "義肢職人のリン",
   "brief": "天使像の腕を回収してください。義肢の材料に使えそうです。",
   "region": 8,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "支えを新設して余剰の腕を回収する",
+      "label": "扉の開閉を点検し、余剰の腕を回収する",
       "text": "義肢も避難路も残りました。リンは次の腕に支えた扉の番号を刻みます。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "天使の護衛を倒し腕を持ち去る",
+      "label": "支えの腕を三本とも持ち去る",
       "text": "材料は揃いました。非常扉を開けるには、人が支える番を必要とします。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "一本だけ借りて複製後に返す",
+      "label": "複製を受け取り、原品を扉へ戻す",
       "text": "納品は遅れました。天使の片腕は、戻るまで仮の梁に替わります。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "義肢職人のリン",
         "observation": "天使像の腕を回収してください。義肢の材料に使えそうです。",
         "belief": "天使像の腕を回収してください。義肢の材料に使えそうです。",
-        "goal": "天使の護衛を倒し腕を持ち去る"
+        "goal": "天使像の腕を回収してください。義肢の材料に使えそうです。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "天使の護衛を倒し腕を持ち去る",
-      "alternative": "支えを新設して余剰の腕を回収する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "天使像の腕を回収してください。義肢の材料に使えそうです。",
+      "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q073.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷があります。"
+          "id": "support",
+          "script": "q073.flow.support"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "非常図では像の数と、固定すべき扉の数が一致します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "copy",
+          "script": "q073.flow.copy"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "ruleReveal",
       "newInformation": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "support"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q073.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q073.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q073.clue_a"
+        "id": "entry",
+        "script": "q073.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q073.clue_b"
+        "id": "support",
+        "script": "q073.flow.support"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q073.decision"
+        "id": "copy",
+        "script": "q073.flow.copy"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "天使の護衛を倒し腕を持ち去ると支えを新設して余剰の腕を回収するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q073.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q073.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q073.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q073.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。",
+    "flowVersion": 2,
+    "entryScript": "q073.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "予備腕が三本、避難扉の下へ差し込まれている。一本を緩めると扉が少し下がった。",
+        "options": [
+          {
+            "id": "brace",
+            "text": "腕を外す前に新しい支えを組む",
+            "to": "support"
+          },
+          {
+            "id": "borrow",
+            "text": "一本だけ借り、残る二本で扉を保つ",
+            "to": "copy"
+          },
+          {
+            "id": "take",
+            "text": "支えの腕を三本とも持ち去る",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "support",
+        "text": "$truth 支えが荷重を受けた。腕を外しても扉の高さは変わらない。",
+        "options": [
+          {
+            "id": "recover",
+            "text": "扉の開閉を点検し、余剰の腕を回収する",
+            "to": "@informed"
+          },
+          {
+            "id": "one",
+            "text": "新しい支えを残し、一本だけ借りる",
+            "to": "copy"
+          }
+        ]
+      },
+      {
+        "id": "copy",
+        "text": "職人が借りた腕の複製を作った。貸し出した腕は、返して初めて避難設備へ戻る。",
+        "options": [
+          {
+            "id": "return",
+            "text": "複製を受け取り、原品を扉へ戻す",
+            "to": "@compromise"
+          },
+          {
+            "id": "support",
+            "text": "原品を返す代わりに、常設の支えを作る",
+            "to": "support"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q073.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q073.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "予備腕が三本、避難扉の下へ差し込まれている。一本を緩めると扉が少し下がった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "腕を外す前に新しい支えを組む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.support"
+                }
+              ]
+            },
+            {
+              "id": "borrow",
+              "text": "一本だけ借り、残る二本で扉を保つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.copy"
+                }
+              ]
+            },
+            {
+              "id": "take",
+              "text": "支えの腕を三本とも持ち去る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.support": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "support"
+        },
+        {
+          "op": "say",
+          "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じます。 支えが荷重を受けた。腕を外しても扉の高さは変わらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recover",
+              "text": "扉の開閉を点検し、余剰の腕を回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "one",
+              "text": "新しい支えを残し、一本だけ借りる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.copy"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.copy": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "copy"
+        },
+        {
+          "op": "say",
+          "text": "職人が借りた腕の複製を作った。貸し出した腕は、返して初めて避難設備へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "複製を受け取り、原品を扉へ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "support",
+              "text": "原品を返す代わりに、常設の支えを作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.support"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "義肢も避難路も残りました。リンは次の腕に支えた扉の番号を刻みます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "材料は揃いました。非常扉を開けるには、人が支える番を必要とします。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "納品は遅れました。天使の片腕は、戻るまで仮の梁に替わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q073.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "義肢も避難路も残りました。リンは次の腕に支えた扉の番号を刻みます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "材料は揃いました。非常扉を開けるには、人が支える番を必要とします。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "納品は遅れました。天使の片腕は、戻るまで仮の梁に替わります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q073"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q073.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q073.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.support"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.copy"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q073.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

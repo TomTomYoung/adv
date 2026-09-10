@@ -6,7 +6,7 @@
   "client": "魚屋と隣の鳥屋",
   "brief": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。",
   "region": 1,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -60,14 +60,27 @@
       }
     ],
     "conflict": {
-      "design": "依頼→餌で捕獲／店を観察→引渡し交渉。魚屋への引渡しは遠い倉庫へ移すという条件を先に説明します。共同管理は両方の観察と改修費が必要です。金がなくても片方の保護か、懸賞辞退を選べます。"
+      "request": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。",
+      "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q108.scene.entry"
+          "script": "q108.flow.entry"
+        },
+        {
+          "id": "caught",
+          "script": "q108.flow.caught"
+        },
+        {
+          "id": "birds",
+          "script": "q108.flow.birds"
+        },
+        {
+          "id": "agreement",
+          "script": "q108.flow.agreement"
         }
       ]
     },
@@ -76,16 +89,29 @@
     },
     "reveal": {
       "newInformation": "猫は魚を盗みますが、鼠除けの働きも本当です。善良な動物だから無罪とせず、店の置き方を変えれば被害を減らせると観察で示します。猫を捕まえた直後、二人が同時に違う名前で呼び、猫がどちらにも返事をしない場面を置きます。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q108.scene.entry"
+        "script": "q108.flow.entry"
+      },
+      {
+        "id": "caught",
+        "script": "q108.flow.caught"
+      },
+      {
+        "id": "birds",
+        "script": "q108.flow.birds"
+      },
+      {
+        "id": "agreement",
+        "script": "q108.flow.agreement"
       }
     ],
     "adaptation": {
@@ -96,102 +122,124 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q108.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q108.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q108.fish",
-        "meaning": "作者原稿の fish に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
+        "path": "flags.flow.q108.shelf",
+        "meaning": "各場面に明記した shelf の行為・合意の記録",
         "writer": [
           "entry"
         ],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q108.rat",
-        "meaning": "作者原稿の rat に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "魚屋と鳥屋が違う名前で猫を呼んだ。猫はどちらも見ずに眠る。魚屋は遠い倉庫へ移すと言い、鳥屋は鼠を追う働きを挙げた。",
+        "text": "魚屋の棚から大猫が魚をくわえた。鳥屋は捕まえるより追い払わないでほしいと頼む。",
+        "options": [
+          {
+            "id": "shelf",
+            "text": "魚の棚を高くして盗み道を塞ぐ",
+            "to": "birds",
+            "set": {
+              "shelf": true
+            }
+          },
+          {
+            "id": "catch",
+            "text": "猫を籠へ入れて捕獲する",
+            "to": "caught"
+          },
+          {
+            "id": "bird",
+            "text": "鳥屋の保護に任せる",
+            "to": "@bird"
+          }
+        ]
+      },
+      {
+        "id": "caught",
+        "text": "捕獲は済んだ。魚屋は遠い倉庫へ運ぼうとし、鳥屋は籠の餌を鼠に荒らされたと駆けて来る。",
         "options": [
           {
             "id": "fish",
-            "text": "魚を盗む経路を見る",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q108.fish"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "fish": true
-            },
-            "textAfter": "猫は低い棚から魚へ届いている。棚を上げれば経路を切れそうだ。"
+            "text": "捕獲依頼として精算し、猫を倉庫へ渡す",
+            "to": "@fish"
           },
           {
-            "id": "rat",
-            "text": "鳥屋の鼠対策を見る",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q108.rat"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "rat": true
-            },
-            "textAfter": "猫が鼠を追うと、籠の餌がこぼれなくなった。働きも実在する。"
+            "id": "rats",
+            "text": "引渡しを止め、鳥屋の餌場を見に行く",
+            "to": "birds"
           },
           {
-            "id": "shared",
-            "text": "両店と棚・餌場を改修する（30G）",
+            "id": "bird",
+            "text": "猫を鳥屋の保護へ渡す",
+            "to": "@bird"
+          }
+        ]
+      },
+      {
+        "id": "birds",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q108.shelf"
+              },
+              "right": true
+            },
+            "yes": "魚は棚の上で守られた。猫は鳥屋の鼠を追い、鳥の餌を守っている。",
+            "no": "猫を捕まえた間に鼠が餌場へ来た。魚への侵入を棚で止められれば、猫の仕事を残せる。"
+          }
+        ],
+        "options": [
+          {
+            "id": "cost",
+            "text": "両店へ棚と餌場の改修・費用分担を相談する",
+            "to": "agreement"
+          },
+          {
+            "id": "bird",
+            "text": "改修を組まず、鳥屋の保護に任せる",
+            "to": "@bird"
+          }
+        ]
+      },
+      {
+        "id": "agreement",
+        "text": "両店は改修に同意した。魚屋は棚、鳥屋は餌場を管理し、道具代30Gを今回の隊が負担する。",
+        "options": [
+          {
+            "id": "build",
+            "text": "30Gを出し、棚と餌場を改修して猫を放す",
             "to": "@shared",
-            "need": [
-              "fish",
-              "rat"
-            ],
             "cost": {
               "gold": 30
             }
           },
           {
-            "id": "fish_end",
-            "text": "魚屋へ渡し、遠い倉庫へ移す",
+            "id": "warehouse",
+            "text": "費用を出さず、魚屋の倉庫へ渡す",
             "to": "@fish"
-          },
-          {
-            "id": "bird_end",
-            "text": "鳥屋の保護に任せる",
-            "to": "@bird"
           }
         ]
       }
-    ]
+    ],
+    "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。",
+    "flowVersion": 2,
+    "entryScript": "q108.flow.visit",
+    "choiceContract": {
+      "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q108.scene.entry": {
@@ -498,6 +546,447 @@
                 {
                   "op": "jump",
                   "script": "q108.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "魚屋の棚から大猫が魚をくわえた。鳥屋は捕まえるより追い払わないでほしいと頼む。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shelf",
+              "text": "魚の棚を高くして盗み道を塞ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q108.shelf",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.flow.birds"
+                }
+              ]
+            },
+            {
+              "id": "catch",
+              "text": "猫を籠へ入れて捕獲する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.caught"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.caught": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "caught"
+        },
+        {
+          "op": "say",
+          "text": "捕獲は済んだ。魚屋は遠い倉庫へ運ぼうとし、鳥屋は籠の餌を鼠に荒らされたと駆けて来る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "捕獲依頼として精算し、猫を倉庫へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "rats",
+              "text": "引渡しを止め、鳥屋の餌場を見に行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.birds"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "猫を鳥屋の保護へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.birds": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "birds"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q108.shelf"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚は棚の上で守られた。猫は鳥屋の鼠を追い、鳥の餌を守っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "猫を捕まえた間に鼠が餌場へ来た。魚への侵入を棚で止められれば、猫の仕事を残せる。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cost",
+              "text": "両店へ棚と餌場の改修・費用分担を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "改修を組まず、鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.agreement": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "agreement"
+        },
+        {
+          "op": "say",
+          "text": "両店は改修に同意した。魚屋は棚、鳥屋は餌場を管理し、道具代30Gを今回の隊が負担する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "build",
+              "text": "30Gを出し、棚と餌場を改修して猫を放す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.shared"
+                }
+              ]
+            },
+            {
+              "id": "warehouse",
+              "text": "費用を出さず、魚屋の倉庫へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.end.shared": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "shared"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.end.fish": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "fish"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.end.bird": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "bird"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q108.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "shared",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fish",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "bird",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q108"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q108.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q108.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "caught",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.flow.caught"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "birds",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.flow.birds"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreement",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.flow.agreement"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q108.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

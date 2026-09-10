@@ -6,7 +6,7 @@
   "client": "鍛冶屋のダン",
   "brief": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
   "region": 2,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "三人の仕事としてまとめて返す",
+      "label": "三人の仕事として、三本をまとめて返す",
       "text": "鍛冶屋は展示札を書き直しました。名工の値は下がり、弟子の名が初めて売れます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "坑道の番獣を倒し一番鋭い一本を選ぶ",
+      "label": "一番鋭い一本を選んで工房へ返す",
       "text": "依頼人は満足しました。残る二本の作り手は贋作者と呼ばれ続けます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "使える二本を坑夫へ貸し一本だけ返す",
+      "label": "二本を坑夫へ貸し、一本を工房へ返す",
       "text": "展示は一つ増え、坑夫の仕事も進みました。銘の議論は後回しになります。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "鍛冶屋のダン",
         "observation": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
         "belief": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
-        "goal": "坑道の番獣を倒し一番鋭い一本を選ぶ"
+        "goal": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "坑道の番獣を倒し一番鋭い一本を選ぶ",
-      "alternative": "三人の仕事としてまとめて返す",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "同じ銘のつるはしが三本あり、本物の回収を頼まれました。",
+      "progression": "道具を持ち主へ返す前に実作業で使い、別の得意仕事を持つ三本の扱いを決める。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q012.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "柄の握り跡は三人分ですが、鍛接の印は同じ順序で刻まれています。"
+          "id": "trial",
+          "script": "q012.flow.trial"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "工房の当番表には銘と同じ三つの記号が並びます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "makers",
+          "script": "q012.flow.makers"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "evidenceRecode",
       "newInformation": "三本とも本物で、銘は名工一人でなく工房の共同名です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "makers"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q012.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q012.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q012.clue_a"
+        "id": "entry",
+        "script": "q012.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q012.clue_b"
+        "id": "trial",
+        "script": "q012.flow.trial"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q012.decision"
+        "id": "makers",
+        "script": "q012.flow.makers"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "坑道の番獣を倒し一番鋭い一本を選ぶと三人の仕事としてまとめて返すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q012.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q012.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q012.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q012.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "道具を持ち主へ返す前に実作業で使い、別の得意仕事を持つ三本の扱いを決める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "道具を持ち主へ返す前に実作業で使い、別の得意仕事を持つ三本の扱いを決める。",
+    "flowVersion": 2,
+    "entryScript": "q012.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "三本のつるはしは同じ銘で、刃の幅が違う。坑夫は今すぐ二本借りたいという。",
+        "options": [
+          {
+            "id": "lend",
+            "text": "二本を坑夫へ貸し、一本を工房へ返す",
+            "to": "@compromise"
+          },
+          {
+            "id": "trial",
+            "text": "工房の試し掘り場で使い分ける",
+            "to": "trial"
+          },
+          {
+            "id": "sharp",
+            "text": "一番鋭い一本を選んで工房へ返す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "trial",
+        "text": "細い刃は割れ目へ、幅広の刃は崩した石へ向く。重い一本で床を固めると、三つの仕事がつながった。",
+        "options": [
+          {
+            "id": "shop",
+            "text": "使用順を添えて工房へ戻す",
+            "to": "makers"
+          },
+          {
+            "id": "lend",
+            "text": "使い分けを坑夫へ教え、二本を貸す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "makers",
+        "text": "$truth 三人は各自の研ぎ直した跡を指した。一本を名工の作として売るつもりはないという。",
+        "options": [
+          {
+            "id": "names",
+            "text": "三人の仕事として、三本をまとめて返す",
+            "to": "@informed"
+          },
+          {
+            "id": "loan",
+            "text": "共同名を残し、坑夫への貸出を取り持つ",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q012.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q012.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q012.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q012.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "三本のつるはしは同じ銘で、刃の幅が違う。坑夫は今すぐ二本借りたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lend",
+              "text": "二本を坑夫へ貸し、一本を工房へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "trial",
+              "text": "工房の試し掘り場で使い分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.trial"
+                }
+              ]
+            },
+            {
+              "id": "sharp",
+              "text": "一番鋭い一本を選んで工房へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q012.flow.trial": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q012.node",
+          "value": "trial"
+        },
+        {
+          "op": "say",
+          "text": "細い刃は割れ目へ、幅広の刃は崩した石へ向く。重い一本で床を固めると、三つの仕事がつながった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shop",
+              "text": "使用順を添えて工房へ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.makers"
+                }
+              ]
+            },
+            {
+              "id": "lend",
+              "text": "使い分けを坑夫へ教え、二本を貸す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q012.flow.makers": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q012.node",
+          "value": "makers"
+        },
+        {
+          "op": "say",
+          "text": "三本とも本物で、銘は名工一人でなく工房の共同名です。 三人は各自の研ぎ直した跡を指した。一本を名工の作として売るつもりはないという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "names",
+              "text": "三人の仕事として、三本をまとめて返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "loan",
+              "text": "共同名を残し、坑夫への貸出を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q012.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q012.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鍛冶屋は展示札を書き直しました。名工の値は下がり、弟子の名が初めて売れます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q012",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q012.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "依頼人は満足しました。残る二本の作り手は贋作者と呼ばれ続けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q012",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q012.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "展示は一つ増え、坑夫の仕事も進みました。銘の議論は後回しになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q012",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q012.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q012.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q012.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鍛冶屋は展示札を書き直しました。名工の値は下がり、弟子の名が初めて売れます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は満足しました。残る二本の作り手は贋作者と呼ばれ続けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "展示は一つ増え、坑夫の仕事も進みました。銘の議論は後回しになります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q012"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q012.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q012.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q012.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "trial",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q012.flow.trial"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "makers",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q012.flow.makers"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q012.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "修繕組合のセリ",
   "brief": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
   "region": 8,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": {
     "op": "gte",
@@ -41,19 +41,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "三者承認を戻して共同運営にする",
+      "label": "三つの署名を接続し、短絡を外す",
       "text": "廟の返事は少し遅くなりました。セリは誰も一人で炉を動かせない鍵を配ります。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "中枢守護機を倒し冒険者の命令へ統一する",
+      "label": "中枢守護機を倒し、命令を隊へ統一する",
       "text": "廟は素早く応えました。何を止めるかも、あなたの署名を待ちます。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "最小機能だけ残し後継選定を延期する",
+      "label": "灯と空調だけ残し、後継選定を延期する",
       "text": "灯と空調は続きました。後継者の席には、議題の札だけが置かれます。",
       "gold": 91,
       "xp": 93
@@ -75,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +84,7 @@
         "name": "修繕組合のセリ",
         "observation": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
         "belief": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
-        "goal": "中枢守護機を倒し冒険者の命令へ統一する"
+        "goal": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。"
       },
       {
         "id": "party",
@@ -107,30 +100,19 @@
       }
     ],
     "conflict": {
-      "request": "中枢守護機を倒し冒険者の命令へ統一する",
-      "alternative": "三者承認を戻して共同運営にする",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "廟の中枢が後継者を求めています。人間か機械かを選ぶよう命じられました。",
+      "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q080.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "創設記録には整備・利用・保護の三者承認が載っています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "council",
+          "script": "q080.flow.council"
         }
       ]
     },
@@ -142,80 +124,170 @@
       "operator": "frameShift",
       "newInformation": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "council"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q080.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q080.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q080.clue_a"
+        "id": "entry",
+        "script": "q080.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q080.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q080.decision"
+        "id": "council",
+        "script": "q080.flow.council"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "中枢守護機を倒し冒険者の命令へ統一すると三者承認を戻して共同運営にするの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q080.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q080.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q080.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q080.maintenance",
+        "meaning": "各場面に明記した maintenance の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q080.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q080.users",
+        "meaning": "各場面に明記した users の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q080.guardians",
+        "meaning": "各場面に明記した guardians の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。",
+    "flowVersion": 2,
+    "entryScript": "q080.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "中枢は後継者を一人求める。しかし玉座の下には三つの端子があり、一つだけ短絡されている。",
+        "options": [
+          {
+            "id": "council",
+            "text": "創設時の三者承認を提案する",
+            "to": "council"
+          },
+          {
+            "id": "rule",
+            "text": "中枢守護機を倒し、命令を隊へ統一する",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "minimum",
+            "text": "灯と空調だけ残し、後継選定を延期する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "council",
+        "text": "$truth 整備・利用・保護の各代表が、自分の責任を確認してから署名する。",
+        "options": [
+          {
+            "id": "maintenance",
+            "text": "整備者へ停止権と点検の責任を渡す",
+            "to": "council",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q080.maintenance"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "maintenance": true
+            },
+            "textAfter": "整備者は故障時に一人でも停止を請求できる条件で署名した。"
+          },
+          {
+            "id": "users",
+            "text": "利用者へ稼働時間を協議する席を渡す",
+            "to": "council",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q080.users"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "users": true
+            },
+            "textAfter": "利用者は夜の空調を勝手に切られない条件で署名した。"
+          },
+          {
+            "id": "guardians",
+            "text": "保護者へ避難路の確認を任せる",
+            "to": "council",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q080.guardians"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "guardians": true
+            },
+            "textAfter": "保護者は避難路が閉じる命令を承認しない条件で署名した。"
+          },
+          {
+            "id": "restore",
+            "text": "三つの署名を接続し、短絡を外す",
+            "to": "@informed",
+            "need": [
+              "maintenance",
+              "users",
+              "guardians"
+            ]
+          },
+          {
+            "id": "defer",
+            "text": "署名の済んだ条件を保管し、選定を延期する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q080.clue_a": {
@@ -683,6 +755,453 @@
             {
               "op": "jump",
               "script": "q080.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q080.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "中枢は後継者を一人求める。しかし玉座の下には三つの端子があり、一つだけ短絡されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "council",
+              "text": "創設時の三者承認を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "rule",
+              "text": "中枢守護機を倒し、命令を隊へ統一する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q080.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "minimum",
+              "text": "灯と空調だけ残し、後継選定を延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.council": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q080.node",
+          "value": "council"
+        },
+        {
+          "op": "say",
+          "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っています。 整備・利用・保護の各代表が、自分の責任を確認してから署名する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "maintenance",
+              "text": "整備者へ停止権と点検の責任を渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.maintenance"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.maintenance",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "users",
+              "text": "利用者へ稼働時間を協議する席を渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.users"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.users",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "利用者は夜の空調を勝手に切られない条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "guardians",
+              "text": "保護者へ避難路の確認を任せる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.guardians"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.guardians",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "三つの署名を接続し、短絡を外す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.maintenance"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.users"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.guardians"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「整備者へ停止権と点検の責任を渡す」・先に「利用者へ稼働時間を協議する席を渡す」・先に「保護者へ避難路の確認を任せる」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "defer",
+              "text": "署名の済んだ条件を保管し、選定を延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟の返事は少し遅くなりました。セリは誰も一人で炉を動かせない鍵を配ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟は素早く応えました。何を止めるかも、あなたの署名を待ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯と空調は続きました。後継者の席には、議題の札だけが置かれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q080.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟の返事は少し遅くなりました。セリは誰も一人で炉を動かせない鍵を配ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟は素早く応えました。何を止めるかも、あなたの署名を待ちます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "灯と空調は続きました。後継者の席には、議題の札だけが置かれます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q080"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q080.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q080.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "council",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.flow.council"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q080.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

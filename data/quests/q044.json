@@ -6,7 +6,7 @@
   "client": "新聞係のユズ",
   "brief": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
   "region": 5,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "書類を公開し処刑前の審査を要求する",
+      "label": "処刑予定書を公開し、執行前の審査を要求する",
       "text": "一覧は取り消されました。救われた者の罪が消えたわけではなく、裁判が始まります。",
       "gold": 105,
       "xp": 100
     },
     "contract": {
-      "label": "訃報の配達霊を倒し紙を処分する",
+      "label": "届いた訃報を処分する",
       "text": "人々は安心しました。予定そのものを知らぬまま翌朝を迎えます。",
       "gold": 125,
       "xp": 75
     },
     "compromise": {
-      "label": "名のある人へ紙を渡し避難を助ける",
+      "label": "避難先へ送り、審査の仕事は引き受けない",
       "text": "何人かは逃れました。残った者のため、ユズは空いた行も印刷します。",
       "gold": 68,
       "xp": 75
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "新聞係のユズ",
         "observation": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
         "belief": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
-        "goal": "訃報の配達霊を倒し紙を処分する"
+        "goal": "明日の死者一覧が届きました。名のある冒険者を救ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "訃報の配達霊を倒し紙を処分する",
-      "alternative": "書類を公開し処刑前の審査を要求する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "明日の死者一覧が届きました。名のある冒険者を救ってください。",
+      "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q044.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号があります。"
+          "id": "safe",
+          "script": "q044.flow.safe"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "office",
+          "script": "q044.flow.office"
         }
       ]
     },
@@ -136,80 +122,112 @@
       "operator": "referenceSwap",
       "newInformation": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "office"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q044.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q044.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q044.clue_a"
+        "id": "entry",
+        "script": "q044.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q044.clue_b"
+        "id": "safe",
+        "script": "q044.flow.safe"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q044.decision"
+        "id": "office",
+        "script": "q044.flow.office"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "訃報の配達霊を倒し紙を処分すると書類を公開し処刑前の審査を要求するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q044.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q044.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q044.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q044.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q044.protected",
+        "meaning": "各場面に明記した protected の行為・合意の記録",
+        "writer": [
+          "safe"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。",
+    "flowVersion": 2,
+    "entryScript": "q044.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。",
+        "options": [
+          {
+            "id": "warn",
+            "text": "本人へ紙を見せ、身の安全を確保する",
+            "to": "safe"
+          },
+          {
+            "id": "office",
+            "text": "紙の発行窓口へ抗議に行く",
+            "to": "office"
+          },
+          {
+            "id": "destroy",
+            "text": "届いた訃報を処分する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "safe",
+        "text": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。",
+        "options": [
+          {
+            "id": "escape",
+            "text": "避難先へ送り、審査の仕事は引き受けない",
+            "to": "@compromise"
+          },
+          {
+            "id": "appeal",
+            "text": "本人の署名で審査を請求する",
+            "to": "office",
+            "set": {
+              "protected": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "office",
+        "text": "$truth 窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。",
+        "options": [
+          {
+            "id": "publish",
+            "text": "処刑予定書を公開し、執行前の審査を要求する",
+            "to": "@informed"
+          },
+          {
+            "id": "warn",
+            "text": "原本を持って名のある人のもとへ戻る",
+            "to": "safe"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q044.clue_a": {
@@ -651,6 +669,363 @@
             {
               "op": "jump",
               "script": "q044.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "本人へ紙を見せ、身の安全を確保する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.safe"
+                }
+              ]
+            },
+            {
+              "id": "office",
+              "text": "紙の発行窓口へ抗議に行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.office"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "届いた訃報を処分する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.safe": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "safe"
+        },
+        {
+          "op": "say",
+          "text": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escape",
+              "text": "避難先へ送り、審査の仕事は引き受けない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "本人の署名で審査を請求する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q044.protected",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.flow.office"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.office": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "office"
+        },
+        {
+          "op": "say",
+          "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせています。 窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "処刑予定書を公開し、執行前の審査を要求する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "warn",
+              "text": "原本を持って名のある人のもとへ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.safe"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一覧は取り消されました。救われた者の罪が消えたわけではなく、裁判が始まります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は安心しました。予定そのものを知らぬまま翌朝を迎えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "何人かは逃れました。残った者のため、ユズは空いた行も印刷します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q044.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一覧は取り消されました。救われた者の罪が消えたわけではなく、裁判が始まります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は安心しました。予定そのものを知らぬまま翌朝を迎えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "何人かは逃れました。残った者のため、ユズは空いた行も印刷します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q044"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q044.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q044.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.safe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "office",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.office"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q044.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

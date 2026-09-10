@@ -6,7 +6,7 @@
   "client": "市場番のゼン",
   "brief": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
   "region": 6,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": {
     "op": "gte",
@@ -41,19 +41,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "共同保証を結び出口を開ける",
+      "label": "全出口を共同保証へ接続して開ける",
       "text": "市場は朝にも開きました。ゼンは門番から、二つの世界の道案内になります。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "結界の番人を倒し自由通行にする",
+      "label": "結界の番人を倒して自由通行にする",
       "text": "人と商品は通りました。守りを失った夜の見回りは、商人が自分で始めます。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "出口を時間制にして結界を保つ",
+      "label": "出口を時間制にし、交代で通す",
       "text": "完全な自由ではありません。地下と地上を結ぶ時刻表が配られます。",
       "gold": 76,
       "xp": 81
@@ -75,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +84,7 @@
         "name": "市場番のゼン",
         "observation": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
         "belief": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
-        "goal": "結界の番人を倒し自由通行にする"
+        "goal": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。"
       },
       {
         "id": "party",
@@ -107,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "結界の番人を倒し自由通行にする",
-      "alternative": "共同保証を結び出口を開ける",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地上への出口が開くと市場の結界が消えます。商人たちの意思をまとめてください。",
+      "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q060.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "古い契約には単独閉鎖と共同保証の二つの欄があります。"
+          "id": "guarantee",
+          "script": "q060.flow.guarantee"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "保証人の欄は空白ですが、各露店の納税額を足せば条件を満たします。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "gate",
+          "script": "q060.flow.gate"
         }
       ]
     },
@@ -142,80 +128,101 @@
       "operator": "frameShift",
       "newInformation": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "guarantee"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q060.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q060.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q060.clue_a"
+        "id": "entry",
+        "script": "q060.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q060.clue_b"
+        "id": "guarantee",
+        "script": "q060.flow.guarantee"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q060.decision"
+        "id": "gate",
+        "script": "q060.flow.gate"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "結界の番人を倒し自由通行にすると共同保証を結び出口を開けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q060.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q060.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q060.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q060.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。",
+    "flowVersion": 2,
+    "entryScript": "q060.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "夜市の結界で出口が閉じた。店は安全だが、荷運び人が帰れない。",
+        "options": [
+          {
+            "id": "guarantors",
+            "text": "店ごとに保護契約の署名を持ち寄る",
+            "to": "guarantee"
+          },
+          {
+            "id": "break",
+            "text": "結界の番人を倒して自由通行にする",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "hours",
+            "text": "出口を時間制にし、交代で通す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "guarantee",
+        "text": "$truth 大店と露店が同じ保証へ入ることに同意した。出口を開いた瞬間の守りを試す必要がある。",
+        "options": [
+          {
+            "id": "test",
+            "text": "一つの出口を開けて結界の継続を試す",
+            "to": "gate"
+          },
+          {
+            "id": "hours",
+            "text": "契約を見送り、時間制で開く",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": "出口を通っても店の保護灯は消えなかった。荷運び人が一人、次に二人と帰っていく。",
+        "options": [
+          {
+            "id": "open",
+            "text": "全出口を共同保証へ接続して開ける",
+            "to": "@informed"
+          },
+          {
+            "id": "limited",
+            "text": "試した出口だけ時間制で運用する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q060.clue_a": {
@@ -683,6 +690,376 @@
             {
               "op": "jump",
               "script": "q060.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "夜市の結界で出口が閉じた。店は安全だが、荷運び人が帰れない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guarantors",
+              "text": "店ごとに保護契約の署名を持ち寄る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.guarantee"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "結界の番人を倒して自由通行にする",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q060.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "出口を時間制にし、交代で通す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.guarantee": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "guarantee"
+        },
+        {
+          "op": "say",
+          "text": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できます。 大店と露店が同じ保証へ入ることに同意した。出口を開いた瞬間の守りを試す必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "一つの出口を開けて結界の継続を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.gate"
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "契約を見送り、時間制で開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.gate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "gate"
+        },
+        {
+          "op": "say",
+          "text": "出口を通っても店の保護灯は消えなかった。荷運び人が一人、次に二人と帰っていく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "全出口を共同保証へ接続して開ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "試した出口だけ時間制で運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "市場は朝にも開きました。ゼンは門番から、二つの世界の道案内になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人と商品は通りました。守りを失った夜の見回りは、商人が自分で始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "完全な自由ではありません。地下と地上を結ぶ時刻表が配られます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q060.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "市場は朝にも開きました。ゼンは門番から、二つの世界の道案内になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人と商品は通りました。守りを失った夜の見回りは、商人が自分で始めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "完全な自由ではありません。地下と地上を結ぶ時刻表が配られます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q060"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q060.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q060.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guarantee",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.guarantee"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "gate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.gate"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q060.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

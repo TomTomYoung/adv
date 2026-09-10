@@ -6,7 +6,7 @@
   "client": "灯番組合のリネ",
   "brief": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
   "region": 10,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "一人ずつ意思を確かめ連絡路を残す",
+      "label": "二人の意思を残し、地上との連絡路を結ぶ",
       "text": "帰る人は帰り、残る人には便りが届きます。リネは灯を消さず、油の補充日を決めます。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "灯の守り手を倒し全員を地上へ連れ出す",
+      "label": "灯の守り手を倒し、全員を地上へ連れ出す",
       "text": "救出者の数は増えました。地上で暮らせない人の居場所を、町が改めて作ります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "遺品と伝言だけ預かり灯を残す",
+      "label": "遺品と伝言だけ預かって家族へ届ける",
       "text": "待つ家族へ言葉が届きました。次に下りる理由は、捜索から訪問へ変わります。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "灯番組合のリネ",
         "observation": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
         "belief": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
-        "goal": "灯の守り手を倒し全員を地上へ連れ出す"
+        "goal": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "灯の守り手を倒し全員を地上へ連れ出す",
-      "alternative": "一人ずつ意思を確かめ連絡路を残す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "最奥で灯が一つだけ点いています。帰らなかった人の遺品を持ち帰ってください。",
+      "progression": "灯の回収から残留者との個別面談へ変わり、帰る人と残る人の連絡方法を別々に作る。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q099.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "芯は新しく替えられ、油瓶には複数の生きた人の補充印があります。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "灯の傍の名簿は死亡日でなく、地上へ戻らないと決めた日を記しています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "people",
+          "script": "q099.flow.people"
         }
       ]
     },
@@ -136,80 +118,139 @@
       "operator": "observerSwap",
       "newInformation": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "people"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q099.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q099.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q099.clue_a"
+        "id": "entry",
+        "script": "q099.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q099.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q099.decision"
+        "id": "people",
+        "script": "q099.flow.people"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "灯の守り手を倒し全員を地上へ連れ出すと一人ずつ意思を確かめ連絡路を残すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q099.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q099.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q099.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q099.returner",
+        "meaning": "各場面に明記した returner の行為・合意の記録",
+        "writer": [
+          "people"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q099.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q099.resident",
+        "meaning": "各場面に明記した resident の行為・合意の記録",
+        "writer": [
+          "people"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "灯の回収から残留者との個別面談へ変わり、帰る人と残る人の連絡方法を別々に作る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "灯の回収から残留者との個別面談へ変わり、帰る人と残る人の連絡方法を別々に作る。",
+    "flowVersion": 2,
+    "entryScript": "q099.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "遺品だと思った灯へ、生きた人が油を足している。名簿の日付は死亡日ではない。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "灯を消さず、一人ずつ帰還の意思を聞く",
+            "to": "people"
+          },
+          {
+            "id": "message",
+            "text": "遺品と伝言だけ預かって家族へ届ける",
+            "to": "@compromise"
+          },
+          {
+            "id": "bring",
+            "text": "灯の守り手を倒し、全員を地上へ連れ出す",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "people",
+        "text": "$truth 一人は帰りたいと言い、一人は地下の保守を続けたいと答える。",
+        "options": [
+          {
+            "id": "returner",
+            "text": "帰る人の迎えを手配する",
+            "to": "people",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q099.returner"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "returner": true
+            }
+          },
+          {
+            "id": "resident",
+            "text": "残る人の便りと油の受渡し日を決める",
+            "to": "people",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q099.resident"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "resident": true
+            }
+          },
+          {
+            "id": "connect",
+            "text": "二人の意思を残し、地上との連絡路を結ぶ",
+            "to": "@informed",
+            "need": [
+              "returner",
+              "resident"
+            ]
+          },
+          {
+            "id": "carry",
+            "text": "面談を途中で終え、預かった言葉だけ届ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q099.clue_a": {
@@ -651,6 +692,403 @@
             {
               "op": "jump",
               "script": "q099.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q099.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q099.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "遺品だと思った灯へ、生きた人が油を足している。名簿の日付は死亡日ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "灯を消さず、一人ずつ帰還の意思を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q099.flow.people"
+                }
+              ]
+            },
+            {
+              "id": "message",
+              "text": "遺品と伝言だけ預かって家族へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q099.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "bring",
+              "text": "灯の守り手を倒し、全員を地上へ連れ出す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q099.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q099.flow.people": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q099.node",
+          "value": "people"
+        },
+        {
+          "op": "say",
+          "text": "灯は死者の遺品だけでなく、帰還を選ばず地下を守る人々の共同の目印です。 一人は帰りたいと言い、一人は地下の保守を続けたいと答える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "returner",
+              "text": "帰る人の迎えを手配する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q099.returner"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q099.returner",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q099.flow.people"
+                }
+              ]
+            },
+            {
+              "id": "resident",
+              "text": "残る人の便りと油の受渡し日を決める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q099.resident"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q099.resident",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q099.flow.people"
+                }
+              ]
+            },
+            {
+              "id": "connect",
+              "text": "二人の意思を残し、地上との連絡路を結ぶ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q099.returner"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q099.resident"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「帰る人の迎えを手配する」・先に「残る人の便りと油の受渡し日を決める」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q099.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "carry",
+              "text": "面談を途中で終え、預かった言葉だけ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q099.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q099.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q099.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "帰る人は帰り、残る人には便りが届きます。リネは灯を消さず、油の補充日を決めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q099",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q099.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q099.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "救出者の数は増えました。地上で暮らせない人の居場所を、町が改めて作ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q099",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q099.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q099.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "待つ家族へ言葉が届きました。次に下りる理由は、捜索から訪問へ変わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q099",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q099.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q099.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q099.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "帰る人は帰り、残る人には便りが届きます。リネは灯を消さず、油の補充日を決めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "救出者の数は増えました。地上で暮らせない人の居場所を、町が改めて作ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "待つ家族へ言葉が届きました。次に下りる理由は、捜索から訪問へ変わります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q099"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q099.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q099.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q099.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "people",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q099.flow.people"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q099.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

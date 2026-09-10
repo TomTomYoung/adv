@@ -6,7 +6,7 @@
   "client": "菓子職人のトト",
   "brief": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
   "region": 1,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "冷水を迂回させ菌床を別槽へ移す",
+      "label": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
       "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "甘泥の魔物を倒し菌床ごと焼く",
+      "label": "菌床を焼き、詰まりを除く",
       "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "流出口に網を張って回収を続ける",
+      "label": "流出口へ網を張り、毎日の回収を引き受ける",
       "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "菓子職人のトト",
         "observation": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
         "belief": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
-        "goal": "甘泥の魔物を倒し菌床ごと焼く"
+        "goal": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "甘泥の魔物を倒し菌床ごと焼く",
-      "alternative": "冷水を迂回させ菌床を別槽へ移す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
+      "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q005.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "泥は工房の休業日にも増え、上流側ほど甘い香りがします。"
+          "id": "overflow",
+          "script": "q005.flow.overflow"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "菌の輪は温かい管に沿い、冷水管の手前で途切れています。"
+          "id": "cold",
+          "script": "q005.flow.cold"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "transfer",
+          "script": "q005.flow.transfer"
         }
       ]
     },
@@ -136,80 +126,132 @@
       "operator": "frameShift",
       "newInformation": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "cold"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q005.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q005.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q005.clue_a"
+        "id": "entry",
+        "script": "q005.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q005.clue_b"
+        "id": "overflow",
+        "script": "q005.flow.overflow"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q005.decision"
+        "id": "cold",
+        "script": "q005.flow.cold"
+      },
+      {
+        "id": "transfer",
+        "script": "q005.flow.transfer"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "甘泥の魔物を倒し菌床ごと焼くと冷水を迂回させ菌床を別槽へ移すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q005.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q005.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q005.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q005.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q005.warmTrial",
+        "meaning": "各場面に明記した warmTrial の行為・合意の記録",
+        "writer": [
+          "overflow"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。",
+    "flowVersion": 2,
+    "entryScript": "q005.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "トトは工房を止めたが泥は増える。温水管と冷水管が、詰まった槽へ並んでいる。",
+        "options": [
+          {
+            "id": "cold",
+            "text": "小さな菌床へ冷水を流す",
+            "to": "cold"
+          },
+          {
+            "id": "warm",
+            "text": "温水で泥を溶かしてみる",
+            "to": "overflow"
+          },
+          {
+            "id": "burn",
+            "text": "菌床を焼き、詰まりを除く",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "overflow",
+        "text": "温水をかけた側ほど甘い汁が増えた。トトが栓を閉じる。「砂糖を洗っているだけじゃないね」",
+        "options": [
+          {
+            "id": "cool",
+            "text": "温水を止め、冷水へ切り替える",
+            "to": "cold",
+            "set": {
+              "warmTrial": true
+            }
+          },
+          {
+            "id": "net",
+            "text": "流出口へ網を張り、毎日の回収を引き受ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "cold",
+        "text": "冷えた側へ菌は広がらない。$truth 空の別槽なら、工房の排水から切り離せる。",
+        "options": [
+          {
+            "id": "divert",
+            "text": "冷水の迂回管を組む",
+            "to": "transfer"
+          },
+          {
+            "id": "net",
+            "text": "設備を変えず、網で回収する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "transfer",
+        "text": "冷水を境に菌床を別槽へ移した。トトは食材として試す前に、排水を一晩通して点検したいと言う。",
+        "options": [
+          {
+            "id": "test",
+            "text": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
+            "to": "@informed"
+          },
+          {
+            "id": "undo",
+            "text": "槽の運用を断り、網で管理する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q005.clue_a": {
@@ -651,6 +693,417 @@
             {
               "op": "jump",
               "script": "q005.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q005.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q005.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "トトは工房を止めたが泥は増える。温水管と冷水管が、詰まった槽へ並んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cold",
+              "text": "小さな菌床へ冷水を流す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.cold"
+                }
+              ]
+            },
+            {
+              "id": "warm",
+              "text": "温水で泥を溶かしてみる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.overflow"
+                }
+              ]
+            },
+            {
+              "id": "burn",
+              "text": "菌床を焼き、詰まりを除く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.flow.overflow": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q005.node",
+          "value": "overflow"
+        },
+        {
+          "op": "say",
+          "text": "温水をかけた側ほど甘い汁が増えた。トトが栓を閉じる。「砂糖を洗っているだけじゃないね」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "温水を止め、冷水へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q005.warmTrial",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.flow.cold"
+                }
+              ]
+            },
+            {
+              "id": "net",
+              "text": "流出口へ網を張り、毎日の回収を引き受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.flow.cold": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q005.node",
+          "value": "cold"
+        },
+        {
+          "op": "say",
+          "text": "冷えた側へ菌は広がらない。工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。 空の別槽なら、工房の排水から切り離せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "divert",
+              "text": "冷水の迂回管を組む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.transfer"
+                }
+              ]
+            },
+            {
+              "id": "net",
+              "text": "設備を変えず、網で回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.flow.transfer": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q005.node",
+          "value": "transfer"
+        },
+        {
+          "op": "say",
+          "text": "冷水を境に菌床を別槽へ移した。トトは食材として試す前に、排水を一晩通して点検したいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "undo",
+              "text": "槽の運用を断り、網で管理する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q005",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q005.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q005",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q005.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q005",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q005.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q005.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q005.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q005"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q005.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q005.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "overflow",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.flow.overflow"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cold",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.flow.cold"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "transfer",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.flow.transfer"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q005.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

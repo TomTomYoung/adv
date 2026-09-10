@@ -6,7 +6,7 @@
   "client": "城址調査団のミオ",
   "brief": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
   "region": 7,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "仮の重りを作り梯子を固定する",
+      "label": "入口に合った位置で重りを固定する",
       "text": "王室へ入れました。使い終えた後は浮く避難梯子へ戻します。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "階段の水獣を倒し柱へ打ち付ける",
+      "label": "階段を柱へ打ち付けて固定する",
       "text": "上下に動かなくなりました。次の増水では使える高さが限られます。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "別の通気孔から迂回する",
+      "label": "別の通気孔を帰路に使う",
       "text": "王室への道は長くなりましたが、避難梯子の役目は残せました。",
       "gold": 83,
       "xp": 87
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "城址調査団のミオ",
         "observation": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
         "belief": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
-        "goal": "階段の水獣を倒し柱へ打ち付ける"
+        "goal": "階段を降りても水面へ戻ります。王室へ入る道を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "階段の水獣を倒し柱へ打ち付ける",
-      "alternative": "仮の重りを作り梯子を固定する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "階段を降りても水面へ戻ります。王室へ入る道を探してください。",
+      "progression": "浮く梯子の重りを実際に調整し、沈め過ぎた試行からも修正できる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q063.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "踏み板の脇に上下の擦過痕があり、壁との継ぎ目が滑ります。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "下部の鎖だけ新しく切られ、重りは救難用の浮標へ転用されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "balance",
+          "script": "q063.flow.balance"
         }
       ]
     },
@@ -135,81 +117,167 @@
     "reveal": {
       "operator": "ruleReveal",
       "newInformation": "階段は転送でなく浮力で上下する避難梯子で、重りが外されています。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q063.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q063.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q063.clue_a"
+        "id": "entry",
+        "script": "q063.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q063.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q063.decision"
+        "id": "balance",
+        "script": "q063.flow.balance"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "階段の水獣を倒し柱へ打ち付けると仮の重りを作り梯子を固定するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q063.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q063.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q063.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q063.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q063.load",
+        "meaning": "各場面に明記した load の行為・合意の記録",
+        "writer": [
+          "entry",
+          "balance"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "浮く梯子の重りを実際に調整し、沈め過ぎた試行からも修正できる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "浮く梯子の重りを実際に調整し、沈め過ぎた試行からも修正できる。",
+    "flowVersion": 2,
+    "entryScript": "q063.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "階段が潮と逆に浮き上がる。外れた重りを掛ける輪がある。",
+        "options": [
+          {
+            "id": "weight",
+            "text": "手近な重りを掛けて試す",
+            "to": "balance",
+            "set": {
+              "load": 1
+            }
+          },
+          {
+            "id": "pin",
+            "text": "階段を柱へ打ち付けて固定する",
+            "to": "@contract"
+          },
+          {
+            "id": "vent",
+            "text": "別の通気孔を帰路に使う",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "balance",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q063.load"
+              },
+              "right": 1
+            },
+            "yes": "一つでは梯子が高すぎる。もう一つなら入口と合いそうだ。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q063.load"
+                },
+                "right": 2
+              },
+              "yes": "入口と梯子が揃い、潮が動いても乗り移れる。",
+              "no": "重りが多すぎて梯子が沈んだ。安全な足場から外し直せる。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "add",
+            "text": "重りを一つ足す",
+            "to": "balance",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.flow.q063.load"
+              },
+              "right": 3
+            },
+            "set": {
+              "load": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.flow.q063.load"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "remove",
+            "text": "重りを一つ外す",
+            "to": "balance",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.flow.q063.load"
+              },
+              "right": 2
+            },
+            "set": {
+              "load": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.flow.q063.load"
+                  },
+                  -1
+                ]
+              }
+            }
+          },
+          {
+            "id": "fix",
+            "text": "入口に合った位置で重りを固定する",
+            "to": "@informed",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q063.load"
+              },
+              "right": 2
+            }
+          },
+          {
+            "id": "detour",
+            "text": "調整を中断して通気孔へ迂回する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q063.clue_a": {
@@ -651,6 +719,429 @@
             {
               "op": "jump",
               "script": "q063.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q063.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q063.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "階段が潮と逆に浮き上がる。外れた重りを掛ける輪がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weight",
+              "text": "手近な重りを掛けて試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q063.load",
+                  "value": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q063.flow.balance"
+                }
+              ]
+            },
+            {
+              "id": "pin",
+              "text": "階段を柱へ打ち付けて固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q063.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "vent",
+              "text": "別の通気孔を帰路に使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q063.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q063.flow.balance": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q063.node",
+          "value": "balance"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q063.load"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一つでは梯子が高すぎる。もう一つなら入口と合いそうだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q063.load"
+                },
+                "right": 2
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "入口と梯子が揃い、潮が動いても乗り移れる。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "重りが多すぎて梯子が沈んだ。安全な足場から外し直せる。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "add",
+              "text": "重りを一つ足す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.flow.q063.load"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q063.load",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q063.load"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q063.flow.balance"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "重りを一つ外す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.flow.q063.load"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q063.load",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q063.load"
+                      },
+                      -1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q063.flow.balance"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "入口に合った位置で重りを固定する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q063.load"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q063.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "detour",
+              "text": "調整を中断して通気孔へ迂回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q063.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q063.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王室へ入れました。使い終えた後は浮く避難梯子へ戻します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q063",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q063.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "上下に動かなくなりました。次の増水では使える高さが限られます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q063",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q063.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王室への道は長くなりましたが、避難梯子の役目は残せました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q063",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q063.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q063.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q063.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "王室へ入れました。使い終えた後は浮く避難梯子へ戻します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "上下に動かなくなりました。次の増水では使える高さが限られます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "王室への道は長くなりましたが、避難梯子の役目は残せました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q063"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q063.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q063.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q063.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "balance",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q063.flow.balance"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q063.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

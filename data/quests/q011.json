@@ -6,7 +6,7 @@
   "client": "坑夫のメル",
   "brief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
   "region": 2,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "像の塩を払い避難路を標示する",
+      "label": "像の向く安全坑へ人を導き、標示を塗り直す",
       "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "白い像を守る骸兵を倒して砕く",
+      "label": "像を砕き、白い姿を取り除く",
       "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "像を残し縄で帰路をつなぐ",
+      "label": "像を目印に縄1本で帰路をつなぐ",
       "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "坑夫のメル",
         "observation": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
         "belief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
-        "goal": "白い像を守る骸兵を倒して砕く"
+        "goal": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "白い像を守る骸兵を倒して砕く",
-      "alternative": "像の塩を払い避難路を標示する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+      "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q011.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "裾に見えた部分には矢印の浮き彫りが残っています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "sign",
+          "script": "q011.flow.sign"
         }
       ]
     },
@@ -136,68 +118,86 @@
       "operator": "causeSwap",
       "newInformation": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "sign"
       ],
-      "gate": {
-        "op": "contains",
-        "left": {
-          "ref": "quests.q011.evidence"
-        },
-        "right": "clue_a"
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q011.clue_a"
+        "id": "entry",
+        "script": "q011.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q011.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q011.decision"
+        "id": "sign",
+        "script": "q011.flow.sign"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "白い像を守る骸兵を倒して砕くと像の塩を払い避難路を標示するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q011.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q011.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q011.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q011.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。",
+    "flowVersion": 2,
+    "entryScript": "q011.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "白い像の足元に「出口」の矢印が透けている。坑夫は像の顔ばかり見ていた。",
+        "options": [
+          {
+            "id": "brush",
+            "text": "足元から塩を払う",
+            "to": "sign"
+          },
+          {
+            "id": "break",
+            "text": "像を砕き、白い姿を取り除く",
+            "to": "@contract"
+          },
+          {
+            "id": "rope",
+            "text": "像を目印に縄1本で帰路をつなぐ",
+            "to": "@compromise",
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "sign",
+        "text": "$a $truth",
+        "options": [
+          {
+            "id": "guide",
+            "text": "像の向く安全坑へ人を導き、標示を塗り直す",
+            "to": "@informed"
+          },
+          {
+            "id": "rope",
+            "text": "塗装は後日にし、縄1本で帰路をつなぐ",
+            "to": "@compromise",
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q011.clue_a": {
@@ -603,6 +603,334 @@
             {
               "op": "jump",
               "script": "q011.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "白い像の足元に「出口」の矢印が透けている。坑夫は像の顔ばかり見ていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brush",
+              "text": "足元から塩を払う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "像を砕き、白い姿を取り除く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "像を目印に縄1本で帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.sign": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "sign"
+        },
+        {
+          "op": "say",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っています。 花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "像の向く安全坑へ人を導き、標示を塗り直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "塗装は後日にし、縄1本で帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q011.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q011"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q011.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q011.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q011.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sign",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q011.flow.sign"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q011.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

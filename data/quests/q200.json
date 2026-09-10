@@ -6,7 +6,7 @@
   "client": "帰還印の修理師トワ",
   "brief": "買った場所へ戻らない帰還印の行先を確かめてください。",
   "region": 10,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -66,14 +66,31 @@
       }
     ],
     "conflict": {
-      "design": "誤帰還→二つの灯を訪ねる順を選ぶ→約束を確認→一つを帰る家にする／訪問日を決める／帰還の約束を解く。相手が既に生活を変えていた場合は灯を消すことにも同意を求めます。全員への訪問が無理なら、伝言を届けて保留でき、存在しない理解を確定しません。"
+      "request": "買った場所へ戻らない帰還印の行先を確かめてください。",
+      "progression": "帰還印に導かれて一方を訪ねると、もう一方への返事が生じる。転居は灯台の同意まで取り付ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q200.scene.entry"
+          "script": "q200.flow.entry"
+        },
+        {
+          "id": "lighthouse",
+          "script": "q200.flow.lighthouse"
+        },
+        {
+          "id": "river",
+          "script": "q200.flow.river"
+        },
+        {
+          "id": "household",
+          "script": "q200.flow.household"
+        },
+        {
+          "id": "reply",
+          "script": "q200.flow.reply"
         }
       ]
     },
@@ -82,16 +99,33 @@
     },
     "reveal": {
       "newInformation": "行先の家では、どこも帰還を待つため灯を残しています。装置の故障に見せた複数の行先が、積み重なった関係の存在を示します。全員が一緒に暮らす解決にせず、待たせた相手へどんな約束を更新するかを問います。来訪者を待たない家へ無断で飛ぶ能力にはしません。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q200.scene.entry"
+        "script": "q200.flow.entry"
+      },
+      {
+        "id": "lighthouse",
+        "script": "q200.flow.lighthouse"
+      },
+      {
+        "id": "river",
+        "script": "q200.flow.river"
+      },
+      {
+        "id": "household",
+        "script": "q200.flow.household"
+      },
+      {
+        "id": "reply",
+        "script": "q200.flow.reply"
       }
     ],
     "adaptation": {
@@ -102,112 +136,263 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q200.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q200.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q200.a",
-        "meaning": "作者原稿の a に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
+        "path": "flags.flow.q200.a",
+        "meaning": "各場面に明記した a の行為・合意の記録",
         "writer": [
-          "entry"
+          "lighthouse",
+          "reply"
         ],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q200.b",
-        "meaning": "作者原稿の b に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
+        "path": "flags.flow.q200.intent",
+        "meaning": "各場面に明記した intent の行為・合意の記録",
         "writer": [
-          "entry"
+          "lighthouse",
+          "river",
+          "household"
         ],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q200.b",
+        "meaning": "各場面に明記した b の行為・合意の記録",
+        "writer": [
+          "river",
+          "household",
+          "reply"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q200.homeConsent",
+        "meaning": "各場面に明記した homeConsent の行為・合意の記録",
+        "writer": [
+          "household"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "印が映したのは売店ではない。今回の道中、あなたは灯台で「修理のあと顔を出す」と、川の家で「夕飯の返事をする」と約束した。二人が了承して結んだ短い約束だ。",
+        "text": "今回の道中、灯台で「修理後に顔を出す」、川の家で「夕飯の返事をする」と約束した。二人とも了承した短い約束だ。印は買った売店へ戻らない。",
         "options": [
           {
             "id": "lighthouse",
-            "text": "灯台へ行き、今の暮らしと約束を確かめる",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q200.a"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "a": true
-            },
-            "textAfter": "灯台守は新しい相棒と働いていた。訪ねるのは歓迎だが、一緒に住む話なら川の家にも返事をしてほしいと言う。"
+            "text": "印の灯台側をたどる",
+            "to": "lighthouse"
           },
           {
             "id": "river",
-            "text": "川の家へ行き、今の暮らしと約束を確かめる",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q200.b"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "b": true
-            },
-            "textAfter": "家では次の旅の仕度が始まっていた。帰還印は場所の所有でなく、相手との約束を辿るのだとトワは確かめた。"
-          },
-          {
-            "id": "home",
-            "text": "両者へ返事をし、灯台を帰る家に選ぶ",
-            "to": "@home",
-            "need": [
-              "a",
-              "b"
-            ]
-          },
-          {
-            "id": "visits",
-            "text": "両者と、住まずに訪ねる約束へ結び直す",
-            "to": "@visits",
-            "need": [
-              "a",
-              "b"
-            ]
-          },
-          {
-            "id": "release",
-            "text": "両者に話し、二つの帰還の約束を解く",
-            "to": "@release",
-            "need": [
-              "a",
-              "b"
-            ]
+            "text": "印の川側をたどる",
+            "to": "river"
           },
           {
             "id": "pending",
-            "text": "今は行先を決めず、返事を保留する伝言を残す",
+            "text": "両者へ返事を保留する伝言を出す",
+            "to": "@pending"
+          }
+        ]
+      },
+      {
+        "id": "lighthouse",
+        "text": "灯台守は新しい相棒と働いていた。「訪ねるのは歓迎だよ。暮らす話なら、相棒にも川の家にも話そう」",
+        "options": [
+          {
+            "id": "river",
+            "text": "灯台での返事を残して川の家へ",
+            "to": "river",
+            "set": {
+              "a": true
+            }
+          },
+          {
+            "id": "visits",
+            "text": "灯台守へ訪問の約束を提案する",
+            "to": "reply",
+            "set": {
+              "a": true,
+              "intent": "visits"
+            }
+          },
+          {
+            "id": "home",
+            "text": "暮らす希望を灯台守と相棒へ相談する",
+            "to": "household",
+            "set": {
+              "a": true
+            }
+          },
+          {
+            "id": "release",
+            "text": "灯台での約束を解く相談をする",
+            "to": "reply",
+            "set": {
+              "a": true,
+              "intent": "release"
+            }
+          }
+        ]
+      },
+      {
+        "id": "river",
+        "text": "川の家では次の旅の支度が始まっていた。主は「待ち続ける約束にはしなくていい」と夕飯の鍋を閉じた。",
+        "options": [
+          {
+            "id": "lighthouse",
+            "text": "川の家へ返事をして灯台へ向かう",
+            "to": "lighthouse",
+            "set": {
+              "b": true
+            }
+          },
+          {
+            "id": "visits",
+            "text": "住まずに訪ねる約束へ結び直したいと伝える",
+            "to": "reply",
+            "set": {
+              "b": true,
+              "intent": "visits"
+            }
+          },
+          {
+            "id": "release",
+            "text": "印に結んだ約束を解きたいと伝える",
+            "to": "reply",
+            "set": {
+              "b": true,
+              "intent": "release"
+            }
+          },
+          {
+            "id": "pending",
+            "text": "今は返事の保留を両者へ伝える",
+            "to": "@pending"
+          }
+        ]
+      },
+      {
+        "id": "household",
+        "text": "灯台守と相棒は、保守当番を分けるなら一緒に暮らせると答えた。川の家には夕飯の返事が残っている。",
+        "options": [
+          {
+            "id": "accept",
+            "text": "保守当番に同意し、川の家へ転居の返事を届ける",
+            "to": "@home",
+            "set": {
+              "b": true,
+              "homeConsent": true
+            }
+          },
+          {
+            "id": "visit",
+            "text": "転居を断り、訪問だけの関係を提案する",
+            "to": "reply",
+            "set": {
+              "intent": "visits"
+            }
+          }
+        ]
+      },
+      {
+        "id": "reply",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q200.intent"
+              },
+              "right": "visits"
+            },
+            "yes": "訪問する日を相手任せにせず、その都度便りで決めると提案した。",
+            "no": "印の約束を解いても、便りや訪問を禁じるものではないと説明した。"
+          },
+          {
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q200.a"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q200.b"
+                  },
+                  "right": true
+                }
+              ]
+            },
+            "yes": "二人に会って話した。修理師トワが双方の返事をもう一度確かめる。",
+            "no": "まだ会えていない側へも、修理師トワと返事を届けて了承を受け取る。"
+          }
+        ],
+        "options": [
+          {
+            "id": "visits",
+            "text": "二人の了承を受け、訪ねる約束へ結び直す",
+            "to": "@visits",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q200.intent"
+              },
+              "right": "visits"
+            },
+            "set": {
+              "a": true,
+              "b": true
+            }
+          },
+          {
+            "id": "release",
+            "text": "二人の了承を受け、印に結んだ約束を解く",
+            "to": "@release",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q200.intent"
+              },
+              "right": "release"
+            },
+            "set": {
+              "a": true,
+              "b": true
+            }
+          },
+          {
+            "id": "pending",
+            "text": "合意の確定を保留し、両者へ伝言を残す",
             "to": "@pending"
           }
         ]
       }
-    ]
+    ],
+    "progression": "帰還印に導かれて一方を訪ねると、もう一方への返事が生じる。転居は灯台の同意まで取り付ける。",
+    "flowVersion": 2,
+    "entryScript": "q200.flow.visit",
+    "choiceContract": {
+      "progression": "帰還印に導かれて一方を訪ねると、もう一方への返事が生じる。転居は灯台の同意まで取り付ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q200.scene.entry": {
@@ -587,6 +772,707 @@
                 {
                   "op": "jump",
                   "script": "q200.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q200.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "今回の道中、灯台で「修理後に顔を出す」、川の家で「夕飯の返事をする」と約束した。二人とも了承した短い約束だ。印は買った売店へ戻らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lighthouse",
+              "text": "印の灯台側をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.flow.lighthouse"
+                }
+              ]
+            },
+            {
+              "id": "river",
+              "text": "印の川側をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.flow.river"
+                }
+              ]
+            },
+            {
+              "id": "pending",
+              "text": "両者へ返事を保留する伝言を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.pending"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.lighthouse": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q200.node",
+          "value": "lighthouse"
+        },
+        {
+          "op": "say",
+          "text": "灯台守は新しい相棒と働いていた。「訪ねるのは歓迎だよ。暮らす話なら、相棒にも川の家にも話そう」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "river",
+              "text": "灯台での返事を残して川の家へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.river"
+                }
+              ]
+            },
+            {
+              "id": "visits",
+              "text": "灯台守へ訪問の約束を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.intent",
+                  "value": "visits"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "暮らす希望を灯台守と相棒へ相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.household"
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "text": "灯台での約束を解く相談をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.intent",
+                  "value": "release"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.river": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q200.node",
+          "value": "river"
+        },
+        {
+          "op": "say",
+          "text": "川の家では次の旅の支度が始まっていた。主は「待ち続ける約束にはしなくていい」と夕飯の鍋を閉じた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lighthouse",
+              "text": "川の家へ返事をして灯台へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.lighthouse"
+                }
+              ]
+            },
+            {
+              "id": "visits",
+              "text": "住まずに訪ねる約束へ結び直したいと伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.intent",
+                  "value": "visits"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "text": "印に結んだ約束を解きたいと伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.intent",
+                  "value": "release"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "pending",
+              "text": "今は返事の保留を両者へ伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.pending"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.household": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q200.node",
+          "value": "household"
+        },
+        {
+          "op": "say",
+          "text": "灯台守と相棒は、保守当番を分けるなら一緒に暮らせると答えた。川の家には夕飯の返事が残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "accept",
+              "text": "保守当番に同意し、川の家へ転居の返事を届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.homeConsent",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.home"
+                }
+              ]
+            },
+            {
+              "id": "visit",
+              "text": "転居を断り、訪問だけの関係を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.intent",
+                  "value": "visits"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.reply"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q200.node",
+          "value": "reply"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q200.intent"
+            },
+            "right": "visits"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "訪問する日を相手任せにせず、その都度便りで決めると提案した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "印の約束を解いても、便りや訪問を禁じるものではないと説明した。"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q200.a"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q200.b"
+                },
+                "right": true
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人に会って話した。修理師トワが双方の返事をもう一度確かめる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "まだ会えていない側へも、修理師トワと返事を届けて了承を受け取る。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visits",
+              "text": "二人の了承を受け、訪ねる約束へ結び直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q200.intent"
+                    },
+                    "right": "visits"
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.visits"
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "text": "二人の了承を受け、印に結んだ約束を解く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q200.intent"
+                    },
+                    "right": "release"
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.release"
+                }
+              ]
+            },
+            {
+              "id": "pending",
+              "text": "合意の確定を保留し、両者へ伝言を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.flow.end.pending"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.flow.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "川の家にも返事をし、灯台で暮らす合意を結んだ。帰還印は玄関へ導いた。扉を叩くと、中から椅子を引く音がした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.flow.end.visits": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "住む家を決めるのでなく、訪ねる約束を結び直した。次の旅の帰り、印の先で扉を叩く音がした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "visits"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.flow.end.release": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人の了承を得て印の約束を解いた。関係を消したわけではない。歩いて辿り着いた扉を、自分の手で叩いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "release"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.flow.end.pending": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行先は決めなかった。待たせ続けるのでなく保留の伝言を残し、返事を書く紙を荷の上へ入れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "pending"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q200.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "川の家にも返事をし、灯台で暮らす合意を結んだ。帰還印は玄関へ導いた。扉を叩くと、中から椅子を引く音がした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "visits",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "住む家を決めるのでなく、訪ねる約束を結び直した。次の旅の帰り、印の先で扉を叩く音がした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "release",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二人の了承を得て印の約束を解いた。関係を消したわけではない。歩いて辿り着いた扉を、自分の手で叩いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pending",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "行先は決めなかった。待たせ続けるのでなく保留の伝言を残し、返事を書く紙を荷の上へ入れた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q200"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q200.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q200.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q200.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lighthouse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q200.flow.lighthouse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "river",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q200.flow.river"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "household",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q200.flow.household"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q200.flow.reply"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q200.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

@@ -6,7 +6,7 @@
   "client": "歴史家のオミ",
   "brief": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
   "region": 7,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "避難記録と鎧を照合し最期を書き直す",
+      "label": "死の軍議を撤回し、避難した記録へ書き直す",
       "text": "殉死とされた人が生還者として戻りました。英雄譚を好む人は反発します。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "鎧の亡霊を倒し英雄の遺品として納める",
+      "label": "鎧を戦死者の遺品として納める",
       "text": "慰霊碑は立派になりました。生還した家族の証言は碑文に入りません。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "鎧を保存し確かな事実だけ展示する",
+      "label": "空の鎧である事実だけ記し、展示する",
       "text": "空の鎧という事実が残りました。見る人が記録を読み比べます。",
       "gold": 83,
       "xp": 87
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "歴史家のオミ",
         "observation": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
         "belief": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
-        "goal": "鎧の亡霊を倒し英雄の遺品として納める"
+        "goal": "会議室の珊瑚が人の形をしています。城の最期を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "鎧の亡霊を倒し英雄の遺品として納める",
-      "alternative": "避難記録と鎧を照合し最期を書き直す",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "会議室の珊瑚が人の形をしています。城の最期を調べてください。",
+      "progression": "会議の遺体と思った鎧を搬出すると中が空だと分かり、展示原稿を書き直す仕事が残る。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q066.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "鎧の内部に骨はなく、珊瑚は空いた襟から生えています。"
+          "id": "empty",
+          "script": "q066.flow.empty"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "議事録の時刻には船がすでに出港し、最後の署名だけ筆が異なります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "evacuated",
+          "script": "q066.flow.evacuated"
         }
       ]
     },
@@ -136,80 +122,95 @@
       "operator": "pathHide",
       "newInformation": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "evacuated"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q066.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q066.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q066.clue_a"
+        "id": "entry",
+        "script": "q066.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q066.clue_b"
+        "id": "empty",
+        "script": "q066.flow.empty"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q066.decision"
+        "id": "evacuated",
+        "script": "q066.flow.evacuated"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "鎧の亡霊を倒し英雄の遺品として納めると避難記録と鎧を照合し最期を書き直すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q066.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q066.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q066.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q066.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "会議の遺体と思った鎧を搬出すると中が空だと分かり、展示原稿を書き直す仕事が残る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "会議の遺体と思った鎧を搬出すると中が空だと分かり、展示原稿を書き直す仕事が残る。",
+    "flowVersion": 2,
+    "entryScript": "q066.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "珊瑚の椅子に鎧が座る。依頼人は「最後の軍議」と題した展示札を用意している。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "一体を椅子から持ち上げる",
+            "to": "empty"
+          },
+          {
+            "id": "honor",
+            "text": "鎧を戦死者の遺品として納める",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "empty",
+        "text": "鎧には体がない。椅子の下から避難便の乗船札が出た。",
+        "options": [
+          {
+            "id": "manifest",
+            "text": "乗船札を避難記録へ照合する",
+            "to": "evacuated"
+          },
+          {
+            "id": "facts",
+            "text": "空の鎧である事実だけ記し、展示する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "evacuated",
+        "text": "$truth 乗船札の番号は全員分が受領されている。依頼人が自分の展示札を伏せた。",
+        "options": [
+          {
+            "id": "rewrite",
+            "text": "死の軍議を撤回し、避難した記録へ書き直す",
+            "to": "@informed"
+          },
+          {
+            "id": "limited",
+            "text": "避難先を断定せず、確実な鎧の記録だけ展示する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q066.clue_a": {
@@ -705,6 +706,347 @@
             {
               "op": "jump",
               "script": "q066.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q066.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q066.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "珊瑚の椅子に鎧が座る。依頼人は「最後の軍議」と題した展示札を用意している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "一体を椅子から持ち上げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.empty"
+                }
+              ]
+            },
+            {
+              "id": "honor",
+              "text": "鎧を戦死者の遺品として納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q066.flow.empty": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q066.node",
+          "value": "empty"
+        },
+        {
+          "op": "say",
+          "text": "鎧には体がない。椅子の下から避難便の乗船札が出た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "manifest",
+              "text": "乗船札を避難記録へ照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.evacuated"
+                }
+              ]
+            },
+            {
+              "id": "facts",
+              "text": "空の鎧である事実だけ記し、展示する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q066.flow.evacuated": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q066.node",
+          "value": "evacuated"
+        },
+        {
+          "op": "say",
+          "text": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装されました。 乗船札の番号は全員分が受領されている。依頼人が自分の展示札を伏せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rewrite",
+              "text": "死の軍議を撤回し、避難した記録へ書き直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "避難先を断定せず、確実な鎧の記録だけ展示する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q066.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q066.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "殉死とされた人が生還者として戻りました。英雄譚を好む人は反発します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q066",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q066.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "慰霊碑は立派になりました。生還した家族の証言は碑文に入りません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q066",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q066.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "空の鎧という事実が残りました。見る人が記録を読み比べます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q066",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q066.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q066.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q066.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "殉死とされた人が生還者として戻りました。英雄譚を好む人は反発します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "慰霊碑は立派になりました。生還した家族の証言は碑文に入りません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "空の鎧という事実が残りました。見る人が記録を読み比べます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q066"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q066.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q066.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q066.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "empty",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q066.flow.empty"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q066.flow.evacuated"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q066.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

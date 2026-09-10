@@ -6,7 +6,7 @@
   "client": "商人のエル",
   "brief": "瓶詰めの星が空になりました。盗まれた光を探してください。",
   "region": 9,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "適温の展示箱へ移し仕組みを示す",
+      "label": "光の寿命と再充填も表示して売る",
       "text": "星は戻りました。エルは光の寿命と再充填の方法も売り札へ書きます。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "光喰いを倒し瓶を強く加熱する",
+      "label": "瓶を強く加熱して明るくする",
       "text": "一瞬は明るくなりました。蓄えた光はすぐ尽き、客は空瓶を持ち帰ります。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "瓶を地上へ戻して返品に応じる",
+      "label": "瓶を地上へ戻し、返品に応じる",
       "text": "商いは縮みました。説明を聞いた客の一部は瓶を残しました。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "商人のエル",
         "observation": "瓶詰めの星が空になりました。盗まれた光を探してください。",
         "belief": "瓶詰めの星が空になりました。盗まれた光を探してください。",
-        "goal": "光喰いを倒し瓶を強く加熱する"
+        "goal": "瓶詰めの星が空になりました。盗まれた光を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "光喰いを倒し瓶を強く加熱する",
-      "alternative": "適温の展示箱へ移し仕組みを示す",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "瓶詰めの星が空になりました。盗まれた光を探してください。",
+      "progression": "光を失った瓶を手で温める実験から、展示箱の設定を実測して調整する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q082.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "栓は開いておらず、掌で温めた瓶だけ細く光ります。"
+          "id": "temperature",
+          "script": "q082.flow.temperature"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "納品票には点灯温度が書かれ、展示室の温度計はそれ以下です。"
+          "id": "spent",
+          "script": "q082.flow.spent"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "label",
+          "script": "q082.flow.label"
         }
       ]
     },
@@ -136,80 +126,125 @@
       "operator": "evidenceRecode",
       "newInformation": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "temperature"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q082.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q082.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q082.clue_a"
+        "id": "entry",
+        "script": "q082.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q082.clue_b"
+        "id": "temperature",
+        "script": "q082.flow.temperature"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q082.decision"
+        "id": "spent",
+        "script": "q082.flow.spent"
+      },
+      {
+        "id": "label",
+        "script": "q082.flow.label"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "光喰いを倒し瓶を強く加熱すると適温の展示箱へ移し仕組みを示すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q082.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q082.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q082.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q082.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "光を失った瓶を手で温める実験から、展示箱の設定を実測して調整する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "光を失った瓶を手で温める実験から、展示箱の設定を実測して調整する。",
+    "flowVersion": 2,
+    "entryScript": "q082.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "栓は開いていない。掌を当てた瓶の側面だけ細く光る。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "掌でゆっくり温める",
+            "to": "temperature"
+          },
+          {
+            "id": "heat",
+            "text": "瓶を強く加熱して明るくする",
+            "to": "@contract"
+          },
+          {
+            "id": "refund",
+            "text": "瓶を地上へ戻し、返品に応じる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "temperature",
+        "text": "$truth 納品票の適温へ戻せば十分だ。展示箱のつまみは低・適温・高の三段になっている。",
+        "options": [
+          {
+            "id": "normal",
+            "text": "適温に設定し、光量を確かめる",
+            "to": "label"
+          },
+          {
+            "id": "high",
+            "text": "高温で明るさを優先する",
+            "to": "spent"
+          },
+          {
+            "id": "refund",
+            "text": "展示をやめ、返品を受け付ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "spent",
+        "text": "瓶は一瞬明るくなり、蓄えを使い切った。温度を戻しても今夜の光は戻らない。",
+        "options": [
+          {
+            "id": "sell",
+            "text": "光を使い切った瓶を、その事情を説明して引き渡す",
+            "to": "@contract"
+          },
+          {
+            "id": "refund",
+            "text": "販売を止め、代金の返却を受け付ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "label",
+        "text": "適温では細い光が続く。エルは「永久の星」という売り札を外した。",
+        "options": [
+          {
+            "id": "instructions",
+            "text": "光の寿命と再充填も表示して売る",
+            "to": "@informed"
+          },
+          {
+            "id": "return",
+            "text": "仕組みを説明し、返品を選べるようにする",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q082.clue_a": {
@@ -705,6 +740,423 @@
             {
               "op": "jump",
               "script": "q082.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q082.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q082.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "栓は開いていない。掌を当てた瓶の側面だけ細く光る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "掌でゆっくり温める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.temperature"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "瓶を強く加熱して明るくする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "refund",
+              "text": "瓶を地上へ戻し、返品に応じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q082.flow.temperature": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q082.node",
+          "value": "temperature"
+        },
+        {
+          "op": "say",
+          "text": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなります。 納品票の適温へ戻せば十分だ。展示箱のつまみは低・適温・高の三段になっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "normal",
+              "text": "適温に設定し、光量を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.label"
+                }
+              ]
+            },
+            {
+              "id": "high",
+              "text": "高温で明るさを優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.spent"
+                }
+              ]
+            },
+            {
+              "id": "refund",
+              "text": "展示をやめ、返品を受け付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q082.flow.spent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q082.node",
+          "value": "spent"
+        },
+        {
+          "op": "say",
+          "text": "瓶は一瞬明るくなり、蓄えを使い切った。温度を戻しても今夜の光は戻らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sell",
+              "text": "光を使い切った瓶を、その事情を説明して引き渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "refund",
+              "text": "販売を止め、代金の返却を受け付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q082.flow.label": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q082.node",
+          "value": "label"
+        },
+        {
+          "op": "say",
+          "text": "適温では細い光が続く。エルは「永久の星」という売り札を外した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "instructions",
+              "text": "光の寿命と再充填も表示して売る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "仕組みを説明し、返品を選べるようにする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q082.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "星は戻りました。エルは光の寿命と再充填の方法も売り札へ書きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q082",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q082.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一瞬は明るくなりました。蓄えた光はすぐ尽き、客は空瓶を持ち帰ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q082",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q082.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "商いは縮みました。説明を聞いた客の一部は瓶を残しました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q082",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q082.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q082.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "星は戻りました。エルは光の寿命と再充填の方法も売り札へ書きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一瞬は明るくなりました。蓄えた光はすぐ尽き、客は空瓶を持ち帰ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "商いは縮みました。説明を聞いた客の一部は瓶を残しました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q082"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q082.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q082.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q082.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "temperature",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q082.flow.temperature"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "spent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q082.flow.spent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "label",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q082.flow.label"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q082.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

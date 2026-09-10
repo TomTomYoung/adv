@@ -6,7 +6,7 @@
   "client": "保守員のイチ",
   "brief": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
   "region": 9,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "測定板だけ交換して観測を続ける",
+      "label": "最後の観測を行い、割れた板を教材として残す",
       "text": "最後の観測も安全に終えました。イチは割れた板を教材に残します。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "窓の星獣を倒し全面を金属で塞ぐ",
+      "label": "窓の全面を金属板で塞ぐ",
       "text": "危険への不安はなくなりました。観測期は過ぎ、次の機会を待ちます。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "観測を中止し窓全体を専門点検へ回す",
+      "label": "観測を中止し、窓全体を専門点検へ回す",
       "text": "慎重すぎるとの声も出ました。点検記録は次の判断材料になります。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "保守員のイチ",
         "observation": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
         "belief": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
-        "goal": "窓の星獣を倒し全面を金属で塞ぐ"
+        "goal": "観測窓が割れ始めました。塞ぐと最後の観測ができません。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "窓の星獣を倒し全面を金属で塞ぐ",
-      "alternative": "測定板だけ交換して観測を続ける",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "観測窓が割れ始めました。塞ぐと最後の観測ができません。",
+      "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q088.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "亀裂は目盛線の層で止まり、背面の反射は連続しています。"
+          "id": "panel",
+          "script": "q088.flow.panel"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "断面図には測定板と耐圧窓が別部品として記されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "observe",
+          "script": "q088.flow.observe"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "valueInvert",
       "newInformation": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "panel"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q088.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q088.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q088.clue_a"
+        "id": "entry",
+        "script": "q088.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q088.clue_b"
+        "id": "panel",
+        "script": "q088.flow.panel"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q088.decision"
+        "id": "observe",
+        "script": "q088.flow.observe"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "窓の星獣を倒し全面を金属で塞ぐと測定板だけ交換して観測を続けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q088.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q088.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q088.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q088.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。",
+    "flowVersion": 2,
+    "entryScript": "q088.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "星が見える時間は今夜だけ。亀裂は目盛線を横切るが、背面の反射は切れていない。",
+        "options": [
+          {
+            "id": "layers",
+            "text": "側面から板の層を確認する",
+            "to": "panel"
+          },
+          {
+            "id": "inspection",
+            "text": "観測を中止し、窓全体を専門点検へ回す",
+            "to": "@compromise"
+          },
+          {
+            "id": "metal",
+            "text": "窓の全面を金属板で塞ぐ",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "text": "$truth 外した測定板の奥に、無傷の耐圧窓が残った。",
+        "options": [
+          {
+            "id": "replace",
+            "text": "測定板だけ交換し、密閉と目盛を点検する",
+            "to": "observe"
+          },
+          {
+            "id": "expert",
+            "text": "自分たちでは判断せず、窓全体を専門点検する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "observe",
+        "text": "点検が終わり、まだ観測の時間が残っている。",
+        "options": [
+          {
+            "id": "sky",
+            "text": "最後の観測を行い、割れた板を教材として残す",
+            "to": "@informed"
+          },
+          {
+            "id": "cancel",
+            "text": "点検済みでも今夜の観測を見送る",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q088.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q088.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "星が見える時間は今夜だけ。亀裂は目盛線を横切るが、背面の反射は切れていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "layers",
+              "text": "側面から板の層を確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.panel"
+                }
+              ]
+            },
+            {
+              "id": "inspection",
+              "text": "観測を中止し、窓全体を専門点検へ回す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "metal",
+              "text": "窓の全面を金属板で塞ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.panel": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "panel"
+        },
+        {
+          "op": "say",
+          "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷です。 外した測定板の奥に、無傷の耐圧窓が残った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "replace",
+              "text": "測定板だけ交換し、密閉と目盛を点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.observe"
+                }
+              ]
+            },
+            {
+              "id": "expert",
+              "text": "自分たちでは判断せず、窓全体を専門点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.observe": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "observe"
+        },
+        {
+          "op": "say",
+          "text": "点検が終わり、まだ観測の時間が残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sky",
+              "text": "最後の観測を行い、割れた板を教材として残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "点検済みでも今夜の観測を見送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "最後の観測も安全に終えました。イチは割れた板を教材に残します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "危険への不安はなくなりました。観測期は過ぎ、次の機会を待ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "慎重すぎるとの声も出ました。点検記録は次の判断材料になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q088.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "最後の観測も安全に終えました。イチは割れた板を教材に残します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "危険への不安はなくなりました。観測期は過ぎ、次の機会を待ちます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "慎重すぎるとの声も出ました。点検記録は次の判断材料になります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q088"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q088.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q088.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "panel",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.panel"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "observe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.observe"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q088.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

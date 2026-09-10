@@ -6,7 +6,7 @@
   "client": "旅人のアセ",
   "brief": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
   "region": 3,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "測定記録を写してから輪を外す",
+      "label": "根を傷めず指輪を外し、記録と共に返す",
       "text": "アセは母の仕事を知りました。指輪は手元に、測定標は庭園に残ります。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "根守りを倒して絡んだ根を切る",
+      "label": "絡んだ根を切り、指輪を回収する",
       "text": "指輪は返りました。通路の膨らみを知らせる最後の印は失われます。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "指輪の写しを作り本体を残す",
+      "label": "本体を残し、指輪の写しを作って渡す",
       "text": "アセは写しを身に着けました。母の名は測定記録の最初に書かれます。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "旅人のアセ",
         "observation": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
         "belief": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
-        "goal": "根守りを倒して絡んだ根を切る"
+        "goal": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "根守りを倒して絡んだ根を切る",
-      "alternative": "測定記録を写してから輪を外す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "木の根に絡んだ母の指輪を取ってほしいと言います。切る許可は得ていません。",
+      "progression": "指輪の回収前に測定を残すか、複製を先に作るかを選ぶ遺品仕事。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q023.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "指輪の内側には名前でなく、前年の根の周囲が刻まれています。"
+          "id": "warning",
+          "script": "q023.flow.warning"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "同じ印の輪が高さ順に並び、最新の輪だけ引き千切れています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "retrieval",
+          "script": "q023.flow.retrieval"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "ruleReveal",
       "newInformation": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "warning"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q023.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q023.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q023.clue_a"
+        "id": "entry",
+        "script": "q023.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q023.clue_b"
+        "id": "warning",
+        "script": "q023.flow.warning"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q023.decision"
+        "id": "retrieval",
+        "script": "q023.flow.retrieval"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "根守りを倒して絡んだ根を切ると測定記録を写してから輪を外すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q023.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q023.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q023.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q023.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "指輪の回収前に測定を残すか、複製を先に作るかを選ぶ遺品仕事。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "指輪の回収前に測定を残すか、複製を先に作るかを選ぶ遺品仕事。",
+    "flowVersion": 2,
+    "entryScript": "q023.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "指輪が根へ食い込み、その脇に母の刻んだ目盛が並ぶ。",
+        "options": [
+          {
+            "id": "measure",
+            "text": "指輪を動かさず、根の太さと目盛を写す",
+            "to": "warning"
+          },
+          {
+            "id": "replica",
+            "text": "本体を残し、指輪の写しを作って渡す",
+            "to": "@compromise"
+          },
+          {
+            "id": "cut",
+            "text": "絡んだ根を切り、指輪を回収する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "warning",
+        "text": "$truth 過去の線より広がった根が、天井の支柱を押している。依頼人は母の指輪より先に住民へ知らせると言う。",
+        "options": [
+          {
+            "id": "notice",
+            "text": "崩落の予告と測定記録を住民へ届ける",
+            "to": "retrieval"
+          },
+          {
+            "id": "leave",
+            "text": "指輪は残し、写しで依頼人へ知らせる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "retrieval",
+        "text": "避難の案内が出た。測定値は保存され、指輪を外しても最後の記録は失われない。",
+        "options": [
+          {
+            "id": "remove",
+            "text": "根を傷めず指輪を外し、記録と共に返す",
+            "to": "@informed"
+          },
+          {
+            "id": "keep",
+            "text": "指輪を測定標として残し、複製を渡す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q023.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q023.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q023.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q023.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "指輪が根へ食い込み、その脇に母の刻んだ目盛が並ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "measure",
+              "text": "指輪を動かさず、根の太さと目盛を写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.warning"
+                }
+              ]
+            },
+            {
+              "id": "replica",
+              "text": "本体を残し、指輪の写しを作って渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "絡んだ根を切り、指輪を回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q023.flow.warning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q023.node",
+          "value": "warning"
+        },
+        {
+          "op": "say",
+          "text": "指輪は母が根の成長を測るために掛けた標識で、地下の崩落を予告しています。 過去の線より広がった根が、天井の支柱を押している。依頼人は母の指輪より先に住民へ知らせると言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "notice",
+              "text": "崩落の予告と測定記録を住民へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.retrieval"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "指輪は残し、写しで依頼人へ知らせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q023.flow.retrieval": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q023.node",
+          "value": "retrieval"
+        },
+        {
+          "op": "say",
+          "text": "避難の案内が出た。測定値は保存され、指輪を外しても最後の記録は失われない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "remove",
+              "text": "根を傷めず指輪を外し、記録と共に返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "指輪を測定標として残し、複製を渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q023.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q023.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "アセは母の仕事を知りました。指輪は手元に、測定標は庭園に残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q023",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q023.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "指輪は返りました。通路の膨らみを知らせる最後の印は失われます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q023",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q023.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "アセは写しを身に着けました。母の名は測定記録の最初に書かれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q023",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q023.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q023.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q023.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "アセは母の仕事を知りました。指輪は手元に、測定標は庭園に残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "指輪は返りました。通路の膨らみを知らせる最後の印は失われます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "アセは写しを身に着けました。母の名は測定記録の最初に書かれます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q023"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q023.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q023.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q023.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q023.flow.warning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retrieval",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q023.flow.retrieval"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q023.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

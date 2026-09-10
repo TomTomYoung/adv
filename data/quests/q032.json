@@ -6,7 +6,7 @@
   "client": "修復師のサイ",
   "brief": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
   "region": 4,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "覗き管を塞ぎ透明でない目を入れる",
+      "label": "覗き管を塞いで不透明な目をはめる",
       "text": "像は元の顔に戻りました。地下牢の監視記録だけが、礼拝堂の外へ出ます。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "宝玉を守る騎士霊を倒して元に戻す",
+      "label": "元の透明な宝玉を戻す",
       "text": "修復師は褒められました。囚人は再び祈りの目を避けて座ります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "片目を残し由来を銘板へ刻む",
+      "label": "片目のまま修復を止め、由来を銘板にする",
       "text": "不完全な像が過去を語り始めました。修復費の残りは牢の整備に回ります。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "修復師のサイ",
         "observation": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
         "belief": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
-        "goal": "宝玉を守る騎士霊を倒して元に戻す"
+        "goal": "聖像の片目を戻す依頼です。外された宝玉を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "宝玉を守る騎士霊を倒して元に戻す",
-      "alternative": "覗き管を塞ぎ透明でない目を入れる",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "聖像の片目を戻す依頼です。外された宝玉を探してください。",
+      "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q032.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "眼窩の奥には彫刻でない磨かれた管が通っています。"
+          "id": "cell",
+          "script": "q032.flow.cell"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "聖像を正面から拝む位置と、牢の見張り台の角度が一致します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "workshop",
+          "script": "q032.flow.workshop"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "evidenceRecode",
       "newInformation": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "cell"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q032.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q032.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q032.clue_a"
+        "id": "entry",
+        "script": "q032.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q032.clue_b"
+        "id": "cell",
+        "script": "q032.flow.cell"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q032.decision"
+        "id": "workshop",
+        "script": "q032.flow.workshop"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "宝玉を守る騎士霊を倒して元に戻すと覗き管を塞ぎ透明でない目を入れるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q032.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q032.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q032.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q032.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。",
+    "flowVersion": 2,
+    "entryScript": "q032.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "片目の穴には小さな風が通る。宝玉は元の棚へ戻っている。",
+        "options": [
+          {
+            "id": "look",
+            "text": "目の穴を覗く",
+            "to": "cell"
+          },
+          {
+            "id": "restore",
+            "text": "元の透明な宝玉を戻す",
+            "to": "@contract"
+          },
+          {
+            "id": "plate",
+            "text": "片目のまま修復を止め、由来を銘板にする",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "cell",
+        "text": "穴の先は地下牢だった。囚人が「誰が見ている」と顔を隠す。$truth",
+        "options": [
+          {
+            "id": "opaque",
+            "text": "見通せない石の目を用意する",
+            "to": "workshop"
+          },
+          {
+            "id": "leave",
+            "text": "穴の由来を記し、今の姿を保存する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "workshop",
+        "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。",
+        "options": [
+          {
+            "id": "stone",
+            "text": "覗き管を塞いで不透明な目をはめる",
+            "to": "@informed"
+          },
+          {
+            "id": "original",
+            "text": "元の見張り用宝玉へ戻す",
+            "to": "@contract"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q032.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q032.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q032.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q032.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "片目の穴には小さな風が通る。宝玉は元の棚へ戻っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "look",
+              "text": "目の穴を覗く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.cell"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "元の透明な宝玉を戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "plate",
+              "text": "片目のまま修復を止め、由来を銘板にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q032.flow.cell": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q032.node",
+          "value": "cell"
+        },
+        {
+          "op": "say",
+          "text": "穴の先は地下牢だった。囚人が「誰が見ている」と顔を隠す。片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開します。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "opaque",
+              "text": "見通せない石の目を用意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.workshop"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "穴の由来を記し、今の姿を保存する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q032.flow.workshop": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q032.node",
+          "value": "workshop"
+        },
+        {
+          "op": "say",
+          "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stone",
+              "text": "覗き管を塞いで不透明な目をはめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "original",
+              "text": "元の見張り用宝玉へ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q032.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q032.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "像は元の顔に戻りました。地下牢の監視記録だけが、礼拝堂の外へ出ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q032",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q032.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "修復師は褒められました。囚人は再び祈りの目を避けて座ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q032",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q032.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "不完全な像が過去を語り始めました。修復費の残りは牢の整備に回ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q032",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q032.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q032.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "像は元の顔に戻りました。地下牢の監視記録だけが、礼拝堂の外へ出ます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "修復師は褒められました。囚人は再び祈りの目を避けて座ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "不完全な像が過去を語り始めました。修復費の残りは牢の整備に回ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q032"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q032.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q032.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q032.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cell",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q032.flow.cell"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "workshop",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q032.flow.workshop"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q032.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

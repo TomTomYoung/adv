@@ -6,7 +6,7 @@
   "client": "聖歌隊のキリ",
   "brief": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
   "region": 4,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "録音と生歌の役割を明示して共演する",
+      "label": "録音・生歌・編曲の役を明示して公演する",
       "text": "歌手は声の代わりに指揮を執りました。七人の名が揃って礼拝録に残ります。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "録音を守る影を倒し六人だけにする",
+      "label": "録音を止め、六人だけで歌う",
       "text": "合唱は純粋な生声になりました。キリは失われた低音を一人で探します。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "録音を追悼曲として別に流す",
+      "label": "録音を別の追悼曲として流す",
       "text": "本番は六人、終わりは七人になりました。拍手は調律室にも届きます。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "聖歌隊のキリ",
         "observation": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
         "belief": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
-        "goal": "録音を守る影を倒し六人だけにする"
+        "goal": "六人の合唱に七人目が混じります。悪霊なら祓ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "録音を守る影を倒し六人だけにする",
-      "alternative": "録音と生歌の役割を明示して共演する",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "六人の合唱に七人目が混じります。悪霊なら祓ってください。",
+      "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q036.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "七番目の息継ぎだけ、何度歌っても全く同じ長さです。"
+          "id": "recording",
+          "script": "q036.flow.recording"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "裏の調律室には声を出さない指導者と、擦り切れた譜面があります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "credit",
+          "script": "q036.flow.credit"
         }
       ]
     },
@@ -136,80 +122,95 @@
       "operator": "pathHide",
       "newInformation": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "recording"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q036.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q036.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q036.clue_a"
+        "id": "entry",
+        "script": "q036.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q036.clue_b"
+        "id": "recording",
+        "script": "q036.flow.recording"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q036.decision"
+        "id": "credit",
+        "script": "q036.flow.credit"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "録音を守る影を倒し六人だけにすると録音と生歌の役割を明示して共演するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q036.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q036.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q036.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q036.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。",
+    "flowVersion": 2,
+    "entryScript": "q036.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "六人の口が動き、七つの声が聞こえる。指揮台には声を失った元団員がいる。",
+        "options": [
+          {
+            "id": "solo",
+            "text": "生歌だけ一度止めてもらう",
+            "to": "recording"
+          },
+          {
+            "id": "cut",
+            "text": "録音を止め、六人だけで歌う",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "recording",
+        "text": "残った一声へ、指揮者が拍を送った。$truth",
+        "options": [
+          {
+            "id": "rehearse",
+            "text": "録音と生歌の入りを合わせて練習する",
+            "to": "credit"
+          },
+          {
+            "id": "memorial",
+            "text": "録音を別の追悼曲として流す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "credit",
+        "text": "共演は形になった。指揮者は録音を自分の今の声とは紹介せず、録音時期と現在の役目を並べたいと言う。",
+        "options": [
+          {
+            "id": "program",
+            "text": "録音・生歌・編曲の役を明示して公演する",
+            "to": "@informed"
+          },
+          {
+            "id": "separate",
+            "text": "共演をやめ、録音を別枠へ移す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q036.clue_a": {
@@ -705,6 +706,347 @@
             {
               "op": "jump",
               "script": "q036.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q036.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q036.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "六人の口が動き、七つの声が聞こえる。指揮台には声を失った元団員がいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "solo",
+              "text": "生歌だけ一度止めてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.recording"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "録音を止め、六人だけで歌う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q036.flow.recording": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q036.node",
+          "value": "recording"
+        },
+        {
+          "op": "say",
+          "text": "残った一声へ、指揮者が拍を送った。七番目は退団した歌手の録音で、声を失った本人が合唱を整えています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rehearse",
+              "text": "録音と生歌の入りを合わせて練習する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.credit"
+                }
+              ]
+            },
+            {
+              "id": "memorial",
+              "text": "録音を別の追悼曲として流す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q036.flow.credit": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q036.node",
+          "value": "credit"
+        },
+        {
+          "op": "say",
+          "text": "共演は形になった。指揮者は録音を自分の今の声とは紹介せず、録音時期と現在の役目を並べたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "program",
+              "text": "録音・生歌・編曲の役を明示して公演する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "共演をやめ、録音を別枠へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q036.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q036.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌手は声の代わりに指揮を執りました。七人の名が揃って礼拝録に残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q036",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q036.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "合唱は純粋な生声になりました。キリは失われた低音を一人で探します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q036",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q036.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本番は六人、終わりは七人になりました。拍手は調律室にも届きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q036",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q036.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q036.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "歌手は声の代わりに指揮を執りました。七人の名が揃って礼拝録に残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "合唱は純粋な生声になりました。キリは失われた低音を一人で探します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本番は六人、終わりは七人になりました。拍手は調律室にも届きます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q036"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q036.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q036.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q036.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recording",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q036.flow.recording"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "credit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q036.flow.credit"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q036.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

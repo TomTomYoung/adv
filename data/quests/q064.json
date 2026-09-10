@@ -6,7 +6,7 @@
   "client": "漁師のハル",
   "brief": "沈没城の砲が鳴り、魚が逃げます。止める方法を探してください。",
   "region": 7,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "警報を鐘へ替え海獣の道を避ける",
+      "label": "砲の代わりに鐘へ圧力管をつなぐ",
       "text": "漁師は静かな警戒法を得ました。安全な湾での漁が再開します。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "砲を守る海獣を倒し機構を壊す",
+      "label": "圧力式の砲を壊す",
       "text": "一頭は倒れ、海は静まりました。次の影を知らせる音はありません。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "発砲時刻を記して漁の時間を変える",
+      "label": "接近と発砲の時刻を記して漁をずらす",
       "text": "根本の脅威は残りました。ハルは砲声を聞いて網を引くようになります。",
       "gold": 83,
       "xp": 87
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "漁師のハル",
         "observation": "沈没城の砲が鳴り、魚が逃げます。止める方法を探してください。",
         "belief": "沈没城の砲が鳴り、魚が逃げます。止める方法を探してください。",
-        "goal": "砲を守る海獣を倒し機構を壊す"
+        "goal": "沈没城の砲が鳴り、魚が逃げます。止める方法を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "砲を守る海獣を倒し機構を壊す",
-      "alternative": "警報を鐘へ替え海獣の道を避ける",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "沈没城の砲が鳴り、魚が逃げます。止める方法を探してください。",
+      "progression": "砲声の前後で魚の移動を観察し、漁の時間変更か警報機の改造へ進む。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q064.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "砲口に弾痕はなく、海獣の擦り傷が検知杭に残っています。"
+          "id": "pressure",
+          "script": "q064.flow.pressure"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "魚群の移動は砲声の後ですが、大きな影はその前から近づいています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "bay",
+          "script": "q064.flow.bay"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "referenceSwap",
       "newInformation": "砲は海獣の接近を知らせる圧力式警報で、魚が逃げる先は安全な湾です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "pressure"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q064.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q064.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q064.clue_a"
+        "id": "entry",
+        "script": "q064.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q064.clue_b"
+        "id": "pressure",
+        "script": "q064.flow.pressure"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q064.decision"
+        "id": "bay",
+        "script": "q064.flow.bay"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "砲を守る海獣を倒し機構を壊すと警報を鐘へ替え海獣の道を避けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q064.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q064.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q064.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q064.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "砲声の前後で魚の移動を観察し、漁の時間変更か警報機の改造へ進む。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "砲声の前後で魚の移動を観察し、漁の時間変更か警報機の改造へ進む。",
+    "flowVersion": 2,
+    "entryScript": "q064.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "砲声の後、魚群は隣の湾へ移る。漁師は次の砲声を待っている。",
+        "options": [
+          {
+            "id": "before",
+            "text": "砲が鳴る前の海面を見張る",
+            "to": "pressure"
+          },
+          {
+            "id": "after",
+            "text": "魚の移る安全な湾へ先回りする",
+            "to": "bay"
+          },
+          {
+            "id": "break",
+            "text": "圧力式の砲を壊す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "pressure",
+        "text": "海獣が遠くを通ると圧力管が動き、砲が鳴った。$truth",
+        "options": [
+          {
+            "id": "bell",
+            "text": "砲の代わりに鐘へ圧力管をつなぐ",
+            "to": "@informed"
+          },
+          {
+            "id": "schedule",
+            "text": "接近と発砲の時刻を記して漁をずらす",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "bay",
+        "text": "この湾には海獣が入れない。魚の移動は損失だけでなく退避にもなっていた。",
+        "options": [
+          {
+            "id": "fish",
+            "text": "砲声に合わせて湾で漁をする時刻表を作る",
+            "to": "@compromise"
+          },
+          {
+            "id": "mechanism",
+            "text": "砲の圧力管を調べ、鐘へ改造する",
+            "to": "pressure"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q064.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q064.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q064.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q064.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "砲声の後、魚群は隣の湾へ移る。漁師は次の砲声を待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "before",
+              "text": "砲が鳴る前の海面を見張る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.pressure"
+                }
+              ]
+            },
+            {
+              "id": "after",
+              "text": "魚の移る安全な湾へ先回りする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.bay"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "圧力式の砲を壊す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q064.flow.pressure": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q064.node",
+          "value": "pressure"
+        },
+        {
+          "op": "say",
+          "text": "海獣が遠くを通ると圧力管が動き、砲が鳴った。砲は海獣の接近を知らせる圧力式警報で、魚が逃げる先は安全な湾です。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bell",
+              "text": "砲の代わりに鐘へ圧力管をつなぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "schedule",
+              "text": "接近と発砲の時刻を記して漁をずらす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q064.flow.bay": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q064.node",
+          "value": "bay"
+        },
+        {
+          "op": "say",
+          "text": "この湾には海獣が入れない。魚の移動は損失だけでなく退避にもなっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "砲声に合わせて湾で漁をする時刻表を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "mechanism",
+              "text": "砲の圧力管を調べ、鐘へ改造する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q064.flow.pressure"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q064.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "漁師は静かな警戒法を得ました。安全な湾での漁が再開します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q064",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q064.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一頭は倒れ、海は静まりました。次の影を知らせる音はありません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q064",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q064.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "根本の脅威は残りました。ハルは砲声を聞いて網を引くようになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q064",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q064.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q064.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q064.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "漁師は静かな警戒法を得ました。安全な湾での漁が再開します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一頭は倒れ、海は静まりました。次の影を知らせる音はありません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "根本の脅威は残りました。ハルは砲声を聞いて網を引くようになります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q064"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q064.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q064.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q064.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "pressure",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q064.flow.pressure"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bay",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q064.flow.bay"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q064.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

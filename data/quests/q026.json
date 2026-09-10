@@ -6,7 +6,7 @@
   "client": "果樹番のレイ",
   "brief": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
   "region": 3,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,22 +35,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "売られた穂を戻して接ぎ直す",
+      "label": "翌季まで手入れし、新芽と代わりの苗を確認する",
       "text": "収穫は先になります。レイは今年の空籠を、来年の苗代として受け入れます。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "寄生獣を倒し台木を燃料にする",
+      "label": "台木を切り、燃料にする",
       "text": "薪代は入りました。果樹園の並びには一本分の空が残ります。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "別の木から穂を分けて育てる",
+      "label": "近くの木から穂を分けてもらう",
       "text": "違う味の実がなることになりました。失った枝の話は、新しい木の名に残ります。",
       "gold": 52,
       "xp": 63
+    },
+    "grafted": {
+      "gold": 81,
+      "xp": 63,
+      "label": "定着確認を依頼人へ任せる",
+      "text": "元の穂は戻った。まだ実の約束はできず、定着の確認と買主へ渡す苗の世話を依頼人が引き受けた。"
     }
   },
   "model": {
@@ -69,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +84,7 @@
         "name": "果樹番のレイ",
         "observation": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
         "belief": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
-        "goal": "寄生獣を倒し台木を燃料にする"
+        "goal": "同じ木だけ実りません。呪いと噂される枝を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "寄生獣を倒し台木を燃料にする",
-      "alternative": "売られた穂を戻して接ぎ直す",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "同じ木だけ実りません。呪いと噂される枝を調べてください。",
+      "progression": "木の回収依頼が、売られた接ぎ穂の返還交渉と翌季の定着確認へ伸びる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q026.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "切り口は病気で黒くなっておらず、商人の封蝋が残っています。"
+          "id": "buyer",
+          "script": "q026.flow.buyer"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "隣の鉢の枝は同じ樹皮を持ち、移植票の値段だけが隠されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "graft",
+          "script": "q026.flow.graft"
         }
       ]
     },
@@ -136,80 +128,100 @@
       "operator": "pathHide",
       "newInformation": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "buyer"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q026.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q026.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q026.clue_a"
+        "id": "entry",
+        "script": "q026.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q026.clue_b"
+        "id": "buyer",
+        "script": "q026.flow.buyer"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q026.decision"
+        "id": "graft",
+        "script": "q026.flow.graft"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "寄生獣を倒し台木を燃料にすると売られた穂を戻して接ぎ直すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q026.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q026.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q026.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q026.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "木の回収依頼が、売られた接ぎ穂の返還交渉と翌季の定着確認へ伸びる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "木の回収依頼が、売られた接ぎ穂の返還交渉と翌季の定着確認へ伸びる。",
+    "flowVersion": 2,
+    "entryScript": "q026.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "木は葉を伸ばすのに実がならない。切り口には接ぎ木の跡と売却札が残る。",
+        "options": [
+          {
+            "id": "buyer",
+            "text": "売却先へ接ぎ穂を訪ねる",
+            "to": "buyer"
+          },
+          {
+            "id": "new",
+            "text": "近くの木から穂を分けてもらう",
+            "to": "@compromise"
+          },
+          {
+            "id": "fuel",
+            "text": "台木を切り、燃料にする",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "buyer",
+        "text": "$truth 買主は花の付いた穂を見せた。「返すなら、こちらへ別の苗を育ててほしい」",
+        "options": [
+          {
+            "id": "agree",
+            "text": "苗を育てる約束で元の穂を戻す",
+            "to": "graft"
+          },
+          {
+            "id": "decline",
+            "text": "返還を断り、別の木から穂を分ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "graft",
+        "text": "戻した穂を接いだ。ここで依頼を終えれば、根付いたかは分からない。季節の移り変わりを場面として進められる。",
+        "options": [
+          {
+            "id": "season",
+            "text": "翌季まで手入れし、新芽と代わりの苗を確認する",
+            "to": "@informed"
+          },
+          {
+            "id": "leave",
+            "text": "定着確認を依頼人へ任せる",
+            "to": "@grafted"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q026.clue_a": {
@@ -705,6 +717,393 @@
             {
               "op": "jump",
               "script": "q026.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q026.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q026.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "木は葉を伸ばすのに実がならない。切り口には接ぎ木の跡と売却札が残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "buyer",
+              "text": "売却先へ接ぎ穂を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.buyer"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "近くの木から穂を分けてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "fuel",
+              "text": "台木を切り、燃料にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q026.flow.buyer": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q026.node",
+          "value": "buyer"
+        },
+        {
+          "op": "say",
+          "text": "木は接ぎ木の台木で、実る枝を外へ売られた後も養分を送り続けています。 買主は花の付いた穂を見せた。「返すなら、こちらへ別の苗を育ててほしい」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "苗を育てる約束で元の穂を戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.graft"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "返還を断り、別の木から穂を分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q026.flow.graft": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q026.node",
+          "value": "graft"
+        },
+        {
+          "op": "say",
+          "text": "戻した穂を接いだ。ここで依頼を終えれば、根付いたかは分からない。季節の移り変わりを場面として進められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "season",
+              "text": "翌季まで手入れし、新芽と代わりの苗を確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "定着確認を依頼人へ任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q026.flow.end.grafted"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q026.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "収穫は先になります。レイは今年の空籠を、来年の苗代として受け入れます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q026",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q026.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "薪代は入りました。果樹園の並びには一本分の空が残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q026",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q026.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "違う味の実がなることになりました。失った枝の話は、新しい木の名に残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q026",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q026.flow.end.grafted": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "元の穂は戻った。まだ実の約束はできず、定着の確認と買主へ渡す苗の世話を依頼人が引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q026",
+              "outcome": "grafted"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q026.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q026.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q026.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "収穫は先になります。レイは今年の空籠を、来年の苗代として受け入れます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "薪代は入りました。果樹園の並びには一本分の空が残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "違う味の実がなることになりました。失った枝の話は、新しい木の名に残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "grafted",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "元の穂は戻った。まだ実の約束はできず、定着の確認と買主へ渡す苗の世話を依頼人が引き受けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q026"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q026.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q026.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q026.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "buyer",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q026.flow.buyer"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "graft",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q026.flow.graft"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q026.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "宿守のネム",
   "brief": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
   "region": 10,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "必要な人だけ匿名契約を続けられるようにする",
+      "label": "別々の契約として二人の意思を保存する",
       "text": "名を戻す人も残す人も選べました。宿守は番号の横に同意日を記します。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "名を奪う影を倒し全ての名を解放する",
+      "label": "全員の匿名契約を一律に解除する",
       "text": "名前は戻りました。隠れていた客は、別の避難先を探して宿を出ます。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "名を預けたまま帰還証を発行する",
+      "label": "名を預けたまま使える帰還証を発行する",
       "text": "町へは戻れました。本名を取り戻す日は、本人が決めることになります。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "宿守のネム",
         "observation": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
         "belief": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
-        "goal": "名を奪う影を倒し全ての名を解放する"
+        "goal": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "名を奪う影を倒し全ての名を解放する",
-      "alternative": "必要な人だけ匿名契約を続けられるようにする",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "深淵の宿で泊まった人が名乗らなくなります。理由を調べてください。",
+      "progression": "宿泊客の匿名契約を本人ごとに見直し、戻す名と預け続ける名を混在させる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q093.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "客は昔の話を覚え、名前を言う時だけ入口の鈴が鳴ります。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "宿帳には偽名でなく番号があり、追跡者を退けた記録が載っています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "guests",
+          "script": "q093.flow.guests"
         }
       ]
     },
@@ -136,80 +118,138 @@
       "operator": "ruleReveal",
       "newInformation": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "guests"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q093.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q093.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q093.clue_a"
+        "id": "entry",
+        "script": "q093.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q093.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q093.decision"
+        "id": "guests",
+        "script": "q093.flow.guests"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "名を奪う影を倒し全ての名を解放すると必要な人だけ匿名契約を続けられるようにするの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q093.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q093.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q093.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q093.one",
+        "meaning": "各場面に明記した one の行為・合意の記録",
+        "writer": [
+          "guests"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q093.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q093.two",
+        "meaning": "各場面に明記した two の行為・合意の記録",
+        "writer": [
+          "guests"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "宿泊客の匿名契約を本人ごとに見直し、戻す名と預け続ける名を混在させる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "宿泊客の匿名契約を本人ごとに見直し、戻す名と預け続ける名を混在させる。",
+    "flowVersion": 2,
+    "entryScript": "q093.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "宿帳は番号だけ。客は過去を覚えているが、名乗る時だけ入口の鈴が鳴る。",
+        "options": [
+          {
+            "id": "contract",
+            "text": "宿守と客へ、名前を預ける契約を聞く",
+            "to": "guests"
+          },
+          {
+            "id": "release",
+            "text": "全員の匿名契約を一律に解除する",
+            "to": "@contract"
+          },
+          {
+            "id": "certificate",
+            "text": "名を預けたまま使える帰還証を発行する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "guests",
+        "text": "$truth 一番の客は家族へ名乗りたい。二番の客は追跡を避け、まだ番号を使いたい。",
+        "options": [
+          {
+            "id": "one",
+            "text": "一番の客の意思で名前を返す",
+            "to": "guests",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q093.one"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "one": true
+            }
+          },
+          {
+            "id": "two",
+            "text": "二番の客の匿名継続への同意日を記す",
+            "to": "guests",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q093.two"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "two": true
+            }
+          },
+          {
+            "id": "renew",
+            "text": "別々の契約として二人の意思を保存する",
+            "to": "@informed",
+            "need": [
+              "one",
+              "two"
+            ]
+          },
+          {
+            "id": "paper",
+            "text": "契約を変えず、帰還証の発行を優先する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q093.clue_a": {
@@ -651,6 +691,385 @@
             {
               "op": "jump",
               "script": "q093.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q093.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q093.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "宿帳は番号だけ。客は過去を覚えているが、名乗る時だけ入口の鈴が鳴る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "宿守と客へ、名前を預ける契約を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q093.flow.guests"
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "text": "全員の匿名契約を一律に解除する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q093.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "certificate",
+              "text": "名を預けたまま使える帰還証を発行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q093.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q093.flow.guests": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q093.node",
+          "value": "guests"
+        },
+        {
+          "op": "say",
+          "text": "宿は追跡を避ける避難所で、名前を封じることを宿代にしています。 一番の客は家族へ名乗りたい。二番の客は追跡を避け、まだ番号を使いたい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "one",
+              "text": "一番の客の意思で名前を返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q093.one"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q093.one",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q093.flow.guests"
+                }
+              ]
+            },
+            {
+              "id": "two",
+              "text": "二番の客の匿名継続への同意日を記す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q093.two"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q093.two",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q093.flow.guests"
+                }
+              ]
+            },
+            {
+              "id": "renew",
+              "text": "別々の契約として二人の意思を保存する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q093.one"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q093.two"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「一番の客の意思で名前を返す」・先に「二番の客の匿名継続への同意日を記す」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q093.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "paper",
+              "text": "契約を変えず、帰還証の発行を優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q093.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q093.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "名を戻す人も残す人も選べました。宿守は番号の横に同意日を記します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q093",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q093.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "名前は戻りました。隠れていた客は、別の避難先を探して宿を出ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q093",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q093.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "町へは戻れました。本名を取り戻す日は、本人が決めることになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q093",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q093.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q093.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q093.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "名を戻す人も残す人も選べました。宿守は番号の横に同意日を記します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "名前は戻りました。隠れていた客は、別の避難先を探して宿を出ます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "町へは戻れました。本名を取り戻す日は、本人が決めることになります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q093"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q093.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q093.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q093.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guests",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q093.flow.guests"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q093.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

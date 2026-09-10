@@ -6,7 +6,7 @@
   "client": "葬送師のアオ",
   "brief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
   "region": 7,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "潮の切替を待ち供油路をつなぐ",
+      "label": "止まった潮で供油路をつなぎ、灯を送る",
       "text": "灯は遺灰と進みました。葬送師は待つ時間も儀式へ組み込みます。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "灯を呑む影を倒して強い油を流す",
+      "label": "強い油を流し、灯を長く燃やす",
       "text": "火は通りました。水面に残る油を、翌日漁師が回収します。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "灯を持ち帰り岸で弔う",
+      "label": "灯を岸へ持ち帰って弔う",
       "text": "海へ届く道は変わりました。遺族は火を見ながら別れを言えました。",
       "gold": 83,
       "xp": 87
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "葬送師のアオ",
         "observation": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
         "belief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
-        "goal": "灯を呑む影を倒して強い油を流す"
+        "goal": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "灯を呑む影を倒して強い油を流す",
-      "alternative": "潮の切替を待ち供油路をつなぐ",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "水中で燃える灯へ遺灰を届けてください。途中で灯が消えます。",
+      "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q065.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "供油室の潮見表は、灯の消えた時刻と一致します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "tide",
+          "script": "q065.flow.tide"
         }
       ]
     },
@@ -135,81 +117,159 @@
     "reveal": {
       "operator": "frameShift",
       "newInformation": "灯は油の膜を辿り、潮の切替で流れが途切れると消えます。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q065.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q065.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q065.clue_a"
+        "id": "entry",
+        "script": "q065.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q065.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q065.decision"
+        "id": "tide",
+        "script": "q065.flow.tide"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "灯を呑む影を倒して強い油を流すと潮の切替を待ち供油路をつなぐの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q065.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q065.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q065.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q065.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q065.phase",
+        "meaning": "各場面に明記した phase の行為・合意の記録",
+        "writer": [
+          "entry",
+          "tide"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。",
+    "flowVersion": 2,
+    "entryScript": "q065.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "水上の灯が潮目で消えた。油膜は二つに切れている。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "潮の変わり目まで灯を預かる",
+            "to": "tide",
+            "set": {
+              "phase": 0
+            }
+          },
+          {
+            "id": "oil",
+            "text": "強い油を流し、灯を長く燃やす",
+            "to": "@contract"
+          },
+          {
+            "id": "shore",
+            "text": "灯を岸へ持ち帰って弔う",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "tide",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q065.phase"
+              },
+              "right": 0
+            },
+            "yes": "流れはまだ外へ向く。継ぎ足した油も離れていく。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q065.phase"
+                },
+                "right": 1
+              },
+              "yes": "潮が止まり、二つの油膜の端が近づいた。今なら供油路をつなげられる。",
+              "no": "潮は内側へ向き、油膜はつながる場所を過ぎた。次の切替を待てる。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "wait",
+            "text": "潮をもう一段待つ",
+            "to": "tide",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.flow.q065.phase"
+              },
+              "right": 2
+            },
+            "set": {
+              "phase": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.flow.q065.phase"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "cycle",
+            "text": "次の潮替わりまで待ち直す",
+            "to": "tide",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q065.phase"
+              },
+              "right": 2
+            },
+            "set": {
+              "phase": 0
+            }
+          },
+          {
+            "id": "join",
+            "text": "止まった潮で供油路をつなぎ、灯を送る",
+            "to": "@informed",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q065.phase"
+              },
+              "right": 1
+            }
+          },
+          {
+            "id": "return",
+            "text": "待つのをやめ、岸で弔う",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q065.clue_a": {
@@ -651,6 +711,421 @@
             {
               "op": "jump",
               "script": "q065.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q065.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "水上の灯が潮目で消えた。油膜は二つに切れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮の変わり目まで灯を預かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "強い油を流し、灯を長く燃やす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "shore",
+              "text": "灯を岸へ持ち帰って弔う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.tide": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q065.node",
+          "value": "tide"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q065.phase"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "流れはまだ外へ向く。継ぎ足した油も離れていく。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q065.phase"
+                },
+                "right": 1
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "潮が止まり、二つの油膜の端が近づいた。今なら供油路をつなげられる。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "潮は内側へ向き、油膜はつながる場所を過ぎた。次の切替を待てる。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮をもう一段待つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q065.phase"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "cycle",
+              "text": "次の潮替わりまで待ち直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "止まった潮で供油路をつなぎ、灯を送る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 1
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "待つのをやめ、岸で弔う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯は遺灰と進みました。葬送師は待つ時間も儀式へ組み込みます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "火は通りました。水面に残る油を、翌日漁師が回収します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "海へ届く道は変わりました。遺族は火を見ながら別れを言えました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q065.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "灯は遺灰と進みました。葬送師は待つ時間も儀式へ組み込みます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "火は通りました。水面に残る油を、翌日漁師が回収します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "海へ届く道は変わりました。遺族は火を見ながら別れを言えました。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q065"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q065.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q065.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tide",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.flow.tide"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q065.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "暦職人のツキ",
   "brief": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
   "region": 9,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "正しい向きへ戻し暦の移行日を設ける",
+      "label": "予定を移してから暦の移行日を設ける",
       "text": "暦は揃いました。飛ぶ日付に予定された仕事には別の日が割り当てられます。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "天球の守り手を倒し現行暦へ歯車を削る",
+      "label": "現行暦に合うよう天球儀の歯車を削る",
       "text": "今の暮らしとは合いました。別の観測所との換算表が必要になります。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "二つの暦を併用し急な変更を避ける",
+      "label": "現行暦と天球儀の暦を併記する",
       "text": "混乱は小さく済みました。ツキは一冊の暦に二本の欄を作ります。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "暦職人のツキ",
         "observation": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
         "belief": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
-        "goal": "天球の守り手を倒し現行暦へ歯車を削る"
+        "goal": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "天球の守り手を倒し現行暦へ歯車を削る",
-      "alternative": "正しい向きへ戻し暦の移行日を設ける",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "天球儀を直すと地下の暦が一月ずれます。どちらが正しいか調べてください。",
+      "progression": "天球儀の向きはすぐ直せるが、失われる日付の予定を移して初めて暦を切り替える。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q089.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "文字は南側から読むと正立し、持ち手の摩耗もそちらに偏っています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "移設前の図では台が逆向きで、暦の補正は移設年から始まっています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "dates",
+          "script": "q089.flow.dates"
         }
       ]
     },
@@ -136,80 +118,138 @@
       "operator": "observerSwap",
       "newInformation": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "dates"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q089.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q089.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q089.clue_a"
+        "id": "entry",
+        "script": "q089.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q089.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q089.decision"
+        "id": "dates",
+        "script": "q089.flow.dates"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "天球の守り手を倒し現行暦へ歯車を削ると正しい向きへ戻し暦の移行日を設けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q089.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q089.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q089.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q089.wedding",
+        "meaning": "各場面に明記した wedding の行為・合意の記録",
+        "writer": [
+          "dates"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q089.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q089.wages",
+        "meaning": "各場面に明記した wages の行為・合意の記録",
+        "writer": [
+          "dates"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "天球儀の向きはすぐ直せるが、失われる日付の予定を移して初めて暦を切り替える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "天球儀の向きはすぐ直せるが、失われる日付の予定を移して初めて暦を切り替える。",
+    "flowVersion": 2,
+    "entryScript": "q089.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "南へ回ると天球儀の字が正立した。持ち手の摩耗も南側にある。",
+        "options": [
+          {
+            "id": "turn",
+            "text": "台を南向きへ戻す",
+            "to": "dates"
+          },
+          {
+            "id": "two",
+            "text": "現行暦と天球儀の暦を併記する",
+            "to": "@compromise"
+          },
+          {
+            "id": "gears",
+            "text": "現行暦に合うよう天球儀の歯車を削る",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "dates",
+        "text": "$truth 補正を外すと一月飛ぶ。婚礼と賃金支払が、その月へ予定されている。",
+        "options": [
+          {
+            "id": "wedding",
+            "text": "婚礼の当事者と代わりの日を決める",
+            "to": "dates",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q089.wedding"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "wedding": true
+            }
+          },
+          {
+            "id": "wages",
+            "text": "工房と支払日を移す",
+            "to": "dates",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q089.wages"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "wages": true
+            }
+          },
+          {
+            "id": "switch",
+            "text": "予定を移してから暦の移行日を設ける",
+            "to": "@informed",
+            "need": [
+              "wedding",
+              "wages"
+            ]
+          },
+          {
+            "id": "keep",
+            "text": "急な切替をやめ、二つの暦を併用する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q089.clue_a": {
@@ -651,6 +691,385 @@
             {
               "op": "jump",
               "script": "q089.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q089.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q089.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "南へ回ると天球儀の字が正立した。持ち手の摩耗も南側にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "turn",
+              "text": "台を南向きへ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q089.flow.dates"
+                }
+              ]
+            },
+            {
+              "id": "two",
+              "text": "現行暦と天球儀の暦を併記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q089.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "gears",
+              "text": "現行暦に合うよう天球儀の歯車を削る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q089.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q089.flow.dates": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q089.node",
+          "value": "dates"
+        },
+        {
+          "op": "say",
+          "text": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられています。 補正を外すと一月飛ぶ。婚礼と賃金支払が、その月へ予定されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wedding",
+              "text": "婚礼の当事者と代わりの日を決める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q089.wedding"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q089.wedding",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q089.flow.dates"
+                }
+              ]
+            },
+            {
+              "id": "wages",
+              "text": "工房と支払日を移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q089.wages"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q089.wages",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q089.flow.dates"
+                }
+              ]
+            },
+            {
+              "id": "switch",
+              "text": "予定を移してから暦の移行日を設ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q089.wedding"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q089.wages"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「婚礼の当事者と代わりの日を決める」・先に「工房と支払日を移す」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q089.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "急な切替をやめ、二つの暦を併用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q089.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q089.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "暦は揃いました。飛ぶ日付に予定された仕事には別の日が割り当てられます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q089",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q089.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今の暮らしとは合いました。別の観測所との換算表が必要になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q089",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q089.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "混乱は小さく済みました。ツキは一冊の暦に二本の欄を作ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q089",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q089.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q089.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q089.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "暦は揃いました。飛ぶ日付に予定された仕事には別の日が割り当てられます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今の暮らしとは合いました。別の観測所との換算表が必要になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "混乱は小さく済みました。ツキは一冊の暦に二本の欄を作ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q089"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q089.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q089.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q089.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "dates",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q089.flow.dates"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q089.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

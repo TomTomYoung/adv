@@ -6,7 +6,7 @@
   "client": "仮面師のチセ",
   "brief": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
   "region": 4,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "共同所有を認め修理帳へ全員の印を残す",
+      "label": "共同修理帳へ三つの印を残す",
       "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "仮面の亡霊を倒し最初の買い手へ返す",
+      "label": "最初の買い手を所有者として仮面を返す",
       "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "原型だけ保存し人数分の複製を作る",
+      "label": "原型を保存し、人数分の複製を作る",
       "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "仮面師のチセ",
         "observation": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
         "belief": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
-        "goal": "仮面の亡霊を倒し最初の買い手へ返す"
+        "goal": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "仮面の亡霊を倒し最初の買い手へ返す",
-      "alternative": "共同所有を認め修理帳へ全員の印を残す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "礼拝用の仮面が持ち主を替えて出回っています。原型を回収してください。",
+      "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q039.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "内側の額当ては交換式で、同じ顔に何人分もの汗跡があります。"
+          "id": "owners",
+          "script": "q039.flow.owners"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "注文帳には個人名でなく、その日の聞き手の人数が記されています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "account",
+          "script": "q039.flow.account"
         }
       ]
     },
@@ -136,80 +122,95 @@
       "operator": "observerSwap",
       "newInformation": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "owners"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q039.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q039.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q039.clue_a"
+        "id": "entry",
+        "script": "q039.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q039.clue_b"
+        "id": "owners",
+        "script": "q039.flow.owners"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q039.decision"
+        "id": "account",
+        "script": "q039.flow.account"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "仮面の亡霊を倒し最初の買い手へ返すと共同所有を認め修理帳へ全員の印を残すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q039.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q039.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q039.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q039.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。",
+    "flowVersion": 2,
+    "entryScript": "q039.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "同じ仮面を自分の物だという客が三人いる。修理人は一人の署名だけを求めている。",
+        "options": [
+          {
+            "id": "gather",
+            "text": "三人を同じ修理台へ呼ぶ",
+            "to": "owners"
+          },
+          {
+            "id": "buyer",
+            "text": "最初の買い手を所有者として仮面を返す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "owners",
+        "text": "$truth 三人は顔を共有しているが、実名の公開を約束したことはない。",
+        "options": [
+          {
+            "id": "marks",
+            "text": "実名を出さず、各自の修理印を決める",
+            "to": "account"
+          },
+          {
+            "id": "copies",
+            "text": "原型を保存し、人数分の複製を作る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "text": "三人は共同名義と輪番の受取役に同意した。印の対応は本人と修理人だけが保管する。",
+        "options": [
+          {
+            "id": "register",
+            "text": "共同修理帳へ三つの印を残す",
+            "to": "@informed"
+          },
+          {
+            "id": "replicas",
+            "text": "共同管理を取りやめ、複製へ分ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q039.clue_a": {
@@ -651,6 +652,347 @@
             {
               "op": "jump",
               "script": "q039.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q039.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q039.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "同じ仮面を自分の物だという客が三人いる。修理人は一人の署名だけを求めている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "三人を同じ修理台へ呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.owners"
+                }
+              ]
+            },
+            {
+              "id": "buyer",
+              "text": "最初の買い手を所有者として仮面を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q039.flow.owners": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q039.node",
+          "value": "owners"
+        },
+        {
+          "op": "say",
+          "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではありません。 三人は顔を共有しているが、実名の公開を約束したことはない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "marks",
+              "text": "実名を出さず、各自の修理印を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.account"
+                }
+              ]
+            },
+            {
+              "id": "copies",
+              "text": "原型を保存し、人数分の複製を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q039.flow.account": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q039.node",
+          "value": "account"
+        },
+        {
+          "op": "say",
+          "text": "三人は共同名義と輪番の受取役に同意した。印の対応は本人と修理人だけが保管する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "register",
+              "text": "共同修理帳へ三つの印を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "replicas",
+              "text": "共同管理を取りやめ、複製へ分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q039.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q039.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q039",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q039.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q039",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q039.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q039",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q039.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q039.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "仮面は巡回用具として戻りました。チセは誰の顔でもない顔を彫り直します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "仮面は飾られました。告解室には聞き手の顔が見えるようになります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "使う顔は増えました。互いを区別するため、裏側だけに小さな印が付きます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q039"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q039.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q039.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q039.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "owners",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q039.flow.owners"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "account",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q039.flow.account"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q039.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

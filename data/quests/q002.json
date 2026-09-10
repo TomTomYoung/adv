@@ -6,7 +6,7 @@
   "client": "運送人のベルト",
   "brief": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
   "region": 1,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "荷札と標本番号を照合して告発する",
+      "label": "本人と一緒に照合記録を提出する",
       "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "骨を守る骸兵を倒し荷札だけ渡す",
+      "label": "骸兵を退け、荷札だけ回収して渡す",
       "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "標本だけ救い、金の流れは追わない",
+      "label": "標本だけを返し、証言は求めない",
       "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "運送人のベルト",
         "observation": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
         "belief": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
-        "goal": "骨を守る骸兵を倒し荷札だけ渡す"
+        "goal": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "骨を守る骸兵を倒し荷札だけ渡す",
-      "alternative": "荷札と標本番号を照合して告発する",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
+      "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q002.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "骨には切断面を磨いた痕と、授業用の赤い番号があります。"
+          "id": "box",
+          "script": "q002.flow.box"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "荷札の配達先は墓地ですが、受領印は営業中の骨細工店です。"
+          "id": "school",
+          "script": "q002.flow.school"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "witness",
+          "script": "q002.flow.witness"
         }
       ]
     },
@@ -136,80 +126,126 @@
       "operator": "evidenceRecode",
       "newInformation": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "box",
+        "witness"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q002.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q002.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q002.clue_a"
+        "id": "entry",
+        "script": "q002.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q002.clue_b"
+        "id": "box",
+        "script": "q002.flow.box"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q002.decision"
+        "id": "school",
+        "script": "q002.flow.school"
+      },
+      {
+        "id": "witness",
+        "script": "q002.flow.witness"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "骨を守る骸兵を倒し荷札だけ渡すと荷札と標本番号を照合して告発するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q002.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q002.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q002.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q002.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。",
+    "flowVersion": 2,
+    "entryScript": "q002.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "骨の束が水路の杭に引っ掛かっている。ベルトは「荷札だけ、封を開けずに」と念を押した。",
+        "options": [
+          {
+            "id": "lift",
+            "text": "縄を掛け、束ごと岸へ引き上げる",
+            "to": "box",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "tags",
+            "text": "骸兵を退け、荷札だけ回収して渡す",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "school",
+            "text": "赤い番号を見せ、学校の運搬係を呼ぶ",
+            "to": "school"
+          }
+        ]
+      },
+      {
+        "id": "box",
+        "text": "$a 封の下には学校へ戻す順番が書かれている。",
+        "options": [
+          {
+            "id": "open",
+            "text": "封を開き、標本の返却先へ持っていく",
+            "to": "school"
+          },
+          {
+            "id": "deliver",
+            "text": "中身には触れず、骸兵を退け荷札を届ける",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "school",
+        "text": "学校は標本の返還を求めた。荷役人は荷札が失踪届へ使われたと話すが、公の証言なら仕事を失うと恐れている。",
+        "options": [
+          {
+            "id": "specimens",
+            "text": "標本だけを返し、証言は求めない",
+            "to": "@compromise"
+          },
+          {
+            "id": "witness",
+            "text": "失職の危険も含め、証言する意思を確認する",
+            "to": "witness"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "text": "荷役人は自分の名で証言すると決め、保険台帳と番号を並べた。$truth",
+        "options": [
+          {
+            "id": "file",
+            "text": "本人と一緒に照合記録を提出する",
+            "to": "@informed"
+          },
+          {
+            "id": "withdraw",
+            "text": "告発を取り下げ、学校への返却で終える",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q002.clue_a": {
@@ -705,6 +741,463 @@
             {
               "op": "jump",
               "script": "q002.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q002.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q002.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "骨の束が水路の杭に引っ掛かっている。ベルトは「荷札だけ、封を開けずに」と念を押した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lift",
+              "text": "縄を掛け、束ごと岸へ引き上げる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.flow.box"
+                }
+              ]
+            },
+            {
+              "id": "tags",
+              "text": "骸兵を退け、荷札だけ回収して渡す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q002.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "school",
+              "text": "赤い番号を見せ、学校の運搬係を呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.school"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.flow.box": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q002.node",
+          "value": "box"
+        },
+        {
+          "op": "say",
+          "text": "骨には切断面を磨いた痕と、授業用の赤い番号があります。 封の下には学校へ戻す順番が書かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "封を開き、標本の返却先へ持っていく",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.school"
+                }
+              ]
+            },
+            {
+              "id": "deliver",
+              "text": "中身には触れず、骸兵を退け荷札を届ける",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q002.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.flow.school": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q002.node",
+          "value": "school"
+        },
+        {
+          "op": "say",
+          "text": "学校は標本の返還を求めた。荷役人は荷札が失踪届へ使われたと話すが、公の証言なら仕事を失うと恐れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "specimens",
+              "text": "標本だけを返し、証言は求めない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "witness",
+              "text": "失職の危険も含め、証言する意思を確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.witness"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.flow.witness": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q002.node",
+          "value": "witness"
+        },
+        {
+          "op": "say",
+          "text": "荷役人は自分の名で証言すると決め、保険台帳と番号を並べた。骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "file",
+              "text": "本人と一緒に照合記録を提出する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "告発を取り下げ、学校への返却で終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q002",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q002.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q002",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q002.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q002",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q002.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q002.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q002.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q002"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q002.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q002.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "box",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.flow.box"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "school",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.flow.school"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "witness",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.flow.witness"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q002.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

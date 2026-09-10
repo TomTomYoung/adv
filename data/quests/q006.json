@@ -6,7 +6,7 @@
   "client": "工事頭のガロ",
   "brief": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
   "region": 1,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "空箱と帳簿を職人全員の前に出す",
+      "label": "空箱と未払い帳簿を職人全員の前へ出す",
       "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "箱の番をする水棲獣を倒して密かに返す",
+      "label": "事情を聞かず、箱をガロへ返す",
       "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "箱の場所を職人へ教え回収を任せる",
+      "label": "箱の位置を職人へ教え、回収を任せる",
       "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "工事頭のガロ",
         "observation": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
         "belief": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
-        "goal": "箱の番をする水棲獣を倒して密かに返す"
+        "goal": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "箱の番をする水棲獣を倒して密かに返す",
-      "alternative": "空箱と帳簿を職人全員の前に出す",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
+      "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q006.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "箱へ結ばれた縄は切れずにほどかれ、工事頭専用の結びが残っています。"
+          "id": "empty",
+          "script": "q006.flow.empty"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "箱の重さの記録は銀貨入りより軽く、中には石の音がします。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "accounts",
+          "script": "q006.flow.accounts"
         }
       ]
     },
@@ -136,80 +122,99 @@
       "operator": "pathHide",
       "newInformation": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "accounts"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q006.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q006.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q006.clue_a"
+        "id": "entry",
+        "script": "q006.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q006.clue_b"
+        "id": "empty",
+        "script": "q006.flow.empty"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q006.decision"
+        "id": "accounts",
+        "script": "q006.flow.accounts"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "箱の番をする水棲獣を倒して密かに返すと空箱と帳簿を職人全員の前に出すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q006.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q006.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q006.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q006.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。",
+    "flowVersion": 2,
+    "entryScript": "q006.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ガロは職人に見つからぬうちに箱を上げてほしいという。職人たちは水の引く岸で待っている。",
+        "options": [
+          {
+            "id": "workers",
+            "text": "箱の位置を職人へ教え、回収を任せる",
+            "to": "@compromise"
+          },
+          {
+            "id": "lift",
+            "text": "水棲獣を退け、縄で箱を引き上げる",
+            "to": "empty",
+            "combat": true,
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "empty",
+        "text": "箱を抱えても給金の重さがない。蓋の隙間から石がこぼれ、ガロが慌てて拾った。",
+        "options": [
+          {
+            "id": "private",
+            "text": "事情を聞かず、箱をガロへ返す",
+            "to": "@contract"
+          },
+          {
+            "id": "open",
+            "text": "皆のいる岸で箱を開く",
+            "to": "accounts"
+          }
+        ]
+      },
+      {
+        "id": "accounts",
+        "text": "$truth 職人は給金の額を読み上げ、ガロは工具の売却を申し出た。",
+        "options": [
+          {
+            "id": "public",
+            "text": "空箱と未払い帳簿を職人全員の前へ出す",
+            "to": "@informed"
+          },
+          {
+            "id": "entrust",
+            "text": "証拠を職人へ渡し、その後の交渉は任せる",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q006.clue_a": {
@@ -705,6 +710,380 @@
             {
               "op": "jump",
               "script": "q006.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q006.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q006.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ガロは職人に見つからぬうちに箱を上げてほしいという。職人たちは水の引く岸で待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "workers",
+              "text": "箱の位置を職人へ教え、回収を任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "水棲獣を退け、縄で箱を引き上げる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費・戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q006.flow.empty"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.flow.empty": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q006.node",
+          "value": "empty"
+        },
+        {
+          "op": "say",
+          "text": "箱を抱えても給金の重さがない。蓋の隙間から石がこぼれ、ガロが慌てて拾った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "private",
+              "text": "事情を聞かず、箱をガロへ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "text": "皆のいる岸で箱を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.accounts"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.flow.accounts": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q006.node",
+          "value": "accounts"
+        },
+        {
+          "op": "say",
+          "text": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。 職人は給金の額を読み上げ、ガロは工具の売却を申し出た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "空箱と未払い帳簿を職人全員の前へ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "entrust",
+              "text": "証拠を職人へ渡し、その後の交渉は任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q006.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q006",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q006.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q006.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q006",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q006.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q006.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q006",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q006.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q006.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q006.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q006"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q006.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q006.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "empty",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.flow.empty"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "accounts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.flow.accounts"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q006.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

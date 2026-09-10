@@ -6,7 +6,7 @@
   "client": "競売人のウメ",
   "brief": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
   "region": 6,
-  "type": "rescue",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "自動札を止め最低価格を明示する",
+      "label": "自動札を停止し、最低額を掲示して競る",
       "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "札の亡霊を祓って倉庫を開放する",
+      "label": "自動札を廃棄して倉庫を開放する",
       "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "自動札に予算上限を設ける",
+      "label": "上限を掲示して運用する",
       "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "競売人のウメ",
         "observation": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
         "belief": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
-        "goal": "札の亡霊を祓って倉庫を開放する"
+        "goal": "姿のない客が毎回最高値を付けます。入札者を特定してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "札の亡霊を祓って倉庫を開放する",
-      "alternative": "自動札を止め最低価格を明示する",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "姿のない客が毎回最高値を付けます。入札者を特定してください。",
+      "progression": "競りを二度観察すると自動札が最低価格まで動くと分かり、停止か予算制限を実際に試す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q052.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "入札幅は必ず同じ比率で、開始直後にだけ反応します。"
+          "id": "bid",
+          "script": "q052.flow.bid"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "落札品は客へ渡らず、先代の名の倉庫へ戻っています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "limit",
+          "script": "q052.flow.limit"
         }
       ]
     },
@@ -136,80 +122,128 @@
       "operator": "evidenceRecode",
       "newInformation": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "limit"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q052.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q052.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q052.clue_a"
+        "id": "entry",
+        "script": "q052.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q052.clue_b"
+        "id": "bid",
+        "script": "q052.flow.bid"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q052.decision"
+        "id": "limit",
+        "script": "q052.flow.limit"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "札の亡霊を祓って倉庫を開放すると自動札を止め最低価格を明示するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q052.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q052.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q052.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q052.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q052.second",
+        "meaning": "各場面に明記した second の行為・合意の記録",
+        "writer": [
+          "bid"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "競りを二度観察すると自動札が最低価格まで動くと分かり、停止か予算制限を実際に試す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "競りを二度観察すると自動札が最低価格まで動くと分かり、停止か予算制限を実際に試す。",
+    "flowVersion": 2,
+    "entryScript": "q052.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "誰もいない席から、最低額を下回る時だけ札が上がる。",
+        "options": [
+          {
+            "id": "observe",
+            "text": "次の競りを見守る",
+            "to": "bid"
+          },
+          {
+            "id": "warehouse",
+            "text": "自動札を廃棄して倉庫を開放する",
+            "to": "@contract"
+          },
+          {
+            "id": "limit",
+            "text": "自動札に一日分の予算上限を設定する",
+            "to": "limit"
+          }
+        ]
+      },
+      {
+        "id": "bid",
+        "text": "値が最低額を超えると札は下がった。競売人が先代の自動札だと認める。",
+        "options": [
+          {
+            "id": "stop",
+            "text": "自動札を停止し、最低額を掲示して競る",
+            "to": "@informed"
+          },
+          {
+            "id": "limit",
+            "text": "予算だけを制限して次の出品を試す",
+            "to": "limit"
+          },
+          {
+            "id": "again",
+            "text": "値の違う品でも動きを見る",
+            "to": "bid",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q052.second"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "second": true
+            },
+            "textAfter": "値は違っても、売主の最低額を守る動きは同じだった。"
+          }
+        ]
+      },
+      {
+        "id": "limit",
+        "text": "$truth 上限に達した札は動かない。売れない品を抱える額は限られるが、競りへの介入は続く。",
+        "options": [
+          {
+            "id": "keep",
+            "text": "上限を掲示して運用する",
+            "to": "@compromise"
+          },
+          {
+            "id": "off",
+            "text": "自動札を完全に止め、最低額だけ示す",
+            "to": "@informed"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q052.clue_a": {
@@ -705,6 +739,393 @@
             {
               "op": "jump",
               "script": "q052.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q052.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q052.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "誰もいない席から、最低額を下回る時だけ札が上がる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "observe",
+              "text": "次の競りを見守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.bid"
+                }
+              ]
+            },
+            {
+              "id": "warehouse",
+              "text": "自動札を廃棄して倉庫を開放する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "limit",
+              "text": "自動札に一日分の予算上限を設定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.limit"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q052.flow.bid": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q052.node",
+          "value": "bid"
+        },
+        {
+          "op": "say",
+          "text": "値が最低額を超えると札は下がった。競売人が先代の自動札だと認める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stop",
+              "text": "自動札を停止し、最低額を掲示して競る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "limit",
+              "text": "予算だけを制限して次の出品を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.limit"
+                }
+              ]
+            },
+            {
+              "id": "again",
+              "text": "値の違う品でも動きを見る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q052.second"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q052.second",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "値は違っても、売主の最低額を守る動きは同じだった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q052.flow.bid"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q052.flow.limit": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q052.node",
+          "value": "limit"
+        },
+        {
+          "op": "say",
+          "text": "競売人の先代が残した自動札が最低価格を守り、売れない品を買い続けています。 上限に達した札は動かない。売れない品を抱える額は限られるが、競りへの介入は続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "keep",
+              "text": "上限を掲示して運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "off",
+              "text": "自動札を完全に止め、最低額だけ示す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q052.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q052.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q052",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q052.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q052",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q052.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q052",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q052.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q052.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q052.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "売れ残りは見えるようになりました。競売人は自分の声で値打ちを説明します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "安く多くが売れました。品を預けた人の希望額には届きませんでした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "暴走する値は止まりました。買い支えの費用が会計へ初めて載ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q052"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q052.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q052.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q052.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bid",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q052.flow.bid"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "limit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q052.flow.limit"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q052.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

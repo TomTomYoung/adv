@@ -6,7 +6,7 @@
   "client": "施療人のネイ",
   "brief": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
   "region": 4,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "炭を交換し水と設備を別々に検査する",
+      "label": "古い炭を交換し、設備の検査を受ける",
       "text": "聖水は使えました。ネイは奇跡の由来とは別に清掃当番を決めます。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "井戸の影を祓い全ての瓶を捨てる",
+      "label": "全ての瓶を回収して廃棄する",
       "text": "不安は一度収まりました。次の給水まで患者は水を少しずつ分けます。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "上澄みを生活用へ回し飲用分を買う",
+      "label": "上澄みを生活用へ回し、飲用水を買い付ける",
       "text": "治療は続きました。費用を負担した人々が交換札を見に来ます。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "施療人のネイ",
         "observation": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
         "belief": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
-        "goal": "井戸の影を祓い全ての瓶を捨てる"
+        "goal": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "井戸の影を祓い全ての瓶を捨てる",
-      "alternative": "炭を交換し水と設備を別々に検査する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "聖水瓶の底に黒い沈殿があります。飲ませてよいか確かめてください。",
+      "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q038.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "黒い粒は炭の組織を持ち、上澄みには異臭がありません。"
+          "id": "water",
+          "script": "q038.flow.water"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "交換札は三月前で止まり、予備の炭箱は未開封です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "filter",
+          "script": "q038.flow.filter"
         }
       ]
     },
@@ -136,80 +122,105 @@
       "operator": "valueInvert",
       "newInformation": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "filter"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q038.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q038.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q038.clue_a"
+        "id": "entry",
+        "script": "q038.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q038.clue_b"
+        "id": "water",
+        "script": "q038.flow.water"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q038.decision"
+        "id": "filter",
+        "script": "q038.flow.filter"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "井戸の影を祓い全ての瓶を捨てると炭を交換し水と設備を別々に検査するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q038.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q038.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q038.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q038.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。",
+    "flowVersion": 2,
+    "entryScript": "q038.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "瓶の底に黒い粉がある。交換札は期限を過ぎているが、水は澄んでいる。",
+        "options": [
+          {
+            "id": "sample",
+            "text": "水だけ別瓶へ取り、検査する",
+            "to": "water"
+          },
+          {
+            "id": "replace",
+            "text": "浄化材の炭を交換する",
+            "to": "filter"
+          },
+          {
+            "id": "purge",
+            "text": "全ての瓶を回収して廃棄する",
+            "to": "@contract"
+          },
+          {
+            "id": "buy",
+            "text": "上澄みを生活用へ回し、飲用水を買い付ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "water",
+        "text": "水質は飲用範囲だった。清いことと、瓶を交換しなくてよいことは別だと検査人が記す。",
+        "options": [
+          {
+            "id": "filter",
+            "text": "古い炭を交換し、設備の検査を受ける",
+            "to": "@informed"
+          },
+          {
+            "id": "separate",
+            "text": "設備検査を待つ間、飲用水を買い付ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "filter",
+        "text": "$truth 新しい炭を入れたが、飲用可否の検査票はまだない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "交換後の水も検査し、二枚の票を掲げる",
+            "to": "@informed"
+          },
+          {
+            "id": "suspend",
+            "text": "飲用を止め、生活用の配水だけ続ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q038.clue_a": {
@@ -651,6 +662,369 @@
             {
               "op": "jump",
               "script": "q038.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q038.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q038.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "瓶の底に黒い粉がある。交換札は期限を過ぎているが、水は澄んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sample",
+              "text": "水だけ別瓶へ取り、検査する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.water"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "浄化材の炭を交換する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.filter"
+                }
+              ]
+            },
+            {
+              "id": "purge",
+              "text": "全ての瓶を回収して廃棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "上澄みを生活用へ回し、飲用水を買い付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q038.flow.water": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q038.node",
+          "value": "water"
+        },
+        {
+          "op": "say",
+          "text": "水質は飲用範囲だった。清いことと、瓶を交換しなくてよいことは別だと検査人が記す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "filter",
+              "text": "古い炭を交換し、設備の検査を受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "設備検査を待つ間、飲用水を買い付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q038.flow.filter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q038.node",
+          "value": "filter"
+        },
+        {
+          "op": "say",
+          "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもあります。 新しい炭を入れたが、飲用可否の検査票はまだない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "交換後の水も検査し、二枚の票を掲げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "suspend",
+              "text": "飲用を止め、生活用の配水だけ続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q038.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q038.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "聖水は使えました。ネイは奇跡の由来とは別に清掃当番を決めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q038",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q038.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "不安は一度収まりました。次の給水まで患者は水を少しずつ分けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q038",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q038.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "治療は続きました。費用を負担した人々が交換札を見に来ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q038",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q038.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q038.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "聖水は使えました。ネイは奇跡の由来とは別に清掃当番を決めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "不安は一度収まりました。次の給水まで患者は水を少しずつ分けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "治療は続きました。費用を負担した人々が交換札を見に来ます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q038"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q038.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q038.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q038.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "water",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q038.flow.water"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "filter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q038.flow.filter"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q038.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

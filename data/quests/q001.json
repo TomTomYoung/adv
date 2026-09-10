@@ -6,7 +6,7 @@
   "client": "灯番組合のリネ",
   "brief": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
   "region": 1,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "予備油を分け、二人の帰路を照らす",
+      "label": "二人に油を分け、帰り道を一緒に点灯する",
       "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "通路の魔物を掃討して灯番を運ぶ",
+      "label": "老人だけの救出として始末書を出す",
       "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "救助隊へ位置を伝えて戻る",
+      "label": "二人の位置を救助隊へ知らせる",
       "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "灯番組合のリネ",
         "observation": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
         "belief": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
-        "goal": "通路の魔物を掃討して灯番を運ぶ"
+        "goal": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,31 @@
       }
     ],
     "conflict": {
-      "request": "通路の魔物を掃討して灯番を運ぶ",
-      "alternative": "予備油を分け、二人の帰路を照らす",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
+      "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q001.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "消えた灯の芯は乾き、落ちていた油瓶だけが新品です。"
+          "id": "rookie",
+          "script": "q001.flow.rookie"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "新人の靴跡は出口へ向かい、その脇に老人の杖跡が止まっています。"
+          "id": "old",
+          "script": "q001.flow.old"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "carried",
+          "script": "q001.flow.carried"
+        },
+        {
+          "id": "marked",
+          "script": "q001.flow.marked"
         }
       ]
     },
@@ -136,80 +130,165 @@
       "operator": "causeSwap",
       "newInformation": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "old"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q001.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q001.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q001.clue_a"
+        "id": "entry",
+        "script": "q001.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q001.clue_b"
+        "id": "rookie",
+        "script": "q001.flow.rookie"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q001.decision"
+        "id": "old",
+        "script": "q001.flow.old"
+      },
+      {
+        "id": "carried",
+        "script": "q001.flow.carried"
+      },
+      {
+        "id": "marked",
+        "script": "q001.flow.marked"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "通路の魔物を掃討して灯番を運ぶと予備油を分け、二人の帰路を照らすの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q001.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q001.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q001.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q001.rookie",
+        "meaning": "各場面に明記した rookie の行為・合意の記録",
+        "writer": [
+          "rookie"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q001.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q001.carried",
+        "meaning": "各場面に明記した carried の行為・合意の記録",
+        "writer": [
+          "carried"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。",
+    "flowVersion": 2,
+    "entryScript": "q001.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "消えた灯の先で杖が鳴る。出口には、新しい油瓶を抱えて立ち尽くす新人がいる。",
+        "options": [
+          {
+            "id": "oil",
+            "text": "新品の油瓶を持つ新人に声をかける",
+            "to": "rookie"
+          },
+          {
+            "id": "clear",
+            "text": "暗い通路を掃討し、先に老人を運ぶ",
+            "to": "carried",
+            "combat": true
+          },
+          {
+            "id": "mark",
+            "text": "杖の音がする支道を地図に記す",
+            "to": "marked"
+          }
+        ]
+      },
+      {
+        "id": "rookie",
+        "text": "「借りた油を返すまで帰れない」新人は出口から動けない。瓶にはまだ半分残っている。",
+        "options": [
+          {
+            "id": "together",
+            "text": "新人と油を持ち、杖の音へ向かう",
+            "to": "old",
+            "set": {
+              "rookie": true
+            }
+          },
+          {
+            "id": "mark",
+            "text": "無理に連れず、救助隊へ渡す地図を作る",
+            "to": "marked"
+          }
+        ]
+      },
+      {
+        "id": "old",
+        "text": "$truth 老人は、新人に最後の灯の点け方を教えたいと言う。",
+        "options": [
+          {
+            "id": "share",
+            "text": "二人に油を分け、帰り道を一緒に点灯する",
+            "to": "@informed"
+          },
+          {
+            "id": "team",
+            "text": "二人の位置を救助隊へ知らせる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "carried",
+        "text": "老人は出口へ着いた。しかし足音が一人分足りない。「あいつに油を渡したんだ」。救助は済んでも、帰還はまだ揃っていない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "老人を休ませ、新人を迎えに戻る",
+            "to": "rookie",
+            "set": {
+              "carried": true
+            }
+          },
+          {
+            "id": "report",
+            "text": "老人だけの救出として始末書を出す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "marked",
+        "text": "支道の曲がり角と二人の位置を地図へ記した。救助班は夜明けの交代を待って出発する。",
+        "options": [
+          {
+            "id": "handoff",
+            "text": "地図を渡して救助を引き継ぐ",
+            "to": "@compromise"
+          },
+          {
+            "id": "search",
+            "text": "引継ぎ前に新人へ話しかける",
+            "to": "rookie"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q001.clue_a": {
@@ -651,6 +730,545 @@
             {
               "op": "jump",
               "script": "q001.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q001.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "消えた灯の先で杖が鳴る。出口には、新しい油瓶を抱えて立ち尽くす新人がいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "oil",
+              "text": "新品の油瓶を持つ新人に声をかける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.rookie"
+                }
+              ]
+            },
+            {
+              "id": "clear",
+              "text": "暗い通路を掃討し、先に老人を運ぶ",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q001.flow.carried"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mark",
+              "text": "杖の音がする支道を地図に記す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.marked"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.rookie": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q001.node",
+          "value": "rookie"
+        },
+        {
+          "op": "say",
+          "text": "「借りた油を返すまで帰れない」新人は出口から動けない。瓶にはまだ半分残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "together",
+              "text": "新人と油を持ち、杖の音へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q001.rookie",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.flow.old"
+                }
+              ]
+            },
+            {
+              "id": "mark",
+              "text": "無理に連れず、救助隊へ渡す地図を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.marked"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.old": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q001.node",
+          "value": "old"
+        },
+        {
+          "op": "say",
+          "text": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。 老人は、新人に最後の灯の点け方を教えたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "二人に油を分け、帰り道を一緒に点灯する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "二人の位置を救助隊へ知らせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.carried": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q001.node",
+          "value": "carried"
+        },
+        {
+          "op": "say",
+          "text": "老人は出口へ着いた。しかし足音が一人分足りない。「あいつに油を渡したんだ」。救助は済んでも、帰還はまだ揃っていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "老人を休ませ、新人を迎えに戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q001.carried",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.flow.rookie"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "老人だけの救出として始末書を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.marked": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q001.node",
+          "value": "marked"
+        },
+        {
+          "op": "say",
+          "text": "支道の曲がり角と二人の位置を地図へ記した。救助班は夜明けの交代を待って出発する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "handoff",
+              "text": "地図を渡して救助を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "search",
+              "text": "引継ぎ前に新人へ話しかける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q001.flow.rookie"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q001",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q001.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q001",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q001.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q001",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q001.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q001.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。"
+                    },
+                    {
+                      "op": "if",
+                      "condition": {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q001.carried"
+                        },
+                        "right": true
+                      },
+                      "then": [
+                        {
+                          "op": "say",
+                          "text": "老人は自分を先に運んだ道を指でなぞった。始末書より先に救助の順を語る。"
+                        }
+                      ],
+                      "else": []
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。"
+                    },
+                    {
+                      "op": "if",
+                      "condition": {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q001.carried"
+                        },
+                        "right": true
+                      },
+                      "then": [
+                        {
+                          "op": "say",
+                          "text": "老人は自分を先に運んだ道を指でなぞった。始末書より先に救助の順を語る。"
+                        }
+                      ],
+                      "else": []
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。"
+                    },
+                    {
+                      "op": "if",
+                      "condition": {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q001.carried"
+                        },
+                        "right": true
+                      },
+                      "then": [
+                        {
+                          "op": "say",
+                          "text": "老人は自分を先に運んだ道を指でなぞった。始末書より先に救助の順を語る。"
+                        }
+                      ],
+                      "else": []
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q001"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q001.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q001.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rookie",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.flow.rookie"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "old",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.flow.old"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "carried",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.flow.carried"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "marked",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.flow.marked"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q001.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

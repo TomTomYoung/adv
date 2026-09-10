@@ -6,7 +6,7 @@
   "client": "双子の術師ネムとノム",
   "brief": "魔力灯の修繕と、二人の仕事の精算に立ち会ってください。",
   "region": 7,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -60,18 +60,27 @@
       }
     ],
     "conflict": {
-      "design": "契約→診断→同時作業／役割分担→追加不具合→精算。主人公が一方の作業を補っても、もう一方の報酬を無断で減らしません。修繕失敗なら店を仮設灯で維持し、翌作業へ持ち越せます。"
+      "request": "魔力灯の修繕と、二人の仕事の精算に立ち会ってください。",
+      "progression": "同時作業と役割分担で故障時の相談先が変わり、修理の実行後に料金の契約を交わす。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q168.scene.entry"
+          "script": "q168.flow.entry"
         },
         {
-          "id": "fault",
-          "script": "q168.scene.fault"
+          "id": "separated",
+          "script": "q168.flow.separated"
+        },
+        {
+          "id": "adjust",
+          "script": "q168.flow.adjust"
+        },
+        {
+          "id": "invoice",
+          "script": "q168.flow.invoice"
         }
       ]
     },
@@ -80,20 +89,29 @@
     },
     "reveal": {
       "newInformation": "同じ言葉で返事する二人が、工具を取る手だけ違います。途中で一人が別の不具合に気づいて離れると、残った一人が自分の説明を続けられません。能力不足でなく、二人一組の契約しか経験していないことを見せます。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q168.scene.entry"
+        "script": "q168.flow.entry"
       },
       {
-        "id": "fault",
-        "script": "q168.scene.fault"
+        "id": "separated",
+        "script": "q168.flow.separated"
+      },
+      {
+        "id": "adjust",
+        "script": "q168.flow.adjust"
+      },
+      {
+        "id": "invoice",
+        "script": "q168.flow.invoice"
       }
     ],
     "adaptation": {
@@ -104,72 +122,118 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q168.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q168.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q168.method",
-        "meaning": "作者原稿の method に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
+        "path": "flags.flow.q168.solo",
+        "meaning": "各場面に明記した solo の行為・合意の記録",
         "writer": [
-          "entry"
+          "separated"
         ],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q168.repaired",
+        "meaning": "各場面に明記した repaired の行為・合意の記録",
+        "writer": [
+          "separated",
+          "adjust"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "同じ言葉で返事する二人が、違う工具を取った。兄は診断、弟は調整が得意だが、一人分の値段で二人を売っている。",
+        "text": "双子は同じ返事で違う工具を取った。兄は診断、弟は調整が得意だが、料金は一人分だ。",
         "options": [
           {
-            "id": "together",
-            "text": "一組で同時に作業する",
-            "to": "fault",
-            "set": {
-              "method": "pair"
-            }
+            "id": "pair",
+            "text": "一組として同時に魔力灯へ取り掛かる",
+            "to": "separated"
           },
           {
             "id": "roles",
-            "text": "役割を明示して分担する",
-            "to": "fault",
+            "text": "診断と調整を別の仕事として頼む",
+            "to": "adjust"
+          }
+        ]
+      },
+      {
+        "id": "separated",
+        "text": "兄が別の故障へ呼ばれ、弟は一人で説明する言葉に詰まった。修理の腕が足りないわけではない。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "弟の説明を一つずつ聞き、単独の調整を任せる",
+            "to": "adjust",
             "set": {
-              "method": "roles"
+              "solo": true
+            }
+          },
+          {
+            "id": "wait",
+            "text": "兄を待ち、二人揃って修理を再開する",
+            "to": "invoice",
+            "set": {
+              "repaired": true
             }
           }
         ]
       },
       {
-        "id": "fault",
+        "id": "adjust",
+        "text": "兄の診断で漏電箇所が分かり、弟が補正量を示した。「この値で通します」。",
+        "options": [
+          {
+            "id": "test",
+            "text": "弟に調整を任せ、点灯試験を行う",
+            "to": "invoice",
+            "set": {
+              "repaired": true
+            }
+          },
+          {
+            "id": "both",
+            "text": "二人揃うまで待ち、試験を一緒に行う",
+            "to": "invoice",
+            "set": {
+              "repaired": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "invoice",
         "text": [
           {
             "when": {
               "op": "eq",
               "left": {
-                "ref": "flags.quest.q168.method"
+                "ref": "flags.flow.q168.solo"
               },
-              "right": "pair"
+              "right": true
             },
-            "yes": "兄が別の不具合へ行くと、弟は一人で説明する言葉に詰まった。",
-            "no": "診断と調整を別々に説明し、兄は追加の不具合を調べた。"
+            "yes": "弟は今回一人で説明できた仕事を請求書へ書く。",
+            "no": "二人は今回の診断と調整を別の行へ書く。"
           },
-          "技術の不足より、一人で契約した経験が足りなかった。主人公が一部を補っても、報酬を無断で減らさない。"
+          "修理は完了した。二人は働いた分を無断で減額しないと確認し、次の契約を相談する。"
         ],
         "options": [
           {
             "id": "pair",
-            "text": "一組のまま二人分の適正料金に改める",
+            "text": "一組を保ち、二人分の適正料金へ改める",
             "to": "@pair"
           },
           {
             "id": "separate",
-            "text": "次回から別契約にすることを双方と合意する",
+            "text": "次回から別契約にすることへ双方の同意を得る",
             "to": "@separate"
           },
           {
@@ -179,7 +243,15 @@
           }
         ]
       }
-    ]
+    ],
+    "progression": "同時作業と役割分担で故障時の相談先が変わり、修理の実行後に料金の契約を交わす。",
+    "flowVersion": 2,
+    "entryScript": "q168.flow.visit",
+    "choiceContract": {
+      "progression": "同時作業と役割分担で故障時の相談先が変わり、修理の実行後に料金の契約を交わす。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q168.scene.entry": {
@@ -472,6 +544,439 @@
                 {
                   "op": "jump",
                   "script": "q168.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q168.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q168.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "双子は同じ返事で違う工具を取った。兄は診断、弟は調整が得意だが、料金は一人分だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pair",
+              "text": "一組として同時に魔力灯へ取り掛かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q168.flow.separated"
+                }
+              ]
+            },
+            {
+              "id": "roles",
+              "text": "診断と調整を別の仕事として頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q168.flow.adjust"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q168.flow.separated": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q168.node",
+          "value": "separated"
+        },
+        {
+          "op": "say",
+          "text": "兄が別の故障へ呼ばれ、弟は一人で説明する言葉に詰まった。修理の腕が足りないわけではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "弟の説明を一つずつ聞き、単独の調整を任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q168.solo",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q168.flow.adjust"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "兄を待ち、二人揃って修理を再開する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q168.repaired",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q168.flow.invoice"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q168.flow.adjust": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q168.node",
+          "value": "adjust"
+        },
+        {
+          "op": "say",
+          "text": "兄の診断で漏電箇所が分かり、弟が補正量を示した。「この値で通します」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "弟に調整を任せ、点灯試験を行う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q168.repaired",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q168.flow.invoice"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "二人揃うまで待ち、試験を一緒に行う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q168.repaired",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q168.flow.invoice"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q168.flow.invoice": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q168.node",
+          "value": "invoice"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q168.solo"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟は今回一人で説明できた仕事を請求書へ書く。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "二人は今回の診断と調整を別の行へ書く。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "修理は完了した。二人は働いた分を無断で減額しないと確認し、次の契約を相談する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pair",
+              "text": "一組を保ち、二人分の適正料金へ改める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q168.flow.end.pair"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "次回から別契約にすることへ双方の同意を得る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q168.flow.end.separate"
+                }
+              ]
+            },
+            {
+              "id": "flex",
+              "text": "日ごとに一組か別役か選べる契約にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q168.flow.end.flex"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q168.flow.end.pair": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q168.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人の働きに合う料金を決めた。別々の杯で乾杯しても、飲むタイミングは同じだった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q168",
+              "outcome": "pair"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q168.flow.end.separate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q168.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "次の修理札は一人ずつ届いた。二人は依頼を見せ合い、同時に笑った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q168",
+              "outcome": "separate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q168.flow.end.flex": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q168.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一緒に働く日も別の現場の日も選べるようになった。工具箱は二つ、乾杯の時刻は一つだった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q168",
+              "outcome": "flex"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q168.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q168.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q168.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "pair",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二人の働きに合う料金を決めた。別々の杯で乾杯しても、飲むタイミングは同じだった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "separate",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "次の修理札は一人ずつ届いた。二人は依頼を見せ合い、同時に笑った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "flex",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一緒に働く日も別の現場の日も選べるようになった。工具箱は二つ、乾杯の時刻は一つだった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q168"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q168.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q168.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q168.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "separated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q168.flow.separated"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "adjust",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q168.flow.adjust"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invoice",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q168.flow.invoice"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q168.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

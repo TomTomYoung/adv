@@ -6,7 +6,7 @@
   "client": "坑夫のメル",
   "brief": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
   "region": 2,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": {
     "op": "gte",
@@ -41,19 +41,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "支柱を補修し全員で役目を終える",
+      "label": "入口を先に支え、奥から順に補修する",
       "text": "王冠は資料室へ置かれました。メルは坑夫に、最後の一人を作らない交代表を配ります。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "王の守護兵を倒して出口を奪う",
+      "label": "守護兵を倒して出口を奪う",
       "text": "出口は開きました。王と呼ばれた坑夫は、誰もいない地下へ戻っていきます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "一日だけ王冠を預かり交代を募る",
+      "label": "一日だけ責任者となり、明日の交代を募る",
       "text": "王は眠れました。仕事を知った人々が、短い交代を引き受け始めます。",
       "gold": 44,
       "xp": 57
@@ -75,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +84,7 @@
         "name": "坑夫のメル",
         "observation": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
         "belief": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
-        "goal": "王の守護兵を倒して出口を奪う"
+        "goal": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。"
       },
       {
         "id": "party",
@@ -107,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "王の守護兵を倒して出口を奪う",
-      "alternative": "支柱を補修し全員で役目を終える",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
+      "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q020.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "王冠の内側に脱出手順が刻まれ、宝石の代わりに予備の栓が付いています。"
+          "id": "shift",
+          "script": "q020.flow.shift"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "王座からは全ての支柱が見え、交代表の最後の欄だけが空白です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "supports",
+          "script": "q020.flow.supports"
         }
       ]
     },
@@ -142,80 +128,113 @@
       "operator": "frameShift",
       "newInformation": "王冠は最後まで坑道に残る責任者の印で、王は交代役を待っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "shift"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q020.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q020.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q020.clue_a"
+        "id": "entry",
+        "script": "q020.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q020.clue_b"
+        "id": "shift",
+        "script": "q020.flow.shift"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q020.decision"
+        "id": "supports",
+        "script": "q020.flow.supports"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "王の守護兵を倒して出口を奪うと支柱を補修し全員で役目を終えるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q020.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q020.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q020.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q020.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q020.relieved",
+        "meaning": "各場面に明記した relieved の行為・合意の記録",
+        "writer": [
+          "shift"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。",
+    "flowVersion": 2,
+    "entryScript": "q020.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "王は出口を塞いでいない。ただ王冠を外す人が来るまで立っている。",
+        "options": [
+          {
+            "id": "relieve",
+            "text": "一時的に王冠を預かり、王を休ませる",
+            "to": "shift"
+          },
+          {
+            "id": "fight",
+            "text": "守護兵を倒して出口を奪う",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "supports",
+            "text": "残された支柱の危険箇所を確かめる",
+            "to": "supports"
+          }
+        ]
+      },
+      {
+        "id": "shift",
+        "text": "$truth 休んだ王が、最後の支柱の補修図を持って戻った。",
+        "options": [
+          {
+            "id": "recruit",
+            "text": "一日だけ責任者となり、明日の交代を募る",
+            "to": "@compromise"
+          },
+          {
+            "id": "repair",
+            "text": "補修図を受け取り、見張りの要らない坑にする",
+            "to": "supports",
+            "set": {
+              "relieved": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "supports",
+        "text": "入口側の支柱を固定すれば、奥を直す人にも帰路が残る。王も作業へ加わった。",
+        "options": [
+          {
+            "id": "brace",
+            "text": "入口を先に支え、奥から順に補修する",
+            "to": "@informed"
+          },
+          {
+            "id": "shift",
+            "text": "補修を翌日に延ばし、一日交代を引き受ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q020.clue_a": {
@@ -683,6 +702,381 @@
             {
               "op": "jump",
               "script": "q020.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q020.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "王は出口を塞いでいない。ただ王冠を外す人が来るまで立っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relieve",
+              "text": "一時的に王冠を預かり、王を休ませる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q020.flow.shift"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "守護兵を倒して出口を奪う",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_2",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q020.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "supports",
+              "text": "残された支柱の危険箇所を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q020.flow.supports"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.flow.shift": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "shift"
+        },
+        {
+          "op": "say",
+          "text": "王冠は最後まで坑道に残る責任者の印で、王は交代役を待っています。 休んだ王が、最後の支柱の補修図を持って戻った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recruit",
+              "text": "一日だけ責任者となり、明日の交代を募る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q020.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "repair",
+              "text": "補修図を受け取り、見張りの要らない坑にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.relieved",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.flow.supports"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.flow.supports": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "supports"
+        },
+        {
+          "op": "say",
+          "text": "入口側の支柱を固定すれば、奥を直す人にも帰路が残る。王も作業へ加わった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "入口を先に支え、奥から順に補修する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q020.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "shift",
+              "text": "補修を翌日に延ばし、一日交代を引き受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q020.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王冠は資料室へ置かれました。メルは坑夫に、最後の一人を作らない交代表を配ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "出口は開きました。王と呼ばれた坑夫は、誰もいない地下へ戻っていきます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王は眠れました。仕事を知った人々が、短い交代を引き受け始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q020.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "王冠は資料室へ置かれました。メルは坑夫に、最後の一人を作らない交代表を配ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "出口は開きました。王と呼ばれた坑夫は、誰もいない地下へ戻っていきます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "王は眠れました。仕事を知った人々が、短い交代を引き受け始めます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q020"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q020.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q020.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shift",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.flow.shift"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supports",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.flow.supports"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q020.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

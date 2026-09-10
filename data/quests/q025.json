@@ -6,7 +6,7 @@
   "client": "水運びのピノ",
   "brief": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
   "region": 3,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "天井番を復活させ祭を行う",
+      "label": "二節目に弁を開き、次の当番へ操作を教える",
       "text": "雨は予定通り降りました。子供は歌を覚え、大人は弁の点検日を覚えます。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "雲を抱く魔物を倒し弁をこじ開ける",
+      "label": "集水弁をこじ開ける",
       "text": "庭は潤いましたが一角が水浸しです。次は排水の依頼が必要になります。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "水を手で運び今年の祭を支える",
+      "label": "手桶で水を運び、今年の祭を支える",
       "text": "祭は続きました。疲れた腕を見て、来年の担当者が自分から名乗ります。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "水運びのピノ",
         "observation": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
         "belief": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
-        "goal": "雲を抱く魔物を倒し弁をこじ開ける"
+        "goal": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "雲を抱く魔物を倒し弁をこじ開ける",
-      "alternative": "天井番を復活させ祭を行う",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地下なのに雨乞い祭を求められました。雨が降る仕組みを調べてください。",
+      "progression": "祭の歌を天井側へ届ける実演が、失われた当番の再開につながる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q025.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "祭具に混じって弁を回す長い鍵があり、歌詞と同じ数字が付いています。"
+          "id": "attendant",
+          "script": "q025.flow.attendant"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "古い祭の記録には、歌い手とは別に天井番の給金が載っています。"
+          "id": "verse",
+          "script": "q025.flow.verse"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "retry",
+          "script": "q025.flow.retry"
         }
       ]
     },
@@ -136,80 +126,125 @@
       "operator": "frameShift",
       "newInformation": "祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "attendant"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q025.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q025.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q025.clue_a"
+        "id": "entry",
+        "script": "q025.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q025.clue_b"
+        "id": "attendant",
+        "script": "q025.flow.attendant"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q025.decision"
+        "id": "verse",
+        "script": "q025.flow.verse"
+      },
+      {
+        "id": "retry",
+        "script": "q025.flow.retry"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "雲を抱く魔物を倒し弁をこじ開けると天井番を復活させ祭を行うの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q025.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q025.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q025.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q025.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "祭の歌を天井側へ届ける実演が、失われた当番の再開につながる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "祭の歌を天井側へ届ける実演が、失われた当番の再開につながる。",
+    "flowVersion": 2,
+    "entryScript": "q025.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "祭の歌は合っているのに雨が降らない。天井の小窓だけが閉じている。",
+        "options": [
+          {
+            "id": "sing",
+            "text": "歌に合わせ、小窓へ合図を送る",
+            "to": "attendant"
+          },
+          {
+            "id": "force",
+            "text": "集水弁をこじ開ける",
+            "to": "@contract"
+          },
+          {
+            "id": "buckets",
+            "text": "手桶で水を運び、今年の祭を支える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "attendant",
+        "text": "返事はない。古い当番札には「二節目で弁を開く」とある。$truth",
+        "options": [
+          {
+            "id": "climb",
+            "text": "天井の作業台へ上がり、歌を聞く役を引き受ける",
+            "to": "verse"
+          },
+          {
+            "id": "carry",
+            "text": "今年は手で水を運ぶ",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "verse",
+        "text": "一節目は井戸への感謝、二節目は畑への呼び掛け。歌い手があなたの合図を待っている。",
+        "options": [
+          {
+            "id": "second",
+            "text": "二節目に弁を開き、次の当番へ操作を教える",
+            "to": "@informed"
+          },
+          {
+            "id": "first",
+            "text": "一節目で開ける",
+            "to": "retry"
+          },
+          {
+            "id": "stop",
+            "text": "弁を使わず手桶へ切り替える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "retry",
+        "text": "水はまだ畑へ届かない。一節目の流れは井戸へ戻る仕組みだ。歌い手はもう一度二節目を歌う。",
+        "options": [
+          {
+            "id": "again",
+            "text": "二節目を聞いて開き直す",
+            "to": "@informed"
+          },
+          {
+            "id": "buckets",
+            "text": "操作を中止し、手桶を回す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q025.clue_a": {
@@ -651,6 +686,423 @@
             {
               "op": "jump",
               "script": "q025.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q025.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q025.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "祭の歌は合っているのに雨が降らない。天井の小窓だけが閉じている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sing",
+              "text": "歌に合わせ、小窓へ合図を送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.attendant"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "集水弁をこじ開ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "buckets",
+              "text": "手桶で水を運び、今年の祭を支える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q025.flow.attendant": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q025.node",
+          "value": "attendant"
+        },
+        {
+          "op": "say",
+          "text": "返事はない。古い当番札には「二節目で弁を開く」とある。祭の歌は天井の集水弁を操作する合図で、担当者の交代が忘れられています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "climb",
+              "text": "天井の作業台へ上がり、歌を聞く役を引き受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.verse"
+                }
+              ]
+            },
+            {
+              "id": "carry",
+              "text": "今年は手で水を運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q025.flow.verse": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q025.node",
+          "value": "verse"
+        },
+        {
+          "op": "say",
+          "text": "一節目は井戸への感謝、二節目は畑への呼び掛け。歌い手があなたの合図を待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "second",
+              "text": "二節目に弁を開き、次の当番へ操作を教える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "first",
+              "text": "一節目で開ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.retry"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "弁を使わず手桶へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q025.flow.retry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q025.node",
+          "value": "retry"
+        },
+        {
+          "op": "say",
+          "text": "水はまだ畑へ届かない。一節目の流れは井戸へ戻る仕組みだ。歌い手はもう一度二節目を歌う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "text": "二節目を聞いて開き直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "buckets",
+              "text": "操作を中止し、手桶を回す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q025.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q025.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "雨は予定通り降りました。子供は歌を覚え、大人は弁の点検日を覚えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q025",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q025.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭は潤いましたが一角が水浸しです。次は排水の依頼が必要になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q025",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q025.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祭は続きました。疲れた腕を見て、来年の担当者が自分から名乗ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q025",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q025.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q025.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "雨は予定通り降りました。子供は歌を覚え、大人は弁の点検日を覚えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭は潤いましたが一角が水浸しです。次は排水の依頼が必要になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祭は続きました。疲れた腕を見て、来年の担当者が自分から名乗ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q025"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q025.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q025.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q025.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "attendant",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q025.flow.attendant"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "verse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q025.flow.verse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q025.flow.retry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q025.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "案内人のノア",
   "brief": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
   "region": 10,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "前の隊の記録を読み帰路を引き継ぐ",
+      "label": "休憩点を確かめ、装備と一緒に帰還記録を借りる",
       "text": "足跡は予言でなく案内になりました。ノアは装備と一緒に記録も貸します。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "足跡を真似る影を倒して跡を消す",
+      "label": "古い足跡を消す",
       "text": "不気味さは減りました。使える帰路の印も見えなくなります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "自分の足跡へ別の印を付ける",
+      "label": "自分の跡だけ別の印で区別する",
       "text": "二つの隊を見分けられました。古い跡は次の調査のために残ります。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "案内人のノア",
         "observation": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
         "belief": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
-        "goal": "足跡を真似る影を倒して跡を消す"
+        "goal": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "足跡を真似る影を倒して跡を消す",
-      "alternative": "前の隊の記録を読み帰路を引き継ぐ",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "まだ入っていない隊の足跡が奥から戻っています。誰のものか確かめてください。",
+      "progression": "自分の靴跡を試しに付ける比較から、前の隊の負傷と帰路を読み取る。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q091.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "印は一致しますが歩幅が違い、片足を引きずった跡があります。"
+          "id": "stride",
+          "script": "q091.flow.stride"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "装備台帳には前使用者と返却日の記録が残っています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "previous",
+          "script": "q091.flow.previous"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "causeSwap",
       "newInformation": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "previous"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q091.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q091.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q091.clue_a"
+        "id": "entry",
+        "script": "q091.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q091.clue_b"
+        "id": "stride",
+        "script": "q091.flow.stride"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q091.decision"
+        "id": "previous",
+        "script": "q091.flow.previous"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "足跡を真似る影を倒して跡を消すと前の隊の記録を読み帰路を引き継ぐの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q091.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q091.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q091.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q091.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "自分の靴跡を試しに付ける比較から、前の隊の負傷と帰路を読み取る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "自分の靴跡を試しに付ける比較から、前の隊の負傷と帰路を読み取る。",
+    "flowVersion": 2,
+    "entryScript": "q091.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "入ったことのない道から、自分たちと同じ靴底印が戻ってくる。",
+        "options": [
+          {
+            "id": "step",
+            "text": "隣へ自分の足跡を一列残す",
+            "to": "stride"
+          },
+          {
+            "id": "mark",
+            "text": "自分の跡だけ別の印で区別する",
+            "to": "@compromise"
+          },
+          {
+            "id": "erase",
+            "text": "古い足跡を消す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "stride",
+        "text": "印は同じだが歩幅は違う。古い跡は片足を引きずり、荷を置いて休んだ形がある。",
+        "options": [
+          {
+            "id": "equipment",
+            "text": "貸出印を装備台帳へ問い合わせる",
+            "to": "previous"
+          },
+          {
+            "id": "different",
+            "text": "新しい跡だけ区別して調査を終える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "previous",
+        "text": "$truth 前の隊は負傷者を支えて、この休憩点を帰路に選んだと記している。",
+        "options": [
+          {
+            "id": "inherit",
+            "text": "休憩点を確かめ、装備と一緒に帰還記録を借りる",
+            "to": "@informed"
+          },
+          {
+            "id": "own",
+            "text": "自分たちの印だけ残し、古い跡は保存する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q091.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q091.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q091.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q091.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "入ったことのない道から、自分たちと同じ靴底印が戻ってくる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "step",
+              "text": "隣へ自分の足跡を一列残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.stride"
+                }
+              ]
+            },
+            {
+              "id": "mark",
+              "text": "自分の跡だけ別の印で区別する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "erase",
+              "text": "古い足跡を消す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q091.flow.stride": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q091.node",
+          "value": "stride"
+        },
+        {
+          "op": "say",
+          "text": "印は同じだが歩幅は違う。古い跡は片足を引きずり、荷を置いて休んだ形がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "equipment",
+              "text": "貸出印を装備台帳へ問い合わせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.previous"
+                }
+              ]
+            },
+            {
+              "id": "different",
+              "text": "新しい跡だけ区別して調査を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q091.flow.previous": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q091.node",
+          "value": "previous"
+        },
+        {
+          "op": "say",
+          "text": "靴底の貸出印が同じなだけで、前の隊が返した装備を今の隊が使っています。 前の隊は負傷者を支えて、この休憩点を帰路に選んだと記している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "inherit",
+              "text": "休憩点を確かめ、装備と一緒に帰還記録を借りる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "own",
+              "text": "自分たちの印だけ残し、古い跡は保存する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q091.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q091.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足跡は予言でなく案内になりました。ノアは装備と一緒に記録も貸します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q091",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q091.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "不気味さは減りました。使える帰路の印も見えなくなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q091",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q091.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二つの隊を見分けられました。古い跡は次の調査のために残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q091",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q091.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q091.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q091.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "足跡は予言でなく案内になりました。ノアは装備と一緒に記録も貸します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "不気味さは減りました。使える帰路の印も見えなくなります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二つの隊を見分けられました。古い跡は次の調査のために残ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q091"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q091.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q091.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q091.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stride",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q091.flow.stride"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "previous",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q091.flow.previous"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q091.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

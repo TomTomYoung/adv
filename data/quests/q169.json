@@ -6,7 +6,7 @@
   "client": "騎士マオ",
   "brief": "昔の旅仲間へ、約束の指輪を届けてください。",
   "region": 7,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -37,6 +37,12 @@
       "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。",
       "gold": 129,
       "xp": 87
+    },
+    "corrected": {
+      "gold": 129,
+      "xp": 87,
+      "label": "遅れて返した指輪",
+      "text": "指輪はマオへ戻り、受け取ったという報告は撤回された。謝罪だけで元の信用には戻らない。マオは次の便りを自分で届けると決めた。"
     }
   },
   "model": {
@@ -60,14 +66,31 @@
       }
     ],
     "conflict": {
-      "design": "託される→旧友と面会→指輪を返す／別れの返事を託す／マオを呼ぶ。本人が会いたくない場合は呼出しを成功させません。嘘の成功報告も選べますが、指輪の所在と後の再会で矛盾が生じます。"
+      "request": "昔の旅仲間へ、約束の指輪を届けてください。",
+      "progression": "指輪を届け、拒否を受けて戻る往復の依頼。虚偽報告の後にも本人の手紙が届く。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q169.scene.entry"
+          "script": "q169.flow.entry"
+        },
+        {
+          "id": "recipient",
+          "script": "q169.flow.recipient"
+        },
+        {
+          "id": "friendship",
+          "script": "q169.flow.friendship"
+        },
+        {
+          "id": "report",
+          "script": "q169.flow.report"
+        },
+        {
+          "id": "later",
+          "script": "q169.flow.later"
         }
       ]
     },
@@ -76,16 +99,33 @@
     },
     "reveal": {
       "newInformation": "指輪は結婚の約束ではなく、昔の冒険で交わした「帰ったらまた旅へ出る」合図でした。受取人は愛情を否定しているのでなく、昔の約束が今の意思を代わることを拒んでいます。贈れば関係値が上がる道具にはしません。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q169.scene.entry"
+        "script": "q169.flow.entry"
+      },
+      {
+        "id": "recipient",
+        "script": "q169.flow.recipient"
+      },
+      {
+        "id": "friendship",
+        "script": "q169.flow.friendship"
+      },
+      {
+        "id": "report",
+        "script": "q169.flow.report"
+      },
+      {
+        "id": "later",
+        "script": "q169.flow.later"
       }
     ],
     "adaptation": {
@@ -96,37 +136,155 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q169.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q169.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q169.ringHeld",
+        "meaning": "各場面に明記した ringHeld の行為・合意の記録",
+        "writer": [
+          "entry",
+          "report",
+          "later"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q169.friendship",
+        "meaning": "各場面に明記した friendship の行為・合意の記録",
+        "writer": [
+          "friendship"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q169.lied",
+        "meaning": "各場面に明記した lied の行為・合意の記録",
+        "writer": [
+          "report"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "受取人は別の暮らしを選んでいた。「また旅に出ようという約束は、今の返事の代わりになりません」面会の呼出しも断った。",
+        "text": "マオは旅の約束の指輪を預けた。「昔と同じように戻って来てくれるはずだ」。",
         "options": [
           {
+            "id": "deliver",
+            "text": "指輪を預かり、旅仲間の今の家へ届ける",
+            "to": "recipient",
+            "set": {
+              "ringHeld": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "recipient",
+        "text": "相手は別の暮らしを選んでいた。「昔の約束は、今の返事の代わりにはなりません」。指輪も面会の呼出しも断った。",
+        "options": [
+          {
+            "id": "message",
+            "text": "旅以外の交流も断るのか、返事として確認する",
+            "to": "friendship"
+          },
+          {
             "id": "return",
-            "text": "指輪と拒否の返事をそのまま持ち帰る",
-            "to": "@honest"
+            "text": "指輪と拒否の返事を持って戻る",
+            "to": "report"
+          }
+        ]
+      },
+      {
+        "id": "friendship",
+        "text": "「手紙なら書きたい。でも旅には出ない」。本人はその言葉をマオへ届けてよいと答えた。",
+        "options": [
+          {
+            "id": "back",
+            "text": "二つの返事を分けて預かり、マオへ戻る",
+            "to": "report",
+            "set": {
+              "friendship": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "マオは、受け取ってくれたかと聞く。指輪はまだあなたが預かっている。",
+        "options": [
+          {
+            "id": "honest",
+            "text": "指輪と拒否を正確に返す",
+            "to": "@honest",
+            "set": {
+              "ringHeld": false
+            }
           },
           {
             "id": "soft",
-            "text": "拒否を曖昧にせず、今後の交流を望む言葉を添える",
-            "to": "@soft"
+            "text": "拒否と、本人が望んだ手紙の交流を伝える",
+            "to": "@soft",
+            "need": [
+              "friendship"
+            ],
+            "visible": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q169.friendship"
+              },
+              "right": true
+            },
+            "set": {
+              "ringHeld": false
+            }
           },
           {
             "id": "lie",
-            "text": "受け取ったと嘘をつき、指輪を持ったまま帰る",
+            "text": "受け取ったと嘘をつき、指輪を隠す",
+            "to": "later",
+            "set": {
+              "lied": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "text": "後日、受取人から「指輪はお返ししたはずです」と手紙が届いた。マオがあなたを呼んだ。",
+        "options": [
+          {
+            "id": "admit",
+            "text": "指輪を返し、虚偽の報告を認める",
+            "to": "@corrected",
+            "set": {
+              "ringHeld": false
+            }
+          },
+          {
+            "id": "silent",
+            "text": "説明をせず、信用を失ったまま去る",
             "to": "@lie"
           }
         ]
       }
-    ]
+    ],
+    "progression": "指輪を届け、拒否を受けて戻る往復の依頼。虚偽報告の後にも本人の手紙が届く。",
+    "flowVersion": 2,
+    "entryScript": "q169.flow.visit",
+    "choiceContract": {
+      "progression": "指輪を届け、拒否を受けて戻る往復の依頼。虚偽報告の後にも本人の手紙が届く。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q169.scene.entry": {
@@ -333,6 +491,513 @@
                 {
                   "op": "jump",
                   "script": "q169.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q169.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "マオは旅の約束の指輪を預けた。「昔と同じように戻って来てくれるはずだ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "指輪を預かり、旅仲間の今の家へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.ringHeld",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.recipient"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.recipient": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q169.node",
+          "value": "recipient"
+        },
+        {
+          "op": "say",
+          "text": "相手は別の暮らしを選んでいた。「昔の約束は、今の返事の代わりにはなりません」。指輪も面会の呼出しも断った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "message",
+              "text": "旅以外の交流も断るのか、返事として確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.flow.friendship"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "指輪と拒否の返事を持って戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.flow.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.friendship": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q169.node",
+          "value": "friendship"
+        },
+        {
+          "op": "say",
+          "text": "「手紙なら書きたい。でも旅には出ない」。本人はその言葉をマオへ届けてよいと答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "二つの返事を分けて預かり、マオへ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.friendship",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q169.node",
+          "value": "report"
+        },
+        {
+          "op": "say",
+          "text": "マオは、受け取ってくれたかと聞く。指輪はまだあなたが預かっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "honest",
+              "text": "指輪と拒否を正確に返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.ringHeld",
+                  "value": false
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.end.honest"
+                }
+              ]
+            },
+            {
+              "id": "soft",
+              "text": "拒否と、本人が望んだ手紙の交流を伝える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q169.friendship"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q169.friendship"
+                },
+                "right": true
+              },
+              "requirement": "先に「二つの返事を分けて預かり、マオへ戻る」",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.ringHeld",
+                  "value": false
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.end.soft"
+                }
+              ]
+            },
+            {
+              "id": "lie",
+              "text": "受け取ったと嘘をつき、指輪を隠す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.lied",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.later"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.later": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q169.node",
+          "value": "later"
+        },
+        {
+          "op": "say",
+          "text": "後日、受取人から「指輪はお返ししたはずです」と手紙が届いた。マオがあなたを呼んだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "admit",
+              "text": "指輪を返し、虚偽の報告を認める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q169.ringHeld",
+                  "value": false
+                },
+                {
+                  "op": "jump",
+                  "script": "q169.flow.end.corrected"
+                }
+              ]
+            },
+            {
+              "id": "silent",
+              "text": "説明をせず、信用を失ったまま去る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q169.flow.end.lie"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q169.flow.end.honest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "マオは怒り、悲しんだ。時間を置いて指輪をしまい、次の旅では本人へ行きたいか尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "honest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.flow.end.soft": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旅の約束への拒否は正確に伝えた。交流は残せると知ったマオは、指輪とは別に返事を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "soft"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.flow.end.lie": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "lie"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.flow.end.corrected": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "指輪はマオへ戻り、受け取ったという報告は撤回された。謝罪だけで元の信用には戻らない。マオは次の便りを自分で届けると決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q169",
+              "outcome": "corrected"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q169.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q169.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q169.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "honest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "マオは怒り、悲しんだ。時間を置いて指輪をしまい、次の旅では本人へ行きたいか尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "soft",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旅の約束への拒否は正確に伝えた。交流は残せると知ったマオは、指輪とは別に返事を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lie",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "成功と伝えたが指輪はあなたの手元に残った。後日マオが相手から聞き、同行の信用が傷ついた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "corrected",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "指輪はマオへ戻り、受け取ったという報告は撤回された。謝罪だけで元の信用には戻らない。マオは次の便りを自分で届けると決めた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q169"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q169.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q169.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q169.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recipient",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q169.flow.recipient"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "friendship",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q169.flow.friendship"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q169.flow.report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "later",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q169.flow.later"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q169.flow.entry"
+                    }
+                  ]
                 }
               ]
             }
