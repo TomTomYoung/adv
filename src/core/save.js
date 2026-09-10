@@ -1,15 +1,31 @@
+import {actorStats,canEquip} from './jobs.js';
+import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
 import {isRecord,clone} from './expression.js';
 import {commandsAt} from './script.js';
 export function migrateSave(original,data){
   if(!isRecord(original)||original.contentVersion===data.game.version)return original;
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
-  const legacy={...data,game:{...data.game,version:original.contentVersion},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
+  // Old records must pass their old growth limits before any normalization.
+  const legacy={...data,jobs:undefined,game:{...data.game,version:original.contentVersion},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
   if(validateSave(original,legacy).length)return original;
-  const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
-  for(const [id,definition] of Object.entries(data.actors))if(!save.state.actors[id]){
-    const level=save.state.level-1;save.state.actors[id]={id,hp:definition.stats.hp+data.system.growth.hp*level,mp:definition.stats.mp+data.system.growth.mp*level,statuses:[],equipment:{}};
+  const save=clone(original),s=save.state;
+  save.contentVersion=data.game.version;s.contentVersion=data.game.version;
+  for(const [id,definition] of Object.entries(data.actors)){
+    if(!s.actors[id])s.actors[id]={id,hp:definition.stats.hp+data.system.growth.hp*(s.level-1),mp:definition.stats.mp+data.system.growth.mp*(s.level-1),statuses:[],equipment:{}};
+    const actor=s.actors[id];
+    if(data.jobs){
+      actor.job=definition.initialJob;actor.growthHistory={legacy:s.level-1};
+      for(const [slot,item] of Object.entries(actor.equipment))if(!canEquip(data,s,id,item)){
+        const count=(s.inventory[item]??0)+1;
+        if(count>data.system.maxStack)throw new Error(`${data.items[item].name}の袋が満杯のため職業付きセーブへ移行できません。旧版で空きを作ってください。`);
+        s.inventory[item]=count;delete actor.equipment[slot];
+      }
+      const stats=actorStats(data,s,id,false);actor.hp=Math.min(actor.hp,stats.hp);actor.mp=Math.min(actor.mp,stats.mp);
+    }
   }
+  if(data.jobs&&s.battle){s.battle.buffs=[];s.battle.covers=[];s.battle.analyzed=[];}
+
   return save;
 }
 export function validateSave(save,data){
@@ -35,10 +51,12 @@ export function validateSave(save,data){
   if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');
   for(const [id,definition] of Object.entries(data.actors)){
     const actor=s.actors[id];if(!isRecord(actor)||!isRecord(actor.equipment)||!Array.isArray(actor.statuses)){fail('隊員状態不正');continue;}
-    const stats={...definition.stats};for(const [key,growth] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+growth*(s.level-1);
-    for(const [slot,itemId] of Object.entries(actor.equipment)){const item=data.items[itemId];if(!item||item.slot!==slot){fail('装備不正');continue;}for(const [key,amount] of Object.entries(item.stats??{}))stats[key]=(stats[key]??0)+amount;}
+    let stats;
+    try{stats=actorStats(data,s,id,false);}catch{fail('職業または能力不正');continue;}
+    for(const [slot,itemId] of Object.entries(actor.equipment)){const item=data.items[itemId];if(!item||item.slot!==slot)fail('装備不正');}
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
+  errors.push(...validateJobState(data,s));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
@@ -60,8 +78,8 @@ export function validateSave(save,data){
     const b=s.battle,e=data.encounters[b?.encounter];
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
-      if(b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
-      b.enemies.forEach((enemy,i)=>{const def=data.enemies[e.enemies[i]];if(enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
+      if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
+      b.enemies.forEach((enemy,i)=>{const def=data.enemies[e.enemies[i]];if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}

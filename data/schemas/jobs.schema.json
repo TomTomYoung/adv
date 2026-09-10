@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "灯帰り 職業定義 v1.3",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "role": {
+        "type": "string",
+        "minLength": 1
+      },
+      "limitation": {
+        "type": "string",
+        "minLength": 1
+      },
+      "growth": {
+        "type": "object",
+        "properties": {
+          "hp": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "mp": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "str": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "vit": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "agi": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "int": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "hp",
+          "mp",
+          "str",
+          "vit",
+          "agi",
+          "int"
+        ],
+        "additionalProperties": false
+      },
+      "stats": {
+        "type": "object",
+        "properties": {
+          "hp": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "mp": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "str": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "vit": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "agi": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "int": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "equipment": {
+        "type": "object",
+        "properties": {
+          "weapon": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "armor": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "charm": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "weapon",
+          "armor",
+          "charm"
+        ],
+        "additionalProperties": false
+      },
+      "passives": {
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              }
+            }
+          ]
+        }
+      },
+      "grants": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "skill": {
+              "type": "string",
+              "minLength": 1
+            },
+            "level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "api": {
+              "enum": [
+                "battle.skill",
+                "map.reveal",
+                "inventory.convert"
+              ]
+            },
+            "target": {
+              "enum": [
+                "self",
+                "ally",
+                "enemy",
+                "all_allies",
+                "all_enemies",
+                "location"
+              ]
+            },
+            "maxTargets": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "lifetime": {
+              "const": "equipped"
+            }
+          },
+          "required": [
+            "skill",
+            "level",
+            "api",
+            "target",
+            "maxTargets",
+            "lifetime"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "role",
+      "limitation",
+      "growth",
+      "stats",
+      "equipment",
+      "passives",
+      "grants"
+    ],
+    "additionalProperties": false
+  }
+}

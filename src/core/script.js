@@ -1,6 +1,6 @@
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear']);
+export const COMMANDS=new Set(['say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -62,10 +62,13 @@ export function pump(engine){
       case 'gold.change':state.gold=Math.max(0,state.gold+v(c.amount));break;
       case 'actor.heal':case 'actor.damage':case 'actor.restore_mp':{
         const ids=c.target==='party'?state.members:[v(c.target)];
-        for(const id of ids){const actor=state.actors[id];if(!actor)throw new Error(`不明な隊員: ${id}`);const key=c.op==='actor.restore_mp'?'mp':'hp',max=engine.stats(id)[key];actor[key]=Math.max(0,Math.min(max,actor[key]+v(c.amount)*(c.op==='actor.damage'?-1:1)));}
+        const amount=Math.floor(v(c.amount)*(c.op==='actor.damage'&&engine.trapContext()?engine.partyEffect('trapDamage'):1));
+        for(const id of ids){const actor=state.actors[id];if(!actor)throw new Error(`不明な隊員: ${id}`);const key=c.op==='actor.restore_mp'?'mp':'hp',max=engine.stats(id)[key];actor[key]=Math.max(0,Math.min(max,actor[key]+amount*(c.op==='actor.damage'?-1:1)));}
         if(state.members.every(id=>state.actors[id].hp<=0)){engine.defeat();return;}
         break;
       }
+      case 'job.change':engine.changeJob(c.actor,c.job);break;
+      case 'job.action':engine.jobAction(c.actor,c.ability);break;
       case 'party.heal_all':engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
       case 'party.join':if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
       case 'party.leave':if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;

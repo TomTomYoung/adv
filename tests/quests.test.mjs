@@ -6,7 +6,7 @@ import {validateSave} from '../src/core/save.js';
 for(const outcome of ['informed','contract','compromise'])test(`walk all 100 quests to the ${outcome} outcome (real maps/events/commands)`,()=>{
   const g=newGame(1907);
   // Scenario coverage fixture isolates reachability and continuation behavior from combat balance.
-  g.state.level=25;g.state.xp=26000;g.state.gold=5000;g.state.inventory.rope=99;g.healAll();
+  g.award(0,data.system.xpBase*24*25);g.state.gold=5000;g.state.inventory.rope=99;g.healAll();
   for(const quest of Object.values(data.quests)){
     if(g.state.mode==='dungeon')g.dispatch({type:'retreat'});
     assert.ok(g.dispatch({type:'accept',id:quest.id}),quest.id+' must unlock');g.healAll();

@@ -27,7 +27,7 @@ test('legacy 1.0 saves migrate at text, choice and battle waits without losing p
     if(mode==='choice')exploreSpot(g,data.quests.q001.locations[2]);
     if(mode==='battle'){exploreSpot(g,data.quests.q001.locations[2]);g.dispatch({type:'choose',id:'contract'});drain(g);}
     const saved=JSON.parse(g.save());saved.contentVersion=saved.state.contentVersion='1.0.0';for(const id of ['luka','toma','mica','dora','ren'])delete saved.state.actors[id];
-    const expected=structuredClone(saved.state),next=newGame();next.load(JSON.stringify(saved));assert.equal(next.state.contentVersion,data.game.version);assert.deepEqual(next.state.waiting,expected.waiting);assert.deepEqual(next.state.vm,expected.vm);assert.deepEqual(next.state.battle,expected.battle);assert.equal(next.state.rng,expected.rng);assert.deepEqual(next.state.actors.ada,expected.actors.ada);assert.equal(Object.keys(next.state.actors).length,10);assert.deepEqual(validateSave(JSON.parse(next.save()),data),[]);
+    const expected=structuredClone(saved.state);expected.actors.ada.growthHistory={legacy:expected.level-1};const next=newGame();next.load(JSON.stringify(saved));assert.equal(next.state.contentVersion,data.game.version);assert.deepEqual(next.state.waiting,expected.waiting);assert.deepEqual(next.state.vm,expected.vm);assert.deepEqual(next.state.battle,expected.battle);assert.equal(next.state.rng,expected.rng);assert.deepEqual(next.state.actors.ada,expected.actors.ada);assert.equal(Object.keys(next.state.actors).length,10);assert.deepEqual(validateSave(JSON.parse(next.save()),data),[]);
     const corrupt=structuredClone(saved);corrupt.state.actors.ada.hp=-1;const before=next.save();assert.throws(()=>next.load(JSON.stringify(corrupt)));assert.equal(next.save(),before);
   }
 });
@@ -45,7 +45,7 @@ test('MP draining never changes the saved battle replay',()=>{
 });
 
 test('weighted encounters stay inside each map pool and reproduce after loading',()=>{
-  const content=structuredClone(data),map=content.maps.region_3_f2;map.encounterRate=1;map.objects=[];
+  const content=structuredClone(data),map=content.maps.region_3_f2;map.encounterRate=1;map.objects=[];content.jobs.scout.passives.encounterRate=1;
   const seen=new Set();
   for(let seed=1;seed<=40;seed++){
     const g=new GameEngine(content,(seed*2654435761)>>>0);drain(g);g.dispatch({type:'travel',region:3});

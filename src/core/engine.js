@@ -3,6 +3,7 @@ import {startBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
+import {actorStats,initializeJob,recordGrowth,knownSkills,canEquip,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
@@ -11,6 +12,7 @@ export class GameEngine {
     this.data=data;this.feedback=freshFeedback();
     this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,rng:(seed>>>0)||1,mode:'town',location:null,flags:{},vars:{},gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
+    if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     this.state.nextScope=1;
     this.run(data.game.startScript);
@@ -23,12 +25,14 @@ export class GameEngine {
   log(text){this.state.log.push(String(text));this.state.log=this.state.log.slice(-80);}
   notify(text){this.state.notice=text;this.log(text);}
   run(id,args={}){runScript(this,id,args);}
-  stats(id) {
-    const definition=this.data.actors[id],actor=this.state.actors[id];
-    const stats=clone(definition.stats), growth=this.data.system.growth;
-    for(const [key,amount] of Object.entries(growth)) stats[key]=(stats[key]??0)+amount*(this.state.level-1);
-    for(const item of Object.values(actor.equipment)) for(const [key,amount] of Object.entries(this.data.items[item]?.stats??{})) stats[key]=(stats[key]??0)+amount;
-    return stats;
+  stats(id) {return actorStats(this.data,this.state,id);}
+  skills(id) {return knownSkills(this.data,this.state,id);}
+  changeJob(id,job) {return changeJob(this,id,job);}
+  jobAction(id,ability) {return fieldAction(this,id,ability);}
+  partyEffect(key,neutral=1,mode='min') {return partyEffect(this.data,this.state,key,neutral,mode);}
+  price(price) {return purchasePrice(this.data,this.state,price);}
+  trapContext() {
+    return this.state.vm.some(f=>this.data.maps[f.local?.args?.map]?.objects.some(o=>o.id===f.local?.args?.object&&o.kind==='trap'));
   }
   healAll(ratio=1) {
     for(const id of this.state.members){const actor=this.state.actors[id],stats=this.stats(id);actor.hp=Math.max(actor.hp,Math.ceil(stats.hp*ratio));actor.mp=Math.max(actor.mp,Math.ceil(stats.mp*ratio));actor.statuses=[];}
@@ -37,7 +41,7 @@ export class GameEngine {
     this.state.gold=Math.max(0,this.state.gold+gold);this.state.xp+=xp;
     const old=this.state.level;
     while(this.state.level<this.data.system.maxLevel && this.state.xp>=this.data.system.xpBase*this.state.level*(this.state.level+1)) this.state.level++;
-    if(old!==this.state.level){this.healAll();this.notify(`隊のレベルが${this.state.level}になりました。`);}
+    if(old!==this.state.level){recordGrowth(this.data,this.state,this.state.level-old);this.healAll();this.notify(`隊のレベルが${this.state.level}になりました。`);}
   }
   unlocked(quest){return !quest.requires || Boolean(this.value(quest.requires));}
   give(item,count){
@@ -74,7 +78,7 @@ export class GameEngine {
     if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||map.tiles[y][x]==='#')return false;
     return !map.objects.some(o=>o.x===x&&o.y===y&&o.blocking && (this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
   }
-  reveal(radius=1){
+  reveal(radius=this.partyEffect('revealRadius',1,'max')){
     const loc=this.state.location;if(!loc)return;
     const seen=new Set(this.state.discovered[loc.map]??[]),map=this.map();
     for(let y=loc.y-radius;y<=loc.y+radius;y++)for(let x=loc.x-radius;x<=loc.x+radius;x++)if(y>=0&&y<map.tiles.length&&x>=0&&x<map.tiles[0].length)seen.add(`${x},${y}`);
@@ -88,7 +92,7 @@ export class GameEngine {
   }
   returnTown(emergency=false,quiet=false){
     if(!quiet)this.eventCue('return');
-    if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate);this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
+    if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
     this.state.mode='town';this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';
   }
   defeat(){
@@ -103,12 +107,12 @@ export class GameEngine {
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
     if(!this.walkable(this.map(),x,y)){this.notify('石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
-    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');this.state.light=Math.max(0,this.state.light-1);this.reveal();
-    for(const id of this.state.members){const actor=this.state.actors[id];for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
+    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0)this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     if(this.trigger('enter'))return true;
     const map=this.map();
-    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)){
+    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0))*this.partyEffect('encounterRate'))){
       let encounter=map.encounter;
       if(map.encounterPool?.length){let roll=this.random()*map.encounterPool.reduce((sum,e)=>sum+e.weight,0);encounter=map.encounterPool.at(-1).encounter;for(const entry of map.encounterPool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
       this.startBattle(encounter,{win:[],escape:[],lose:[]});
@@ -159,11 +163,13 @@ export class GameEngine {
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;this.run(service.script);return true;
     }
+    if(type==='job.change')return this.changeJob(intent.actor,intent.job);
+    if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
     if(type==='unequip')return this.unequip(intent.actor,intent.slot);
     if(type==='buy'&&this.state.mode==='town'){
-      const stock=this.data.shops.goods.find(g=>g.item===intent.item);if(!stock||this.state.gold<stock.price||(this.state.inventory[intent.item]??0)>=this.data.system.maxStack)return false;
-      this.state.gold-=stock.price;this.give(stock.item,1);this.notify(`${this.data.items[stock.item].name}を購入しました。`);return true;
+      const stock=this.data.shops.goods.find(g=>g.item===intent.item);if(!stock||this.state.gold<this.price(stock.price)||(this.state.inventory[intent.item]??0)>=this.data.system.maxStack)return false;
+      this.state.gold-=this.price(stock.price);this.give(stock.item,1);this.notify(`${this.data.items[stock.item].name}を購入しました。`);return true;
     }
     if(type==='equip')return this.equip(intent.actor,intent.item);
     if(type==='item')return this.useItem(intent.item,intent.actor);
@@ -171,7 +177,7 @@ export class GameEngine {
   }
   equip(actorId,itemId){
     const item=this.data.items[itemId],actor=this.state.actors[actorId];
-    if(!this.state.members.includes(actorId)||!item?.slot||!(this.state.inventory[itemId]>0)||!actor||actor.hp<=0)return false;
+    if(!this.state.members.includes(actorId)||!canEquip(this.data,this.state,actorId,itemId)||!item?.slot||!(this.state.inventory[itemId]>0)||!actor||actor.hp<=0)return false;
     const previous=actor.equipment[item.slot];if(previous&&previous!==itemId&&(this.state.inventory[previous]??0)>=this.data.system.maxStack)return false;
     this.give(itemId,-1);if(previous)this.give(previous,1);actor.equipment[item.slot]=itemId;
     const stats=this.stats(actorId);actor.hp=Math.min(actor.hp,stats.hp);actor.mp=Math.min(actor.mp,stats.mp);return true;

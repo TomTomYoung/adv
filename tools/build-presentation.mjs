@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {applyJobs} from './build-jobs.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 const root=path.resolve(import.meta.dirname,'..');
@@ -11,6 +12,7 @@ export async function applyPresentation(){
   game.version=plan.version;game.files.databases={...game.files.databases,effects:'data/effects.json',sounds:'data/sounds.json',presentation:'data/presentation.json'};
   game.migrations={...game.migrations,'1.1.0':{actors:Object.keys(await read('data/actors.json'))}};
   await write('data/game.json',game);await write('data/assets.json',assets);await write('data/effects.json',plan.effects);await write('data/sounds.json',sounds);await write('data/presentation.json',{cues:plan.cues,bindings:plan.bindings,ambient:plan.ambient});
+  await applyJobs();
   console.log(`Presentation: ${Object.keys(sounds).length} SE, ${Object.keys(plan.effects).length} effects`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await applyPresentation();
