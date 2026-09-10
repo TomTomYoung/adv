@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "id": "q197",
+  "number": 197,
+  "title": "忘れられる勝利",
+  "client": "封印の記録官エル",
+  "brief": "勝利の記憶を糧にする災厄への対処を相談してください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q197_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "forget": {
+      "label": "名のない勝利",
+      "text": "人々は誰の勝利かを語れなくなった。記念品も名を取り戻す仕掛けにはならない。帰り道で隣の歩調に合わせる習慣だけは残った。",
+      "gold": 165,
+      "xp": 105
+    },
+    "seal": {
+      "label": "猶予を作る封印",
+      "text": "一時封印を補修した。解決とは報告せず、記憶を失う同意を急がせない時間を作った。",
+      "gold": 165,
+      "xp": 105
+    },
+    "other": {
+      "label": "名を残す探索",
+      "text": "別策の調査を引き受けた。見つかったことにはせず、勝利を伝える価値と災厄の危険を両方記録した。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "名前を消しても災厄の被害は消えません。失うのは「誰が終わらせたか」の結び付きです。初期の史料に原因と復旧だけが残る空白を置き、以前にも同じ選択があったと示します。忘却を功績への罰や作者の万能リセットにはしません。",
+      "fixedPast": "記憶を餌に戻る災厄を封じるため、勝利した英雄の名を公の記憶から切り離す儀式が必要です。記録官は主人公の同意を求めます。仲間は勝利を覚えていたい。主人公は人々を守れても、共に戦った関係まで失うことを恐れられます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "封印の記録官エル",
+        "beliefsAndGoals": "記憶を餌に戻る災厄を封じるため、勝利した英雄の名を公の記憶から切り離す儀式が必要です。記録官は主人公の同意を求めます。仲間は勝利を覚えていたい。主人公は人々を守れても、共に戦った関係まで失うことを恐れられます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "勝利の記憶を糧にする災厄への対処を相談してください。"
+      }
+    ],
+    "conflict": {
+      "design": "再発→史料調査→一時封印／完全儀式／別の封印手段を探す旅へ出る。完全儀式の前に仲間が残せるものを選びます。名を含まぬ品は残せますが、後で誰の品かを自動で思い出す抜け道にはしません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q197.scene.entry"
+        },
+        {
+          "id": "consent",
+          "script": "q197.scene.consent"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "勝利の記憶を糧にする災厄への対処を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "名前を消しても災厄の被害は消えません。失うのは「誰が終わらせたか」の結び付きです。初期の史料に原因と復旧だけが残る空白を置き、以前にも同じ選択があったと示します。忘却を功績への罰や作者の万能リセットにはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q197.scene.entry"
+      },
+      {
+        "id": "consent",
+        "script": "q197.scene.consent"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": "忘却の対象は本依頼の当事者と記念行為。既存依頼・戦闘の客観記録や他のNPC状態は削除しない。"
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q197.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "記念式典のたび封印が弱まる。勝者の名を語る記憶が災厄へ流れているらしい。エルは忘却を提案するが、まず過去の事例を確かめる必要がある。",
+        "options": [
+          {
+            "id": "verify",
+            "text": "名を伝えなかった旧封印の経過を調べる",
+            "to": "consent"
+          },
+          {
+            "id": "seal",
+            "text": "今は一時封印を補修し、判断を延ばす",
+            "to": "@seal"
+          },
+          {
+            "id": "other",
+            "text": "忘却を選ばず、別の対策の調査を続ける",
+            "to": "@other"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "旧記録は仕組みを裏づけた。ただし消すのはこの勝利を公に伝える名の記憶で、戦いそのものをなかったことにはしない。当事者へ損失を説明した。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "当事者の同意を受け、名のない記念品だけを残す",
+            "to": "@forget"
+          },
+          {
+            "id": "seal",
+            "text": "同意を急がず一時封印にとどめる",
+            "to": "@seal"
+          },
+          {
+            "id": "other",
+            "text": "名を残す方法の調査を続ける",
+            "to": "@other"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q197.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q197.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "記念式典のたび封印が弱まる。勝者の名を語る記憶が災厄へ流れているらしい。エルは忘却を提案するが、まず過去の事例を確かめる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "verify",
+              "text": "名を伝えなかった旧封印の経過を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.scene.consent"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "今は一時封印を補修し、判断を延ばす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "忘却を選ばず、別の対策の調査を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.end.other"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q197.scene.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q197.node",
+          "value": "consent"
+        },
+        {
+          "op": "say",
+          "text": "旧記録は仕組みを裏づけた。ただし消すのはこの勝利を公に伝える名の記憶で、戦いそのものをなかったことにはしない。当事者へ損失を説明した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "当事者の同意を受け、名のない記念品だけを残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.end.forget"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "同意を急がず一時封印にとどめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "名を残す方法の調査を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q197.end.other"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q197.end.forget": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q197.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は誰の勝利かを語れなくなった。記念品も名を取り戻す仕掛けにはならない。帰り道で隣の歩調に合わせる習慣だけは残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q197",
+              "outcome": "forget"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q197.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q197.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一時封印を補修した。解決とは報告せず、記憶を失う同意を急がせない時間を作った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q197",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q197.end.other": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q197.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別策の調査を引き受けた。見つかったことにはせず、勝利を伝える価値と災厄の危険を両方記録した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q197",
+              "outcome": "other"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q197.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q197.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q197.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "forget",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は誰の勝利かを語れなくなった。記念品も名を取り戻す仕掛けにはならない。帰り道で隣の歩調に合わせる習慣だけは残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一時封印を補修した。解決とは報告せず、記憶を失う同意を急がせない時間を作った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "other",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別策の調査を引き受けた。見つかったことにはせず、勝利を伝える価値と災厄の危険を両方記録した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q197.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q197.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "consent",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q197.scene.consent"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q197.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,912 @@
+{
+  "schemaVersion": 1,
+  "id": "q137",
+  "number": 137,
+  "title": "燃え残る図書館",
+  "client": "写本師エル",
+  "brief": "燃え残る図書館から、今救える一冊を選んでください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "object": "q137_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "medicine": {
+      "label": "救われた薬学書",
+      "text": "薬学書を回収した。患者の治療に使う一冊を先に選び、家族と言語の記録は次の救出へ残った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "family": {
+      "label": "救われた家族の記録",
+      "text": "家族の記録を回収した。名を辿れる一冊を先に選び、薬学書と言語書は次の救出へ残った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "language": {
+      "label": "救われた地域の言葉",
+      "text": "言語書を回収した。話す人の減った言葉を先に選び、薬学書と家族の記録は次の救出へ残った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "prepare": {
+      "label": "次の救出の準備",
+      "text": "一冊を回収し、追加の人員と道具を申請した。今すぐ全冊を救った報告にはしなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "close": {
+      "label": "閉じて残す",
+      "text": "火の区画を封鎖した。館長は戸を閉める音を聞き、蔵書を残すための休止を受け入れた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "火は内容でなく、未完の読書に応じて再現される記憶魔法です。読み終えた児童書だけが冷たいことを先に示します。一冊を最後まで読む間、他の本へ手を出さなければその本を安全に持ち出せます。館長が何冊も同時に開いたことが火勢を保っています。",
+      "fixedPast": "一度燃えた図書館に、焦げた頁を開くたび新しい火が灯ります。写本師エルは唯一の薬学書を回収したい。消防係は全焼を防ぐため封鎖を望みます。館長は、自分が避難順を誤った過去を、蔵書を残すことで償おうとしています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "写本師エル",
+        "beliefsAndGoals": "一度燃えた図書館に、焦げた頁を開くたび新しい火が灯ります。写本師エルは唯一の薬学書を回収したい。消防係は全焼を防ぐため封鎖を望みます。館長は、自分が避難順を誤った過去を、蔵書を残すことで償おうとしています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "燃え残る図書館から、今救える一冊を選んでください。"
+      }
+    ],
+    "conflict": {
+      "design": "封鎖口→調査→一冊選定→読解三段階／途中退避→回収。別の本へ変える場合、読解は対象ごとに保管し、同時に開けません。薬学書以外を選ぶ理由も、それぞれ家族記録と地域の言語保存として示します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q137.scene.entry"
+        },
+        {
+          "id": "read",
+          "script": "q137.scene.read"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "燃え残る図書館から、今救える一冊を選んでください。"
+    },
+    "reveal": {
+      "newInformation": "火は内容でなく、未完の読書に応じて再現される記憶魔法です。読み終えた児童書だけが冷たいことを先に示します。一冊を最後まで読む間、他の本へ手を出さなければその本を安全に持ち出せます。館長が何冊も同時に開いたことが火勢を保っています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q137.scene.entry"
+      },
+      {
+        "id": "read",
+        "script": "q137.scene.read"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "この版は選んだ一冊を確定し、途中で別の本へ変更しない。一冊ごとの読解保存を装う処理は行わない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q137.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q137.book",
+        "meaning": "作者原稿の book に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q137.pages",
+        "meaning": "作者原稿の pages に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "read"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "読み終えた児童書だけ冷たい。館長が何冊も開いたままにしたため、未完の読書の火が続いていた。一冊を三段階読み終えれば持ち出せる。",
+        "options": [
+          {
+            "id": "medicine",
+            "text": "薬学書を選ぶ",
+            "to": "read",
+            "set": {
+              "book": "medicine",
+              "pages": 0
+            }
+          },
+          {
+            "id": "family",
+            "text": "家族の記録を選ぶ",
+            "to": "read",
+            "set": {
+              "book": "family",
+              "pages": 0
+            }
+          },
+          {
+            "id": "language",
+            "text": "地域の言語書を選ぶ",
+            "to": "read",
+            "set": {
+              "book": "language",
+              "pages": 0
+            }
+          },
+          {
+            "id": "close",
+            "text": "全て閉じて将来の救出に備える",
+            "to": "@close"
+          }
+        ]
+      },
+      {
+        "id": "read",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q137.pages"
+              },
+              "right": 3
+            },
+            "yes": "選んだ一冊は冷たくなった。今はこれを安全に持ち出せる。",
+            "no": "他の本を開かず、この一冊の続きを読む。読む行為を選ぶごとに一段階進む。"
+          }
+        ],
+        "options": [
+          {
+            "id": "page",
+            "text": "次の段階を読み終える",
+            "to": "read",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q137.pages"
+              },
+              "right": 3
+            },
+            "set": {
+              "pages": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q137.pages"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "carry_medicine",
+            "text": "読み終えた本を回収する",
+            "to": "@medicine",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q137.pages"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q137.book"
+                  },
+                  "right": "medicine"
+                }
+              ]
+            },
+            "visible": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q137.book"
+              },
+              "right": "medicine"
+            }
+          },
+          {
+            "id": "carry_family",
+            "text": "読み終えた本を回収する",
+            "to": "@family",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q137.pages"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q137.book"
+                  },
+                  "right": "family"
+                }
+              ]
+            },
+            "visible": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q137.book"
+              },
+              "right": "family"
+            }
+          },
+          {
+            "id": "carry_language",
+            "text": "読み終えた本を回収する",
+            "to": "@language",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "gte",
+                  "left": {
+                    "ref": "flags.quest.q137.pages"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.quest.q137.book"
+                  },
+                  "right": "language"
+                }
+              ]
+            },
+            "visible": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q137.book"
+              },
+              "right": "language"
+            }
+          },
+          {
+            "id": "prepare",
+            "text": "一冊を回収し、追加分は増援を準備する",
+            "to": "@prepare",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q137.pages"
+              },
+              "right": 3
+            }
+          },
+          {
+            "id": "close",
+            "text": "今は本を閉じ、危険区画を封鎖する",
+            "to": "@close"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q137.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q137.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "読み終えた児童書だけ冷たい。館長が何冊も開いたままにしたため、未完の読書の火が続いていた。一冊を三段階読み終えれば持ち出せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "medicine",
+              "text": "薬学書を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.book",
+                  "value": "medicine"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.pages",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q137.scene.read"
+                }
+              ]
+            },
+            {
+              "id": "family",
+              "text": "家族の記録を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.book",
+                  "value": "family"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.pages",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q137.scene.read"
+                }
+              ]
+            },
+            {
+              "id": "language",
+              "text": "地域の言語書を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.book",
+                  "value": "language"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.pages",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q137.scene.read"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "全て閉じて将来の救出に備える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.close"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q137.scene.read": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q137.node",
+          "value": "read"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q137.pages"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "選んだ一冊は冷たくなった。今はこれを安全に持ち出せる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "他の本を開かず、この一冊の続きを読む。読む行為を選ぶごとに一段階進む。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "page",
+              "text": "次の段階を読み終える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q137.pages"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q137.pages",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q137.pages"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q137.scene.read"
+                }
+              ]
+            },
+            {
+              "id": "carry_medicine",
+              "text": "読み終えた本を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q137.pages"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q137.book"
+                        },
+                        "right": "medicine"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q137.book"
+                },
+                "right": "medicine"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.medicine"
+                }
+              ]
+            },
+            {
+              "id": "carry_family",
+              "text": "読み終えた本を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q137.pages"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q137.book"
+                        },
+                        "right": "family"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q137.book"
+                },
+                "right": "family"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.family"
+                }
+              ]
+            },
+            {
+              "id": "carry_language",
+              "text": "読み終えた本を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "flags.quest.q137.pages"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.quest.q137.book"
+                        },
+                        "right": "language"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q137.book"
+                },
+                "right": "language"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.language"
+                }
+              ]
+            },
+            {
+              "id": "prepare",
+              "text": "一冊を回収し、追加分は増援を準備する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q137.pages"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.prepare"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "今は本を閉じ、危険区画を封鎖する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q137.end.close"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q137.end.medicine": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "薬学書を回収した。患者の治療に使う一冊を先に選び、家族と言語の記録は次の救出へ残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q137",
+              "outcome": "medicine"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q137.end.family": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家族の記録を回収した。名を辿れる一冊を先に選び、薬学書と言語書は次の救出へ残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q137",
+              "outcome": "family"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q137.end.language": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "言語書を回収した。話す人の減った言葉を先に選び、薬学書と家族の記録は次の救出へ残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q137",
+              "outcome": "language"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q137.end.prepare": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一冊を回収し、追加の人員と道具を申請した。今すぐ全冊を救った報告にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q137",
+              "outcome": "prepare"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q137.end.close": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "火の区画を封鎖した。館長は戸を閉める音を聞き、蔵書を残すための休止を受け入れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q137",
+              "outcome": "close"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q137.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q137.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q137.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "medicine",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "薬学書を回収した。患者の治療に使う一冊を先に選び、家族と言語の記録は次の救出へ残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "family",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "家族の記録を回収した。名を辿れる一冊を先に選び、薬学書と言語書は次の救出へ残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "language",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "言語書を回収した。話す人の減った言葉を先に選び、薬学書と家族の記録は次の救出へ残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "prepare",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一冊を回収し、追加の人員と道具を申請した。今すぐ全冊を救った報告にはしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "close",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "火の区画を封鎖した。館長は戸を閉める音を聞き、蔵書を残すための休止を受け入れた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q137.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q137.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "read",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q137.scene.read"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q137.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

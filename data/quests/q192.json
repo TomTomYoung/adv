@@ -1,0 +1,675 @@
+{
+  "schemaVersion": 1,
+  "id": "q192",
+  "number": 192,
+  "title": "消えた依頼板",
+  "client": "組合長メナ",
+  "brief": "村の依頼板がなくなりました。持ち去った人を探してください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q192_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "renew": {
+      "label": "依頼板の相談机",
+      "text": "メナは相談机に座り、研修と緊急連絡を始めた。板の釘穴には、小さな鉛筆立てが収まった。",
+      "gold": 165,
+      "xp": 105
+    },
+    "restore": {
+      "label": "再開した受付",
+      "text": "受付は戻った。仕事の減った理由を怠慢とはせず、住人の予定表と重ならないよう調整を続けた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "step": {
+      "label": "見守る組合",
+      "text": "大きな受付を縮めた。助け合いで届かない仕事が出た時の連絡先だけ、机の端へ残した。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "かつて救った店へ行くと、今は別の店の荷物を預かっています。組合長は存在意義を失うのが怖く、難しい依頼だけを誇張して掲示し直そうとします。住民は冒険者を排除したいわけでなく、日常の判断を取り戻したいのです。",
+      "fixedPast": "いつもの町の依頼板が撤去され、組合長は何者かの妨害を疑います。町の人々は、冒険者へ頼む前に自分たちで相談する場所へ変えていました。主人公の仕事が役立たなかったのではなく、修繕や連絡の方法が町へ残った結果です。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "組合長メナ",
+        "beliefsAndGoals": "いつもの町の依頼板が撤去され、組合長は何者かの妨害を疑います。町の人々は、冒険者へ頼む前に自分たちで相談する場所へ変えていました。主人公の仕事が役立たなかったのではなく、修繕や連絡の方法が町へ残った結果です。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "村の依頼板がなくなりました。持ち去った人を探してください。"
+      }
+    ],
+    "conflict": {
+      "design": "旧広場→店／橋／炊事場を任意順に訪問→組合会議。依頼仲介、訓練、緊急対応へ組合を改める道と、旧制度を維持する道があります。役割変更には住民と組合の合意が必要です。主人公が会議を降りても町は話合いを続けます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q192.scene.entry"
+        },
+        {
+          "id": "roles",
+          "script": "q192.scene.roles"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "村の依頼板がなくなりました。持ち去った人を探してください。"
+    },
+    "reveal": {
+      "newInformation": "かつて救った店へ行くと、今は別の店の荷物を預かっています。組合長は存在意義を失うのが怖く、難しい依頼だけを誇張して掲示し直そうとします。住民は冒険者を排除したいわけでなく、日常の判断を取り戻したいのです。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q192.scene.entry"
+      },
+      {
+        "id": "roles",
+        "script": "q192.scene.roles"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q192.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q192.shop",
+        "meaning": "作者原稿の shop に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q192.bridge",
+        "meaning": "作者原稿の bridge に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q192.kitchen",
+        "meaning": "作者原稿の kitchen に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": [
+          "盗難の跡はない。店、橋、炊事場に小さな手伝いの予定表がある。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q103.outcome"
+              },
+              "right": "joint"
+            },
+            "yes": "以前の共同炊事を覚えた人が、今回も分担を相談していた。",
+            "no": ""
+          }
+        ],
+        "options": [
+          {
+            "id": "shop",
+            "text": "店の助け合いを聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q192.shop"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "shop": true
+            },
+            "textAfter": "配達の帰りに薪も運ぶ。大仕事はまだ頼めないと店主は言った。"
+          },
+          {
+            "id": "bridge",
+            "text": "橋の当番を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q192.bridge"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "bridge": true
+            },
+            "textAfter": "住人が交代で板を直している。危険な補修には専門家が要る。"
+          },
+          {
+            "id": "kitchen",
+            "text": "炊事場の分担を聞く",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q192.kitchen"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "kitchen": true
+            },
+            "textAfter": "板はここで相談机になっていた。組合を嫌ったのでなく、近い人で済む仕事が増えたのだ。"
+          },
+          {
+            "id": "consult",
+            "text": "三か所の話を持ち寄り、組合の次の仕事を相談する",
+            "to": "roles",
+            "need": [
+              "shop",
+              "bridge",
+              "kitchen"
+            ]
+          },
+          {
+            "id": "restore",
+            "text": "従来の受付を再開する",
+            "to": "@restore"
+          },
+          {
+            "id": "step",
+            "text": "住人の助け合いを見守り、受付を縮める",
+            "to": "@step"
+          }
+        ]
+      },
+      {
+        "id": "roles",
+        "text": "メナは仕事の数より、頼られなくなるのが怖かったと認めた。住人は危険な仕事の仲介と、初めて手伝う人への研修を組合に頼みたいという。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "仲介・研修・緊急連絡を引き受ける合意を結ぶ",
+            "to": "@renew"
+          },
+          {
+            "id": "step",
+            "text": "合意を急がず、受付を縮める",
+            "to": "@step"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q192.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q192.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "盗難の跡はない。店、橋、炊事場に小さな手伝いの予定表がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.outcome"
+            },
+            "right": "joint"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "以前の共同炊事を覚えた人が、今回も分担を相談していた。"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shop",
+              "text": "店の助け合いを聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q192.shop"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q192.shop",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "配達の帰りに薪も運ぶ。大仕事はまだ頼めないと店主は言った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q192.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "bridge",
+              "text": "橋の当番を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q192.bridge"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q192.bridge",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "住人が交代で板を直している。危険な補修には専門家が要る。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q192.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "kitchen",
+              "text": "炊事場の分担を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q192.kitchen"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q192.kitchen",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "板はここで相談机になっていた。組合を嫌ったのでなく、近い人で済む仕事が増えたのだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q192.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "consult",
+              "text": "三か所の話を持ち寄り、組合の次の仕事を相談する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q192.shop"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q192.bridge"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q192.kitchen"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q192.scene.roles"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "従来の受付を再開する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q192.end.restore"
+                }
+              ]
+            },
+            {
+              "id": "step",
+              "text": "住人の助け合いを見守り、受付を縮める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q192.end.step"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q192.scene.roles": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q192.node",
+          "value": "roles"
+        },
+        {
+          "op": "say",
+          "text": "メナは仕事の数より、頼られなくなるのが怖かったと認めた。住人は危険な仕事の仲介と、初めて手伝う人への研修を組合に頼みたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "仲介・研修・緊急連絡を引き受ける合意を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q192.end.renew"
+                }
+              ]
+            },
+            {
+              "id": "step",
+              "text": "合意を急がず、受付を縮める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q192.end.step"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q192.end.renew": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q192.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "メナは相談机に座り、研修と緊急連絡を始めた。板の釘穴には、小さな鉛筆立てが収まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q192",
+              "outcome": "renew"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q192.end.restore": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q192.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "受付は戻った。仕事の減った理由を怠慢とはせず、住人の予定表と重ならないよう調整を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q192",
+              "outcome": "restore"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q192.end.step": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q192.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "大きな受付を縮めた。助け合いで届かない仕事が出た時の連絡先だけ、机の端へ残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q192",
+              "outcome": "step"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q192.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q192.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q192.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "renew",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "メナは相談机に座り、研修と緊急連絡を始めた。板の釘穴には、小さな鉛筆立てが収まった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "restore",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "受付は戻った。仕事の減った理由を怠慢とはせず、住人の予定表と重ならないよう調整を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "step",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "大きな受付を縮めた。助け合いで届かない仕事が出た時の連絡先だけ、机の端へ残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q192.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q192.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q192.scene.roles"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q192.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

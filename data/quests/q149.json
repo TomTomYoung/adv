@@ -1,0 +1,457 @@
+{
+  "schemaVersion": 1,
+  "id": "q149",
+  "number": 149,
+  "title": "売らない剣",
+  "client": "武具商と鍛冶師",
+  "brief": "競売へ運ぶ剣の護衛と取引の立会いをお願いします。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q149_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "collector": {
+      "label": "展示される剣",
+      "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "user": {
+      "label": "使われる刃",
+      "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。",
+      "gold": 105,
+      "xp": 75
+    },
+    "withdraw": {
+      "label": "貸し出す余地",
+      "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせます。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることです。武具商は損失を避けるため、触れずに買う富豪へ売ろうとします。",
+      "fixedPast": "武具商が、名剣を競売へ運ぶ護衛を募ります。鍛冶師は売却に同意していますが、剣は所有者の希望する姿へ変わるため、誰も買えません。競り人が握ると鍬、別の客では裁縫針になり、武器としての値段が付かなくなります。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "武具商と鍛冶師",
+        "beliefsAndGoals": "武具商が、名剣を競売へ運ぶ護衛を募ります。鍛冶師は売却に同意していますが、剣は所有者の希望する姿へ変わるため、誰も買えません。競り人が握ると鍬、別の客では裁縫針になり、武器としての値段が付かなくなります。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "競売へ運ぶ剣の護衛と取引の立会いをお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→競売の試持ち→収集家へ販売／使い手を探す／売却撤回。使い手への譲渡には製作費をどこで負担するか合意します。高額販売も詐欺でない説明済みの取引として可能です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q149.scene.entry"
+        },
+        {
+          "id": "user",
+          "script": "q149.scene.user"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "競売へ運ぶ剣の護衛と取引の立会いをお願いします。"
+    },
+    "reveal": {
+      "newInformation": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせます。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることです。武具商は損失を避けるため、触れずに買う富豪へ売ろうとします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q149.scene.entry"
+      },
+      {
+        "id": "user",
+        "script": "q149.scene.user"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q149.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "剣は望む道具へ変わる。試持ちは願望を人前へ見せる可能性があると、触る前に説明した。客が握ると鍬になった。",
+        "options": [
+          {
+            "id": "collector",
+            "text": "性質を説明したうえで収集家へ売る",
+            "to": "@collector"
+          },
+          {
+            "id": "user",
+            "text": "道具を使いたい人と製作費を相談する",
+            "to": "user"
+          },
+          {
+            "id": "withdraw",
+            "text": "売却を撤回し、貸出制を考える",
+            "to": "@withdraw"
+          }
+        ]
+      },
+      {
+        "id": "user",
+        "text": "農夫は鍬として使いたい。鍛冶師は製作費の一部を減らし、残り40Gなら譲ると答えた。使われることが望みだった。",
+        "options": [
+          {
+            "id": "pay",
+            "text": "残り40Gを負担し、農夫への譲渡を取り持つ",
+            "to": "@user",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "collector",
+            "text": "費用を負担せず、説明済みの販売へ戻る",
+            "to": "@collector"
+          },
+          {
+            "id": "withdraw",
+            "text": "今回は売らない",
+            "to": "@withdraw"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q149.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q149.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "剣は望む道具へ変わる。試持ちは願望を人前へ見せる可能性があると、触る前に説明した。客が握ると鍬になった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collector",
+              "text": "性質を説明したうえで収集家へ売る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.collector"
+                }
+              ]
+            },
+            {
+              "id": "user",
+              "text": "道具を使いたい人と製作費を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.user"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "売却を撤回し、貸出制を考える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q149.scene.user": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q149.node",
+          "value": "user"
+        },
+        {
+          "op": "say",
+          "text": "農夫は鍬として使いたい。鍛冶師は製作費の一部を減らし、残り40Gなら譲ると答えた。使われることが望みだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pay",
+              "text": "残り40Gを負担し、農夫への譲渡を取り持つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.end.user"
+                }
+              ]
+            },
+            {
+              "id": "collector",
+              "text": "費用を負担せず、説明済みの販売へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.collector"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今回は売らない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q149.end.collector": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "collector"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.end.user": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "user"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.end.withdraw": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "withdraw"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q149.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "collector",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "user",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "withdraw",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q149.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q149.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "user",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q149.scene.user"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

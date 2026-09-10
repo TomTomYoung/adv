@@ -1,0 +1,489 @@
+{
+  "schemaVersion": 1,
+  "id": "q127",
+  "number": 127,
+  "title": "魔物の借金",
+  "client": "傭兵組合の帳簿係",
+  "brief": "倒しても出る泥人形の後始末をお願いします。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q127_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "release": {
+      "label": "契約の解除",
+      "text": "証文は解除され、泥は作業用へ戻った。帳簿係は討伐数でなく、次の人形が出ないことを確かめた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "seal": {
+      "label": "期限のある封印",
+      "text": "当面の再生は止まった。帳簿係は次の交渉日を借主へ伝え、討伐料を無限に加算する欄を閉じた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "break": {
+      "label": "生成器の破壊",
+      "text": "人形は出なくなったが、請求は残った。傭兵と借主は、物を壊した結果と契約の争いを別々に引き受けた。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "同じ借主の名が別の人形から現れ、Kが増えても借主の戸口の印が消えません。討伐数が虚偽なのではなく、除去した個体数と契約の終結が別なのです。術者は利息を取り続けるため、核の処理法を教えていません。",
+      "fixedPast": "傭兵組合は、泥人形の退治を請け負った隊の後始末を頼みます。隊は倒すたび報酬を受け取りましたが、泥人形は借金証文を核に作られ、壊すと証文が別の泥へ移ります。帳簿係は手続を、傭兵は自分の戦果を守ろうとします。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "傭兵組合の帳簿係",
+        "beliefsAndGoals": "傭兵組合は、泥人形の退治を請け負った隊の後始末を頼みます。隊は倒すたび報酬を受け取りましたが、泥人形は借金証文を核に作られ、壊すと証文が別の泥へ移ります。帳簿係は手続を、傭兵は自分の戦果を守ろうとします。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "倒しても出る泥人形の後始末をお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "討伐→再出現の確認→術者との交渉／契約の調査→一時封印／正規解除／生成器破壊。解除には借主の代理権と所定の支払が必要です。破壊は請求権までは消さず、後日の紛争を残します。資金不足なら封印で時間を買えます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q127.scene.entry"
+        },
+        {
+          "id": "terms",
+          "script": "q127.scene.terms"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "倒しても出る泥人形の後始末をお願いします。"
+    },
+    "reveal": {
+      "newInformation": "同じ借主の名が別の人形から現れ、Kが増えても借主の戸口の印が消えません。討伐数が虚偽なのではなく、除去した個体数と契約の終結が別なのです。術者は利息を取り続けるため、核の処理法を教えていません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q127.scene.entry"
+      },
+      {
+        "id": "terms",
+        "script": "q127.scene.terms"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q127.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "傭兵の記録には、壊した泥人形の証文が隣の泥へ移ったとある。帳簿係は戦果の数字を直そうとする。あなたの隊はまだ今回の個体に手を出していない。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "一体を倒し、核の動きを確認する",
+            "to": "terms",
+            "combat": "story_127",
+            "escape": "entry"
+          },
+          {
+            "id": "terms",
+            "text": "先に契約の解除条件を調べる",
+            "to": "terms"
+          }
+        ]
+      },
+      {
+        "id": "terms",
+        "text": "倒した個体数は本当でも、借金契約は終わらない。借主はあなたを代理人とすることに同意した。解除には40Gが必要だ。",
+        "options": [
+          {
+            "id": "release",
+            "text": "代理権に基づき40Gで正規解除する",
+            "to": "@release",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "seal",
+            "text": "有限の封印で時間を買う",
+            "to": "@seal"
+          },
+          {
+            "id": "break",
+            "text": "生成器を壊す。借金の請求権は残る",
+            "to": "@break",
+            "combat": "story_127",
+            "escape": "terms"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q127.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q127.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "傭兵の記録には、壊した泥人形の証文が隣の泥へ移ったとある。帳簿係は戦果の数字を直そうとする。あなたの隊はまだ今回の個体に手を出していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "一体を倒し、核の動きを確認する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_127",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q127.scene.terms"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q127.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "terms",
+              "text": "先に契約の解除条件を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q127.scene.terms"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q127.scene.terms": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q127.node",
+          "value": "terms"
+        },
+        {
+          "op": "say",
+          "text": "倒した個体数は本当でも、借金契約は終わらない。借主はあなたを代理人とすることに同意した。解除には40Gが必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "release",
+              "text": "代理権に基づき40Gで正規解除する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q127.end.release"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "有限の封印で時間を買う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q127.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "生成器を壊す。借金の請求権は残る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_127",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q127.end.break"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q127.scene.terms"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q127.end.release": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q127.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "証文は解除され、泥は作業用へ戻った。帳簿係は討伐数でなく、次の人形が出ないことを確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q127",
+              "outcome": "release"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q127.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q127.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "当面の再生は止まった。帳簿係は次の交渉日を借主へ伝え、討伐料を無限に加算する欄を閉じた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q127",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q127.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q127.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人形は出なくなったが、請求は残った。傭兵と借主は、物を壊した結果と契約の争いを別々に引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q127",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q127.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q127.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q127.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "release",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "証文は解除され、泥は作業用へ戻った。帳簿係は討伐数でなく、次の人形が出ないことを確かめた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "当面の再生は止まった。帳簿係は次の交渉日を借主へ伝え、討伐料を無限に加算する欄を閉じた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "break",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人形は出なくなったが、請求は残った。傭兵と借主は、物を壊した結果と契約の争いを別々に引き受けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q127.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q127.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "terms",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q127.scene.terms"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q127.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

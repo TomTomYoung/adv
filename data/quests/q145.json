@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q145",
+  "number": 145,
+  "title": "花を咲かせない庭",
+  "client": "庭師ロマ",
+  "brief": "師の庭が咲かない理由を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q145_scene",
+      "x": 9,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "now": {
+      "label": "今の庭",
+      "text": "花の絵を娘へ送った。母は不在を責める手紙より先に、次に植えたい花を書いた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "half": {
+      "label": "二つの季節",
+      "text": "一部の花が先に開いた。同じ庭の二つの季節を、母は自分の予定で歩いた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "waited": {
+      "label": "待つのを終える花",
+      "text": "一通を待ってから花を開いた。帰省を断ったのではなく、今日の庭を楽しむ日を母が選んだ。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "娘の帰省は何度も延期され、母にはその約束が知らされていません。蕾を守る覆いが美しく整えられていることで、放置でなく意図的な管理だと示します。娘は母を喜ばせたい一方、自分がいない日にも母が楽しむことを考えていません。",
+      "fixedPast": "若い庭師ロマは、師の庭が咲かない理由を調べてほしいと言います。庭の主である老婦人は、庭師が下手になったと怒っています。師は開花を遅らせています。遠くで働く婦人の娘が、戻る日に合わせて見せてほしいと頼んだからです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "庭師ロマ",
+        "beliefsAndGoals": "若い庭師ロマは、師の庭が咲かない理由を調べてほしいと言います。庭の主である老婦人は、庭師が下手になったと怒っています。師は開花を遅らせています。遠くで働く婦人の娘が、戻る日に合わせて見せてほしいと頼んだからです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "師の庭が咲かない理由を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "庭の観察→師／娘への伝言→母へ提案。今咲かせる、期限を決めて待つ、一部だけ咲かせる道があります。待つ期限は「次の便り一通まで」で、現実の日付を使いません。次便が来た場面で母が再判断します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q145.scene.entry"
+        },
+        {
+          "id": "letter",
+          "script": "q145.scene.letter"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "師の庭が咲かない理由を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "娘の帰省は何度も延期され、母にはその約束が知らされていません。蕾を守る覆いが美しく整えられていることで、放置でなく意図的な管理だと示します。娘は母を喜ばせたい一方、自分がいない日にも母が楽しむことを考えていません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q145.scene.entry"
+      },
+      {
+        "id": "letter",
+        "script": "q145.scene.letter"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q145.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "蕾の覆いは丁寧だ。師は娘の帰省まで開花を遅らせるよう頼まれたが、母は約束を知らなかった。帰省は何度も延びている。",
+        "options": [
+          {
+            "id": "now",
+            "text": "母の希望を聞き、今咲かせる",
+            "to": "@now"
+          },
+          {
+            "id": "half",
+            "text": "母の同意で一部だけ咲かせる",
+            "to": "@half"
+          },
+          {
+            "id": "wait",
+            "text": "母の希望で次の便り一通まで待つ",
+            "to": "letter"
+          }
+        ]
+      },
+      {
+        "id": "letter",
+        "text": "次便が来た。「まだ帰れません」母は手紙を閉じる。約束した待機の期限はここで終わり、今度は本人が決める。",
+        "options": [
+          {
+            "id": "open",
+            "text": "待つのをやめ、花を開く",
+            "to": "@waited"
+          },
+          {
+            "id": "half",
+            "text": "一部を開き、残りは母が管理する",
+            "to": "@half"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q145.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q145.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "蕾の覆いは丁寧だ。師は娘の帰省まで開花を遅らせるよう頼まれたが、母は約束を知らなかった。帰省は何度も延びている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "now",
+              "text": "母の希望を聞き、今咲かせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q145.end.now"
+                }
+              ]
+            },
+            {
+              "id": "half",
+              "text": "母の同意で一部だけ咲かせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q145.end.half"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "母の希望で次の便り一通まで待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q145.scene.letter"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q145.scene.letter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q145.node",
+          "value": "letter"
+        },
+        {
+          "op": "say",
+          "text": "次便が来た。「まだ帰れません」母は手紙を閉じる。約束した待機の期限はここで終わり、今度は本人が決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "待つのをやめ、花を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q145.end.waited"
+                }
+              ]
+            },
+            {
+              "id": "half",
+              "text": "一部を開き、残りは母が管理する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q145.end.half"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q145.end.now": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q145.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "花の絵を娘へ送った。母は不在を責める手紙より先に、次に植えたい花を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q145",
+              "outcome": "now"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q145.end.half": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q145.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一部の花が先に開いた。同じ庭の二つの季節を、母は自分の予定で歩いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q145",
+              "outcome": "half"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q145.end.waited": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q145.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一通を待ってから花を開いた。帰省を断ったのではなく、今日の庭を楽しむ日を母が選んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q145",
+              "outcome": "waited"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q145.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q145.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q145.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "now",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "花の絵を娘へ送った。母は不在を責める手紙より先に、次に植えたい花を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "half",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一部の花が先に開いた。同じ庭の二つの季節を、母は自分の予定で歩いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "waited",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一通を待ってから花を開いた。帰省を断ったのではなく、今日の庭を楽しむ日を母が選んだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q145.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q145.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "letter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q145.scene.letter"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q145.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

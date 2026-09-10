@@ -1,0 +1,412 @@
+{
+  "schemaVersion": 1,
+  "id": "q175",
+  "number": 175,
+  "title": "狩人を待つ獣",
+  "client": "猟師ミロの妹",
+  "brief": "戦法を先回りする鏡牙獣への対処を相談してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q175_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "changed": {
+      "label": "見せない稽古",
+      "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "drive": {
+      "label": "誘導して追う",
+      "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "front": {
+      "label": "正面戦の代価",
+      "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "獣の寝床に、人間用の訓練標が引きずり込まれています。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取ります。努力が無意味なのではなく、見せることが相手への教材になっています。",
+      "fixedPast": "村は、討伐隊が使う戦法を先回りする鏡牙獣に怯えています。猟師ミロは同じ突撃を磨けば勝てると信じ、妹は兄の傷が増えるのを見ています。獣は心を読むのでなく、村の広場で行われる公開訓練を夜に見て学んでいます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "猟師ミロの妹",
+        "beliefsAndGoals": "村は、討伐隊が使う戦法を先回りする鏡牙獣に怯えています。猟師ミロは同じ突撃を磨けば勝てると信じ、妹は兄の傷が増えるのを見ています。獣は心を読むのでなく、村の広場で行われる公開訓練を夜に見て学んでいます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "戦法を先回りする鏡牙獣への対処を相談してください。"
+      }
+    ],
+    "conflict": {
+      "design": "被害調査→訓練場／寝床→非公開の別戦法／見せかけの訓練／従来の正面戦→対決。偽訓練の後は対応する固定遭遇へ切り替えます。敗北なら学習条件を見直し、隠れた別地点から再挑戦できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q175.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "戦法を先回りする鏡牙獣への対処を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "獣の寝床に、人間用の訓練標が引きずり込まれています。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取ります。努力が無意味なのではなく、見せることが相手への教材になっています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q175.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "非公開戦法と正面戦は別の固定遭遇で実現。一般的な敵AI学習は追加しない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q175.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q175.changed",
+        "meaning": "作者原稿の changed に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ミロは同じ突撃を広場で磨く。獣の寝床には訓練標が運び込まれていた。心を読むのでなく、見て学んでいる。",
+        "options": [
+          {
+            "id": "hidden",
+            "text": "観客のいない場所で別戦法を練る",
+            "to": "@changed",
+            "combat": "story_175",
+            "escape": "entry",
+            "set": {
+              "changed": true
+            }
+          },
+          {
+            "id": "fake",
+            "text": "偽の訓練を見せ、誘導用の道へ追い込む",
+            "to": "@drive"
+          },
+          {
+            "id": "front",
+            "text": "従来の正面戦を押し通す（強い固定遭遇）",
+            "to": "@front",
+            "combat": "boss_8",
+            "escape": "entry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q175.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q175.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ミロは同じ突撃を広場で磨く。獣の寝床には訓練標が運び込まれていた。心を読むのでなく、見て学んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hidden",
+              "text": "観客のいない場所で別戦法を練る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q175.changed",
+                      "value": true
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.end.changed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fake",
+              "text": "偽の訓練を見せ、誘導用の道へ追い込む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.end.drive"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "従来の正面戦を押し通す（強い固定遭遇）",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q175.end.front"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q175.end.changed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "changed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.end.drive": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "drive"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.end.front": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "front"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q175.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "changed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "drive",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "front",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q175.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q175.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

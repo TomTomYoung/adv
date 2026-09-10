@@ -1,6 +1,6 @@
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -22,7 +22,7 @@ export function chooseOption(engine,id){
   const wait=engine.state.waiting;if(wait?.type!=='choice')return false;
   const frame=engine.state.vm.at(-1),command=commandsAt(engine.data,frame)[wait.index];
   const optionIndex=command.options.findIndex(o=>o.id===id),option=command.options[optionIndex];
-  if(!option||(option.condition&&!engine.value(option.condition)))return false;
+  if(!option||(option.visibleWhen!==undefined&&!engine.value(option.visibleWhen))||(option.condition!==undefined&&!engine.value(option.condition)))return false;
   engine.state.waiting=null;engine.log(`選択：${option.text}`);pushBranch(engine,frame,wait.index,['options',optionIndex,'commands']);pump(engine);return true;
 }
 export function pump(engine){
@@ -44,6 +44,11 @@ export function pump(engine){
         const args=Object.fromEntries(Object.entries(c.args??{}).map(([k,val])=>[k,v(val)]));
         if(!engine.data.scripts[c.script])throw new Error(`不明なスクリプト: ${c.script}`);
         state.vm.push({script:c.script,path:[],index:0,scope:state.nextScope++,branch:false,local:{args}});break;
+      }
+      case 'jump':{
+        if(!engine.data.scripts[c.script])throw new Error(`不明なスクリプト: ${c.script}`);
+        while(state.vm.at(-1)?.scope===frame.scope)state.vm.pop();
+        state.vm.push({script:c.script,path:[],index:0,scope:state.nextScope++,branch:false,local:clone(frame.local)});break;
       }
       case 'return':while(state.vm.at(-1)?.scope===frame.scope)state.vm.pop();break;
       case 'set':case 'add':case 'random.set':{

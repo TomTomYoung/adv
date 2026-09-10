@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-10。対象: 灯帰りの迷宮 1.3.0。
+更新日: 2026-09-10。対象: 灯帰りの迷宮 1.3.1。
 
 ## 最初に行うこと
 
@@ -12,7 +12,7 @@
 
 | 変更したいもの | 編集対象 |
 | --- | --- |
-| 依頼の文章・手掛かり・選択・結果 | data/quests/q001.json〜q100.json |
+| 依頼の文章・手掛かり・選択・結果 | authoring/scenarios-*.mjs、tools/build-scenarios.mjs、data/quests/q001.json〜q200.json |
 | 地形・扉・調査位置・トリガー | data/maps/*.json |
 | 共通イベント・施設・道具の処理 | data/scripts/common.json |
 | 戦闘ルールの数値・技能・AI | data/system.json、formulas.json、skills.json、enemies.json、encounters.json |
@@ -23,7 +23,7 @@
 | 音の状態・曲の切替・再試行 | src/application/audio.js |
 | 拡張魔物・仲間の原稿 | authoring/entities.json、tools/build-entities.mjs |
 
-現行の生成コードは `authoring/quests.txt` の100行を、独立したJSONへコンパイルします。ゲーム起動時に生成やテンプレート展開はしません。生成済みJSONを直接直した後にbuild-contentを走らせると修正が失われるため、再生成する変更か手編集かを最初に決めてください。原稿変更時はbuild-content、続いてbuild-fixtures、必要ならbuild-schemasを実行します。
+現行の再生成は `npm run build:scenarios` です。`authoring/quests.txt` の既存100行と、`authoring/scenarios-*.mjs` の追加100本を、独立したJSONへコンパイルします。ゲーム起動時に生成やテンプレート展開はしません。生成済みJSONを直接直した後にbuild-contentを走らせると修正が失われるため、再生成する変更か手編集かを最初に決めてください。原稿変更時はbuild:scenarios、続いてbuild-fixturesを実行します。
 
 1.1.0は魔物20体、仲間10人の肖像、酒場編成を追加しました。MONSTER_CATALOG、COMPANION_CATALOG、BALANCE_PLANを実装前にコミットし、後から画像と実測結果を追記しています。追加原稿だけの再生成はbuild-entities、計測はsimulate-balanceです。BGM新版と画像の生成プロンプトはassets/PROVENANCE.mdを参照してください。
 
@@ -51,7 +51,11 @@ JOB_SYSTEMとJOB_IMPLEMENTATIONを読んでください。原稿はauthoring/job
 
 node tools/simulate-balance.mjsとnode tools/simulate-jobs.mjsで計測できます。HTTPでの実起動と音声の最終確認は未完了です。Playwrightを用意した通常環境ではtools/browser-jobs-smoke.pyを使用できます。
 
-## シナリオ条件・フラグ・戦績システムの拡張
+## 1.3.1のシナリオ拡張
+
+[SCENARIO_IMPLEMENTATION](SCENARIO_IMPLEMENTATION.md) と [SCENARIO_DESIGN](SCENARIO_DESIGN.md) が今回の実装結果です。以下の提案のうち、戦績・受注時差分・jumpによる場面継続・非表示選択肢・保存移行を実装しました。actor_stat、一般化したObjective/Reward層、世界全体の時計は未実装です。元の提案は検討経緯として下に残します。
+
+## シナリオ条件・フラグ・戦績システムの拡張（1.3.0時点の提案）
 
 現状の式エンジンには `eq/ne/gt/gte/lt/lte/and/or/not/exists/in/contains` と、`has_item`、`has_member`、`has_status`、`event_done`、`map_discovered` があり、`flags` と `vars` の任意パスも条件式から参照できます。選択肢、`if`、クエストの `requires`、マップオブジェクトの `condition` などへ共通利用できるため、条件判定の基礎はできています。
 
@@ -86,7 +90,7 @@ node tools/simulate-balance.mjsとnode tools/simulate-jobs.mjsで計測できま
 
 優先はブラウザでの操作・レイキャスト表示・スマートフォン表示・音声の確認です。次にプレイテストの観察から移動距離と遭遇頻度、依頼の文量、地域別の戦闘難度を調整してください。
 
-コンテンツ拡張では、共通の三地点構成を維持したまま、順序依存の手掛かり、複数階をまたぐ追跡、期限や移動NPCを追加できます。新しい仕組みは汎用命令として実装し、個別シナリオの条件はJSONへ置きます。
+コンテンツ拡張では、現在の場面グラフを基礎に、複数階をまたぐ追跡や移動NPCを検討できます。新しい仕組みは汎用命令として実装し、個別シナリオの条件はJSONへ置きます。
 
 素材を再生成する場合はassets/PROVENANCE.mdを読んでください。AIPaint/AIMusicを最新版へ無断で差し替えず、固定ソースとの出力差を確認します。
 

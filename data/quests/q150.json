@@ -1,0 +1,608 @@
+{
+  "schemaVersion": 1,
+  "id": "q150",
+  "number": 150,
+  "title": "大道芸人の弟子",
+  "client": "曲芸師リッツ",
+  "brief": "弟子候補三人の試演を手伝ってください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q150_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "porter": {
+      "label": "客席から始める芸",
+      "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "thief": {
+      "label": "返す手の芸",
+      "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "singer": {
+      "label": "待つ間の歌",
+      "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "company": {
+      "label": "小さくなった看板",
+      "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "none": {
+      "label": "出演者としての精算",
+      "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "公開試演で道具が壊れ、予定の芸ができなくなります。荷役は観客席を直し、スリは落ちた財布を本人へ戻す芸にし、歌手は伴奏なしで待ち時間を埋めます。試験を仕掛けたのではなく、本当に失敗した舞台をそれぞれが救います。",
+      "fixedPast": "曲芸師リッツが、弟子選びの一日を手伝う相手を募ります。応募者は怪力の荷役、器用なスリ、口下手な歌手です。リッツは自分と同じ芸を継ぐ者を求め、誰の違う強みも欠点として見ています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "曲芸師リッツ",
+        "beliefsAndGoals": "曲芸師リッツが、弟子選びの一日を手伝う相手を募ります。応募者は怪力の荷役、器用なスリ、口下手な歌手です。リッツは自分と同じ芸を継ぐ者を求め、誰の違う強みも欠点として見ています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "弟子候補三人の試演を手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "面談→個別練習→本番の故障→誰へ仕事を渡すか→弟子選考。事前に特技を知らなくても本人が名乗り出ますが、十分な準備があれば成功の見せ方が変わります。共同一座には三人全員の同意と道具費が必要です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q150.scene.entry"
+        },
+        {
+          "id": "stage",
+          "script": "q150.scene.stage"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "弟子候補三人の試演を手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "公開試演で道具が壊れ、予定の芸ができなくなります。荷役は観客席を直し、スリは落ちた財布を本人へ戻す芸にし、歌手は伴奏なしで待ち時間を埋めます。試験を仕掛けたのではなく、本当に失敗した舞台をそれぞれが救います。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q150.scene.entry"
+      },
+      {
+        "id": "stage",
+        "script": "q150.scene.stage"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q150.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q150.prepared",
+        "meaning": "作者原稿の prepared に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "怪力の荷役、器用なスリ、口下手な歌手。リッツは自分と違う芸を欠点のように挙げる。",
+        "options": [
+          {
+            "id": "practice",
+            "text": "三人の得意な仕事を先に見せてもらう",
+            "to": "stage",
+            "set": {
+              "prepared": true
+            }
+          },
+          {
+            "id": "stage",
+            "text": "本番の試演へ進む",
+            "to": "stage"
+          }
+        ]
+      },
+      {
+        "id": "stage",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q150.prepared"
+              },
+              "right": true
+            },
+            "yes": "練習を見ていたので、壊れた舞台で誰に頼めるか分かった。",
+            "no": "道具が壊れた。仕込みの試験ではない。候補者たちが自分から名乗り出た。"
+          },
+          "荷役が客席を直し、スリが財布を返す芸をし、歌手が待ち時間を埋める。"
+        ],
+        "options": [
+          {
+            "id": "porter",
+            "text": "荷役へ主な仕事を渡し、弟子に選ぶ",
+            "to": "@porter"
+          },
+          {
+            "id": "thief",
+            "text": "スリへ主な仕事を渡し、弟子に選ぶ",
+            "to": "@thief"
+          },
+          {
+            "id": "singer",
+            "text": "歌手へ主な仕事を渡し、弟子に選ぶ",
+            "to": "@singer"
+          },
+          {
+            "id": "company",
+            "text": "全員の同意を得て一座を作る（道具代40G）",
+            "to": "@company",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "none",
+            "text": "出演料を精算し、今回は弟子を取らない",
+            "to": "@none"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q150.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q150.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "怪力の荷役、器用なスリ、口下手な歌手。リッツは自分と違う芸を欠点のように挙げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "practice",
+              "text": "三人の得意な仕事を先に見せてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q150.prepared",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage"
+                }
+              ]
+            },
+            {
+              "id": "stage",
+              "text": "本番の試演へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q150.scene.stage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q150.node",
+          "value": "stage"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q150.prepared"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "練習を見ていたので、壊れた舞台で誰に頼めるか分かった。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "道具が壊れた。仕込みの試験ではない。候補者たちが自分から名乗り出た。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "荷役が客席を直し、スリが財布を返す芸をし、歌手が待ち時間を埋める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役へ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.porter"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "スリへ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.thief"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手へ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.singer"
+                }
+              ]
+            },
+            {
+              "id": "company",
+              "text": "全員の同意を得て一座を作る（道具代40G）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.end.company"
+                }
+              ]
+            },
+            {
+              "id": "none",
+              "text": "出演料を精算し、今回は弟子を取らない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.none"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q150.end.porter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "porter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.thief": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "thief"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.singer": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "singer"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.company": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "company"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.none": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "none"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q150.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "porter",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "thief",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "singer",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "company",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "none",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q150.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q150.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stage",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q150.scene.stage"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

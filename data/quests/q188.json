@@ -1,0 +1,463 @@
+{
+  "schemaVersion": 1,
+  "id": "q188",
+  "number": 188,
+  "title": "帰還兵の席",
+  "client": "帰還兵ラフ",
+  "brief": "故郷の家まで護衛してください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q188_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "arrived": {
+      "label": "帰郷の護衛",
+      "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "old": {
+      "label": "戻す仕事の負担",
+      "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "share": {
+      "label": "新しい机",
+      "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "apart": {
+      "label": "距離のある帰還",
+      "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "食卓の席が変わり、使っていた道具が別の棚へ移っています。妻は彼の存在を消したのではなく、怪我した自分でも届く位置へ動かしました。小さな変更を疑惑として見せ、理由を一つずつ知れるようにします。",
+      "fixedPast": "行方不明だった兵士ラフを故郷へ送ります。妻は帰還を喜びますが、彼がいない間、弟と店を切り盛りして生活を作っています。弟は妻の恋人ではありません。しかしラフは家で役割を失ったことを、誰かに奪われたと感じます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "帰還兵ラフ",
+        "beliefsAndGoals": "行方不明だった兵士ラフを故郷へ送ります。妻は帰還を喜びますが、彼がいない間、弟と店を切り盛りして生活を作っています。弟は妻の恋人ではありません。しかしラフは家で役割を失ったことを、誰かに奪われたと感じます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "故郷の家まで護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "帰郷→家の観察／家族との個別会話→同じ仕事へ戻る／役割を再分担／別の住まいから交流。本人が怒って家を出ても追跡戦にはせず、落ち着く場所で話せます。護衛依頼は安全な到着で達成し、家庭を仲直りさせることを報酬条件にしません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q188.scene.entry"
+        },
+        {
+          "id": "work",
+          "script": "q188.scene.work"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "故郷の家まで護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "食卓の席が変わり、使っていた道具が別の棚へ移っています。妻は彼の存在を消したのではなく、怪我した自分でも届く位置へ動かしました。小さな変更を疑惑として見せ、理由を一つずつ知れるようにします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q188.scene.entry"
+      },
+      {
+        "id": "work",
+        "script": "q188.scene.work"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q188.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "個別に理由を聞き、仕事を相談する",
+            "to": "work"
+          },
+          {
+            "id": "arrived",
+            "text": "安全な到着を報告し、家庭の判断には介入しない",
+            "to": "@arrived"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "text": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。",
+        "options": [
+          {
+            "id": "old",
+            "text": "弟の転職も含め、旧役割へ戻す合意を作る",
+            "to": "@old"
+          },
+          {
+            "id": "share",
+            "text": "三人で仕事を分け直す",
+            "to": "@share"
+          },
+          {
+            "id": "apart",
+            "text": "別の住まいから交流を続ける意思を尊重する",
+            "to": "@apart"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q188.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q188.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "個別に理由を聞き、仕事を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.scene.work"
+                }
+              ]
+            },
+            {
+              "id": "arrived",
+              "text": "安全な到着を報告し、家庭の判断には介入しない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.arrived"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q188.scene.work": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q188.node",
+          "value": "work"
+        },
+        {
+          "op": "say",
+          "text": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "old",
+              "text": "弟の転職も含め、旧役割へ戻す合意を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.old"
+                }
+              ]
+            },
+            {
+              "id": "share",
+              "text": "三人で仕事を分け直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.share"
+                }
+              ]
+            },
+            {
+              "id": "apart",
+              "text": "別の住まいから交流を続ける意思を尊重する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.apart"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q188.end.arrived": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "arrived"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.old": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "old"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.share": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "share"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.apart": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "apart"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q188.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "arrived",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "old",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "share",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "apart",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q188.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q188.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "work",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q188.scene.work"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q188.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

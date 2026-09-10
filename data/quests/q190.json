@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 1,
+  "id": "q190",
+  "number": 190,
+  "title": "終戦翌日の魔物",
+  "client": "兵站係フウ",
+  "brief": "終戦翌日の補給村を、骸骨獣から守ってください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q190_scene",
+      "x": 9,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "evac": {
+      "label": "村からの避難",
+      "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "only": {
+      "label": "討伐後の戦場",
+      "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "collect": {
+      "label": "終戦後の回収",
+      "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "魔物は敵国の呪いだけでなく、放置された軍用魔石の残響へ集まっています。旗が下りても戦場に残った物は消えません。戦勝式の遠い花火と、地面の骨の振動を交互に見せます。敵を倒す必要と後片付けの必要を分けます。",
+      "fixedPast": "終戦が決まった翌日、戦場の骸骨獣が補給村を襲います。軍は撤収を急ぎ、冒険者への討伐依頼だけを残そうとします。兵站係フウは、戦争が終われば危険も終わると家族に手紙を書いたばかりです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "兵站係フウ",
+        "beliefsAndGoals": "終戦が決まった翌日、戦場の骸骨獣が補給村を襲います。軍は撤収を急ぎ、冒険者への討伐依頼だけを残そうとします。兵站係フウは、戦争が終われば危険も終わると家族に手紙を書いたばかりです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "終戦翌日の補給村を、骸骨獣から守ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "襲撃防衛→魔石源の確認→討伐だけ／軍を引き留めて回収／避難を優先。回収は三か所の封鎖と安全な保管先が必要です。兵が去った後でも冒険者の増援で続けられますが費用が変わります。戦闘撤退なら避難の結末へ接続します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q190.scene.entry"
+        },
+        {
+          "id": "cleanup",
+          "script": "q190.scene.cleanup"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "終戦翌日の補給村を、骸骨獣から守ってください。"
+    },
+    "reveal": {
+      "newInformation": "魔物は敵国の呪いだけでなく、放置された軍用魔石の残響へ集まっています。旗が下りても戦場に残った物は消えません。戦勝式の遠い花火と、地面の骨の振動を交互に見せます。敵を倒す必要と後片付けの必要を分けます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q190.scene.entry"
+      },
+      {
+        "id": "cleanup",
+        "script": "q190.scene.cleanup"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q190.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q190.sites",
+        "meaning": "作者原稿の sites に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "cleanup"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q190.store",
+        "meaning": "作者原稿の store に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "cleanup"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "遠くで戦勝の花火が鳴り、地面の骨が振動する。群れは放置された軍用魔石へ集まっていた。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "まず襲撃を防ぎ、後処理を相談する",
+            "to": "cleanup",
+            "combat": "story_190",
+            "escape": "@evac",
+            "loss": "@evac",
+            "set": {
+              "sites": 0
+            }
+          },
+          {
+            "id": "evac",
+            "text": "戦わず村の避難を優先する",
+            "to": "@evac"
+          }
+        ]
+      },
+      {
+        "id": "cleanup",
+        "text": "群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。",
+        "options": [
+          {
+            "id": "site",
+            "text": "次の魔石区画を一か所封鎖する",
+            "to": "cleanup",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q190.sites"
+              },
+              "right": 3
+            },
+            "set": {
+              "sites": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q190.sites"
+                  },
+                  1
+                ]
+              }
+            },
+            "textAfter": "軍の地図の一か所と現地を照合し、その区画へ封鎖札を掛けた。"
+          },
+          {
+            "id": "store",
+            "text": "軍の安全な保管庫と受入れを確認する",
+            "to": "cleanup",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q190.store"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "store": true
+            }
+          },
+          {
+            "id": "collect",
+            "text": "封鎖した全区画から回収する",
+            "to": "@collect",
+            "need": [
+              "store"
+            ],
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q190.sites"
+              },
+              "right": 3
+            }
+          },
+          {
+            "id": "only",
+            "text": "今の討伐だけで任務を終える",
+            "to": "@only"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q190.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q190.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "遠くで戦勝の花火が鳴り、地面の骨が振動する。群れは放置された軍用魔石へ集まっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "まず襲撃を防ぎ、後処理を相談する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_190",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q190.sites",
+                      "value": 0
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.cleanup"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.end.evac"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.end.evac"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず村の避難を優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.evac"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q190.scene.cleanup": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q190.node",
+          "value": "cleanup"
+        },
+        {
+          "op": "say",
+          "text": "群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "site",
+              "text": "次の魔石区画を一か所封鎖する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q190.sites"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q190.sites",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q190.sites"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "say",
+                  "text": "軍の地図の一か所と現地を照合し、その区画へ封鎖札を掛けた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.scene.cleanup"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "軍の安全な保管庫と受入れを確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q190.store"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q190.store",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.scene.cleanup"
+                }
+              ]
+            },
+            {
+              "id": "collect",
+              "text": "封鎖した全区画から回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q190.sites"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q190.store"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.collect"
+                }
+              ]
+            },
+            {
+              "id": "only",
+              "text": "今の討伐だけで任務を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.only"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q190.end.evac": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "evac"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.end.only": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "only"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.end.collect": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "collect"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q190.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "evac",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "only",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "collect",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q190.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cleanup",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.cleanup"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q190.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

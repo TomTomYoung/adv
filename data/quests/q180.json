@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "id": "q180",
+  "number": 180,
+  "title": "最後の怪談",
+  "client": "宿主と語り部ムイ",
+  "brief": "翌夜に実現する怪談へ対処してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q180_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "home": {
+      "label": "帰る場所のある怪談",
+      "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "new": {
+      "label": "別の宿の結末",
+      "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "語りを残す封印",
+      "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "ban": {
+      "label": "静かな夜の宿",
+      "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "現れた怪物はいつも同じ場所で止まり、その後の動きがありません。散った古い台本には、村へ帰るだけの平凡な後半もあります。語り部の商売の工夫が、未完の恐怖を町へ置き去りにしています。",
+      "fixedPast": "宿で語られる怪談が翌夜に実現するため、語り部ムイの口を止めてほしいと頼まれます。怪異は話そのものより、結末まで聞かれなかった話を形にします。客は怖い部分で席を立ち、ムイは客を留めるため結末を延ばし続けていました。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "宿主と語り部ムイ",
+        "beliefsAndGoals": "宿で語られる怪談が翌夜に実現するため、語り部ムイの口を止めてほしいと頼まれます。怪異は話そのものより、結末まで聞かれなかった話を形にします。客は怖い部分で席を立ち、ムイは客を留めるため結末を延ばし続けていました。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "翌夜に実現する怪談へ対処してください。"
+      }
+    ],
+    "conflict": {
+      "design": "怪異の対処→語り部／台本庫→完結した語り／即時封印／語りを禁ずる。完結には元の結末か、既出事実を否定しない新しい結末を作者が用意します。聞き手が逃げた場合は護衛してやり直せます。怪物を倒しても未完の話は残ると示します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q180.scene.entry"
+        },
+        {
+          "id": "ending",
+          "script": "q180.scene.ending"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "翌夜に実現する怪談へ対処してください。"
+    },
+    "reveal": {
+      "newInformation": "現れた怪物はいつも同じ場所で止まり、その後の動きがありません。散った古い台本には、村へ帰るだけの平凡な後半もあります。語り部の商売の工夫が、未完の恐怖を町へ置き去りにしています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q180.scene.entry"
+      },
+      {
+        "id": "ending",
+        "script": "q180.scene.ending"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q180.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ばしていた。",
+        "options": [
+          {
+            "id": "scripts",
+            "text": "散った台本の後半を探す",
+            "to": "ending"
+          },
+          {
+            "id": "seal",
+            "text": "怪異を即時封印する",
+            "to": "@seal"
+          },
+          {
+            "id": "ban",
+            "text": "今後の語りを禁じる",
+            "to": "@ban"
+          }
+        ]
+      },
+      {
+        "id": "ending",
+        "text": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。",
+        "options": [
+          {
+            "id": "original",
+            "text": "元の平凡な帰郷で話を終える",
+            "to": "@home"
+          },
+          {
+            "id": "new",
+            "text": "怪物が遠い宿へ帰る新しい後半を語る",
+            "to": "@new"
+          },
+          {
+            "id": "seal",
+            "text": "完結を試さず封印する",
+            "to": "@seal"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q180.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q180.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ばしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "scripts",
+              "text": "散った台本の後半を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.scene.ending"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "怪異を即時封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "ban",
+              "text": "今後の語りを禁じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.ban"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q180.scene.ending": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q180.node",
+          "value": "ending"
+        },
+        {
+          "op": "say",
+          "text": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "original",
+              "text": "元の平凡な帰郷で話を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.home"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "怪物が遠い宿へ帰る新しい後半を語る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "完結を試さず封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q180.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.ban": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "ban"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q180.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ban",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q180.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q180.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ending",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q180.scene.ending"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q180.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

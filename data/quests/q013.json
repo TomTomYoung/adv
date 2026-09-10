@@ -35,26 +35,26 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "事情を踏まえた決着",
+      "label": "根の通り道を残して鉱脈を迂回する",
       "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "依頼を優先した決着",
+      "label": "根に巣食う魔物ごと切り開く",
       "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "別の道による決着",
+      "label": "調査標を置いて採掘を凍結する",
       "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。",
       "gold": 44,
       "xp": 57
     }
   },
   "model": {
-    "source": "https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4",
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
       "truth": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
       "history": [
@@ -140,24 +140,15 @@
         "clue_b"
       ],
       "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q013.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q013.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      }
+        "op": "contains",
+        "left": {
+          "ref": "quests.q013.evidence"
+        },
+        "right": "clue_b"
+      },
+      "window": "判断前。知った後も全ての決着を選べる",
+      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
+      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
     },
     "beats": [
       {
@@ -182,7 +173,31 @@
         ],
         "script": "q013.decision"
       }
-    ]
+    ],
+    "revision": "game-scenario-1.0",
+    "dramaticQuestion": "根に巣食う魔物ごと切り開くと根の通り道を残して鉱脈を迂回するの間で、誰が何を引き受けるか。",
+    "stateRegistry": [
+      {
+        "path": "quests.q013.evidence",
+        "meaning": "取得した観察・証言。真実や人物の内心とは別",
+        "initial": []
+      },
+      {
+        "path": "flags.quest.q013.disclosed",
+        "meaning": "判断前の事情説明を提示した履歴",
+        "initial": false
+      },
+      {
+        "path": "flags.quest.q013.questioned",
+        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
+        "initial": false
+      }
+    ],
+    "choiceContract": {
+      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
+      "residue": "結末と判断保留の発言を再会時に参照",
+      "reward": "報酬額を正解の判定として扱わない"
+    }
   },
   "scripts": {
     "q013.clue_a": {
@@ -326,6 +341,268 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "呼吸する鉱脈\n\n鉱脈が膨らむため掘れません。奥の異変を止めてください。\n\nこの場所で、依頼の行方を決められます。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q013.evidence"
+            },
+            "right": "clue_b"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q013.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "根に巣食う魔物ごと切り開く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q013",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いています。準備を整えて、この場所で再び判断できます。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "根の通り道を残して鉱脈を迂回する",
+              "condition": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q013.evidence"
+                },
+                "right": "clue_b"
+              },
+              "requirement": "現場の根拠を確認",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q013",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q013.evidence"
+                },
+                "right": "clue_b"
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "調査標を置いて採掘を凍結する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q013",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」鉱石商のセイは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられます。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q013.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q013.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q013.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q013.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q013.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q013.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q013.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q013.review"
             }
           ]
         }

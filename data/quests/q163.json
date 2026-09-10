@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q163",
+  "number": 163,
+  "title": "盗賊の初仕事",
+  "client": "元盗賊の鍵師ソム",
+  "brief": "初めての正式な修理に、保証人として立ち会ってください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "object": "q163_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "repair": {
+      "label": "慎重な取引",
+      "text": "修理を終え、品は店主と照合した。ソムは裏口へ消えず、正面で受取印を待った。",
+      "gold": 129,
+      "xp": 87
+    },
+    "repay": {
+      "label": "返済を伴う仕事",
+      "text": "正式な修理代が出た。弁償は長く続く契約として残り、一度の謝罪で消さなかった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "later": {
+      "label": "開けない延期",
+      "text": "立会いのない開錠はしなかった。店主は別業者も紹介し、次の仕事を奪う罰にはしなかった。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ソムは昔の侵入路を知っており、速く直せます。しかしそれを説明すれば別の未告白の盗みが明らかになります。謝罪すれば全て許されるのではなく、返す物と修理代をどう分けるかを話します。",
+      "fixedPast": "元盗賊ソムは、鍵師として初めて正式な依頼を受けます。依頼人は昔ソムに盗まれた店主で、腕を認めつつ信用しきれません。同行を頼まれた主人公は保証人ですが、店主は保証人がいる間だけ金庫を開けさせる条件を出します。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "元盗賊の鍵師ソム",
+        "beliefsAndGoals": "元盗賊ソムは、鍵師として初めて正式な依頼を受けます。依頼人は昔ソムに盗まれた店主で、腕を認めつつ信用しきれません。同行を頼まれた主人公は保証人ですが、店主は保証人がいる間だけ金庫を開けさせる条件を出します。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "初めての正式な修理に、保証人として立ち会ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "契約→金庫の外観確認→旧経路の利用／別手段の修理→開錠と照合。立会人不在なら鍵は開けず、別の日へ延期できます。昔の品が中から出ても、勝手に持ち帰らせず所有者の確認へ回します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q163.scene.entry"
+        },
+        {
+          "id": "repay",
+          "script": "q163.scene.repay"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "初めての正式な修理に、保証人として立ち会ってください。"
+    },
+    "reveal": {
+      "newInformation": "ソムは昔の侵入路を知っており、速く直せます。しかしそれを説明すれば別の未告白の盗みが明らかになります。謝罪すれば全て許されるのではなく、返す物と修理代をどう分けるかを話します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q163.scene.entry"
+      },
+      {
+        "id": "repay",
+        "script": "q163.scene.repay"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q163.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "店主は昔ソムに盗まれた相手だった。金庫は立会人のいる間だけ開ける契約だ。ソムは古い侵入路を知っている。",
+        "options": [
+          {
+            "id": "old",
+            "text": "未告白の侵入も説明し、古い経路を使う",
+            "to": "repay"
+          },
+          {
+            "id": "new",
+            "text": "別の手段で修理し、所有品を店主と照合する",
+            "to": "@repair"
+          },
+          {
+            "id": "later",
+            "text": "今は立会いを引き受けず延期する",
+            "to": "@later"
+          }
+        ]
+      },
+      {
+        "id": "repay",
+        "text": "ソムは別の日にも盗んだと認めた。店主は修理の代金と過去の弁償を別々に計算するよう求めた。金庫の中身を勝手に持ち帰らせない。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "修理と長期の弁償を分けて合意する",
+            "to": "@repay"
+          },
+          {
+            "id": "later",
+            "text": "合意を急がず、閉じたまま延期する",
+            "to": "@later"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q163.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q163.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "店主は昔ソムに盗まれた相手だった。金庫は立会人のいる間だけ開ける契約だ。ソムは古い侵入路を知っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "old",
+              "text": "未告白の侵入も説明し、古い経路を使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q163.scene.repay"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "別の手段で修理し、所有品を店主と照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q163.end.repair"
+                }
+              ]
+            },
+            {
+              "id": "later",
+              "text": "今は立会いを引き受けず延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q163.end.later"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q163.scene.repay": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q163.node",
+          "value": "repay"
+        },
+        {
+          "op": "say",
+          "text": "ソムは別の日にも盗んだと認めた。店主は修理の代金と過去の弁償を別々に計算するよう求めた。金庫の中身を勝手に持ち帰らせない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "修理と長期の弁償を分けて合意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q163.end.repay"
+                }
+              ]
+            },
+            {
+              "id": "later",
+              "text": "合意を急がず、閉じたまま延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q163.end.later"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q163.end.repair": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q163.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "修理を終え、品は店主と照合した。ソムは裏口へ消えず、正面で受取印を待った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q163",
+              "outcome": "repair"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q163.end.repay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q163.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "正式な修理代が出た。弁償は長く続く契約として残り、一度の謝罪で消さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q163",
+              "outcome": "repay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q163.end.later": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q163.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "立会いのない開錠はしなかった。店主は別業者も紹介し、次の仕事を奪う罰にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q163",
+              "outcome": "later"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q163.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q163.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q163.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "repair",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "修理を終え、品は店主と照合した。ソムは裏口へ消えず、正面で受取印を待った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "repay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "正式な修理代が出た。弁償は長く続く契約として残り、一度の謝罪で消さなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "later",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "立会いのない開錠はしなかった。店主は別業者も紹介し、次の仕事を奪う罰にはしなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q163.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q163.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "repay",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q163.scene.repay"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q163.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

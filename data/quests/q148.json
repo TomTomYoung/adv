@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "id": "q148",
+  "number": 148,
+  "title": "贋金より軽い金",
+  "client": "市場の両替人",
+  "brief": "同じ金貨で傾きが変わる秤を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q148_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "public": {
+      "label": "公開された比較",
+      "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "private": {
+      "label": "一人への返金",
+      "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "remove": {
+      "label": "秤を止める",
+      "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "同じ硬貨を別人が置くだけで目盛りが変わります。最初に貧しい客が損をしている場面を見せ、その人が悪人だからではなく、自責しやすさを利用されていると示します。図太い盗人の金貨が最も重くなる皮肉を置きます。",
+      "fixedPast": "市場の両替人は、同じ金貨なのに秤が人によって傾くと訴えます。秤師エギは罪悪感の重さを測る魔具を「純度の秤」として売っています。客の弱みを見つけ、値切るためです。彼の事情を聞いても意図的な詐欺は残ります。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "市場の両替人",
+        "beliefsAndGoals": "市場の両替人は、同じ金貨なのに秤が人によって傾くと訴えます。秤師エギは罪悪感の重さを測る魔具を「純度の秤」として売っています。客の弱みを見つけ、値切るためです。彼の事情を聞いても意図的な詐欺は残ります。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "同じ金貨で傾きが変わる秤を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "苦情→比較実験／仕入れ元→公開実演／私的返金交渉／装置だけ回収。証明前の告発は反論され、追加調査へ戻れます。秤師が逃げる場合は市場出口で追跡場面を行い、戦闘は必須にしません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q148.scene.entry"
+        },
+        {
+          "id": "denied",
+          "script": "q148.scene.denied"
+        },
+        {
+          "id": "proof",
+          "script": "q148.scene.proof"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ金貨で傾きが変わる秤を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "同じ硬貨を別人が置くだけで目盛りが変わります。最初に貧しい客が損をしている場面を見せ、その人が悪人だからではなく、自責しやすさを利用されていると示します。図太い盗人の金貨が最も重くなる皮肉を置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q148.scene.entry"
+      },
+      {
+        "id": "denied",
+        "script": "q148.scene.denied"
+      },
+      {
+        "id": "proof",
+        "script": "q148.scene.proof"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q148.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q148.proof",
+        "meaning": "作者原稿の proof に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。",
+        "options": [
+          {
+            "id": "test",
+            "text": "同じ硬貨を別の人に載せてもらう",
+            "to": "proof",
+            "set": {
+              "proof": true
+            }
+          },
+          {
+            "id": "accuse",
+            "text": "まだ試験せず、不正だと告発する",
+            "to": "denied"
+          },
+          {
+            "id": "remove",
+            "text": "秤だけを回収し、使用を止める",
+            "to": "@remove"
+          }
+        ]
+      },
+      {
+        "id": "denied",
+        "text": "エギは硬貨の違いだと反論した。あなたの疑いを誤りと断定はできないが、公の証明はまだない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "比較実験へ戻る",
+            "to": "entry"
+          },
+          {
+            "id": "remove",
+            "text": "装置の使用停止だけを仲介する",
+            "to": "@remove"
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "text": "同じ硬貨でも持主を替えると重さが変わった。純度でなく自責を読む秤だった。図太い客ほど有利になる。",
+        "options": [
+          {
+            "id": "public",
+            "text": "本人の内心を暴かず、比較結果を公開実演する",
+            "to": "@public"
+          },
+          {
+            "id": "private",
+            "text": "この客の返金を私的に交渉する",
+            "to": "@private"
+          },
+          {
+            "id": "remove",
+            "text": "装置だけを回収する",
+            "to": "@remove"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q148.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "同じ硬貨を別の人に載せてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q148.proof",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.scene.proof"
+                }
+              ]
+            },
+            {
+              "id": "accuse",
+              "text": "まだ試験せず、不正だと告発する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.denied"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "秤だけを回収し、使用を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q148.scene.denied": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "denied"
+        },
+        {
+          "op": "say",
+          "text": "エギは硬貨の違いだと反論した。あなたの疑いを誤りと断定はできないが、公の証明はまだない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "比較実験へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置の使用停止だけを仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q148.scene.proof": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "proof"
+        },
+        {
+          "op": "say",
+          "text": "同じ硬貨でも持主を替えると重さが変わった。純度でなく自責を読む秤だった。図太い客ほど有利になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "本人の内心を暴かず、比較結果を公開実演する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.public"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "この客の返金を私的に交渉する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.private"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置だけを回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q148.end.public": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "public"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.end.private": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "private"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.end.remove": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "remove"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q148.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "public",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "private",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "remove",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q148.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "denied",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.denied"
+                    }
+                  ]
+                },
+                {
+                  "equals": "proof",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.proof"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

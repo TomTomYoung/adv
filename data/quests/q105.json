@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "id": "q105",
+  "number": 105,
+  "title": "花嫁の片方の靴",
+  "client": "婚約者ダン",
+  "brief": "花嫁リセが見当たらず、靴が運河に浮いています。捜してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q105_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "return": {
+      "label": "空席のある式",
+      "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "roles": {
+      "label": "婚礼後の当番",
+      "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "delay": {
+      "label": "延期した祝い",
+      "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "靴を落としたのは、泥道で姉の荷車を押したためです。ダンは浮気や誘拐を恐れていますが、別の靴には工房の木屑が詰まっています。リセは姉に来てほしくても、今後の家業を手伝う気持ちは未整理です。仲直りの言葉だけでは姉は動きません。",
+      "fixedPast": "婚礼の日、成人した花嫁リセが姿を消し、靴だけが運河に浮かびます。婚約者ダンは捜索を頼みます。リセは結婚から逃げたのではなく、出席を拒む姉のもとへ行きました。姉は家業を一人で背負ったことへの怒りを、結婚への反対として口にしています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "婚約者ダン",
+        "beliefsAndGoals": "婚礼の日、成人した花嫁リセが姿を消し、靴だけが運河に浮かびます。婚約者ダンは捜索を頼みます。リセは結婚から逃げたのではなく、出席を拒む姉のもとへ行きました。姉は家業を一人で背負ったことへの怒りを、結婚への反対として口にしています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "花嫁リセが見当たらず、靴が運河に浮いています。捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "靴を拾う→工房か運河を追う→姉妹へ合流→婚礼へ戻る／役割を相談／式を延期。発見後はいつでも無事の報告を先にできます。勝手に連れ戻す道ではなく、リセが戻る条件を交渉します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q105.scene.entry"
+        },
+        {
+          "id": "sisters",
+          "script": "q105.scene.sisters"
+        },
+        {
+          "id": "roles",
+          "script": "q105.scene.roles"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "花嫁リセが見当たらず、靴が運河に浮いています。捜してください。"
+    },
+    "reveal": {
+      "newInformation": "靴を落としたのは、泥道で姉の荷車を押したためです。ダンは浮気や誘拐を恐れていますが、別の靴には工房の木屑が詰まっています。リセは姉に来てほしくても、今後の家業を手伝う気持ちは未整理です。仲直りの言葉だけでは姉は動きません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q105.scene.entry"
+      },
+      {
+        "id": "sisters",
+        "script": "q105.scene.sisters"
+      },
+      {
+        "id": "roles",
+        "script": "q105.scene.roles"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q105.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q105.reported",
+        "meaning": "作者原稿の reported に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "sisters",
+          "roles"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q105.work",
+        "meaning": "作者原稿の work に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "roles"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "片方の靴は濡れている。ダンは誘拐では、と繰り返す。近くに工房の木屑が落ちていた。",
+        "options": [
+          {
+            "id": "shop",
+            "text": "木屑をたどって工房へ",
+            "to": "sisters"
+          },
+          {
+            "id": "canal",
+            "text": "運河の荷車の跡を追う",
+            "to": "sisters"
+          }
+        ]
+      },
+      {
+        "id": "sisters",
+        "text": "リセは姉の荷車を押していた。落とした靴の代わりに裸足だ。「式に来てほしい。でも仕事を全部姉さんに残す話は、まだしてない」",
+        "options": [
+          {
+            "id": "report",
+            "text": "先にダンへ無事を伝える",
+            "to": "sisters",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q105.reported"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "reported": true
+            }
+          },
+          {
+            "id": "roles",
+            "text": "今後の仕事を姉妹で相談する",
+            "to": "roles"
+          },
+          {
+            "id": "return",
+            "text": "家業の話は保留し、リセの意思で式へ戻る",
+            "to": "@return"
+          },
+          {
+            "id": "delay",
+            "text": "姉妹とダンへ式の延期を提案する",
+            "to": "@delay"
+          }
+        ]
+      },
+      {
+        "id": "roles",
+        "text": "姉は週二日の荷運びを頼み、リセは婚礼後も来ると答えた。報告を受けたダンにも日取りを確認する必要がある。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "ダンにも予定を伝え、三人で分担を決める",
+            "to": "@roles",
+            "set": {
+              "reported": true,
+              "work": "two_days"
+            }
+          },
+          {
+            "id": "back",
+            "text": "約束を確定せず姉妹の話へ戻る",
+            "to": "sisters"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q105.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "片方の靴は濡れている。ダンは誘拐では、と繰り返す。近くに工房の木屑が落ちていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shop",
+              "text": "木屑をたどって工房へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "canal",
+              "text": "運河の荷車の跡を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q105.scene.sisters": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "sisters"
+        },
+        {
+          "op": "say",
+          "text": "リセは姉の荷車を押していた。落とした靴の代わりに裸足だ。「式に来てほしい。でも仕事を全部姉さんに残す話は、まだしてない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "先にダンへ無事を伝える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q105.reported"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.reported",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "roles",
+              "text": "今後の仕事を姉妹で相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.roles"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "家業の話は保留し、リセの意思で式へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.end.return"
+                }
+              ]
+            },
+            {
+              "id": "delay",
+              "text": "姉妹とダンへ式の延期を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.end.delay"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q105.scene.roles": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "roles"
+        },
+        {
+          "op": "say",
+          "text": "姉は週二日の荷運びを頼み、リセは婚礼後も来ると答えた。報告を受けたダンにも日取りを確認する必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "ダンにも予定を伝え、三人で分担を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.reported",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.work",
+                  "value": "two_days"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.end.roles"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "約束を確定せず姉妹の話へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q105.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.end.roles": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "roles"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.end.delay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "delay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q105.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "delay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q105.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sisters",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.sisters"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.roles"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

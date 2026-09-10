@@ -1,0 +1,509 @@
+{
+  "schemaVersion": 1,
+  "id": "q108",
+  "number": 108,
+  "title": "猫に付いた懸賞",
+  "client": "魚屋と隣の鳥屋",
+  "brief": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q108_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "shared": {
+      "label": "二つの昼寝場所",
+      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。",
+      "gold": 57,
+      "xp": 51
+    },
+    "fish": {
+      "label": "倉庫の猫",
+      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。",
+      "gold": 57,
+      "xp": 51
+    },
+    "bird": {
+      "label": "鳥屋の保護",
+      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "猫は魚を盗みますが、鼠除けの働きも本当です。善良な動物だから無罪とせず、店の置き方を変えれば被害を減らせると観察で示します。猫を捕まえた直後、二人が同時に違う名前で呼び、猫がどちらにも返事をしない場面を置きます。",
+      "fixedPast": "魚屋が、巨大な猫に懸賞を出します。隣の鳥屋は、その猫が鼠を追うので保護したいと主張します。猫は飼い主を選ばず、どちらの店でも可愛がられてきました。二人は猫の問題より、昔の共同仕入れの喧嘩を続けています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "魚屋と隣の鳥屋",
+        "beliefsAndGoals": "魚屋が、巨大な猫に懸賞を出します。隣の鳥屋は、その猫が鼠を追うので保護したいと主張します。猫は飼い主を選ばず、どちらの店でも可愛がられてきました。二人は猫の問題より、昔の共同仕入れの喧嘩を続けています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→餌で捕獲／店を観察→引渡し交渉。魚屋への引渡しは遠い倉庫へ移すという条件を先に説明します。共同管理は両方の観察と改修費が必要です。金がなくても片方の保護か、懸賞辞退を選べます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q108.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "猫は魚を盗みますが、鼠除けの働きも本当です。善良な動物だから無罪とせず、店の置き方を変えれば被害を減らせると観察で示します。猫を捕まえた直後、二人が同時に違う名前で呼び、猫がどちらにも返事をしない場面を置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q108.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q108.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q108.fish",
+        "meaning": "作者原稿の fish に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q108.rat",
+        "meaning": "作者原稿の rat に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "魚屋と鳥屋が違う名前で猫を呼んだ。猫はどちらも見ずに眠る。魚屋は遠い倉庫へ移すと言い、鳥屋は鼠を追う働きを挙げた。",
+        "options": [
+          {
+            "id": "fish",
+            "text": "魚を盗む経路を見る",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q108.fish"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "fish": true
+            },
+            "textAfter": "猫は低い棚から魚へ届いている。棚を上げれば経路を切れそうだ。"
+          },
+          {
+            "id": "rat",
+            "text": "鳥屋の鼠対策を見る",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q108.rat"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "rat": true
+            },
+            "textAfter": "猫が鼠を追うと、籠の餌がこぼれなくなった。働きも実在する。"
+          },
+          {
+            "id": "shared",
+            "text": "両店と棚・餌場を改修する（30G）",
+            "to": "@shared",
+            "need": [
+              "fish",
+              "rat"
+            ],
+            "cost": {
+              "gold": 30
+            }
+          },
+          {
+            "id": "fish_end",
+            "text": "魚屋へ渡し、遠い倉庫へ移す",
+            "to": "@fish"
+          },
+          {
+            "id": "bird_end",
+            "text": "鳥屋の保護に任せる",
+            "to": "@bird"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q108.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q108.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "魚屋と鳥屋が違う名前で猫を呼んだ。猫はどちらも見ずに眠る。魚屋は遠い倉庫へ移すと言い、鳥屋は鼠を追う働きを挙げた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "魚を盗む経路を見る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q108.fish"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q108.fish",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "猫は低い棚から魚へ届いている。棚を上げれば経路を切れそうだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "rat",
+              "text": "鳥屋の鼠対策を見る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q108.rat"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q108.rat",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "猫が鼠を追うと、籠の餌がこぼれなくなった。働きも実在する。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "shared",
+              "text": "両店と棚・餌場を改修する（30G）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.end.shared"
+                }
+              ]
+            },
+            {
+              "id": "fish_end",
+              "text": "魚屋へ渡し、遠い倉庫へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "bird_end",
+              "text": "鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.end.bird"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q108.end.shared": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "shared"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.end.fish": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "fish"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.end.bird": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "bird"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q108.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "shared",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fish",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "bird",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q108.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q108.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

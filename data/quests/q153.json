@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q153",
+  "number": 153,
+  "title": "招待されなかった伯爵",
+  "client": "城の侍従",
+  "brief": "招待状のない伯爵への対応をお願いします。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q153_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "guest": {
+      "label": "代表ではない客",
+      "text": "父は条件を守って着席した。帰り際、古い印を娘の印の隣へ置き、条約には押さなかった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "advice": {
+      "label": "限った助言",
+      "text": "水利の話だけを娘が尋ねた。父は全権を取り戻さず、必要な答えを返した。",
+      "gold": 117,
+      "xp": 81
+    },
+    "leave": {
+      "label": "門の外の父",
+      "text": "会談は守られた。家族としての話は後日へ残り、父の身元まで偽物とは呼ばなかった。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "偽物を示すはずの紋章の違いが、父が古い印を使っているだけだと分かります。使者は父の昔話だけを丁寧に聞き、現行条約の話をしません。父は尊重される快さと政治的利用を混同します。",
+      "fixedPast": "城の侍従は、招待状のない伯爵を追い返してほしいと頼みます。本人は本物ですが、爵位を娘へ譲った後も自分が代表だと思っています。娘は新しい同盟を結ぶため、父の反対を避けて招待から外しました。敵国の使者は父を利用して交渉を壊そうとします。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "城の侍従",
+        "beliefsAndGoals": "城の侍従は、招待状のない伯爵を追い返してほしいと頼みます。本人は本物ですが、爵位を娘へ譲った後も自分が代表だと思っています。娘は新しい同盟を結ぶため、父の反対を避けて招待から外しました。敵国の使者は父を利用して交渉を壊そうとします。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "招待状のない伯爵への対応をお願いします。"
+      }
+    ],
+    "conflict": {
+      "design": "門前→系譜確認／父との対話→娘へ取次ぎ→客として入れる／助言役を合意／退去。身元確認だけでは代理権は得られません。使者へ渡る前に役割を決める機会があり、早く利用を見抜けば父本人へ説明できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q153.scene.entry"
+        },
+        {
+          "id": "daughter",
+          "script": "q153.scene.daughter"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "招待状のない伯爵への対応をお願いします。"
+    },
+    "reveal": {
+      "newInformation": "偽物を示すはずの紋章の違いが、父が古い印を使っているだけだと分かります。使者は父の昔話だけを丁寧に聞き、現行条約の話をしません。父は尊重される快さと政治的利用を混同します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q153.scene.entry"
+      },
+      {
+        "id": "daughter",
+        "script": "q153.scene.daughter"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q153.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "古い紋章を持つ男は本人だったが、爵位は娘へ譲っていた。敵国の使者は昔話だけを丁寧に聞き、今の条約へ触れない。",
+        "options": [
+          {
+            "id": "role",
+            "text": "父へ代理権と身元は別だと説明する",
+            "to": "daughter"
+          },
+          {
+            "id": "leave",
+            "text": "会談を優先し、父へ退去を求める",
+            "to": "@leave"
+          }
+        ]
+      },
+      {
+        "id": "daughter",
+        "text": "娘は父を客として入れるなら発言を控えてほしいと言う。助言役なら旧領の水利に限って頼める。父は条件を聞いた。",
+        "options": [
+          {
+            "id": "guest",
+            "text": "発言しない客として入る条件を仲介する",
+            "to": "@guest"
+          },
+          {
+            "id": "advice",
+            "text": "頼まれた範囲だけの助言役を合意する",
+            "to": "@advice"
+          },
+          {
+            "id": "leave",
+            "text": "合意を取らず退去を選ぶ",
+            "to": "@leave"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q153.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q153.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "古い紋章を持つ男は本人だったが、爵位は娘へ譲っていた。敵国の使者は昔話だけを丁寧に聞き、今の条約へ触れない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "role",
+              "text": "父へ代理権と身元は別だと説明する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q153.scene.daughter"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "会談を優先し、父へ退去を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q153.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q153.scene.daughter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q153.node",
+          "value": "daughter"
+        },
+        {
+          "op": "say",
+          "text": "娘は父を客として入れるなら発言を控えてほしいと言う。助言役なら旧領の水利に限って頼める。父は条件を聞いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guest",
+              "text": "発言しない客として入る条件を仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q153.end.guest"
+                }
+              ]
+            },
+            {
+              "id": "advice",
+              "text": "頼まれた範囲だけの助言役を合意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q153.end.advice"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "合意を取らず退去を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q153.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q153.end.guest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q153.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "父は条件を守って着席した。帰り際、古い印を娘の印の隣へ置き、条約には押さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q153",
+              "outcome": "guest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q153.end.advice": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q153.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "水利の話だけを娘が尋ねた。父は全権を取り戻さず、必要な答えを返した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q153",
+              "outcome": "advice"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q153.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q153.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "会談は守られた。家族としての話は後日へ残り、父の身元まで偽物とは呼ばなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q153",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q153.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q153.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q153.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "guest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "父は条件を守って着席した。帰り際、古い印を娘の印の隣へ置き、条約には押さなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "advice",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "水利の話だけを娘が尋ねた。父は全権を取り戻さず、必要な答えを返した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "会談は守られた。家族としての話は後日へ残り、父の身元まで偽物とは呼ばなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q153.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q153.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "daughter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q153.scene.daughter"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q153.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

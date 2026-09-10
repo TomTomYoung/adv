@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "id": "q195",
+  "number": 195,
+  "title": "魔王の畑",
+  "client": "魔王領だった村の農夫",
+  "brief": "戦後に育たなくなった畑の原因を調べてください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f1",
+      "object": "q195_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "convert": {
+      "label": "木屑の炉",
+      "text": "収量は落ちたが、拘束を燃料にしない炉が動いた。村人は肖像画を燃やし、設計図を棚へ戻した。",
+      "gold": 165,
+      "xp": 105
+    },
+    "aid": {
+      "label": "炉を止めた季節",
+      "text": "二便を届けた。村は供給に頼る季節を受け入れ、次の作付けと支援の負担を相談し始めた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "old": {
+      "label": "再開した旧炉",
+      "text": "収量は戻った。牢の仕組みも戻り、被害を農業の必要という言葉で消すことはできなかった。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "城の牢と畑の収穫帳を別々に見せ、加害と生活基盤が同じ施設に存在したことを示します。農夫は炉を再開したいが、その燃料には捕虜の魔力が使われていました。古い農法へ戻すには時間と外からの食料が必要です。",
+      "fixedPast": "討たれた魔王の城の周辺で、食用菌の畑が枯れ始めます。解放軍は呪いと思い焼却を考え、元城勤めの農夫は調査を頼みます。魔王の炉から出る魔灰が肥料で、炉の停止とともに供給が切れました。魔王の圧政が実は善政だったという反転にはしません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "魔王領だった村の農夫",
+        "beliefsAndGoals": "討たれた魔王の城の周辺で、食用菌の畑が枯れ始めます。解放軍は呪いと思い焼却を考え、元城勤めの農夫は調査を頼みます。魔王の炉から出る魔灰が肥料で、炉の停止とともに供給が切れました。魔王の圧政が実は善政だったという反転にはしません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "戦後に育たなくなった畑の原因を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "枯れた畑→城／炉番／周辺農地→代替燃料へ改修／一季を支援して転作／旧炉を再開。旧炉再開の被害は選択前に明示し、救済の最適解として隠しません。改修失敗なら転作と食料支援へ移れます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q195.scene.entry"
+        },
+        {
+          "id": "fuel",
+          "script": "q195.scene.fuel"
+        },
+        {
+          "id": "deliver",
+          "script": "q195.scene.deliver"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "戦後に育たなくなった畑の原因を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "城の牢と畑の収穫帳を別々に見せ、加害と生活基盤が同じ施設に存在したことを示します。農夫は炉を再開したいが、その燃料には捕虜の魔力が使われていました。古い農法へ戻すには時間と外からの食料が必要です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q195.scene.entry"
+      },
+      {
+        "id": "fuel",
+        "script": "q195.scene.fuel"
+      },
+      {
+        "id": "deliver",
+        "script": "q195.scene.deliver"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q195.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q195.deliveries",
+        "meaning": "作者原稿の deliveries に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "fuel",
+          "deliver"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "畑の菌は旧魔王の炉の灰で育っていた。炉が止まってから作物が弱った。設計図には、捕らえた人の魔力を燃料にした記録も残る。",
+        "options": [
+          {
+            "id": "fuel",
+            "text": "炉と代替燃料を調べる",
+            "to": "fuel"
+          },
+          {
+            "id": "aid",
+            "text": "炉を動かさず、当面の食料供給を始める",
+            "to": "deliver",
+            "set": {
+              "deliveries": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "fuel",
+        "text": "農業への役割も牢の被害も事実だった。旧方式を戻せば拘束と搾取も戻る。60Gの改修で木屑を使えるが、収量は落ちる。",
+        "options": [
+          {
+            "id": "convert",
+            "text": "60Gで改修し、収量の低下を受け入れる",
+            "to": "@convert",
+            "cost": {
+              "gold": 60
+            }
+          },
+          {
+            "id": "aid",
+            "text": "炉を止めたまま、二便の食料を届ける",
+            "to": "deliver",
+            "set": {
+              "deliveries": 0
+            }
+          },
+          {
+            "id": "old",
+            "text": "被害を承知で旧方式の再稼働を認める",
+            "to": "@old"
+          }
+        ]
+      },
+      {
+        "id": "deliver",
+        "text": "村と二便の食料を約束した。各便に糧食一つを使う。足りない時は中断して用意するか、改修を再検討できる。",
+        "options": [
+          {
+            "id": "one",
+            "text": "次の一便を届ける",
+            "to": "deliver",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q195.deliveries"
+              },
+              "right": 2
+            },
+            "cost": {
+              "ration": 1
+            },
+            "set": {
+              "deliveries": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q195.deliveries"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "done",
+            "text": "二便の受領を確かめ、季節支援へ引き継ぐ",
+            "to": "@aid",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q195.deliveries"
+              },
+              "right": 2
+            }
+          },
+          {
+            "id": "rethink",
+            "text": "炉の改修を再検討する",
+            "to": "fuel"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q195.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q195.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "畑の菌は旧魔王の炉の灰で育っていた。炉が止まってから作物が弱った。設計図には、捕らえた人の魔力を燃料にした記録も残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fuel",
+              "text": "炉と代替燃料を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.fuel"
+                }
+              ]
+            },
+            {
+              "id": "aid",
+              "text": "炉を動かさず、当面の食料供給を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q195.deliveries",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q195.scene.deliver"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q195.scene.fuel": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q195.node",
+          "value": "fuel"
+        },
+        {
+          "op": "say",
+          "text": "農業への役割も牢の被害も事実だった。旧方式を戻せば拘束と搾取も戻る。60Gの改修で木屑を使えるが、収量は落ちる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "convert",
+              "text": "60Gで改修し、収量の低下を受け入れる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 60
+                  }
+                ]
+              },
+              "requirement": "G 60消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -60
+                },
+                {
+                  "op": "jump",
+                  "script": "q195.end.convert"
+                }
+              ]
+            },
+            {
+              "id": "aid",
+              "text": "炉を止めたまま、二便の食料を届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q195.deliveries",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q195.scene.deliver"
+                }
+              ]
+            },
+            {
+              "id": "old",
+              "text": "被害を承知で旧方式の再稼働を認める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.end.old"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q195.scene.deliver": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q195.node",
+          "value": "deliver"
+        },
+        {
+          "op": "say",
+          "text": "村と二便の食料を約束した。各便に糧食一つを使う。足りない時は中断して用意するか、改修を再検討できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "one",
+              "text": "次の一便を届ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q195.deliveries"
+                    },
+                    "right": 2
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q195.deliveries",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q195.deliveries"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q195.scene.deliver"
+                }
+              ]
+            },
+            {
+              "id": "done",
+              "text": "二便の受領を確かめ、季節支援へ引き継ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q195.deliveries"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.end.aid"
+                }
+              ]
+            },
+            {
+              "id": "rethink",
+              "text": "炉の改修を再検討する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.fuel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q195.end.convert": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q195.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "収量は落ちたが、拘束を燃料にしない炉が動いた。村人は肖像画を燃やし、設計図を棚へ戻した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q195",
+              "outcome": "convert"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q195.end.aid": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q195.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二便を届けた。村は供給に頼る季節を受け入れ、次の作付けと支援の負担を相談し始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q195",
+              "outcome": "aid"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q195.end.old": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q195.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "収量は戻った。牢の仕組みも戻り、被害を農業の必要という言葉で消すことはできなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q195",
+              "outcome": "old"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q195.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q195.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q195.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "convert",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "収量は落ちたが、拘束を燃料にしない炉が動いた。村人は肖像画を燃やし、設計図を棚へ戻した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "aid",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二便を届けた。村は供給に頼る季節を受け入れ、次の作付けと支援の負担を相談し始めた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "old",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "収量は戻った。牢の仕組みも戻り、被害を農業の必要という言葉で消すことはできなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q195.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q195.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fuel",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q195.scene.fuel"
+                    }
+                  ]
+                },
+                {
+                  "equals": "deliver",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q195.scene.deliver"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

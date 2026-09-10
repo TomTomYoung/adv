@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 1,
+  "id": "q113",
+  "number": 113,
+  "title": "雪解けを待たない男",
+  "client": "庭師オド",
+  "brief": "山道が閉じる前に故郷へ戻る旅を手伝ってください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "object": "q113_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "valley": {
+      "label": "春を待つ苗",
+      "text": "谷の苗床に箱を置いた。オドは道端の花の名を教えた。悲しみが済んだ、とは言わなかった。",
+      "gold": 69,
+      "xp": 57
+    },
+    "daughter": {
+      "label": "娘の家の一本",
+      "text": "苗は一本だけ娘の家に植わった。空になった箱より、残してあった父の部屋をオドは長く見た。",
+      "gold": 69,
+      "xp": 57
+    },
+    "garden": {
+      "label": "別の家族の庭",
+      "text": "苗は雪解けの便に託された。オドは新しい家族へ水やりの手紙を書き、最後に娘の住所を添えた。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "荷を墓へ向ける描写で弔いの旅を予感させますが、箱から生きた根が出ます。娘の二通目には「庭は売った。父さんの部屋は残した」とあります。苗を届ける目的はそのままでは達せず、帰宅の意味を話し合う必要があります。",
+      "fixedPast": "庭師オドは、封鎖前の山道を越えて故郷へ帰りたいと言います。娘は手紙で引き留め、案内人は雪崩の危険を説明します。オドが運ぶのは亡妻の遺骨ではなく、妻が生前に予約した苗木です。庭を完成させれば悲しみが終わると信じています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "庭師オド",
+        "beliefsAndGoals": "庭師オドは、封鎖前の山道を越えて故郷へ帰りたいと言います。娘は手紙で引き留め、案内人は雪崩の危険を説明します。オドが運ぶのは亡妻の遺骨ではなく、妻が生前に予約した苗木です。庭を完成させれば悲しみが終わると信じています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "山道が閉じる前に故郷へ戻る旅を手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "宿→旧道の偵察／娘への伝言→峠の決断。安全な季節まで預かる、娘の町へ迂回する、旧庭の新所有者へ受入れを確認して進む道があります。旧庭へ勝手に植えることは成功扱いにしません。危険を越える前ならいつでも宿へ戻れます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q113.scene.entry"
+        },
+        {
+          "id": "letter",
+          "script": "q113.scene.letter"
+        },
+        {
+          "id": "pass",
+          "script": "q113.scene.pass"
+        },
+        {
+          "id": "owner",
+          "script": "q113.scene.owner"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "山道が閉じる前に故郷へ戻る旅を手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "荷を墓へ向ける描写で弔いの旅を予感させますが、箱から生きた根が出ます。娘の二通目には「庭は売った。父さんの部屋は残した」とあります。苗を届ける目的はそのままでは達せず、帰宅の意味を話し合う必要があります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q113.scene.entry"
+      },
+      {
+        "id": "letter",
+        "script": "q113.scene.letter"
+      },
+      {
+        "id": "pass",
+        "script": "q113.scene.pass"
+      },
+      {
+        "id": "owner",
+        "script": "q113.scene.owner"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q113.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q113.weather",
+        "meaning": "作者原稿の weather に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q113.letter",
+        "meaning": "作者原稿の letter に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "letter"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "オドの長い箱から根がのぞく。妻が予約していた苗木だという。案内人は、次の山行区間へ進む前に雪崩情報を聞くよう勧めた。",
+        "options": [
+          {
+            "id": "weather",
+            "text": "案内人の現場報告を聞く",
+            "to": "pass",
+            "set": {
+              "weather": true
+            }
+          },
+          {
+            "id": "letter",
+            "text": "本人の許可で娘の手紙を読む",
+            "to": "letter"
+          },
+          {
+            "id": "wait",
+            "text": "山行を延期し、谷で苗を預かる",
+            "to": "@valley"
+          }
+        ]
+      },
+      {
+        "id": "letter",
+        "text": "「庭は売った。父さんの部屋は残した」オドは二通目の手紙を折った。「木を植えたら、終わると思ったんだ」",
+        "options": [
+          {
+            "id": "pass",
+            "text": "次の区間へ進む前に行先を相談する",
+            "to": "pass",
+            "set": {
+              "letter": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q113.weather"
+              },
+              "right": true
+            },
+            "yes": "旧道は雪崩の危険が高い。安全な迂回路なら娘の町へ行ける。",
+            "no": "次区間の旧道は安全確認が済んでいない。進む前に案内人の報告を取り直した。"
+          },
+          "旧庭へ苗を植えるには、新所有者の承諾が必要だ。"
+        ],
+        "options": [
+          {
+            "id": "daughter",
+            "text": "娘の家へ迂回し、一本だけ植える",
+            "to": "@daughter",
+            "need": [
+              "letter"
+            ]
+          },
+          {
+            "id": "owner",
+            "text": "新所有者へ受入れを問い合わせる",
+            "to": "owner"
+          },
+          {
+            "id": "valley",
+            "text": "今季は谷へ預ける",
+            "to": "@valley"
+          }
+        ]
+      },
+      {
+        "id": "owner",
+        "text": "新しい家族は苗を引き取りたいと答えた。今は危険な道を越えず、雪解け後の運搬便に載せることで合意する。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "自分の庭へ戻すのでなく、新しい家族に託す",
+            "to": "@garden"
+          },
+          {
+            "id": "valley",
+            "text": "受渡しを確約せず、谷に預ける",
+            "to": "@valley"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q113.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q113.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "オドの長い箱から根がのぞく。妻が予約していた苗木だという。案内人は、次の山行区間へ進む前に雪崩情報を聞くよう勧めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weather",
+              "text": "案内人の現場報告を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q113.weather",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q113.scene.pass"
+                }
+              ]
+            },
+            {
+              "id": "letter",
+              "text": "本人の許可で娘の手紙を読む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.scene.letter"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "山行を延期し、谷で苗を預かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.end.valley"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q113.scene.letter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q113.node",
+          "value": "letter"
+        },
+        {
+          "op": "say",
+          "text": "「庭は売った。父さんの部屋は残した」オドは二通目の手紙を折った。「木を植えたら、終わると思ったんだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pass",
+              "text": "次の区間へ進む前に行先を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q113.letter",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q113.scene.pass"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q113.scene.pass": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q113.node",
+          "value": "pass"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q113.weather"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旧道は雪崩の危険が高い。安全な迂回路なら娘の町へ行ける。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "次区間の旧道は安全確認が済んでいない。進む前に案内人の報告を取り直した。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "旧庭へ苗を植えるには、新所有者の承諾が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "daughter",
+              "text": "娘の家へ迂回し、一本だけ植える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q113.letter"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.end.daughter"
+                }
+              ]
+            },
+            {
+              "id": "owner",
+              "text": "新所有者へ受入れを問い合わせる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.scene.owner"
+                }
+              ]
+            },
+            {
+              "id": "valley",
+              "text": "今季は谷へ預ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.end.valley"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q113.scene.owner": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q113.node",
+          "value": "owner"
+        },
+        {
+          "op": "say",
+          "text": "新しい家族は苗を引き取りたいと答えた。今は危険な道を越えず、雪解け後の運搬便に載せることで合意する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "自分の庭へ戻すのでなく、新しい家族に託す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.end.garden"
+                }
+              ]
+            },
+            {
+              "id": "valley",
+              "text": "受渡しを確約せず、谷に預ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q113.end.valley"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q113.end.valley": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q113.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "谷の苗床に箱を置いた。オドは道端の花の名を教えた。悲しみが済んだ、とは言わなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q113",
+              "outcome": "valley"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q113.end.daughter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q113.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "苗は一本だけ娘の家に植わった。空になった箱より、残してあった父の部屋をオドは長く見た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q113",
+              "outcome": "daughter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q113.end.garden": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q113.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "苗は雪解けの便に託された。オドは新しい家族へ水やりの手紙を書き、最後に娘の住所を添えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q113",
+              "outcome": "garden"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q113.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q113.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q113.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "valley",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "谷の苗床に箱を置いた。オドは道端の花の名を教えた。悲しみが済んだ、とは言わなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "daughter",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "苗は一本だけ娘の家に植わった。空になった箱より、残してあった父の部屋をオドは長く見た。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "garden",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "苗は雪解けの便に託された。オドは新しい家族へ水やりの手紙を書き、最後に娘の住所を添えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q113.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q113.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "letter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q113.scene.letter"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pass",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q113.scene.pass"
+                    }
+                  ]
+                },
+                {
+                  "equals": "owner",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q113.scene.owner"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q113.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

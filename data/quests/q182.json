@@ -1,0 +1,485 @@
+{
+  "schemaVersion": 1,
+  "id": "q182",
+  "number": 182,
+  "title": "一発も撃たない砲手",
+  "client": "魔導砲手オル",
+  "brief": "最後の魔石を砲台へ運び、使い道を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q182_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "light": {
+      "label": "砲声のない歓声",
+      "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "attack": {
+      "label": "攻撃の成果",
+      "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "hold": {
+      "label": "最後の魔石を残す",
+      "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "照準は敵城でなく谷の岩壁へ向いています。壁に残る古い反射鏡の跡が、砲台の元の用途を示します。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要です。",
+      "fixedPast": "魔導砲手オルは、砲台へ最後の魔石を運んでほしいと頼みます。司令は攻撃用と思っていますが、オルは砲を照明へ切り替え、夜間避難の道を示すつもりです。彼は昔の一射で得た名声を捨てたいのでなく、今できる仕事を変えたいのです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "魔導砲手オル",
+        "beliefsAndGoals": "魔導砲手オルは、砲台へ最後の魔石を運んでほしいと頼みます。司令は攻撃用と思っていますが、オルは砲を照明へ切り替え、夜間避難の道を示すつもりです。彼は昔の一射で得た名声を捨てたいのでなく、今できる仕事を変えたいのです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "最後の魔石を砲台へ運び、使い道を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→砲手の計画→司令と相談／避難隊へ連絡→発動。攻撃なら包囲敵との戦闘が有利になります。照明なら準備二条件が必要です。条件不足は発動保留にでき、魔石を無駄に消費しません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q182.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後の魔石を砲台へ運び、使い道を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "照準は敵城でなく谷の岩壁へ向いています。壁に残る古い反射鏡の跡が、砲台の元の用途を示します。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q182.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q182.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q182.command",
+        "meaning": "作者原稿の command に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q182.evac",
+        "meaning": "作者原稿の evac に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "照準は敵城でなく反射鏡のあった岩壁へ向く。オルは砲を照明に変え、夜の避難路を示したいという。準備不足なら魔石を使わず保留できる。",
+        "options": [
+          {
+            "id": "command",
+            "text": "司令へ用途と軍の危険を説明し、合意する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q182.command"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "command": true
+            }
+          },
+          {
+            "id": "evac",
+            "text": "避難隊へ連絡し、点灯の合図を決める",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q182.evac"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "evac": true
+            }
+          },
+          {
+            "id": "light",
+            "text": "二つの準備を確認して照明を点ける",
+            "to": "@light",
+            "need": [
+              "command",
+              "evac"
+            ]
+          },
+          {
+            "id": "attack",
+            "text": "砲を攻撃に使い、包囲敵を退ける",
+            "to": "@attack"
+          },
+          {
+            "id": "hold",
+            "text": "今は発動せず、魔石を保管する",
+            "to": "@hold"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q182.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q182.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "照準は敵城でなく反射鏡のあった岩壁へ向く。オルは砲を照明に変え、夜の避難路を示したいという。準備不足なら魔石を使わず保留できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "command",
+              "text": "司令へ用途と軍の危険を説明し、合意する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q182.command"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q182.command",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "避難隊へ連絡し、点灯の合図を決める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q182.evac"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q182.evac",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "light",
+              "text": "二つの準備を確認して照明を点ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q182.command"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q182.evac"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.light"
+                }
+              ]
+            },
+            {
+              "id": "attack",
+              "text": "砲を攻撃に使い、包囲敵を退ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.attack"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "今は発動せず、魔石を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.hold"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q182.end.light": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "light"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.end.attack": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "attack"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.end.hold": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "hold"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q182.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "light",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "attack",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hold",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q182.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q182.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q174",
+  "number": 174,
+  "title": "泣かない葬列",
+  "client": "村長",
+  "brief": "笑いながら人を連れていく葬列に対処してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q174_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "name": {
+      "label": "役柄を降りた葬儀",
+      "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "封じた棺",
+      "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "rescue": {
+      "label": "列からの救出",
+      "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "列の人は楽しそうでも足は擦り切れています。道化師の娘だけが列に加わらず、父への怒りを抱いています。彼女は葬儀を終える道具として泣くことを要求されたくありません。悲しい話を集めて涙を点数化する仕組みにはしません。",
+      "fixedPast": "笑いながら村を通る葬列に、次々と人が加わって帰りません。村長は怪異の討伐を頼みます。棺の主は笑わせることに生涯を使った道化師で、泣く者がいない限り葬儀が終わりません。列の笑いは命令でなく、悲しみを見せないという観客の習慣です。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "村長",
+        "beliefsAndGoals": "笑いながら村を通る葬列に、次々と人が加わって帰りません。村長は怪異の討伐を頼みます。棺の主は笑わせることに生涯を使った道化師で、泣く者がいない限り葬儀が終わりません。列の笑いは命令でなく、悲しみを見せないという観客の習慣です。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "笑いながら人を連れていく葬列に対処してください。"
+      }
+    ],
+    "conflict": {
+      "design": "葬列へ近づく→列の観察／娘と対話／道化師の小屋→弔いをやり直す／棺を封じる／列から人だけ救出。泣く代わりに、死者を役柄でなく個人として呼ぶ言葉でも弔いは成立すると小屋の遺書で示します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q174.scene.entry"
+        },
+        {
+          "id": "letter",
+          "script": "q174.scene.letter"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "笑いながら人を連れていく葬列に対処してください。"
+    },
+    "reveal": {
+      "newInformation": "列の人は楽しそうでも足は擦り切れています。道化師の娘だけが列に加わらず、父への怒りを抱いています。彼女は葬儀を終える道具として泣くことを要求されたくありません。悲しい話を集めて涙を点数化する仕組みにはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q174.scene.entry"
+      },
+      {
+        "id": "letter",
+        "script": "q174.scene.letter"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q174.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。彼女に泣く役を強いることはできない。",
+        "options": [
+          {
+            "id": "hut",
+            "text": "道化師の小屋で遺書を探す",
+            "to": "letter"
+          },
+          {
+            "id": "seal",
+            "text": "棺を封じ、列の動きを止める",
+            "to": "@seal"
+          },
+          {
+            "id": "people",
+            "text": "まず歩けない人だけを列から救い出す",
+            "to": "@rescue"
+          }
+        ]
+      },
+      {
+        "id": "letter",
+        "text": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。娘が怒ったままでも弔いはできる。",
+        "options": [
+          {
+            "id": "name",
+            "text": "道化師でなく個人の名を呼んで送る",
+            "to": "@name"
+          },
+          {
+            "id": "seal",
+            "text": "今は弔わず棺を封じる",
+            "to": "@seal"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q174.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q174.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。彼女に泣く役を強いることはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hut",
+              "text": "道化師の小屋で遺書を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.scene.letter"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "棺を封じ、列の動きを止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "まず歩けない人だけを列から救い出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.rescue"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q174.scene.letter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q174.node",
+          "value": "letter"
+        },
+        {
+          "op": "say",
+          "text": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。娘が怒ったままでも弔いはできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "name",
+              "text": "道化師でなく個人の名を呼んで送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.name"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "今は弔わず棺を封じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q174.end.name": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "name"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.end.rescue": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "rescue"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q174.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "name",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q174.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q174.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "letter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q174.scene.letter"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q174.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

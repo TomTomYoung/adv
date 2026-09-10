@@ -1,0 +1,722 @@
+{
+  "schemaVersion": 1,
+  "id": "q122",
+  "number": 122,
+  "title": "逃げた竜殺し",
+  "client": "竜狩りのレク",
+  "brief": "谷の飛竜へ向かいます。帰る道の準備も手伝ってください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f1",
+      "object": "q122_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "kill": {
+      "label": "谷の討伐",
+      "text": "槍兵は戦利品を持ち帰った。レクは武勇を遮らず、卓の端へ退路の地図を置いた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "guide": {
+      "label": "飛竜の移動",
+      "text": "谷は空いた。移転先を見張る仕事が残り、槍兵は地図の余白に次の当番を書いた。",
+      "gold": 81,
+      "xp": 63
+    },
+    "cancel": {
+      "label": "作戦を降りる",
+      "text": "レクは別隊を募ると決めた。あなたが確かめたことと、まだ試していないことを分けて伝えた。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "出発前、彼が逃走経路を三度確認するため、臆病さを疑わせます。巣では親竜が見えず、出口に突然帰ってきます。予告した退路が、そのまま反撃の位置へ変わります。退く判断が攻略の一部であることを、演説でなく空間で示します。",
+      "fixedPast": "竜殺しと呼ばれるレクが、谷の飛竜の巣へ同行者を募ります。若い槍兵は名声を欲し、レクは討伐より、餌場を動かして谷から追い出すことを考えています。彼はかつて仲間を失い、勝つまで退けない作戦を信用していません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "竜狩りのレク",
+        "beliefsAndGoals": "竜殺しと呼ばれるレクが、谷の飛竜の巣へ同行者を募ります。若い槍兵は名声を欲し、レクは討伐より、餌場を動かして谷から追い出すことを考えています。彼はかつて仲間を失い、勝つまで退けない作戦を信用していません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "谷の飛竜へ向かいます。帰る道の準備も手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "準備→巣への進入→討伐戦／誘導退避→帰還。誘導は退路と餌場が必要です。戦闘から逃げても用意した餌場へ接続できます。準備なしの逃走は安全な麓へ戻り、次の出撃を組み直します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q122.scene.entry"
+        },
+        {
+          "id": "nest",
+          "script": "q122.scene.nest"
+        },
+        {
+          "id": "escape",
+          "script": "q122.scene.escape"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "谷の飛竜へ向かいます。帰る道の準備も手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "出発前、彼が逃走経路を三度確認するため、臆病さを疑わせます。巣では親竜が見えず、出口に突然帰ってきます。予告した退路が、そのまま反撃の位置へ変わります。退く判断が攻略の一部であることを、演説でなく空間で示します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q122.scene.entry"
+      },
+      {
+        "id": "nest",
+        "script": "q122.scene.nest"
+      },
+      {
+        "id": "escape",
+        "script": "q122.scene.escape"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q122.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q122.route",
+        "meaning": "作者原稿の route に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q122.lure",
+        "meaning": "作者原稿の lure に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "レクは退路を三度確認した。槍兵が焦れて槍を鳴らす。討伐だけでなく、餌場を移す作戦もあるという。",
+        "options": [
+          {
+            "id": "route",
+            "text": "退路を踏査する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q122.route"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "route": true
+            },
+            "textAfter": "麓への道と、誘導先へ分かれる角を確かめた。"
+          },
+          {
+            "id": "lure",
+            "text": "糧食一つを使い、谷外の餌場を準備する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q122.lure"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "ration": 1
+            },
+            "set": {
+              "lure": true
+            }
+          },
+          {
+            "id": "nest",
+            "text": "巣へ進む",
+            "to": "nest"
+          }
+        ]
+      },
+      {
+        "id": "nest",
+        "text": "空だった巣の出口へ親竜が帰ってきた。レクは確認した角を指す。退くか、戦い抜くか。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "討伐を試みる。逃走時は退路の準備に従う",
+            "to": "@kill",
+            "combat": "story_122",
+            "escape": "escape"
+          },
+          {
+            "id": "guide",
+            "text": "確認した道と餌場へ誘導して退く",
+            "to": "@guide",
+            "need": [
+              "route",
+              "lure"
+            ]
+          },
+          {
+            "id": "withdraw",
+            "text": "麓へ退いて作戦を組み直す",
+            "to": "entry"
+          },
+          {
+            "id": "cancel",
+            "text": "今回の作戦から降りる",
+            "to": "@cancel"
+          }
+        ]
+      },
+      {
+        "id": "escape",
+        "text": "戦闘から離脱した。逃走の記録は消さない。餌場と退路の両方を用意した時だけ、誘導を続けられる。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "餌場まで誘導を続ける",
+            "to": "@guide",
+            "need": [
+              "route",
+              "lure"
+            ]
+          },
+          {
+            "id": "retry",
+            "text": "麓で再準備する",
+            "to": "entry"
+          },
+          {
+            "id": "cancel",
+            "text": "再挑戦を断る",
+            "to": "@cancel"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q122.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q122.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "レクは退路を三度確認した。槍兵が焦れて槍を鳴らす。討伐だけでなく、餌場を移す作戦もあるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "route",
+              "text": "退路を踏査する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q122.route"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q122.route",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "麓への道と、誘導先へ分かれる角を確かめた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "lure",
+              "text": "糧食一つを使い、谷外の餌場を準備する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q122.lure"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q122.lure",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "nest",
+              "text": "巣へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.scene.nest"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q122.scene.nest": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q122.node",
+          "value": "nest"
+        },
+        {
+          "op": "say",
+          "text": "空だった巣の出口へ親竜が帰ってきた。レクは確認した角を指す。退くか、戦い抜くか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "討伐を試みる。逃走時は退路の準備に従う",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_122",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q122.end.kill"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q122.scene.escape"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "guide",
+              "text": "確認した道と餌場へ誘導して退く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q122.route"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q122.lure"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.end.guide"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "麓へ退いて作戦を組み直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "今回の作戦から降りる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.end.cancel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q122.scene.escape": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q122.node",
+          "value": "escape"
+        },
+        {
+          "op": "say",
+          "text": "戦闘から離脱した。逃走の記録は消さない。餌場と退路の両方を用意した時だけ、誘導を続けられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "餌場まで誘導を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q122.route"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q122.lure"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.end.guide"
+                }
+              ]
+            },
+            {
+              "id": "retry",
+              "text": "麓で再準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "再挑戦を断る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.end.cancel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q122.end.kill": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q122.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "槍兵は戦利品を持ち帰った。レクは武勇を遮らず、卓の端へ退路の地図を置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q122",
+              "outcome": "kill"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q122.end.guide": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q122.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "谷は空いた。移転先を見張る仕事が残り、槍兵は地図の余白に次の当番を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q122",
+              "outcome": "guide"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q122.end.cancel": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q122.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "レクは別隊を募ると決めた。あなたが確かめたことと、まだ試していないことを分けて伝えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q122",
+              "outcome": "cancel"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q122.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q122.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q122.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "kill",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "槍兵は戦利品を持ち帰った。レクは武勇を遮らず、卓の端へ退路の地図を置いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guide",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "谷は空いた。移転先を見張る仕事が残り、槍兵は地図の余白に次の当番を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cancel",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "レクは別隊を募ると決めた。あなたが確かめたことと、まだ試していないことを分けて伝えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q122.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q122.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "nest",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q122.scene.nest"
+                    }
+                  ]
+                },
+                {
+                  "equals": "escape",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q122.scene.escape"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

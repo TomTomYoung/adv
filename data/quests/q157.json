@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q157",
+  "number": 157,
+  "title": "影武者の休日",
+  "client": "影武者アリ",
+  "brief": "一日だけ自由に過ごし、町の彫刻教室へ行きたいのです。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q157_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "fake": {
+      "label": "偽装した休日",
+      "text": "一日の自由は得た。後日の説明はアリとあなたが負い、侍女へ押し付けなかった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "exchange": {
+      "label": "本人の代行",
+      "text": "王女は影武者の仕事を務めた。アリの作品は王女に似ておらず、王女はそれを自室に置いた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "form": {
+      "label": "休める役割",
+      "text": "今後も交代で休める式になった。アリは胸像ではない顔を一つ、教室で完成させた。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "アリが行きたいのは恋人の家でなく、町の彫刻教室です。王女の胸像ばかりモデルを務め、自分で別の顔を作りたい。王女の予定表には、アリの休暇を捻出しようとして消した案が残っています。秘密の陰謀より、役割の固定を扱います。",
+      "fixedPast": "王女の影武者アリは、一日だけ本人と入れ替わらず自由に過ごしたいと頼みます。王女は祝典の代理を必要とし、侍女は双方の健康を案じます。王女にも休日はなく、二人は同じ顔で互いを楽だと思っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "影武者アリ",
+        "beliefsAndGoals": "王女の影武者アリは、一日だけ本人と入れ替わらず自由に過ごしたいと頼みます。王女は祝典の代理を必要とし、侍女は双方の健康を案じます。王女にも休日はなく、二人は同じ顔で互いを楽だと思っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "一日だけ自由に過ごし、町の彫刻教室へ行きたいのです。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→教室の予約／王女へ相談→休暇の偽装／本人が代わる／式の形式変更。偽装は発覚時の責任を予告し、侍女を無断で共犯にしません。形式変更なら挨拶を文書でなく別の出席者へ託す調整が必要です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q157.scene.entry"
+        },
+        {
+          "id": "form",
+          "script": "q157.scene.form"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "一日だけ自由に過ごし、町の彫刻教室へ行きたいのです。"
+    },
+    "reveal": {
+      "newInformation": "アリが行きたいのは恋人の家でなく、町の彫刻教室です。王女の胸像ばかりモデルを務め、自分で別の顔を作りたい。王女の予定表には、アリの休暇を捻出しようとして消した案が残っています。秘密の陰謀より、役割の固定を扱います。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q157.scene.entry"
+      },
+      {
+        "id": "form",
+        "script": "q157.scene.form"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q157.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "王女の胸像を作るモデルばかりだったアリは、自分で別の顔を作りたいという。王女の予定表には、休暇を作ろうとして消した跡があった。",
+        "options": [
+          {
+            "id": "fake",
+            "text": "責任を自分たちで負い、休暇を偽装する",
+            "to": "@fake"
+          },
+          {
+            "id": "ask",
+            "text": "王女本人に一日の交代を相談する",
+            "to": "@exchange"
+          },
+          {
+            "id": "form",
+            "text": "別の出席者へ挨拶を頼み、式の形式を変える",
+            "to": "form"
+          }
+        ]
+      },
+      {
+        "id": "form",
+        "text": "別の出席者は挨拶を引き受け、王女は代理の顔ではなく役割として告知すると承諾した。侍女へ秘密の共犯を求める必要もない。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "式の形式変更を正式に告知する",
+            "to": "@form"
+          },
+          {
+            "id": "exchange",
+            "text": "今年だけ本人の交代で対処する",
+            "to": "@exchange"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q157.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q157.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "王女の胸像を作るモデルばかりだったアリは、自分で別の顔を作りたいという。王女の予定表には、休暇を作ろうとして消した跡があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fake",
+              "text": "責任を自分たちで負い、休暇を偽装する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q157.end.fake"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "王女本人に一日の交代を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q157.end.exchange"
+                }
+              ]
+            },
+            {
+              "id": "form",
+              "text": "別の出席者へ挨拶を頼み、式の形式を変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q157.scene.form"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q157.scene.form": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q157.node",
+          "value": "form"
+        },
+        {
+          "op": "say",
+          "text": "別の出席者は挨拶を引き受け、王女は代理の顔ではなく役割として告知すると承諾した。侍女へ秘密の共犯を求める必要もない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "式の形式変更を正式に告知する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q157.end.form"
+                }
+              ]
+            },
+            {
+              "id": "exchange",
+              "text": "今年だけ本人の交代で対処する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q157.end.exchange"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q157.end.fake": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q157.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一日の自由は得た。後日の説明はアリとあなたが負い、侍女へ押し付けなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q157",
+              "outcome": "fake"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q157.end.exchange": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q157.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王女は影武者の仕事を務めた。アリの作品は王女に似ておらず、王女はそれを自室に置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q157",
+              "outcome": "exchange"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q157.end.form": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q157.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今後も交代で休める式になった。アリは胸像ではない顔を一つ、教室で完成させた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q157",
+              "outcome": "form"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q157.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q157.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q157.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "fake",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一日の自由は得た。後日の説明はアリとあなたが負い、侍女へ押し付けなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "exchange",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "王女は影武者の仕事を務めた。アリの作品は王女に似ておらず、王女はそれを自室に置いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "form",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今後も交代で休める式になった。アリは胸像ではない顔を一つ、教室で完成させた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q157.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q157.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "form",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q157.scene.form"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q157.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 1,
+  "id": "q131",
+  "number": 131,
+  "title": "逆向きの足跡",
+  "client": "考古学者シェル",
+  "brief": "砂の回廊に入った師を捜してください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q131_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "person": {
+      "label": "救出を先に",
+      "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。",
+      "gold": 93,
+      "xp": 69
+    },
+    "sample": {
+      "label": "標本と救援の分担",
+      "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "all": {
+      "label": "綱を引いた名",
+      "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "school": {
+      "label": "師弟の発表",
+      "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "回廊は一定の区画を越えると床の砂だけを裏返し、足跡の凹凸が逆転します。靴の形から進行方向を読んだ推論が間違っています。荷物を引きずった線だけが途切れず、師が奥の避難室へ向かったと分かります。床の反転前に荷担ぎが釘を落とす小さな実演を置きます。",
+      "fixedPast": "考古学者シェルは、行方不明の師を探して砂の回廊へ入ります。足跡はすべて入口へ向き、戻った者がいないことと矛盾します。彼女は師の発見を証明したい。同行する荷担ぎは、生還を優先して新発見を後回しにしたがります。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "考古学者シェル",
+        "beliefsAndGoals": "考古学者シェルは、行方不明の師を探して砂の回廊へ入ります。足跡はすべて入口へ向き、戻った者がいないことと矛盾します。彼女は師の発見を証明したい。同行する荷担ぎは、生還を優先して新発見を後回しにしたがります。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "砂の回廊に入った師を捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "入口→足跡の追跡／釘の試験→避難室→師の救出／標本の回収。師は生存しており、自分の誤読を認めたくありません。綱があれば標本も運べ、なければ人か重量標本を優先します。迷えば釘の試験へ戻れる退路を残します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q131.scene.entry"
+        },
+        {
+          "id": "lost",
+          "script": "q131.scene.lost"
+        },
+        {
+          "id": "room",
+          "script": "q131.scene.room"
+        },
+        {
+          "id": "credit",
+          "script": "q131.scene.credit"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "砂の回廊に入った師を捜してください。"
+    },
+    "reveal": {
+      "newInformation": "回廊は一定の区画を越えると床の砂だけを裏返し、足跡の凹凸が逆転します。靴の形から進行方向を読んだ推論が間違っています。荷物を引きずった線だけが途切れず、師が奥の避難室へ向かったと分かります。床の反転前に荷担ぎが釘を落とす小さな実演を置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q131.scene.entry"
+      },
+      {
+        "id": "lost",
+        "script": "q131.scene.lost"
+      },
+      {
+        "id": "room",
+        "script": "q131.scene.room"
+      },
+      {
+        "id": "credit",
+        "script": "q131.scene.credit"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q131.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q131.test",
+        "meaning": "作者原稿の test に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "足跡はすべて入口へ向く。荷担ぎが落とした釘は、一区画を越えると砂の下から上へ現れた。",
+        "options": [
+          {
+            "id": "test",
+            "text": "釘と引きずった線を使って床の反転を確かめる",
+            "to": "room",
+            "set": {
+              "test": true
+            }
+          },
+          {
+            "id": "tracks",
+            "text": "足跡の形だけを頼りに進む",
+            "to": "lost"
+          }
+        ]
+      },
+      {
+        "id": "lost",
+        "text": "入口へ戻ってしまった。釘を落とした場所だけは目印が残る。靴型の向きと人の進行方向は同じとは限らない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "釘の試験へ戻る",
+            "to": "entry"
+          }
+        ]
+      },
+      {
+        "id": "room",
+        "text": "砂が裏返るだけで、荷物を引いた線は続いていた。避難室の師は生きているが、自分の誤読を認めたがらない。人と標本を同時に運ぶには縄が必要だ。",
+        "options": [
+          {
+            "id": "person",
+            "text": "師を先に連れて帰る",
+            "to": "@person"
+          },
+          {
+            "id": "sample",
+            "text": "師の承諾で標本を先に運び、救助班へ引き継ぐ",
+            "to": "@sample"
+          },
+          {
+            "id": "both",
+            "text": "縄一つで人と標本を運ぶ",
+            "to": "credit",
+            "cost": {
+              "rope": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "credit",
+        "text": "帰路、師は弟子の足跡でなく荷担ぎの綱をたどった。発見報告に誰の名を載せるか、シェルが原稿を広げる。",
+        "options": [
+          {
+            "id": "all",
+            "text": "荷担ぎを共同発見者として記す",
+            "to": "@all"
+          },
+          {
+            "id": "school",
+            "text": "報告を師弟の名だけで提出する",
+            "to": "@school"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q131.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "足跡はすべて入口へ向く。荷担ぎが落とした釘は、一区画を越えると砂の下から上へ現れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘と引きずった線を使って床の反転を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q131.test",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.scene.room"
+                }
+              ]
+            },
+            {
+              "id": "tracks",
+              "text": "足跡の形だけを頼りに進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.lost"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.lost": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "lost"
+        },
+        {
+          "op": "say",
+          "text": "入口へ戻ってしまった。釘を落とした場所だけは目印が残る。靴型の向きと人の進行方向は同じとは限らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘の試験へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.room": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "room"
+        },
+        {
+          "op": "say",
+          "text": "砂が裏返るだけで、荷物を引いた線は続いていた。避難室の師は生きているが、自分の誤読を認めたがらない。人と標本を同時に運ぶには縄が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "person",
+              "text": "師を先に連れて帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.person"
+                }
+              ]
+            },
+            {
+              "id": "sample",
+              "text": "師の承諾で標本を先に運び、救助班へ引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.sample"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "縄一つで人と標本を運ぶ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.scene.credit"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.credit": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "credit"
+        },
+        {
+          "op": "say",
+          "text": "帰路、師は弟子の足跡でなく荷担ぎの綱をたどった。発見報告に誰の名を載せるか、シェルが原稿を広げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "all",
+              "text": "荷担ぎを共同発見者として記す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.all"
+                }
+              ]
+            },
+            {
+              "id": "school",
+              "text": "報告を師弟の名だけで提出する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.school"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q131.end.person": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "person"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.sample": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "sample"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.school": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "school"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q131.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "person",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sample",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "all",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "school",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q131.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q131.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lost",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q131.scene.lost"
+                    }
+                  ]
+                },
+                {
+                  "equals": "room",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q131.scene.room"
+                    }
+                  ]
+                },
+                {
+                  "equals": "credit",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q131.scene.credit"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

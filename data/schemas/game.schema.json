@@ -631,6 +631,37 @@
             "y"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "record_count"
+            },
+            "metric": {
+              "enum": [
+                "battles",
+                "wins",
+                "escapes",
+                "losses",
+                "kills",
+                "encounters"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sinceQuest": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "metric"
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -701,6 +732,9 @@
                     "minLength": 1
                   },
                   "condition": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "visibleWhen": {
                     "$ref": "#/$defs/value"
                   },
                   "requirement": {
@@ -836,6 +870,23 @@
           },
           "required": [
             "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "jump"
+            },
+            "script": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "script"
           ],
           "additionalProperties": false
         },
@@ -1688,6 +1739,9 @@
       "type": "string",
       "minLength": 1
     },
+    "recordVersion": {
+      "const": 1
+    },
     "title": {
       "type": "string",
       "minLength": 1
@@ -1797,6 +1851,18 @@
         "type": "object",
         "properties": {
           "actors": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "scenarioRevision": {
+            "type": "boolean"
+          },
+          "quests": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,

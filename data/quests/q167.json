@@ -1,0 +1,657 @@
+{
+  "schemaVersion": 1,
+  "id": "q167",
+  "number": 167,
+  "title": "軍師のいない勝利",
+  "client": "病欠した軍師ユウナの隊",
+  "brief": "三案の指示書を使い、小砦への対応を決めてください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "object": "q167_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "ours": {
+      "label": "選んだ隊の勝利",
+      "text": "観測と選択を自分たちの名で報告した。戻ったユウナの椅子は、皆と同じ列に置かれた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "hers": {
+      "label": "軍師に集まる期待",
+      "text": "軍師の名へ功績を集めた。ユウナは次も全部予見できると期待され、現場の判断が報告から見えなくなった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "retreat": {
+      "label": "避難民の護衛",
+      "text": "砦の奪還は済まなかった。避難民を守った成果を別に記し、未達を消さず帰還した。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "指示書の余白には、各案を捨てる条件が書いてあります。几帳面さの象徴に見えた番号が、優先順位でないと分かります。病床からの伝言は「第二案」ではなく「今、何が見える？」です。",
+      "fixedPast": "軍師ユウナが病欠した日に、隊は小さな砦を奪還する依頼を受けます。仲間は指示書通りなら安全と考えます。書かれた三案は別々の状況向けで、全部を順に実行する作戦ではありません。副隊長は自分で選ぶ責任を避け、順番を守ろうとします。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "病欠した軍師ユウナの隊",
+        "beliefsAndGoals": "軍師ユウナが病欠した日に、隊は小さな砦を奪還する依頼を受けます。仲間は指示書通りなら安全と考えます。書かれた三案は別々の状況向けで、全部を順に実行する作戦ではありません。副隊長は自分で選ぶ責任を避け、順番を守ろうとします。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "三案の指示書を使い、小砦への対応を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "指示書受領→偵察二地点を任意順→作戦選択→砦戦または撤退。橋の崩落を見たなら尾根、敵の集中を見たなら橋の迂回支援など、選択前の観測へ対応させます。未偵察でも決断できますが、既定の世界状況は変えません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q167.scene.entry"
+        },
+        {
+          "id": "blocked",
+          "script": "q167.scene.blocked"
+        },
+        {
+          "id": "report",
+          "script": "q167.scene.report"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "三案の指示書を使い、小砦への対応を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "指示書の余白には、各案を捨てる条件が書いてあります。几帳面さの象徴に見えた番号が、優先順位でないと分かります。病床からの伝言は「第二案」ではなく「今、何が見える？」です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q167.scene.entry"
+      },
+      {
+        "id": "blocked",
+        "script": "q167.scene.blocked"
+      },
+      {
+        "id": "report",
+        "script": "q167.scene.report"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q167.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q167.bridge",
+        "meaning": "作者原稿の bridge に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q167.enemy",
+        "meaning": "作者原稿の enemy に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "副隊長は一、二、三の順に進めようとする。余白には各案を捨てる条件がある。番号は手順ではなかった。",
+        "options": [
+          {
+            "id": "bridge",
+            "text": "橋を偵察する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q167.bridge"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "bridge": true
+            },
+            "textAfter": "橋は既に落ちていた。これは選択に合わせて変わる状況ではない。"
+          },
+          {
+            "id": "enemy",
+            "text": "敵の集まる地点を偵察する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q167.enemy"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "enemy": true
+            },
+            "textAfter": "敵は橋の対岸に集中し、尾根の守りは薄い。"
+          },
+          {
+            "id": "ridge",
+            "text": "尾根の案で攻める",
+            "to": "report",
+            "combat": "guard_7",
+            "escape": "@retreat",
+            "loss": "@retreat"
+          },
+          {
+            "id": "march",
+            "text": "未確認でも橋を渡る案を実行する",
+            "to": "blocked"
+          },
+          {
+            "id": "retreat",
+            "text": "攻撃をやめ、避難民の護衛をする",
+            "to": "@retreat"
+          }
+        ]
+      },
+      {
+        "id": "blocked",
+        "text": "橋は落ちている。順番通りでも渡れない。軍師からの伝言は「今、何が見える？」だった。",
+        "options": [
+          {
+            "id": "back",
+            "text": "見えている状況から選び直す",
+            "to": "entry"
+          },
+          {
+            "id": "retreat",
+            "text": "攻撃をやめて護衛へ回る",
+            "to": "@retreat"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "砦を奪還した。現場で案を選んだのは今ここにいる隊だった。誰の判断として報告するかを決める。",
+        "options": [
+          {
+            "id": "ours",
+            "text": "自分たちの判断として報告する",
+            "to": "@ours"
+          },
+          {
+            "id": "hers",
+            "text": "軍師の指示通りだったと報告する",
+            "to": "@hers"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q167.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q167.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "副隊長は一、二、三の順に進めようとする。余白には各案を捨てる条件がある。番号は手順ではなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bridge",
+              "text": "橋を偵察する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q167.bridge"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q167.bridge",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "橋は既に落ちていた。これは選択に合わせて変わる状況ではない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q167.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "enemy",
+              "text": "敵の集まる地点を偵察する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q167.enemy"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q167.enemy",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "敵は橋の対岸に集中し、尾根の守りは薄い。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q167.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "ridge",
+              "text": "尾根の案で攻める",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q167.scene.report"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q167.end.retreat"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q167.end.retreat"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "march",
+              "text": "未確認でも橋を渡る案を実行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.scene.blocked"
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "攻撃をやめ、避難民の護衛をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.end.retreat"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q167.scene.blocked": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q167.node",
+          "value": "blocked"
+        },
+        {
+          "op": "say",
+          "text": "橋は落ちている。順番通りでも渡れない。軍師からの伝言は「今、何が見える？」だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "見えている状況から選び直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "攻撃をやめて護衛へ回る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.end.retreat"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q167.scene.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q167.node",
+          "value": "report"
+        },
+        {
+          "op": "say",
+          "text": "砦を奪還した。現場で案を選んだのは今ここにいる隊だった。誰の判断として報告するかを決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ours",
+              "text": "自分たちの判断として報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.end.ours"
+                }
+              ]
+            },
+            {
+              "id": "hers",
+              "text": "軍師の指示通りだったと報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q167.end.hers"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q167.end.ours": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q167.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "観測と選択を自分たちの名で報告した。戻ったユウナの椅子は、皆と同じ列に置かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q167",
+              "outcome": "ours"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q167.end.hers": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q167.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍師の名へ功績を集めた。ユウナは次も全部予見できると期待され、現場の判断が報告から見えなくなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q167",
+              "outcome": "hers"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q167.end.retreat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q167.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "砦の奪還は済まなかった。避難民を守った成果を別に記し、未達を消さず帰還した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q167",
+              "outcome": "retreat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q167.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q167.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q167.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "ours",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "観測と選択を自分たちの名で報告した。戻ったユウナの椅子は、皆と同じ列に置かれた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hers",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍師の名へ功績を集めた。ユウナは次も全部予見できると期待され、現場の判断が報告から見えなくなった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retreat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "砦の奪還は済まなかった。避難民を守った成果を別に記し、未達を消さず帰還した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q167.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q167.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "blocked",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q167.scene.blocked"
+                    }
+                  ]
+                },
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q167.scene.report"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q167.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

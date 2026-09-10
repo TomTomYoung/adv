@@ -1,0 +1,441 @@
+{
+  "schemaVersion": 1,
+  "id": "q147",
+  "number": 147,
+  "title": "一番遅い配達",
+  "client": "運送店主",
+  "brief": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "object": "q147_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "quiet": {
+      "label": "開く花の配達",
+      "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "tomorrow": {
+      "label": "翌晩の到着",
+      "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "record": {
+      "label": "速達の記録",
+      "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "近道を走るほど花は閉じ、到着が早くても受取条件を満たしません。店主は条件を知りながら宣伝の速さだけを強調しています。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしません。",
+      "fixedPast": "運送店主が、速達競争の荷を運んでほしいと頼みます。包みは振動で閉じる夜咲きの花。受取人は引退した舞踊家で、かつて舞台の最後に使った花をもう一度開くところから見たいのです。若い配達人は最速記録を狙っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "運送店主",
+        "beliefsAndGoals": "運送店主が、速達競争の荷を運んでほしいと頼みます。包みは振動で閉じる夜咲きの花。受取人は引退した舞踊家で、かつて舞台の最後に使った花をもう一度開くところから見たいのです。若い配達人は最速記録を狙っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "荷受け→速い山道／遅い水路／費用の高い懸架車→受取。閉じた花でも事情を説明して翌晩の配達へ変更できます。速さを優先した場合、競技賞と依頼達成を別に扱います。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q147.scene.entry"
+        },
+        {
+          "id": "closed",
+          "script": "q147.scene.closed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。"
+    },
+    "reveal": {
+      "newInformation": "近道を走るほど花は閉じ、到着が早くても受取条件を満たしません。店主は条件を知りながら宣伝の速さだけを強調しています。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q147.scene.entry"
+      },
+      {
+        "id": "closed",
+        "script": "q147.scene.closed"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q147.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "扱い札には振動を避けるよう書かれている。店主は速達記録を宣伝したい。受取人は花が開くところから見たいという。",
+        "options": [
+          {
+            "id": "run",
+            "text": "最速の山道を走る。花は閉じる",
+            "to": "closed"
+          },
+          {
+            "id": "water",
+            "text": "時間をかけ、静かな水路で届ける",
+            "to": "@quiet"
+          },
+          {
+            "id": "car",
+            "text": "30Gで懸架車を借り、速さと静けさを両立する",
+            "to": "@quiet",
+            "cost": {
+              "gold": 30
+            }
+          }
+        ]
+      },
+      {
+        "id": "closed",
+        "text": "記録は更新したが花は閉じた。到着後に隠されていた条件ではない。受取人へ状態を伝える。",
+        "options": [
+          {
+            "id": "tomorrow",
+            "text": "事情を説明し、翌晩の再配達へ変更する",
+            "to": "@tomorrow"
+          },
+          {
+            "id": "record",
+            "text": "競技の達成だけで精算し、花の依頼は未達と報告する",
+            "to": "@record"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q147.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q147.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "扱い札には振動を避けるよう書かれている。店主は速達記録を宣伝したい。受取人は花が開くところから見たいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "run",
+              "text": "最速の山道を走る。花は閉じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.closed"
+                }
+              ]
+            },
+            {
+              "id": "water",
+              "text": "時間をかけ、静かな水路で届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "car",
+              "text": "30Gで懸架車を借り、速さと静けさを両立する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q147.scene.closed": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q147.node",
+          "value": "closed"
+        },
+        {
+          "op": "say",
+          "text": "記録は更新したが花は閉じた。到着後に隠されていた条件ではない。受取人へ状態を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tomorrow",
+              "text": "事情を説明し、翌晩の再配達へ変更する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.tomorrow"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "競技の達成だけで精算し、花の依頼は未達と報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.record"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q147.end.quiet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "quiet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.end.tomorrow": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "tomorrow"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.end.record": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "record"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q147.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "quiet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "tomorrow",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "record",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q147.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q147.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "closed",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q147.scene.closed"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

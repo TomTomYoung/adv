@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "id": "q189",
+  "number": 189,
+  "title": "敵国の子守歌",
+  "client": "避難所の薬売りアサ",
+  "brief": "子守歌を敵の暗号と疑われています。事情を聞いてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q189_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "explain": {
+      "label": "続きのある旋律",
+      "text": "確認方法が改められた。夜番の看守は続きを口ずさみ、自分が軍の節しか知らなかったと気づいた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "private": {
+      "label": "歌える小部屋",
+      "text": "歌う場所だけは守られた。偏見が解消したわけではないが、子供たちはそこで眠れた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "hold": {
+      "label": "処罰を保留する",
+      "text": "罪を断定せず、歌集と慣習を調べる時間を取った。アサは避難者の名を売らずに済んだ。",
+      "gold": 153,
+      "xp": 99
+    },
+    "ban": {
+      "label": "静まらない夜",
+      "text": "歌は止まった。秩序の札は守られたが、夜泣きと緊張は増えた。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "同じ旋律でも、軍の合図には欠けている終わりの一節があります。最初は看守の記憶も正しく扱い、別の用途が共存すると示します。眠りかけた子どもが歌の続きを言う場面が、公開の証言を要求する前にあります。",
+      "fixedPast": "避難所で子守歌を歌う薬売りアサが、敵国の暗号を使ったと疑われます。看守は昔その旋律を軍の合図として聞きました。アサの故郷では普通の歌で、軍が後から借用したものです。彼女は疑いを晴らすために、避難者全員の出身を暴かれたくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "避難所の薬売りアサ",
+        "beliefsAndGoals": "避難所で子守歌を歌う薬売りアサが、敵国の暗号を使ったと疑われます。看守は昔その旋律を軍の合図として聞きました。アサの故郷では普通の歌で、軍が後から借用したものです。彼女は疑いを晴らすために、避難者全員の出身を暴かれたくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "子守歌を敵の暗号と疑われています。事情を聞いてください。"
+      }
+    ],
+    "conflict": {
+      "design": "呼出し→歌集／看守の記憶／本人への面談→禁止・事情説明・私的使用。歌集があれば出身者を名指しせず由来を説明できます。証拠不足でも即時処罰でなく保留を求められます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q189.scene.entry"
+        },
+        {
+          "id": "explain",
+          "script": "q189.scene.explain"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "子守歌を敵の暗号と疑われています。事情を聞いてください。"
+    },
+    "reveal": {
+      "newInformation": "同じ旋律でも、軍の合図には欠けている終わりの一節があります。最初は看守の記憶も正しく扱い、別の用途が共存すると示します。眠りかけた子どもが歌の続きを言う場面が、公開の証言を要求する前にあります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q189.scene.entry"
+      },
+      {
+        "id": "explain",
+        "script": "q189.scene.explain"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q189.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "看守が知る軍の合図と同じ旋律だった。眠りかけた子供は、その合図にない最後の一節を歌った。",
+        "options": [
+          {
+            "id": "book",
+            "text": "歌集で、軍に使われる前の由来を確かめる",
+            "to": "explain"
+          },
+          {
+            "id": "private",
+            "text": "公の歌唱を止め、私的に歌う場所を守る",
+            "to": "@private"
+          },
+          {
+            "id": "hold",
+            "text": "証拠不足のまま処罰せず、調査を保留する",
+            "to": "@hold"
+          },
+          {
+            "id": "ban",
+            "text": "所内の歌唱を禁止する",
+            "to": "@ban"
+          }
+        ]
+      },
+      {
+        "id": "explain",
+        "text": "古い歌集に全曲が載っていた。看守の記憶も間違いではないが、軍の用途だけで住人の出身を名指しする根拠にはならない。",
+        "options": [
+          {
+            "id": "public",
+            "text": "避難者を名指しせず、歌集の由来を説明する",
+            "to": "@explain"
+          },
+          {
+            "id": "private",
+            "text": "事情は伏せ、私的使用だけを頼む",
+            "to": "@private"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q189.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q189.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "看守が知る軍の合図と同じ旋律だった。眠りかけた子供は、その合図にない最後の一節を歌った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "book",
+              "text": "歌集で、軍に使われる前の由来を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.scene.explain"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "公の歌唱を止め、私的に歌う場所を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.end.private"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "証拠不足のまま処罰せず、調査を保留する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.end.hold"
+                }
+              ]
+            },
+            {
+              "id": "ban",
+              "text": "所内の歌唱を禁止する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.end.ban"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q189.scene.explain": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q189.node",
+          "value": "explain"
+        },
+        {
+          "op": "say",
+          "text": "古い歌集に全曲が載っていた。看守の記憶も間違いではないが、軍の用途だけで住人の出身を名指しする根拠にはならない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "避難者を名指しせず、歌集の由来を説明する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.end.explain"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "事情は伏せ、私的使用だけを頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q189.end.private"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q189.end.explain": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q189.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "確認方法が改められた。夜番の看守は続きを口ずさみ、自分が軍の節しか知らなかったと気づいた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q189",
+              "outcome": "explain"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q189.end.private": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q189.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌う場所だけは守られた。偏見が解消したわけではないが、子供たちはそこで眠れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q189",
+              "outcome": "private"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q189.end.hold": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q189.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "罪を断定せず、歌集と慣習を調べる時間を取った。アサは避難者の名を売らずに済んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q189",
+              "outcome": "hold"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q189.end.ban": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q189.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌は止まった。秩序の札は守られたが、夜泣きと緊張は増えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q189",
+              "outcome": "ban"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q189.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q189.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q189.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "explain",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "確認方法が改められた。夜番の看守は続きを口ずさみ、自分が軍の節しか知らなかったと気づいた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "private",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "歌う場所だけは守られた。偏見が解消したわけではないが、子供たちはそこで眠れた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hold",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "罪を断定せず、歌集と慣習を調べる時間を取った。アサは避難者の名を売らずに済んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ban",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "歌は止まった。秩序の札は守られたが、夜泣きと緊張は増えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q189.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q189.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "explain",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q189.scene.explain"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q189.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

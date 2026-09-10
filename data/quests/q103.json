@@ -1,0 +1,596 @@
+{
+  "schemaVersion": 1,
+  "id": "q103",
+  "number": 103,
+  "title": "一枚多い食券",
+  "client": "料理人トマ",
+  "brief": "炊き出しの食券が毎日一枚増えます。出所を調べてください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q103_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "券の数を合わせる",
+      "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "write": {
+      "label": "一人の申請",
+      "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "joint": {
+      "label": "二店の仕込み",
+      "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "偽券は食堂の献立の裏紙で、発見は難しくありません。追及されると女将は謝るより先に「今日の鍋は足りるのか」と聞きます。問題の中心を犯人当てから、誰が食事を受け取れるかへ移します。トマは善意に同情しても、在庫を無限には増やせません。",
+      "fixedPast": "炊き出しの料理人トマが、毎日一枚ずつ増える食券を調べてほしいと頼みます。見習いニルは不正を許せません。券を増やすのは、字が読めず申請できない老人を見た、隣の食堂の女将です。自店の客を減らす炊き出しを嫌いながら、見捨てられません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "料理人トマ",
+        "beliefsAndGoals": "炊き出しの料理人トマが、毎日一枚ずつ増える食券を調べてほしいと頼みます。見習いニルは不正を許せません。券を増やすのは、字が読めず申請できない老人を見た、隣の食堂の女将です。自店の客を減らす炊き出しを嫌いながら、見捨てられません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "炊き出しの食券が毎日一枚増えます。出所を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "券の調査→食堂→配膳前の相談。偽造を止める、本人の同意で申請を代筆する、食材を持ち込んで共同仕込みを仲介する道があります。代筆は無料ですが老人の身の上を公表しません。食材不足なら代筆か不正停止へ戻れます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q103.scene.entry"
+        },
+        {
+          "id": "inn",
+          "script": "q103.scene.inn"
+        },
+        {
+          "id": "elder",
+          "script": "q103.scene.elder"
+        },
+        {
+          "id": "joint",
+          "script": "q103.scene.joint"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "炊き出しの食券が毎日一枚増えます。出所を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "偽券は食堂の献立の裏紙で、発見は難しくありません。追及されると女将は謝るより先に「今日の鍋は足りるのか」と聞きます。問題の中心を犯人当てから、誰が食事を受け取れるかへ移します。トマは善意に同情しても、在庫を無限には増やせません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q103.scene.entry"
+      },
+      {
+        "id": "inn",
+        "script": "q103.scene.inn"
+      },
+      {
+        "id": "elder",
+        "script": "q103.scene.elder"
+      },
+      {
+        "id": "joint",
+        "script": "q103.scene.joint"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q103.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "見習いニルは食券を並べ直した。一枚の裏に、隣の食堂の献立が透けている。",
+        "options": [
+          {
+            "id": "source",
+            "text": "献立を持って隣の食堂へ",
+            "to": "inn"
+          },
+          {
+            "id": "stop",
+            "text": "券の照合を厳格にし、偽券を止める",
+            "to": "@stop"
+          }
+        ]
+      },
+      {
+        "id": "inn",
+        "text": "女将は謝るより先に尋ねた。「今日の鍋は足りるの？」字の読めない老人が申請できずにいたという。トマも、食材を無限に増やせはしない。",
+        "options": [
+          {
+            "id": "consent",
+            "text": "老人に代筆を望むか聞く",
+            "to": "elder"
+          },
+          {
+            "id": "join",
+            "text": "共同仕込みの仕事と費用を相談する",
+            "to": "joint"
+          },
+          {
+            "id": "stop",
+            "text": "事情を聞いても偽券は止める",
+            "to": "@stop"
+          }
+        ]
+      },
+      {
+        "id": "elder",
+        "text": "老人は身の上を皆に話すのは断った。「申請だけ、頼めるか」トマは申請の欄だけを開いた。",
+        "options": [
+          {
+            "id": "write",
+            "text": "本人の同意した申請だけ代筆する",
+            "to": "@write"
+          },
+          {
+            "id": "back",
+            "text": "配膳前の相談に戻る",
+            "to": "inn"
+          }
+        ]
+      },
+      {
+        "id": "joint",
+        "text": "トマは調理場所を、女将は仕込みを出すと同意した。最初の食材に野営糧食一つが足りない。明日以降の仕込みは二店の仕事になる。",
+        "options": [
+          {
+            "id": "food",
+            "text": "糧食一つを渡し、共同仕込みを始める",
+            "to": "@joint",
+            "cost": {
+              "ration": 1
+            }
+          },
+          {
+            "id": "back",
+            "text": "寄付せず、代筆や券の扱いを相談する",
+            "to": "inn"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q103.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "見習いニルは食券を並べ直した。一枚の裏に、隣の食堂の献立が透けている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "source",
+              "text": "献立を持って隣の食堂へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "券の照合を厳格にし、偽券を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.inn": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "inn"
+        },
+        {
+          "op": "say",
+          "text": "女将は謝るより先に尋ねた。「今日の鍋は足りるの？」字の読めない老人が申請できずにいたという。トマも、食材を無限に増やせはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consent",
+              "text": "老人に代筆を望むか聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.elder"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "共同仕込みの仕事と費用を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.joint"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "事情を聞いても偽券は止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.elder": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "elder"
+        },
+        {
+          "op": "say",
+          "text": "老人は身の上を皆に話すのは断った。「申請だけ、頼めるか」トマは申請の欄だけを開いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "write",
+              "text": "本人の同意した申請だけ代筆する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.write"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "配膳前の相談に戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.joint": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "joint"
+        },
+        {
+          "op": "say",
+          "text": "トマは調理場所を、女将は仕込みを出すと同意した。最初の食材に野営糧食一つが足りない。明日以降の仕込みは二店の仕事になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "food",
+              "text": "糧食一つを渡し、共同仕込みを始める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "寄付せず、代筆や券の扱いを相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q103.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.end.write": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "write"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q103.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "stop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "write",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q103.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q103.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "inn",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q103.scene.inn"
+                    }
+                  ]
+                },
+                {
+                  "equals": "elder",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q103.scene.elder"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q103.scene.joint"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

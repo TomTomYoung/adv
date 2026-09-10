@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q110",
+  "number": 110,
+  "title": "明日までの英雄",
+  "client": "退役兵イーロ",
+  "brief": "祭の行列で、一日だけ護衛してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "object": "q110_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "legend": {
+      "label": "伝説の行列",
+      "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。",
+      "gold": 57,
+      "xp": 51
+    },
+    "retreat": {
+      "label": "帰還路の祭",
+      "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "all": {
+      "label": "足りない英雄席",
+      "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "旧兵の証言は初めから得られ、隠し真相にしません。問題は、祝う席でどの言葉を使うかです。自分の逃走戦績を見せればイーロは具体的に話しますが、逃走経験のない主人公も話を聞けます。記録から人格を決めません。",
+      "fixedPast": "退役兵イーロが、祭の行列へ一日だけ護衛してほしいと頼みます。町は彼を「一度も退かなかった英雄」と紹介していますが、彼が誇るのは、撤退を決めて部隊を救った夜です。祭係は嘘を守りたいのではなく、子どもに勇気を伝える物語が必要だと考えています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "退役兵イーロ",
+        "beliefsAndGoals": "退役兵イーロが、祭の行列へ一日だけ護衛してほしいと頼みます。町は彼を「一度も退かなかった英雄」と紹介していますが、彼が誇るのは、撤退を決めて部隊を救った夜です。祭係は嘘を守りたいのではなく、子どもに勇気を伝える物語が必要だと考えています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "祭の行列で、一日だけ護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→衣装合わせと証言→演説文の相談→祭。伝説のまま祝う、撤退を中心に語る、演説をやめて生還者全員を招く道があります。演説変更は本人の同意で確定します。護衛だけを務めて語り方に介入しなくても報酬は出ます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q110.scene.entry"
+        },
+        {
+          "id": "speech",
+          "script": "q110.scene.speech"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祭の行列で、一日だけ護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "旧兵の証言は初めから得られ、隠し真相にしません。問題は、祝う席でどの言葉を使うかです。自分の逃走戦績を見せればイーロは具体的に話しますが、逃走経験のない主人公も話を聞けます。記録から人格を決めません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q110.scene.entry"
+      },
+      {
+        "id": "speech",
+        "script": "q110.scene.speech"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q110.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "「一度も退かなかった英雄」と衣装に縫われている。イーロは笑わない。「私が誇るのは、撤退を決めた夜なんだ」",
+        "options": [
+          {
+            "id": "hear",
+            "text": "退役兵の話を聞く",
+            "to": "speech"
+          },
+          {
+            "id": "guard",
+            "text": "語り方に介入せず護衛を務める",
+            "to": "@legend"
+          }
+        ]
+      },
+      {
+        "id": "speech",
+        "text": "退いたため部隊が帰った。祭係は子供に勇気を見せたいと言う。イーロは撤退の話をすることも、仲間全員を呼ぶことも受け入れた。",
+        "options": [
+          {
+            "id": "retreat",
+            "text": "本人の同意のもと、撤退を演説の中心にする",
+            "to": "@retreat"
+          },
+          {
+            "id": "all",
+            "text": "演説をやめ、生還者を皆招く",
+            "to": "@all"
+          },
+          {
+            "id": "legend",
+            "text": "今の紹介のまま護衛する",
+            "to": "@legend"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q110.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q110.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "「一度も退かなかった英雄」と衣装に縫われている。イーロは笑わない。「私が誇るのは、撤退を決めた夜なんだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hear",
+              "text": "退役兵の話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.scene.speech"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "語り方に介入せず護衛を務める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.legend"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q110.scene.speech": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q110.node",
+          "value": "speech"
+        },
+        {
+          "op": "say",
+          "text": "退いたため部隊が帰った。祭係は子供に勇気を見せたいと言う。イーロは撤退の話をすることも、仲間全員を呼ぶことも受け入れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "retreat",
+              "text": "本人の同意のもと、撤退を演説の中心にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.retreat"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "演説をやめ、生還者を皆招く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.all"
+                }
+              ]
+            },
+            {
+              "id": "legend",
+              "text": "今の紹介のまま護衛する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.legend"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q110.end.legend": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "legend"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.end.retreat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "retreat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q110.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "legend",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retreat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "all",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q110.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q110.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "speech",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q110.scene.speech"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q110.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

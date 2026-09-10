@@ -70,3 +70,7 @@ background/surface/raised/ink/muted/accent/border/dangerは6桁のHEX色。font�
 GameViewはdata-fx属性のscene / screen / party / actor:ID / enemy:instanceを表示上の目印にします。EffectsRendererは再描画前の画像位置を保存し、倒れた敵など新しいDOMにない画像にも最後の効果を付けます。演出はbody上の操作を遮らない一時要素とWeb Animations APIを使用し、終了・中断時に取り除きます。元画像とコアの状態は変更しません。
 
 feedbackのsession/revisionが同じ場合は再生しません。通常の描画前に予約・変形を中止し、音声アダプターにもui.cancelFeedbackで同じ取消しを通知します。ui.effectsModeはfull / reduced / offを返します。OSの動き軽減も表示側で扱います。previewは固定データのfeedbackだけを差し替えて、任意の効果を再生します。
+
+## 1.3.1の依頼表示
+
+questsとtrackedにevidenceTotalを追加しました。証拠地点数が0の依頼は場面内で進行するため「相談・調査」を表示します。evidenceCountを固定値2で割らないでください。選択肢はvisibleWhenを満たすものだけが投影され、conditionに応じたenabledを持ちます。非表示選択肢の本文や作者用modelは渡しません。

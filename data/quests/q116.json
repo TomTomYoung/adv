@@ -1,0 +1,555 @@
+{
+  "schemaVersion": 1,
+  "id": "q116",
+  "number": 116,
+  "title": "帰り道だけの地図",
+  "client": "地図師フェン",
+  "brief": "行先の書かれていない地図を、実際に確かめてください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q116_scene",
+      "x": 2,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "fixed": {
+      "label": "町からの案内図",
+      "text": "町の旅行者には使いやすい図になった。老婆は別の余白へ、来月帰る道を引いた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "moving": {
+      "label": "移る帰着先",
+      "text": "居場所は伏せ、季節の読み方を教える会が開かれた。フェンは地図の中心でなく、余白から線を引いた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "return": {
+      "label": "返された原図",
+      "text": "老婆は原図を受け取り、次は一緒に一枚描こうと言った。フェンは白紙を持って再訪する日を決めた。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "鳥の民の家は季節とともに移動します。線は定住地から毎年の住居へ帰る経路です。老婆は誤記を訂正しないのではなく、家を一つに固定する発想を採らないだけです。道中の目印が仮設の炊事場として使われていることで示します。",
+      "fixedPast": "地図師フェンは、行き先のない地図を買い取り、その道を確かめてほしいと頼みます。線はすべて同じ町から外へ伸びています。地図を描いた渡り鳥の民の老婆は「帰る道しか描いていない」と言い、町の学者は逆向きだと笑います。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "地図師フェン",
+        "beliefsAndGoals": "地図師フェンは、行き先のない地図を買い取り、その道を確かめてほしいと頼みます。線はすべて同じ町から外へ伸びています。地図を描いた渡り鳥の民の老婆は「帰る道しか描いていない」と言い、町の学者は逆向きだと笑います。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "行先の書かれていない地図を、実際に確かめてください。"
+      }
+    ],
+    "conflict": {
+      "design": "地図を読む→老婆と話す／一本を試す→帰還報告。季節を知らず進むと空の野営地へ着きますが、残された標で現在の営地へ追えます。固定の町を中心に描き直す、複数の帰着先を残す、公開せず本人へ返す道があります。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q116.scene.entry"
+        },
+        {
+          "id": "road",
+          "script": "q116.scene.road"
+        },
+        {
+          "id": "report",
+          "script": "q116.scene.report"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "行先の書かれていない地図を、実際に確かめてください。"
+    },
+    "reveal": {
+      "newInformation": "鳥の民の家は季節とともに移動します。線は定住地から毎年の住居へ帰る経路です。老婆は誤記を訂正しないのではなく、家を一つに固定する発想を採らないだけです。道中の目印が仮設の炊事場として使われていることで示します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q116.scene.entry"
+      },
+      {
+        "id": "road",
+        "script": "q116.scene.road"
+      },
+      {
+        "id": "report",
+        "script": "q116.scene.report"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q116.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q116.season",
+        "meaning": "作者原稿の season に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q116.followed",
+        "meaning": "作者原稿の followed に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "road"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "線は町から外へ延びる。鳥の民の老婆は「帰る道だけ描いた」と言った。",
+        "options": [
+          {
+            "id": "season",
+            "text": "出発月と目印の対応を聞く",
+            "to": "road",
+            "set": {
+              "season": true
+            }
+          },
+          {
+            "id": "try",
+            "text": "一本の道を実際に歩く",
+            "to": "road"
+          }
+        ]
+      },
+      {
+        "id": "road",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q116.season"
+              },
+              "right": true
+            },
+            "yes": "季節の印を選ぶと、炊事の煙が上がる営地へ着いた。",
+            "no": "空の炊事場へ着いた。残された移転標を追うと、今の営地へたどり着く。"
+          },
+          "家は季節とともに動く。住人は読み方の公開に同意したが、正確な居場所を載せるのは断った。"
+        ],
+        "options": [
+          {
+            "id": "report",
+            "text": "歩いた経路と住人の意思を報告する",
+            "to": "report",
+            "set": {
+              "followed": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "フェンは地図の中央に町を描こうとして手を止めた。目的地を一つに固定すると便利だが、家のあり方は伝わらない。",
+        "options": [
+          {
+            "id": "fixed",
+            "text": "定住地からの案内図として描き直す",
+            "to": "@fixed"
+          },
+          {
+            "id": "moving",
+            "text": "読み方の講習を添え、移る帰着先を残す",
+            "to": "@moving"
+          },
+          {
+            "id": "return",
+            "text": "公開せず、老婆へ原図を返す",
+            "to": "@return"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q116.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q116.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "線は町から外へ延びる。鳥の民の老婆は「帰る道だけ描いた」と言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "season",
+              "text": "出発月と目印の対応を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q116.season",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q116.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "try",
+              "text": "一本の道を実際に歩く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q116.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q116.scene.road": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q116.node",
+          "value": "road"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q116.season"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "季節の印を選ぶと、炊事の煙が上がる営地へ着いた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "空の炊事場へ着いた。残された移転標を追うと、今の営地へたどり着く。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "家は季節とともに動く。住人は読み方の公開に同意したが、正確な居場所を載せるのは断った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "歩いた経路と住人の意思を報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q116.followed",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q116.scene.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q116.scene.report": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q116.node",
+          "value": "report"
+        },
+        {
+          "op": "say",
+          "text": "フェンは地図の中央に町を描こうとして手を止めた。目的地を一つに固定すると便利だが、家のあり方は伝わらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fixed",
+              "text": "定住地からの案内図として描き直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q116.end.fixed"
+                }
+              ]
+            },
+            {
+              "id": "moving",
+              "text": "読み方の講習を添え、移る帰着先を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q116.end.moving"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "公開せず、老婆へ原図を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q116.end.return"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q116.end.fixed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q116.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "町の旅行者には使いやすい図になった。老婆は別の余白へ、来月帰る道を引いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q116",
+              "outcome": "fixed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q116.end.moving": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q116.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "居場所は伏せ、季節の読み方を教える会が開かれた。フェンは地図の中心でなく、余白から線を引いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q116",
+              "outcome": "moving"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q116.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q116.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "老婆は原図を受け取り、次は一緒に一枚描こうと言った。フェンは白紙を持って再訪する日を決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q116",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q116.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q116.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q116.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "fixed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "町の旅行者には使いやすい図になった。老婆は別の余白へ、来月帰る道を引いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "moving",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "居場所は伏せ、季節の読み方を教える会が開かれた。フェンは地図の中心でなく、余白から線を引いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "老婆は原図を受け取り、次は一緒に一枚描こうと言った。フェンは白紙を持って再訪する日を決めた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q116.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q116.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "road",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q116.scene.road"
+                    }
+                  ]
+                },
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q116.scene.report"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q116.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

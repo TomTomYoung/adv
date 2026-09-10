@@ -1,0 +1,677 @@
+{
+  "schemaVersion": 1,
+  "id": "q104",
+  "number": 104,
+  "title": "雨を売る少年",
+  "client": "花売りの少年",
+  "brief": "雨音を出す瓶を盗まれました。音を頼りに捜してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "object": "q104_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "return": {
+      "label": "商品の返却",
+      "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "buy": {
+      "label": "雨音の贈り物",
+      "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。",
+      "gold": 57,
+      "xp": 51
+    },
+    "lease": {
+      "label": "夜だけの雨",
+      "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。",
+      "gold": 57,
+      "xp": 51
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "追跡は音を頼りにしますが、噴水、桶、屋根の修理音が紛らわしく響きます。瓶は雨を生むのではなく、最初に聞かせた音を繰り返す品です。ベロが思い出す雨音の途中に、少年のくしゃみが入ります。魔法の誤認を、笑いと郷愁へ着地させます。",
+      "fixedPast": "花売りの少年が、晴天なのに雨音を立てる瓶を盗まれたと訴えます。盗んだのは老楽師ベロ。眠れない夜に、故郷の雨の音を聞きたかったのです。少年は不思議な道具の商売に誇りがあり、同情で商品を無価値にされることを嫌います。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "花売りの少年",
+        "beliefsAndGoals": "花売りの少年が、晴天なのに雨音を立てる瓶を盗まれたと訴えます。盗んだのは老楽師ベロ。眠れない夜に、故郷の雨の音を聞きたかったのです。少年は不思議な道具の商売に誇りがあり、同情で商品を無価値にされることを嫌います。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "雨音を出す瓶を盗まれました。音を頼りに捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "聞き込み→音の追跡→発見→返却／買い取りの仲介／貸出の提案。仕組みに早く気づけば少年へ直接尋ね、追跡を短縮できます。買い取りは金が足りなければ選べませんが、返却は常に可能です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q104.scene.entry"
+        },
+        {
+          "id": "rule",
+          "script": "q104.scene.rule"
+        },
+        {
+          "id": "sound",
+          "script": "q104.scene.sound"
+        },
+        {
+          "id": "found",
+          "script": "q104.scene.found"
+        },
+        {
+          "id": "lease",
+          "script": "q104.scene.lease"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "雨音を出す瓶を盗まれました。音を頼りに捜してください。"
+    },
+    "reveal": {
+      "newInformation": "追跡は音を頼りにしますが、噴水、桶、屋根の修理音が紛らわしく響きます。瓶は雨を生むのではなく、最初に聞かせた音を繰り返す品です。ベロが思い出す雨音の途中に、少年のくしゃみが入ります。魔法の誤認を、笑いと郷愁へ着地させます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q104.scene.entry"
+      },
+      {
+        "id": "rule",
+        "script": "q104.scene.rule"
+      },
+      {
+        "id": "sound",
+        "script": "q104.scene.sound"
+      },
+      {
+        "id": "found",
+        "script": "q104.scene.found"
+      },
+      {
+        "id": "lease",
+        "script": "q104.scene.lease"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q104.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q104.loop",
+        "meaning": "作者原稿の loop に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "rule"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "晴れている。少年の空の棚から、瓶を置いていた丸い跡だけが消えていなかった。",
+        "options": [
+          {
+            "id": "sound",
+            "text": "水音をたどる",
+            "to": "sound"
+          },
+          {
+            "id": "ask",
+            "text": "瓶の仕組みを先に尋ねる",
+            "to": "rule"
+          }
+        ]
+      },
+      {
+        "id": "rule",
+        "text": "少年が別の瓶へ指を鳴らすと、同じ音が繰り返された。「入れた音を覚えるんだ。雨が降るわけじゃない」",
+        "options": [
+          {
+            "id": "find",
+            "text": "繰り返す音を選んで追う",
+            "to": "found",
+            "set": {
+              "loop": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "sound",
+        "text": "噴水は一定、桶の音は途切れ、屋根の修理音は近づく。遠くの雨音だけに、同じくしゃみが混じる。",
+        "options": [
+          {
+            "id": "repeat",
+            "text": "くしゃみを繰り返す音へ向かう",
+            "to": "found"
+          },
+          {
+            "id": "learn",
+            "text": "少年へ仕組みを確かめる",
+            "to": "rule"
+          }
+        ]
+      },
+      {
+        "id": "found",
+        "text": "老楽師ベロは瓶を抱いていた。「故郷では、夜になると降った」少年は手を差し出す。「それでも商品だよ」",
+        "options": [
+          {
+            "id": "return",
+            "text": "瓶を少年へ返す",
+            "to": "@return"
+          },
+          {
+            "id": "buy",
+            "text": "40Gを払い、少年から買って楽師へ贈る",
+            "to": "@buy",
+            "cost": {
+              "gold": 40
+            }
+          },
+          {
+            "id": "lease",
+            "text": "音楽との交換で貸し出せないか相談する",
+            "to": "lease"
+          }
+        ]
+      },
+      {
+        "id": "lease",
+        "text": "少年は録音した曲を新商品にしたいと言い、ベロは朝には瓶を返すと答えた。所有者は少年のまま、夜だけ貸す約束になる。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "二人の貸出契約を取り持つ",
+            "to": "@lease"
+          },
+          {
+            "id": "return",
+            "text": "契約を結ばず瓶を返す",
+            "to": "@return"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q104.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "晴れている。少年の空の棚から、瓶を置いていた丸い跡だけが消えていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sound",
+              "text": "水音をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.sound"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "瓶の仕組みを先に尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.rule"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.rule": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "rule"
+        },
+        {
+          "op": "say",
+          "text": "少年が別の瓶へ指を鳴らすと、同じ音が繰り返された。「入れた音を覚えるんだ。雨が降るわけじゃない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "find",
+              "text": "繰り返す音を選んで追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q104.loop",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.sound": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "sound"
+        },
+        {
+          "op": "say",
+          "text": "噴水は一定、桶の音は途切れ、屋根の修理音は近づく。遠くの雨音だけに、同じくしゃみが混じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repeat",
+              "text": "くしゃみを繰り返す音へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found"
+                }
+              ]
+            },
+            {
+              "id": "learn",
+              "text": "少年へ仕組みを確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.rule"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.found": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "found"
+        },
+        {
+          "op": "say",
+          "text": "老楽師ベロは瓶を抱いていた。「故郷では、夜になると降った」少年は手を差し出す。「それでも商品だよ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "瓶を少年へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.return"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "40Gを払い、少年から買って楽師へ贈る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.end.buy"
+                }
+              ]
+            },
+            {
+              "id": "lease",
+              "text": "音楽との交換で貸し出せないか相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.lease"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.lease": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "lease"
+        },
+        {
+          "op": "say",
+          "text": "少年は録音した曲を新商品にしたいと言い、ベロは朝には瓶を返すと答えた。所有者は少年のまま、夜だけ貸す約束になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "二人の貸出契約を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.lease"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "契約を結ばず瓶を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.return"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q104.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.end.buy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "buy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.end.lease": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "lease"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q104.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "buy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lease",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q104.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rule",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.rule"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sound",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.sound"
+                    }
+                  ]
+                },
+                {
+                  "equals": "found",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.found"
+                    }
+                  ]
+                },
+                {
+                  "equals": "lease",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.lease"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

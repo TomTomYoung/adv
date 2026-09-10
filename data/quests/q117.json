@@ -1,0 +1,547 @@
+{
+  "schemaVersion": 1,
+  "id": "q117",
+  "number": 117,
+  "title": "空の棺の護送",
+  "client": "老騎士ヴァル",
+  "brief": "封じた棺を祖先の墓へ運んでください。私も同行します。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q117_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "bury": {
+      "label": "称号の墓",
+      "text": "鎧は地中へ収まった。墓守が名を尋ねると、ヴァルは称号を付けずに答えた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "return": {
+      "label": "返す鎧",
+      "text": "息子は鎧を預かった。父がまた着ることは求めず、平服のまま夕食へ招いた。",
+      "gold": 69,
+      "xp": 57
+    },
+    "oath": {
+      "label": "平服の誓い",
+      "text": "武器を納めたヴァルは平服で門を出た。退役は決まり、家族との話は生きた本人に残った。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "重さの割に棺が音を立て、途中で本人が鎧の留め具を直します。息子が反対するのは相続ではなく、生きた父との関係まで終わった形にされることです。戦いをやめる決意と、家族から逃げる決意を分けます。",
+      "fixedPast": "老騎士ヴァルは、封をした棺を祖先の墓へ運ぶよう頼み、自分も同行します。墓守は葬儀に本人がいることを不審に思います。棺に入っているのは鎧だけで、騎士は家督を譲るため、自分の称号を弔おうとしています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "老騎士ヴァル",
+        "beliefsAndGoals": "老騎士ヴァルは、封をした棺を祖先の墓へ運ぶよう頼み、自分も同行します。墓守は葬儀に本人がいることを不審に思います。棺に入っているのは鎧だけで、騎士は家督を譲るため、自分の称号を弔おうとしています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "封じた棺を祖先の墓へ運んでください。私も同行します。"
+      }
+    ],
+    "conflict": {
+      "design": "護送→家の門で息子と会う→墓地。鎧を埋葬する、家へ返す、武器だけを納めて退役を公に誓う道があります。息子との対面を拒んだ場合でも退役はできますが、和解は未成立です。襲撃戦から退けば家へ戻り、再出発を相談できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q117.scene.entry"
+        },
+        {
+          "id": "son",
+          "script": "q117.scene.son"
+        },
+        {
+          "id": "grave",
+          "script": "q117.scene.grave"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "封じた棺を祖先の墓へ運んでください。私も同行します。"
+    },
+    "reveal": {
+      "newInformation": "重さの割に棺が音を立て、途中で本人が鎧の留め具を直します。息子が反対するのは相続ではなく、生きた父との関係まで終わった形にされることです。戦いをやめる決意と、家族から逃げる決意を分けます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q117.scene.entry"
+      },
+      {
+        "id": "son",
+        "script": "q117.scene.son"
+      },
+      {
+        "id": "grave",
+        "script": "q117.scene.grave"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q117.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q117.son",
+        "meaning": "作者原稿の son に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "棺が金属の音を立て、ヴァルが留め具を直した。家の門で、息子が行く手に立つ。",
+        "options": [
+          {
+            "id": "son",
+            "text": "息子の話を聞く",
+            "to": "son",
+            "set": {
+              "son": true
+            }
+          },
+          {
+            "id": "grave",
+            "text": "対面は断り、墓まで護送する",
+            "to": "grave"
+          }
+        ]
+      },
+      {
+        "id": "son",
+        "text": "「家督は受け取る。でも、生きた父まで弔うのか」ヴァルは棺を開いた。入っているのは鎧だけだ。",
+        "options": [
+          {
+            "id": "grave",
+            "text": "息子の意思を聞いて墓へ",
+            "to": "grave"
+          }
+        ]
+      },
+      {
+        "id": "grave",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q117.son"
+              },
+              "right": true
+            },
+            "yes": "息子の言葉を聞いたヴァルは、退役と家族への別れを分けて考えている。",
+            "no": "ヴァルは墓守へ鎧を見せ、称号だけを弔いたいと話した。息子とは話していない。"
+          }
+        ],
+        "options": [
+          {
+            "id": "bury",
+            "text": "本人の希望どおり鎧を埋葬する",
+            "to": "@bury"
+          },
+          {
+            "id": "return",
+            "text": "鎧を家へ返すよう提案する",
+            "to": "@return",
+            "need": [
+              "son"
+            ]
+          },
+          {
+            "id": "oath",
+            "text": "武器だけを納め、公に退役を誓う",
+            "to": "@oath"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q117.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q117.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "棺が金属の音を立て、ヴァルが留め具を直した。家の門で、息子が行く手に立つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "son",
+              "text": "息子の話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q117.son",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q117.scene.son"
+                }
+              ]
+            },
+            {
+              "id": "grave",
+              "text": "対面は断り、墓まで護送する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q117.scene.grave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q117.scene.son": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q117.node",
+          "value": "son"
+        },
+        {
+          "op": "say",
+          "text": "「家督は受け取る。でも、生きた父まで弔うのか」ヴァルは棺を開いた。入っているのは鎧だけだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "grave",
+              "text": "息子の意思を聞いて墓へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q117.scene.grave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q117.scene.grave": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q117.node",
+          "value": "grave"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q117.son"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "息子の言葉を聞いたヴァルは、退役と家族への別れを分けて考えている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "ヴァルは墓守へ鎧を見せ、称号だけを弔いたいと話した。息子とは話していない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bury",
+              "text": "本人の希望どおり鎧を埋葬する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q117.end.bury"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "鎧を家へ返すよう提案する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q117.son"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q117.end.return"
+                }
+              ]
+            },
+            {
+              "id": "oath",
+              "text": "武器だけを納め、公に退役を誓う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q117.end.oath"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q117.end.bury": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q117.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鎧は地中へ収まった。墓守が名を尋ねると、ヴァルは称号を付けずに答えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q117",
+              "outcome": "bury"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q117.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q117.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "息子は鎧を預かった。父がまた着ることは求めず、平服のまま夕食へ招いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q117",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q117.end.oath": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q117.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "武器を納めたヴァルは平服で門を出た。退役は決まり、家族との話は生きた本人に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q117",
+              "outcome": "oath"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q117.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q117.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q117.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "bury",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鎧は地中へ収まった。墓守が名を尋ねると、ヴァルは称号を付けずに答えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "息子は鎧を預かった。父がまた着ることは求めず、平服のまま夕食へ招いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "oath",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "武器を納めたヴァルは平服で門を出た。退役は決まり、家族との話は生きた本人に残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q117.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q117.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "son",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q117.scene.son"
+                    }
+                  ]
+                },
+                {
+                  "equals": "grave",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q117.scene.grave"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q117.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

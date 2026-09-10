@@ -1,3 +1,4 @@
+import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
@@ -10,7 +11,7 @@ export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 export class GameEngine {
   constructor(data, seed = 20260909) {
     this.data=data;this.feedback=freshFeedback();
-    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,rng:(seed>>>0)||1,mode:'town',location:null,flags:{},vars:{},gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
+    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,rng:(seed>>>0)||1,mode:'town',location:null,flags:{},vars:{},records:freshRecords(),gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
@@ -53,6 +54,7 @@ export class GameEngine {
   accept(id){
     const q=this.data.quests[id];if(!q||!this.unlocked(q))return false;
     const qs=this.state.quests[id];if(qs.stage==='completed')return false;
+    if(qs.stage==='available')this.state.records.baselines[id]=snapshotRecords(this.state.records);
     qs.stage='active';this.state.trackedQuest=id;
     this.notify(`依頼「${q.title}」を手帳に記しました。`);return true;
   }
@@ -60,6 +62,7 @@ export class GameEngine {
     const q=this.data.quests[id],qs=this.state.quests[id];
     if(qs.stage!=='active')throw new Error(`受注していない依頼です: ${id}`);
     const ending=q.outcomes[outcome];if(!ending)throw new Error(`不明な結末: ${id}/${outcome}`);
+    if(ending.requires!==undefined&&!this.value(ending.requires))throw new Error(`結末の条件を満たしていません: ${id}/${outcome}`);
     qs.stage='completed';qs.outcome=outcome;
     this.state.vars.completed=(this.state.vars.completed??0)+1;
     const key=`region_${q.region}`;this.state.vars[key]=(this.state.vars[key]??0)+1;

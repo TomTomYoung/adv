@@ -1,0 +1,598 @@
+{
+  "schemaVersion": 1,
+  "id": "q200",
+  "number": 200,
+  "title": "帰還印の向こう側",
+  "client": "帰還印の修理師トワ",
+  "brief": "買った場所へ戻らない帰還印の行先を確かめてください。",
+  "region": 10,
+  "type": "scene_graph",
+  "recommendedLevel": 10,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_10_f2",
+      "object": "q200_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "home": {
+      "label": "選んだ帰る家",
+      "text": "川の家にも返事をし、灯台で暮らす合意を結んだ。帰還印は玄関へ導いた。扉を叩くと、中から椅子を引く音がした。",
+      "gold": 165,
+      "xp": 105
+    },
+    "visits": {
+      "label": "訪ねる約束",
+      "text": "住む家を決めるのでなく、訪ねる約束を結び直した。次の旅の帰り、印の先で扉を叩く音がした。",
+      "gold": 165,
+      "xp": 105
+    },
+    "release": {
+      "label": "印を離れた帰還",
+      "text": "二人の了承を得て印の約束を解いた。関係を消したわけではない。歩いて辿り着いた扉を、自分の手で叩いた。",
+      "gold": 165,
+      "xp": 105
+    },
+    "pending": {
+      "label": "返事までの旅",
+      "text": "行先は決めなかった。待たせ続けるのでなく保留の伝言を残し、返事を書く紙を荷の上へ入れた。",
+      "gold": 165,
+      "xp": 105
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381e293decc4199c9ed94",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "行先の家では、どこも帰還を待つため灯を残しています。装置の故障に見せた複数の行先が、積み重なった関係の存在を示します。全員が一緒に暮らす解決にせず、待たせた相手へどんな約束を更新するかを問います。来訪者を待たない家へ無断で飛ぶ能力にはしません。",
+      "fixedPast": "古い帰還印を使った冒険者が、知らない家の前へ戻るようになります。印職人レナは行先の調査を頼みます。帰還印が結ぶのは購入地ではなく、使用者が帰ると約束した相手の灯です。長い旅で約束が増え、どこへ帰るかを印だけでは決められなくなっています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "帰還印の修理師トワ",
+        "beliefsAndGoals": "古い帰還印を使った冒険者が、知らない家の前へ戻るようになります。印職人レナは行先の調査を頼みます。帰還印が結ぶのは購入地ではなく、使用者が帰ると約束した相手の灯です。長い旅で約束が増え、どこへ帰るかを印だけでは決められなくなっています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "買った場所へ戻らない帰還印の行先を確かめてください。"
+      }
+    ],
+    "conflict": {
+      "design": "誤帰還→二つの灯を訪ねる順を選ぶ→約束を確認→一つを帰る家にする／訪問日を決める／帰還の約束を解く。相手が既に生活を変えていた場合は灯を消すことにも同意を求めます。全員への訪問が無理なら、伝言を届けて保留でき、存在しない理解を確定しません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q200.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "買った場所へ戻らない帰還印の行先を確かめてください。"
+    },
+    "reveal": {
+      "newInformation": "行先の家では、どこも帰還を待つため灯を残しています。装置の故障に見せた複数の行先が、積み重なった関係の存在を示します。全員が一緒に暮らす解決にせず、待たせた相手へどんな約束を更新するかを問います。来訪者を待たない家へ無断で飛ぶ能力にはしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q200.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": "導入の二つの約束はこの依頼内の出来事。通常の帰還印アイテムの転送先や本編の終了条件は変更しない。"
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q200.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q200.a",
+        "meaning": "作者原稿の a に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q200.b",
+        "meaning": "作者原稿の b に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "印が映したのは売店ではない。今回の道中、あなたは灯台で「修理のあと顔を出す」と、川の家で「夕飯の返事をする」と約束した。二人が了承して結んだ短い約束だ。",
+        "options": [
+          {
+            "id": "lighthouse",
+            "text": "灯台へ行き、今の暮らしと約束を確かめる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q200.a"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "a": true
+            },
+            "textAfter": "灯台守は新しい相棒と働いていた。訪ねるのは歓迎だが、一緒に住む話なら川の家にも返事をしてほしいと言う。"
+          },
+          {
+            "id": "river",
+            "text": "川の家へ行き、今の暮らしと約束を確かめる",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q200.b"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "b": true
+            },
+            "textAfter": "家では次の旅の仕度が始まっていた。帰還印は場所の所有でなく、相手との約束を辿るのだとトワは確かめた。"
+          },
+          {
+            "id": "home",
+            "text": "両者へ返事をし、灯台を帰る家に選ぶ",
+            "to": "@home",
+            "need": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "id": "visits",
+            "text": "両者と、住まずに訪ねる約束へ結び直す",
+            "to": "@visits",
+            "need": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "id": "release",
+            "text": "両者に話し、二つの帰還の約束を解く",
+            "to": "@release",
+            "need": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "id": "pending",
+            "text": "今は行先を決めず、返事を保留する伝言を残す",
+            "to": "@pending"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q200.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q200.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "印が映したのは売店ではない。今回の道中、あなたは灯台で「修理のあと顔を出す」と、川の家で「夕飯の返事をする」と約束した。二人が了承して結んだ短い約束だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lighthouse",
+              "text": "灯台へ行き、今の暮らしと約束を確かめる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q200.a"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q200.a",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "灯台守は新しい相棒と働いていた。訪ねるのは歓迎だが、一緒に住む話なら川の家にも返事をしてほしいと言う。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "river",
+              "text": "川の家へ行き、今の暮らしと約束を確かめる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q200.b"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q200.b",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "家では次の旅の仕度が始まっていた。帰還印は場所の所有でなく、相手との約束を辿るのだとトワは確かめた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q200.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "両者へ返事をし、灯台を帰る家に選ぶ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.a"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.b"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.end.home"
+                }
+              ]
+            },
+            {
+              "id": "visits",
+              "text": "両者と、住まずに訪ねる約束へ結び直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.a"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.b"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.end.visits"
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "text": "両者に話し、二つの帰還の約束を解く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.a"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q200.b"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.end.release"
+                }
+              ]
+            },
+            {
+              "id": "pending",
+              "text": "今は行先を決めず、返事を保留する伝言を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q200.end.pending"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q200.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "川の家にも返事をし、灯台で暮らす合意を結んだ。帰還印は玄関へ導いた。扉を叩くと、中から椅子を引く音がした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.end.visits": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "住む家を決めるのでなく、訪ねる約束を結び直した。次の旅の帰り、印の先で扉を叩く音がした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "visits"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.end.release": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二人の了承を得て印の約束を解いた。関係を消したわけではない。歩いて辿り着いた扉を、自分の手で叩いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "release"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.end.pending": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行先は決めなかった。待たせ続けるのでなく保留の伝言を残し、返事を書く紙を荷の上へ入れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q200",
+              "outcome": "pending"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q200.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q200.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q200.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "川の家にも返事をし、灯台で暮らす合意を結んだ。帰還印は玄関へ導いた。扉を叩くと、中から椅子を引く音がした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "visits",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "住む家を決めるのでなく、訪ねる約束を結び直した。次の旅の帰り、印の先で扉を叩く音がした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "release",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "二人の了承を得て印の約束を解いた。関係を消したわけではない。歩いて辿り着いた扉を、自分の手で叩いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pending",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "行先は決めなかった。待たせ続けるのでなく保留の伝言を残し、返事を書く紙を荷の上へ入れた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q200.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q200.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q200.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,899 @@
+{
+  "schemaVersion": 1,
+  "id": "q171",
+  "number": 171,
+  "title": "足音を持ち帰る",
+  "client": "靴職人ダイの妻",
+  "brief": "夫の後ろへ付く足音を、家へ入れる前に調べてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "object": "q171_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "loop": {
+      "label": "輪の維持",
+      "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "return": {
+      "label": "道を返す",
+      "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "fight": {
+      "label": "家の防衛",
+      "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "evacuate": {
+      "label": "覚えられた家を離れる",
+      "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ダイが止まると音も止まりますが、彼が寝た後も、昼間歩いた道を小さく再現します。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示します。妻は冷たいのではなく、家の入口を教えることを恐れています。",
+      "fixedPast": "迷宮から戻った靴職人ダイの後ろで、必ず一歩遅れて足音がします。妻は家へ入れたくなく、ダイは自分が疑われたと怒っています。足音は、迷宮の追跡者が地上への道を覚えるため付けたものです。悪意ある怪異として、家族の不信とは別に実在させます。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "靴職人ダイの妻",
+        "beliefsAndGoals": "迷宮から戻った靴職人ダイの後ろで、必ず一歩遅れて足音がします。妻は家へ入れたくなく、ダイは自分が疑われたと怒っています。足音は、迷宮の追跡者が地上への道を覚えるため付けたものです。悪意ある怪異として、家族の不信とは別に実在させます。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "夫の後ろへ付く足音を、家へ入れる前に調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "靴店→境界調査／歩行試験→迷宮へ戻す／閉じた輪を歩かせ封じる／家の周囲を防衛。輪の封じは境界の規則と準備した護符が必要です。期限に達した場合は追跡者が現れ、戦闘または避難へ接続します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q171.scene.entry"
+        },
+        {
+          "id": "watch",
+          "script": "q171.scene.watch"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "夫の後ろへ付く足音を、家へ入れる前に調べてください。"
+    },
+    "reveal": {
+      "newInformation": "ダイが止まると音も止まりますが、彼が寝た後も、昼間歩いた道を小さく再現します。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示します。妻は冷たいのではなく、家の入口を教えることを恐れています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q171.scene.entry"
+      },
+      {
+        "id": "watch",
+        "script": "q171.scene.watch"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q171.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.time",
+        "meaning": "作者原稿の time に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.rule",
+        "meaning": "作者原稿の rule に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.ward",
+        "meaning": "作者原稿の ward に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "軒下にも濡れた靴跡が続く。職人が眠ると、足音だけが昼間の道を再現した。三回の試験・待機で追跡者が道を覚えると、境界守が警告した。",
+        "options": [
+          {
+            "id": "begin",
+            "text": "家の外で調査を始める",
+            "to": "watch",
+            "set": {
+              "time": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q171.time"
+              },
+              "right": 3
+            },
+            "yes": "足音が追いついた。追跡者が姿を現した。封印の準備は間に合わない。",
+            "no": "帰宅路を教えないよう家の外に留まる。試験か待機を確定すると一回進む。"
+          }
+        ],
+        "options": [
+          {
+            "id": "rule",
+            "text": "閉じた輪を歩かせる境界の規則を調べる",
+            "to": "watch",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q171.time"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.rule"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            },
+            "set": {
+              "rule": true,
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q171.time"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "ward",
+            "text": "20Gで輪を封じる護符を用意する",
+            "to": "watch",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "lt",
+                  "left": {
+                    "ref": "flags.quest.q171.time"
+                  },
+                  "right": 3
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.ward"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            },
+            "cost": {
+              "gold": 20
+            },
+            "set": {
+              "ward": true,
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q171.time"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "wait",
+            "text": "もう一回、歩く足音を観察する",
+            "to": "watch",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q171.time"
+              },
+              "right": 3
+            },
+            "set": {
+              "time": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.quest.q171.time"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "loop",
+            "text": "規則と護符で閉じた輪へ封じる",
+            "to": "@loop",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q171.time"
+              },
+              "right": 3
+            },
+            "need": [
+              "rule",
+              "ward"
+            ]
+          },
+          {
+            "id": "return",
+            "text": "追跡者が現れる前に迷宮へ道を返す",
+            "to": "@return",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.quest.q171.time"
+              },
+              "right": 3
+            }
+          },
+          {
+            "id": "fight",
+            "text": "現れた追跡者から家を守る",
+            "to": "@fight",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.quest.q171.time"
+              },
+              "right": 3
+            },
+            "combat": "story_171",
+            "escape": "@evacuate",
+            "loss": "@evacuate"
+          },
+          {
+            "id": "leave",
+            "text": "家族と避難する",
+            "to": "@evacuate"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q171.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q171.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "軒下にも濡れた靴跡が続く。職人が眠ると、足音だけが昼間の道を再現した。三回の試験・待機で追跡者が道を覚えると、境界守が警告した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "家の外で調査を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q171.scene.watch": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q171.node",
+          "value": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q171.time"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足音が追いついた。追跡者が姿を現した。封印の準備は間に合わない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "帰宅路を教えないよう家の外に留まる。試験か待機を確定すると一回進む。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "閉じた輪を歩かせる境界の規則を調べる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q171.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q171.rule"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.rule",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "ward",
+              "text": "20Gで輪を封じる護符を用意する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q171.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q171.ward"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.ward",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "もう一回、歩く足音を観察する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "loop",
+              "text": "規則と護符で閉じた輪へ封じる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.ward"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.loop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "追跡者が現れる前に迷宮へ道を返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.return"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "現れた追跡者から家を守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_171",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q171.end.fight"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.end.evacuate"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.end.evacuate"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "家族と避難する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q171.end.loop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "loop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.fight": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "fight"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.evacuate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "evacuate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q171.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "loop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fight",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "evacuate",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q171.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q171.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "watch",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q171.scene.watch"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q171.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

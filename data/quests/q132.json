@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 1,
+  "id": "q132",
+  "number": 132,
+  "title": "宝箱の底の椅子",
+  "client": "財宝庫の管理人",
+  "brief": "人を襲う宝箱を処分してください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "object": "q132_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "destroy": {
+      "label": "椅子だけを残す",
+      "text": "襲う箱は壊れた。回収された椅子へ、管理人は父の薄い座布団を掛けた。",
+      "gold": 93,
+      "xp": 69
+    },
+    "isolate": {
+      "label": "閉じた詰所",
+      "text": "生物は隔離された。管理人は当番と費用を帳面へ入れ、古い椅子を安全な側に置いた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "最初は犠牲者の生活跡に見せ、壁の覗き穴と食べ残しの年代差で監視詰所と分かります。ただし現在の擬態生物は人を襲った事実があり、懐かしい設備だから安全とはしません。管理人は父の仕事を怪物と同じにされたくありません。",
+      "fixedPast": "財宝庫の管理人は、人を食う宝箱の処分を依頼します。箱の底には、小さな椅子と茶器があります。かつて警備員が内部で監視していた箱に擬態生物が住み、今も座る者を職員と認識して通します。管理人は父がここで働いていたことを誇りにしています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "財宝庫の管理人",
+        "beliefsAndGoals": "財宝庫の管理人は、人を食う宝箱の処分を依頼します。箱の底には、小さな椅子と茶器があります。かつて警備員が内部で監視していた箱に擬態生物が住み、今も座る者を職員と認識して通します。管理人は父がここで働いていたことを誇りにしています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "人を襲う宝箱を処分してください。"
+      }
+    ],
+    "conflict": {
+      "design": "財宝庫→戦闘処分／詰所調査→囮試験→隔離／破壊。隔離は合図と外から閉める封鎖具が必要です。調査をやめて通常戦闘へ戻れます。逃走時は宝箱が扉を越えない範囲まで退き、再準備できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q132.scene.entry"
+        },
+        {
+          "id": "test",
+          "script": "q132.scene.test"
+        },
+        {
+          "id": "isolate",
+          "script": "q132.scene.isolate"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "人を襲う宝箱を処分してください。"
+    },
+    "reveal": {
+      "newInformation": "最初は犠牲者の生活跡に見せ、壁の覗き穴と食べ残しの年代差で監視詰所と分かります。ただし現在の擬態生物は人を襲った事実があり、懐かしい設備だから安全とはしません。管理人は父の仕事を怪物と同じにされたくありません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q132.scene.entry"
+      },
+      {
+        "id": "test",
+        "script": "q132.scene.test"
+      },
+      {
+        "id": "isolate",
+        "script": "q132.scene.isolate"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q132.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q132.signal",
+        "meaning": "作者原稿の signal に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "test"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "宝箱の底には小さな椅子と茶器がある。壁の覗き穴は外へ向いていた。",
+        "options": [
+          {
+            "id": "destroy",
+            "text": "擬態生物を戦って処分する",
+            "to": "@destroy",
+            "combat": "story_132",
+            "escape": "entry"
+          },
+          {
+            "id": "room",
+            "text": "覗き穴と古い詰所記録を調べる",
+            "to": "test"
+          }
+        ]
+      },
+      {
+        "id": "test",
+        "text": "昔は警備員が中へ座って見張った箱だった。今の擬態生物が人を襲った事実は消えない。管理人は父の座り方と合図を教えた。",
+        "options": [
+          {
+            "id": "decoy",
+            "text": "人の代わりに囮で合図を試す",
+            "to": "isolate",
+            "set": {
+              "signal": true
+            }
+          },
+          {
+            "id": "destroy",
+            "text": "隔離を断り、通常の討伐に戻る",
+            "to": "@destroy",
+            "combat": "story_132",
+            "escape": "entry"
+          }
+        ]
+      },
+      {
+        "id": "isolate",
+        "text": "囮が座ると箱の口が開いた。外から閉じる封鎖具に縄一つを使えば隔離できる。継続して見張る費用は管理人が引き受ける。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "縄一つで外から隔離を確定する",
+            "to": "@isolate",
+            "cost": {
+              "rope": 1
+            }
+          },
+          {
+            "id": "destroy",
+            "text": "維持管理を残さず討伐する",
+            "to": "@destroy",
+            "combat": "story_132",
+            "escape": "entry"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q132.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q132.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "宝箱の底には小さな椅子と茶器がある。壁の覗き穴は外へ向いていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "destroy",
+              "text": "擬態生物を戦って処分する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_132",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q132.end.destroy"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "room",
+              "text": "覗き穴と古い詰所記録を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q132.scene.test"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q132.scene.test": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q132.node",
+          "value": "test"
+        },
+        {
+          "op": "say",
+          "text": "昔は警備員が中へ座って見張った箱だった。今の擬態生物が人を襲った事実は消えない。管理人は父の座り方と合図を教えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "decoy",
+              "text": "人の代わりに囮で合図を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q132.signal",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q132.scene.isolate"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "隔離を断り、通常の討伐に戻る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_132",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q132.end.destroy"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q132.scene.isolate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q132.node",
+          "value": "isolate"
+        },
+        {
+          "op": "say",
+          "text": "囮が座ると箱の口が開いた。外から閉じる封鎖具に縄一つを使えば隔離できる。継続して見張る費用は管理人が引き受ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "縄一つで外から隔離を確定する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q132.end.isolate"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "維持管理を残さず討伐する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_132",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q132.end.destroy"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q132.end.destroy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q132.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "襲う箱は壊れた。回収された椅子へ、管理人は父の薄い座布団を掛けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q132",
+              "outcome": "destroy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q132.end.isolate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q132.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "生物は隔離された。管理人は当番と費用を帳面へ入れ、古い椅子を安全な側に置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q132",
+              "outcome": "isolate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q132.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q132.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q132.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "destroy",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "襲う箱は壊れた。回収された椅子へ、管理人は父の薄い座布団を掛けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "isolate",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "生物は隔離された。管理人は当番と費用を帳面へ入れ、古い椅子を安全な側に置いた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q132.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "test",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.test"
+                    }
+                  ]
+                },
+                {
+                  "equals": "isolate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q132.scene.isolate"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q132.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

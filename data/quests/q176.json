@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q176",
+  "number": 176,
+  "title": "神様の忘れ物",
+  "client": "小さな街道神",
+  "brief": "祠に置いた片方の草鞋を取ってきてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "object": "q176_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "travel": {
+      "label": "初めて迷う神",
+      "text": "神は旅立った。最初の分かれ道で迷い、通りがかった行商人に道を教わった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "stay": {
+      "label": "祠へ留める条件",
+      "text": "神は残ったが、草鞋を人質にされたことを覚えていた。旅人の話を聞く席で、返却の約束を確かめた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "season": {
+      "label": "不在のある祭",
+      "text": "補修当番を残して神は歩いた。祠の祭には不在の日ができ、それを人々は最初から知っていた。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "草鞋は古い旅人たちが修繕を重ねた物で、左右の大きさが違います。神が守ったから道が続いたのと同時に、旅人が歩いて直したから神が残れました。旅に出ると祠の小さな祝福は弱まり、司祭の心配にも根拠があります。",
+      "fixedPast": "小さな街道神が、祠に残した片方の草鞋を取ってきてほしいと頼みます。司祭は神を遠くへ出したくありません。祠へ寄進が集まるのは神がいるからです。神は、道を守る存在なのに歩いたことのない道が増えたと恥じています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "小さな街道神",
+        "beliefsAndGoals": "小さな街道神が、祠に残した片方の草鞋を取ってきてほしいと頼みます。司祭は神を遠くへ出したくありません。祠へ寄進が集まるのは神がいるからです。神は、道を守る存在なのに歩いたことのない道が増えたと恥じています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "祠に置いた片方の草鞋を取ってきてください。"
+      }
+    ],
+    "conflict": {
+      "design": "神の依頼→祠→草鞋を返す／司祭と相談／道の補修→旅立ち判断。返却を人質にして残留を強制することはできますが、神の信頼に残ります。季節ごとの旅には住民の整備体制が必要です。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q176.scene.entry"
+        },
+        {
+          "id": "road",
+          "script": "q176.scene.road"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祠に置いた片方の草鞋を取ってきてください。"
+    },
+    "reveal": {
+      "newInformation": "草鞋は古い旅人たちが修繕を重ねた物で、左右の大きさが違います。神が守ったから道が続いたのと同時に、旅人が歩いて直したから神が残れました。旅に出ると祠の小さな祝福は弱まり、司祭の心配にも根拠があります。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q176.scene.entry"
+      },
+      {
+        "id": "road",
+        "script": "q176.scene.road"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q176.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "草鞋は旅人が何度も直し、左右の大きさが違う。神は歩いたことのない道を守るのが恥ずかしいという。司祭は不在で祠の祝福が弱まると心配した。",
+        "options": [
+          {
+            "id": "give",
+            "text": "草鞋を返し、神の旅立ちを認める",
+            "to": "@travel"
+          },
+          {
+            "id": "keep",
+            "text": "草鞋を返す条件として残留を求める",
+            "to": "@stay"
+          },
+          {
+            "id": "road",
+            "text": "住民と道の補修当番を決める",
+            "to": "road"
+          }
+        ]
+      },
+      {
+        "id": "road",
+        "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。神は季節ごとに戻ると言った。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "季節の旅と補修体制を合意する",
+            "to": "@season"
+          },
+          {
+            "id": "give",
+            "text": "体制に頼らず草鞋を返す",
+            "to": "@travel"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q176.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q176.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "草鞋は旅人が何度も直し、左右の大きさが違う。神は歩いたことのない道を守るのが恥ずかしいという。司祭は不在で祠の祝福が弱まると心配した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "give",
+              "text": "草鞋を返し、神の旅立ちを認める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q176.end.travel"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "草鞋を返す条件として残留を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q176.end.stay"
+                }
+              ]
+            },
+            {
+              "id": "road",
+              "text": "住民と道の補修当番を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q176.scene.road"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q176.scene.road": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q176.node",
+          "value": "road"
+        },
+        {
+          "op": "say",
+          "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。神は季節ごとに戻ると言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "季節の旅と補修体制を合意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q176.end.season"
+                }
+              ]
+            },
+            {
+              "id": "give",
+              "text": "体制に頼らず草鞋を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q176.end.travel"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q176.end.travel": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q176.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "神は旅立った。最初の分かれ道で迷い、通りがかった行商人に道を教わった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q176",
+              "outcome": "travel"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q176.end.stay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q176.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "神は残ったが、草鞋を人質にされたことを覚えていた。旅人の話を聞く席で、返却の約束を確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q176",
+              "outcome": "stay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q176.end.season": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q176.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補修当番を残して神は歩いた。祠の祭には不在の日ができ、それを人々は最初から知っていた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q176",
+              "outcome": "season"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q176.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q176.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q176.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "travel",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "神は旅立った。最初の分かれ道で迷い、通りがかった行商人に道を教わった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "神は残ったが、草鞋を人質にされたことを覚えていた。旅人の話を聞く席で、返却の約束を確かめた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "season",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補修当番を残して神は歩いた。祠の祭には不在の日ができ、それを人々は最初から知っていた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q176.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q176.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "road",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q176.scene.road"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q176.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

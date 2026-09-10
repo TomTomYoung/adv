@@ -16,6 +16,7 @@ export function validateContent(data){
     for(const key of ['left','right','arg','value'])if(key in value)expression(value[key],`${path}.${key}`,depth+1);
     if(value.args!==undefined){if(!Array.isArray(value.args))fail(path,'argsは配列です');else value.args.forEach(v=>expression(v,path,depth+1));}
     if(['and','or','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp'].includes(value.op)&&(!Array.isArray(value.args)||!value.args.length))fail(path,'argsが必要です');
+    if(value.op==='record_count'){if(!['battles','wins','escapes','losses','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
     if(value.op==='has_item')reference(data.items,value.item,path);
     if(value.op==='has_member'||value.op==='has_status')reference(data.actors,value.actor,path);
   };
@@ -26,7 +27,7 @@ export function validateContent(data){
       const at=`${path}[${i}]`;if(!isRecord(c)||!COMMANDS.has(c.op)){fail(at,`未知の命令: ${c?.op}`);return;}
       for(const key of ['condition','value','amount','count','text','target'])if(c[key]!==undefined)expression(c[key],at);
       if(['say','narrate'].includes(c.op)&&typeof c.text!=='string'&&!c.text?.format)fail(at,'本文が必要です');
-      if(c.op==='call')reference(data.scripts,c.script,at);
+      if(['call','jump'].includes(c.op))reference(data.scripts,c.script,at);
       if(c.op==='battle.start'){
         reference(data.encounters,c.encounter,at);
         for(const key of ['on_win','on_lose','on_escape'])commands(c[key],`${at}.${key}`,depth+1);
@@ -55,8 +56,8 @@ export function validateContent(data){
       if(c.op==='flag.set'){try{pathParts(`flags.${c.key}`);}catch(e){fail(at,e.message);}}
       if(c.op==='choice'){
         if(!Array.isArray(c.options)||!c.options.length){fail(at,'選択肢が必要です');return;}
-        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);commands(option.commands,at,depth+1);}
-        if(!c.options.some(o=>!o.condition))fail(at,'常に選べる選択肢を1つ以上設けてください');
+        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1);}
+        if(!c.options.some(o=>o.condition===undefined&&o.visibleWhen===undefined))fail(at,'常に選べる選択肢を1つ以上設けてください');
       }
       if(c.op==='if'){commands(c.then,`${at}.then`,depth+1);commands(c.else,`${at}.else`,depth+1);}
       if(c.op==='switch'){for(const item of c.cases??[])commands(item.commands,at,depth+1);commands(c.default,at,depth+1);}
@@ -102,9 +103,9 @@ export function validateContent(data){
   }
   for(const [id,q] of Object.entries(data.quests)){
     if(q.schemaVersion!==1||q.id!==id||typeof q.title!=='string')fail(id,'依頼定義不正');
-    if(q.requires)expression(q.requires,id);
+    if(q.requires)expression(q.requires,id);for(const o of Object.values(q.outcomes??{}))if(o.requires)expression(o.requires,id);
     if(!q.model?.world?.truth||q.model?.agents?.length<2||q.model?.reveal?.retroactiveTargets?.length<2)fail(id,'シナリオモデルが不足しています');
-    if(Object.keys(q.outcomes??{}).length<3)fail(id,'結末は3つ以上必要です');
+    if(Object.keys(q.outcomes??{}).length<2)fail(id,'結末は2つ以上必要です');
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }

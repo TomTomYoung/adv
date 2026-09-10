@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q141",
+  "number": 141,
+  "title": "音の出ない優勝旗",
+  "client": "楽団長ポル",
+  "brief": "歌わなくなった優勝旗を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q141_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "use": {
+      "label": "舞台に上がらない作曲者",
+      "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "new": {
+      "label": "今年の新曲",
+      "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "silent": {
+      "label": "旗のない音楽",
+      "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たります。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れます。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくありません。才能発掘を無条件の救済にしません。",
+      "fixedPast": "楽団長ポルは、歌うはずの優勝旗が黙ったため修理を頼みます。旗は優勝曲を覚える魔具です。去年の演奏で、舞台裏の洗濯娘サナが口ずさんだ対旋律まで記憶し、今年の楽団だけでは曲が完成しません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "楽団長ポル",
+        "beliefsAndGoals": "楽団長ポルは、歌うはずの優勝旗が黙ったため修理を頼みます。旗は優勝曲を覚える魔具です。去年の演奏で、舞台裏の洗濯娘サナが口ずさんだ対旋律まで記憶し、今年の楽団だけでは曲が完成しません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "歌わなくなった優勝旗を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "旗の試奏→楽譜／洗濯場→曲の相談→本番。許可を得て対旋律を入れる、別の新曲で旗を上書きする、今年は旗を鳴らさず演奏する道があります。本人が出演を断っても曲の使用は別に相談できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q141.scene.entry"
+        },
+        {
+          "id": "sana",
+          "script": "q141.scene.sana"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "歌わなくなった優勝旗を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たります。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れます。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくありません。才能発掘を無条件の救済にしません。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q141.scene.entry"
+      },
+      {
+        "id": "sana",
+        "script": "q141.scene.sana"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q141.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "旗は楽団の演奏に黙ったまま、洗濯物を絞る音で微かに揺れた。去年の旗は、舞台裏のサナの対旋律も覚えていた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "サナへ曲と出演を別々に相談する",
+            "to": "sana"
+          },
+          {
+            "id": "new",
+            "text": "別の新曲で今年の旗を上書きする",
+            "to": "@new"
+          },
+          {
+            "id": "silent",
+            "text": "旗を鳴らさず今年の演奏をする",
+            "to": "@silent"
+          }
+        ]
+      },
+      {
+        "id": "sana",
+        "text": "「仕事中の歌まで採点されたくない」サナは出演を断ったが、曲の使用と作曲者として名を載せることには同意した。",
+        "options": [
+          {
+            "id": "use",
+            "text": "出演を求めず、許諾した対旋律を使う",
+            "to": "@use"
+          },
+          {
+            "id": "new",
+            "text": "許諾曲を使わず新曲で進む",
+            "to": "@new"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q141.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q141.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "旗は楽団の演奏に黙ったまま、洗濯物を絞る音で微かに揺れた。去年の旗は、舞台裏のサナの対旋律も覚えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "サナへ曲と出演を別々に相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.scene.sana"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "別の新曲で今年の旗を上書きする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.new"
+                }
+              ]
+            },
+            {
+              "id": "silent",
+              "text": "旗を鳴らさず今年の演奏をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.silent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q141.scene.sana": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q141.node",
+          "value": "sana"
+        },
+        {
+          "op": "say",
+          "text": "「仕事中の歌まで採点されたくない」サナは出演を断ったが、曲の使用と作曲者として名を載せることには同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "use",
+              "text": "出演を求めず、許諾した対旋律を使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.use"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "許諾曲を使わず新曲で進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.new"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q141.end.use": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "use"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.end.silent": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "silent"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q141.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "use",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "silent",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q141.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q141.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sana",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q141.scene.sana"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q141.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

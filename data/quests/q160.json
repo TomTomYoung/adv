@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 1,
+  "id": "q160",
+  "number": 160,
+  "title": "拍手する裏切り者",
+  "client": "密偵長",
+  "brief": "演説会の連絡役を見つけてください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q160_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "hold": {
+      "label": "拘束と救援を分ける",
+      "text": "連絡役を止めた。家族の安全まで解決した報告にはせず、救援の手配を続けた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "deal": {
+      "label": "安全を先にした交換",
+      "text": "家族を退避させ、脅迫者を追う経路を得た。後の演説でセルは拍手をせず、最後まで言葉を聞いた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "escape": {
+      "label": "祝辞から消える人",
+      "text": "連絡手段を遮断し、セルは会場を離れた。組織は漏洩の説明を求め続け、本人の名は祝辞から消えた。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "最初は拍手の熱狂を信念の強さに見せます。無音になる一拍に、裏方の短い要求が聞こえます。プレイヤーだけへ密会側の幕間を先に見せる場合も、主人公が告発するには現場の聞き取りか証拠が必要です。",
+      "fixedPast": "革命を祝う演説会で、密偵長が裏切り者の発見を頼みます。最も大きく拍手する書記セルが連絡役です。拍手の間だけ密会相手の声が聞き取りにくくなるためです。だがセルの目的は敵軍へ情報を売ることではなく、拘束された家族を返してもらうことです。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "密偵長",
+        "beliefsAndGoals": "革命を祝う演説会で、密偵長が裏切り者の発見を頼みます。最も大きく拍手する書記セルが連絡役です。拍手の間だけ密会相手の声が聞き取りにくくなるためです。だがセルの目的は敵軍へ情報を売ることではなく、拘束された家族を返してもらうことです。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "演説会の連絡役を見つけてください。"
+      }
+    ],
+    "conflict": {
+      "design": "演説会→聴衆／裏方を観察→セルとの対面→捕縛／脅迫者との逆取引／逃亡支援。逆取引は家族保護か安全な交換条件が必要です。条件不足なら秘密を保った一時拘束へ切り替えます。逃亡支援では情報漏洩を止める手段を別に確保します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q160.scene.entry"
+        },
+        {
+          "id": "cell",
+          "script": "q160.scene.cell"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "演説会の連絡役を見つけてください。"
+    },
+    "reveal": {
+      "newInformation": "最初は拍手の熱狂を信念の強さに見せます。無音になる一拍に、裏方の短い要求が聞こえます。プレイヤーだけへ密会側の幕間を先に見せる場合も、主人公が告発するには現場の聞き取りか証拠が必要です。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q160.scene.entry"
+      },
+      {
+        "id": "cell",
+        "script": "q160.scene.cell"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q160.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q160.safe",
+        "meaning": "作者原稿の safe に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "cell"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "書記セルの拍手だけが大きい。拍手が途切れた一拍に、舞台裏から「家族を返してほしければ」と声がした。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "裏方の要求を現場で確かめる",
+            "to": "cell"
+          },
+          {
+            "id": "hold",
+            "text": "断定せず、秘密を保った一時拘束にする",
+            "to": "@hold"
+          }
+        ]
+      },
+      {
+        "id": "cell",
+        "text": "セルは情報を売るためでなく家族を取り戻すために連絡したと話す。漏洩は本物だ。逆取引なら先に家族の安全な交換条件が必要になる。",
+        "options": [
+          {
+            "id": "safe",
+            "text": "交換場所と家族の退避を先に確保する",
+            "to": "cell",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q160.safe"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "safe": true
+            }
+          },
+          {
+            "id": "deal",
+            "text": "確保した交換条件で脅迫者へ逆取引する",
+            "to": "@deal",
+            "need": [
+              "safe"
+            ]
+          },
+          {
+            "id": "escape",
+            "text": "漏洩経路を封じてセルの逃亡を手伝う",
+            "to": "@escape"
+          },
+          {
+            "id": "hold",
+            "text": "セルを拘束し、家族の救援は別に続ける",
+            "to": "@hold"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q160.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q160.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "書記セルの拍手だけが大きい。拍手が途切れた一拍に、舞台裏から「家族を返してほしければ」と声がした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "裏方の要求を現場で確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q160.scene.cell"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "断定せず、秘密を保った一時拘束にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q160.end.hold"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q160.scene.cell": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q160.node",
+          "value": "cell"
+        },
+        {
+          "op": "say",
+          "text": "セルは情報を売るためでなく家族を取り戻すために連絡したと話す。漏洩は本物だ。逆取引なら先に家族の安全な交換条件が必要になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "safe",
+              "text": "交換場所と家族の退避を先に確保する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q160.safe"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q160.safe",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q160.scene.cell"
+                }
+              ]
+            },
+            {
+              "id": "deal",
+              "text": "確保した交換条件で脅迫者へ逆取引する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q160.safe"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q160.end.deal"
+                }
+              ]
+            },
+            {
+              "id": "escape",
+              "text": "漏洩経路を封じてセルの逃亡を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q160.end.escape"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "セルを拘束し、家族の救援は別に続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q160.end.hold"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q160.end.hold": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q160.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "連絡役を止めた。家族の安全まで解決した報告にはせず、救援の手配を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q160",
+              "outcome": "hold"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q160.end.deal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q160.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家族を退避させ、脅迫者を追う経路を得た。後の演説でセルは拍手をせず、最後まで言葉を聞いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q160",
+              "outcome": "deal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q160.end.escape": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q160.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "連絡手段を遮断し、セルは会場を離れた。組織は漏洩の説明を求め続け、本人の名は祝辞から消えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q160",
+              "outcome": "escape"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q160.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q160.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q160.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "hold",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "連絡役を止めた。家族の安全まで解決した報告にはせず、救援の手配を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "deal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "家族を退避させ、脅迫者を追う経路を得た。後の演説でセルは拍手をせず、最後まで言葉を聞いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "escape",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "連絡手段を遮断し、セルは会場を離れた。組織は漏洩の説明を求め続け、本人の名は祝辞から消えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q160.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q160.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cell",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q160.scene.cell"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q160.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "id": "q187",
+  "number": 187,
+  "title": "旗を持たない兵士",
+  "client": "国境村",
+  "brief": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q187_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "army": {
+      "label": "国軍の補給と命令",
+      "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。",
+      "gold": 153,
+      "xp": 99
+    },
+    "village": {
+      "label": "守る場所の名",
+      "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "leave": {
+      "label": "退去後の村",
+      "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "過去の隊章が外套の裏へ縫われ、隠し持った工作員に見えます。だがどの章にも同じ救護所の糸が使われています。彼を無条件の善人にはせず、敵軍として村から徴発した過去も本人が認めます。",
+      "fixedPast": "国境村は、所属を示さない武装者の調査を頼みます。彼は三度所属を変えた兵カドで、村を守る仕事だけを続けています。村長は実績を信用し、駐留将校は忠誠の証明を求めます。カドは旗が変わるたび同じ村が敵領になることに耐えられません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "国境村",
+        "beliefsAndGoals": "国境村は、所属を示さない武装者の調査を頼みます。彼は三度所属を変えた兵カドで、村を守る仕事だけを続けています。村長は実績を信用し、駐留将校は忠誠の証明を求めます。カドは旗が変わるたび同じ村が敵領になることに耐えられません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "調査→駐留所／住民／本人→野盗防衛→任用の判断。国旗を掲げる条件、村への限定契約、退去があります。戦わず住民を退避させても守った行為として報告できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q187.scene.entry"
+        },
+        {
+          "id": "contract",
+          "script": "q187.scene.contract"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "過去の隊章が外套の裏へ縫われ、隠し持った工作員に見えます。だがどの章にも同じ救護所の糸が使われています。彼を無条件の善人にはせず、敵軍として村から徴発した過去も本人が認めます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q187.scene.entry"
+      },
+      {
+        "id": "contract",
+        "script": "q187.scene.contract"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q187.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "一緒に野盗から村を守る",
+            "to": "contract",
+            "combat": "guard_9",
+            "escape": "contract"
+          },
+          {
+            "id": "evac",
+            "text": "戦わず住民を安全な場所へ導く",
+            "to": "contract"
+          }
+        ]
+      },
+      {
+        "id": "contract",
+        "text": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。",
+        "options": [
+          {
+            "id": "army",
+            "text": "国旗と命令を受け入れる任用を仲介する",
+            "to": "@army"
+          },
+          {
+            "id": "village",
+            "text": "橋と井戸を守る限定契約を結ぶ",
+            "to": "@village"
+          },
+          {
+            "id": "leave",
+            "text": "任用せず退去を求める",
+            "to": "@leave"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q187.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q187.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "一緒に野盗から村を守る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず住民を安全な場所へ導く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.scene.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q187.scene.contract": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q187.node",
+          "value": "contract"
+        },
+        {
+          "op": "say",
+          "text": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "army",
+              "text": "国旗と命令を受け入れる任用を仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.army"
+                }
+              ]
+            },
+            {
+              "id": "village",
+              "text": "橋と井戸を守る限定契約を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.village"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "任用せず退去を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.leave"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q187.end.army": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "army"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.end.village": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "village"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q187.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "army",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "village",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q187.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q187.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

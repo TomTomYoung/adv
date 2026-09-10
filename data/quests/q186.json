@@ -1,0 +1,462 @@
+{
+  "schemaVersion": 1,
+  "id": "q186",
+  "number": 186,
+  "title": "返事のない停戦",
+  "client": "交渉官ハス",
+  "brief": "定型文しか返さない敵砦へ、交渉の道を探してください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "object": "q186_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "local": {
+      "label": "小さな合意の返書",
+      "text": "負傷者を交換した。返書は短く誤字もあったが、通信士自身の言葉になっていた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "battle": {
+      "label": "交渉を終えた砦戦",
+      "text": "砦を制した。話合いで停戦を得たとは扱わず、戦闘と捕虜保護を別に報告した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "withdraw": {
+      "label": "留保した停戦",
+      "text": "正式停戦は成立しなかった。捕虜の安全を求める伝言だけを別に残した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "文面の同じ誤字が、時刻だけを変えて繰り返されます。相手が嘘をついているのではなく、意思決定できる人がいないと分かります。通信士は降伏を決めれば帰郷後に家族が責められると恐れています。",
+      "fixedPast": "停戦交渉で、敵砦から同じ定型文だけが返ります。交渉官ハスは侮辱と受け取り、強硬策を求めます。実際の砦司令は負傷し、留守番の若い通信士が権限を持たず、返答機の定型を使い続けています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "交渉官ハス",
+        "beliefsAndGoals": "停戦交渉で、敵砦から同じ定型文だけが返ります。交渉官ハスは侮辱と受け取り、強硬策を求めます。実際の砦司令は負傷し、留守番の若い通信士が権限を持たず、返答機の定型を使い続けています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "定型文しか返さない敵砦へ、交渉の道を探してください。"
+      }
+    ],
+    "conflict": {
+      "design": "交渉所→返答の比較／使者の対面→臨時の局地休戦／代理権の取得待ち／交渉打切り。局地休戦なら物資搬入や負傷者交換だけを合意します。正式停戦には権限確認が必要です。打切りでも捕虜の安全を別に相談できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q186.scene.entry"
+        },
+        {
+          "id": "authority",
+          "script": "q186.scene.authority"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "定型文しか返さない敵砦へ、交渉の道を探してください。"
+    },
+    "reveal": {
+      "newInformation": "文面の同じ誤字が、時刻だけを変えて繰り返されます。相手が嘘をついているのではなく、意思決定できる人がいないと分かります。通信士は降伏を決めれば帰郷後に家族が責められると恐れています。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q186.scene.entry"
+      },
+      {
+        "id": "authority",
+        "script": "q186.scene.authority"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q186.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "時刻だけ違う返書に、同じ誤字がある。対面すると若い通信士は、負傷した司令に代わる権限がないと話した。",
+        "options": [
+          {
+            "id": "local",
+            "text": "負傷者交換と物資搬入だけの局地休戦を結ぶ",
+            "to": "@local"
+          },
+          {
+            "id": "authority",
+            "text": "正式な代理権の到着を待つ",
+            "to": "authority"
+          },
+          {
+            "id": "break",
+            "text": "交渉を打ち切り、砦へ強硬策を取る",
+            "to": "@battle",
+            "combat": "guard_9",
+            "escape": "@withdraw"
+          },
+          {
+            "id": "withdraw",
+            "text": "交渉は打ち切り、捕虜の安全だけを伝える",
+            "to": "@withdraw"
+          }
+        ]
+      },
+      {
+        "id": "authority",
+        "text": "待機で双方の食料を使った。臨時の代理状が届いたが、決められるのは今日の負傷者交換までだ。全体の停戦を勝手に成立させられない。",
+        "options": [
+          {
+            "id": "limited",
+            "text": "権限内の小さな合意を結ぶ",
+            "to": "@local"
+          },
+          {
+            "id": "withdraw",
+            "text": "正式停戦は留保して戻る",
+            "to": "@withdraw"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q186.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q186.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "時刻だけ違う返書に、同じ誤字がある。対面すると若い通信士は、負傷した司令に代わる権限がないと話した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "local",
+              "text": "負傷者交換と物資搬入だけの局地休戦を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q186.end.local"
+                }
+              ]
+            },
+            {
+              "id": "authority",
+              "text": "正式な代理権の到着を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q186.scene.authority"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "交渉を打ち切り、砦へ強硬策を取る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q186.end.battle"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q186.end.withdraw"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "交渉は打ち切り、捕虜の安全だけを伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q186.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q186.scene.authority": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q186.node",
+          "value": "authority"
+        },
+        {
+          "op": "say",
+          "text": "待機で双方の食料を使った。臨時の代理状が届いたが、決められるのは今日の負傷者交換までだ。全体の停戦を勝手に成立させられない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "limited",
+              "text": "権限内の小さな合意を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q186.end.local"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "正式停戦は留保して戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q186.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q186.end.local": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q186.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "負傷者を交換した。返書は短く誤字もあったが、通信士自身の言葉になっていた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q186",
+              "outcome": "local"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q186.end.battle": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q186.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "砦を制した。話合いで停戦を得たとは扱わず、戦闘と捕虜保護を別に報告した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q186",
+              "outcome": "battle"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q186.end.withdraw": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q186.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "正式停戦は成立しなかった。捕虜の安全を求める伝言だけを別に残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q186",
+              "outcome": "withdraw"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q186.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q186.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q186.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "local",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "負傷者を交換した。返書は短く誤字もあったが、通信士自身の言葉になっていた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "battle",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "砦を制した。話合いで停戦を得たとは扱わず、戦闘と捕虜保護を別に報告した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "withdraw",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "正式停戦は成立しなかった。捕虜の安全を求める伝言だけを別に残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q186.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q186.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "authority",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q186.scene.authority"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q186.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

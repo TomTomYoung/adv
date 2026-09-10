@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "id": "q158",
+  "number": 158,
+  "title": "成功させてはいけない救出",
+  "client": "商会員トルの兄",
+  "brief": "秘密監獄にいる弟を助け出してください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q158_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "now": {
+      "label": "兄弟を先に守る",
+      "text": "トルは説得を受けて退出した。兄弟は再会したが、囚人の支援に空いた穴は別の救援へ残った。",
+      "gold": 117,
+      "xp": 81
+    },
+    "handoff": {
+      "label": "渡して出る",
+      "text": "連絡網を引き継いで帰った。トルは誰の配分も数えず食べ始めるまで、少し時間がかかった。",
+      "gold": 117,
+      "xp": 81
+    },
+    "remain": {
+      "label": "残留の返事",
+      "text": "兄は反対した。弟の意思だけで疲労の危険まで消したことにはせず、次の引継ぎ案を作る約束をした。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "トルがわざと錠を閉め直す姿を先に見せ、洗脳や裏切りを疑わせます。次に、壁へ刻んだ印が囚人ごとの薬の配分だと分かります。本人の使命感を美化せず、疲労と判断の限界も示します。",
+      "fixedPast": "商会員を秘密監獄から救う依頼を受けます。捕われたトルは、自分が解放されると残る囚人の連絡網が失われるため、今日の救出を拒みます。依頼人は兄で、組織の利益のため弟を残すことを許せません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "商会員トルの兄",
+        "beliefsAndGoals": "商会員を秘密監獄から救う依頼を受けます。捕われたトルは、自分が解放されると残る囚人の連絡網が失われるため、今日の救出を拒みます。依頼人は兄で、組織の利益のため弟を残すことを許せません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "秘密監獄にいる弟を助け出してください。"
+      }
+    ],
+    "conflict": {
+      "design": "潜入→独房→即時救出の説得／引継ぎ準備／外へ戻って再交渉。引継ぎと連絡が整えば本人は退去できます。準備不足でも救出を強行する道はありますが、他の囚人の支援を失うと先に伝えます。発見されたら脱出戦となり、再潜入は別日に持ち越します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q158.scene.entry"
+        },
+        {
+          "id": "handoff",
+          "script": "q158.scene.handoff"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "秘密監獄にいる弟を助け出してください。"
+    },
+    "reveal": {
+      "newInformation": "トルがわざと錠を閉め直す姿を先に見せ、洗脳や裏切りを疑わせます。次に、壁へ刻んだ印が囚人ごとの薬の配分だと分かります。本人の使命感を美化せず、疲労と判断の限界も示します。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q158.scene.entry"
+      },
+      {
+        "id": "handoff",
+        "script": "q158.scene.handoff"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q158.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "トルが自分で錠を閉め直した。壁の印は囚人への薬の配分で、本人がいなくなると連絡網が途切れるという。顔には疲れが出ていた。",
+        "options": [
+          {
+            "id": "now",
+            "text": "支援の後任がいなくなることを承知して、即時退去を説得する",
+            "to": "@now"
+          },
+          {
+            "id": "handoff",
+            "text": "後任と外部連絡を準備する",
+            "to": "handoff"
+          },
+          {
+            "id": "remain",
+            "text": "今日の残留を尊重し、兄と再交渉する",
+            "to": "@remain"
+          }
+        ]
+      },
+      {
+        "id": "handoff",
+        "text": "別の囚人が配分を引き受け、外部との合図も試した。二人が手順を再現できたことをトルが見届ける。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "引継ぎを終えて本人を連れ出す",
+            "to": "@handoff"
+          },
+          {
+            "id": "remain",
+            "text": "今は退出を保留する",
+            "to": "@remain"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q158.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q158.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "トルが自分で錠を閉め直した。壁の印は囚人への薬の配分で、本人がいなくなると連絡網が途切れるという。顔には疲れが出ていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "now",
+              "text": "支援の後任がいなくなることを承知して、即時退去を説得する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q158.end.now"
+                }
+              ]
+            },
+            {
+              "id": "handoff",
+              "text": "後任と外部連絡を準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q158.scene.handoff"
+                }
+              ]
+            },
+            {
+              "id": "remain",
+              "text": "今日の残留を尊重し、兄と再交渉する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q158.end.remain"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q158.scene.handoff": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q158.node",
+          "value": "handoff"
+        },
+        {
+          "op": "say",
+          "text": "別の囚人が配分を引き受け、外部との合図も試した。二人が手順を再現できたことをトルが見届ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "引継ぎを終えて本人を連れ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q158.end.handoff"
+                }
+              ]
+            },
+            {
+              "id": "remain",
+              "text": "今は退出を保留する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q158.end.remain"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q158.end.now": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q158.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "トルは説得を受けて退出した。兄弟は再会したが、囚人の支援に空いた穴は別の救援へ残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q158",
+              "outcome": "now"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q158.end.handoff": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q158.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "連絡網を引き継いで帰った。トルは誰の配分も数えず食べ始めるまで、少し時間がかかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q158",
+              "outcome": "handoff"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q158.end.remain": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q158.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "兄は反対した。弟の意思だけで疲労の危険まで消したことにはせず、次の引継ぎ案を作る約束をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q158",
+              "outcome": "remain"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q158.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q158.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q158.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "now",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "トルは説得を受けて退出した。兄弟は再会したが、囚人の支援に空いた穴は別の救援へ残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "handoff",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "連絡網を引き継いで帰った。トルは誰の配分も数えず食べ始めるまで、少し時間がかかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "remain",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "兄は反対した。弟の意思だけで疲労の危険まで消したことにはせず、次の引継ぎ案を作る約束をした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q158.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q158.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "handoff",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q158.scene.handoff"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q158.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

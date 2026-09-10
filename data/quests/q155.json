@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 1,
+  "id": "q155",
+  "number": 155,
+  "title": "味方の密告",
+  "client": "反乱軍のベルナ",
+  "brief": "襲撃予定を漏らした者を調べてください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f1",
+      "object": "q155_scene",
+      "x": 8,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "internal": {
+      "label": "承認手順の変更",
+      "text": "作戦の承認手順を変えた。ベルナは次の会議で、市民がいる時刻を最初に尋ねた。",
+      "gold": 117,
+      "xp": 81
+    },
+    "public": {
+      "label": "割れた組織と告知",
+      "text": "組織は割れ、市民は計画されていた危険を知った。漏洩した兵にも仲間を危険にした責任が残った。",
+      "gold": 117,
+      "xp": 81
+    },
+    "hidden": {
+      "label": "秘匿した団結",
+      "text": "その場の分裂は避けた。同じ問題を防ぐ手順はできず、ベルナは次の作戦の説明に迷った。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "密告文は標的の位置を省き、市民の集まる時刻だけを強調しています。正義の密告として一方的に許さず、何を知り何を予測できなかったかを分けます。ベルナは裏切り者を裁くより先に、捕虜を取り戻したいと途中で目的を切り替えます。",
+      "fixedPast": "反乱軍の連絡係ベルナは、仲間を密告した者を探しています。密告者は穏健派の兵で、襲撃予定を漏らして市民の巻き添えを防ぎました。しかしその情報で別の仲間が捕まり、本人はそこまで予測していません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "反乱軍のベルナ",
+        "beliefsAndGoals": "反乱軍の連絡係ベルナは、仲間を密告した者を探しています。密告者は穏健派の兵で、襲撃予定を漏らして市民の巻き添えを防ぎました。しかしその情報で別の仲間が捕まり、本人はそこまで予測していません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "襲撃予定を漏らした者を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "文書調査→密告者との面談→救出を先行／内部審議／公開告発。密告者を協力者にするなら本人の同意で移送情報を使えます。救出に失敗しても責任の判断へ戻れます。真相を知らず疑わしい者を処罰する道では誤判定が後日判明します。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q155.scene.entry"
+        },
+        {
+          "id": "judge",
+          "script": "q155.scene.judge"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "襲撃予定を漏らした者を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "密告文は標的の位置を省き、市民の集まる時刻だけを強調しています。正義の密告として一方的に許さず、何を知り何を予測できなかったかを分けます。ベルナは裏切り者を裁くより先に、捕虜を取り戻したいと途中で目的を切り替えます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q155.scene.entry"
+      },
+      {
+        "id": "judge",
+        "script": "q155.scene.judge"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q155.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q155.rescued",
+        "meaning": "作者原稿の rescued に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "密告文は標的の位置を省き、市民の集まる時刻を強調する。穏健派の兵は巻き添えを止めたかったが、その情報で仲間が捕まった。",
+        "options": [
+          {
+            "id": "rescue",
+            "text": "本人の同意した移送情報を使い、救出を先に試みる",
+            "to": "judge",
+            "combat": "guard_6",
+            "escape": "judge",
+            "loss": "judge",
+            "set": {
+              "rescued": true
+            }
+          },
+          {
+            "id": "judge",
+            "text": "責任をどう扱うか先に話す",
+            "to": "judge"
+          }
+        ]
+      },
+      {
+        "id": "judge",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q155.rescued"
+              },
+              "right": true
+            },
+            "yes": "捕虜を取り戻した。救出できたことは、漏洩の判断をすべて正当化しない。",
+            "no": "捕虜の救出は確認できていない。責任審議と救援の手配を分けて進める。"
+          }
+        ],
+        "options": [
+          {
+            "id": "internal",
+            "text": "市民被害と漏洩の責任を内部審議へ",
+            "to": "@internal"
+          },
+          {
+            "id": "public",
+            "text": "市民へ作戦と密告の両方を公表する",
+            "to": "@public"
+          },
+          {
+            "id": "hidden",
+            "text": "短期の団結を優先し、組織内でも伏せる",
+            "to": "@hidden"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q155.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q155.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "密告文は標的の位置を省き、市民の集まる時刻を強調する。穏健派の兵は巻き添えを止めたかったが、その情報で仲間が捕まった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rescue",
+              "text": "本人の同意した移送情報を使い、救出を先に試みる",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_6",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q155.rescued",
+                      "value": true
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q155.scene.judge"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q155.scene.judge"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q155.scene.judge"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "judge",
+              "text": "責任をどう扱うか先に話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q155.scene.judge"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q155.scene.judge": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q155.node",
+          "value": "judge"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q155.rescued"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "捕虜を取り戻した。救出できたことは、漏洩の判断をすべて正当化しない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "捕虜の救出は確認できていない。責任審議と救援の手配を分けて進める。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "internal",
+              "text": "市民被害と漏洩の責任を内部審議へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q155.end.internal"
+                }
+              ]
+            },
+            {
+              "id": "public",
+              "text": "市民へ作戦と密告の両方を公表する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q155.end.public"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "短期の団結を優先し、組織内でも伏せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q155.end.hidden"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q155.end.internal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q155.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "作戦の承認手順を変えた。ベルナは次の会議で、市民がいる時刻を最初に尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q155",
+              "outcome": "internal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q155.end.public": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q155.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "組織は割れ、市民は計画されていた危険を知った。漏洩した兵にも仲間を危険にした責任が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q155",
+              "outcome": "public"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q155.end.hidden": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q155.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その場の分裂は避けた。同じ問題を防ぐ手順はできず、ベルナは次の作戦の説明に迷った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q155",
+              "outcome": "hidden"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q155.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q155.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q155.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "internal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "作戦の承認手順を変えた。ベルナは次の会議で、市民がいる時刻を最初に尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "public",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "組織は割れ、市民は計画されていた危険を知った。漏洩した兵にも仲間を危険にした責任が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hidden",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その場の分裂は避けた。同じ問題を防ぐ手順はできず、ベルナは次の作戦の説明に迷った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q155.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q155.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "judge",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q155.scene.judge"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q155.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

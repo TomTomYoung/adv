@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 1,
+  "id": "q126",
+  "number": 126,
+  "title": "獲物のいない狩猟祭",
+  "client": "祭主催コル",
+  "brief": "獲物の少ない狩猟祭を、今年も開けるよう手伝ってください。",
+  "region": 3,
+  "type": "scene_graph",
+  "recommendedLevel": 3,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "object": "q126_scene",
+      "x": 3,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "hunt": {
+      "label": "少ない獲物の祭",
+      "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。",
+      "gold": 81,
+      "xp": 63
+    },
+    "track": {
+      "label": "木標の競技",
+      "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。",
+      "gold": 81,
+      "xp": 63
+    },
+    "show": {
+      "label": "来年への演技",
+      "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。",
+      "gold": 81,
+      "xp": 63
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38125aeffc8f5049e6960",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "倉庫には、昔使った木製の獲物が残っています。祭の初期は追跡技術を競う遊びでした。古式を万能の正解にはせず、食肉を期待する屋台と、狩人の腕を見たい観客の利害も置きます。",
+      "fixedPast": "祭主催のコルは、毎年の狩猟競技に出て町を盛り上げてほしいと頼みます。今年は獲物が少なく、若い競技者は遠くまで追うつもりです。コルは予算を失いたくない一方、自分の息子を遭難させた祭を繰り返したくありません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "祭主催コル",
+        "beliefsAndGoals": "祭主催のコルは、毎年の狩猟競技に出て町を盛り上げてほしいと頼みます。今年は獲物が少なく、若い競技者は遠くまで追うつもりです。コルは予算を失いたくない一方、自分の息子を遭難させた祭を繰り返したくありません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "獲物の少ない狩猟祭を、今年も開けるよう手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "参加→下見→現行競技に出る／競技変更を提案／模範演技をする→表彰。追跡競技への変更には規則と食材の手配が必要です。単に獲物を減らす案は屋台側が反対します。競技で敗れても祭の支援依頼は完了できます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q126.scene.entry"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "獲物の少ない狩猟祭を、今年も開けるよう手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "倉庫には、昔使った木製の獲物が残っています。祭の初期は追跡技術を競う遊びでした。古式を万能の正解にはせず、食肉を期待する屋台と、狩人の腕を見たい観客の利害も置きます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q126.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q126.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q126.rules",
+        "meaning": "作者原稿の rules に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q126.food",
+        "meaning": "作者原稿の food に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "倉庫には古い木製の獲物があった。コルは昔、息子を遭難で失ったという。屋台は祭の食肉を当てにしている。",
+        "options": [
+          {
+            "id": "rules",
+            "text": "木標を追った古い競技札を読む",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q126.rules"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "rules": true
+            },
+            "textAfter": "初期の祭は追跡技術を競っていた。肉を得る祭とは別の目的だった。"
+          },
+          {
+            "id": "food",
+            "text": "代替食材として糧食二つを手配する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q126.food"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "ration": 2
+            },
+            "set": {
+              "food": true
+            }
+          },
+          {
+            "id": "hunt",
+            "text": "範囲を限った現行の狩猟に参加する",
+            "to": "@hunt",
+            "combat": "story_125",
+            "escape": "entry"
+          },
+          {
+            "id": "track",
+            "text": "食材と規則を揃え、追跡競技に変える",
+            "to": "@track",
+            "need": [
+              "rules",
+              "food"
+            ]
+          },
+          {
+            "id": "show",
+            "text": "今年は模範演技で祭を支える",
+            "to": "@show"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q126.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q126.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "倉庫には古い木製の獲物があった。コルは昔、息子を遭難で失ったという。屋台は祭の食肉を当てにしている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rules",
+              "text": "木標を追った古い競技札を読む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q126.rules"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q126.rules",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "初期の祭は追跡技術を競っていた。肉を得る祭とは別の目的だった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q126.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "food",
+              "text": "代替食材として糧食二つを手配する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q126.food"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "野営糧食 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 2
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q126.food",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q126.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "範囲を限った現行の狩猟に参加する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_125",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q126.end.hunt"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q126.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "track",
+              "text": "食材と規則を揃え、追跡競技に変える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q126.rules"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q126.food"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.end.track"
+                }
+              ]
+            },
+            {
+              "id": "show",
+              "text": "今年は模範演技で祭を支える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.end.show"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q126.end.hunt": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "hunt"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.end.track": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "track"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.end.show": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "show"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q126.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "hunt",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "track",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "show",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q126.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q126.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q126.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

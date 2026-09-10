@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "id": "q159",
+  "number": 159,
+  "title": "二重に売れた地図",
+  "client": "二つの探検隊",
+  "brief": "二重に売られた独占地図の扱いを調停してください。",
+  "region": 6,
+  "type": "scene_graph",
+  "recommendedLevel": 6,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "object": "q159_scene",
+      "x": 6,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "joint": {
+      "label": "共同回収と返金要求",
+      "text": "回収品を分け、二重販売への要求は取り下げなかった。若手は次の地図を売る前に用途を説明した。",
+      "gold": 117,
+      "xp": 81
+    },
+    "solo": {
+      "label": "一隊の往復",
+      "text": "資材を使って一隊で回収した。分配は得たが、余分な費用と地図売りへの請求も記録に残った。",
+      "gold": 117,
+      "xp": 81
+    },
+    "refund": {
+      "label": "探索を止める交渉",
+      "text": "今の回収は見送った。将来の探索権と、誤った独占契約への返金要求を分けて保管した。",
+      "gold": 117,
+      "xp": 81
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381c5aa9ce9c5bfc093ee",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "二枚の余白の欠けを重ねると、双方の道が対になっています。片隊の隊長は共同探索を合理的と考えますが、若手は騙されたまま従うことを敗北と思います。目的地へ着く価値と契約の不正を別に扱います。",
+      "fixedPast": "二つの探検隊が同じ宝の独占地図を買い、仲介者へ抗議しています。地図売りは二重販売しましたが、宝への道は二方向の装置を同時に動かす必要があります。争わせると見せかけて協力させる企みで、代金の説明も同意も省きました。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "二つの探検隊",
+        "beliefsAndGoals": "二つの探検隊が同じ宝の独占地図を買い、仲介者へ抗議しています。地図売りは二重販売しましたが、宝への道は二方向の装置を同時に動かす必要があります。争わせると見せかけて協力させる企みで、代金の説明も同意も省きました。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "二重に売られた独占地図の扱いを調停してください。"
+      }
+    ],
+    "conflict": {
+      "design": "口論→地図照合→共同探索／一隊が両側を往復／返金交渉。共同なら二つの支援場面を交互に進めます。単独なら装置の一時固定具と追加資源が必要です。装置側で失敗すれば安全地帯へ戻り、相手を助けるか選べます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q159.scene.entry"
+        },
+        {
+          "id": "left",
+          "script": "q159.scene.left"
+        },
+        {
+          "id": "right",
+          "script": "q159.scene.right"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "二重に売られた独占地図の扱いを調停してください。"
+    },
+    "reveal": {
+      "newInformation": "二枚の余白の欠けを重ねると、双方の道が対になっています。片隊の隊長は共同探索を合理的と考えますが、若手は騙されたまま従うことを敗北と思います。目的地へ着く価値と契約の不正を別に扱います。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q159.scene.entry"
+      },
+      {
+        "id": "left",
+        "script": "q159.scene.left"
+      },
+      {
+        "id": "right",
+        "script": "q159.scene.right"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q159.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "二枚の余白を合わせると、二方向の装置が対になった。地図売りは協力させるつもりだったが、説明も同意も省いていた。",
+        "options": [
+          {
+            "id": "joint",
+            "text": "分配と返金要求を合意し、二隊で進む",
+            "to": "left"
+          },
+          {
+            "id": "solo",
+            "text": "縄二つで装置を固定し、一隊で往復する",
+            "to": "@solo",
+            "cost": {
+              "rope": 2
+            }
+          },
+          {
+            "id": "refund",
+            "text": "探索を中止し、返金交渉をする",
+            "to": "@refund"
+          }
+        ]
+      },
+      {
+        "id": "left",
+        "text": "左の隊が装置を押さえる。右の隊が進むまで離してはいけない。あなたは左の固定を支えた。",
+        "options": [
+          {
+            "id": "right",
+            "text": "右の隊へ合図を送り、反対側を動かす",
+            "to": "right"
+          }
+        ]
+      },
+      {
+        "id": "right",
+        "text": "右側が動き、左側の退路が開いた。若手は騙された契約を受け入れたわけではないと念を押す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "共同回収を終え、売主への返金要求も残す",
+            "to": "@joint"
+          },
+          {
+            "id": "back",
+            "text": "回収を中断し、両隊の安全を優先して戻る",
+            "to": "@refund"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q159.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q159.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "二枚の余白を合わせると、二方向の装置が対になった。地図売りは協力させるつもりだったが、説明も同意も省いていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "joint",
+              "text": "分配と返金要求を合意し、二隊で進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.scene.left"
+                }
+              ]
+            },
+            {
+              "id": "solo",
+              "text": "縄二つで装置を固定し、一隊で往復する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "縄 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q159.end.solo"
+                }
+              ]
+            },
+            {
+              "id": "refund",
+              "text": "探索を中止し、返金交渉をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.end.refund"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q159.scene.left": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q159.node",
+          "value": "left"
+        },
+        {
+          "op": "say",
+          "text": "左の隊が装置を押さえる。右の隊が進むまで離してはいけない。あなたは左の固定を支えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "right",
+              "text": "右の隊へ合図を送り、反対側を動かす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.scene.right"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q159.scene.right": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q159.node",
+          "value": "right"
+        },
+        {
+          "op": "say",
+          "text": "右側が動き、左側の退路が開いた。若手は騙された契約を受け入れたわけではないと念を押す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "共同回収を終え、売主への返金要求も残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "回収を中断し、両隊の安全を優先して戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.end.refund"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q159.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q159.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "回収品を分け、二重販売への要求は取り下げなかった。若手は次の地図を売る前に用途を説明した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q159",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q159.end.solo": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q159.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "資材を使って一隊で回収した。分配は得たが、余分な費用と地図売りへの請求も記録に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q159",
+              "outcome": "solo"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q159.end.refund": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q159.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今の回収は見送った。将来の探索権と、誤った独占契約への返金要求を分けて保管した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q159",
+              "outcome": "refund"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q159.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q159.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q159.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "回収品を分け、二重販売への要求は取り下げなかった。若手は次の地図を売る前に用途を説明した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "solo",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "資材を使って一隊で回収した。分配は得たが、余分な費用と地図売りへの請求も記録に残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "refund",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今の回収は見送った。将来の探索権と、誤った独占契約への返金要求を分けて保管した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q159.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q159.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "left",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q159.scene.left"
+                    }
+                  ]
+                },
+                {
+                  "equals": "right",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q159.scene.right"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q159.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

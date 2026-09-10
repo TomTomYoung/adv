@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "id": "q118",
+  "number": 118,
+  "title": "聞こえない救難笛",
+  "client": "川の監視所",
+  "brief": "流された測量隊の救助に協力してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_2_f2",
+      "object": "q118_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "rescue": {
+      "label": "互いの合図",
+      "text": "測量隊は戻った。ソラが一度合図を見落とすと、新人は笑わず、もう一度大きく示した。",
+      "gold": 69,
+      "xp": 57
+    },
+    "help": {
+      "label": "応援班の救助",
+      "text": "位置情報を使って応援班が救出した。二人は次の訓練で合図を揃える約束をした。",
+      "gold": 69,
+      "xp": 57
+    },
+    "notes": {
+      "label": "救助の中断",
+      "text": "資料は回収したが、人の救助は後続班に残った。ソラと新人は、できた仕事と残る仕事を別々に報告した。",
+      "gold": 69,
+      "xp": 57
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ソラは笛でなく、水鳥の飛び立ちと旗の動きを見ます。ただし死角では役立ちません。彼女を万能な感覚の持ち主へ置換せず、新人が音を、彼女が地形を読み、合図の取り決めが救助を可能にします。",
+      "fixedPast": "川の監視所は、流された測量隊を探しています。案内できるのは聴力を失った元救助員ソラです。新人は危険だと同行を拒み、ソラは過去の実績だけで黙らせようとします。互いに安全を望みながら、確認方法を話していません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "川の監視所",
+        "beliefsAndGoals": "川の監視所は、流された測量隊を探しています。案内できるのは聴力を失った元救助員ソラです。新人は危険だと同行を拒み、ソラは過去の実績だけで黙らせようとします。互いに安全を望みながら、確認方法を話していません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "流された測量隊の救助に協力してください。"
+      }
+    ],
+    "conflict": {
+      "design": "監視所→準備をする／直ちに追う→二つの川筋→救出。準備なしでも岸から位置を見つけて応援を呼べます。直接救出には信号と綱が必要です。片方を欠けば危険を説明し、応援待ちか準備へ戻します。読了の遅さで漂流者を失わせません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q118.scene.entry"
+        },
+        {
+          "id": "river",
+          "script": "q118.scene.river"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "流された測量隊の救助に協力してください。"
+    },
+    "reveal": {
+      "newInformation": "ソラは笛でなく、水鳥の飛び立ちと旗の動きを見ます。ただし死角では役立ちません。彼女を万能な感覚の持ち主へ置換せず、新人が音を、彼女が地形を読み、合図の取り決めが救助を可能にします。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q118.scene.entry"
+      },
+      {
+        "id": "river",
+        "script": "q118.scene.river"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q118.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q118.signals",
+        "meaning": "作者原稿の signals に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q118.line",
+        "meaning": "作者原稿の line に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "元救助員ソラは聴力を失い、新人は同行を渋る。ソラは水鳥と旗を見るが、曲がり角は死角になる。",
+        "options": [
+          {
+            "id": "signals",
+            "text": "全員で三つの手信号を実演する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q118.signals"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "signals": true
+            },
+            "textAfter": "見落とした時は繰り返す。互いの死角を確認して合意した。"
+          },
+          {
+            "id": "line",
+            "text": "縄一つを使い、救助綱を設置する",
+            "to": "entry",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.quest.q118.line"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "rope": 1
+            },
+            "set": {
+              "line": true
+            },
+            "textAfter": "綱が岸に固定された。袋の中の予備縄とは別に、救助に使える状態になった。"
+          },
+          {
+            "id": "river",
+            "text": "高岸から川筋を探す",
+            "to": "river"
+          }
+        ]
+      },
+      {
+        "id": "river",
+        "text": "測量隊は枝へつかまっている。新人は音を聞き、ソラは足場を見る。直接の救助には、合図と設置済みの綱が必要だ。",
+        "options": [
+          {
+            "id": "rescue",
+            "text": "合図を交わし、綱で直接救助する",
+            "to": "@rescue",
+            "need": [
+              "signals",
+              "line"
+            ]
+          },
+          {
+            "id": "ready",
+            "text": "準備地点へ戻る",
+            "to": "entry"
+          },
+          {
+            "id": "help",
+            "text": "位置を伝え、応援班へ委ねる",
+            "to": "@help"
+          },
+          {
+            "id": "notes",
+            "text": "独断の救助を打ち切り、流れ着いた資料だけ回収する",
+            "to": "@notes"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q118.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q118.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "元救助員ソラは聴力を失い、新人は同行を渋る。ソラは水鳥と旗を見るが、曲がり角は死角になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "signals",
+              "text": "全員で三つの手信号を実演する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q118.signals"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q118.signals",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "見落とした時は繰り返す。互いの死角を確認して合意した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q118.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "line",
+              "text": "縄一つを使い、救助綱を設置する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q118.line"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q118.line",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "綱が岸に固定された。袋の中の予備縄とは別に、救助に使える状態になった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q118.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "river",
+              "text": "高岸から川筋を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.scene.river"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q118.scene.river": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q118.node",
+          "value": "river"
+        },
+        {
+          "op": "say",
+          "text": "測量隊は枝へつかまっている。新人は音を聞き、ソラは足場を見る。直接の救助には、合図と設置済みの綱が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rescue",
+              "text": "合図を交わし、綱で直接救助する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q118.signals"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q118.line"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.end.rescue"
+                }
+              ]
+            },
+            {
+              "id": "ready",
+              "text": "準備地点へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "位置を伝え、応援班へ委ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.end.help"
+                }
+              ]
+            },
+            {
+              "id": "notes",
+              "text": "独断の救助を打ち切り、流れ着いた資料だけ回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.end.notes"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q118.end.rescue": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q118.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "測量隊は戻った。ソラが一度合図を見落とすと、新人は笑わず、もう一度大きく示した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q118",
+              "outcome": "rescue"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q118.end.help": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q118.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "位置情報を使って応援班が救出した。二人は次の訓練で合図を揃える約束をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q118",
+              "outcome": "help"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q118.end.notes": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q118.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "資料は回収したが、人の救助は後続班に残った。ソラと新人は、できた仕事と残る仕事を別々に報告した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q118",
+              "outcome": "notes"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q118.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q118.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q118.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "測量隊は戻った。ソラが一度合図を見落とすと、新人は笑わず、もう一度大きく示した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "help",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "位置情報を使って応援班が救出した。二人は次の訓練で合図を揃える約束をした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "notes",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "資料は回収したが、人の救助は後続班に残った。ソラと新人は、できた仕事と残る仕事を別々に報告した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q118.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q118.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "river",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q118.scene.river"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q118.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

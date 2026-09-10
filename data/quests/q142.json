@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "id": "q142",
+  "number": 142,
+  "title": "偽物職人の本物",
+  "client": "偽宝石職人キオ",
+  "brief": "納めた指輪を取り戻したいのです。まず相談に乗ってください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "object": "q142_scene",
+      "x": 4,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "refund": {
+      "label": "選び直す指輪",
+      "text": "返金された買主は、指輪を残すと自分で決めた。価格の偽りを取り消しても、内側の年月日は消さなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "repair": {
+      "label": "名を出す仕事",
+      "text": "修理の期間と返済額を決めた。キオは今度は自分の名で修理札を書いた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "refuse": {
+      "label": "取り戻さない仲介",
+      "text": "盗み返しは引き受けなかった。キオには当事者へ説明する仕事が残り、調査の精算だけを受けた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "指輪の石は安物ですが、内側の刻印は手間を惜しまぬ出来です。騎士の配偶者は石の価値を知らなくても、毎年少しずつ刻印を増やせる約束を大切にしています。キオの「取り戻して黙って交換する」計画は、買った側の判断を奪います。",
+      "fixedPast": "偽宝石職人キオは、騎士の結婚祝いに納めた指輪を取り戻してほしいと頼みます。依頼主は本物と思って高額な保険を掛けています。キオは金を騙し取っており、受取人の喜びに触れてから罪悪感を持ちました。美しい偽物だから詐欺でなくなる話にはしません。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "偽宝石職人キオ",
+        "beliefsAndGoals": "偽宝石職人キオは、騎士の結婚祝いに納めた指輪を取り戻してほしいと頼みます。依頼主は本物と思って高額な保険を掛けています。キオは金を騙し取っており、受取人の喜びに触れてから罪悪感を持ちました。美しい偽物だから詐欺でなくなる話にはしません。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "納めた指輪を取り戻したいのです。まず相談に乗ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→贈呈前に面会／鑑定を取る→告知／秘密の交換を断る→返金・作り直し・保管。贈呈後でも告知できますが、演出の場が変わります。盗み返す依頼を拒否して調査料だけ受け取ることもできます。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q142.scene.entry"
+        },
+        {
+          "id": "buyer",
+          "script": "q142.scene.buyer"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "納めた指輪を取り戻したいのです。まず相談に乗ってください。"
+    },
+    "reveal": {
+      "newInformation": "指輪の石は安物ですが、内側の刻印は手間を惜しまぬ出来です。騎士の配偶者は石の価値を知らなくても、毎年少しずつ刻印を増やせる約束を大切にしています。キオの「取り戻して黙って交換する」計画は、買った側の判断を奪います。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q142.scene.entry"
+      },
+      {
+        "id": "buyer",
+        "script": "q142.scene.buyer"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q142.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q142.before",
+        "meaning": "作者原稿の before に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "安い石の内側に、手の込んだ年月日の刻印がある。買主は本物と思い、保険まで掛けていた。",
+        "options": [
+          {
+            "id": "tell",
+            "text": "贈呈前に価値と代金の偽りを告げる",
+            "to": "buyer",
+            "set": {
+              "before": true
+            }
+          },
+          {
+            "id": "later",
+            "text": "贈呈が終わってから当事者へ告げる",
+            "to": "buyer"
+          },
+          {
+            "id": "refuse",
+            "text": "盗み返す依頼を断る",
+            "to": "@refuse"
+          }
+        ]
+      },
+      {
+        "id": "buyer",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.quest.q142.before"
+              },
+              "right": true
+            },
+            "yes": "贈呈前の机で説明をした。買主はまず金額を確認した。",
+            "no": "祝いが済んだ後、二人だけの席で説明した。買主は皆の前で取り戻さないよう求めた。"
+          },
+          "石の価値と、刻印を毎年足す約束は別だ。指輪を残すかは買主が決める。"
+        ],
+        "options": [
+          {
+            "id": "refund",
+            "text": "キオが返金し、指輪の扱いを買主へ委ねる",
+            "to": "@refund"
+          },
+          {
+            "id": "repair",
+            "text": "名を隠さない修理仕事で返す契約を仲介する",
+            "to": "@repair"
+          },
+          {
+            "id": "refuse",
+            "text": "秘密の交換には加わらず仲介を終える",
+            "to": "@refuse"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q142.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q142.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "安い石の内側に、手の込んだ年月日の刻印がある。買主は本物と思い、保険まで掛けていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tell",
+              "text": "贈呈前に価値と代金の偽りを告げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q142.before",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q142.scene.buyer"
+                }
+              ]
+            },
+            {
+              "id": "later",
+              "text": "贈呈が終わってから当事者へ告げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q142.scene.buyer"
+                }
+              ]
+            },
+            {
+              "id": "refuse",
+              "text": "盗み返す依頼を断る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q142.end.refuse"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q142.scene.buyer": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q142.node",
+          "value": "buyer"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q142.before"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "贈呈前の机で説明をした。買主はまず金額を確認した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "祝いが済んだ後、二人だけの席で説明した。買主は皆の前で取り戻さないよう求めた。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "石の価値と、刻印を毎年足す約束は別だ。指輪を残すかは買主が決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "refund",
+              "text": "キオが返金し、指輪の扱いを買主へ委ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q142.end.refund"
+                }
+              ]
+            },
+            {
+              "id": "repair",
+              "text": "名を隠さない修理仕事で返す契約を仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q142.end.repair"
+                }
+              ]
+            },
+            {
+              "id": "refuse",
+              "text": "秘密の交換には加わらず仲介を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q142.end.refuse"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q142.end.refund": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q142.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "返金された買主は、指輪を残すと自分で決めた。価格の偽りを取り消しても、内側の年月日は消さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q142",
+              "outcome": "refund"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q142.end.repair": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q142.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "修理の期間と返済額を決めた。キオは今度は自分の名で修理札を書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q142",
+              "outcome": "repair"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q142.end.refuse": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q142.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盗み返しは引き受けなかった。キオには当事者へ説明する仕事が残り、調査の精算だけを受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q142",
+              "outcome": "refuse"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q142.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q142.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q142.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "refund",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "返金された買主は、指輪を残すと自分で決めた。価格の偽りを取り消しても、内側の年月日は消さなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "repair",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "修理の期間と返済額を決めた。キオは今度は自分の名で修理札を書いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "refuse",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "盗み返しは引き受けなかった。キオには当事者へ説明する仕事が残り、調査の精算だけを受けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q142.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q142.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "buyer",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q142.scene.buyer"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q142.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

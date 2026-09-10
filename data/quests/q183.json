@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "id": "q183",
+  "number": 183,
+  "title": "勝者の洗濯場",
+  "client": "戦後の洗濯場の係長",
+  "brief": "同じ名の軍服が何枚も届く理由を調べてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "object": "q183_scene",
+      "x": 5,
+      "y": 1,
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "report": {
+      "label": "帰還記録の訂正",
+      "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "supported": {
+      "label": "支援をつなぐ訂正",
+      "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "hidden": {
+      "label": "待ち続ける家",
+      "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "泥は別々の戦場のものなのに、名札の糸は同じです。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せます。遺族側には既に死を察している者と、本当に帰りを待つ者がいます。",
+      "fixedPast": "戦後の洗濯場で、同じ兵の軍服が何枚も届きます。係長は横流しを疑い調査を頼みます。兵士たちは死んだ友の名を自分の襟へ縫い、全員帰還したことにして遺族年金を止めないようにしています。目的は支援ですが、死の知らせも遺族の選択も奪っています。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "戦後の洗濯場の係長",
+        "beliefsAndGoals": "戦後の洗濯場で、同じ兵の軍服が何枚も届きます。係長は横流しを疑い調査を頼みます。兵士たちは死んだ友の名を自分の襟へ縫い、全員帰還したことにして遺族年金を止めないようにしています。目的は支援ですが、死の知らせも遺族の選択も奪っています。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "同じ名の軍服が何枚も届く理由を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "衣類調査→兵士／遺族→報告と支援の選択。即時告発、実際の支援を確保してから訂正、当面の秘匿があります。支援確保は物資の引渡しか公的な受給確認で、口約束だけでは成立しません。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q183.scene.entry"
+        },
+        {
+          "id": "support",
+          "script": "q183.scene.support"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ名の軍服が何枚も届く理由を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "泥は別々の戦場のものなのに、名札の糸は同じです。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せます。遺族側には既に死を察している者と、本当に帰りを待つ者がいます。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q183.scene.entry"
+      },
+      {
+        "id": "support",
+        "script": "q183.scene.support"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q183.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。",
+        "options": [
+          {
+            "id": "families",
+            "text": "遺族の話を聞く",
+            "to": "support"
+          },
+          {
+            "id": "report",
+            "text": "直ちに偽装を告発する",
+            "to": "@report"
+          },
+          {
+            "id": "hidden",
+            "text": "当面は秘匿し、支援を続ける",
+            "to": "@hidden"
+          }
+        ]
+      },
+      {
+        "id": "support",
+        "text": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。",
+        "options": [
+          {
+            "id": "goods",
+            "text": "糧食二つを家へ渡してから訂正する",
+            "to": "@supported",
+            "cost": {
+              "ration": 2
+            }
+          },
+          {
+            "id": "official",
+            "text": "公的窓口で遺族給付の受給確認を取って訂正する",
+            "to": "@supported"
+          },
+          {
+            "id": "report",
+            "text": "支援確保を待たず訂正する",
+            "to": "@report"
+          },
+          {
+            "id": "hidden",
+            "text": "今日の訂正は見送る",
+            "to": "@hidden"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "q183.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q183.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "families",
+              "text": "遺族の話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.support"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "直ちに偽装を告発する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "当面は秘匿し、支援を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.hidden"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q183.scene.support": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q183.node",
+          "value": "support"
+        },
+        {
+          "op": "say",
+          "text": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "goods",
+              "text": "糧食二つを家へ渡してから訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "野営糧食 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.end.supported"
+                }
+              ]
+            },
+            {
+              "id": "official",
+              "text": "公的窓口で遺族給付の受給確認を取って訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.supported"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "支援確保を待たず訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "今日の訂正は見送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.hidden"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q183.end.report": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "report"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.end.supported": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "supported"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.end.hidden": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "hidden"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q183.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "supported",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hidden",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q183.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q183.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "support",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q183.scene.support"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
