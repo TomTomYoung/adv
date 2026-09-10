@@ -24,7 +24,7 @@ function toggleSound(){
   if(settings.sound)status('探索・戦闘BGMを再生します。音量は「記録」で調整できます。');
 }
 function render(){lastModel=projectGame(engine);view.render(lastModel);syncAudio();}
-function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
+function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length||engine.state.notice)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
 function restore(text){try{engine.load(text);storageWrite('auto',engine.save());dialog.close();render();status('記録を読み込みました。');}catch(error){status(error.message);}}
 function menu(){
   modal('旅の記録');dialog.append(make('p','会話・選択肢・戦闘の途中も保存できます。記録はこのブラウザに保存されます。'));
@@ -43,11 +43,12 @@ function help(){modal('遊び方');for(const paragraph of [
  '2. W/Sまたは前後ボタンで移動、A/Dで方向を変えます。Eか「調べる」で足元と正面を調べます。追跡欄の座標は横・縦の順です。',
  '3. ?で手掛かり、!で決着を選びます。手掛かり2つで事情を踏まえた選択が解放されます。一部は縄や戦闘も必要です。結末はやり直せません。別の記録で比較できます。',
  '4. 素早い味方から1人ずつ行動し、その後に敵が動きます。敵の絵で攻撃対象、選択欄で回復対象を指定。毒は移動・ターン終了時にダメージ。防御は敵の行動終了まで有効です。',
- '5. 旅支度で補給・装備、酒場で10人から最大5人を編成し、宿・無料施療所を利用。待機中もHP・MP・装備は残ります。入口から無料帰還、帰還印は所持金8%、全滅時は15%を失います。依頼と手掛かりは残ります。',
- '6. 行動後に自動保存。「記録」で3枠への手動保存とファイル入出力ができます。ブラウザのデータ削除に備え、長い旅はファイルにも保存してください。',
- '7. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。すべてに3つの結末があります。'
+ '5. 旅支度で補給・装備、酒場で10人から最大5人を編成し、宿・無料施療所を利用。待機中もHP・MP・装備は残ります。入口から無料帰還、帰還印は原則所持金8%（同行する生存巡礼者で半額）、全滅時は15%を失います。依頼と手掛かりは残ります。',
+ '6. 酒場の各人物にある「職業・成長」を開くと30職へ無料で転職できます。人物の負傷と過去の成長は残り、装備できない品は袋へ戻ります。技能は隊Lv1・5・10で解放。探索特技は隊の状態から使用できます。',
+ '7. 行動後に自動保存。「記録」で3枠への手動保存とファイル入出力ができます。ブラウザのデータ削除に備え、長い旅はファイルにも保存してください。',
+ '8. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。すべてに3つの結末があります。'
 ])dialog.append(make('p',paragraph));closeButton();}
-function retreat(){modal('帰還印を使いますか');dialog.append(make('p',`救援費は${Math.ceil(engine.state.gold*data.system.retreatGoldRate)}Gです。受注中の依頼と手掛かりはそのまま残ります。`),btn('帰還する',()=>{dialog.close();dispatch({type:'retreat'});}));closeButton();}
+function retreat(){modal('帰還印を使いますか');dialog.append(make('p',`救援費は${Math.ceil(engine.state.gold*data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}Gです。受注中の依頼と手掛かりはそのまま残ります。`),btn('帰還する',()=>{dialog.close();dispatch({type:'retreat'});}));closeButton();}
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   data=await loadContent();sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);

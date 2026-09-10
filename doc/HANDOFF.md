@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-09。対象: 灯帰りの迷宮 1.2.0。
+更新日: 2026-09-10。対象: 灯帰りの迷宮 1.3.0。
 
 ## 最初に行うこと
 
@@ -42,6 +42,14 @@
 - コアの乱数にMath.randomを混ぜない。seedと乱数位置を保存する。
 - 主たる探索地点を鍵のない側に閉じ込めない。正面の閉じた扉を階段より優先して調べる仕様を維持する。
 - 依頼の結末やmodel.world.truthを未解決時のViewModelへ流さない。静的ゲームなのでソースを読んだプレイヤーへの秘匿は保証しない。
+
+## 職業システムの引き継ぎ
+
+JOB_SYSTEMとJOB_IMPLEMENTATIONを読んでください。原稿はauthoring/jobs.json、生成はtools/build-jobs.mjsです。build-content/build-entities/build-presentationからも最後に適用するため、職業・技能を消しません。人物の初期職と職業履歴は別管理です。通常の派生JSONだけを直さず、原稿側を変更してください。
+
+共通技能・職業技能はengine.skillsから列挙し、人物定義の旧skillsから列挙しないでください。レベルをテストで直接変更せずawardを通してください。battleSkillPlan、jobChangePlan、fieldActionPlanが事前検査を担当します。能力・材料・袋を直接書き換える別経路を追加しないでください。
+
+node tools/simulate-balance.mjsとnode tools/simulate-jobs.mjsで計測できます。HTTPでの実起動と音声の最終確認は未完了です。Playwrightを用意した通常環境ではtools/browser-jobs-smoke.pyを使用できます。
 
 ## 次の作業候補
 

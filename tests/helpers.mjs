@@ -7,7 +7,7 @@ import {activeActor} from '../src/core/battle.js';
 export const data=await loadContent(file=>fs.readFile(path.resolve(import.meta.dirname,'..',file),'utf8').then(JSON.parse));
 export function newGame(seed=42){const engine=new GameEngine(data,seed);drain(engine);return engine;}
 export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='text'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
-export function fight(engine){let fuel=800;while(engine.state.battle){assert.ok(--fuel,'battle must terminate');const id=activeActor(engine),actor=engine.state.actors[id],skills=data.actors[id].skills,alive=engine.state.members.filter(id=>engine.state.actors[id].hp>0),injured=alive.sort((a,b)=>engine.state.actors[a].hp/engine.stats(a).hp-engine.state.actors[b].hp/engine.stats(b).hp)[0];let skill='attack',target=engine.state.battle.enemies.find(e=>e.hp>0).instance;
+export function fight(engine){let fuel=800;while(engine.state.battle){assert.ok(--fuel,'battle must terminate');const id=activeActor(engine),actor=engine.state.actors[id],skills=engine.skills(id),alive=engine.state.members.filter(id=>engine.state.actors[id].hp>0),injured=alive.sort((a,b)=>engine.state.actors[a].hp/engine.stats(a).hp-engine.state.actors[b].hp/engine.stats(b).hp)[0];let skill='attack',target=engine.state.battle.enemies.find(e=>e.hp>0).instance;
     if(skills.includes('heal')&&actor.mp>=4&&engine.state.actors[injured].hp<engine.stats(injured).hp*.7){skill='heal';target=injured;}
     else if(skills.includes('fire')&&actor.mp>=4)skill='fire';
     else if(skills.includes('power')&&actor.mp>=3)skill='power';

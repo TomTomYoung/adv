@@ -15,7 +15,7 @@ test('JSON effects and SE share timing; only persistent screen layers survive a 
  next.data.scripts.clear_fx={commands:[{op:'screen.clear',layer:'mist'}]};drain(next);next.run('clear_fx');assert.deepEqual(next.state.presentation.layers,{});
 });
 test('1.1 saves migrate in battle, retain RNG and progress, and do not replay historical SE',()=>{
- const g=newGame(91);g.dispatch({type:'travel',region:1});g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});const saved=JSON.parse(g.save());saved.contentVersion=saved.state.contentVersion='1.1.0';saved.state.presentation.se={asset:'battle',revision:999};const rng=saved.state.rng;g.load(JSON.stringify(saved));assert.equal(g.state.contentVersion,'1.2.0');assert.equal(g.state.rng,rng);assert.equal(g.state.battle.encounter,'wild_pair_1');assert.equal(g.feedback.events.length,0);assert.equal(projectGame(g).se,null);
+ const g=newGame(91);g.dispatch({type:'travel',region:1});g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});const saved=JSON.parse(g.save());saved.contentVersion=saved.state.contentVersion='1.1.0';saved.state.presentation.se={asset:'battle',revision:999};const rng=saved.state.rng;g.load(JSON.stringify(saved));assert.equal(g.state.contentVersion,data.game.version);assert.equal(g.state.rng,rng);assert.equal(g.state.battle.encounter,'wild_pair_1');assert.equal(g.feedback.events.length,0);assert.equal(projectGame(g).se,null);
 });
 test('presentation does not consume random numbers or change battle and quest state',()=>{
  const enabled=newGame(312),silentData=structuredClone(data);silentData.presentation.cues={};const silent=new GameEngine(silentData,312);drain(silent);
