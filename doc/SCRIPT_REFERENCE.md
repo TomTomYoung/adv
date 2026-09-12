@@ -2,6 +2,8 @@
 
 JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範囲へ具体化した文書です。JSONの追加・編集だけで新しい場面を記述します。任意JavaScript・YAML文字列・関数名の文字列評価は受け付けません。
 
+2026-09-12照合: master 1.3.1は45命令・30式演算子です。PR #3（1.3.2）でもこの数は同じです。未実装の条件拡張と版の区分は [CURRENT_STATUS.md](CURRENT_STATUS.md) を参照してください。
+
 ## ファイルとID
 
 `data/game.json` のfilesに読み込むファイルを登録します。databasesは名前からJSONへの対応、maps/quests/scriptsはファイル配列です。マップは単体オブジェクト、共通スクリプトは `{ "scripts": { "id": { "commands": [] } } }`、クエストは自分の情報とscriptsを持ちます。全体でscript IDを重複させないでください。
@@ -56,6 +58,8 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 - 表示文字列: `{ "format": "所持金は{g}G", "values": { "g": { "ref": "gold" } } }`。
 
 戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratio・self.roundを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
+
+`has_member` は出撃隊への所属だけを判定します。不在は `not`、生存も必要なら `actors.<id>.hp > 0` を組み合わせます。現在HP・MP・職業・状態異常は保存状態から参照できますが、装備・職歴を含む最終能力値を任意人物から読む `actor_stat` はありません。戦闘式の `source.stats` を一般のシナリオ条件でそのまま使えるわけではありません。戦績用の `record_count` と受注時差分は末尾のシナリオ拡張節を参照してください。
 
 ## 実装した45命令
 

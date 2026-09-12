@@ -1,11 +1,14 @@
 # adv ドキュメント
 
-更新日: 2026-09-10。現行版: 灯帰りの迷宮 1.3.1。
+更新日: 2026-09-12。masterの現行版: 灯帰りの迷宮 1.3.1。
 
-最初に [SPEC.md](SPEC.md)、続いて [PROGRESS.md](PROGRESS.md)、[HANDOFF.md](HANDOFF.md) を読んでください。
+最初に [CURRENT_STATUS.md](CURRENT_STATUS.md) でmasterと未マージPRの違いを確認し、[SPEC.md](SPEC.md)、[PROGRESS.md](PROGRESS.md)、[HANDOFF.md](HANDOFF.md) を読んでください。
+
+個別進行へ改稿する [PR #3](https://github.com/TomTomYoung/adv/pull/3) は確認時点でopenです。200本・559場面・629結末・313テストはPR側の1.3.2の数値です。masterは200本・618結末・200テストで、既存100本の共通進行はまだ残っています。
 
 | 文書 | 内容 |
 | --- | --- |
+| [CURRENT_STATUS.md](CURRENT_STATUS.md) | 2026-09-12のGitHub・実装照合、版別件数、再検証、未完了事項 |
 | [SPEC.md](SPEC.md) | 実装済みのゲーム・データ・戦闘・保存仕様 |
 | [PROGRESS.md](PROGRESS.md) | 完成範囲、検証実績、残る制限 |
 | [HANDOFF.md](HANDOFF.md) | 次担当の入口、修正箇所、維持すべき条件 |
