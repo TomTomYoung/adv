@@ -1,10 +1,16 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-10。対象: 灯帰りの迷宮 1.3.2。
+更新日: 2026-09-12。本文の対象: 灯帰りの迷宮 1.3.2（PR #3）。
+
+## 引き継ぐ現在地
+
+[CURRENT_STATUS.md](CURRENT_STATUS.md) に2026-09-12のGitHub・コード照合を記録しています。masterの文書更新 `277a999` をこのPRブランチへ取り込み、1.3.2の仕様・一覧・再生成手順と照合して文書の競合を解消しました。今回の統合による変更はdocのみです。1.3.2のmasterへの反映状況は [PR #3](https://github.com/TomTomYoung/adv/pull/3) を確認してください。
+
+文書統合前の検証はmasterの実装 `e513cd4` が200件、PRの実装 `7be106c` が313件すべて合格でした。統合後の検証はPROGRESSを参照してください。本書の1.3.0時点の提案のうち、戦績・受注時差分・結末成立条件は既に1.3.1で実装済みです。1.3.2でも維持しており、未実装項目は下記の区分で引き継ぎます。
 
 ## 最初に行うこと
 
-1. READMEとSPEC、PROGRESSを読む。
+1. CURRENT_STATUS、README、SPEC、PROGRESSを読み、対象ブランチと内容版を確定する。
 2. `node tools/validate.mjs`、`node tools/check-static.mjs`、`node --test tests/*.test.mjs` を実行する。
 3. HTTP配信でindex.htmlを開く。画面だけの作業はview-preview.htmlから始める。
 
@@ -23,7 +29,11 @@
 | 音の状態・曲の切替・再試行 | src/application/audio.js |
 | 拡張魔物・仲間の原稿 | authoring/entities.json、tools/build-entities.mjs |
 
-現行の再生成は `npm run build:scenarios` です。基礎原稿と1.3.1の互換用進行を生成した後、`authoring/structures-1.mjs`〜`5.mjs` の既存100本と `structures-additional.mjs` の追加篇10本を適用します。残る追加篇90本は `authoring/scenarios-*.mjs` の個別進行を維持します。ゲーム起動時に生成やテンプレート展開はしません。生成済みJSONを直接直した後にbuild-contentを走らせると修正が失われるため、再生成する変更か手編集かを最初に決めてください。原稿変更時はbuild:scenarios、続いてbuild-fixturesを実行します。
+現行の再生成は `npm run build:scenarios` です。基礎原稿と1.3.1の互換用進行を生成した後、`authoring/structures-1.mjs`〜`5.mjs` の既存100本と `structures-additional.mjs` の追加篇10本を適用します。残る追加篇90本は `authoring/scenarios-*.mjs` の個別進行を維持します。ゲーム起動時に生成やテンプレート展開はしません。
+
+通常の修正は原稿・生成器へ反映し、生成済みJSONもコミットします。JSONだけの手修正は次の生成で失われます。原稿変更時は `npm run build:scenarios`、続いて `node tools/build-fixtures.mjs` を実行し、`npm run check` で検証します。`build-content.mjs` や `build-scenarios.mjs` 単体で終了すると1.3.2の適用が完了しないため、通常の更新手順にはしません。
+
+`tools/build-quest-structures.mjs` が新進行を適用します。`flags.flow` は新進行、`flags.quest` は維持した追加篇、`flags.legacyQuestRoutes` は移行済み旧進行に使うため、一括置換しないでください。1.3.1の1,376スクリプトは保存位置互換の対象です。
 
 1.1.0は魔物20体、仲間10人の肖像、酒場編成を追加しました。MONSTER_CATALOG、COMPANION_CATALOG、BALANCE_PLANを実装前にコミットし、後から画像と実測結果を追記しています。追加原稿だけの再生成はbuild-entities、計測はsimulate-balanceです。BGM新版と画像の生成プロンプトはassets/PROVENANCE.mdを参照してください。
 
@@ -65,6 +75,21 @@ node tools/simulate-balance.mjsとnode tools/simulate-jobs.mjsで計測できま
 
 ## シナリオ条件・フラグ・戦績システムの拡張（1.3.0時点の提案）
 
+ここからは当時の提案を保存した記録です。2026-09-12時点では次の区分で引き継ぎ、実装済みの戦績システムを重複して追加しないでください。
+
+| 提案項目 | 1.3.1から1.3.2へ維持した実装範囲 |
+| --- | --- |
+| 自動戦績・討伐・遭遇別勝利 | `records.js` / `battle.js` に実装済み。逃走・敗北前の撃破も保持 |
+| 受注後の討伐数 | `record_count.sinceQuest` と `records.baselines` に実装済み。任意の基準点は未実装 |
+| 仲間の在否・生存 | `has_member`、`not`、HP参照で記述可能 |
+| 現在HP・MP・職業・状態異常 | 状態参照 / `has_status` で記述可能。最終能力値の `actor_stat` は未実装 |
+| 結末の成立条件 | `outcomes.<id>.requires` を完了処理でも検査済み |
+| 場面の継続・反復 | `jump` と場面フラグで実装済み。汎用Objective・独立した内部段階APIは未実装 |
+| 型付きフラグ台帳・汎用Counter | 作者向け `model.stateRegistry` はあるが、型付き台帳の実行時検証・汎用Counter APIは未実装 |
+| 統一Reward・自動期限・失敗/期限切れ/再開 | 未実装。費用や報酬の原子性、保存互換性を含め提言・検討する |
+
+GitHubの `feature/scenario-records-20260910` は `aecd71f`（1.3.0時点の提案コミット）を指しています。ブランチ名から追加実装済みと判断しないでください。今回取得したGitHubのブランチ・PRからは1.4.0の反映を確認できませんでした。
+
 現状の式エンジンには `eq/ne/gt/gte/lt/lte/and/or/not/exists/in/contains` と、`has_item`、`has_member`、`has_status`、`event_done`、`map_discovered` があり、`flags` と `vars` の任意パスも条件式から参照できます。選択肢、`if`、クエストの `requires`、マップオブジェクトの `condition` などへ共通利用できるため、条件判定の基礎はできています。
 
 ただし今後のシナリオでは、「特定の魔物を何匹倒した」「特定エンカウントに何回勝った」「この仲間がいる／いない」「特定人物の現在HP、最大HP、STR、AGIなどが一定以上／以下」「特定の状態・イベント・クエスト進行を満たした」といったゲーム状態を横断して参照する必要があります。個別シナリオごとに `vars.foo` を手作業で加算する方式へ寄せず、シナリオ用の状態参照基盤として整理してください。
@@ -96,7 +121,11 @@ node tools/simulate-balance.mjsとnode tools/simulate-jobs.mjsで計測できま
 
 ## 次の作業候補
 
-優先はブラウザでの操作・レイキャスト表示・スマートフォン表示・音声の確認です。次にプレイテストの観察から移動距離と遭遇頻度、依頼の文量、地域別の戦闘難度を調整してください。
+優先はPR #3の残る確認です。人物の目的・得た情報・行為・応答・代償の関係を実際の選択列で読み、同じ調査手順や最後の三択への置換が残っていないか確認してください。旧3分類の結末ID・共通報酬計算と、互換用に残した旧命令列も役割を分けて評価します。件数・グラフの形・到達テストの合格だけを物語の分化の証明にしないでください。
+
+続いてHTTPでの起動・選択・中断再開・保存再読込・旧セーブ移行、レイキャスト表示、スマートフォン幅、BGM/SEの確認を行います。職業のブラウザ補助試験は全200シナリオの確認を代替しません。プレイテストでは追加100本の通常能力・通常資金での難度と文量も確認してください。詳細な残作業はCURRENT_STATUSへ記載しました。
+
+masterの文書更新 `277a999` との競合は、このPRブランチで解消しました。1.3.2の仕様・一覧と、現状記録・未完了事項を保持しています。以後masterや実装が更新された場合は、取り込み後に検証を再実行してください。旧headでの313件を別の版の検証結果として転記しないでください。
 
 コンテンツ拡張では、現在の場面グラフを基礎に、複数階をまたぐ追跡や移動NPCを検討できます。新しい仕組みは汎用命令として実装し、個別シナリオの条件はJSONへ置きます。
 
