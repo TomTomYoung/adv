@@ -6,7 +6,7 @@
   "client": "案内人のノア",
   "brief": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
   "region": 10,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "補給の印を付け必要な場所へ届ける",
+      "label": "次の隊のための補給と表示し、必要な角へ届ける",
       "text": "次の隊が空腹で止まらずに済みます。ノアは持主欄へ次に来る人と書きます。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "荷物を運ぶ番獣を倒して全て回収する",
+      "label": "運搬床を止め、補給袋を全て町へ回収する",
       "text": "町へ多くの物資が戻りました。深い曲がり角の箱は空になります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "古い物を回収し同量の新しい物を残す",
+      "label": "糧食1つを新しく残し、同量の古い物を回収する",
       "text": "補給は新しくなりました。あなたの隊の荷は少し軽くなります。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "案内人のノア",
         "observation": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
         "belief": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
-        "goal": "荷物を運ぶ番獣を倒して全て回収する"
+        "goal": "持主のない荷物が奥へ進みます。追って持ち帰ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "荷物を運ぶ番獣を倒して全て回収する",
-      "alternative": "補給の印を付け必要な場所へ届ける",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "持主のない荷物が奥へ進みます。追って持ち帰ってください。",
+      "progression": "自動運搬床を荷物と一緒に進み、補給先を見てから回収や交換を選ぶ。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q096.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "袋の中は宝でなく包帯と水で、残量に応じた日付があります。"
+          "id": "cache",
+          "script": "q096.flow.cache"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "床の行先は宝庫でなく、遭難記録の多い曲がり角です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "deep",
+          "script": "q096.flow.deep"
         }
       ]
     },
@@ -136,80 +122,106 @@
       "operator": "pathHide",
       "newInformation": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "cache"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q096.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q096.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q096.clue_a"
+        "id": "entry",
+        "script": "q096.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q096.clue_b"
+        "id": "cache",
+        "script": "q096.flow.cache"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q096.decision"
+        "id": "deep",
+        "script": "q096.flow.deep"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "荷物を運ぶ番獣を倒して全て回収すると補給の印を付け必要な場所へ届けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q096.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q096.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q096.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q096.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "自動運搬床を荷物と一緒に進み、補給先を見てから回収や交換を選ぶ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "自動運搬床を荷物と一緒に進み、補給先を見てから回収や交換を選ぶ。",
+    "flowVersion": 2,
+    "entryScript": "q096.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "持主のいない袋が運搬床を進む。先頭の袋は包帯と水で軽くなっている。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "袋を持ち去らず、行先まで付いていく",
+            "to": "cache"
+          },
+          {
+            "id": "recover",
+            "text": "運搬床を止め、補給袋を全て町へ回収する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "cache",
+        "text": "$truth 袋は遭難の多い角へ届いた。前の隊の補充日が書かれている。",
+        "options": [
+          {
+            "id": "label",
+            "text": "次の隊のための補給と表示し、必要な角へ届ける",
+            "to": "@informed"
+          },
+          {
+            "id": "replace",
+            "text": "糧食1つを新しく残し、同量の古い物を回収する",
+            "to": "@compromise",
+            "cost": {
+              "ration": 1
+            }
+          },
+          {
+            "id": "route",
+            "text": "奥の空箱も確認する",
+            "to": "deep"
+          }
+        ]
+      },
+      {
+        "id": "deep",
+        "text": "奥の箱はまだ空だ。運搬床の行先札をこの角へ切り替えられる。",
+        "options": [
+          {
+            "id": "redirect",
+            "text": "補給表示を付け、次便を空箱へ送る",
+            "to": "@informed"
+          },
+          {
+            "id": "fresh",
+            "text": "糧食1つを残して古い補給を交換する",
+            "to": "@compromise",
+            "cost": {
+              "ration": 1
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q096.clue_a": {
@@ -705,6 +717,388 @@
             {
               "op": "jump",
               "script": "q096.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q096.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q096.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "持主のいない袋が運搬床を進む。先頭の袋は包帯と水で軽くなっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "袋を持ち去らず、行先まで付いていく",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.cache"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "運搬床を止め、補給袋を全て町へ回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q096.flow.cache": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q096.node",
+          "value": "cache"
+        },
+        {
+          "op": "say",
+          "text": "荷物は帰還者が次の隊へ残した補給で、自動運搬床が危険地点へ送っています。 袋は遭難の多い角へ届いた。前の隊の補充日が書かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "label",
+              "text": "次の隊のための補給と表示し、必要な角へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "糧食1つを新しく残し、同量の古い物を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q096.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "route",
+              "text": "奥の空箱も確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.deep"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q096.flow.deep": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q096.node",
+          "value": "deep"
+        },
+        {
+          "op": "say",
+          "text": "奥の箱はまだ空だ。運搬床の行先札をこの角へ切り替えられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "redirect",
+              "text": "補給表示を付け、次便を空箱へ送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "fresh",
+              "text": "糧食1つを残して古い補給を交換する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q096.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q096.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q096.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "次の隊が空腹で止まらずに済みます。ノアは持主欄へ次に来る人と書きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q096",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q096.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q096.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "町へ多くの物資が戻りました。深い曲がり角の箱は空になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q096",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q096.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q096.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補給は新しくなりました。あなたの隊の荷は少し軽くなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q096",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q096.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q096.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q096.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "次の隊が空腹で止まらずに済みます。ノアは持主欄へ次に来る人と書きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "町へ多くの物資が戻りました。深い曲がり角の箱は空になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補給は新しくなりました。あなたの隊の荷は少し軽くなります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q096"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q096.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q096.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q096.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cache",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q096.flow.cache"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deep",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q096.flow.deep"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q096.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

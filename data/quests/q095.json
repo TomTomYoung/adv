@@ -6,7 +6,7 @@
   "client": "記録係のテオ",
   "brief": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
   "region": 10,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "交代した全員を英雄の記録へ載せる",
+      "label": "一人の像をやめ、全員を載せる記念の壁を作る",
       "text": "一人の像を建てる計画は、帰還者の長い壁へ変わりました。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "記録の守護霊を倒し一人を英雄に選ぶ",
+      "label": "一人だけを英雄として記念碑に選ぶ",
       "text": "分かりやすい記念碑が立ちました。名前のない仲間は別の場所で杯を上げます。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "肩書を使わず全員の行動を記録する",
+      "label": "肩書を使わず、全員の行動を記録する",
       "text": "英雄という語は残りませんでした。助けた手の数は失われません。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "記録係のテオ",
         "observation": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
         "belief": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
-        "goal": "記録の守護霊を倒し一人を英雄に選ぶ"
+        "goal": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "記録の守護霊を倒し一人を英雄に選ぶ",
-      "alternative": "交代した全員を英雄の記録へ載せる",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "帰還者名簿に英雄だけ載っていません。記録を取り戻してください。",
+      "progression": "一人の英雄像を発注する前に交代した先頭役の記録を読み、記念物の形自体を変える。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q095.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "英雄の装備は体格ごとに調整跡があり、同じ日に複数の署名があります。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "隊の本名を並べると、英雄の行動記録に途切れがなく対応します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "names",
+          "script": "q095.flow.names"
         }
       ]
     },
@@ -136,80 +118,80 @@
       "operator": "frameShift",
       "newInformation": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "names"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q095.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q095.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q095.clue_a"
+        "id": "entry",
+        "script": "q095.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q095.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q095.decision"
+        "id": "names",
+        "script": "q095.flow.names"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "記録の守護霊を倒し一人を英雄に選ぶと交代した全員を英雄の記録へ載せるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q095.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q095.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q095.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q095.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "一人の英雄像を発注する前に交代した先頭役の記録を読み、記念物の形自体を変える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "一人の英雄像を発注する前に交代した先頭役の記録を読み、記念物の形自体を変える。",
+    "flowVersion": 2,
+    "entryScript": "q095.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "英雄の装備には別の体格へ直した跡が重なる。記録係は像の顔を誰にするか決められない。",
+        "options": [
+          {
+            "id": "timeline",
+            "text": "同じ日の行動を時刻順に並べる",
+            "to": "names"
+          },
+          {
+            "id": "all",
+            "text": "肩書を使わず、全員の行動を記録する",
+            "to": "@compromise"
+          },
+          {
+            "id": "single",
+            "text": "一人だけを英雄として記念碑に選ぶ",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "names",
+        "text": "$truth 先頭役の交代時刻を並べると、全員の本名が切れ目なくつながった。",
+        "options": [
+          {
+            "id": "wall",
+            "text": "一人の像をやめ、全員を載せる記念の壁を作る",
+            "to": "@informed"
+          },
+          {
+            "id": "actions",
+            "text": "英雄という語を使わず、行動の記録だけ残す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q095.clue_a": {
@@ -651,6 +633,304 @@
             {
               "op": "jump",
               "script": "q095.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q095.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q095.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "英雄の装備には別の体格へ直した跡が重なる。記録係は像の顔を誰にするか決められない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "timeline",
+              "text": "同じ日の行動を時刻順に並べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q095.flow.names"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "肩書を使わず、全員の行動を記録する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q095.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "single",
+              "text": "一人だけを英雄として記念碑に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q095.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q095.flow.names": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q095.node",
+          "value": "names"
+        },
+        {
+          "op": "say",
+          "text": "英雄は肩書でなく交代制の先頭役で、名簿には各人の本名だけが載っています。 先頭役の交代時刻を並べると、全員の本名が切れ目なくつながった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wall",
+              "text": "一人の像をやめ、全員を載せる記念の壁を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q095.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "actions",
+              "text": "英雄という語を使わず、行動の記録だけ残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q095.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q095.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一人の像を建てる計画は、帰還者の長い壁へ変わりました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q095",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q095.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "分かりやすい記念碑が立ちました。名前のない仲間は別の場所で杯を上げます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q095",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q095.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "英雄という語は残りませんでした。助けた手の数は失われません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q095",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q095.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q095.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q095.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一人の像を建てる計画は、帰還者の長い壁へ変わりました。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "分かりやすい記念碑が立ちました。名前のない仲間は別の場所で杯を上げます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "英雄という語は残りませんでした。助けた手の数は失われません。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q095"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q095.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q095.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q095.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "names",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q095.flow.names"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q095.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

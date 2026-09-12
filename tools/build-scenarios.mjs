@@ -122,9 +122,8 @@ export async function buildScenarios(){
  for(const migration of Object.values(game.migrations))migration.quests=quests.filter(q=>q.number<=100).map(q=>q.id);
  await write('data/game.json',game);
  const common=await read('data/scripts/common.json');common.scripts.prologue.commands[1].text=common.scripts.prologue.commands[1].text.replace(/(?:二)?百の依頼/,'二百の依頼');await write('data/scripts/common.json',common);
- const catalog=['# シナリオ一覧','',`全${quests.length}本。既存 q001–q100 を改稿し、新規 q101–q200 を追加。更新日: 2026-09-10。`,``,`設計基準: [ゲームシナリオモデル v1.0](${source})。作者向け一覧のため真相・結末を含みます。`,``,`追加分は町の依頼一覧で受注し、表示された地点を調べると開始します。場面途中は「中断」で探索へ戻り、同じ地点から続けられます。完了後の再訪は後日談のみです。`,``,`q100 は元の99本の完了で解放します。追加100本の完了数では代用できません。`,``,`新規篇の原稿報酬は金・経験値へ換算しました。本文で扱うNPC同行、競技、交渉、儀礼等は場面内の選択として実行します。`,``];
- for(const q of quests){catalog.push(`## ${q.id} ${q.title}`,``,`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`,``,`概要: ${q.brief}`,``,`実装: [シナリオJSON](../data/quests/${q.id}.json)。${q.number>100?`場面 ${q.model.narrative.units.length}、結末 ${Object.keys(q.outcomes).length}。原稿: [Notion](${q.model.sourceDraft})。`:'痕跡・証言・決着・再会。改稿前の継続位置も保存互換用に保持。'}`,``,`真相と人物: ${q.model.world.truth}`,``);for(const [k,o] of Object.entries(q.outcomes))catalog.push(`${k} — ${o.label}（${o.gold}G / ${o.xp}EXP）: ${o.text}`,``);}
- await fs.writeFile(path.join(root,'doc/QUEST_CATALOG.md'),catalog.join('\n'));
+ // This stage preserves the published 1.3.1 continuations.
+ // The final structure compiler writes the current catalog once, from the final quest data.
  console.log(`Scenarios: ${quests.length} quests, ${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} endings; ${specs.reduce((n,q)=>n+q.nodes.length,0)} new scenes`);
 }
 await buildScenarios();

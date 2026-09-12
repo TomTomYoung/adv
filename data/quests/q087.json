@@ -6,7 +6,7 @@
   "client": "見習いのハク",
   "brief": "流星へ願った人が願いを忘れます。観測室を調べてください。",
   "region": 9,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "受付札に直し願いを本人へ読み返す",
+      "label": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
       "text": "願いは再び本人の仕事になりました。ハクは最初の一歩を一緒に書きます。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "願いの番人を倒し筒を壊す",
+      "label": "願いを受け付ける筒を壊す",
       "text": "新しい誤認は止まりました。すでに出された札の説明は残ります。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "願いを手帳へ写してから観測する",
+      "label": "願いを手帳へ写してから空を見る",
       "text": "流星の後も言葉が残りました。叶ったかどうかは本人が書き足します。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "見習いのハク",
         "observation": "流星へ願った人が願いを忘れます。観測室を調べてください。",
         "belief": "流星へ願った人が願いを忘れます。観測室を調べてください。",
-        "goal": "願いの番人を倒し筒を壊す"
+        "goal": "流星へ願った人が願いを忘れます。観測室を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "願いの番人を倒し筒を壊す",
-      "alternative": "受付札に直し願いを本人へ読み返す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "流星へ願った人が願いを忘れます。観測室を調べてください。",
+      "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q087.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていません。"
+          "id": "ticket",
+          "script": "q087.flow.ticket"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はありません。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "firststep",
+          "script": "q087.flow.firststep"
         }
       ]
     },
@@ -135,81 +121,99 @@
     "reveal": {
       "operator": "identitySplit",
       "newInformation": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させています。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q087.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q087.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q087.clue_a"
+        "id": "entry",
+        "script": "q087.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q087.clue_b"
+        "id": "ticket",
+        "script": "q087.flow.ticket"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q087.decision"
+        "id": "firststep",
+        "script": "q087.flow.firststep"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "願いの番人を倒し筒を壊すと受付札に直し願いを本人へ読み返すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q087.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q087.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q087.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q087.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。",
+    "flowVersion": 2,
+    "entryScript": "q087.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ハクは「机を片付けたい」と願ったばかりなのに、もう終わった気がすると言う。机は散らかったままだ。",
+        "options": [
+          {
+            "id": "test",
+            "text": "流星のない時間に「一歩歩く」と筒へ言う",
+            "to": "ticket"
+          },
+          {
+            "id": "notebook",
+            "text": "願いを手帳へ写してから空を見る",
+            "to": "@compromise"
+          },
+          {
+            "id": "break",
+            "text": "願いを受け付ける筒を壊す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "ticket",
+        "text": "歩く前に完了札が出た。筒の脇の「受付」の字だけが擦れていた。",
+        "options": [
+          {
+            "id": "wording",
+            "text": "札を受付完了へ直す",
+            "to": "firststep"
+          },
+          {
+            "id": "record",
+            "text": "札を信用せず、願いを手帳へ書く",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "firststep",
+        "text": "ハクは札を読み直した。「片付けるのは、まだ自分なんだ」。",
+        "options": [
+          {
+            "id": "act",
+            "text": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+            "to": "@informed"
+          },
+          {
+            "id": "write",
+            "text": "実行は本人へ任せ、手帳へ残す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q087.clue_a": {
@@ -651,6 +655,358 @@
             {
               "op": "jump",
               "script": "q087.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ハクは「机を片付けたい」と願ったばかりなのに、もう終わった気がすると言う。机は散らかったままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "流星のない時間に「一歩歩く」と筒へ言う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.ticket"
+                }
+              ]
+            },
+            {
+              "id": "notebook",
+              "text": "願いを手帳へ写してから空を見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "願いを受け付ける筒を壊す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.ticket": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "ticket"
+        },
+        {
+          "op": "say",
+          "text": "歩く前に完了札が出た。筒の脇の「受付」の字だけが擦れていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wording",
+              "text": "札を受付完了へ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.firststep"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "札を信用せず、願いを手帳へ書く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.firststep": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "firststep"
+        },
+        {
+          "op": "say",
+          "text": "ハクは札を読み直した。「片付けるのは、まだ自分なんだ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "act",
+              "text": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "write",
+              "text": "実行は本人へ任せ、手帳へ残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "願いは再び本人の仕事になりました。ハクは最初の一歩を一緒に書きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新しい誤認は止まりました。すでに出された札の説明は残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "流星の後も言葉が残りました。叶ったかどうかは本人が書き足します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q087.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "願いは再び本人の仕事になりました。ハクは最初の一歩を一緒に書きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "新しい誤認は止まりました。すでに出された札の説明は残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "流星の後も言葉が残りました。叶ったかどうかは本人が書き足します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q087"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q087.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q087.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ticket",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.ticket"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "firststep",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.firststep"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q087.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

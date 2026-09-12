@@ -6,7 +6,7 @@
   "client": "宿坊のウラ",
   "brief": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
   "region": 4,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "外套を洗い修復師として紹介する",
+      "label": "外套を洗い、巡礼者と曇りを磨き直す",
       "text": "巡礼者は仕事を取り戻しました。宿坊は鏡だけで人を決めない規則を掲げます。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "巡礼者につく影を倒し入堂を拒む",
+      "label": "巡礼者の入堂を拒む",
       "text": "騒ぎは収まりました。外套の白い粉は、門の前にも残ります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "別室へ泊め鏡を使わず話を聞く",
+      "label": "鏡のない別室へ泊めて話を聞く",
       "text": "巡礼者は一晩だけ休めました。翌朝、宿坊の曇り鏡が一枚直っています。",
       "gold": 60,
       "xp": 69
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "宿坊のウラ",
         "observation": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
         "belief": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
-        "goal": "巡礼者につく影を倒し入堂を拒む"
+        "goal": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "巡礼者につく影を倒し入堂を拒む",
-      "alternative": "外套を洗い修復師として紹介する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "鏡に映らない巡礼者がいます。礼拝堂へ入れてよいか判断してください。",
+      "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q033.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "裸の手は映り、外套を近づけた場所だけ鏡が白みます。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "荷物には修復工房の磨き布と、未払いの請求書があります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "powder",
+          "script": "q033.flow.powder"
         }
       ]
     },
@@ -136,80 +118,80 @@
       "operator": "ruleReveal",
       "newInformation": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "powder"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q033.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q033.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q033.clue_a"
+        "id": "entry",
+        "script": "q033.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q033.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q033.decision"
+        "id": "powder",
+        "script": "q033.flow.powder"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "巡礼者につく影を倒し入堂を拒むと外套を洗い修復師として紹介するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q033.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q033.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q033.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q033.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。",
+    "flowVersion": 2,
+    "entryScript": "q033.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "巡礼者が鏡へ触れると白く曇った。「自分でも分からない」と外套を握る。",
+        "options": [
+          {
+            "id": "cloth",
+            "text": "鏡と外套をそれぞれ布で拭く",
+            "to": "powder"
+          },
+          {
+            "id": "guest",
+            "text": "鏡のない別室へ泊めて話を聞く",
+            "to": "@compromise"
+          },
+          {
+            "id": "reject",
+            "text": "巡礼者の入堂を拒む",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "powder",
+        "text": "布に銀磨き粉が付き、拭いた鏡へ手が映った。$truth 巡礼者は以前、鏡磨きの作業をしていた。",
+        "options": [
+          {
+            "id": "wash",
+            "text": "外套を洗い、巡礼者と曇りを磨き直す",
+            "to": "@informed"
+          },
+          {
+            "id": "room",
+            "text": "身の潔白だけ伝え、別室へ案内する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q033.clue_a": {
@@ -651,6 +633,304 @@
             {
               "op": "jump",
               "script": "q033.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q033.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q033.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "巡礼者が鏡へ触れると白く曇った。「自分でも分からない」と外套を握る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cloth",
+              "text": "鏡と外套をそれぞれ布で拭く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q033.flow.powder"
+                }
+              ]
+            },
+            {
+              "id": "guest",
+              "text": "鏡のない別室へ泊めて話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q033.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "text": "巡礼者の入堂を拒む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q033.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q033.flow.powder": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q033.node",
+          "value": "powder"
+        },
+        {
+          "op": "say",
+          "text": "布に銀磨き粉が付き、拭いた鏡へ手が映った。巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしています。 巡礼者は以前、鏡磨きの作業をしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wash",
+              "text": "外套を洗い、巡礼者と曇りを磨き直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q033.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "room",
+              "text": "身の潔白だけ伝え、別室へ案内する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q033.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q033.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巡礼者は仕事を取り戻しました。宿坊は鏡だけで人を決めない規則を掲げます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q033",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q033.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "騒ぎは収まりました。外套の白い粉は、門の前にも残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q033",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q033.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巡礼者は一晩だけ休めました。翌朝、宿坊の曇り鏡が一枚直っています。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q033",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q033.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q033.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巡礼者は仕事を取り戻しました。宿坊は鏡だけで人を決めない規則を掲げます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "騒ぎは収まりました。外套の白い粉は、門の前にも残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巡礼者は一晩だけ休めました。翌朝、宿坊の曇り鏡が一枚直っています。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q033"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q033.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q033.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q033.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "powder",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q033.flow.powder"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q033.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

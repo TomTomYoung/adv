@@ -6,7 +6,7 @@
   "client": "救難船長のトウ",
   "brief": "城を吊り上げる錨が二つあります。一方を切って船を軽くしてください。",
   "region": 7,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 7,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,22 +35,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "人のいる綱を別船へ渡してから切る",
+      "label": "安全を確認して筏側の綱を切る",
       "text": "船は軽くなり、筏も残りました。船長は重さだけで荷を呼ばなくなります。",
       "gold": 129,
       "xp": 116
     },
     "contract": {
-      "label": "鎖を守る獣を倒して軽い綱を切る",
+      "label": "軽い綱を切って吊上げを続ける",
       "text": "船は進みました。離れた筏を追うため、救難船は後から戻ります。",
       "gold": 149,
       "xp": 89
     },
     "compromise": {
-      "label": "吊上げを中止し両方をその場へ固定する",
+      "label": "吊上げを中止し、両方をその場へ固定する",
       "text": "城の回収は延びました。人を数える時間だけは確保できました。",
       "gold": 83,
       "xp": 87
+    },
+    "cargo": {
+      "gold": 129,
+      "xp": 87,
+      "label": "人の避難を優先し、筏の荷は切り離して残す",
+      "text": "全員が船へ乗った。綱を失った筏は荷と共に流れ、生活道具の補給を港へ頼むことになった。"
     }
   },
   "model": {
@@ -69,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +84,7 @@
         "name": "救難船長のトウ",
         "observation": "城を吊り上げる錨が二つあります。一方を切って船を軽くしてください。",
         "belief": "城を吊り上げる錨が二つあります。一方を切って船を軽くしてください。",
-        "goal": "鎖を守る獣を倒して軽い綱を切る"
+        "goal": "城を吊り上げる錨が二つあります。一方を切って船を軽くしてください。"
       },
       {
         "id": "party",
@@ -101,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "鎖を守る獣を倒して軽い綱を切る",
-      "alternative": "人のいる綱を別船へ渡してから切る",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "城を吊り上げる錨が二つあります。一方を切って船を軽くしてください。",
+      "progression": "二つの綱の負荷を確かめ、筏の人を移してから吊上げを再開する救助。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q068.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "太い鎖は城へ、細い綱は浮遊物の陰へ消えています。"
+          "id": "raft",
+          "script": "q068.flow.raft"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "細い綱の揺れに合わせて遠くの灯が三回ずつ点滅します。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "secured",
+          "script": "q068.flow.secured"
         }
       ]
     },
@@ -136,80 +128,157 @@
       "operator": "valueInvert",
       "newInformation": "二つの錨は城と避難筏を別々に支え、軽い方にも人が乗っています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "raft"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q068.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q068.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q068.clue_a"
+        "id": "entry",
+        "script": "q068.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q068.clue_b"
+        "id": "raft",
+        "script": "q068.flow.raft"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q068.decision"
+        "id": "secured",
+        "script": "q068.flow.secured"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "鎖を守る獣を倒して軽い綱を切ると人のいる綱を別船へ渡してから切るの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q068.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q068.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q068.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q068.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q068.raft",
+        "meaning": "各場面に明記した raft の行為・合意の記録",
+        "writer": [
+          "raft"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "二つの綱の負荷を確かめ、筏の人を移してから吊上げを再開する救助。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "二つの綱の負荷を確かめ、筏の人を移してから吊上げを再開する救助。",
+    "flowVersion": 2,
+    "entryScript": "q068.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "重い綱は城、軽い綱は水面の陰へ続く。吊上げ人は軽い方を切ろうとしている。",
+        "options": [
+          {
+            "id": "light",
+            "text": "軽い綱の行先を舟で確かめる",
+            "to": "raft"
+          },
+          {
+            "id": "cut",
+            "text": "軽い綱を切って吊上げを続ける",
+            "to": "@contract"
+          },
+          {
+            "id": "fix",
+            "text": "吊上げを中止し、両方をその場へ固定する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "raft",
+        "text": "$truth 筏から人の声がする。別船へ人を移すか、筏の綱ごと渡せる。",
+        "options": [
+          {
+            "id": "rope",
+            "text": "縄1本で筏を別船へつなぐ",
+            "to": "secured",
+            "cost": {
+              "rope": 1
+            },
+            "set": {
+              "raft": true
+            }
+          },
+          {
+            "id": "people",
+            "text": "人だけを別船へ乗せる",
+            "to": "secured",
+            "set": {
+              "raft": false
+            }
+          },
+          {
+            "id": "stay",
+            "text": "救助船を係留し、吊上げを取りやめる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "secured",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q068.raft"
+              },
+              "right": true
+            },
+            "yes": "筏も人も別船へつながった。城の綱から切り離せる。",
+            "no": "人は別船へ移ったが、生活の荷が載る筏はまだ城へつながっている。"
+          }
+        ],
+        "options": [
+          {
+            "id": "cut",
+            "text": "安全を確認して筏側の綱を切る",
+            "to": "@informed",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q068.raft"
+              },
+              "right": true
+            }
+          },
+          {
+            "id": "abandon",
+            "text": "人の避難を優先し、筏の荷は切り離して残す",
+            "to": "@cargo",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q068.raft"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "fix",
+            "text": "綱を切らず、両方を固定して作業を終える",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q068.clue_a": {
@@ -651,6 +720,485 @@
             {
               "op": "jump",
               "script": "q068.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q068.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q068.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "重い綱は城、軽い綱は水面の陰へ続く。吊上げ人は軽い方を切ろうとしている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "light",
+              "text": "軽い綱の行先を舟で確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.raft"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "軽い綱を切って吊上げを続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "吊上げを中止し、両方をその場へ固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q068.flow.raft": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q068.node",
+          "value": "raft"
+        },
+        {
+          "op": "say",
+          "text": "二つの錨は城と避難筏を別々に支え、軽い方にも人が乗っています。 筏から人の声がする。別船へ人を移すか、筏の綱ごと渡せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rope",
+              "text": "縄1本で筏を別船へつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q068.raft",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q068.flow.secured"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "人だけを別船へ乗せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q068.raft",
+                  "value": false
+                },
+                {
+                  "op": "jump",
+                  "script": "q068.flow.secured"
+                }
+              ]
+            },
+            {
+              "id": "stay",
+              "text": "救助船を係留し、吊上げを取りやめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q068.flow.secured": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q068.node",
+          "value": "secured"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q068.raft"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "筏も人も別船へつながった。城の綱から切り離せる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "人は別船へ移ったが、生活の荷が載る筏はまだ城へつながっている。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cut",
+              "text": "安全を確認して筏側の綱を切る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q068.raft"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "abandon",
+              "text": "人の避難を優先し、筏の荷は切り離して残す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q068.raft"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.cargo"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "綱を切らず、両方を固定して作業を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q068.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "船は軽くなり、筏も残りました。船長は重さだけで荷を呼ばなくなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q068",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q068.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "船は進みました。離れた筏を追うため、救難船は後から戻ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q068",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q068.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "城の回収は延びました。人を数える時間だけは確保できました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q068",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q068.flow.end.cargo": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "全員が船へ乗った。綱を失った筏は荷と共に流れ、生活道具の補給を港へ頼むことになった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q068",
+              "outcome": "cargo"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q068.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q068.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q068.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "船は軽くなり、筏も残りました。船長は重さだけで荷を呼ばなくなります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "船は進みました。離れた筏を追うため、救難船は後から戻ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "城の回収は延びました。人を数える時間だけは確保できました。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cargo",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "全員が船へ乗った。綱を失った筏は荷と共に流れ、生活道具の補給を港へ頼むことになった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q068"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q068.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q068.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q068.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "raft",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q068.flow.raft"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "secured",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q068.flow.secured"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q068.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

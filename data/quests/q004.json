@@ -6,7 +6,7 @@
   "client": "見習い冒険者のイナ",
   "brief": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
   "region": 1,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "双方の事情を記録し臨時証を交渉する",
+      "label": "三人の署名を窓口へ出す",
       "text": "姉妹は別々の証を得ました。係員には本名での再試験が課されます。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "関所の番犬を退け姉を連れ出す",
+      "label": "番犬を退け、姉を連れ出す",
       "text": "姉は帰りましたが通行証は失効しました。妹は地上で働いて再発行料を貯めます。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "罰金を肩代わりし事情は伏せる",
+      "label": "罰金20Gを肩代わりする",
       "text": "係員は何も聞かず姉を放しました。翌月も二人は一枚の証を握っています。",
       "gold": 37,
       "xp": 51
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "見習い冒険者のイナ",
         "observation": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
         "belief": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
-        "goal": "関所の番犬を退け姉を連れ出す"
+        "goal": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "関所の番犬を退け姉を連れ出す",
-      "alternative": "双方の事情を記録し臨時証を交渉する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あります。",
+      "progression": "関所で姉妹の申立を先に受けるか、係員の資格を先に問うかで交渉の入口が変わる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q004.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "通行証の擦れ方が違い、両方に同じ修正傷があります。"
+          "id": "sisters",
+          "script": "q004.flow.sisters"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。"
+          "id": "keeper",
+          "script": "q004.flow.keeper"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "applications",
+          "script": "q004.flow.applications"
         }
       ]
     },
@@ -136,80 +126,139 @@
       "operator": "referenceSwap",
       "newInformation": "姉妹は一枚を共有していますが、関所の係も亡き兄の資格で働いています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "keeper"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q004.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q004.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q004.clue_a"
+        "id": "entry",
+        "script": "q004.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q004.clue_b"
+        "id": "sisters",
+        "script": "q004.flow.sisters"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q004.decision"
+        "id": "keeper",
+        "script": "q004.flow.keeper"
+      },
+      {
+        "id": "applications",
+        "script": "q004.flow.applications"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "関所の番犬を退け姉を連れ出すと双方の事情を記録し臨時証を交渉するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q004.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q004.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q004.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q004.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q004.application",
+        "meaning": "各場面に明記した application の行為・合意の記録",
+        "writer": [
+          "sisters"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "関所で姉妹の申立を先に受けるか、係員の資格を先に問うかで交渉の入口が変わる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "関所で姉妹の申立を先に受けるか、係員の資格を先に問うかで交渉の入口が変わる。",
+    "flowVersion": 2,
+    "entryScript": "q004.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "イナは姉の証を示し、係員は番号の重複を指摘した。双方の机が離れている。",
+        "options": [
+          {
+            "id": "sisters",
+            "text": "姉妹に別々の証が必要な理由を聞く",
+            "to": "sisters"
+          },
+          {
+            "id": "register",
+            "text": "係員の署名と勤務名簿を照合する",
+            "to": "keeper"
+          },
+          {
+            "id": "rescue",
+            "text": "番犬を退け、姉を連れ出す",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "sisters",
+        "text": "姉妹は証の共有を認めた。「罰金で今日だけ通れるなら」。書類には臨時証の申請欄もある。",
+        "options": [
+          {
+            "id": "fine",
+            "text": "罰金20Gを肩代わりする",
+            "to": "@compromise",
+            "cost": {
+              "gold": 20
+            }
+          },
+          {
+            "id": "appeal",
+            "text": "臨時証を申請し、審査係の署名を求める",
+            "to": "keeper",
+            "set": {
+              "application": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "keeper",
+        "text": "$b 係員は兄の名を借りていたと認め、本名で再試験を受けるなら姉妹にも正規の道を用意すると答えた。",
+        "options": [
+          {
+            "id": "apply",
+            "text": "姉妹と係員の三人分の申請を一緒に書く",
+            "to": "applications"
+          },
+          {
+            "id": "fine",
+            "text": "資格の件を伏せ、姉の罰金20Gを払う",
+            "to": "@compromise",
+            "cost": {
+              "gold": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "applications",
+        "text": "姉妹は臨時証、係員は再試験を希望した。一方だけを見逃す取引にはしないと三人が署名した。",
+        "options": [
+          {
+            "id": "submit",
+            "text": "三人の署名を窓口へ出す",
+            "to": "@informed"
+          },
+          {
+            "id": "hold",
+            "text": "申請を保留し、姉妹へ相談を戻す",
+            "to": "sisters"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q004.clue_a": {
@@ -651,6 +700,467 @@
             {
               "op": "jump",
               "script": "q004.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "イナは姉の証を示し、係員は番号の重複を指摘した。双方の机が離れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sisters",
+              "text": "姉妹に別々の証が必要な理由を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.sisters"
+                }
+              ]
+            },
+            {
+              "id": "register",
+              "text": "係員の署名と勤務名簿を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.keeper"
+                }
+              ]
+            },
+            {
+              "id": "rescue",
+              "text": "番犬を退け、姉を連れ出す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q004.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.sisters": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "sisters"
+        },
+        {
+          "op": "say",
+          "text": "姉妹は証の共有を認めた。「罰金で今日だけ通れるなら」。書類には臨時証の申請欄もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fine",
+              "text": "罰金20Gを肩代わりする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "臨時証を申請し、審査係の署名を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q004.application",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.keeper"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.keeper": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "keeper"
+        },
+        {
+          "op": "say",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。 係員は兄の名を借りていたと認め、本名で再試験を受けるなら姉妹にも正規の道を用意すると答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "apply",
+              "text": "姉妹と係員の三人分の申請を一緒に書く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.applications"
+                }
+              ]
+            },
+            {
+              "id": "fine",
+              "text": "資格の件を伏せ、姉の罰金20Gを払う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.applications": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "applications"
+        },
+        {
+          "op": "say",
+          "text": "姉妹は臨時証、係員は再試験を希望した。一方だけを見逃す取引にはしないと三人が署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "submit",
+              "text": "三人の署名を窓口へ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "申請を保留し、姉妹へ相談を戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.sisters"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉妹は別々の証を得ました。係員には本名での再試験が課されます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉は帰りましたが通行証は失効しました。妹は地上で働いて再発行料を貯めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "係員は何も聞かず姉を放しました。翌月も二人は一枚の証を握っています。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q004.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉妹は別々の証を得ました。係員には本名での再試験が課されます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉は帰りましたが通行証は失効しました。妹は地上で働いて再発行料を貯めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "係員は何も聞かず姉を放しました。翌月も二人は一枚の証を握っています。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q004"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q004.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q004.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sisters",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.sisters"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "keeper",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.keeper"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "applications",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.applications"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q004.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

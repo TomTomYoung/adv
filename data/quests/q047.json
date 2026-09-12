@@ -6,7 +6,7 @@
   "client": "歴史家のオミ",
   "brief": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
   "region": 5,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "両方の頁を併記し取引の記録を残す",
+      "label": "双方の勝利記述と撤退条件を併記する",
       "text": "勝敗の一語では授業が終わらなくなりました。歴史家は二国へ同じ写しを送ります。",
       "gold": 105,
       "xp": 100
     },
     "contract": {
-      "label": "軍旗の亡霊を倒し依頼国へ都合よく戻す",
+      "label": "依頼国に都合のよい頁だけ戻す",
       "text": "謝礼と表彰状が届きました。隣国の書庫ではまた逆の依頼が出ます。",
       "gold": 125,
       "xp": 75
     },
     "compromise": {
-      "label": "交換頁を共同保管し双方へ写しを渡す",
+      "label": "二国の受領を確認して写しを渡す",
       "text": "原本の奪い合いは止まりました。解釈の争いは、紙を破らずに続きます。",
       "gold": 68,
       "xp": 75
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "歴史家のオミ",
         "observation": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
         "belief": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
-        "goal": "軍旗の亡霊を倒し依頼国へ都合よく戻す"
+        "goal": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "軍旗の亡霊を倒し依頼国へ都合よく戻す",
-      "alternative": "両方の頁を併記し取引の記録を残す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "二国の戦史が一頁だけ入れ替わっています。正しい持ち主へ戻してください。",
+      "progression": "交換頁をどちらの国へ先に持ち込むかで説明の順が変わり、共同保管は相手の受領まで行う。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q047.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "勝利の日時は両書で同じですが、砦の引渡日も同じです。"
+          "id": "home",
+          "script": "q047.flow.home"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "交換頁には領土でなく、捕虜と冬営物資の取り決めが載っています。"
+          "id": "other",
+          "script": "q047.flow.other"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "vault",
+          "script": "q047.flow.vault"
         }
       ]
     },
@@ -136,80 +126,120 @@
       "operator": "identitySplit",
       "newInformation": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "other"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q047.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q047.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q047.clue_a"
+        "id": "entry",
+        "script": "q047.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q047.clue_b"
+        "id": "home",
+        "script": "q047.flow.home"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q047.decision"
+        "id": "other",
+        "script": "q047.flow.other"
+      },
+      {
+        "id": "vault",
+        "script": "q047.flow.vault"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "軍旗の亡霊を倒し依頼国へ都合よく戻すと両方の頁を併記し取引の記録を残すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q047.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q047.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q047.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q047.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "交換頁をどちらの国へ先に持ち込むかで説明の順が変わり、共同保管は相手の受領まで行う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "交換頁をどちらの国へ先に持ち込むかで説明の順が変わり、共同保管は相手の受領まで行う。",
+    "flowVersion": 2,
+    "entryScript": "q047.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "二国の史書から、一頁ずつが入れ替わっている。依頼国は自国の頁だけ戻すよう求めた。",
+        "options": [
+          {
+            "id": "home",
+            "text": "依頼国の記録係に交換頁を読んでもらう",
+            "to": "home"
+          },
+          {
+            "id": "other",
+            "text": "相手国の記録係を先に訪ねる",
+            "to": "other"
+          },
+          {
+            "id": "return",
+            "text": "依頼国に都合のよい頁だけ戻す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "text": "記録係は勝利と読んだが、頁の末尾には相手国への撤退条件がある。",
+        "options": [
+          {
+            "id": "other",
+            "text": "その条件を相手国へ照会する",
+            "to": "other"
+          },
+          {
+            "id": "vault",
+            "text": "交換頁を共同保管庫へ預ける提案を送る",
+            "to": "vault"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "text": "$truth 相手国の係は、自国の頁にも勝利とあることを隠さなかった。",
+        "options": [
+          {
+            "id": "parallel",
+            "text": "双方の勝利記述と撤退条件を併記する",
+            "to": "@informed"
+          },
+          {
+            "id": "vault",
+            "text": "どちらの編纂にも入れず、共同保管へ送る",
+            "to": "vault"
+          }
+        ]
+      },
+      {
+        "id": "vault",
+        "text": "双方から受領人が来た。原本は共同庫、同じ写しを両国へ渡すと確認した。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "二国の受領を確認して写しを渡す",
+            "to": "@compromise"
+          },
+          {
+            "id": "publish",
+            "text": "原本の扱いより先に併記を提案する",
+            "to": "@informed"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q047.clue_a": {
@@ -651,6 +681,412 @@
             {
               "op": "jump",
               "script": "q047.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q047.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q047.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "二国の史書から、一頁ずつが入れ替わっている。依頼国は自国の頁だけ戻すよう求めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "home",
+              "text": "依頼国の記録係に交換頁を読んでもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.home"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "相手国の記録係を先に訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.other"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "依頼国に都合のよい頁だけ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q047.flow.home": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q047.node",
+          "value": "home"
+        },
+        {
+          "op": "say",
+          "text": "記録係は勝利と読んだが、頁の末尾には相手国への撤退条件がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "other",
+              "text": "その条件を相手国へ照会する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.other"
+                }
+              ]
+            },
+            {
+              "id": "vault",
+              "text": "交換頁を共同保管庫へ預ける提案を送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.vault"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q047.flow.other": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q047.node",
+          "value": "other"
+        },
+        {
+          "op": "say",
+          "text": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記しています。 相手国の係は、自国の頁にも勝利とあることを隠さなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "parallel",
+              "text": "双方の勝利記述と撤退条件を併記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "vault",
+              "text": "どちらの編纂にも入れず、共同保管へ送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.vault"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q047.flow.vault": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q047.node",
+          "value": "vault"
+        },
+        {
+          "op": "say",
+          "text": "双方から受領人が来た。原本は共同庫、同じ写しを両国へ渡すと確認した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "二国の受領を確認して写しを渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "publish",
+              "text": "原本の扱いより先に併記を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q047.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q047.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "勝敗の一語では授業が終わらなくなりました。歴史家は二国へ同じ写しを送ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q047",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q047.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "謝礼と表彰状が届きました。隣国の書庫ではまた逆の依頼が出ます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q047",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q047.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "原本の奪い合いは止まりました。解釈の争いは、紙を破らずに続きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q047",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q047.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q047.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q047.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "勝敗の一語では授業が終わらなくなりました。歴史家は二国へ同じ写しを送ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "謝礼と表彰状が届きました。隣国の書庫ではまた逆の依頼が出ます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "原本の奪い合いは止まりました。解釈の争いは、紙を破らずに続きます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q047"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q047.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q047.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q047.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q047.flow.home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "other",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q047.flow.other"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "vault",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q047.flow.vault"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q047.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

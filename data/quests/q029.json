@@ -6,7 +6,7 @@
   "client": "養蜂家のミナ",
   "brief": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
   "region": 3,
-  "type": "survey",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "花期の違いを示して納期を延ばす",
+      "label": "巣の備蓄を残し、売約先と納期を改める",
       "text": "蜂は冬を越せます。養蜂家は違約金を払いながら、地下用の暦を作ります。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "女王の護衛を倒し契約量を採る",
+      "label": "女王の護衛を倒し、契約量を採る",
       "text": "代金は入りました。春に戻った巣には、前ほど羽音がありません。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "少量だけ納め不足を別蜜で補う",
+      "label": "代替蜜を15Gで買って不足を補う",
       "text": "契約先は味の違いを認めました。赤い蜜は限定品として扱われます。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "養蜂家のミナ",
         "observation": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
         "belief": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
-        "goal": "女王の護衛を倒し契約量を採る"
+        "goal": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "女王の護衛を倒し契約量を採る",
-      "alternative": "花期の違いを示して納期を延ばす",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "赤い蜜を納める契約ですが、蜂を刺激すると庭が閉じます。採取方法を探してください。",
+      "progression": "契約量の採取を始める前に冬の備蓄を見れば交渉へ、少量採取なら代替蜜の調達へ進む。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q029.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "赤い房には幼虫用の薄い蓋が重ねられ、他の蜜と分けられています。"
+          "id": "deadline",
+          "script": "q029.flow.deadline"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "契約日は地上の開花暦で、地下の花はすでに一季遅れています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "substitute",
+          "script": "q029.flow.substitute"
         }
       ]
     },
@@ -136,80 +122,104 @@
       "operator": "observerSwap",
       "newInformation": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "deadline"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q029.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q029.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q029.clue_a"
+        "id": "entry",
+        "script": "q029.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q029.clue_b"
+        "id": "deadline",
+        "script": "q029.flow.deadline"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q029.decision"
+        "id": "substitute",
+        "script": "q029.flow.substitute"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "女王の護衛を倒し契約量を採ると花期の違いを示して納期を延ばすの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q029.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q029.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q029.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q029.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "契約量の採取を始める前に冬の備蓄を見れば交渉へ、少量採取なら代替蜜の調達へ進む。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "契約量の採取を始める前に冬の備蓄を見れば交渉へ、少量採取なら代替蜜の調達へ進む。",
+    "flowVersion": 2,
+    "entryScript": "q029.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "契約は樽一杯。巣には花がなく、蜂は赤い蜜の栓を守っている。",
+        "options": [
+          {
+            "id": "season",
+            "text": "花期の札と巣の冬支度を見る",
+            "to": "deadline"
+          },
+          {
+            "id": "small",
+            "text": "少量だけ分けてもらう",
+            "to": "substitute"
+          },
+          {
+            "id": "take",
+            "text": "女王の護衛を倒し、契約量を採る",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "deadline",
+        "text": "$truth 買主は開花時期を一季誤って書いたと認めたが、売約先への説明を手伝ってほしいと言う。",
+        "options": [
+          {
+            "id": "explain",
+            "text": "巣の備蓄を残し、売約先と納期を改める",
+            "to": "@informed"
+          },
+          {
+            "id": "small",
+            "text": "納期を守るため少量の採取と代替を選ぶ",
+            "to": "substitute"
+          }
+        ]
+      },
+      {
+        "id": "substitute",
+        "text": "蜂が渡せる量だけでは足りない。別の養蜂家は不足分を15Gで分けると言う。",
+        "options": [
+          {
+            "id": "buy",
+            "text": "代替蜜を15Gで買って不足を補う",
+            "to": "@compromise",
+            "cost": {
+              "gold": 15
+            }
+          },
+          {
+            "id": "return",
+            "text": "少量の蜜を巣へ返し、納期を相談する",
+            "to": "deadline"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q029.clue_a": {
@@ -651,6 +661,392 @@
             {
               "op": "jump",
               "script": "q029.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q029.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q029.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "契約は樽一杯。巣には花がなく、蜂は赤い蜜の栓を守っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "season",
+              "text": "花期の札と巣の冬支度を見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.deadline"
+                }
+              ]
+            },
+            {
+              "id": "small",
+              "text": "少量だけ分けてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.substitute"
+                }
+              ]
+            },
+            {
+              "id": "take",
+              "text": "女王の護衛を倒し、契約量を採る",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_3",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q029.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q029.flow.deadline": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q029.node",
+          "value": "deadline"
+        },
+        {
+          "op": "say",
+          "text": "赤い蜜は蜂の冬の備蓄で、花期を誤った契約が巣の生存と衝突しています。 買主は開花時期を一季誤って書いたと認めたが、売約先への説明を手伝ってほしいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "explain",
+              "text": "巣の備蓄を残し、売約先と納期を改める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "small",
+              "text": "納期を守るため少量の採取と代替を選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.substitute"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q029.flow.substitute": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q029.node",
+          "value": "substitute"
+        },
+        {
+          "op": "say",
+          "text": "蜂が渡せる量だけでは足りない。別の養蜂家は不足分を15Gで分けると言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "buy",
+              "text": "代替蜜を15Gで買って不足を補う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 15
+                  }
+                ]
+              },
+              "requirement": "G 15消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -15
+                },
+                {
+                  "op": "jump",
+                  "script": "q029.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "少量の蜜を巣へ返し、納期を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.deadline"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q029.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "蜂は冬を越せます。養蜂家は違約金を払いながら、地下用の暦を作ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q029",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q029.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "代金は入りました。春に戻った巣には、前ほど羽音がありません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q029",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q029.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "契約先は味の違いを認めました。赤い蜜は限定品として扱われます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q029",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q029.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q029.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q029.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "蜂は冬を越せます。養蜂家は違約金を払いながら、地下用の暦を作ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "代金は入りました。春に戻った巣には、前ほど羽音がありません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "契約先は味の違いを認めました。赤い蜜は限定品として扱われます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q029"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q029.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q029.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q029.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deadline",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q029.flow.deadline"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "substitute",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q029.flow.substitute"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q029.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "施療人のネイ",
   "brief": "鏡の前に置いた食糧が消えます。誰が受け取っているか調べてください。",
   "region": 4,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,22 +35,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "配膳口を整え患者の同意で案内する",
+      "label": "同意の範囲で配膳口を直し、案内の境界を掲げる",
       "text": "施しの行先は明らかになりました。患者には見られずに食事を受ける権利も残ります。",
       "gold": 93,
       "xp": 92
     },
     "contract": {
-      "label": "鏡の魔物を倒して裏壁を壊す",
+      "label": "鏡の裏壁を壊す",
       "text": "食事の行先は分かりました。患者は見世物を避けて別の地下室へ移ります。",
       "gold": 113,
       "xp": 68
     },
     "compromise": {
-      "label": "配膳表だけ公開し鏡を残す",
+      "label": "配膳表の数量だけ公開し、鏡は残す",
       "text": "人々は必要な分を届けるようになりました。誰が食べるかは尋ねません。",
       "gold": 60,
       "xp": 69
+    },
+    "meal": {
+      "gold": 93,
+      "xp": 69,
+      "label": "糧食1つを追加で届け、訪問を終える",
+      "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
     }
   },
   "model": {
@@ -69,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +84,7 @@
         "name": "施療人のネイ",
         "observation": "鏡の前に置いた食糧が消えます。誰が受け取っているか調べてください。",
         "belief": "鏡の前に置いた食糧が消えます。誰が受け取っているか調べてください。",
-        "goal": "鏡の魔物を倒して裏壁を壊す"
+        "goal": "鏡の前に置いた食糧が消えます。誰が受け取っているか調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +100,23 @@
       }
     ],
     "conflict": {
-      "request": "鏡の魔物を倒して裏壁を壊す",
-      "alternative": "配膳口を整え患者の同意で案内する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "鏡の前に置いた食糧が消えます。誰が受け取っているか調べてください。",
+      "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q035.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "鏡の下に皿の滑った跡があり、銀面には手が触れていません。"
+          "id": "patient",
+          "script": "q035.flow.patient"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "礼拝のない時刻だけ、壁の奥から食器を洗う音がします。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "consent",
+          "script": "q035.flow.consent"
         }
       ]
     },
@@ -136,80 +128,108 @@
       "operator": "frameShift",
       "newInformation": "鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "patient"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q035.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q035.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q035.clue_a"
+        "id": "entry",
+        "script": "q035.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q035.clue_b"
+        "id": "patient",
+        "script": "q035.flow.patient"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q035.decision"
+        "id": "consent",
+        "script": "q035.flow.consent"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "鏡の魔物を倒して裏壁を壊すと配膳口を整え患者の同意で案内するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q035.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q035.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q035.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q035.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。",
+    "flowVersion": 2,
+    "entryScript": "q035.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "鏡の前から食事が消える。配膳係は次の皿を運ぶところだ。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "次の皿を配膳係と運ぶ",
+            "to": "patient"
+          },
+          {
+            "id": "break",
+            "text": "鏡の裏壁を壊す",
+            "to": "@contract"
+          },
+          {
+            "id": "table",
+            "text": "配膳表の数量だけ公開し、鏡は残す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "patient",
+        "text": "皿は壁の奥へ受け渡された。患者は顔を隠したまま礼を言う。$truth",
+        "options": [
+          {
+            "id": "ask",
+            "text": "修理人へ配膳口を見せてもよいか尋ねる",
+            "to": "consent"
+          },
+          {
+            "id": "food",
+            "text": "糧食1つを追加で届け、訪問を終える",
+            "to": "@meal",
+            "cost": {
+              "ration": 1
+            }
+          },
+          {
+            "id": "record",
+            "text": "人数を明かさず配膳表だけ整える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "患者は修理人の入室に同意し、見学者へ病室を見せる案は断った。",
+        "options": [
+          {
+            "id": "repair",
+            "text": "同意の範囲で配膳口を直し、案内の境界を掲げる",
+            "to": "@informed"
+          },
+          {
+            "id": "table",
+            "text": "改修をやめ、配膳表だけ公開する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q035.clue_a": {
@@ -651,6 +671,419 @@
             {
               "op": "jump",
               "script": "q035.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q035.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q035.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "鏡の前から食事が消える。配膳係は次の皿を運ぶところだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "次の皿を配膳係と運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.patient"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "鏡の裏壁を壊す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "table",
+              "text": "配膳表の数量だけ公開し、鏡は残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q035.flow.patient": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q035.node",
+          "value": "patient"
+        },
+        {
+          "op": "say",
+          "text": "皿は壁の奥へ受け渡された。患者は顔を隠したまま礼を言う。鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "修理人へ配膳口を見せてもよいか尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.consent"
+                }
+              ]
+            },
+            {
+              "id": "food",
+              "text": "糧食1つを追加で届け、訪問を終える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.meal"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "人数を明かさず配膳表だけ整える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q035.flow.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q035.node",
+          "value": "consent"
+        },
+        {
+          "op": "say",
+          "text": "患者は修理人の入室に同意し、見学者へ病室を見せる案は断った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "同意の範囲で配膳口を直し、案内の境界を掲げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "table",
+              "text": "改修をやめ、配膳表だけ公開する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q035.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "施しの行先は明らかになりました。患者には見られずに食事を受ける権利も残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q035",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q035.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "食事の行先は分かりました。患者は見世物を避けて別の地下室へ移ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q035",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q035.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は必要な分を届けるようになりました。誰が食べるかは尋ねません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q035",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q035.flow.end.meal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q035",
+              "outcome": "meal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q035.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q035.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "施しの行先は明らかになりました。患者には見られずに食事を受ける権利も残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "食事の行先は分かりました。患者は見世物を避けて別の地下室へ移ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は必要な分を届けるようになりました。誰が食べるかは尋ねません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "meal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q035"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q035.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q035.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q035.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "patient",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q035.flow.patient"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q035.flow.consent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q035.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

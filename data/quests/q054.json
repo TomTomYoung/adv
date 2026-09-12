@@ -6,7 +6,7 @@
   "client": "質屋のユノ",
   "brief": "客が預けた夢を取り戻せなくなりました。蔵の棚を調べてください。",
   "region": 6,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "合言葉で持ち主を照合し返済を確定する",
+      "label": "本人の確認を受け、返済と現物返却を確定する",
       "text": "夢は本人へ返りました。ユノは空瓶を数えて二重帳簿を閉じます。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "夢喰いを倒し一番輝く瓶を客へ渡す",
+      "label": "一番輝く瓶を客へ渡す",
       "text": "客は眠れましたが、知らない故郷の夢を見ると言いました。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "全ての瓶を保全し集団で返済照会する",
+      "label": "全瓶を封じ、客を集めて返済照会する",
       "text": "夢を見るまで時間はかかります。誰の瓶も売られず、札を待ちます。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "質屋のユノ",
         "observation": "客が預けた夢を取り戻せなくなりました。蔵の棚を調べてください。",
         "belief": "客が預けた夢を取り戻せなくなりました。蔵の棚を調べてください。",
-        "goal": "夢喰いを倒し一番輝く瓶を客へ渡す"
+        "goal": "客が預けた夢を取り戻せなくなりました。蔵の棚を調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "夢喰いを倒し一番輝く瓶を客へ渡す",
-      "alternative": "合言葉で持ち主を照合し返済を確定する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "客が預けた夢を取り戻せなくなりました。蔵の棚を調べてください。",
+      "progression": "匿名の瓶を客の合言葉で一つずつ照合し、個別返却か集団照会を選ぶ。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q054.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "瓶の封は無傷で、栓には本人が覚えた合言葉の頭文字があります。"
+          "id": "response",
+          "script": "q054.flow.response"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "名札の束には返済済みの印があり、帳簿の残債は二重です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "counter",
+          "script": "q054.flow.counter"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "referenceSwap",
       "newInformation": "夢の瓶は中身が混ざったのではなく、返済した人の名札だけ外されています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "counter"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q054.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q054.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q054.clue_a"
+        "id": "entry",
+        "script": "q054.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q054.clue_b"
+        "id": "response",
+        "script": "q054.flow.response"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q054.decision"
+        "id": "counter",
+        "script": "q054.flow.counter"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "夢喰いを倒し一番輝く瓶を客へ渡すと合言葉で持ち主を照合し返済を確定するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q054.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q054.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q054.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q054.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "匿名の瓶を客の合言葉で一つずつ照合し、個別返却か集団照会を選ぶ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "匿名の瓶を客の合言葉で一つずつ照合し、個別返却か集団照会を選ぶ。",
+    "flowVersion": 2,
+    "entryScript": "q054.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "返済済みの客に夢が戻らない。瓶には名札がないが、口の裏に合言葉の留め具がある。",
+        "options": [
+          {
+            "id": "customer",
+            "text": "客に自分の合言葉を言ってもらう",
+            "to": "response"
+          },
+          {
+            "id": "bright",
+            "text": "一番輝く瓶を客へ渡す",
+            "to": "@contract"
+          },
+          {
+            "id": "all",
+            "text": "全瓶を封じ、客を集めて返済照会する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "response",
+        "text": "一つの瓶だけが客の言葉へ返事をした。帳簿の返済印はすでに乾いている。",
+        "options": [
+          {
+            "id": "receipt",
+            "text": "返済印と返事のあった瓶を窓口へ出す",
+            "to": "counter"
+          },
+          {
+            "id": "collective",
+            "text": "個別返却を止め、他の客も呼ぶ",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "counter",
+        "text": "$truth 質屋は名札を外した時に返却済と誤記した。客は瓶を手に、自分の夢を確かめる。",
+        "options": [
+          {
+            "id": "return",
+            "text": "本人の確認を受け、返済と現物返却を確定する",
+            "to": "@informed"
+          },
+          {
+            "id": "hold",
+            "text": "受領は保留し、全体の照会を待つ",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q054.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q054.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q054.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q054.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "返済済みの客に夢が戻らない。瓶には名札がないが、口の裏に合言葉の留め具がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "customer",
+              "text": "客に自分の合言葉を言ってもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.response"
+                }
+              ]
+            },
+            {
+              "id": "bright",
+              "text": "一番輝く瓶を客へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "全瓶を封じ、客を集めて返済照会する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q054.flow.response": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q054.node",
+          "value": "response"
+        },
+        {
+          "op": "say",
+          "text": "一つの瓶だけが客の言葉へ返事をした。帳簿の返済印はすでに乾いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "receipt",
+              "text": "返済印と返事のあった瓶を窓口へ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.counter"
+                }
+              ]
+            },
+            {
+              "id": "collective",
+              "text": "個別返却を止め、他の客も呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q054.flow.counter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q054.node",
+          "value": "counter"
+        },
+        {
+          "op": "say",
+          "text": "夢の瓶は中身が混ざったのではなく、返済した人の名札だけ外されています。 質屋は名札を外した時に返却済と誤記した。客は瓶を手に、自分の夢を確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "本人の確認を受け、返済と現物返却を確定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "受領は保留し、全体の照会を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q054.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q054.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夢は本人へ返りました。ユノは空瓶を数えて二重帳簿を閉じます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q054",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q054.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "客は眠れましたが、知らない故郷の夢を見ると言いました。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q054",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q054.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夢を見るまで時間はかかります。誰の瓶も売られず、札を待ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q054",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q054.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q054.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q054.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夢は本人へ返りました。ユノは空瓶を数えて二重帳簿を閉じます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "客は眠れましたが、知らない故郷の夢を見ると言いました。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夢を見るまで時間はかかります。誰の瓶も売られず、札を待ちます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q054"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q054.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q054.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q054.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "response",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q054.flow.response"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "counter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q054.flow.counter"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q054.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

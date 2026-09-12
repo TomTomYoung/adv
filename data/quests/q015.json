@@ -6,7 +6,7 @@
   "client": "坑道礼拝堂のマヤ",
   "brief": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
   "region": 2,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,22 +35,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "涙を受け、名簿を写して公開する",
+      "label": "読める名を全て写し、由来と共に公開する",
       "text": "奇跡の水は瓶に収まり、名前は紙に戻りました。巡礼者は遺族への寄付を始めます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "柱に憑いた霊を祓って水を止める",
+      "label": "柱の水路を塞ぎ、水を止める",
       "text": "柱は乾きました。読めなくなった名前の補償は、そのまま審査待ちになります。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "名簿を乾かし礼拝堂へ預ける",
+      "label": "名簿を乾布で包み、礼拝堂へ預ける",
       "text": "名前の一部は救えました。マヤは祭壇より先に帳簿の部屋を修理します。",
       "gold": 44,
       "xp": 57
+    },
+    "missing": {
+      "gold": 69,
+      "xp": 57,
+      "label": "失われた三名を空欄にして公開する",
+      "text": "写しは坑夫の手へ渡ったが、三つの名は間に合わなかった。家族へ照会する欄を残し、読めなかった事実も記録した。"
     }
   },
   "model": {
@@ -69,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +84,7 @@
         "name": "坑道礼拝堂のマヤ",
         "observation": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
         "belief": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
-        "goal": "柱に憑いた霊を祓って水を止める"
+        "goal": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。"
       },
       {
         "id": "party",
@@ -101,30 +100,19 @@
       }
     ],
     "conflict": {
-      "request": "柱に憑いた霊を祓って水を止める",
-      "alternative": "涙を受け、名簿を写して公開する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "聖人像の塩柱から涙が流れます。巡礼前に由来を確認してください。",
+      "progression": "濡れ続ける名簿を救う作業で、止水を先にするか筆写を急ぐかが保存範囲を変える。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q015.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "水滴は像の目より上の亀裂から伝い、裏の棚へ落ちています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "名簿の失われた行に限って、遺族への補償記録が途切れています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "copy",
+          "script": "q015.flow.copy"
         }
       ]
     },
@@ -136,80 +124,132 @@
       "operator": "frameShift",
       "newInformation": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "copy"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q015.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q015.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q015.clue_a"
+        "id": "entry",
+        "script": "q015.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q015.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q015.decision"
+        "id": "copy",
+        "script": "q015.flow.copy"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "柱に憑いた霊を祓って水を止めると涙を受け、名簿を写して公開するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q015.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q015.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q015.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q015.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q015.dry",
+        "meaning": "各場面に明記した dry の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "濡れ続ける名簿を救う作業で、止水を先にするか筆写を急ぐかが保存範囲を変える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "濡れ続ける名簿を救う作業で、止水を先にするか筆写を急ぐかが保存範囲を変える。",
+    "flowVersion": 2,
+    "entryScript": "q015.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "塩柱の水滴が名簿へ落ち、一文字ずつ崩れている。",
+        "options": [
+          {
+            "id": "catch",
+            "text": "受け皿を置き、滴を名簿からそらす",
+            "to": "copy",
+            "set": {
+              "dry": true
+            }
+          },
+          {
+            "id": "copy",
+            "text": "すぐ読める名から書き写す",
+            "to": "copy"
+          },
+          {
+            "id": "exorcise",
+            "text": "柱の水路を塞ぎ、水を止める",
+            "to": "@contract"
+          },
+          {
+            "id": "chapel",
+            "text": "名簿を乾布で包み、礼拝堂へ預ける",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "copy",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q015.dry"
+              },
+              "right": true
+            },
+            "yes": "受け皿に滴が溜まる。紙の傷みは止まり、薄い文字も読める。",
+            "no": "書いている間に、下段の三名が滲んだ。上段は写せたが、失った名を推測で埋めることはできない。"
+          },
+          "$truth"
+        ],
+        "options": [
+          {
+            "id": "complete",
+            "text": "読める名を全て写し、由来と共に公開する",
+            "to": "@informed",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q015.dry"
+              },
+              "right": true
+            }
+          },
+          {
+            "id": "missing",
+            "text": "失われた三名を空欄にして公開する",
+            "to": "@missing",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q015.dry"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "deposit",
+            "text": "公開をやめ、原本と写しを礼拝堂へ預ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q015.clue_a": {
@@ -651,6 +691,415 @@
             {
               "op": "jump",
               "script": "q015.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q015.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q015.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "塩柱の水滴が名簿へ落ち、一文字ずつ崩れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "catch",
+              "text": "受け皿を置き、滴を名簿からそらす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q015.dry",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q015.flow.copy"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "すぐ読める名から書き写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.copy"
+                }
+              ]
+            },
+            {
+              "id": "exorcise",
+              "text": "柱の水路を塞ぎ、水を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "chapel",
+              "text": "名簿を乾布で包み、礼拝堂へ預ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q015.flow.copy": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q015.node",
+          "value": "copy"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q015.dry"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "受け皿に滴が溜まる。紙の傷みは止まり、薄い文字も読める。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "書いている間に、下段の三名が滲んだ。上段は写せたが、失った名を推測で埋めることはできない。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "涙は保存された古い坑夫名簿へ染み込み、死者の名前を消しています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "complete",
+              "text": "読める名を全て写し、由来と共に公開する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q015.dry"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "missing",
+              "text": "失われた三名を空欄にして公開する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q015.dry"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.end.missing"
+                }
+              ]
+            },
+            {
+              "id": "deposit",
+              "text": "公開をやめ、原本と写しを礼拝堂へ預ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q015.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q015.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "奇跡の水は瓶に収まり、名前は紙に戻りました。巡礼者は遺族への寄付を始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q015",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q015.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "柱は乾きました。読めなくなった名前の補償は、そのまま審査待ちになります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q015",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q015.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "名前の一部は救えました。マヤは祭壇より先に帳簿の部屋を修理します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q015",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q015.flow.end.missing": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "写しは坑夫の手へ渡ったが、三つの名は間に合わなかった。家族へ照会する欄を残し、読めなかった事実も記録した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q015",
+              "outcome": "missing"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q015.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q015.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q015.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "奇跡の水は瓶に収まり、名前は紙に戻りました。巡礼者は遺族への寄付を始めます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "柱は乾きました。読めなくなった名前の補償は、そのまま審査待ちになります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "名前の一部は救えました。マヤは祭壇より先に帳簿の部屋を修理します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "missing",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "写しは坑夫の手へ渡ったが、三つの名は間に合わなかった。家族へ照会する欄を残し、読めなかった事実も記録した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q015"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q015.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q015.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q015.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q015.flow.copy"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q015.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "整備士のフウ",
   "brief": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
   "region": 8,
-  "type": "investigation",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,7 +35,7 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "退職番号を精算して停止させる",
+      "label": "整備人を呼び、本人の帰還印を受け取る",
       "text": "門番は初めて座りました。フウは人の退職にも機械の点検を付けます。",
       "gold": 141,
       "xp": 124
@@ -47,7 +47,7 @@
       "xp": 96
     },
     "compromise": {
-      "label": "外部電源を切って短時間だけ補修する",
+      "label": "外部電源を切り、短時間だけ補修する",
       "text": "その日の補修は済みました。再起動すると、門番は同じ番号を探し始めます。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "整備士のフウ",
         "observation": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
         "belief": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
-        "goal": "門番を戦闘で止めて解体する"
+        "goal": "門番機械が巡回をやめず補修できません。停止条件を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "門番を戦闘で止めて解体する",
-      "alternative": "退職番号を精算して停止させる",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "門番機械が巡回をやめず補修できません。停止条件を探してください。",
+      "progression": "門番の在室番号を退職者の履歴へ照会し、停止前に残る人の帰還を確認する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q071.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "人数計には姿のない番号が一つあり、巡回経路は空の更衣室で止まります。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "退職届は受理済みですが、入退室盤への転記欄が空白です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "worker",
+          "script": "q071.flow.worker"
         }
       ]
     },
@@ -135,81 +117,80 @@
     "reveal": {
       "operator": "causeSwap",
       "newInformation": "門番は全員帰還を待ち、退職者の番号が在室のまま残っています。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q071.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q071.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q071.clue_a"
+        "id": "entry",
+        "script": "q071.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q071.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q071.decision"
+        "id": "worker",
+        "script": "q071.flow.worker"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "門番を戦闘で止めて解体すると退職番号を精算して停止させるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q071.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q071.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q071.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q071.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "門番の在室番号を退職者の履歴へ照会し、停止前に残る人の帰還を確認する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "門番の在室番号を退職者の履歴へ照会し、停止前に残る人の帰還を確認する。",
+    "flowVersion": 2,
+    "entryScript": "q071.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "門番は「未帰還二名」と繰り返す。番号の片方は退職記録、もう片方は現役の整備人だ。",
+        "options": [
+          {
+            "id": "retired",
+            "text": "退職者の返却記録を門番へ読み込ませる",
+            "to": "worker"
+          },
+          {
+            "id": "power",
+            "text": "外部電源を切り、短時間だけ補修する",
+            "to": "@compromise"
+          },
+          {
+            "id": "dismantle",
+            "text": "門番を戦闘で止めて解体する",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "worker",
+        "text": "表示は未帰還一名になった。全員を退職扱いにすれば止まるが、整備人はまだ中にいる。",
+        "options": [
+          {
+            "id": "call",
+            "text": "整備人を呼び、本人の帰還印を受け取る",
+            "to": "@informed"
+          },
+          {
+            "id": "temporary",
+            "text": "整備人が戻るまで、一時的な外部電源切断で補修する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q071.clue_a": {
@@ -651,6 +632,322 @@
             {
               "op": "jump",
               "script": "q071.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q071.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q071.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "門番は「未帰還二名」と繰り返す。番号の片方は退職記録、もう片方は現役の整備人だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "retired",
+              "text": "退職者の返却記録を門番へ読み込ませる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q071.flow.worker"
+                }
+              ]
+            },
+            {
+              "id": "power",
+              "text": "外部電源を切り、短時間だけ補修する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q071.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "dismantle",
+              "text": "門番を戦闘で止めて解体する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q071.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q071.flow.worker": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q071.node",
+          "value": "worker"
+        },
+        {
+          "op": "say",
+          "text": "表示は未帰還一名になった。全員を退職扱いにすれば止まるが、整備人はまだ中にいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "call",
+              "text": "整備人を呼び、本人の帰還印を受け取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q071.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "text": "整備人が戻るまで、一時的な外部電源切断で補修する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q071.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q071.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門番は初めて座りました。フウは人の退職にも機械の点検を付けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q071",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q071.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補修通路は通れました。組み直した門番には以前の巡回記録がありません。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q071",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q071.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その日の補修は済みました。再起動すると、門番は同じ番号を探し始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q071",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q071.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q071.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q071.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門番は初めて座りました。フウは人の退職にも機械の点検を付けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補修通路は通れました。組み直した門番には以前の巡回記録がありません。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その日の補修は済みました。再起動すると、門番は同じ番号を探し始めます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q071"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q071.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q071.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q071.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "worker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q071.flow.worker"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q071.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

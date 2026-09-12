@@ -6,7 +6,7 @@
   "client": "採集人のノム",
   "brief": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
   "region": 3,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "虫の食跡を凡例にして写す",
+      "label": "三地点の食跡を凡例として地図へ写す",
       "text": "消える地図は更新される地図になりました。採集人は古い写しに日付を入れます。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "地図喰いを倒し葉を薬で固める",
+      "label": "虫を取り除き、葉を薬で固める",
       "text": "地図は長持ちしました。花の咲き方が変わると、書かれた近道は危険になります。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "安全が確かめられた道だけ刻む",
+      "label": "今まで確かめた道だけ刻み、引き返す",
       "text": "遠回りの地図が完成しました。初めての採集人は無事に帰ります。",
       "gold": 52,
       "xp": 63
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "採集人のノム",
         "observation": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
         "belief": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
-        "goal": "地図喰いを倒し葉を薬で固める"
+        "goal": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "地図喰いを倒し葉を薬で固める",
-      "alternative": "虫の食跡を凡例にして写す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "葉に描かれた道案内が消えます。奥へ進める地図を作ってください。",
+      "progression": "食跡の読み方を実際の分かれ道で試し、途中までの地図でも帰還できる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q024.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "地図の消えた道には花粉が積もり、残った道は風が通っています。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "虫は新しい墨を避けず、特定の花の印だけを先に食べます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "fork",
+          "script": "q024.flow.fork"
         }
       ]
     },
@@ -135,81 +117,139 @@
     "reveal": {
       "operator": "referenceSwap",
       "newInformation": "葉を食べる虫が危険な花粉に反応し、安全な道だけを残しています。",
-      "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
-      ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q024.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q024.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q024.clue_a"
+        "id": "entry",
+        "script": "q024.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q024.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q024.decision"
+        "id": "fork",
+        "script": "q024.flow.fork"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "地図喰いを倒し葉を薬で固めると虫の食跡を凡例にして写すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q024.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q024.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q024.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q024.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q024.steps",
+        "meaning": "各場面に明記した steps の行為・合意の記録",
+        "writer": [
+          "entry",
+          "fork"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "食跡の読み方を実際の分かれ道で試し、途中までの地図でも帰還できる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "食跡の読み方を実際の分かれ道で試し、途中までの地図でも帰還できる。",
+    "flowVersion": 2,
+    "entryScript": "q024.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "地図の葉を虫が食べている。消えた線の先は花粉の濃い通路だ。",
+        "options": [
+          {
+            "id": "walk",
+            "text": "葉を持って最初の分かれ道へ進む",
+            "to": "fork",
+            "set": {
+              "steps": 0
+            }
+          },
+          {
+            "id": "fix",
+            "text": "虫を取り除き、葉を薬で固める",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "fork",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q024.steps"
+              },
+              "right": 0
+            },
+            "yes": "食べ残された線は低い通路へ、消えた線は花の房へ続く。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q024.steps"
+                },
+                "right": 1
+              },
+              "yes": "二つ目の分岐では、高い方の線が残っている。高さだけで安全は決まらない。",
+              "no": "三つ目の道でも、虫は花粉の濃い側だけを削った。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "safe",
+            "text": "葉に残った線をたどり、道標へ写す",
+            "to": "fork",
+            "when": {
+              "op": "lt",
+              "left": {
+                "ref": "flags.flow.q024.steps"
+              },
+              "right": 2
+            },
+            "set": {
+              "steps": {
+                "op": "add",
+                "args": [
+                  {
+                    "ref": "flags.flow.q024.steps"
+                  },
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "legend",
+            "text": "三地点の食跡を凡例として地図へ写す",
+            "to": "@informed",
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "flags.flow.q024.steps"
+              },
+              "right": 2
+            }
+          },
+          {
+            "id": "return",
+            "text": "今まで確かめた道だけ刻み、引き返す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q024.clue_a": {
@@ -651,6 +691,382 @@
             {
               "op": "jump",
               "script": "q024.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q024.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q024.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "地図の葉を虫が食べている。消えた線の先は花粉の濃い通路だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "葉を持って最初の分かれ道へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q024.steps",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q024.flow.fork"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "虫を取り除き、葉を薬で固める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q024.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q024.flow.fork": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q024.node",
+          "value": "fork"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q024.steps"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "食べ残された線は低い通路へ、消えた線は花の房へ続く。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q024.steps"
+                },
+                "right": 1
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "二つ目の分岐では、高い方の線が残っている。高さだけで安全は決まらない。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "三つ目の道でも、虫は花粉の濃い側だけを削った。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "safe",
+              "text": "葉に残った線をたどり、道標へ写す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.flow.q024.steps"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q024.steps",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q024.steps"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q024.flow.fork"
+                }
+              ]
+            },
+            {
+              "id": "legend",
+              "text": "三地点の食跡を凡例として地図へ写す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.flow.q024.steps"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q024.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "今まで確かめた道だけ刻み、引き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q024.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q024.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "消える地図は更新される地図になりました。採集人は古い写しに日付を入れます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q024",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q024.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地図は長持ちしました。花の咲き方が変わると、書かれた近道は危険になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q024",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q024.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "遠回りの地図が完成しました。初めての採集人は無事に帰ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q024",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q024.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q024.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q024.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "消える地図は更新される地図になりました。採集人は古い写しに日付を入れます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地図は長持ちしました。花の咲き方が変わると、書かれた近道は危険になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "遠回りの地図が完成しました。初めての採集人は無事に帰ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q024"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q024.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q024.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q024.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fork",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q024.flow.fork"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q024.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

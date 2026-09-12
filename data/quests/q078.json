@@ -6,7 +6,7 @@
   "client": "義肢職人のリン",
   "brief": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
   "region": 8,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "利用者に合わせて作業学習を更新する",
+      "label": "二つの学習を本人の設定として保存する",
       "text": "腕は本人の仕事を覚えました。古い技術の記録は消さずに保存されます。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "記憶の守護者を倒して全記録を消す",
+      "label": "義肢の全学習記録を消す",
       "text": "不意の動きは止まりました。一から練習する日々を、リンが手伝います。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "自動補正を切り手動で使う",
+      "label": "自動補正を切って手動で使う",
       "text": "便利さは減りましたが意思通りに動きます。本人が次の調整日を決めます。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "義肢職人のリン",
         "observation": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
         "belief": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
-        "goal": "記憶の守護者を倒して全記録を消す"
+        "goal": "古い腕を付けると知らない作業をします。危険な記憶を消してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,19 @@
       }
     ],
     "conflict": {
-      "request": "記憶の守護者を倒して全記録を消す",
-      "alternative": "利用者に合わせて作業学習を更新する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "古い腕を付けると知らない作業をします。危険な記憶を消してください。",
+      "progression": "義肢の道具配置学習を利用者と二つの作業で更新し、人格の消去と混同しない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q078.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "腕は写真に反応せず、同じ工具配置にだけ手を伸ばします。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "学習簿の項目は感情でなく距離と握力の数値です。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "bench",
+          "script": "q078.flow.bench"
         }
       ]
     },
@@ -136,80 +118,138 @@
       "operator": "valueInvert",
       "newInformation": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "bench"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q078.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q078.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q078.clue_a"
+        "id": "entry",
+        "script": "q078.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q078.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q078.decision"
+        "id": "bench",
+        "script": "q078.flow.bench"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "記憶の守護者を倒して全記録を消すと利用者に合わせて作業学習を更新するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q078.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q078.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q078.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q078.hammer",
+        "meaning": "各場面に明記した hammer の行為・合意の記録",
+        "writer": [
+          "bench"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q078.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q078.needle",
+        "meaning": "各場面に明記した needle の行為・合意の記録",
+        "writer": [
+          "bench"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "義肢の道具配置学習を利用者と二つの作業で更新し、人格の消去と混同しない。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "義肢の道具配置学習を利用者と二つの作業で更新し、人格の消去と混同しない。",
+    "flowVersion": 2,
+    "entryScript": "q078.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "腕は古い工具の位置へ伸びるが、前の持主の写真には反応しない。利用者は自分の作業を覚えさせたいという。",
+        "options": [
+          {
+            "id": "train",
+            "text": "本人の工具台で練習を始める",
+            "to": "bench"
+          },
+          {
+            "id": "manual",
+            "text": "自動補正を切って手動で使う",
+            "to": "@compromise"
+          },
+          {
+            "id": "erase",
+            "text": "義肢の全学習記録を消す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "bench",
+        "text": "$truth 二つの作業を実際の配置で覚え直せる。古い配置は記録へ退避してある。",
+        "options": [
+          {
+            "id": "hammer",
+            "text": "本人の槌の距離と握力を練習する",
+            "to": "bench",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q078.hammer"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "hammer": true
+            }
+          },
+          {
+            "id": "needle",
+            "text": "本人の針仕事の距離と握力を練習する",
+            "to": "bench",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q078.needle"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "needle": true
+            }
+          },
+          {
+            "id": "save",
+            "text": "二つの学習を本人の設定として保存する",
+            "to": "@informed",
+            "need": [
+              "hammer",
+              "needle"
+            ]
+          },
+          {
+            "id": "manual",
+            "text": "練習をやめ、自動補正を切る",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q078.clue_a": {
@@ -651,6 +691,385 @@
             {
               "op": "jump",
               "script": "q078.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q078.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q078.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "腕は古い工具の位置へ伸びるが、前の持主の写真には反応しない。利用者は自分の作業を覚えさせたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "train",
+              "text": "本人の工具台で練習を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q078.flow.bench"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "自動補正を切って手動で使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q078.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "erase",
+              "text": "義肢の全学習記録を消す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q078.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q078.flow.bench": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q078.node",
+          "value": "bench"
+        },
+        {
+          "op": "say",
+          "text": "腕は前使用者の人格でなく、道具位置を補正する作業学習を残しています。 二つの作業を実際の配置で覚え直せる。古い配置は記録へ退避してある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hammer",
+              "text": "本人の槌の距離と握力を練習する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q078.hammer"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q078.hammer",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q078.flow.bench"
+                }
+              ]
+            },
+            {
+              "id": "needle",
+              "text": "本人の針仕事の距離と握力を練習する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q078.needle"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q078.needle",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q078.flow.bench"
+                }
+              ]
+            },
+            {
+              "id": "save",
+              "text": "二つの学習を本人の設定として保存する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q078.hammer"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q078.needle"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「本人の槌の距離と握力を練習する」・先に「本人の針仕事の距離と握力を練習する」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q078.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "練習をやめ、自動補正を切る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q078.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q078.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "腕は本人の仕事を覚えました。古い技術の記録は消さずに保存されます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q078",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q078.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "不意の動きは止まりました。一から練習する日々を、リンが手伝います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q078",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q078.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "便利さは減りましたが意思通りに動きます。本人が次の調整日を決めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q078",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q078.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q078.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q078.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "腕は本人の仕事を覚えました。古い技術の記録は消さずに保存されます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "不意の動きは止まりました。一から練習する日々を、リンが手伝います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "便利さは減りましたが意思通りに動きます。本人が次の調整日を決めます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q078"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q078.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q078.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q078.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bench",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q078.flow.bench"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q078.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

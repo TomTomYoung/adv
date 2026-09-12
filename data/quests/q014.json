@@ -6,7 +6,7 @@
   "client": "貨車番のホド",
   "brief": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
   "region": 2,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "負傷を記録し搬送便として通す",
+      "label": "本人と一緒に搬送便の登録を出す",
       "text": "家族は看病できました。坑主は補償を迫られ、貨車には人用の手すりが付きます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "線路の魔物を退け貨車だけ引き上げる",
+      "label": "荷を開けず、貨車を引き上げる",
       "text": "坑夫は密かに帰れました。次の負傷者も同じ床下に押し込まれます。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "荷を二回に分け誰も告発しない",
+      "label": "荷と人を二便に分け、事情を伏せて運ぶ",
       "text": "その日の搬送は終わりました。貨車番はあなたにだけ次の便の時刻を教えます。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "貨車番のホド",
         "observation": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
         "belief": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
-        "goal": "線路の魔物を退け貨車だけ引き上げる"
+        "goal": "空のはずの貨車が重くて上がりません。積荷を確認してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "線路の魔物を退け貨車だけ引き上げる",
-      "alternative": "負傷を記録し搬送便として通す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "空のはずの貨車が重くて上がりません。積荷を確認してください。",
+      "progression": "貨車を動かすための荷下ろしが負傷者の発見になり、搬送後の届け出へ続く。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q014.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "荷台の下から包帯が出ていますが、鉱石の粉は付いていません。"
+          "id": "injured",
+          "script": "q014.flow.injured"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "作業簿では全員出勤なのに、賃金受取には家族が並んでいます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "clinic",
+          "script": "q014.flow.clinic"
         }
       ]
     },
@@ -136,80 +122,95 @@
       "operator": "referenceSwap",
       "newInformation": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "injured"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q014.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q014.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q014.clue_a"
+        "id": "entry",
+        "script": "q014.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q014.clue_b"
+        "id": "injured",
+        "script": "q014.flow.injured"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q014.decision"
+        "id": "clinic",
+        "script": "q014.flow.clinic"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "線路の魔物を退け貨車だけ引き上げると負傷を記録し搬送便として通すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q014.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q014.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q014.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q014.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "貨車を動かすための荷下ろしが負傷者の発見になり、搬送後の届け出へ続く。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "貨車を動かすための荷下ろしが負傷者の発見になり、搬送後の届け出へ続く。",
+    "flowVersion": 2,
+    "entryScript": "q014.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "帰りの貨車が重い。車内からは鉱石でなく、咳が聞こえる。",
+        "options": [
+          {
+            "id": "unload",
+            "text": "車輪を止め、荷を下ろして軽くする",
+            "to": "injured"
+          },
+          {
+            "id": "haul",
+            "text": "荷を開けず、貨車を引き上げる",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "injured",
+        "text": "$truth 坑夫は治療を望むが、欠勤で賃金を失うのを恐れている。",
+        "options": [
+          {
+            "id": "split",
+            "text": "荷と人を二便に分け、事情を伏せて運ぶ",
+            "to": "@compromise"
+          },
+          {
+            "id": "medical",
+            "text": "負傷者を先に運び、治療所で搬送記録を作る",
+            "to": "clinic"
+          }
+        ]
+      },
+      {
+        "id": "clinic",
+        "text": "治療所が負傷日時を記録した。坑夫は事故として届け出る意思を示した。",
+        "options": [
+          {
+            "id": "register",
+            "text": "本人と一緒に搬送便の登録を出す",
+            "to": "@informed"
+          },
+          {
+            "id": "quiet",
+            "text": "本人の写しだけ残し、荷の二便目を運ぶ",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q014.clue_a": {
@@ -651,6 +652,347 @@
             {
               "op": "jump",
               "script": "q014.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q014.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q014.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "帰りの貨車が重い。車内からは鉱石でなく、咳が聞こえる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "unload",
+              "text": "車輪を止め、荷を下ろして軽くする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.injured"
+                }
+              ]
+            },
+            {
+              "id": "haul",
+              "text": "荷を開けず、貨車を引き上げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q014.flow.injured": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q014.node",
+          "value": "injured"
+        },
+        {
+          "op": "say",
+          "text": "帰り便は負傷した坑夫を隠して運び、欠勤扱いを避けています。 坑夫は治療を望むが、欠勤で賃金を失うのを恐れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "荷と人を二便に分け、事情を伏せて運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "medical",
+              "text": "負傷者を先に運び、治療所で搬送記録を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.clinic"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q014.flow.clinic": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q014.node",
+          "value": "clinic"
+        },
+        {
+          "op": "say",
+          "text": "治療所が負傷日時を記録した。坑夫は事故として届け出る意思を示した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "register",
+              "text": "本人と一緒に搬送便の登録を出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "本人の写しだけ残し、荷の二便目を運ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q014.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q014.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家族は看病できました。坑主は補償を迫られ、貨車には人用の手すりが付きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q014",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q014.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "坑夫は密かに帰れました。次の負傷者も同じ床下に押し込まれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q014",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q014.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その日の搬送は終わりました。貨車番はあなたにだけ次の便の時刻を教えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q014",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q014.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q014.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q014.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "家族は看病できました。坑主は補償を迫られ、貨車には人用の手すりが付きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "坑夫は密かに帰れました。次の負傷者も同じ床下に押し込まれます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その日の搬送は終わりました。貨車番はあなたにだけ次の便の時刻を教えます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q014"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q014.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q014.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q014.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "injured",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q014.flow.injured"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clinic",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q014.flow.clinic"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q014.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

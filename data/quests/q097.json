@@ -6,7 +6,7 @@
   "client": "救助人のヤチ",
   "brief": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
   "region": 10,
-  "type": "testimony",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "運搬人を隊員として名簿へ加える",
+      "label": "全員の返事を確認し、本人の帰還証を渡す",
       "text": "点呼の数が合いました。運搬人は初めて、荷物と別に帰還証を受け取ります。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "返事に混じる影を倒し名簿の人数だけ通す",
+      "label": "名簿に載る人数だけを帰還門へ通す",
       "text": "門の数は合いました。運搬人は別の入口で自分の事情を説明し続けます。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "全員を仮登録し町で身元を確認する",
+      "label": "地下には誰も残さず、全員を仮登録する",
       "text": "誰も地下に残りませんでした。ヤチは仮の名前も丁寧に読み上げます。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "救助人のヤチ",
         "observation": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
         "belief": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
-        "goal": "返事に混じる影を倒し名簿の人数だけ通す"
+        "goal": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "返事に混じる影を倒し名簿の人数だけ通す",
-      "alternative": "運搬人を隊員として名簿へ加える",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "点呼に一人多く返事があります。誰を連れて帰るべきか調べてください。",
+      "progression": "名簿から余分な一人を探すのではなく、担架を支える全員に名を聞いて点呼をやり直す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q097.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "余分な荷の持ち手に新しい掌の跡があり、配給も一人分減っています。"
+          "id": "porter",
+          "script": "q097.flow.porter"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "遭難地点から先にだけ別の歩幅が混じり、担架の後ろ側へ続きます。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "roll",
+          "script": "q097.flow.roll"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "identitySplit",
       "newInformation": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "porter"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q097.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q097.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q097.clue_a"
+        "id": "entry",
+        "script": "q097.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q097.clue_b"
+        "id": "porter",
+        "script": "q097.flow.porter"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q097.decision"
+        "id": "roll",
+        "script": "q097.flow.roll"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "返事に混じる影を倒し名簿の人数だけ通すと運搬人を隊員として名簿へ加えるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q097.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q097.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q097.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q097.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "名簿から余分な一人を探すのではなく、担架を支える全員に名を聞いて点呼をやり直す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "名簿から余分な一人を探すのではなく、担架を支える全員に名を聞いて点呼をやり直す。",
+    "flowVersion": 2,
+    "entryScript": "q097.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "名簿の人数を呼び終えても、担架の後ろから返事がある。荷を支える手は確かに一人分多い。",
+        "options": [
+          {
+            "id": "name",
+            "text": "返事をした人に名前と同行した地点を聞く",
+            "to": "porter"
+          },
+          {
+            "id": "temporary",
+            "text": "地下には誰も残さず、全員を仮登録する",
+            "to": "@compromise"
+          },
+          {
+            "id": "count",
+            "text": "名簿に載る人数だけを帰還門へ通す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "porter",
+        "text": "$truth 救助された隊員も、遭難地点で加わってくれたと証言する。",
+        "options": [
+          {
+            "id": "register",
+            "text": "本人を運搬品とは別の隊員として名簿へ加える",
+            "to": "roll"
+          },
+          {
+            "id": "provisional",
+            "text": "正式登録は町へ預け、全員を仮登録で帰す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "roll",
+        "text": "新しい名を入れて呼ぶと、返事の数が合った。本人へ帰還証を手渡せる。",
+        "options": [
+          {
+            "id": "certificate",
+            "text": "全員の返事を確認し、本人の帰還証を渡す",
+            "to": "@informed"
+          },
+          {
+            "id": "town",
+            "text": "正式な証の発行を町へ任せる",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q097.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q097.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q097.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q097.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "名簿の人数を呼び終えても、担架の後ろから返事がある。荷を支える手は確かに一人分多い。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "name",
+              "text": "返事をした人に名前と同行した地点を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.porter"
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "text": "地下には誰も残さず、全員を仮登録する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "count",
+              "text": "名簿に載る人数だけを帰還門へ通す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q097.flow.porter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q097.node",
+          "value": "porter"
+        },
+        {
+          "op": "say",
+          "text": "多い返事は隊に同行して救助した無登録の運搬人で、名簿だけが更新されていません。 救助された隊員も、遭難地点で加わってくれたと証言する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "register",
+              "text": "本人を運搬品とは別の隊員として名簿へ加える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.roll"
+                }
+              ]
+            },
+            {
+              "id": "provisional",
+              "text": "正式登録は町へ預け、全員を仮登録で帰す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q097.flow.roll": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q097.node",
+          "value": "roll"
+        },
+        {
+          "op": "say",
+          "text": "新しい名を入れて呼ぶと、返事の数が合った。本人へ帰還証を手渡せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "certificate",
+              "text": "全員の返事を確認し、本人の帰還証を渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "town",
+              "text": "正式な証の発行を町へ任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q097.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q097.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q097.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "点呼の数が合いました。運搬人は初めて、荷物と別に帰還証を受け取ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q097",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q097.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q097.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門の数は合いました。運搬人は別の入口で自分の事情を説明し続けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q097",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q097.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q097.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "誰も地下に残りませんでした。ヤチは仮の名前も丁寧に読み上げます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q097",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q097.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q097.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q097.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "点呼の数が合いました。運搬人は初めて、荷物と別に帰還証を受け取ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門の数は合いました。運搬人は別の入口で自分の事情を説明し続けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "誰も地下に残りませんでした。ヤチは仮の名前も丁寧に読み上げます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q097"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q097.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q097.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q097.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "porter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q097.flow.porter"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "roll",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q097.flow.roll"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q097.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

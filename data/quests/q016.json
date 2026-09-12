@@ -6,7 +6,7 @@
   "client": "発破師のネフ",
   "brief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
   "region": 2,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 2,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "避難区画を移して小規模発破を続ける",
+      "label": "住民と寝台を移し、退避後に小規模発破を試す",
       "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。",
       "gold": 69,
       "xp": 76
     },
     "contract": {
-      "label": "盗人扱いの魔物を倒し強い火薬へ戻す",
+      "label": "疑われた魔物を倒し、強い火薬で発破する",
       "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。",
       "gold": 89,
       "xp": 54
     },
     "compromise": {
-      "label": "助手の火薬を買い取り疑いを晴らす",
+      "label": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
       "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。",
       "gold": 44,
       "xp": 57
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "発破師のネフ",
         "observation": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
         "belief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
-        "goal": "盗人扱いの魔物を倒し強い火薬へ戻す"
+        "goal": "爆発音がしない発破が続いています。火薬泥棒を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "盗人扱いの魔物を倒し強い火薬へ戻す",
-      "alternative": "避難区画を移して小規模発破を続ける",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+      "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q016.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "導火線は燃え切り、岩には小さな割れだけが規則的に入っています。"
+          "id": "shelter",
+          "script": "q016.flow.shelter"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "壁の向こうに食器の棚があり、大きな振動を受けた皿だけが割れています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "move",
+          "script": "q016.flow.move"
         }
       ]
     },
@@ -136,80 +122,110 @@
       "operator": "pathHide",
       "newInformation": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "shelter"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q016.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q016.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q016.clue_a"
+        "id": "entry",
+        "script": "q016.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q016.clue_b"
+        "id": "shelter",
+        "script": "q016.flow.shelter"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q016.decision"
+        "id": "move",
+        "script": "q016.flow.move"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "盗人扱いの魔物を倒し強い火薬へ戻すと避難区画を移して小規模発破を続けるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q016.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q016.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q016.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q016.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。",
+    "flowVersion": 2,
+    "entryScript": "q016.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "発破師は音のしない火薬を不良品と呼ぶ。助手は避難区画を見ている。",
+        "options": [
+          {
+            "id": "assistant",
+            "text": "助手の向いた区画へ行く",
+            "to": "shelter"
+          },
+          {
+            "id": "blast",
+            "text": "疑われた魔物を倒し、強い火薬で発破する",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "buy",
+            "text": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
+            "to": "@compromise",
+            "cost": {
+              "gold": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "shelter",
+        "text": "$truth 寝台の脚が小さな振動でも沈む。助手は、空いている倉なら移せると指した。",
+        "options": [
+          {
+            "id": "warehouse",
+            "text": "倉の床と入口を点検する",
+            "to": "move"
+          },
+          {
+            "id": "buy",
+            "text": "今の火薬を20Gで買い取り、発破を止める",
+            "to": "@compromise",
+            "cost": {
+              "gold": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "move",
+        "text": "倉へ寝台が通ることを確かめた。住民は荷の運搬を手伝ってほしいと言う。",
+        "options": [
+          {
+            "id": "evacuate",
+            "text": "住民と寝台を移し、退避後に小規模発破を試す",
+            "to": "@informed"
+          },
+          {
+            "id": "cancel",
+            "text": "移転を中止し、火薬を20Gで引き取る",
+            "to": "@compromise",
+            "cost": {
+              "gold": 20
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q016.clue_a": {
@@ -705,6 +721,424 @@
             {
               "op": "jump",
               "script": "q016.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q016.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "発破師は音のしない火薬を不良品と呼ぶ。助手は避難区画を見ている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "assistant",
+              "text": "助手の向いた区画へ行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.shelter"
+                }
+              ]
+            },
+            {
+              "id": "blast",
+              "text": "疑われた魔物を倒し、強い火薬で発破する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q016.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.flow.shelter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "shelter"
+        },
+        {
+          "op": "say",
+          "text": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。 寝台の脚が小さな振動でも沈む。助手は、空いている倉なら移せると指した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warehouse",
+              "text": "倉の床と入口を点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.move"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "今の火薬を20Gで買い取り、発破を止める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.flow.move": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "move"
+        },
+        {
+          "op": "say",
+          "text": "倉へ寝台が通ることを確かめた。住民は荷の運搬を手伝ってほしいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evacuate",
+              "text": "住民と寝台を移し、退避後に小規模発破を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "移転を中止し、火薬を20Gで引き取る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q016.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q016"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q016.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q016.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shelter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.flow.shelter"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "move",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.flow.move"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q016.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "両替商のエン",
   "brief": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
   "region": 6,
-  "type": "ritual",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "取引履歴で盗難分だけ追跡する",
+      "label": "盗難に関わる取引だけを追跡対象として届ける",
       "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "金を食う魔物を倒し黒い貨幣を没収する",
+      "label": "黒い金貨を全て没収する",
       "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "同額の代貨へ交換し原貨を保管する",
+      "label": "同額の代貨へ交換し、原貨を保管する",
       "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "両替商のエン",
         "observation": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
         "belief": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
-        "goal": "金を食う魔物を倒し黒い貨幣を没収する"
+        "goal": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "金を食う魔物を倒し黒い貨幣を没収する",
-      "alternative": "取引履歴で盗難分だけ追跡する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "金貨に触ると手が黒くなります。呪われた貨幣を集めてください。",
+      "progression": "黒い貨幣の移動を取引ごとにさかのぼり、善意の客と盗難元を区別する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q058.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "黒い色は水で薄れ、金貨自体の重さや材質は変わりません。"
+          "id": "chain",
+          "script": "q058.flow.chain"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "同じ袋に入った正規の領収書にも、同じ染みが付いています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "source",
+          "script": "q058.flow.source"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "valueInvert",
       "newInformation": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "source"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q058.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q058.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q058.clue_a"
+        "id": "entry",
+        "script": "q058.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q058.clue_b"
+        "id": "chain",
+        "script": "q058.flow.chain"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q058.decision"
+        "id": "source",
+        "script": "q058.flow.source"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "金を食う魔物を倒し黒い貨幣を没収すると取引履歴で盗難分だけ追跡するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q058.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q058.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q058.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q058.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "黒い貨幣の移動を取引ごとにさかのぼり、善意の客と盗難元を区別する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "黒い貨幣の移動を取引ごとにさかのぼり、善意の客と盗難元を区別する。",
+    "flowVersion": 2,
+    "entryScript": "q058.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "パン屋の釣銭が黒くなり、客まで盗人と呼ばれている。",
+        "options": [
+          {
+            "id": "baker",
+            "text": "パン屋の受領帳から前の持主を探す",
+            "to": "chain"
+          },
+          {
+            "id": "exchange",
+            "text": "同額の代貨へ交換し、原貨を保管する",
+            "to": "@compromise"
+          },
+          {
+            "id": "seize",
+            "text": "黒い金貨を全て没収する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "chain",
+        "text": "パン屋は粉屋から釣銭を受け取った。粉屋は盗難当日の荷役賃として受け取っている。",
+        "options": [
+          {
+            "id": "porter",
+            "text": "荷役人と盗難元の支払を照合する",
+            "to": "source"
+          },
+          {
+            "id": "stop",
+            "text": "客への追及を止め、代貨へ交換する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "source",
+        "text": "$truth 盗難元の袋から出た時点と、仕事の対価として渡った時点を分けて記録できた。",
+        "options": [
+          {
+            "id": "trace",
+            "text": "盗難に関わる取引だけを追跡対象として届ける",
+            "to": "@informed"
+          },
+          {
+            "id": "hold",
+            "text": "原貨を保管し、代貨で商いを再開する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q058.clue_a": {
@@ -651,6 +657,358 @@
             {
               "op": "jump",
               "script": "q058.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q058.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q058.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "パン屋の釣銭が黒くなり、客まで盗人と呼ばれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "baker",
+              "text": "パン屋の受領帳から前の持主を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.chain"
+                }
+              ]
+            },
+            {
+              "id": "exchange",
+              "text": "同額の代貨へ交換し、原貨を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "seize",
+              "text": "黒い金貨を全て没収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q058.flow.chain": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q058.node",
+          "value": "chain"
+        },
+        {
+          "op": "say",
+          "text": "パン屋は粉屋から釣銭を受け取った。粉屋は盗難当日の荷役賃として受け取っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役人と盗難元の支払を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.source"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "客への追及を止め、代貨へ交換する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q058.flow.source": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q058.node",
+          "value": "source"
+        },
+        {
+          "op": "say",
+          "text": "黒くなるのは盗難防止の染料で、被害者が善意の流通先まで泥棒扱いしています。 盗難元の袋から出た時点と、仕事の対価として渡った時点を分けて記録できた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trace",
+              "text": "盗難に関わる取引だけを追跡対象として届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "原貨を保管し、代貨で商いを再開する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q058.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q058.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q058",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q058.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q058",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q058.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q058",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q058.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q058.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q058.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "手の黒い客は買物へ戻れました。両替商は染料を証拠の一部として扱います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "金貨は集まりました。正当に受け取った人たちの抗議が市場へ残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "流通は続きました。誰の損になるかは、帳簿の照合を待ちます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q058"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q058.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q058.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q058.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "chain",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q058.flow.chain"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "source",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q058.flow.source"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q058.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

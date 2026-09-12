@@ -6,7 +6,7 @@
   "client": "記録係のテオ",
   "brief": "書庫の中央時計を動かすと未完の本が閉じます。何を残すか決めてください。",
   "region": 5,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 5,
   "requires": {
     "op": "gte",
@@ -41,19 +41,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "搬送先を公開し未完の本へ延長を出す",
+      "label": "搬送先と延長した二冊を入口へ掲示する",
       "text": "時計は動き出しました。終わらなかった物語にも、続きを書く机が残ります。",
       "gold": 105,
       "xp": 100
     },
     "contract": {
-      "label": "時計守を倒して針を止め続ける",
+      "label": "収蔵時計の針を固定する",
       "text": "本は閉じませんでした。新刊を置く棚がなくなり、床に積まれます。",
       "gold": 125,
       "xp": 75
     },
     "compromise": {
-      "label": "全て写してから予定通り閉架する",
+      "label": "全冊の写しを確認して予定通り閉架する",
       "text": "原本は移り、写本が残りました。書き手は次の頁を別冊として始めます。",
       "gold": 68,
       "xp": 75
@@ -75,13 +75,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +84,7 @@
         "name": "記録係のテオ",
         "observation": "書庫の中央時計を動かすと未完の本が閉じます。何を残すか決めてください。",
         "belief": "書庫の中央時計を動かすと未完の本が閉じます。何を残すか決めてください。",
-        "goal": "時計守を倒して針を止め続ける"
+        "goal": "書庫の中央時計を動かすと未完の本が閉じます。何を残すか決めてください。"
       },
       {
         "id": "party",
@@ -107,30 +100,27 @@
       }
     ],
     "conflict": {
-      "request": "時計守を倒して針を止め続ける",
-      "alternative": "搬送先を公開し未完の本へ延長を出す",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "書庫の中央時計を動かすと未完の本が閉じます。何を残すか決めてください。",
+      "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q050.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "閉じた本の番号は焼却簿でなく搬送簿へ移っています。"
+          "id": "warehouse",
+          "script": "q050.flow.warehouse"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "中央台の裏に延長申請があり、未完成者の署名欄があります。"
+          "id": "requests",
+          "script": "q050.flow.requests"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "copies",
+          "script": "q050.flow.copies"
         }
       ]
     },
@@ -142,80 +132,120 @@
       "operator": "frameShift",
       "newInformation": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送されます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "warehouse"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q050.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q050.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q050.clue_a"
+        "id": "entry",
+        "script": "q050.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q050.clue_b"
+        "id": "warehouse",
+        "script": "q050.flow.warehouse"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q050.decision"
+        "id": "requests",
+        "script": "q050.flow.requests"
+      },
+      {
+        "id": "copies",
+        "script": "q050.flow.copies"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "時計守を倒して針を止め続けると搬送先を公開し未完の本へ延長を出すの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q050.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q050.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q050.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q050.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。",
+    "flowVersion": 2,
+    "entryScript": "q050.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "終業の鐘が近い。司書は本を閉じ、黒い箱へ入れている。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "一箱目の搬送先を追う",
+            "to": "warehouse"
+          },
+          {
+            "id": "copy",
+            "text": "予定通り閉架するため、写本班を呼ぶ",
+            "to": "copies"
+          },
+          {
+            "id": "stop",
+            "text": "収蔵時計の針を固定する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "warehouse",
+        "text": "箱は焼却炉でなく、別棟の棚へ置かれた。$truth",
+        "options": [
+          {
+            "id": "extension",
+            "text": "未完の本だけ延長を申請する",
+            "to": "requests"
+          },
+          {
+            "id": "copy",
+            "text": "延長せず、全て写して予定通り送る",
+            "to": "copies"
+          }
+        ]
+      },
+      {
+        "id": "requests",
+        "text": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。",
+        "options": [
+          {
+            "id": "publish",
+            "text": "搬送先と延長した二冊を入口へ掲示する",
+            "to": "@informed"
+          },
+          {
+            "id": "cancel",
+            "text": "延長を取り下げ、写本に切り替える",
+            "to": "copies"
+          }
+        ]
+      },
+      {
+        "id": "copies",
+        "text": "写本班が分担し、一箱ずつ照合する。最後の箱にも受領印が返ってきた。",
+        "options": [
+          {
+            "id": "close",
+            "text": "全冊の写しを確認して予定通り閉架する",
+            "to": "@compromise"
+          },
+          {
+            "id": "address",
+            "text": "移送先も公開し、未完の本へ延長を求める",
+            "to": "requests"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q050.clue_a": {
@@ -683,6 +713,412 @@
             {
               "op": "jump",
               "script": "q050.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "終業の鐘が近い。司書は本を閉じ、黒い箱へ入れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "一箱目の搬送先を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.warehouse"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "予定通り閉架するため、写本班を呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "収蔵時計の針を固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.warehouse": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "warehouse"
+        },
+        {
+          "op": "say",
+          "text": "箱は焼却炉でなく、別棟の棚へ置かれた。時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送されます。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "extension",
+              "text": "未完の本だけ延長を申請する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.requests"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "延長せず、全て写して予定通り送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.requests": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "requests"
+        },
+        {
+          "op": "say",
+          "text": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "搬送先と延長した二冊を入口へ掲示する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "延長を取り下げ、写本に切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.copies": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "copies"
+        },
+        {
+          "op": "say",
+          "text": "写本班が分担し、一箱ずつ照合する。最後の箱にも受領印が返ってきた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "全冊の写しを確認して予定通り閉架する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "address",
+              "text": "移送先も公開し、未完の本へ延長を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.requests"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "時計は動き出しました。終わらなかった物語にも、続きを書く机が残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本は閉じませんでした。新刊を置く棚がなくなり、床に積まれます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "原本は移り、写本が残りました。書き手は次の頁を別冊として始めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q050.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "時計は動き出しました。終わらなかった物語にも、続きを書く机が残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本は閉じませんでした。新刊を置く棚がなくなり、床に積まれます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "原本は移り、写本が残りました。書き手は次の頁を別冊として始めます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q050"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q050.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q050.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warehouse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.warehouse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "requests",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.requests"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copies",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.copies"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q050.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

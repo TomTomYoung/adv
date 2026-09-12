@@ -6,7 +6,7 @@
   "client": "料理人のキク",
   "brief": "市場の食糧は全て明日までです。期限札の仕組みを調べてください。",
   "region": 6,
-  "type": "mechanism",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "入荷順を復元し使える品だけ選別する",
+      "label": "入荷日を固定して掲示し、使える品だけ納める",
       "text": "捨てる品も救える品も分かりました。キクは鍋の数を減らして店を開けます。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "倉庫の腐敗獣を倒し札を信用して納める",
+      "label": "札を信用し、現物を検めず納める",
       "text": "納品は間に合いました。料理人は匂いを確かめ、一部を自腹で廃棄します。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "全品を隔離し新しい食糧を調達する",
+      "label": "全品を隔離して新しい食糧を手配する",
       "text": "食事は遅れました。客には理由と返金方法が先に伝わります。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "料理人のキク",
         "observation": "市場の食糧は全て明日までです。期限札の仕組みを調べてください。",
         "belief": "市場の食糧は全て明日までです。期限札の仕組みを調べてください。",
-        "goal": "倉庫の腐敗獣を倒し札を信用して納める"
+        "goal": "市場の食糧は全て明日までです。期限札の仕組みを調べてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "倉庫の腐敗獣を倒し札を信用して納める",
-      "alternative": "入荷順を復元し使える品だけ選別する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "市場の食糧は全て明日までです。期限札の仕組みを調べてください。",
+      "progression": "日付の札を見続ける待機と現物の選別が別の入口になり、隔離は調査前にも選べる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q053.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "札の裏には何度も消した墨があり、同じ袋の紐は古く変色しています。"
+          "id": "sign",
+          "script": "q053.flow.sign"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "廃棄簿の日付と納品控えが合わず、倉庫の奥ほど番号が若くなっています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "sorting",
+          "script": "q053.flow.sorting"
         }
       ]
     },
@@ -136,80 +122,105 @@
       "operator": "ruleReveal",
       "newInformation": "札は日替わりで更新される宣伝板で、本当の入荷日を隠しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "sign"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q053.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q053.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q053.clue_a"
+        "id": "entry",
+        "script": "q053.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q053.clue_b"
+        "id": "sign",
+        "script": "q053.flow.sign"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q053.decision"
+        "id": "sorting",
+        "script": "q053.flow.sorting"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "倉庫の腐敗獣を倒し札を信用して納めると入荷順を復元し使える品だけ選別するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q053.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q053.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q053.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q053.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "日付の札を見続ける待機と現物の選別が別の入口になり、隔離は調査前にも選べる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "日付の札を見続ける待機と現物の選別が別の入口になり、隔離は調査前にも選べる。",
+    "flowVersion": 2,
+    "entryScript": "q053.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "どの木箱にも「賞味期限は明日」。古い箱にも同じ新しい札がある。",
+        "options": [
+          {
+            "id": "night",
+            "text": "日付が替わるところを見張る",
+            "to": "sign"
+          },
+          {
+            "id": "sort",
+            "text": "札を外し、入荷印と現物から選別する",
+            "to": "sorting"
+          },
+          {
+            "id": "deliver",
+            "text": "札を信用し、現物を検めず納める",
+            "to": "@contract"
+          },
+          {
+            "id": "isolate",
+            "text": "全品を隔離して新しい食糧を手配する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "sign",
+        "text": "夜明けに札だけが翌日へ替わった。$truth",
+        "options": [
+          {
+            "id": "sort",
+            "text": "入荷順を復元して食材を検める",
+            "to": "sorting"
+          },
+          {
+            "id": "quarantine",
+            "text": "調査を止め、全品を隔離する",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "sorting",
+        "text": "使える新しい箱と、納められない古い箱を分けた。入荷順を表示しなければ明日また混ざる。",
+        "options": [
+          {
+            "id": "dates",
+            "text": "入荷日を固定して掲示し、使える品だけ納める",
+            "to": "@informed"
+          },
+          {
+            "id": "none",
+            "text": "選別品も使わず、新しい食糧へ替える",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q053.clue_a": {
@@ -651,6 +662,369 @@
             {
               "op": "jump",
               "script": "q053.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q053.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q053.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "どの木箱にも「賞味期限は明日」。古い箱にも同じ新しい札がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "night",
+              "text": "日付が替わるところを見張る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.sign"
+                }
+              ]
+            },
+            {
+              "id": "sort",
+              "text": "札を外し、入荷印と現物から選別する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.sorting"
+                }
+              ]
+            },
+            {
+              "id": "deliver",
+              "text": "札を信用し、現物を検めず納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "isolate",
+              "text": "全品を隔離して新しい食糧を手配する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q053.flow.sign": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q053.node",
+          "value": "sign"
+        },
+        {
+          "op": "say",
+          "text": "夜明けに札だけが翌日へ替わった。札は日替わりで更新される宣伝板で、本当の入荷日を隠しています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sort",
+              "text": "入荷順を復元して食材を検める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.sorting"
+                }
+              ]
+            },
+            {
+              "id": "quarantine",
+              "text": "調査を止め、全品を隔離する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q053.flow.sorting": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q053.node",
+          "value": "sorting"
+        },
+        {
+          "op": "say",
+          "text": "使える新しい箱と、納められない古い箱を分けた。入荷順を表示しなければ明日また混ざる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dates",
+              "text": "入荷日を固定して掲示し、使える品だけ納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "none",
+              "text": "選別品も使わず、新しい食糧へ替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q053.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q053.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "捨てる品も救える品も分かりました。キクは鍋の数を減らして店を開けます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q053",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q053.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "納品は間に合いました。料理人は匂いを確かめ、一部を自腹で廃棄します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q053",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q053.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "食事は遅れました。客には理由と返金方法が先に伝わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q053",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q053.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q053.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q053.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "捨てる品も救える品も分かりました。キクは鍋の数を減らして店を開けます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "納品は間に合いました。料理人は匂いを確かめ、一部を自腹で廃棄します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "食事は遅れました。客には理由と返金方法が先に伝わります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q053"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q053.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q053.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q053.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sign",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q053.flow.sign"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sorting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q053.flow.sorting"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q053.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

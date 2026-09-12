@@ -6,7 +6,7 @@
   "client": "司書のシフ",
   "brief": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
   "region": 5,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "新旧の書名を結び循環をほどく",
+      "label": "新旧三つの書名を同じ対応表へ結ぶ",
       "text": "読者は目的の本へ着きました。古い名でも検索できる札が残ります。",
       "gold": 105,
       "xp": 100
     },
     "contract": {
-      "label": "索引の番人を倒して棚を直線に並べる",
+      "label": "索引を廃して棚を直線に並べる",
       "text": "出口は見えました。分類を失った本を探す時間は長くなります。",
       "gold": 125,
       "xp": 75
     },
     "compromise": {
-      "label": "循環の途中に出口札を足す",
+      "label": "ここに出口札を追加し、入口へ戻る",
       "text": "迷子は帰れます。探していた本の場所だけは、司書に聞く仕組みです。",
       "gold": 68,
       "xp": 75
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "司書のシフ",
         "observation": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
         "belief": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
-        "goal": "索引の番人を倒して棚を直線に並べる"
+        "goal": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "索引の番人を倒して棚を直線に並べる",
-      "alternative": "新旧の書名を結び循環をほどく",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "索引が読者を同じ棚へ戻します。出口へ導く順番を直してください。",
+      "progression": "旧書名をたどると索引が実際に循環し、一周後に対応表か出口札を作れる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q046.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "頁番号は正しく、古い書名だけが次の索引を指しています。"
+          "id": "rain",
+          "script": "q046.flow.rain"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "三冊の扉頁に同じ改題日があり、新旧対照表だけ抜けています。"
+          "id": "river",
+          "script": "q046.flow.river"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "ferry",
+          "script": "q046.flow.ferry"
         }
       ]
     },
@@ -136,80 +126,132 @@
       "operator": "pathHide",
       "newInformation": "索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "ferry"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q046.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q046.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q046.clue_a"
+        "id": "entry",
+        "script": "q046.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q046.clue_b"
+        "id": "rain",
+        "script": "q046.flow.rain"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q046.decision"
+        "id": "river",
+        "script": "q046.flow.river"
+      },
+      {
+        "id": "ferry",
+        "script": "q046.flow.ferry"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "索引の番人を倒して棚を直線に並べると新旧の書名を結び循環をほどくの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q046.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q046.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q046.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q046.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q046.looped",
+        "meaning": "各場面に明記した looped の行為・合意の記録",
+        "writer": [
+          "ferry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "旧書名をたどると索引が実際に循環し、一周後に対応表か出口札を作れる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "旧書名をたどると索引が実際に循環し、一周後に対応表か出口札を作れる。",
+    "flowVersion": 2,
+    "entryScript": "q046.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "探す本の索引は「雨の年」へ案内する。",
+        "options": [
+          {
+            "id": "index",
+            "text": "索引をたどる",
+            "to": "rain"
+          },
+          {
+            "id": "straight",
+            "text": "索引を廃して棚を直線に並べる",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "rain",
+        "text": "「雨の年」は「川の暦」に改題された、と棚札にある。",
+        "options": [
+          {
+            "id": "river",
+            "text": "川の暦の棚へ進む",
+            "to": "river"
+          },
+          {
+            "id": "exit",
+            "text": "ここに出口札を追加し、入口へ戻る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "river",
+        "text": "「川の暦」の札は「渡し守の記録」を指す。",
+        "options": [
+          {
+            "id": "ferry",
+            "text": "渡し守の記録を探す",
+            "to": "ferry"
+          },
+          {
+            "id": "exit",
+            "text": "この棚に出口札を足す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "ferry",
+        "text": "最後の札が「雨の年」へ戻った。$truth 三冊そのものはここに揃っている。",
+        "options": [
+          {
+            "id": "link",
+            "text": "新旧三つの書名を同じ対応表へ結ぶ",
+            "to": "@informed"
+          },
+          {
+            "id": "loop",
+            "text": "最初の棚へ戻って旧札を確認する",
+            "to": "rain",
+            "set": {
+              "looped": true
+            }
+          },
+          {
+            "id": "exit",
+            "text": "対応表は作らず、出口札だけ足す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q046.clue_a": {
@@ -705,6 +747,417 @@
             {
               "op": "jump",
               "script": "q046.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q046.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q046.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "探す本の索引は「雨の年」へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "index",
+              "text": "索引をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.rain"
+                }
+              ]
+            },
+            {
+              "id": "straight",
+              "text": "索引を廃して棚を直線に並べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q046.flow.rain": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q046.node",
+          "value": "rain"
+        },
+        {
+          "op": "say",
+          "text": "「雨の年」は「川の暦」に改題された、と棚札にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "river",
+              "text": "川の暦の棚へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.river"
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "text": "ここに出口札を追加し、入口へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q046.flow.river": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q046.node",
+          "value": "river"
+        },
+        {
+          "op": "say",
+          "text": "「川の暦」の札は「渡し守の記録」を指す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ferry",
+              "text": "渡し守の記録を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.ferry"
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "text": "この棚に出口札を足す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q046.flow.ferry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q046.node",
+          "value": "ferry"
+        },
+        {
+          "op": "say",
+          "text": "最後の札が「雨の年」へ戻った。索引は場所でなく書名の旧称を参照し、改題された三冊が循環しています。 三冊そのものはここに揃っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "link",
+              "text": "新旧三つの書名を同じ対応表へ結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "loop",
+              "text": "最初の棚へ戻って旧札を確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q046.looped",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q046.flow.rain"
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "text": "対応表は作らず、出口札だけ足す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q046.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q046.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "読者は目的の本へ着きました。古い名でも検索できる札が残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q046",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q046.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "出口は見えました。分類を失った本を探す時間は長くなります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q046",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q046.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷子は帰れます。探していた本の場所だけは、司書に聞く仕組みです。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q046",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q046.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q046.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q046.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "読者は目的の本へ着きました。古い名でも検索できる札が残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "出口は見えました。分類を失った本を探す時間は長くなります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "迷子は帰れます。探していた本の場所だけは、司書に聞く仕組みです。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q046"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q046.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q046.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q046.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rain",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q046.flow.rain"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "river",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q046.flow.river"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ferry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q046.flow.ferry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q046.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "深層組合のモリ",
   "brief": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
   "region": 10,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "人命救助を共同費にし荷物だけ従量制へ変える",
+      "label": "救助の共同費と荷物の従量制を結ぶ",
       "text": "巻上機は動き続け、負傷者も帰れました。宝物を多く持つ隊は少し多く払います。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "徴税の番機を倒し出口を開放する",
+      "label": "徴税の番機を倒し、出口を開放する",
       "text": "その日の帰還は無料でした。翌週の修理代を集める相談が始まります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "待機者の税を払い現行設備を使う",
+      "label": "立替額を記録して依頼を終える",
       "text": "全員その日に上がれました。モリは立替額を、新制度の材料として記録します。",
       "gold": 107,
       "xp": 105
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "深層組合のモリ",
         "observation": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
         "belief": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
-        "goal": "徴税の番機を倒し出口を開放する"
+        "goal": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "徴税の番機を倒し出口を開放する",
-      "alternative": "人命救助を共同費にし荷物だけ従量制へ変える",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "出口で帰還税を求められます。誰が集め何に使うのか確かめてください。",
+      "progression": "待機者を先に帰す立替と設備の維持費を確認する交渉が合流し、救助費の制度へ進む。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q094.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "納付箱から修理部品の支払いが出ていますが、人も荷も同じ重さ表です。"
+          "id": "returned",
+          "script": "q094.flow.returned"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "救助台帳には無一文の負傷者だけが待機欄へ残っています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "budget",
+          "script": "q094.flow.budget"
         }
       ]
     },
@@ -136,80 +122,141 @@
       "operator": "referenceSwap",
       "newInformation": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "budget"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q094.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q094.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q094.clue_a"
+        "id": "entry",
+        "script": "q094.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q094.clue_b"
+        "id": "returned",
+        "script": "q094.flow.returned"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q094.decision"
+        "id": "budget",
+        "script": "q094.flow.budget"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "徴税の番機を倒し出口を開放すると人命救助を共同費にし荷物だけ従量制へ変えるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q094.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q094.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q094.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q094.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q094.advanced",
+        "meaning": "各場面に明記した advanced の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "待機者を先に帰す立替と設備の維持費を確認する交渉が合流し、救助費の制度へ進む。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "待機者を先に帰す立替と設備の維持費を確認する交渉が合流し、救助費の制度へ進む。",
+    "flowVersion": 2,
+    "entryScript": "q094.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "巻上機は動くが、金を持たない負傷者だけが下に残る。徴収係は修理部品の納品を待っている。",
+        "options": [
+          {
+            "id": "advance",
+            "text": "待機者の税30Gを立て替える",
+            "to": "returned",
+            "cost": {
+              "gold": 30
+            },
+            "set": {
+              "advanced": true
+            }
+          },
+          {
+            "id": "cost",
+            "text": "維持費と重さ表を徴収係と見る",
+            "to": "budget"
+          },
+          {
+            "id": "free",
+            "text": "徴税の番機を倒し、出口を開放する",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "text": "負傷者は全員上へ着いた。今日の救助は終わったが、次の無一文の人にも税は掛かる。",
+        "options": [
+          {
+            "id": "receipt",
+            "text": "立替額を記録して依頼を終える",
+            "to": "@compromise"
+          },
+          {
+            "id": "reform",
+            "text": "次の救助のために重さ表を見直す",
+            "to": "budget"
+          }
+        ]
+      },
+      {
+        "id": "budget",
+        "text": "$truth 荷物の重さだけを課金し、人の救助を共同費へ分ければ維持費を賄える。",
+        "options": [
+          {
+            "id": "change",
+            "text": "救助の共同費と荷物の従量制を結ぶ",
+            "to": "@informed"
+          },
+          {
+            "id": "pay",
+            "text": "今日の待機者分30Gだけ払う",
+            "to": "@compromise",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q094.advanced"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "gold": 30
+            }
+          },
+          {
+            "id": "leave",
+            "text": "支払った立替額だけ残して戻る",
+            "to": "@compromise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q094.advanced"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q094.clue_a": {
@@ -651,6 +698,446 @@
             {
               "op": "jump",
               "script": "q094.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q094.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q094.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "巻上機は動くが、金を持たない負傷者だけが下に残る。徴収係は修理部品の納品を待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "advance",
+              "text": "待機者の税30Gを立て替える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q094.advanced",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q094.flow.returned"
+                }
+              ]
+            },
+            {
+              "id": "cost",
+              "text": "維持費と重さ表を徴収係と見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.budget"
+                }
+              ]
+            },
+            {
+              "id": "free",
+              "text": "徴税の番機を倒し、出口を開放する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_10",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q094.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q094.flow.returned": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q094.node",
+          "value": "returned"
+        },
+        {
+          "op": "say",
+          "text": "負傷者は全員上へ着いた。今日の救助は終わったが、次の無一文の人にも税は掛かる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "receipt",
+              "text": "立替額を記録して依頼を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "reform",
+              "text": "次の救助のために重さ表を見直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.budget"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q094.flow.budget": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q094.node",
+          "value": "budget"
+        },
+        {
+          "op": "say",
+          "text": "税は下層から人を吊る巻上機の維持費で、宝物の重量だけを人にも課しています。 荷物の重さだけを課金し、人の救助を共同費へ分ければ維持費を賄える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "change",
+              "text": "救助の共同費と荷物の従量制を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pay",
+              "text": "今日の待機者分30Gだけ払う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q094.advanced"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q094.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "支払った立替額だけ残して戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q094.advanced"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q094.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巻上機は動き続け、負傷者も帰れました。宝物を多く持つ隊は少し多く払います。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q094",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q094.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その日の帰還は無料でした。翌週の修理代を集める相談が始まります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q094",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q094.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "全員その日に上がれました。モリは立替額を、新制度の材料として記録します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q094",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q094.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q094.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巻上機は動き続け、負傷者も帰れました。宝物を多く持つ隊は少し多く払います。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その日の帰還は無料でした。翌週の修理代を集める相談が始まります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "全員その日に上がれました。モリは立替額を、新制度の材料として記録します。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q094"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q094.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q094.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q094.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q094.flow.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "budget",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q094.flow.budget"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q094.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

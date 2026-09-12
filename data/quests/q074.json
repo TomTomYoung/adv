@@ -6,7 +6,7 @@
   "client": "鐘番のユア",
   "brief": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
   "region": 8,
-  "type": "negotiation",
+  "type": "authored_progression",
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "旧手順を試験して祈祷書を訂正する",
+      "label": "扉を開き、試験済みの順で祈祷書を訂正する",
       "text": "扉は開きました。ユアは訂正した頁に、自分の検証日を記します。",
       "gold": 141,
       "xp": 124
     },
     "contract": {
-      "label": "封鎖機構を倒し順番を無視して進む",
+      "label": "封鎖機構を倒し、順番を無視して進む",
       "text": "今回の隊は通れました。次の祈祷でも炉は熱を持ちます。",
       "gold": 161,
       "xp": 96
     },
     "compromise": {
-      "label": "炉を止め手動で扉を開ける",
+      "label": "炉を停止し、手動で扉を開く",
       "text": "廟は静かなまま開きました。鐘の音が戻るのは点検の後です。",
       "gold": 91,
       "xp": 93
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "鐘番のユア",
         "observation": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
         "belief": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
-        "goal": "封鎖機構を倒し順番を無視して進む"
+        "goal": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "封鎖機構を倒し順番を無視して進む",
-      "alternative": "旧手順を試験して祈祷書を訂正する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "祈祷の順番を間違えると廟が閉じます。正しい順を探してください。",
+      "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q074.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっています。"
+          "id": "lock",
+          "script": "q074.flow.lock"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にあります。"
+          "id": "furnace",
+          "script": "q074.flow.furnace"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "door",
+          "script": "q074.flow.door"
         }
       ]
     },
@@ -136,80 +126,138 @@
       "operator": "referenceSwap",
       "newInformation": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "door"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q074.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q074.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q074.clue_a"
+        "id": "entry",
+        "script": "q074.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q074.clue_b"
+        "id": "lock",
+        "script": "q074.flow.lock"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q074.decision"
+        "id": "furnace",
+        "script": "q074.flow.furnace"
+      },
+      {
+        "id": "door",
+        "script": "q074.flow.door"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "封鎖機構を倒し順番を無視して進むと旧手順を試験して祈祷書を訂正するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q074.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q074.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q074.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q074.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q074.failedTrial",
+        "meaning": "各場面に明記した failedTrial の行為・合意の記録",
+        "writer": [
+          "lock"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。",
+    "flowVersion": 2,
+    "entryScript": "q074.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "新しい祈祷書は「炉、冷却、扉」。古い操作盤には冷却が最初に彫られている。",
+        "options": [
+          {
+            "id": "cool",
+            "text": "古い刻印通り、冷却を先に入れる",
+            "to": "furnace"
+          },
+          {
+            "id": "heat",
+            "text": "祈祷書通り、炉を先に開く",
+            "to": "lock"
+          },
+          {
+            "id": "force",
+            "text": "封鎖機構を倒し、順番を無視して進む",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "manual",
+            "text": "炉を停止し、手動で扉を開く",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "lock",
+        "text": "温度が上がり、封鎖が戻った。試験盤なので炉は自動停止した。写本の一節目が逆らしい。",
+        "options": [
+          {
+            "id": "reset",
+            "text": "試験盤を戻し、冷却から始める",
+            "to": "furnace",
+            "set": {
+              "failedTrial": true
+            }
+          },
+          {
+            "id": "manual",
+            "text": "試験を中止して手動で扉を開く",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "furnace",
+        "text": "冷却灯が点いた。次は炉、その後で扉の句へ進める。",
+        "options": [
+          {
+            "id": "furnace",
+            "text": "冷却を確認して炉を開く",
+            "to": "door"
+          },
+          {
+            "id": "manual",
+            "text": "炉を使わず、手動へ切り替える",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "door",
+        "text": "扉の封鎖灯が消えた。$truth",
+        "options": [
+          {
+            "id": "correct",
+            "text": "扉を開き、試験済みの順で祈祷書を訂正する",
+            "to": "@informed"
+          },
+          {
+            "id": "stop",
+            "text": "訂正の決定は預け、炉を止めて手動運用する",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q074.clue_a": {
@@ -651,6 +699,446 @@
             {
               "op": "jump",
               "script": "q074.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "新しい祈祷書は「炉、冷却、扉」。古い操作盤には冷却が最初に彫られている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "古い刻印通り、冷却を先に入れる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.furnace"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "祈祷書通り、炉を先に開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.lock"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "封鎖機構を倒し、順番を無視して進む",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q074.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を停止し、手動で扉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.lock": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "lock"
+        },
+        {
+          "op": "say",
+          "text": "温度が上がり、封鎖が戻った。試験盤なので炉は自動停止した。写本の一節目が逆らしい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reset",
+              "text": "試験盤を戻し、冷却から始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q074.failedTrial",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q074.flow.furnace"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "試験を中止して手動で扉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.furnace": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "furnace"
+        },
+        {
+          "op": "say",
+          "text": "冷却灯が点いた。次は炉、その後で扉の句へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "furnace",
+              "text": "冷却を確認して炉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.door"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を使わず、手動へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.door": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "door"
+        },
+        {
+          "op": "say",
+          "text": "扉の封鎖灯が消えた。祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられています。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "扉を開き、試験済みの順で祈祷書を訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "訂正の決定は預け、炉を止めて手動運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "扉は開きました。ユアは訂正した頁に、自分の検証日を記します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今回の隊は通れました。次の祈祷でも炉は熱を持ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟は静かなまま開きました。鐘の音が戻るのは点検の後です。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q074.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "扉は開きました。ユアは訂正した頁に、自分の検証日を記します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今回の隊は通れました。次の祈祷でも炉は熱を持ちます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟は静かなまま開きました。鐘の音が戻るのは点検の後です。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q074"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q074.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q074.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lock",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.lock"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "furnace",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.furnace"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "door",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.door"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q074.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

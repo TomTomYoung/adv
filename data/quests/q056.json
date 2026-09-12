@@ -6,7 +6,7 @@
   "client": "舞台主のトワ",
   "brief": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
   "region": 6,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 6,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "停止札を作り機械の役割を公表する",
+      "label": "開演前に仕組みを説明し、停止札を係へ渡す",
       "text": "夜は静まりました。初公演では本物の拍手が少し遅れて広がります。",
       "gold": 117,
       "xp": 108
     },
     "contract": {
-      "label": "機械の精を倒し歯車を壊す",
+      "label": "拍手機械の歯車を壊す",
       "text": "眠れる夜が戻りました。昼の舞台も静かになり、役者は客の息を聞きます。",
       "gold": 137,
       "xp": 82
     },
     "compromise": {
-      "label": "機械を稽古用へ移す",
+      "label": "機械を舞台裏の稽古場へ移す",
       "text": "拍手は地下奥で続きました。若い役者には練習の相手ができます。",
       "gold": 76,
       "xp": 81
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "舞台主のトワ",
         "observation": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
         "belief": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
-        "goal": "機械の精を倒し歯車を壊す"
+        "goal": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "機械の精を倒し歯車を壊す",
-      "alternative": "停止札を作り機械の役割を公表する",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "地下劇場で無人の拍手が続き眠れません。音の原因を止めてください。",
+      "progression": "客席札を動かす試験で拍手の停止条件を見つけ、その機械を公演へ残すか稽古へ移す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q056.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "拍手の強さは椅子を外すと減り、舞台を照らしても変わりません。"
+          "id": "silent",
+          "script": "q056.flow.silent"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "機械の注文書には満席を演出とあり、停止用の売約札が欠けています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "public",
+          "script": "q056.flow.public"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "pathHide",
       "newInformation": "拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "silent"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q056.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q056.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q056.clue_a"
+        "id": "entry",
+        "script": "q056.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q056.clue_b"
+        "id": "silent",
+        "script": "q056.flow.silent"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q056.decision"
+        "id": "public",
+        "script": "q056.flow.public"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "機械の精を倒し歯車を壊すと停止札を作り機械の役割を公表するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q056.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q056.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q056.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q056.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "客席札を動かす試験で拍手の停止条件を見つけ、その機械を公演へ残すか稽古へ移す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "客席札を動かす試験で拍手の停止条件を見つけ、その機械を公演へ残すか稽古へ移す。",
+    "flowVersion": 2,
+    "entryScript": "q056.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "閉店後の空席へ拍手が鳴る。席番の板には「未売」が並んでいる。",
+        "options": [
+          {
+            "id": "sold",
+            "text": "試しに全席へ売約札を掛ける",
+            "to": "silent"
+          },
+          {
+            "id": "break",
+            "text": "拍手機械の歯車を壊す",
+            "to": "@contract"
+          },
+          {
+            "id": "move",
+            "text": "機械を舞台裏の稽古場へ移す",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "silent",
+        "text": "最後の売約札で拍手が止まった。一枚外すとまた鳴る。$truth",
+        "options": [
+          {
+            "id": "switch",
+            "text": "客席札と別に停止札を作る",
+            "to": "public"
+          },
+          {
+            "id": "practice",
+            "text": "試験の仕組みを稽古だけへ使う",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "public",
+        "text": "停止札でいつでも静かになる。役者は客へ機械の役割を説明してから幕を開けたいという。",
+        "options": [
+          {
+            "id": "announce",
+            "text": "開演前に仕組みを説明し、停止札を係へ渡す",
+            "to": "@informed"
+          },
+          {
+            "id": "backstage",
+            "text": "説明する公演をやめ、稽古場へ移す",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q056.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q056.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q056.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q056.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "閉店後の空席へ拍手が鳴る。席番の板には「未売」が並んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sold",
+              "text": "試しに全席へ売約札を掛ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.silent"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "拍手機械の歯車を壊す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "機械を舞台裏の稽古場へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q056.flow.silent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q056.node",
+          "value": "silent"
+        },
+        {
+          "op": "say",
+          "text": "最後の売約札で拍手が止まった。一枚外すとまた鳴る。拍手機械は客席の空き数を数えて動き、全席売約の印がない限り止まりません。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "switch",
+              "text": "客席札と別に停止札を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.public"
+                }
+              ]
+            },
+            {
+              "id": "practice",
+              "text": "試験の仕組みを稽古だけへ使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q056.flow.public": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q056.node",
+          "value": "public"
+        },
+        {
+          "op": "say",
+          "text": "停止札でいつでも静かになる。役者は客へ機械の役割を説明してから幕を開けたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "announce",
+              "text": "開演前に仕組みを説明し、停止札を係へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "backstage",
+              "text": "説明する公演をやめ、稽古場へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q056.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q056.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夜は静まりました。初公演では本物の拍手が少し遅れて広がります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q056",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q056.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "眠れる夜が戻りました。昼の舞台も静かになり、役者は客の息を聞きます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q056",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q056.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "拍手は地下奥で続きました。若い役者には練習の相手ができます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q056",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q056.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q056.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q056.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夜は静まりました。初公演では本物の拍手が少し遅れて広がります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "眠れる夜が戻りました。昼の舞台も静かになり、役者は客の息を聞きます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "拍手は地下奥で続きました。若い役者には練習の相手ができます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q056"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q056.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q056.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q056.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "silent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q056.flow.silent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "public",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q056.flow.public"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q056.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -6,7 +6,7 @@
   "client": "観測士のシオ",
   "brief": "百年前の日付で観測報告が続きます。書いた者を探してください。",
   "region": 9,
-  "type": "escort",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "暦を更新し百年分の対応表を作る",
+      "label": "新旧の対応表を作り、古い値も保存する",
       "text": "古い観測値も現在の研究へ使えます。機械の名は観測者欄に残ります。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "観測器の護衛を倒し古い報告を破棄する",
+      "label": "古い日付の報告を全て破棄する",
       "text": "日付の混乱は消えました。長い変化を追える資料も失われます。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "旧暦のまま受領し注記を付ける",
+      "label": "旧暦と注記して毎日の報告を受け取る",
       "text": "新旧の暦が並びました。変換を忘れない仕事が、毎日の当番に加わります。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "観測士のシオ",
         "observation": "百年前の日付で観測報告が続きます。書いた者を探してください。",
         "belief": "百年前の日付で観測報告が続きます。書いた者を探してください。",
-        "goal": "観測器の護衛を倒し古い報告を破棄する"
+        "goal": "百年前の日付で観測報告が続きます。書いた者を探してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,23 @@
       }
     ],
     "conflict": {
-      "request": "観測器の護衛を倒し古い報告を破棄する",
-      "alternative": "暦を更新し百年分の対応表を作る",
-      "cost": "補修用の縄と戦闘リスク"
+      "request": "百年前の日付で観測報告が続きます。書いた者を探してください。",
+      "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q086.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもありません。"
+          "id": "mail",
+          "script": "q086.flow.mail"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車があります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "mapping",
+          "script": "q086.flow.mapping"
         }
       ]
     },
@@ -136,80 +122,100 @@
       "operator": "pathHide",
       "newInformation": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "mapping"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q086.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q086.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q086.clue_a"
+        "id": "entry",
+        "script": "q086.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q086.clue_b"
+        "id": "mail",
+        "script": "q086.flow.mail"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q086.decision"
+        "id": "mapping",
+        "script": "q086.flow.mapping"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "観測器の護衛を倒し古い報告を破棄すると暦を更新し百年分の対応表を作るの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q086.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q086.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q086.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q086.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。",
+    "flowVersion": 2,
+    "entryScript": "q086.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "百年前の日付の報告へ、今夜しかない星の並びが描かれている。",
+        "options": [
+          {
+            "id": "reply",
+            "text": "報告者へ現在の暦を返信する",
+            "to": "mail"
+          },
+          {
+            "id": "old",
+            "text": "旧暦と注記して毎日の報告を受け取る",
+            "to": "@compromise"
+          },
+          {
+            "id": "discard",
+            "text": "古い日付の報告を全て破棄する",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "mail",
+        "text": "返信が受領されない。通信箱では受領用の歯車が欠け、暦改定通知が封をしたまま積まれている。",
+        "options": [
+          {
+            "id": "repair",
+            "text": "受領歯車を直し、暦改定を読み込ませる",
+            "to": "mapping"
+          },
+          {
+            "id": "manual",
+            "text": "通信の修理を延期し、旧暦として受け取る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "mapping",
+        "text": "$truth 新しい報告の日付は直ったが、過去百年の値は旧暦のままだ。",
+        "options": [
+          {
+            "id": "table",
+            "text": "新旧の対応表を作り、古い値も保存する",
+            "to": "@informed"
+          },
+          {
+            "id": "daily",
+            "text": "対応表は作らず、日ごとに旧暦の注記を付ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q086.clue_a": {
@@ -705,6 +711,358 @@
             {
               "op": "jump",
               "script": "q086.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "百年前の日付の報告へ、今夜しかない星の並びが描かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "報告者へ現在の暦を返信する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.mail"
+                }
+              ]
+            },
+            {
+              "id": "old",
+              "text": "旧暦と注記して毎日の報告を受け取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "古い日付の報告を全て破棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.mail": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "mail"
+        },
+        {
+          "op": "say",
+          "text": "返信が受領されない。通信箱では受領用の歯車が欠け、暦改定通知が封をしたまま積まれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "受領歯車を直し、暦改定を読み込ませる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.mapping"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "通信の修理を延期し、旧暦として受け取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.mapping": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "mapping"
+        },
+        {
+          "op": "say",
+          "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器です。 新しい報告の日付は直ったが、過去百年の値は旧暦のままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "table",
+              "text": "新旧の対応表を作り、古い値も保存する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "daily",
+              "text": "対応表は作らず、日ごとに旧暦の注記を付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "古い観測値も現在の研究へ使えます。機械の名は観測者欄に残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "日付の混乱は消えました。長い変化を追える資料も失われます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新旧の暦が並びました。変換を忘れない仕事が、毎日の当番に加わります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q086.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "古い観測値も現在の研究へ使えます。機械の名は観測者欄に残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "日付の混乱は消えました。長い変化を追える資料も失われます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "新旧の暦が並びました。変換を忘れない仕事が、毎日の当番に加わります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q086"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q086.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q086.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mail",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.flow.mail"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mapping",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.flow.mapping"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q086.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

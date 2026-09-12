@@ -6,7 +6,7 @@
   "client": "帰還者たち",
   "brief": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
   "region": 10,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 10,
   "requires": {
     "op": "and",
@@ -732,19 +732,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "帰還記録を公開し迷宮を共同で管理する",
+      "label": "公開範囲を守り、共同管理へ帰還記録を渡す",
       "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。",
       "gold": 165,
       "xp": 140
     },
     "contract": {
-      "label": "深淵の守護者を倒し門の鍵を独占する",
+      "label": "深淵の守護者を倒し、門の鍵を独占する",
       "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。",
       "gold": 185,
       "xp": 110
     },
     "compromise": {
-      "label": "最奥を封じ、救助と研究の通路だけ残す",
+      "label": "救助と研究の通路だけ残して最奥を封じる",
       "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。",
       "gold": 107,
       "xp": 105
@@ -766,13 +766,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -782,7 +775,7 @@
         "name": "帰還者たち",
         "observation": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
         "belief": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
-        "goal": "深淵の守護者を倒し門の鍵を独占する"
+        "goal": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。"
       },
       {
         "id": "party",
@@ -798,30 +791,27 @@
       }
     ],
     "conflict": {
-      "request": "深淵の守護者を倒し門の鍵を独占する",
-      "alternative": "帰還記録を公開し迷宮を共同で管理する",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "百件の記録が深淵の門へ集まりました。迷宮を閉じるか、残すか、その扱いを決めてください。",
+      "progression": "実際に選んだ帰還の記録を読む終幕。共有前に居住者の公開範囲を調整し、管理責任を引き継ぐ。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q100.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "門に映るのは財宝でなく、実際に残した地図・補給・救助の記録です。"
+          "id": "archive",
+          "script": "q100.flow.archive"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "古い銘文の征服は後世の追記で、原文には道を次へ渡すと刻まれています。"
+          "id": "privacy",
+          "script": "q100.flow.privacy"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "handoff",
+          "script": "q100.flow.handoff"
         }
       ]
     },
@@ -833,80 +823,224 @@
       "operator": "frameShift",
       "newInformation": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "archive"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q100.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q100.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q100.clue_a"
+        "id": "entry",
+        "script": "q100.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q100.clue_b"
+        "id": "archive",
+        "script": "q100.flow.archive"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q100.decision"
+        "id": "privacy",
+        "script": "q100.flow.privacy"
+      },
+      {
+        "id": "handoff",
+        "script": "q100.flow.handoff"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "深淵の守護者を倒し門の鍵を独占すると帰還記録を公開し迷宮を共同で管理するの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q100.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q100.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q100.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q100.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q100.redacted",
+        "meaning": "各場面に明記した redacted の行為・合意の記録",
+        "writer": [
+          "privacy"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "実際に選んだ帰還の記録を読む終幕。共有前に居住者の公開範囲を調整し、管理責任を引き継ぐ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "実際に選んだ帰還の記録を読む終幕。共有前に居住者の公開範囲を調整し、管理責任を引き継ぐ。",
+    "flowVersion": 2,
+    "entryScript": "q100.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "門には財宝でなく、これまでの帰路が映る。帰還者は閉じるか支配するかだけを聞くつもりで来ていた。",
+        "options": [
+          {
+            "id": "records",
+            "text": "門へ実際の帰還記録を映す",
+            "to": "archive"
+          },
+          {
+            "id": "key",
+            "text": "深淵の守護者を倒し、門の鍵を独占する",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "limited",
+            "text": "救助と研究の通路だけ残して最奥を封じる",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "archive",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q001.outcome"
+              },
+              "right": "informed"
+            },
+            "yes": "最初の記録には、二人へ油を分けて帰った道が映る。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q001.outcome"
+                },
+                "right": "contract"
+              },
+              "yes": "最初の記録には、老人を運び、新人の名を記せなかった救助が映る。",
+              "no": "最初の記録には、救助隊へ渡した灯番の地図が映る。"
+            }
+          },
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q098.outcome"
+              },
+              "right": "informed"
+            },
+            "yes": "最後の一室は、住民が承認した避難路だけが共有されている。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q098.outcome"
+                },
+                "right": "contract"
+              },
+              "yes": "最後の一室を全て描いた地図が映る。公開を望まなかった住民の家も含まれている。",
+              "no": "最後の一室の白い余白には、立ち入らなかった理由が添えられている。"
+            }
+          },
+          "$truth"
+        ],
+        "options": [
+          {
+            "id": "privacy",
+            "text": "次へ渡す範囲を帰還者と確認する",
+            "to": "privacy"
+          },
+          {
+            "id": "close",
+            "text": "記録を保管し、救助と研究だけへ利用を絞る",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "privacy",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q098.outcome"
+              },
+              "right": "contract"
+            },
+            "yes": "全室の地図には住居の位置がある。公開用の写しでは家へ入る枝道を除き、避難路だけ渡す必要がある。",
+            "no": "承認のある避難路と、理由を記した余白を、その範囲のまま引き継げる。"
+          }
+        ],
+        "options": [
+          {
+            "id": "redact",
+            "text": "住居を公開用の写しから除く",
+            "to": "handoff",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q098.outcome"
+              },
+              "right": "contract"
+            },
+            "set": {
+              "redacted": true
+            }
+          },
+          {
+            "id": "respect",
+            "text": "承認された範囲と余白を維持する",
+            "to": "handoff",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q098.outcome"
+                },
+                "right": "contract"
+              }
+            }
+          },
+          {
+            "id": "limit",
+            "text": "公開せず、救助と研究の通路だけに使う",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "handoff",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q099.outcome"
+              },
+              "right": "informed"
+            },
+            "yes": "地下へ残る人にも連絡日がある。リネはその日を、次の管理当番へ引き継ぐ。",
+            "no": "地下へ残る人との連絡は、まだ整っていない部分がある。管理当番はそれも未完の仕事として受け取る。"
+          },
+          "帰還者たちは鍵を一人に渡さず、地図・補給・救助の記録をそれぞれ更新すると署名した。"
+        ],
+        "options": [
+          {
+            "id": "share",
+            "text": "公開範囲を守り、共同管理へ帰還記録を渡す",
+            "to": "@informed"
+          },
+          {
+            "id": "seal",
+            "text": "署名を保管し、最奥を封じて研究と救助に限る",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q100.clue_a": {
@@ -1428,6 +1562,608 @@
             {
               "op": "jump",
               "script": "q100.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q100.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q100.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "門には財宝でなく、これまでの帰路が映る。帰還者は閉じるか支配するかだけを聞くつもりで来ていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "records",
+              "text": "門へ実際の帰還記録を映す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.archive"
+                }
+              ]
+            },
+            {
+              "id": "key",
+              "text": "深淵の守護者を倒し、門の鍵を独占する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_10",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q100.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "救助と研究の通路だけ残して最奥を封じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q100.flow.archive": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q100.node",
+          "value": "archive"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.outcome"
+            },
+            "right": "informed"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "最初の記録には、二人へ油を分けて帰った道が映る。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q001.outcome"
+                },
+                "right": "contract"
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "最初の記録には、老人を運び、新人の名を記せなかった救助が映る。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "最初の記録には、救助隊へ渡した灯番の地図が映る。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q098.outcome"
+            },
+            "right": "informed"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "最後の一室は、住民が承認した避難路だけが共有されている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q098.outcome"
+                },
+                "right": "contract"
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "最後の一室を全て描いた地図が映る。公開を望まなかった住民の家も含まれている。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "最後の一室の白い余白には、立ち入らなかった理由が添えられている。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "門は願いを叶える装置でなく、記録された帰還方法を次の冒険者へ渡す共有基盤です。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "privacy",
+              "text": "次へ渡す範囲を帰還者と確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.privacy"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "記録を保管し、救助と研究だけへ利用を絞る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q100.flow.privacy": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q100.node",
+          "value": "privacy"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q098.outcome"
+            },
+            "right": "contract"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "全室の地図には住居の位置がある。公開用の写しでは家へ入る枝道を除き、避難路だけ渡す必要がある。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "承認のある避難路と、理由を記した余白を、その範囲のまま引き継げる。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "redact",
+              "text": "住居を公開用の写しから除く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q098.outcome"
+                    },
+                    "right": "contract"
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q100.redacted",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q100.flow.handoff"
+                }
+              ]
+            },
+            {
+              "id": "respect",
+              "text": "承認された範囲と余白を維持する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "quests.q098.outcome"
+                      },
+                      "right": "contract"
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.handoff"
+                }
+              ]
+            },
+            {
+              "id": "limit",
+              "text": "公開せず、救助と研究の通路だけに使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q100.flow.handoff": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q100.node",
+          "value": "handoff"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q099.outcome"
+            },
+            "right": "informed"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下へ残る人にも連絡日がある。リネはその日を、次の管理当番へ引き継ぐ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "地下へ残る人との連絡は、まだ整っていない部分がある。管理当番はそれも未完の仕事として受け取る。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "帰還者たちは鍵を一人に渡さず、地図・補給・救助の記録をそれぞれ更新すると署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "公開範囲を守り、共同管理へ帰還記録を渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "署名を保管し、最奥を封じて研究と救助に限る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q100.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q100.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q100",
+              "outcome": "informed"
+            },
+            {
+              "op": "ending.set",
+              "title": "道を次へ渡す者",
+              "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q100.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q100",
+              "outcome": "contract"
+            },
+            {
+              "op": "ending.set",
+              "title": "迷宮の鍵を持つ者",
+              "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q100.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q100",
+              "outcome": "compromise"
+            },
+            {
+              "op": "ending.set",
+              "title": "灯を守って帰る者",
+              "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q100.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q100.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "門の先に新しい依頼が掲げられました。英雄の一度の勝利より、次の隊が帰れる手順が町の財産になります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "あなたの隊は迷宮の管理者になりました。帰還を許す責任も、閉ざす責任も、その鍵の重さとして残ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "町はしばらく静かな朝を迎えました。未踏の場所は残り、いつ開くかを決めるための記録も残ります。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q100"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q100.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q100.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q100.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "archive",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q100.flow.archive"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "privacy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q100.flow.privacy"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "handoff",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q100.flow.handoff"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q100.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

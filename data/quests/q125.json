@@ -6,7 +6,7 @@
   "client": "森番ユノ",
   "brief": "角獣の群れが畑へ来ます。師オサと対応を相談してください。",
   "region": 3,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -60,14 +60,27 @@
       }
     ],
     "conflict": {
-      "design": "弟子の相談→師／森の調査→暴れる先頭個体への対応→群れを討つ／迂回路へ誘導。誘導は餌場の理解と通過路が必要です。先頭を倒してから誘導する混合解決も認めます。調査中に退けば畑の柵を守る小目標へ切り替えられます。"
+      "request": "角獣の群れが畑へ来ます。師オサと対応を相談してください。",
+      "progression": "先頭を討っても群れが止まらず、戦闘後に行先を確保する仕事へ続く。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q125.scene.entry"
+          "script": "q125.flow.entry"
+        },
+        {
+          "id": "after",
+          "script": "q125.flow.after"
+        },
+        {
+          "id": "village",
+          "script": "q125.flow.village"
+        },
+        {
+          "id": "crossing",
+          "script": "q125.flow.crossing"
         }
       ]
     },
@@ -76,16 +89,29 @@
     },
     "reveal": {
       "newInformation": "角獣の群れは餌場を失っています。強い個体を倒す必要がある場合もありますが、群れ全体の追撃では移動が終わりません。師は知識が間違っていたのではなく、自分の弓以外の解決を弟子へ渡せずにいます。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q125.scene.entry"
+        "script": "q125.flow.entry"
+      },
+      {
+        "id": "after",
+        "script": "q125.flow.after"
+      },
+      {
+        "id": "village",
+        "script": "q125.flow.village"
+      },
+      {
+        "id": "crossing",
+        "script": "q125.flow.crossing"
       }
     ],
     "adaptation": {
@@ -96,143 +122,105 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q125.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q125.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q125.forage",
-        "meaning": "作者原稿の forage に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q125.passage",
-        "meaning": "作者原稿の passage に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q125.lead",
-        "meaning": "作者原稿の lead に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "オサは倒した数を尋ねる。ユノは、群れがどこへ行けるかを知りたいと言った。",
+        "text": "オサは倒した数を尋ねる。ユノは伐られた斜面を指し、群れがどこへ行けるかを問う。",
         "options": [
           {
-            "id": "forage",
-            "text": "失われた餌場を確かめる",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q125.forage"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "forage": true
-            },
-            "textAfter": "伐採された斜面で餌がなくなっていた。群れは畑へ移ろうとしている。"
-          },
-          {
-            "id": "passage",
-            "text": "村と迂回路を空ける段取りを決める",
-            "to": "entry",
-            "when": {
-              "op": "and",
-              "args": [
-                {
-                  "op": "eq",
-                  "left": {
-                    "ref": "flags.quest.q125.forage"
-                  },
-                  "right": true
-                },
-                {
-                  "op": "not",
-                  "arg": {
-                    "op": "eq",
-                    "left": {
-                      "ref": "flags.quest.q125.passage"
-                    },
-                    "right": true
-                  }
-                }
-              ]
-            },
-            "set": {
-              "passage": true
-            },
-            "textAfter": "村は柵の一部を開くと承諾した。作物の近くには番を残す。"
+            "id": "slope",
+            "text": "ユノと斜面をたどる",
+            "to": "village"
           },
           {
             "id": "lead",
-            "text": "暴れる先頭だけを退ける",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q125.lead"
-                },
-                "right": true
-              }
-            },
-            "combat": "story_125",
-            "escape": "entry",
-            "set": {
-              "lead": true
-            }
-          },
-          {
-            "id": "hunt",
-            "text": "群れを討つ作戦に協力する",
-            "to": "@hunt",
-            "combat": "story_125",
-            "escape": "entry"
-          },
-          {
-            "id": "guide",
-            "text": "餌場と通過路を使って群れを誘導する",
-            "to": "@guide",
-            "need": [
-              "forage",
-              "passage"
-            ]
+            "text": "暴れる先頭を退ける",
+            "to": "after",
+            "combat": "story_125"
           },
           {
             "id": "guard",
-            "text": "調査を打ち切り、今夜は畑の柵を守る",
+            "text": "今夜は畑の柵だけ守る",
+            "to": "@guard"
+          }
+        ]
+      },
+      {
+        "id": "after",
+        "text": "先頭は倒れたが、群れは後ろから来る。戦績に一頭増えても、空腹の群れの行先はできていない。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "残った群れの前を歩き、斜面へ向かう",
+            "to": "village"
+          },
+          {
+            "id": "hunt",
+            "text": "オサの今季の討伐作戦を支援する",
+            "to": "@hunt",
+            "combat": "story_125"
+          },
+          {
+            "id": "guard",
+            "text": "追撃せず、柵へ戻る",
+            "to": "@guard"
+          }
+        ]
+      },
+      {
+        "id": "village",
+        "text": "斜面の餌場は伐採されていた。村は作物から離れた柵なら開けられると話す。",
+        "options": [
+          {
+            "id": "passage",
+            "text": "村と一緒に通過路を空ける",
+            "to": "crossing"
+          },
+          {
+            "id": "hunt",
+            "text": "迂回を断り、討伐作戦を支援する",
+            "to": "@hunt",
+            "combat": "story_125"
+          },
+          {
+            "id": "guard",
+            "text": "通過路を決めず、柵を守る",
+            "to": "@guard"
+          }
+        ]
+      },
+      {
+        "id": "crossing",
+        "text": "作物のそばに番を残し、迂回路を開いた。ユノが笛を吹き、オサは弓を下げて待っている。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "群れを餌のある側へ誘導し、最後の一頭まで通す",
+            "to": "@guide"
+          },
+          {
+            "id": "stop",
+            "text": "誘導を中止し、今夜の柵番に戻る",
             "to": "@guard"
           }
         ]
       }
-    ]
+    ],
+    "progression": "先頭を討っても群れが止まらず、戦闘後に行先を確保する仕事へ続く。",
+    "flowVersion": 2,
+    "entryScript": "q125.flow.visit",
+    "choiceContract": {
+      "progression": "先頭を討っても群れが止まらず、戦闘後に行先を確保する仕事へ続く。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q125.scene.entry": {
@@ -615,6 +603,473 @@
                 {
                   "op": "jump",
                   "script": "q125.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q125.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q125.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "オサは倒した数を尋ねる。ユノは伐られた斜面を指し、群れがどこへ行けるかを問う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "slope",
+              "text": "ユノと斜面をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.village"
+                }
+              ]
+            },
+            {
+              "id": "lead",
+              "text": "暴れる先頭を退ける",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_125",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q125.flow.after"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "今夜は畑の柵だけ守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q125.flow.after": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q125.node",
+          "value": "after"
+        },
+        {
+          "op": "say",
+          "text": "先頭は倒れたが、群れは後ろから来る。戦績に一頭増えても、空腹の群れの行先はできていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "残った群れの前を歩き、斜面へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.village"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "オサの今季の討伐作戦を支援する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_125",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q125.flow.end.hunt"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "追撃せず、柵へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q125.flow.village": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q125.node",
+          "value": "village"
+        },
+        {
+          "op": "say",
+          "text": "斜面の餌場は伐採されていた。村は作物から離れた柵なら開けられると話す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "passage",
+              "text": "村と一緒に通過路を空ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.crossing"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "迂回を断り、討伐作戦を支援する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_125",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q125.flow.end.hunt"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "通過路を決めず、柵を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q125.flow.crossing": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q125.node",
+          "value": "crossing"
+        },
+        {
+          "op": "say",
+          "text": "作物のそばに番を残し、迂回路を開いた。ユノが笛を吹き、オサは弓を下げて待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "群れを餌のある側へ誘導し、最後の一頭まで通す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.end.guide"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "誘導を中止し、今夜の柵番に戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q125.flow.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q125.flow.end.hunt": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q125.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今季の被害は止まった。ユノは来季の餌場も調べると、師の弓とは別に地図を持ち帰った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q125",
+              "outcome": "hunt"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q125.flow.end.guide": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q125.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "群れは迂回路を抜けた。オサは現場を見届け、弓を捨てるのでなく、弟子へ渡す笛の穴を削った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q125",
+              "outcome": "guide"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q125.flow.end.guard": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q125.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今夜の柵は守った。群れの行先は未解決のまま、ユノは翌日の調査範囲を記した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q125",
+              "outcome": "guard"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q125.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q125.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q125.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "hunt",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今季の被害は止まった。ユノは来季の餌場も調べると、師の弓とは別に地図を持ち帰った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guide",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "群れは迂回路を抜けた。オサは現場を見届け、弓を捨てるのでなく、弟子へ渡す笛の穴を削った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guard",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今夜の柵は守った。群れの行先は未解決のまま、ユノは翌日の調査範囲を記した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q125"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q125.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q125.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q125.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "after",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q125.flow.after"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "village",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q125.flow.village"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crossing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q125.flow.crossing"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q125.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

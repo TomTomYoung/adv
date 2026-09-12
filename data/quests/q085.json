@@ -6,7 +6,7 @@
   "client": "探検家のルウ",
   "brief": "羅針盤が人を指します。地図作りに使えるか試してください。",
   "region": 9,
-  "type": "resource",
+  "type": "authored_progression",
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
@@ -35,19 +35,19 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "帰還標を入口へ据え脱出具として使う",
+      "label": "入口の標を固定し、脱出用具として登録する",
       "text": "迷宮で迷っても戻る向きが分かります。ルウは方角用の盤を別に持ちます。",
       "gold": 153,
       "xp": 132
     },
     "contract": {
-      "label": "針を引く魔物を倒し盤を磁化し直す",
+      "label": "盤を磁化し、北を指すよう直す",
       "text": "北は指しました。対の標を使う帰還機能は失われます。",
       "gold": 173,
       "xp": 103
     },
     "compromise": {
-      "label": "標を先導者に持たせ隊を離さない",
+      "label": "標の受渡しを決めて道案内に使う",
       "text": "道案内には使えました。先導者が倒れた時の交代手順も決めます。",
       "gold": 99,
       "xp": 99
@@ -69,13 +69,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -85,7 +78,7 @@
         "name": "探検家のルウ",
         "observation": "羅針盤が人を指します。地図作りに使えるか試してください。",
         "belief": "羅針盤が人を指します。地図作りに使えるか試してください。",
-        "goal": "針を引く魔物を倒し盤を磁化し直す"
+        "goal": "羅針盤が人を指します。地図作りに使えるか試してください。"
       },
       {
         "id": "party",
@@ -101,30 +94,27 @@
       }
     ],
     "conflict": {
-      "request": "針を引く魔物を倒し盤を磁化し直す",
-      "alternative": "帰還標を入口へ据え脱出具として使う",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "羅針盤が人を指します。地図作りに使えるか試してください。",
+      "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q085.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "針は北へ向かず、荷袋を置くとその場へ止まります。"
+          "id": "marker",
+          "script": "q085.flow.marker"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "製作票には航法でなく回収用と書かれ、対の番号があります。"
+          "id": "entrance",
+          "script": "q085.flow.entrance"
         },
         {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "leader",
+          "script": "q085.flow.leader"
         }
       ]
     },
@@ -136,80 +126,115 @@
       "operator": "frameShift",
       "newInformation": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "marker"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q085.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q085.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q085.clue_a"
+        "id": "entry",
+        "script": "q085.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q085.clue_b"
+        "id": "marker",
+        "script": "q085.flow.marker"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q085.decision"
+        "id": "entrance",
+        "script": "q085.flow.entrance"
+      },
+      {
+        "id": "leader",
+        "script": "q085.flow.leader"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "針を引く魔物を倒し盤を磁化し直すと帰還標を入口へ据え脱出具として使うの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q085.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q085.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q085.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q085.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。",
+    "flowVersion": 2,
+    "entryScript": "q085.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "羅針盤が隊員の荷袋へ向く。荷袋を置けば針もそこで止まる。",
+        "options": [
+          {
+            "id": "bag",
+            "text": "荷袋の中の対の標を取り出す",
+            "to": "marker"
+          },
+          {
+            "id": "north",
+            "text": "盤を磁化し、北を指すよう直す",
+            "to": "@contract"
+          }
+        ]
+      },
+      {
+        "id": "marker",
+        "text": "$truth 標を入口へ置くか、動く先導者へ渡すかを試せる。",
+        "options": [
+          {
+            "id": "entrance",
+            "text": "標を入口に置いて一つ曲がり角を進む",
+            "to": "entrance"
+          },
+          {
+            "id": "leader",
+            "text": "標を先導者へ渡して隊を動かす",
+            "to": "leader"
+          }
+        ]
+      },
+      {
+        "id": "entrance",
+        "text": "角を曲がっても針は入口へ向く。方角ではなく、帰る先が定まった。",
+        "options": [
+          {
+            "id": "exit",
+            "text": "入口の標を固定し、脱出用具として登録する",
+            "to": "@informed"
+          },
+          {
+            "id": "leader",
+            "text": "固定せず、先導者の交代を試す",
+            "to": "leader"
+          }
+        ]
+      },
+      {
+        "id": "leader",
+        "text": "標を次の隊員へ渡すと針が向きを変えた。先導者が動けなくても役を交代できる。",
+        "options": [
+          {
+            "id": "relay",
+            "text": "標の受渡しを決めて道案内に使う",
+            "to": "@compromise"
+          },
+          {
+            "id": "entrance",
+            "text": "先導者の追跡はやめ、入口を試す",
+            "to": "entrance"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q085.clue_a": {
@@ -651,6 +676,401 @@
             {
               "op": "jump",
               "script": "q085.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "羅針盤が隊員の荷袋へ向く。荷袋を置けば針もそこで止まる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bag",
+              "text": "荷袋の中の対の標を取り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.marker"
+                }
+              ]
+            },
+            {
+              "id": "north",
+              "text": "盤を磁化し、北を指すよう直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.marker": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "marker"
+        },
+        {
+          "op": "say",
+          "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されています。 標を入口へ置くか、動く先導者へ渡すかを試せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "entrance",
+              "text": "標を入口に置いて一つ曲がり角を進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.entrance"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "標を先導者へ渡して隊を動かす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.leader"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.entrance": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "entrance"
+        },
+        {
+          "op": "say",
+          "text": "角を曲がっても針は入口へ向く。方角ではなく、帰る先が定まった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "exit",
+              "text": "入口の標を固定し、脱出用具として登録する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "固定せず、先導者の交代を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.leader"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.leader": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "leader"
+        },
+        {
+          "op": "say",
+          "text": "標を次の隊員へ渡すと針が向きを変えた。先導者が動けなくても役を交代できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relay",
+              "text": "標の受渡しを決めて道案内に使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "entrance",
+              "text": "先導者の追跡はやめ、入口を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.entrance"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷宮で迷っても戻る向きが分かります。ルウは方角用の盤を別に持ちます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "北は指しました。対の標を使う帰還機能は失われます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "道案内には使えました。先導者が倒れた時の交代手順も決めます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q085.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "迷宮で迷っても戻る向きが分かります。ルウは方角用の盤を別に持ちます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "北は指しました。対の標を使う帰還機能は失われます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "道案内には使えました。先導者が倒れた時の交代手順も決めます。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q085"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q085.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q085.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "marker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.marker"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entrance",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.entrance"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "leader",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.leader"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q085.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

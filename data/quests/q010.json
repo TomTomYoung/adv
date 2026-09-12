@@ -6,7 +6,7 @@
   "client": "灯番組合のリネ",
   "brief": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
   "region": 1,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": {
     "op": "gte",
@@ -41,22 +41,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "縦坑を開き、工事記録ごと全員を上げる",
+      "label": "二班と工事簿を地上へ引き渡す",
       "text": "地下の全員が上がりました。組合は責任を問われ、リネは証言台でも灯番の名を名乗ります。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
-      "label": "水門の守護獣を倒し強行閉鎖する",
+      "label": "守護獣を倒し、救助を待たず水門を閉じる",
       "text": "地上は守られました。遅れた住人を救うため、後日もう一度水門を開ける工事が始まります。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
-      "label": "閉鎖を延期し交代で排水を続ける",
+      "label": "閉鎖を延期し、排水の交代要員を集める",
       "text": "その夜は持ちこたえました。疲れた町の手で、次の避難計画が書き直されます。",
       "gold": 37,
       "xp": 51
+    },
+    "partial": {
+      "gold": 57,
+      "xp": 51,
+      "label": "救助済みの班を上げ、残る坑を閉じる",
+      "text": "手前の班は帰還した。奥へ通じる坑は水に沈み、残る班の捜索が翌朝へ持ち越された。救助した人数と残した人数を、同じ帳簿へ記した。"
     }
   },
   "model": {
@@ -75,13 +81,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +90,7 @@
         "name": "灯番組合のリネ",
         "observation": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
         "belief": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
-        "goal": "水門の守護獣を倒し強行閉鎖する"
+        "goal": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。"
       },
       {
         "id": "party",
@@ -107,30 +106,19 @@
       }
     ],
     "conflict": {
-      "request": "水門の守護獣を倒し強行閉鎖する",
-      "alternative": "縦坑を開き、工事記録ごと全員を上げる",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "老朽水門を閉じると地下の住人が取り残されます。代わりの出口を探してください。",
+      "progression": "縦坑の開放、二班の救出、工事記録の搬出を危機の中で進め、途中閉鎖にも結果を残す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q010.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "塗り潰された図面に梯子の穴があり、その先から雨の匂いがします。"
-        },
-        {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "水門番は避難者の人数と同じ数だけ、未使用の安全帯を隠しています。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "rescue",
+          "script": "q010.flow.rescue"
         }
       ]
     },
@@ -142,80 +130,197 @@
       "operator": "frameShift",
       "newInformation": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "rescue"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q010.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q010.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q010.clue_a"
+        "id": "entry",
+        "script": "q010.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q010.clue_b"
-      },
-      {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q010.decision"
+        "id": "rescue",
+        "script": "q010.flow.rescue"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "水門の守護獣を倒し強行閉鎖すると縦坑を開き、工事記録ごと全員を上げるの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q010.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
+        "path": "flags.flow.q010.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q010.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
+        "path": "flags.flow.q010.near",
+        "meaning": "各場面に明記した near の行為・合意の記録",
+        "writer": [
+          "rescue"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       },
       {
-        "path": "flags.quest.q010.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q010.deep",
+        "meaning": "各場面に明記した deep の行為・合意の記録",
+        "writer": [
+          "rescue"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q010.records",
+        "meaning": "各場面に明記した records の行為・合意の記録",
+        "writer": [
+          "rescue"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "縦坑の開放、二班の救出、工事記録の搬出を危機の中で進め、途中閉鎖にも結果を残す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "縦坑の開放、二班の救出、工事記録の搬出を危機の中で進め、途中閉鎖にも結果を残す。",
+    "flowVersion": 2,
+    "entryScript": "q010.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "水門番は閉鎖を待っている。奥には二班が残り、組合の封印された縦坑が上へ続く。",
+        "options": [
+          {
+            "id": "shaft",
+            "text": "封印を切って縦坑を開く",
+            "to": "rescue"
+          },
+          {
+            "id": "close",
+            "text": "守護獣を倒し、救助を待たず水門を閉じる",
+            "to": "@contract",
+            "combat": true
+          },
+          {
+            "id": "pump",
+            "text": "閉鎖を延期し、排水の交代要員を集める",
+            "to": "@compromise"
+          }
+        ]
+      },
+      {
+        "id": "rescue",
+        "text": "$truth 開いた坑には足場と工事簿がある。戻るたびに一つの班か記録を上げられる。",
+        "options": [
+          {
+            "id": "near",
+            "text": "手前の班を上げる",
+            "to": "rescue",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q010.near"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "near": true
+            }
+          },
+          {
+            "id": "deep",
+            "text": "奥の班へ縄を渡して上げる",
+            "to": "rescue",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q010.deep"
+                },
+                "right": true
+              }
+            },
+            "cost": {
+              "rope": 1
+            },
+            "set": {
+              "deep": true
+            }
+          },
+          {
+            "id": "records",
+            "text": "工事簿を防水袋へ収める",
+            "to": "rescue",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q010.records"
+                },
+                "right": true
+              }
+            },
+            "set": {
+              "records": true
+            }
+          },
+          {
+            "id": "finish",
+            "text": "二班と工事簿を地上へ引き渡す",
+            "to": "@informed",
+            "need": [
+              "near",
+              "deep",
+              "records"
+            ]
+          },
+          {
+            "id": "partial",
+            "text": "救助済みの班を上げ、残る坑を閉じる",
+            "to": "@partial",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q010.near"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q010.deep"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "pump",
+            "text": "現在の救助位置を引き継ぎ、排水を続ける",
+            "to": "@compromise"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q010.clue_a": {
@@ -683,6 +788,524 @@
             {
               "op": "jump",
               "script": "q010.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q010.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q010.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "水門番は閉鎖を待っている。奥には二班が残り、組合の封印された縦坑が上へ続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shaft",
+              "text": "封印を切って縦坑を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "守護獣を倒し、救助を待たず水門を閉じる",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q010.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pump",
+              "text": "閉鎖を延期し、排水の交代要員を集める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q010.flow.rescue": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q010.node",
+          "value": "rescue"
+        },
+        {
+          "op": "say",
+          "text": "旧工事用の縦坑は通れますが、開けると組合の隠した手抜き工事が露見します。 開いた坑には足場と工事簿がある。戻るたびに一つの班か記録を上げられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "near",
+              "text": "手前の班を上げる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q010.near"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q010.near",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue"
+                }
+              ]
+            },
+            {
+              "id": "deep",
+              "text": "奥の班へ縄を渡して上げる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q010.deep"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q010.deep",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue"
+                }
+              ]
+            },
+            {
+              "id": "records",
+              "text": "工事簿を防水袋へ収める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q010.records"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q010.records",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "二班と工事簿を地上へ引き渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q010.near"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q010.deep"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q010.records"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「手前の班を上げる」・先に「奥の班へ縄を渡して上げる」・先に「工事簿を防水袋へ収める」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "partial",
+              "text": "救助済みの班を上げ、残る坑を閉じる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q010.near"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.flow.q010.deep"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.end.partial"
+                }
+              ]
+            },
+            {
+              "id": "pump",
+              "text": "現在の救助位置を引き継ぎ、排水を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q010.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q010.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下の全員が上がりました。組合は責任を問われ、リネは証言台でも灯番の名を名乗ります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q010",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q010.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q010.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地上は守られました。遅れた住人を救うため、後日もう一度水門を開ける工事が始まります。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q010",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q010.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q010.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "その夜は持ちこたえました。疲れた町の手で、次の避難計画が書き直されます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q010",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q010.flow.end.partial": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q010.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "手前の班は帰還した。奥へ通じる坑は水に沈み、残る班の捜索が翌朝へ持ち越された。救助した人数と残した人数を、同じ帳簿へ記した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q010",
+              "outcome": "partial"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q010.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q010.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q010.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地下の全員が上がりました。組合は責任を問われ、リネは証言台でも灯番の名を名乗ります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地上は守られました。遅れた住人を救うため、後日もう一度水門を開ける工事が始まります。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "その夜は持ちこたえました。疲れた町の手で、次の避難計画が書き直されます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "partial",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "手前の班は帰還した。奥へ通じる坑は水に沈み、残る班の捜索が翌朝へ持ち越された。救助した人数と残した人数を、同じ帳簿へ記した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q010"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q010.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q010.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q010.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescue",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q010.flow.rescue"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q010.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

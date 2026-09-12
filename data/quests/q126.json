@@ -6,7 +6,7 @@
   "client": "祭主催コル",
   "brief": "獲物の少ない狩猟祭を、今年も開けるよう手伝ってください。",
   "region": 3,
-  "type": "scene_graph",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
@@ -60,14 +60,27 @@
       }
     ],
     "conflict": {
-      "design": "参加→下見→現行競技に出る／競技変更を提案／模範演技をする→表彰。追跡競技への変更には規則と食材の手配が必要です。単に獲物を減らす案は屋台側が反対します。競技で敗れても祭の支援依頼は完了できます。"
+      "request": "獲物の少ない狩猟祭を、今年も開けるよう手伝ってください。",
+      "progression": "屋台への食糧手配から競技規則の変更、本番で全員の帰還を確認するまでを進める。"
     },
     "narrative": {
       "viewpoint": "冒険者の観察と当事者の発言",
       "units": [
         {
           "id": "entry",
-          "script": "q126.scene.entry"
+          "script": "q126.flow.entry"
+        },
+        {
+          "id": "food",
+          "script": "q126.flow.food"
+        },
+        {
+          "id": "rules",
+          "script": "q126.flow.rules"
+        },
+        {
+          "id": "last",
+          "script": "q126.flow.last"
         }
       ]
     },
@@ -76,16 +89,29 @@
     },
     "reveal": {
       "newInformation": "倉庫には、昔使った木製の獲物が残っています。祭の初期は追跡技術を競う遊びでした。古式を万能の正解にはせず、食肉を期待する屋台と、狩人の腕を見たい観客の利害も置きます。",
-      "retroactiveTargets": [
-        "source.request",
-        "source.disclosure"
-      ],
-      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q126.scene.entry"
+        "script": "q126.flow.entry"
+      },
+      {
+        "id": "food",
+        "script": "q126.flow.food"
+      },
+      {
+        "id": "rules",
+        "script": "q126.flow.rules"
+      },
+      {
+        "id": "last",
+        "script": "q126.flow.last"
       }
     ],
     "adaptation": {
@@ -96,103 +122,96 @@
     },
     "stateRegistry": [
       {
-        "path": "flags.quest.q126.node",
-        "meaning": "中断時の再開場面",
-        "initial": "entry",
+        "path": "flags.flow.q126.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
         "writer": [],
         "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q126.rules",
-        "meaning": "作者原稿の rules に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
-      },
-      {
-        "path": "flags.quest.q126.food",
-        "meaning": "作者原稿の food に対応する選択・発言・行為の履歴",
-        "initial": "未設定。条件の成立とは扱わない",
-        "writer": [
-          "entry"
-        ],
-        "scope": "quest",
-        "lifetime": "保存データ内に保持"
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "graph": [
       {
         "id": "entry",
-        "text": "倉庫には古い木製の獲物があった。コルは昔、息子を遭難で失ったという。屋台は祭の食肉を当てにしている。",
+        "text": "倉には木製の獲物がある。主催コルは息子を遭難で失い、屋台は今年の食肉を待っている。",
         "options": [
           {
-            "id": "rules",
-            "text": "木標を追った古い競技札を読む",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q126.rules"
-                },
-                "right": true
-              }
-            },
-            "set": {
-              "rules": true
-            },
-            "textAfter": "初期の祭は追跡技術を競っていた。肉を得る祭とは別の目的だった。"
-          },
-          {
-            "id": "food",
-            "text": "代替食材として糧食二つを手配する",
-            "to": "entry",
-            "when": {
-              "op": "not",
-              "arg": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.quest.q126.food"
-                },
-                "right": true
-              }
-            },
-            "cost": {
-              "ration": 2
-            },
-            "set": {
-              "food": true
-            }
+            "id": "wood",
+            "text": "木標を使う古い競技を屋台へ提案する",
+            "to": "food"
           },
           {
             "id": "hunt",
             "text": "範囲を限った現行の狩猟に参加する",
             "to": "@hunt",
-            "combat": "story_125",
-            "escape": "entry"
-          },
-          {
-            "id": "track",
-            "text": "食材と規則を揃え、追跡競技に変える",
-            "to": "@track",
-            "need": [
-              "rules",
-              "food"
-            ]
+            "combat": "story_125"
           },
           {
             "id": "show",
-            "text": "今年は模範演技で祭を支える",
+            "text": "今年は模範演技に切り替える",
+            "to": "@show"
+          }
+        ]
+      },
+      {
+        "id": "food",
+        "text": "屋台は代替食材があれば狩猟にこだわらない。糧食二つで今夜の不足を補える。",
+        "options": [
+          {
+            "id": "provide",
+            "text": "糧食二つを屋台へ渡す",
+            "to": "rules",
+            "cost": {
+              "ration": 2
+            }
+          },
+          {
+            "id": "show",
+            "text": "食材を約束せず、模範演技だけ開く",
+            "to": "@show"
+          }
+        ]
+      },
+      {
+        "id": "rules",
+        "text": "初期の札は討伐数でなく木標への到達を競っていた。コルは子供と熟練者を分け、帰還確認を入れたいという。",
+        "options": [
+          {
+            "id": "start",
+            "text": "二部門と帰還確認を告知して競技を始める",
+            "to": "last"
+          },
+          {
+            "id": "demo",
+            "text": "規則は来年へ預け、今年は模範演技にする",
+            "to": "@show"
+          }
+        ]
+      },
+      {
+        "id": "last",
+        "text": "最速の選手が帰った。最後の一人は遅いが、見張りから無事の合図がある。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "最後の帰還札を受け取ってから閉会の鐘を鳴らす",
+            "to": "@track"
+          },
+          {
+            "id": "help",
+            "text": "順位を付ける競技を中止し、演技として全員を迎える",
             "to": "@show"
           }
         ]
       }
-    ]
+    ],
+    "progression": "屋台への食糧手配から競技規則の変更、本番で全員の帰還を確認するまでを進める。",
+    "flowVersion": 2,
+    "entryScript": "q126.flow.visit",
+    "choiceContract": {
+      "progression": "屋台への食糧手配から競技規則の変更、本番で全員の帰還を確認するまでを進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    }
   },
   "scripts": {
     "q126.scene.entry": {
@@ -516,6 +535,430 @@
                 {
                   "op": "jump",
                   "script": "q126.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q126.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q126.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "倉には木製の獲物がある。主催コルは息子を遭難で失い、屋台は今年の食肉を待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wood",
+              "text": "木標を使う古い競技を屋台へ提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.food"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "範囲を限った現行の狩猟に参加する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_125",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q126.flow.end.hunt"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "show",
+              "text": "今年は模範演技に切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.end.show"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q126.flow.food": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q126.node",
+          "value": "food"
+        },
+        {
+          "op": "say",
+          "text": "屋台は代替食材があれば狩猟にこだわらない。糧食二つで今夜の不足を補える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "provide",
+              "text": "糧食二つを屋台へ渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "野営糧食 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q126.flow.rules"
+                }
+              ]
+            },
+            {
+              "id": "show",
+              "text": "食材を約束せず、模範演技だけ開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.end.show"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q126.flow.rules": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q126.node",
+          "value": "rules"
+        },
+        {
+          "op": "say",
+          "text": "初期の札は討伐数でなく木標への到達を競っていた。コルは子供と熟練者を分け、帰還確認を入れたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "start",
+              "text": "二部門と帰還確認を告知して競技を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.last"
+                }
+              ]
+            },
+            {
+              "id": "demo",
+              "text": "規則は来年へ預け、今年は模範演技にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.end.show"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q126.flow.last": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q126.node",
+          "value": "last"
+        },
+        {
+          "op": "say",
+          "text": "最速の選手が帰った。最後の一人は遅いが、見張りから無事の合図がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "最後の帰還札を受け取ってから閉会の鐘を鳴らす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.end.track"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "順位を付ける競技を中止し、演技として全員を迎える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.end.show"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q126.flow.end.hunt": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "hunt"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.flow.end.track": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "track"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.flow.end.show": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q126",
+              "outcome": "show"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q126.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q126.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q126.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "hunt",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "track",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "show",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q126"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q126.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q126.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q126.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "food",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q126.flow.food"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rules",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q126.flow.rules"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "last",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q126.flow.last"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q126.flow.entry"
+                    }
+                  ]
                 }
               ]
             }

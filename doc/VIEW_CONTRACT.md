@@ -74,3 +74,8 @@ feedbackのsession/revisionが同じ場合は再生しません。通常の描�
 ## 1.3.1の依頼表示
 
 questsとtrackedにevidenceTotalを追加しました。証拠地点数が0の依頼は場面内で進行するため「相談・調査」を表示します。evidenceCountを固定値2で割らないでください。選択肢はvisibleWhenを満たすものだけが投影され、conditionに応じたenabledを持ちます。非表示選択肢の本文や作者用modelは渡しません。
+
+
+## 1.3.2の進行地点
+
+quests/trackedのlocationsとevidenceTotalは、現在使用している経路の案内です。個別進行では開始地点だけを投影し、旧二地点を数えません。旧版で進行中の依頼は移行フラグに基づき旧地点を投影します。保存互換用に残る全q.locationsをそのまま画面へ表示しないでください。モデルの本文・真相・未到達場面は引き続き渡しません。

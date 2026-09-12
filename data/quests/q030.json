@@ -6,7 +6,7 @@
   "client": "薬師のハナ",
   "brief": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
   "region": 3,
-  "type": "finale",
+  "type": "authored_progression",
   "recommendedLevel": 3,
   "requires": {
     "op": "gte",
@@ -41,22 +41,28 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "明かり取りを補強し根をそこへ導く",
+      "label": "補強した穴へ光を寄せ、根を誘導する",
       "text": "地下に朝の光が差しました。守る庭と伸びる木は、同じ穴を使えます。",
       "gold": 81,
       "xp": 84
     },
     "contract": {
-      "label": "根の化身を倒し成長を止める",
+      "label": "根の化身を倒して成長を止める",
       "text": "庭園は形を保ちました。ハナは切り株から取れる最後の薬を保存します。",
       "gold": 101,
       "xp": 61
     },
     "compromise": {
-      "label": "人と薬草を移して根へ庭を渡す",
+      "label": "苗床を運んでから庭を根へ渡す",
       "text": "庭園は森へ変わりました。地上の新しい薬畑には、地下の名が付けられます。",
       "gold": 52,
       "xp": 63
+    },
+    "people": {
+      "gold": 81,
+      "xp": 63,
+      "label": "人の避難だけを急ぎ、苗床を残す",
+      "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
     }
   },
   "model": {
@@ -75,13 +81,6 @@
           "causes": [
             "e0"
           ]
-        },
-        {
-          "id": "e2",
-          "event": "冒険者が現場と記録を観察し、依頼の扱いを決める",
-          "causes": [
-            "e1"
-          ]
         }
       ]
     },
@@ -91,7 +90,7 @@
         "name": "薬師のハナ",
         "observation": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
         "belief": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
-        "goal": "根の化身を倒し成長を止める"
+        "goal": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。"
       },
       {
         "id": "party",
@@ -107,30 +106,23 @@
       }
     ],
     "conflict": {
-      "request": "根の化身を倒し成長を止める",
-      "alternative": "明かり取りを補強し根をそこへ導く",
-      "cost": "依頼の即時達成と、事情を確かめる手間・利害の調整"
+      "request": "地上へ伸びる根が庭園を裂こうとしています。切るか通すか決めてください。",
+      "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
-          "id": "brief",
-          "sourceEvent": "e1"
+          "id": "entry",
+          "script": "q030.flow.entry"
         },
         {
-          "id": "clue_a",
-          "sourceEvent": "e0",
-          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げています。"
+          "id": "light",
+          "script": "q030.flow.light"
         },
         {
-          "id": "clue_b",
-          "sourceEvent": "e0",
-          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置があります。"
-        },
-        {
-          "id": "decision",
-          "sourceEvent": "e2"
+          "id": "evacuate",
+          "script": "q030.flow.evacuate"
         }
       ]
     },
@@ -142,80 +134,106 @@
       "operator": "frameShift",
       "newInformation": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。",
       "retroactiveTargets": [
-        "clue_a",
-        "clue_b"
+        "light"
       ],
-      "gate": {
-        "op": "and",
-        "args": [
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q030.evidence"
-            },
-            "right": "clue_a"
-          },
-          {
-            "op": "contains",
-            "left": {
-              "ref": "quests.q030.evidence"
-            },
-            "right": "clue_b"
-          }
-        ]
-      },
-      "window": "判断前。知った後も全ての決着を選べる",
-      "earlyDiscovery": "根拠を先に取得した経路も同じ判断へ接続する。異議は無調査でも述べられる",
-      "missedProof": "未取得の真相を選択肢へ表示しない。依頼優先・別案・保留は可能"
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
-        "id": "observation",
-        "changes": [
-          "knowledge"
-        ],
-        "script": "q030.clue_a"
+        "id": "entry",
+        "script": "q030.flow.entry"
       },
       {
-        "id": "reinterpretation",
-        "changes": [
-          "belief"
-        ],
-        "script": "q030.clue_b"
+        "id": "light",
+        "script": "q030.flow.light"
       },
       {
-        "id": "resolution",
-        "changes": [
-          "world",
-          "relationship"
-        ],
-        "script": "q030.decision"
+        "id": "evacuate",
+        "script": "q030.flow.evacuate"
       }
     ],
     "revision": "game-scenario-1.0",
-    "dramaticQuestion": "根の化身を倒し成長を止めると明かり取りを補強し根をそこへ導くの間で、誰が何を引き受けるか。",
     "stateRegistry": [
       {
-        "path": "quests.q030.evidence",
-        "meaning": "取得した観察・証言。真実や人物の内心とは別",
-        "initial": []
-      },
-      {
-        "path": "flags.quest.q030.disclosed",
-        "meaning": "判断前の事情説明を提示した履歴",
-        "initial": false
-      },
-      {
-        "path": "flags.quest.q030.questioned",
-        "meaning": "依頼の説明に不足があると口にした履歴。再会で参照",
-        "initial": false
+        "path": "flags.flow.q030.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
       }
     ],
     "choiceContract": {
-      "visibleRisk": "既存の戦闘・縄消費を明示。縄は逃走・敗北では消費しない",
-      "residue": "結末と判断保留の発言を再会時に参照",
-      "reward": "報酬額を正解の判定として扱わない"
-    }
+      "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。",
+    "flowVersion": 2,
+    "entryScript": "q030.flow.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "根が天井へ伸び、薬草棚の支えが軋んだ。光の方向だけ変えれば、支柱を避けられそうだ。",
+        "options": [
+          {
+            "id": "brace",
+            "text": "天井を先に補強する",
+            "to": "light"
+          },
+          {
+            "id": "move",
+            "text": "人と薬草の移転を始める",
+            "to": "evacuate"
+          },
+          {
+            "id": "stop",
+            "text": "根の化身を倒して成長を止める",
+            "to": "@contract",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "light",
+        "text": "$truth 補強した明かり取りのそばへ、鏡で日光を導ける。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "補強した穴へ光を寄せ、根を誘導する",
+            "to": "@informed"
+          },
+          {
+            "id": "evacuate",
+            "text": "補強だけ残し、庭を移す",
+            "to": "evacuate"
+          }
+        ]
+      },
+      {
+        "id": "evacuate",
+        "text": "住民は地上へ移れるが、薬草の苗床がまだ地下にある。",
+        "options": [
+          {
+            "id": "beds",
+            "text": "苗床を運んでから庭を根へ渡す",
+            "to": "@compromise"
+          },
+          {
+            "id": "people",
+            "text": "人の避難だけを急ぎ、苗床を残す",
+            "to": "@people"
+          },
+          {
+            "id": "return",
+            "text": "移転を保留し、採光の補強へ戻る",
+            "to": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q030.clue_a": {
@@ -683,6 +701,422 @@
             {
               "op": "jump",
               "script": "q030.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "根が天井へ伸び、薬草棚の支えが軋んだ。光の方向だけ変えれば、支柱を避けられそうだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "天井を先に補強する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.light"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "人と薬草の移転を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "根の化身を倒して成長を止める",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q030.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.light": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "light"
+        },
+        {
+          "op": "say",
+          "text": "根は日光へ向かっていますが、通れば庭園を支える古い天井も崩れます。 補強した明かり取りのそばへ、鏡で日光を導ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "補強した穴へ光を寄せ、根を誘導する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "evacuate",
+              "text": "補強だけ残し、庭を移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.evacuate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "evacuate"
+        },
+        {
+          "op": "say",
+          "text": "住民は地上へ移れるが、薬草の苗床がまだ地下にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "beds",
+              "text": "苗床を運んでから庭を根へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "人の避難だけを急ぎ、苗床を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.people"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "移転を保留し、採光の補強へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.entry"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下に朝の光が差しました。守る庭と伸びる木は、同じ穴を使えます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭園は形を保ちました。ハナは切り株から取れる最後の薬を保存します。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭園は森へ変わりました。地上の新しい薬畑には、地下の名が付けられます。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.people": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "people"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q030.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地下に朝の光が差しました。守る庭と伸びる木は、同じ穴を使えます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭園は形を保ちました。ハナは切り株から取れる最後の薬を保存します。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭園は森へ変わりました。地上の新しい薬畑には、地下の名が付けられます。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "people",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q030"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q030.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q030.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "light",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.light"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.evacuate"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q030.flow.entry"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
