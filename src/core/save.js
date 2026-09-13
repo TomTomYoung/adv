@@ -2,7 +2,7 @@ import {storyStateErrors,storyEnding} from './story.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
-import {isRecord,clone} from './expression.js';
+import {isRecord,clone,evaluate} from './expression.js';
 import {commandsAt} from './script.js';
 import {freshRecords,snapshotRecords,recordsValid} from './records.js';
 function addScenarioState(save,data){
@@ -24,8 +24,29 @@ function keepLegacyRoutes(save,data,migration){
   const routes=save.state.flags.legacyQuestRoutes??={};
   for(const [id,q] of Object.entries(save.state.quests))if(q.stage==='active'&&data.quests[id]?.model.flowVersion>=2)routes[id]=true;
 }
+function upgradeStoryRevisions(original,data){
+  if(!isRecord(original.state?.stories))return original;
+  let save=original;
+  for(const [id,q] of Object.entries(data.quests)){
+    const current=save.state.stories[id];
+    if(!current||!q.story||(current.revision??1)===(q.story.revision??1))continue;
+    const upgrade=q.model.storyUpgrades?.find(u=>u.fromRevision===(current.revision??1)&&u.toRevision===(q.story.revision??1));
+    if(!upgrade)continue;
+    // Validate the entire old save against its shipped definition before transforming it.
+    const previousData={...data,quests:{...data.quests,[id]:{...q,story:upgrade.previous}}};
+    if(validateSave(save,previousData).length)return original;
+    save=clone(save);
+    for(const change of upgrade.values){
+      if(!Object.hasOwn(q.story.registry,change.key))throw Error('移行先に未登録の物語状態があります');
+      if(change.when===undefined||evaluate(change.when,save.state))save.state.stories[id].values[change.key]=clone(evaluate(change.value,save.state));
+    }
+    save.state.stories[id].revision=upgrade.toRevision;
+  }
+  return save;
+}
 export function migrateSave(original,data){
-  if(!isRecord(original)||original.contentVersion===data.game.version)return original;
+  if(!isRecord(original))return original;
+  if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
   const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
   if(migration.scenarioRevision){

@@ -15,6 +15,7 @@ for(const file of game.files.quests){
   q.legacyOutcomes??=structuredClone(q.outcomes);const sid=n=>`${q.id}.v11.${n}`;
   if(s.brief){q.brief=s.brief;q.model.audience={...q.model.audience,initialHypothesis:s.brief};}
   if(s.revealText)q.model.reveal={...q.model.reveal,newInformation:s.revealText};
+  if(s.storyUpgrades)q.model.storyUpgrades=s.storyUpgrades;
   q.story=s.story;q.outcomes=Object.fromEntries(Object.entries(s.outcomes).map(([k,o])=>[k,{gold:q.legacyOutcomes[k]?.gold??57,xp:q.legacyOutcomes[k]?.xp??51,...o}]));
   q.model.standard=standard;q.model.flowVersion=3;q.model.entryScript=sid('visit');q.model.progression=s.progression;
   q.model.world={...q.model.world,truth:s.past.join(' '),history:s.past.map((text,i)=>({id:`fixed_${i}`,text})),initialState:'story.registry の initial。過去の真相と現在の所在を別に持つ。'};
@@ -35,8 +36,12 @@ for(const file of game.files.quests){
    options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
    q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...render(n.text),{op:'choice',options}]};
   }
+  for(const [alias,canonical] of Object.entries(s.sceneAliases??{})){
+   q.scripts[sid(alias)]=structuredClone(q.scripts[sid(canonical)]);
+   q.scripts[sid(alias)].commands[0].scene=alias;
+  }
   for(const [key,o] of Object.entries(q.outcomes))q.scripts[sid(`end.${key}`)]={commands:[{op:'quest.complete',quest:q.id,outcome:key},...(['informed','contract','compromise'].includes(key)?[{op:'add',target:`vars.${key}`,value:1}]:[]),say(o.text)]};
-  q.scripts[sid('visit')]={commands:[{op:'if',condition:eq(ref(`flags.legacyStoryRoutes.${q.id}`),true),then:[{op:'jump',script:`${q.id}.flow.visit`}],else:[{op:'if',condition:eq(ref(`quests.${q.id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${q.id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text)]})),default:[]}],else:[{op:'story.init',quest:q.id},{op:'switch',value:ref(`stories.${q.id}.scene`),cases:s.nodes.map(n=>({equals:n.id,commands:[{op:'jump',script:sid(n.id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]}]};
+  q.scripts[sid('visit')]={commands:[{op:'if',condition:eq(ref(`flags.legacyStoryRoutes.${q.id}`),true),then:[{op:'jump',script:`${q.id}.flow.visit`}],else:[{op:'if',condition:eq(ref(`quests.${q.id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${q.id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text)]})),default:[]}],else:[{op:'story.init',quest:q.id},{op:'switch',value:ref(`stories.${q.id}.scene`),cases:[...s.nodes.map(n=>n.id),...Object.keys(s.sceneAliases??{})].map(id=>({equals:id,commands:[{op:'jump',script:sid(id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]}]};
   const spot=q.locations.find(l=>l.role==='decision'),file=`data/maps/${spot.map}.json`,map=await read(file);map.objects.find(o=>o.id===spot.object).script=sid('visit');await write(file,map);
  }
  await write(file,q);quests.push(q);
@@ -46,7 +51,7 @@ await write('data/characters.json',Object.fromEntries(characters.map(({design,..
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';
 game.migrations['1.3.2']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true};await write('data/game.json',game);
 const catalog=['# シナリオ一覧','',`全 ${quests.length} 本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} 結末。作品版 1.4.0。更新日: 2026-09-13。`,'','q001〜q010 は [シナリオモデル v1.1]('+standard.source+') と状態モデル `adv-story-state/1` に準拠。q011〜q200 は既存の v1.0 原稿・経路を維持する。作者向けの一覧のため真相と結末を含む。','','[改稿全文](SCENARIOS_Q001_Q010_V11.md) ／ [人物一覧](CHARACTERS.md) ／ [状態モデルと互換性](SCENARIO_MODEL_V11.md)',''];
-const authoringNotes=notes=>notes?[`AI向け注釈: ${notes.notice}`,'','事実:','',...notes.facts.flatMap(text=>[text,''])]:[];
+const authoringNotes=notes=>notes?[`AI向け注釈: ${notes.notice}`,'',`${notes.factsHeading??'事実'}:`,'',...notes.facts.flatMap(text=>[text,''])]:[];
 for(const q of quests){
  catalog.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`,'',q.brief,'',`モデル: ${q.model.standard.version}。実装: [JSON](../data/quests/${q.id}.json)。場面 ${q.model.graph?.length??0}、結末 ${Object.keys(q.outcomes).length}。`,'',`固定された過去: ${q.model.world.truth}`,'',...authoringNotes(q.model.world.authoringNotes));
  for(const [k,o] of Object.entries(q.outcomes))catalog.push(`${k} — ${o.label}（${o.gold}G / ${o.xp}EXP）: ${o.text}`,'');

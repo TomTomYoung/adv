@@ -13,6 +13,7 @@
 | `model.standard.version: 1.1` | Notion の設計基準 |
 | `model.standard.adapter: adv-story-state/1` | このゲームで実装した解釈・機能範囲 |
 | `story.version: 1` | 各物語の状態定義版 |
+| `story.revision` | 同一形式内の状態構成の改訂。省略時は1。q008は外底追加により2 |
 | `model.flowVersion: 3` | 新規開始時の `.v11.*` 実行経路 |
 
 `model.standard` には基準ページの URL、改稿日、適用範囲も記録する。作品版とモデル版を同じ番号として扱わない。
@@ -33,7 +34,7 @@
 
 `state.stories.<quest>` に `version / values / knowledge / events / scene` を保存する。`values` は `story.registry` に登録した boolean、範囲付き integer、enum だけを受け付ける。
 
-人物・物品は実体ごとに一つの所在フィールドを持つ。物品は人物や別の物品を保持者にできる。例えば q008 の遺体は棺に、食料は取り出すまでは同じ棺に入る。保持者をたどると一つの実在場所に着かなければならず、循環や不明な保持者は拒否する。
+人物・物品は実体ごとに一つの所在フィールドを持つ。物品は人物や別の物品を保持者にできる。例えば q008 の遺体は内室 `coffin` に、食料は `outerBase` に入る。外底は当初内室に取り付けられ、取り外した後は別の所在を持つ。保持者をたどると一つの実在場所に着かなければならず、循環や不明な保持者は拒否する。
 
 | 効果 | 検査する条件 |
 |---|---|
@@ -74,6 +75,10 @@
 
 ロードは型、実体の所在、情報参照、場面の同席者、結末の成立条件を検証してから状態を置き換える。未知の状態名、数量超過、保持関係の循環、未救出の全員救出記録は拒否する。
 
+作品版1.4.0内のカタログ同期でも進行を保持する。q004の旧場面 `window` は `duplicate` の互換名として保存済みのVM・行動履歴・再訪を受け付ける。新規進行では `duplicate` を使う。
+
+q008は `model.storyUpgrades` で改訂1から2へ移行する。旧定義は `authoring/compat/q008-story-v1.json` に固定し、旧セーブ全体をその定義で検証した後、外底の所在を既存の水葬状態と曳航履歴から補う。未搬出の食料の保持者は内室から外底へ移す。救助・配送・許可・報酬・戦績は追加しない。改訂2の欠落フィールドや、不正な旧セーブは修復扱いにせず拒否する。
+
 ## 編集・再生成
 
 ```bash
@@ -83,5 +88,7 @@ npm run check
 ```
 
 原稿は `authoring/story-kit.mjs` と `authoring/stories-v11-1.mjs / stories-v11-2.mjs`。`tools/build-stories-v11.mjs` が実行 JSON、改稿全文、人物一覧、全依頼カタログを生成する。生成済み JSON だけの修正はしない。
+
+カタログのAI向け注釈と世界設定上の事実は、原稿の `authoringNotes` とJSONの `model.world.authoringNotes` に保持する。台詞へ機械的に挿入せず、人物の目的・情報の取得順・状態遷移が制約と矛盾しないように編集する。
 
 人物素材の編集は `authoring/characters.mjs` と `tools/assets/generate-characters.mjs`。`npm run build:characters` で再生成する。112×128 の透過 PNG、3レイヤーのネイティブ原稿、再実行可能な描画コマンドを36組保持する。出所・ハッシュは [PROVENANCE](../assets/PROVENANCE.md) と [manifest](../assets/source/characters/manifest.json) を参照。

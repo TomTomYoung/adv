@@ -1,0 +1,854 @@
+{
+  "version": 1,
+  "modelVersion": "1.1",
+  "places": {
+    "shore": "水葬場の岸",
+    "threshold": "浅瀬の段差",
+    "jetty": "下流の受取桟橋",
+    "office": "検査窓口",
+    "mortuary": "待棺所",
+    "river": "水葬の流れ"
+  },
+  "connections": [
+    [
+      "shore",
+      "threshold"
+    ],
+    [
+      "threshold",
+      "jetty"
+    ],
+    [
+      "shore",
+      "office"
+    ],
+    [
+      "shore",
+      "mortuary"
+    ],
+    [
+      "jetty",
+      "river"
+    ],
+    [
+      "shore",
+      "river"
+    ]
+  ],
+  "registry": {
+    "partyAt": {
+      "type": "enum",
+      "initial": "shore",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "party の所在または保持者"
+    },
+    "yoruAt": {
+      "type": "enum",
+      "initial": "shore",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "yoru の所在または保持者"
+    },
+    "familyAt": {
+      "type": "enum",
+      "initial": "shore",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "family の所在または保持者"
+    },
+    "bearersAt": {
+      "type": "enum",
+      "initial": "shore",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "bearers の所在または保持者"
+    },
+    "recipientAt": {
+      "type": "enum",
+      "initial": "jetty",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "recipient の所在または保持者"
+    },
+    "inspectorAt": {
+      "type": "enum",
+      "initial": "office",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river"
+      ],
+      "meaning": "inspector の所在または保持者"
+    },
+    "coffinAt": {
+      "type": "enum",
+      "initial": "threshold",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river",
+        "party",
+        "yoru",
+        "family",
+        "bearers",
+        "recipient",
+        "inspector",
+        "body",
+        "food"
+      ],
+      "meaning": "coffin の所在または保持者"
+    },
+    "bodyAt": {
+      "type": "enum",
+      "initial": "coffin",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river",
+        "party",
+        "yoru",
+        "family",
+        "bearers",
+        "recipient",
+        "inspector",
+        "coffin",
+        "food"
+      ],
+      "meaning": "body の所在または保持者"
+    },
+    "foodAt": {
+      "type": "enum",
+      "initial": "coffin",
+      "values": [
+        "shore",
+        "threshold",
+        "jetty",
+        "office",
+        "mortuary",
+        "river",
+        "party",
+        "yoru",
+        "family",
+        "bearers",
+        "recipient",
+        "inspector",
+        "coffin",
+        "body"
+      ],
+      "meaning": "food の所在または保持者"
+    },
+    "consent": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "consent"
+    },
+    "inspected": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "inspected"
+    },
+    "permit": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "permit"
+    },
+    "delivered": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "delivered"
+    },
+    "funeral": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "funeral"
+    },
+    "postponed": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "postponed"
+    },
+    "declared": {
+      "type": "boolean",
+      "initial": false,
+      "meaning": "declared"
+    }
+  },
+  "entities": {
+    "party": {
+      "holder": "partyAt",
+      "kind": "group"
+    },
+    "yoru": {
+      "holder": "yoruAt",
+      "kind": "person",
+      "character": "yoru"
+    },
+    "family": {
+      "holder": "familyAt",
+      "kind": "group",
+      "character": "family"
+    },
+    "bearers": {
+      "holder": "bearersAt",
+      "kind": "group",
+      "character": "bearers"
+    },
+    "recipient": {
+      "holder": "recipientAt",
+      "kind": "person",
+      "character": "recipient"
+    },
+    "inspector": {
+      "holder": "inspectorAt",
+      "kind": "person",
+      "character": "inspector"
+    },
+    "coffin": {
+      "holder": "coffinAt",
+      "kind": "item"
+    },
+    "body": {
+      "holder": "bodyAt",
+      "kind": "item"
+    },
+    "food": {
+      "holder": "foodAt",
+      "kind": "item"
+    }
+  },
+  "propositions": {
+    "cargo": {
+      "text": "棺の外底には食料の包みが隠されている"
+    }
+  },
+  "initialKnowledge": {},
+  "invariants": [],
+  "scenes": {
+    "entry": {
+      "title": "水葬場の岸",
+      "place": "shore",
+      "cast": [
+        {
+          "entity": "yoru"
+        },
+        {
+          "entity": "family"
+        },
+        {
+          "entity": "bearers"
+        }
+      ],
+      "requires": true
+    },
+    "cargo": {
+      "title": "水葬場の岸",
+      "place": "shore",
+      "cast": [
+        {
+          "entity": "yoru"
+        },
+        {
+          "entity": "family"
+        },
+        {
+          "entity": "bearers"
+        }
+      ],
+      "requires": true
+    },
+    "application": {
+      "title": "検査窓口",
+      "place": "office",
+      "cast": [
+        {
+          "entity": "yoru"
+        },
+        {
+          "entity": "inspector"
+        }
+      ],
+      "requires": true
+    },
+    "postponed": {
+      "title": "水葬場の岸",
+      "place": "shore",
+      "cast": [
+        {
+          "entity": "yoru"
+        },
+        {
+          "entity": "recipient"
+        }
+      ],
+      "requires": true
+    }
+  },
+  "actions": {
+    "entry_inspect": {
+      "from": [
+        "entry"
+      ],
+      "to": "cargo",
+      "requires": true,
+      "effects": [
+        {
+          "op": "set",
+          "key": "consent",
+          "value": true
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "bearers"
+          ],
+          "path": [
+            "shore",
+            "threshold"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "threshold",
+          "to": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "bearers"
+          ],
+          "path": [
+            "threshold",
+            "shore"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "party",
+          "to": "shore"
+        },
+        {
+          "op": "set",
+          "key": "inspected",
+          "value": true
+        },
+        {
+          "op": "observe",
+          "observer": "party",
+          "proposition": "cargo",
+          "source": "food",
+          "requires": true
+        }
+      ],
+      "once": true
+    },
+    "entry_tow": {
+      "from": [
+        "entry"
+      ],
+      "ending": "contract",
+      "requires": true,
+      "effects": [
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "bearers"
+          ],
+          "path": [
+            "shore",
+            "threshold"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "threshold",
+          "to": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "bearers"
+          ],
+          "path": [
+            "threshold",
+            "jetty"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "food",
+          "from": "coffin",
+          "to": "recipient"
+        },
+        {
+          "op": "set",
+          "key": "delivered",
+          "value": true
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "bearers"
+          ],
+          "path": [
+            "jetty",
+            "river"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "party",
+          "to": "river"
+        },
+        {
+          "op": "set",
+          "key": "funeral",
+          "value": true
+        }
+      ],
+      "once": true
+    },
+    "cargo_declare": {
+      "from": [
+        "cargo"
+      ],
+      "to": "application",
+      "requires": true,
+      "effects": [
+        {
+          "op": "transfer",
+          "entity": "food",
+          "from": "coffin",
+          "to": "yoru"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "shore",
+          "to": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "family",
+            "bearers"
+          ],
+          "path": [
+            "shore",
+            "river"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "party",
+          "to": "river"
+        },
+        {
+          "op": "set",
+          "key": "funeral",
+          "value": true
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "family",
+            "bearers"
+          ],
+          "path": [
+            "river",
+            "shore"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "yoru"
+          ],
+          "path": [
+            "shore",
+            "office"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "set",
+          "key": "declared",
+          "value": true
+        }
+      ],
+      "once": true
+    },
+    "cargo_quiet": {
+      "from": [
+        "cargo"
+      ],
+      "to": "postponed",
+      "requires": true,
+      "effects": [
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "shore",
+          "to": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "family",
+            "bearers"
+          ],
+          "path": [
+            "shore",
+            "mortuary"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "coffin",
+          "from": "party",
+          "to": "mortuary"
+        },
+        {
+          "op": "set",
+          "key": "postponed",
+          "value": true
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party"
+          ],
+          "path": [
+            "mortuary",
+            "shore",
+            "threshold",
+            "jetty"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "recipient"
+          ],
+          "path": [
+            "jetty",
+            "threshold",
+            "shore"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        }
+      ],
+      "once": true
+    },
+    "application_permit": {
+      "from": [
+        "application"
+      ],
+      "ending": "informed",
+      "requires": true,
+      "effects": [
+        {
+          "op": "move",
+          "entities": [
+            "party"
+          ],
+          "path": [
+            "office",
+            "shore",
+            "threshold",
+            "jetty"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "recipient"
+          ],
+          "path": [
+            "jetty",
+            "threshold",
+            "shore",
+            "office"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "set",
+          "key": "permit",
+          "value": true
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "recipient",
+            "yoru"
+          ],
+          "path": [
+            "office",
+            "shore",
+            "threshold",
+            "jetty"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "food",
+          "from": "yoru",
+          "to": "recipient"
+        },
+        {
+          "op": "set",
+          "key": "delivered",
+          "value": true
+        }
+      ],
+      "once": true
+    },
+    "postponed_deliver": {
+      "from": [
+        "postponed"
+      ],
+      "ending": "compromise",
+      "requires": true,
+      "effects": [
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "recipient",
+            "yoru"
+          ],
+          "path": [
+            "shore",
+            "mortuary"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "transfer",
+          "entity": "food",
+          "from": "coffin",
+          "to": "recipient"
+        },
+        {
+          "op": "move",
+          "entities": [
+            "party",
+            "recipient",
+            "yoru"
+          ],
+          "path": [
+            "mortuary",
+            "shore",
+            "threshold",
+            "jetty"
+          ],
+          "assistant": "party",
+          "carrier": "party"
+        },
+        {
+          "op": "set",
+          "key": "delivered",
+          "value": true
+        }
+      ],
+      "once": true
+    }
+  },
+  "endings": {
+    "informed": {
+      "op": "and",
+      "args": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.funeral"
+          },
+          "right": true
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.permit"
+          },
+          "right": true
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.delivered"
+          },
+          "right": true
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.bodyAt"
+          },
+          "right": "coffin"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.foodAt"
+          },
+          "right": "recipient"
+        }
+      ]
+    },
+    "contract": {
+      "op": "and",
+      "args": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.funeral"
+          },
+          "right": true
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.delivered"
+          },
+          "right": true
+        },
+        {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.inspected"
+            },
+            "right": true
+          }
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.coffinAt"
+          },
+          "right": "river"
+        }
+      ]
+    },
+    "compromise": {
+      "op": "and",
+      "args": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.postponed"
+          },
+          "right": true
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.coffinAt"
+          },
+          "right": "mortuary"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q008.values.delivered"
+          },
+          "right": true
+        },
+        {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.funeral"
+            },
+            "right": true
+          }
+        }
+      ]
+    }
+  }
+}

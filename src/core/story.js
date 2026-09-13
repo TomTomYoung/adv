@@ -18,6 +18,7 @@ export function storyPlace(d,s,id,seen=new Set()){
 export function storyStateErrors(d,s,state,id,{scene=false}={}){
   const errors=[];
   if(!isRecord(s)||s.version!==d.version||!isRecord(s.values)||!Array.isArray(s.events)||!isRecord(s.knowledge))return [`${id}: 物語状態不正`];
+  if((s.revision??1)!==(d.revision??1))errors.push(`${id}: 物語状態の改訂版が一致しません`);
   for(const [key,r] of Object.entries(d.registry))if(!fieldValid(s.values[key],r))errors.push(`${id}.${key}: 型・定義域違反`);
   for(const key of Object.keys(s.values))if(!own(d.registry,key))errors.push(`${id}.${key}: 未登録の状態`);
   if(new Set(s.events).size!==s.events.length||s.events.some(e=>!own(d.actions,e)))errors.push(`${id}: 行動履歴不正`);
@@ -44,7 +45,7 @@ export function initStory(engine,id){
   const d=definition(engine.data,id);engine.state.stories??={};
   if(!engine.state.stories[id]){
     if(engine.state.quests[id].stage!=='active')throw Error('受注前に物語を開始できません');
-    const s={version:d.version,values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,clone(r.initial)])),knowledge:clone(d.initialKnowledge??{}),events:[],scene:null};
+    const s={version:d.version,...(d.revision?{revision:d.revision}:{}),values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,clone(r.initial)])),knowledge:clone(d.initialKnowledge??{}),events:[],scene:null};
     assertValid(d,s,engine.state,id);engine.state.stories[id]=s;
   }
   assertValid(d,engine.state.stories[id],engine.state,id);
@@ -124,6 +125,7 @@ export function validateStories(data,expression=()=>{}){
     const d=q.story;if(!d)continue;
     try{
       if(d.version!==1||d.modelVersion!=='1.1'||q.model?.standard?.version!=='1.1'||!q.model.standard.source||!d.registry||!d.scenes?.entry||!d.entities?.party)throw Error('モデル情報または物語の構成が不足しています');
+      if(d.revision!==undefined&&(!Number.isInteger(d.revision)||d.revision<1))throw Error('物語の改訂版が不正です');
       const guard=(v,path)=>{
         expression(v,`${id}.story.${path}`);
         const walk=x=>{if(!x||typeof x!=='object')return;if(x.ref?.startsWith('stories.')){const parts=x.ref.split('.'),other=data.quests[parts[1]]?.story;if(!other||parts[2]==='values'&&!own(other.registry,parts[3]))throw Error(`${path}: 未登録の物語状態参照`);}for(const child of Object.values(x))walk(child);};walk(v);
@@ -159,7 +161,7 @@ export function validateStories(data,expression=()=>{}){
       }
       for(const end of Object.keys(q.outcomes)){if(!own(d.endings,end))throw Error(`${end}: 終了条件がありません`);guard(d.endings[end],`endings.${end}`);}
       for(const inv of d.invariants??[])guard(inv.condition,`invariants.${inv.id}`);
-      const initial={version:d.version,values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,r.initial])),events:[],knowledge:d.initialKnowledge??{},scene:null};
+      const initial={version:d.version,...(d.revision?{revision:d.revision}:{}),values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,r.initial])),events:[],knowledge:d.initialKnowledge??{},scene:null};
       errors.push(...storyStateErrors(d,initial,{stories:{[id]:initial}},id));
     }catch(e){errors.push(`${id}: ${e.message}`);}
   }

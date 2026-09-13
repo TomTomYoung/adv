@@ -17,7 +17,12 @@ export function story(number,places,connections){
   invariant(id,condition,message){d.invariants.push({id,condition,message});return s;},
   node(id,place,cast,text,options,requires=true){d.scenes[id]={title:places[place],place,cast:cast.map(c=>typeof c==='string'?{entity:c}:c),requires};s.nodes.push({id,text,options});for(const o of options){const key=`${id}_${o.id}`;o.action=key;d.actions[key]={from:[id],...(o.to.startsWith('@')?{ending:o.to.slice(1)}:{to:o.to}),requires:o.when??true,effects:o.effects??[],...(o.cost?{cost:o.cost}:{}),once:o.once??true};}return s;},
   end(key,label,text,condition){s.outcomes[key]={label,text};d.endings[key]=condition;return s;},
-  done(){const places=Object.keys(d.places),entities=Object.keys(d.entities);for(const [key,e] of Object.entries(d.entities)){d.registry[e.holder].values=e.kind==='item'?[...places,...entities.filter(x=>x!==key)]:places;}d.entities.party.kind='group';return s;}
+  done(){const places=Object.keys(d.places),entities=Object.keys(d.entities);for(const [key,e] of Object.entries(d.entities)){d.registry[e.holder].values=e.kind==='item'?[...places,...entities.filter(x=>x!==key)]:places;}d.entities.party.kind='group';
+   for(const [alias,canonical] of Object.entries(s.sceneAliases??{})){
+    d.scenes[alias]=structuredClone(d.scenes[canonical]);
+    for(const o of s.nodes.find(n=>n.id===canonical).options){const action=d.actions[o.action];action.from.push(alias);d.actions[`${alias}_${o.id}`]={...structuredClone(action),from:[alias]};}
+   }
+   return s;}
  };
  s.entity('party',Object.keys(places)[0],null,{kind:'group'});return s;
 }

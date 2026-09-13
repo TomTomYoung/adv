@@ -18,19 +18,19 @@
 | examiner | 保険審査員／死亡保険の審査担当 | q002 | 標本番号・荷札・失踪届・保険請求書・証言を照合する |
 | sora | ソラ／水門役人 | q003 | 警報の信頼を取り戻す |
 | passers | 通行人たち／低い通路の利用者 | q003 | 荷とともに安全な通路へ出る |
-| innkeeper | 宿屋の主人／私設貯水槽の管理者 | q003 | 宿の営業と湯替えを維持する |
-| seller | 水売り／貯水槽に関わる商人 | q003 | 水の商いによる収入を保つ |
+| innkeeper | 宿屋の主人／私設汚水槽の管理者 | q003 | 宿の営業と湯替えを維持する |
+| seller | 水売り／井戸水を樽で届ける商人 | q003 | 水の商いによる収入を保つ |
 | waterwatch | 水位見張り当番／水位観測と伝令の担当 | q003 | 高所の鐘へ水位を伝える |
 | ina | イナ／見習い冒険者 | q004 | 関所に留置された姉を助ける |
 | sister | イナの姉／留置された通行者 | q004 | 妹を守り、自分も外へ戻る |
 | passkeeper | 関所番／地下関所の係員 | q004 | 兄の名で続けた勤務を失いたくない |
 | reviewer | 名義審査官／地上の資格審査担当 | q004 | 本人と資格名義を照合する |
-| toto | トト／菓子職人 | q005 | 工房の排水を直し、甘みを無駄にしない |
-| garo | ガロ／工事頭 | q006 | 未払いを隠し、仕事を継続する |
+| toto | トト／菓子職人 | q005 | 詰まりを取り除き、工房を再開する |
+| garo | ガロ／工事頭 | q006 | 未払いを隠し、石入りの給金箱を未開封で取り戻す |
 | workers | 工事の職人たち／未払い給金を待つ集団 | q006 | 未払いを受け取り、仲間への疑いを解く |
-| accused | 疑われた職人／給金箱の紛失を責められた人 | q006 | 盗みの疑いを晴らす |
+| accused | 疑われた荷役人／給金箱の紛失を責められた人 | q006 | 盗みの疑いを晴らす |
 | mire | ミレ／酒場で働く遺族 | q007 | 亡夫の声の正体を自分で確かめる |
-| brother | ミレの夫の弟／手紙を預かる遺族 | q007 | 手紙を渡せなかった罪悪感から逃れたい |
+| brother | ミレの夫の弟／手紙を預かる遺族 | q007 | 兄の手紙を届けたいが、ミレに拒まれるのが怖い |
 | yoru | ヨル／葬送組合の担当者 | q008 | 葬儀を終え、下流へ食料も届ける |
 | family | 棺の遺族／水葬を待つ家族 | q008 | 故人を弔い、扱いを自分たちで決める |
 | bearers | 棺の担ぎ手／葬送作業の担当者 | q008 | 棺と遺体を傷めずに運ぶ |
@@ -129,7 +129,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![宿屋の主人](../assets/images/characters/innkeeper.png)
 
-放水の分散と量の削減を交渉する当事者。
+浴場・洗濯場・食堂の拡張で増えた使用済みの水を夜にまとめて排出していた。使用量の削減と排水時刻の分散を交渉する当事者。
 
 [AIPaint 編集原稿](../assets/source/characters/innkeeper.paint.json) ／ [描画コマンド](../assets/source/characters/innkeeper.commands.json)
 
@@ -137,7 +137,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![水売り](../assets/images/characters/seller.png)
 
-放水量の削減に伴う収入減を引き受ける。
+宿へ届ける水の量が減れば収入も減る。
 
 [AIPaint 編集原稿](../assets/source/characters/seller.paint.json) ／ [描画コマンド](../assets/source/characters/seller.commands.json)
 
@@ -185,7 +185,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![トト](../assets/images/characters/toto.png)
 
-網を使う場合の清掃当番を引き受ける。
+冷水試験の後に初めて、安全に食用へ回せるなら菌床を残したいと申し出る。分離槽の維持や、網を使う場合の清掃当番を引き受ける。
 
 [AIPaint 編集原稿](../assets/source/characters/toto.paint.json) ／ [描画コマンド](../assets/source/characters/toto.commands.json)
 
@@ -193,7 +193,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![ガロ](../assets/images/characters/garo.png)
 
-給金箱の石と台帳の矛盾を問われる。
+工事費を使い切り、自ら石入りの箱を沈めて盗難に見せかけた。職人たちに第三者の捜索を求められて依頼する。一部払いには自分の荷車と予備工具を売る。
 
 [AIPaint 編集原稿](../assets/source/characters/garo.paint.json) ／ [描画コマンド](../assets/source/characters/garo.commands.json)
 
@@ -205,11 +205,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 [AIPaint 編集原稿](../assets/source/characters/workers.paint.json) ／ [描画コマンド](../assets/source/characters/workers.commands.json)
 
-### 疑われた職人 (accused)
+### 疑われた荷役人 (accused)
 
-![疑われた職人](../assets/images/characters/accused.png)
+![疑われた荷役人](../assets/images/characters/accused.png)
 
-集団とは別の実体として所在を管理する。
+空の箱を最後に運んだが、盗んでも沈めてもいない。集団とは別の実体として所在を管理する。
 
 [AIPaint 編集原稿](../assets/source/characters/accused.paint.json) ／ [描画コマンド](../assets/source/characters/accused.commands.json)
 
@@ -225,7 +225,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![ミレの夫の弟](../assets/images/characters/brother.png)
 
-亡夫本人とは別人。声の模倣と手紙の保管をしていた。
+遺品から見つけた兄の未配達の手紙の原本を保持する。似た声を兄の話し方へ寄せ、伝声管を通して読んでいた。
 
 [AIPaint 編集原稿](../assets/source/characters/brother.paint.json) ／ [描画コマンド](../assets/source/characters/brother.commands.json)
 
@@ -257,7 +257,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![下流の受取人](../assets/images/characters/recipient.png)
 
-桟橋から勝手に岸へ現れず、案内または運搬の行動で移動する。
+下流の葬送桟橋で待つ。棺が届いた場合は外底だけを外し、遺体を封じた内室を水葬経路へ戻す。岸や窓口へは案内に従って移動する。
 
 [AIPaint 編集原稿](../assets/source/characters/recipient.paint.json) ／ [描画コマンド](../assets/source/characters/recipient.commands.json)
 
@@ -273,7 +273,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![エダ](../assets/images/characters/eda.png)
 
-図面だけで安全宣言せず、現物の支柱も比較する。
+旧図、支柱の測点、亀裂、地下水位を比較する。この区画に新しい変位がないことを、他区画の安全と混同しない。
 
 [AIPaint 編集原稿](../assets/source/characters/eda.paint.json) ／ [描画コマンド](../assets/source/characters/eda.commands.json)
 
@@ -305,7 +305,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![水門番](../assets/images/characters/gatekeeper.png)
 
-関所番とは別人。縦坑と安全帯を用意していた。
+関所番とは別人。安全側の操作室から閉門し、操作梯子で地上へ脱出できる。旧工事用の縦坑は上下両端の検査が済むまで避難路に使えない。未承認工事と閉門を遅らせた理由を証言できる。
 
 [AIPaint 編集原稿](../assets/source/characters/gatekeeper.paint.json) ／ [描画コマンド](../assets/source/characters/gatekeeper.commands.json)
 
