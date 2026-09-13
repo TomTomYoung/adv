@@ -12,10 +12,10 @@
 | elder | 老灯番／行方不明の灯番 | q001 | 新人を帰し、仕事を教え直す |
 | rookie | 新人灯番／帰還をためらう見習い | q001 | 失敗を隠したいが老人を見捨てたくない |
 | rescuers | 灯番救助隊／引継ぎ先の救助班 | q001 | 地図に従って未帰還者を連れ戻す |
-| belt | ベルト／運送人 | q002 | 荷札を回収し、偽装した保険請求を通す |
+| belt | ベルト／運送人 | q002 | 偽装の証拠となる荷札を回収し、一味の保険請求を通す |
 | porter | 運搬人／標本の運搬を請けた荷役人 | q002 | 仕事を失わずに標本を返したい |
 | curator | 標本係／医学校の標本管理者 | q002 | 標本と貸出台帳を学校へ戻す |
-| examiner | 保険審査員／死亡保険の審査担当 | q002 | 請求と本人確認を照合する |
+| examiner | 保険審査員／死亡保険の審査担当 | q002 | 標本番号・荷札・失踪届・保険請求書・証言を照合する |
 | sora | ソラ／水門役人 | q003 | 警報の信頼を取り戻す |
 | passers | 通行人たち／低い通路の利用者 | q003 | 荷とともに安全な通路へ出る |
 | innkeeper | 宿屋の主人／私設貯水槽の管理者 | q003 | 宿の営業と湯替えを維持する |
@@ -81,7 +81,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![ベルト](../assets/images/characters/belt.png)
 
-標本の番号を調べられたくない。
+生存する保険加入者を失踪者として届け出た一味から、標本を遺体に見せる仕事を受けた。骨箱を地下水路へ落とし、荷札だけを回収したがっている。
 
 [AIPaint 編集原稿](../assets/source/characters/belt.paint.json) ／ [描画コマンド](../assets/source/characters/belt.commands.json)
 
@@ -89,7 +89,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![運搬人](../assets/images/characters/porter.png)
 
-不正請求の証言には本人の同意が必要。
+保険加入者本人ではなく、ベルトの依頼で箱を運んだ証人。一味の偽装を知っているが、仕事を失うことを恐れている。証言には本人の同意が必要。
 
 [AIPaint 編集原稿](../assets/source/characters/porter.paint.json) ／ [描画コマンド](../assets/source/characters/porter.commands.json)
 
@@ -105,7 +105,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![保険審査員](../assets/images/characters/examiner.png)
 
-告発を受けた瞬間に真相を知るのではなく、本人と帳簿を審査する。
+審査所で失踪届と保険請求書を管理する。医学校の台帳、書き換えられた荷札、運搬人の証言を照合して不正を立証する。
 
 [AIPaint 編集原稿](../assets/source/characters/examiner.paint.json) ／ [描画コマンド](../assets/source/characters/examiner.commands.json)
 

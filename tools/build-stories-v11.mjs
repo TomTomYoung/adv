@@ -13,6 +13,8 @@ for(const file of game.files.quests){
  const q=await read(file),s=drafts.find(s=>s.id===q.id);q.model.standard??=previous;
  if(s){
   q.legacyOutcomes??=structuredClone(q.outcomes);const sid=n=>`${q.id}.v11.${n}`;
+  if(s.brief){q.brief=s.brief;q.model.audience={...q.model.audience,initialHypothesis:s.brief};}
+  if(s.revealText)q.model.reveal={...q.model.reveal,newInformation:s.revealText};
   q.story=s.story;q.outcomes=Object.fromEntries(Object.entries(s.outcomes).map(([k,o])=>[k,{gold:q.legacyOutcomes[k]?.gold??57,xp:q.legacyOutcomes[k]?.xp??51,...o}]));
   q.model.standard=standard;q.model.flowVersion=3;q.model.entryScript=sid('visit');q.model.progression=s.progression;
   q.model.world={...q.model.world,truth:s.past.join(' '),history:s.past.map((text,i)=>({id:`fixed_${i}`,text})),initialState:'story.registry の initial。過去の真相と現在の所在を別に持つ。'};

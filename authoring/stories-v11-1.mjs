@@ -34,21 +34,56 @@ const rows=[];
  rows.push(s.done());
 }
 {
- const s=story(2,{landing:'引き揚げ場',water:'浅瀬の荷崩れ',school:'学校の標本室',office:'保険審査所'},[['landing','water'],['landing','school'],['landing','office']]);
- s.entity('belt','landing','belt').entity('porter','school','porter').entity('curator','school','curator').entity('examiner','office','examiner').entity('box','water').entity('bones','box').entity('tags','box').entity('ledger','curator');
+ const s=story(2,{landing:'引き揚げ場',water:'浅瀬の荷崩れ',school:'医学校の標本室',office:'保険審査所'},[['landing','water'],['landing','school'],['landing','office']]);
+ s.entity('belt','landing','belt').entity('porter','school','porter').entity('curator','school','curator').entity('examiner','office','examiner').entity('box','water').entity('bones','water').entity('tags','box').entity('ledger','curator');
  for(const k of ['opened','schoolKnown','witnessConsent','fraudChecked','returned','tagDelivered'])s.bool(k);
- s.fact('number','骨の台座には学校の貸出番号がある').fact('loan','貸出台帳は標本を学校の所有物と示す').fact('fraud','生存している運搬人に死亡保険の請求が出ている');
- s.past=['ベルトは貸出標本を死者の骨に見せかけ、荷札で死亡保険を請求しようとした。運搬人は仕事を失うのを恐れて黙っている。'];s.progression='荷札だけの回収、箱の引き揚げ、学校への照会を分ける。保険不正の確定には台帳・運搬人の同意・審査が必要。';
- s.node('entry','landing',['belt'],'ベルトは水面の箱を指した。「中身は捨てていい。荷札だけ戻してくれ」。浅瀬へ降りれば箱を調べられる。',[O('lift','縄を使って箱ごと引き揚げる','box',[move('party','landing','water'),give('box','water','party'),move('party','water','landing'),set('opened'),see('number','bones')],{cost:{rope:1}}),O('tags','浅瀬の魔物を退け、荷札だけ回収する','tags',[move('party','landing','water'),give('tags','box','party'),move('party','water','landing')],{combat:true}),O('school','浅瀬で台座の番号を写し、学校へ照会する','school',[move('party','landing','water'),see('number','bones'),move('party','water','landing','school'),see('loan','ledger'),set('schoolKnown')])]);
- s.node('box','landing',['belt'],'箱の中の骨は針金で連結され、台座に学校の番号が刻まれている。ベルトは荷札だけを差し出すよう急かした。',[O('school','箱を保持したまま、標本室へ番号を照会する','school',[move('party','landing','school'),see('loan','ledger'),set('schoolKnown')]),O('tags','荷札を外してベルトへ渡す','@contract',[give('tags','box','belt'),give('box','party','belt'),move('belt','landing','water'),give('box','belt','water'),move('belt','water','landing'),set('tagDelivered')])]);
- s.node('tags','landing',['belt'],'荷札はあなたの手にある。箱と骨は浅瀬に残した。ベルトは札を数えるため手を伸ばした。',[O('deliver','荷札だけを渡して依頼を終える','@contract',[give('tags','party','belt'),set('tagDelivered')]),O('inspect','荷札を渡さず、浅瀬の台座を確かめて学校へ行く','school',[move('party','landing','water'),see('number','bones'),move('party','water','landing','school'),see('loan','ledger'),set('schoolKnown')])]);
- const recover=[{...move('party porter','school','landing','water'),when:s.is('boxAt','water')},{...give('box','water','party'),when:s.is('boxAt','water')},{...move('party porter','water','landing','school'),when:s.is('partyAt','water')},give('box','party','curator'),{...give('tags','party','curator'),when:s.is('tagsAt','party')},set('returned')];
- s.node('school','school',['porter','curator'],'標本係は番号を貸出台帳と照合した。「授業の骨です。運搬を頼んだのは、この人」。運搬人は、回収の手伝いには応じたが、保険の話には口をつぐんだ。',[O('recover','運搬人と標本を回収し、学校へ返す','returned',recover)]);
- s.node('returned','school',['porter','curator'],'骨と箱を学校へ返した。標本係が返却を記帳する。運搬人は「証言したら次の仕事がなくなる」と言った。',[O('finish','標本の返却だけで報告を終える','@compromise'),O('consent','不利益も説明し、本人の同意を得て審査所へ同行する','hearing',[set('witnessConsent'),give('ledger','curator','party'),move('party porter','school','landing','office')])]);
- s.node('hearing','office',['porter','examiner'],'審査員が運搬人本人と貸出台帳を確認し、ベルトの請求書と照合した。死亡したとされる人が、目の前で署名する。',[O('file','本人の証言と台帳を受理してもらう','@informed',[see('fraud','examiner'),give('ledger','party','examiner'),set('fraudChecked')])]);
- s.end('informed','証言を伴う不正請求の審査','審査所は標本を死者に見せた請求を止めた。運搬人は同意して証言したが、ベルトからの仕事を失った。返却済みの骨は学校に残る。',and(s.is('returned'),s.is('witnessConsent'),s.is('fraudChecked'),s.known('fraud')));
- s.end('contract','荷札だけの納品','ベルトは荷札を受け取り、箱は浅瀬に残された。あなたは請求書を見ていない。その後、ベルトの死亡保険請求は審査を通った。',and(s.is('tagDelivered'),s.is('tagsAt','belt'),s.is('boxAt','water')));
- s.end('compromise','学校へ標本を返却','箱と骨は学校へ戻った。運搬人の証言は得ず、保険請求の確認は審査所に持ち込まなかった。標本の返却と不正の立証は、別の仕事として残った。',s.is('returned'));
+ s.fact('number','骨には医学校の管理番号が刻まれている').fact('loan','管理番号と貸出台帳が一致し、持出し許可のない医学校の貸出標本だと確認した');
+ s.fact('alteredTag','荷札の宛名には別人の名前へ書き直された跡がある').fact('missingReport','荷札の宛名は審査所にある失踪届の名前と一致する').fact('claim','保険請求書は同じ失踪者の遺体として標本箱を提出するとしている').fact('testimony','運搬人は、失踪者として届けられた保険加入者の生存と、一味がベルトへ標本の偽装を頼んだ経緯を証言した').fact('fraud','標本番号・書き換えられた荷札・失踪届・保険請求書・運搬人の証言を照合し、生存する保険加入者の遺体偽装を立証した');
+ s.brief='地下水路へ落ちた骨箱から人骨が流れ出ています。運送人のベルトは、箱に付いていた荷札だけを回収してほしいと依頼しました。';
+ s.past=['ベルトは、生存している保険加入者を失踪者として届け出た一味から依頼を受け、医学校の貸出標本を遺体に見せかけようとした。標本を入れた箱には失踪者の名前へ書き換えた荷札が付き、骨には医学校の管理番号が残っている。ベルトは箱を地下水路へ落としたため、偽装の証拠となる荷札だけを先に回収しようとしている。運搬人は事情を知っているが、仕事を失うのを恐れて黙っている。'];
+ s.revealText='医学校の貸出標本に失踪者名の荷札を付け、生存する保険加入者の遺体として提出する偽装だった。運搬人は保険加入者本人ではなく、事情を知る証人である。';
+ s.progression='荷札だけの回収、骨箱の引き揚げ、標本番号の照会を分ける。保険不正の立証には、標本番号、書き換えられた荷札、失踪届、保険請求書、事情を知る運搬人の証言が必要。';
+ const collectBones={...give('bones','water','box'),when:s.is('bonesAt','water')};
+ s.node('entry','landing',['belt'],'地下水路の曲がり角で、口の開いた骨箱が浅瀬に引っ掛かっている。流れ出た骨がその周囲に散っていた。ベルトは箱の縁を指した。「荷札だけ戻してくれ。骨は拾わなくていい」。',[
+  O('lift','縄を使って骨箱ごと引き揚げる','box',[move('party','landing','water'),collectBones,give('box','water','party'),move('party','water','landing'),set('opened'),see('number','bones')],{cost:{rope:1}}),
+  O('tags','浅瀬の魔物を退け、荷札だけ回収する','tags',[move('party','landing','water'),give('tags','box','party'),move('party','water','landing')],{combat:true}),
+  O('school','浅瀬の骨に刻まれた管理番号を写し、医学校へ照会する','school',[move('party','landing','water'),see('number','bones'),move('party','water','landing','school'),see('loan','ledger'),set('schoolKnown')])
+ ]);
+ s.node('box','landing',['belt'],'流れ出た骨を箱へ集め、縄で岸へ引き揚げた。骨には医学校の管理番号があり、荷札の宛名には書き直された跡がある。ベルトが手を出した。「荷札だけくれ。箱は俺が浅瀬へ戻す」。',[
+  O('school','骨の管理番号と荷札の宛名を控え、医学校へ照会する','school',[see('alteredTag','tags'),move('party','landing','school'),see('loan','ledger'),set('schoolKnown')]),
+  O('tags','荷札を外してベルトへ渡す','@contract',[give('tags','box','belt'),give('box','party','belt'),move('belt','landing','water'),give('box','belt','water'),move('belt','water','landing'),set('tagDelivered')])
+ ]);
+ s.node('tags','landing',['belt'],'荷札を箱から外して岸へ戻った。骨箱は浅瀬に残っている。ベルトは濡れた札へ手を伸ばした。「それでいい。渡してくれ」。',[
+  O('deliver','荷札だけをベルトへ渡して依頼を終える','@contract',[give('tags','party','belt'),set('tagDelivered')]),
+  O('inspect','荷札の書き直された跡を調べ、骨の管理番号を確かめる','school',[see('alteredTag','tags'),move('party','landing','water'),see('number','bones'),move('party','water','landing','school'),see('loan','ledger'),set('schoolKnown')])
+ ]);
+ const recover=[{...move('party porter','school','landing','water'),when:s.is('boxAt','water')},collectBones,{...give('box','water','party'),when:s.is('boxAt','water')},{...move('party porter','water','landing','school'),when:s.is('partyAt','water')},give('box','party','curator'),{...give('tags','box','curator'),when:s.is('tagsAt','box')},{...give('tags','party','curator'),when:s.is('tagsAt','party')},set('returned')];
+ s.node('school','school',['porter','curator'],'標本係は骨の管理番号を貸出台帳と照合した。「貸出用の標本です。この持ち出しは許可していません」。呼ばれた運搬人は、ベルトに頼まれて箱を運んだと認め、回収を手伝うと答えた。',[
+  O('recover','管理番号から貸出標本だと確認し、箱と骨を医学校へ返す','returned',recover)
+ ]);
+ s.node('returned','school',['porter','curator'],'箱と骨を医学校へ返し、荷札も一緒に預けた。標本係が番号を確かめて返却を記帳する。運搬人は荷札を見て声を落とした。「名前を書き換えた理由は知っています。でも、証言したらベルトからの仕事はなくなる」。',[
+  O('finish','標本の返却だけで報告を終える','@compromise'),
+  O('consent','運搬人へ不利益を説明し、本人の同意を得て審査所へ同行する','hearing',[set('witnessConsent'),give('ledger','curator','party'),{...give('tags','box','party'),when:s.is('tagsAt','box')},{...give('tags','curator','party'),when:s.is('tagsAt','curator')},move('party porter','school','landing','office')])
+ ]);
+ // A pre-revision save at the hearing may still have its tags at the school.
+ // The porter must physically collect them before the same inspection can finish.
+ const bringFiledTags=[
+  {...move('porter','office','landing','school'),when:or(s.is('tagsAt','box'),s.is('tagsAt','curator'))},
+  {...give('tags','box','porter'),when:s.is('tagsAt','box')},
+  {...give('tags','curator','porter'),when:s.is('tagsAt','curator')},
+  {...move('porter','school','landing','office'),when:s.is('porterAt','school')},
+  {...give('tags','porter','party'),when:s.is('tagsAt','porter')}
+ ];
+ const documents=and(s.known('number'),s.known('loan'),s.known('alteredTag'),s.known('missingReport'),s.known('claim'),s.known('testimony'));
+ s.node('hearing','office',['porter','examiner'],'審査員は標本の台帳を開き、荷札の提出を求めた。医学校に預けたままなら、運搬人が取りに戻る。失踪届と保険請求書は審査所に保管されている。運搬人は「失踪したという人は生きています。その人の遺体に見せる箱を、一味がベルトに用意させたんです」と話し始めた。',[
+  O('file','標本番号、荷札、失踪届、保険請求書を照合し、運搬人の証言を受理してもらう','@informed',[
+   ...bringFiledTags,see('alteredTag','tags'),give('tags','party','examiner'),give('ledger','party','examiner'),
+   see('missingReport','examiner',s.is('tagsAt','examiner')),see('claim','examiner',s.known('missingReport')),see('testimony','porter',s.is('witnessConsent')),see('fraud','examiner',documents),set('fraudChecked')
+  ],{when:and(s.is('returned'),s.is('witnessConsent'),s.is('ledgerAt','party'),s.known('number'),s.known('loan'))})
+ ]);
+ s.end('informed','証言を伴う不正請求の審査','標本番号、書き換えられた荷札、失踪届、保険請求書が一つの偽装として審査所へ提出された。不正請求は止まり、標本は医学校へ返却された。運搬人は同意して証言したが、ベルトからの仕事を失った。',and(s.is('returned'),s.is('witnessConsent'),s.is('fraudChecked'),s.known('fraud')));
+ s.end('contract','荷札だけの納品','ベルトは荷札を受け取り、浅瀬の骨箱は回収されなかった。後日、荷札は別の標本箱に付け直され、失踪者の遺体として保険審査へ提出された。',and(s.is('tagDelivered'),s.is('tagsAt','belt'),s.is('boxAt','water')));
+ s.end('compromise','学校へ標本を返却','箱と骨は医学校へ戻り、盗まれた標本の管理番号も確認された。しかし荷札と失踪届の関係、保険請求への関与までは立証されず、不正の追及は別の仕事として残った。',s.is('returned'));
  rows.push(s.done());
 }
 {
