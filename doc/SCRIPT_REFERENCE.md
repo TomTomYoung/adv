@@ -1,5 +1,8 @@
 # JSON DSL 1.0 実装リファレンス
 
+2026-09-13追記: q001〜q010 は作品版1.4.0で [人物・物品を追うモデル v1.1](SCENARIO_MODEL_V11.md) へ更新しました。[改稿全文](SCENARIOS_Q001_Q010_V11.md)、[人物一覧](CHARACTERS.md)、[今回の検証と残る範囲](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。以下の旧版の記録は当時の実装範囲を表します。
+
+
 JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範囲へ具体化した文書です。JSONの追加・編集だけで新しい場面を記述します。任意JavaScript・YAML文字列・関数名の文字列評価は受け付けません。
 
 2026-09-12照合: master 1.3.1は45命令・30式演算子です。PR #3（1.3.2）でもこの数は同じです。未実装の条件拡張と版の区分は [CURRENT_STATUS.md](CURRENT_STATUS.md) を参照してください。
@@ -153,3 +156,13 @@ effects.typeにはdamage / heal / guard / status / cleanseに加え、drain_mp�
 map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"wild_waterwheel_beaver","weight":40}]` のように正の重みを与えます。省略時は従来のencounterだけを使用します。
 
 1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。
+
+## 1.4.0 物語状態の専用命令
+
+| 命令 | 必須引数 | 作用 |
+|---|---|---|
+| story.init | quest | 登録済みの型・初期値で受注中の物語を開始。再訪で初期化し直さない |
+| story.scene | quest, scene | 所在と同席者・遠隔通信の条件を確認して場面を開く |
+| story.action | quest, action | 宣言済みの前提・費用・効果・終了条件を確認し、一括確定 |
+
+choice.options の `storyAction: {quest, action}` は同じ行為を選択可否の検査に使う。`stories` へ set/add で書き込むことはできない。詳細と効果一覧は [モデル仕様](SCENARIO_MODEL_V11.md) を参照。

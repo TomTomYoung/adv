@@ -1,3 +1,4 @@
+import {validateStories} from './story.js';
 import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
 import {validateJobs} from './job-validation.js';
 import {COMMANDS} from './script.js';
@@ -32,6 +33,11 @@ export function validateContent(data){
         reference(data.encounters,c.encounter,at);
         for(const key of ['on_win','on_lose','on_escape'])commands(c[key],`${at}.${key}`,depth+1);
       }
+      if(c.op.startsWith('story.')){
+        const story=data.quests[c.quest]?.story;if(!story)fail(at,'物語定義がありません');
+        if(c.op==='story.action'&&!story?.actions[c.action])fail(at,'物語行動がありません');
+        if(c.op==='story.scene'&&!story?.scenes[c.scene])fail(at,'物語場面がありません');
+      }
       if(c.op.startsWith('quest.'))reference(data.quests,c.quest,at);
       if(c.op==='quest.complete'&&!data.quests[c.quest]?.outcomes[c.outcome])fail(at,'結末がありません');
       if(['item.give','item.take'].includes(c.op)&&typeof c.item==='string')reference(data.items,c.item,at);
@@ -56,7 +62,7 @@ export function validateContent(data){
       if(c.op==='flag.set'){try{pathParts(`flags.${c.key}`);}catch(e){fail(at,e.message);}}
       if(c.op==='choice'){
         if(!Array.isArray(c.options)||!c.options.length){fail(at,'選択肢が必要です');return;}
-        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1);}
+        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(option.storyAction&&!data.quests[option.storyAction.quest]?.story?.actions[option.storyAction.action])fail(at,'物語選択の参照不正');if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1);}
         if(!c.options.some(o=>o.condition===undefined&&o.visibleWhen===undefined))fail(at,'常に選べる選択肢を1つ以上設けてください');
       }
       if(c.op==='if'){commands(c.then,`${at}.then`,depth+1);commands(c.else,`${at}.else`,depth+1);}
@@ -64,7 +70,7 @@ export function validateContent(data){
       if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1);}}
     });
   };
-  errors.push(...validatePresentation(data),...validateJobs(data));
+  errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');

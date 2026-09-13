@@ -671,6 +671,67 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "story.init"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "story.scene"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scene": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest",
+            "scene"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "story.action"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest",
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "say"
             },
             "text": {
@@ -739,6 +800,24 @@
                   },
                   "requirement": {
                     "type": "string"
+                  },
+                  "storyAction": {
+                    "type": "object",
+                    "properties": {
+                      "quest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "action": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "quest",
+                      "action"
+                    ],
+                    "additionalProperties": false
                   },
                   "commands": {
                     "type": "array",
@@ -1717,6 +1796,10 @@
           "items": {
             "$ref": "#/$defs/command"
           }
+        },
+        "storyQuest": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
@@ -1840,6 +1923,534 @@
         ],
         "additionalProperties": false
       }
+    },
+    "story": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "modelVersion": {
+          "const": "1.1"
+        },
+        "places": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "registry": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "boolean"
+                  },
+                  "initial": {
+                    "type": "boolean"
+                  },
+                  "meaning": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "type",
+                  "initial",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "enum"
+                  },
+                  "initial": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "values": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1
+                  },
+                  "meaning": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "type",
+                  "initial",
+                  "values",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "integer"
+                  },
+                  "initial": {
+                    "type": "integer"
+                  },
+                  "min": {
+                    "type": "integer"
+                  },
+                  "max": {
+                    "type": "integer"
+                  },
+                  "meaning": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "container": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "type",
+                  "initial",
+                  "min",
+                  "max",
+                  "meaning"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "entities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "holder": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "person",
+                  "group",
+                  "item"
+                ]
+              },
+              "character": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mobility": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "holder",
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "propositions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "initialKnowledge": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "invariants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "condition": {
+                "$ref": "#/$defs/value"
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "condition",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "scenes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "place": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requires": {
+                "$ref": "#/$defs/value"
+              },
+              "cast": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "entity": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "when": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "mode": {
+                      "enum": [
+                        "local",
+                        "remote"
+                      ]
+                    },
+                    "requires": {
+                      "$ref": "#/$defs/value"
+                    }
+                  },
+                  "required": [
+                    "entity"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "title",
+              "place",
+              "requires",
+              "cast"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "actions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ending": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requires": {
+                "$ref": "#/$defs/value"
+              },
+              "effects": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "move"
+                        },
+                        "entities": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 1
+                        },
+                        "path": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "assistant": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "carrier": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "entities",
+                        "path"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "transfer"
+                        },
+                        "entity": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "from": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "to": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "entity",
+                        "from",
+                        "to"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "set"
+                        },
+                        "key": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "value": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "key",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "pour"
+                        },
+                        "from": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "to": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "from",
+                        "to",
+                        "amount"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "consume"
+                        },
+                        "key": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "sink": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "key",
+                        "amount",
+                        "sink"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "op": {
+                          "const": "observe"
+                        },
+                        "observer": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "proposition": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "requires": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "when": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "op",
+                        "observer",
+                        "proposition",
+                        "source",
+                        "requires"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "once": {
+                "type": "boolean"
+              },
+              "cost": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "required": [
+              "from",
+              "requires",
+              "effects"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "endings": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "modelVersion",
+        "places",
+        "connections",
+        "registry",
+        "entities",
+        "propositions",
+        "initialKnowledge",
+        "invariants",
+        "scenes",
+        "actions",
+        "endings"
+      ],
+      "additionalProperties": false
+    },
+    "legacyOutcomes": {
+      "type": "object"
     },
     "model": {
       "type": "object",

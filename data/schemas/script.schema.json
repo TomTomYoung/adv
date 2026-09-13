@@ -671,6 +671,67 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "story.init"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "story.scene"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scene": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest",
+            "scene"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "story.action"
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "quest",
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "say"
             },
             "text": {
@@ -739,6 +800,24 @@
                   },
                   "requirement": {
                     "type": "string"
+                  },
+                  "storyAction": {
+                    "type": "object",
+                    "properties": {
+                      "quest": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "action": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "quest",
+                      "action"
+                    ],
+                    "additionalProperties": false
                   },
                   "commands": {
                     "type": "array",
@@ -1717,6 +1796,10 @@
           "items": {
             "$ref": "#/$defs/command"
           }
+        },
+        "storyQuest": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [

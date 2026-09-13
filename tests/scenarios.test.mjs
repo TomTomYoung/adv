@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
+import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
 import {GameEngine} from '../src/core/engine.js';
 import {projectGame} from '../src/application/projection.js';
@@ -9,13 +10,13 @@ import {recordCount} from '../src/core/records.js';
 import {validateContent} from '../src/core/validation.js';
 
 const visit=id=>data.quests[id].model.entryScript??`${id}.visit`;
-const scene=(g,id)=>g.state.flags.flow?.[id]?.node??g.state.flags.quest?.[id]?.node;
+const scene=(g,id)=>g.state.stories?.[id]?.scene??g.state.flags.flow?.[id]?.node??g.state.flags.quest?.[id]?.node;
 const options=g=>g.state.waiting?.type==='choice'?commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options:[];
-const enabled=(g,o)=>(o.visibleWhen===undefined||g.value(o.visibleWhen))&&(o.condition===undefined||g.value(o.condition));
+const enabled=(g,o)=>(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.visibleWhen===undefined||g.value(o.visibleWhen))&&(o.condition===undefined||g.value(o.condition));
 function start(id,{rich=true,walk=true}={}){
  const g=newGame(1907);
  if(rich){g.award(0,data.system.xpBase*24*25);g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;g.healAll();}
- if(data.quests[id].number<=100)for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number)){g.dispatch({type:'accept',id:q.id});g.complete(q.id,'compromise');}
+ if(data.quests[id].number<=100)for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  assert.ok(g.dispatch({type:'accept',id}));
  if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true});else{g.run(visit(id));drain(g);}
  return g;
@@ -38,7 +39,7 @@ function canonical(value){return JSON.stringify(value,(_,v)=>v&&typeof v==='obje
 // Explore the actual VM and battle continuations. The rich fixture isolates authored
 // reachability from combat balance; resource and party edge cases are tested below.
 // Counters used by story predicates saturate at two; narrative counters stay exact.
-const key=(g,id)=>canonical({flags:g.state.flags.quest?.[id],flow:g.state.flags.flow?.[id],members:g.state.members,outcome:g.state.quests[id].outcome,waiting:g.state.waiting?.type,
+const key=(g,id)=>canonical({story:g.state.stories?.[id],flags:g.state.flags.quest?.[id],flow:g.state.flags.flow?.[id],members:g.state.members,outcome:g.state.quests[id].outcome,waiting:g.state.waiting?.type,
  kills:Object.fromEntries(Object.entries(g.state.records.kills).map(([k,n])=>[k,Math.min(n,2)]))});
 
 for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending, reachable map, save/resume and no repeat reward`,()=>{
@@ -119,7 +120,7 @@ test('q190 one sealed site is not three and its completed recovery cannot be cla
 test('q100 still requires the original 99 completions, even after the additional 100',()=>{
  const g=newGame();for(const q of Object.values(data.quests).filter(q=>q.number>100)){g.dispatch({type:'accept',id:q.id});g.complete(q.id,Object.entries(q.outcomes).find(([,o])=>!o.requires)[0]);}
  assert.equal(g.state.vars.completed,100);assert.equal(g.unlocked(data.quests.q100),false);
- for(const q of Object.values(data.quests).filter(q=>q.number<100)){g.dispatch({type:'accept',id:q.id});g.complete(q.id,'compromise');}
+ for(const q of Object.values(data.quests).filter(q=>q.number<100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  assert.equal(g.unlocked(data.quests.q100),true);
 });
 test('earlier proof unlocks q011 before collecting its second clue; incomplete q001 proof stays hidden',()=>{
@@ -189,7 +190,7 @@ test('poison defeats multiple individual enemies once; migrated dead enemies are
 test('rope is spent only after winning the revised rescue route',()=>{
  for(const result of ['win','escape','lose']){
   const g=newGame();g.award(0,data.system.xpBase*24*25);g.accept('q002');
-  g.evidence('q002','clue_a','痕跡');g.evidence('q002','clue_b','証言');g.run('q002.visit');drain(g);
+  (g.state.flags.legacyStoryRoutes??={}).q002=true;g.evidence('q002','clue_a','痕跡');g.evidence('q002','clue_b','証言');g.run('q002.visit');drain(g);
   const before=g.state.inventory.rope;choose(g,'informed');assert.equal(g.state.inventory.rope,before);resolveBattle(g,result);
   assert.equal(g.state.inventory.rope,before-(result==='win'?1:0));assert.equal(g.state.quests.q002.stage,result==='win'?'completed':'active');
  }
@@ -208,7 +209,7 @@ for(const phase of ['text','choice','battle'])test(`actual 1.3.0 ${phase} save m
  const source=await fs.readFile(new URL(`fixtures/save-1.3.0-${phase}.json`,import.meta.url),'utf8'),old=JSON.parse(source),g=newGame();
  g.load(source);assert.equal(g.state.contentVersion,data.game.version);assert.equal(Object.keys(g.state.quests).length,200);
  for(const field of ['actors','inventory','rng','vars','waiting','vm','nextScope'])assert.deepEqual(g.state[field],old.state[field],field);
- assert.deepEqual(Object.fromEntries(Object.entries(g.state.flags).filter(([k])=>k!=='legacyQuestRoutes')),old.state.flags);
+ assert.deepEqual(Object.fromEntries(Object.entries(g.state.flags).filter(([k])=>!['legacyQuestRoutes','legacyStoryRoutes'].includes(k))),old.state.flags);
  assert.equal(g.state.records.historyComplete,false);assert.deepEqual(g.state.records.kills,{});
  const checkpoint=g.save();g.load(checkpoint);assert.equal(g.save(),checkpoint);
  drain(g);if(phase==='choice'){choose(g,'contract');}if(g.state.battle)fight(g);

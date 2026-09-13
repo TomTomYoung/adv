@@ -35,82 +35,153 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "二つの荷の行先を届け出て、別々に送り出す",
-      "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "水葬と許可された食料輸送",
+      "text": "遺体を納めた棺は水葬の流れへ送り出した。食料は外底から分け、受取人の照会を経た今回限りの許可で桟橋へ届けた。恒久的な輸送制度の見直しは申請として残る。"
     },
     "contract": {
-      "label": "魔物を退け、積荷を確かめず儀式を進める",
-      "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "重い棺を下流へ曳く",
+      "text": "棺を段差の先へ曳いた。下流の受取人は外底の荷を外し、棺は水葬の流れへ送られた。荷の由来を調べないまま、棺に食料を隠す輸送は続く。"
     },
     "compromise": {
-      "label": "食糧を下ろし、棺だけ陸へ上げる",
-      "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "水葬を延期して食料を届ける",
+      "text": "棺と遺体は遺族の了承のもと待棺所に残し、食料だけを受取人へ届けた。飢えへの手当てはできたが、水葬は未完了で、輸送許可も得ていない。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
+      "truth": "ヨルは通行税を避けて食料を届けるため、遺体の内室と別の外底へ食料を詰めた。棺は重くなり、浅瀬の段差を越えられない。",
       "history": [
         {
-          "id": "e0",
-          "event": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "ヨルは通行税を避けて食料を届けるため、遺体の内室と別の外底へ食料を詰めた。棺は重くなり、浅瀬の段差を越えられない。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "葬送組合のヨル",
-        "observation": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
-        "belief": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
-        "goal": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。"
+        "id": "yoru",
+        "character": "yoru",
+        "name": "ヨル",
+        "goal": "葬儀を終え、下流へ食料も届ける",
+        "initialLocation": "shore"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "family",
+        "character": "family",
+        "name": "棺の遺族",
+        "goal": "故人を弔い、扱いを自分たちで決める",
+        "initialLocation": "shore"
+      },
+      {
+        "id": "bearers",
+        "character": "bearers",
+        "name": "棺の担ぎ手",
+        "goal": "棺と遺体を傷めずに運ぶ",
+        "initialLocation": "shore"
+      },
+      {
+        "id": "recipient",
+        "character": "recipient",
+        "name": "下流の受取人",
+        "goal": "食料を受け取り、待つ人々へ配る",
+        "initialLocation": "jetty"
+      },
+      {
+        "id": "inspector",
+        "character": "inspector",
+        "name": "輸送検査官",
+        "goal": "今回の荷と届け先を確かめる",
+        "initialLocation": "office"
       }
     ],
     "conflict": {
       "request": "水葬用の棺が引っ掛かっています。流れを戻し、葬儀を終えてください。",
-      "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。"
+      "progression": "遺体・棺・食料を別の実体として追う。棺を流す行為と食料の輸送許可を一度の出来事にしない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q008.flow.entry"
+          "script": "q008.v11.entry",
+          "assertion": {
+            "title": "水葬場の岸",
+            "place": "shore",
+            "cast": [
+              {
+                "entity": "yoru"
+              },
+              {
+                "entity": "family"
+              },
+              {
+                "entity": "bearers"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "food",
-          "script": "q008.flow.food"
+          "id": "cargo",
+          "script": "q008.v11.cargo",
+          "assertion": {
+            "title": "水葬場の岸",
+            "place": "shore",
+            "cast": [
+              {
+                "entity": "yoru"
+              },
+              {
+                "entity": "family"
+              },
+              {
+                "entity": "bearers"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "processions",
-          "script": "q008.flow.processions"
+          "id": "application",
+          "script": "q008.v11.application",
+          "assertion": {
+            "title": "検査窓口",
+            "place": "office",
+            "cast": [
+              {
+                "entity": "yoru"
+              },
+              {
+                "entity": "inspector"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "postponed",
+          "script": "q008.v11.postponed",
+          "assertion": {
+            "title": "水葬場の岸",
+            "place": "shore",
+            "cast": [
+              {
+                "entity": "yoru"
+              },
+              {
+                "entity": "recipient"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -122,113 +193,414 @@
       "operator": "valueInvert",
       "newInformation": "棺の底には避難民の食糧が隠され、死者の重みで密輸されています。",
       "retroactiveTargets": [
-        "food"
+        "entry",
+        "cargo",
+        "application",
+        "postponed"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q008.flow.entry"
+        "script": "q008.v11.entry",
+        "assertion": {
+          "title": "水葬場の岸",
+          "place": "shore",
+          "cast": [
+            {
+              "entity": "yoru"
+            },
+            {
+              "entity": "family"
+            },
+            {
+              "entity": "bearers"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "food",
-        "script": "q008.flow.food"
+        "id": "cargo",
+        "script": "q008.v11.cargo",
+        "assertion": {
+          "title": "水葬場の岸",
+          "place": "shore",
+          "cast": [
+            {
+              "entity": "yoru"
+            },
+            {
+              "entity": "family"
+            },
+            {
+              "entity": "bearers"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "processions",
-        "script": "q008.flow.processions"
+        "id": "application",
+        "script": "q008.v11.application",
+        "assertion": {
+          "title": "検査窓口",
+          "place": "office",
+          "cast": [
+            {
+              "entity": "yoru"
+            },
+            {
+              "entity": "inspector"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "postponed",
+        "script": "q008.v11.postponed",
+        "assertion": {
+          "title": "水葬場の岸",
+          "place": "shore",
+          "cast": [
+            {
+              "entity": "yoru"
+            },
+            {
+              "entity": "recipient"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q008.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q008.values.partyAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
       },
       {
-        "path": "flags.flow.q008.shore",
-        "meaning": "各場面に明記した shore の行為・合意の記録",
-        "writer": [
-          "entry"
+        "path": "stories.q008.values.yoruAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
         ],
+        "meaning": "yoru の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.familyAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "family の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.bearersAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "bearers の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.recipientAt",
+        "type": "enum",
+        "initial": "jetty",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "recipient の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.inspectorAt",
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "inspector の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.coffinAt",
+        "type": "enum",
+        "initial": "threshold",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "body",
+          "food"
+        ],
+        "meaning": "coffin の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.bodyAt",
+        "type": "enum",
+        "initial": "coffin",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "coffin",
+          "food"
+        ],
+        "meaning": "body の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.foodAt",
+        "type": "enum",
+        "initial": "coffin",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "coffin",
+          "body"
+        ],
+        "meaning": "food の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.consent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.inspected",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "inspected",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.permit",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "permit",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.delivered",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.funeral",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "funeral",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.postponed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q008.values.declared",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "declared",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "葬列を進める途中で積荷が見つかり、葬送と食糧搬送を別々の仕事へ分ける。",
-    "flowVersion": 2,
-    "entryScript": "q008.flow.visit",
+    "progression": "遺体・棺・食料を別の実体として追う。棺を流す行為と食料の輸送許可を一度の出来事にしない。",
+    "flowVersion": 3,
+    "entryScript": "q008.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "棺は水に沈み、葬列が止まった。下流では避難民が火を焚いて待っている。",
+        "text": "棺は沈み切らず、段差に腹を掛けている。ヨルが綱を引くと、遺族も持ち上げようとした。下流には受取桟橋がある。",
         "options": [
           {
             "id": "inspect",
-            "text": "棺を岸へ寄せ、重い底板を調べる",
-            "to": "food"
+            "text": "遺族の了承を得て岸へ引き戻し、遺体に触れず外底を調べる",
+            "to": "cargo",
+            "action": "entry_inspect"
           },
           {
-            "id": "ritual",
-            "text": "魔物を退け、積荷を確かめず儀式を進める",
+            "id": "tow",
+            "text": "水辺の魔物を退け、棺を段差の向こうへ曳く",
             "to": "@contract",
-            "combat": true
-          },
-          {
-            "id": "shore",
-            "text": "儀式を止め、陸から運ぶ準備をする",
-            "to": "food",
-            "set": {
-              "shore": true
-            }
+            "combat": true,
+            "action": "entry_tow"
           }
         ]
       },
       {
-        "id": "food",
-        "text": "$a 底の食糧を見た葬送人は、避難民へ届ける荷だと認めた。死者の遺族は別に弔ってほしいという。",
-        "options": [
-          {
-            "id": "unload",
-            "text": "食糧を下ろし、棺だけ陸へ上げる",
-            "to": "@compromise"
-          },
-          {
-            "id": "separate",
-            "text": "食糧便と葬列を分ける相談をする",
-            "to": "processions"
-          }
-        ]
-      },
-      {
-        "id": "processions",
-        "text": "遺族は葬列、避難民は食糧の引取りに同意した。密輸が明るみに出れば搬送人への処分は残る。",
+        "id": "cargo",
+        "text": "外底から食料の包みが出た。遺体は内室に安置されたままだ。ヨルは、下流の人へ税を払えず届けられなかったと認めた。",
         "options": [
           {
             "id": "declare",
-            "text": "二つの荷の行先を届け出て、別々に送り出す",
-            "to": "@informed"
+            "text": "食料を分け、遺族の水葬を終えてから輸送許可を申請する",
+            "to": "application",
+            "action": "cargo_declare"
           },
           {
             "id": "quiet",
-            "text": "届け出をせず、荷を岸で引き渡す",
-            "to": "@compromise"
+            "text": "遺族に事情を伝えて棺を待棺所へ移し、受取人を呼びに行く",
+            "to": "postponed",
+            "action": "cargo_quiet"
+          }
+        ]
+      },
+      {
+        "id": "application",
+        "text": "検査官は今回の包みの量と行先を記録した。恒久的な免税ではなく、この便の臨時許可を審査する。受取人にも照会を取りに行く必要がある。",
+        "options": [
+          {
+            "id": "permit",
+            "text": "受取人を窓口へ案内し、確認と許可を得てから食料を運ぶ",
+            "to": "@informed",
+            "action": "application_permit"
+          }
+        ]
+      },
+      {
+        "id": "postponed",
+        "text": "受取人を桟橋から連れてきた。遺族は待棺所で待っている。食料を外せば棺は軽くなるが、葬儀を再開する時刻はまだ決めていない。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "受取人と待棺所へ行き、食料だけ外して桟橋へ届ける",
+            "to": "@compromise",
+            "action": "postponed_deliver"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q008.clue_a": {
@@ -1049,6 +1421,1294 @@
           ]
         }
       ]
+    },
+    "q008.v11.entry": {
+      "storyQuest": "q008",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q008",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "棺は沈み切らず、段差に腹を掛けている。ヨルが綱を引くと、遺族も持ち上げようとした。下流には受取桟橋がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "inspect",
+              "text": "遺族の了承を得て岸へ引き戻し、遺体に触れず外底を調べる",
+              "storyAction": {
+                "quest": "q008",
+                "action": "entry_inspect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q008",
+                  "action": "entry_inspect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.v11.cargo"
+                }
+              ]
+            },
+            {
+              "id": "tow",
+              "text": "水辺の魔物を退け、棺を段差の向こうへ曳く",
+              "storyAction": {
+                "quest": "q008",
+                "action": "entry_tow"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q008",
+                      "action": "entry_tow"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q008.v11.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.v11.cargo": {
+      "storyQuest": "q008",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q008",
+          "scene": "cargo"
+        },
+        {
+          "op": "say",
+          "text": "外底から食料の包みが出た。遺体は内室に安置されたままだ。ヨルは、下流の人へ税を払えず届けられなかったと認めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "declare",
+              "text": "食料を分け、遺族の水葬を終えてから輸送許可を申請する",
+              "storyAction": {
+                "quest": "q008",
+                "action": "cargo_declare"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q008",
+                  "action": "cargo_declare"
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.v11.application"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "遺族に事情を伝えて棺を待棺所へ移し、受取人を呼びに行く",
+              "storyAction": {
+                "quest": "q008",
+                "action": "cargo_quiet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q008",
+                  "action": "cargo_quiet"
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.v11.postponed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.v11.application": {
+      "storyQuest": "q008",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q008",
+          "scene": "application"
+        },
+        {
+          "op": "say",
+          "text": "検査官は今回の包みの量と行先を記録した。恒久的な免税ではなく、この便の臨時許可を審査する。受取人にも照会を取りに行く必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "permit",
+              "text": "受取人を窓口へ案内し、確認と許可を得てから食料を運ぶ",
+              "storyAction": {
+                "quest": "q008",
+                "action": "application_permit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q008",
+                  "action": "application_permit"
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.v11.postponed": {
+      "storyQuest": "q008",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q008",
+          "scene": "postponed"
+        },
+        {
+          "op": "say",
+          "text": "受取人を桟橋から連れてきた。遺族は待棺所で待っている。食料を外せば棺は軽くなるが、葬儀を再開する時刻はまだ決めていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "受取人と待棺所へ行き、食料だけ外して桟橋へ届ける",
+              "storyAction": {
+                "quest": "q008",
+                "action": "postponed_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q008",
+                  "action": "postponed_deliver"
+                },
+                {
+                  "op": "jump",
+                  "script": "q008.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q008.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q008",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "遺体を納めた棺は水葬の流れへ送り出した。食料は外底から分け、受取人の照会を経た今回限りの許可で桟橋へ届けた。恒久的な輸送制度の見直しは申請として残る。"
+        }
+      ]
+    },
+    "q008.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q008",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "棺を段差の先へ曳いた。下流の受取人は外底の荷を外し、棺は水葬の流れへ送られた。荷の由来を調べないまま、棺に食料を隠す輸送は続く。"
+        }
+      ]
+    },
+    "q008.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q008",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "棺と遺体は遺族の了承のもと待棺所に残し、食料だけを受取人へ届けた。飢えへの手当てはできたが、水葬は未完了で、輸送許可も得ていない。"
+        }
+      ]
+    },
+    "q008.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q008"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q008.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q008.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q008.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "遺体を納めた棺は水葬の流れへ送り出した。食料は外底から分け、受取人の照会を経た今回限りの許可で桟橋へ届けた。恒久的な輸送制度の見直しは申請として残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "棺を段差の先へ曳いた。下流の受取人は外底の荷を外し、棺は水葬の流れへ送られた。荷の由来を調べないまま、棺に食料を隠す輸送は続く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "棺と遺体は遺族の了承のもと待棺所に残し、食料だけを受取人へ届けた。飢えへの手当てはできたが、水葬は未完了で、輸送許可も得ていない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q008"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q008.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cargo",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.v11.cargo"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "application",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.v11.application"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "postponed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q008.v11.postponed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q008.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "二つの荷の行先を届け出て、別々に送り出す",
+      "text": "飢えはしのげました。組合は処分を受けましたが、棺と食糧を分ける支援路ができます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "魔物を退け、積荷を確かめず儀式を進める",
+      "text": "棺は流れ、食糧も届きました。次の密輸にも死者の名前が使われます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "食糧を下ろし、棺だけ陸へ上げる",
+      "text": "葬儀は一日延びました。棺の持ち主には、地下で生きる人の事情だけが伝わります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "shore": "水葬場の岸",
+      "threshold": "浅瀬の段差",
+      "jetty": "下流の受取桟橋",
+      "office": "検査窓口",
+      "mortuary": "待棺所",
+      "river": "水葬の流れ"
+    },
+    "connections": [
+      [
+        "shore",
+        "threshold"
+      ],
+      [
+        "threshold",
+        "jetty"
+      ],
+      [
+        "shore",
+        "office"
+      ],
+      [
+        "shore",
+        "mortuary"
+      ],
+      [
+        "jetty",
+        "river"
+      ],
+      [
+        "shore",
+        "river"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "yoruAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "yoru の所在または保持者"
+      },
+      "familyAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "family の所在または保持者"
+      },
+      "bearersAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "bearers の所在または保持者"
+      },
+      "recipientAt": {
+        "type": "enum",
+        "initial": "jetty",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "recipient の所在または保持者"
+      },
+      "inspectorAt": {
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river"
+        ],
+        "meaning": "inspector の所在または保持者"
+      },
+      "coffinAt": {
+        "type": "enum",
+        "initial": "threshold",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "body",
+          "food"
+        ],
+        "meaning": "coffin の所在または保持者"
+      },
+      "bodyAt": {
+        "type": "enum",
+        "initial": "coffin",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "coffin",
+          "food"
+        ],
+        "meaning": "body の所在または保持者"
+      },
+      "foodAt": {
+        "type": "enum",
+        "initial": "coffin",
+        "values": [
+          "shore",
+          "threshold",
+          "jetty",
+          "office",
+          "mortuary",
+          "river",
+          "party",
+          "yoru",
+          "family",
+          "bearers",
+          "recipient",
+          "inspector",
+          "coffin",
+          "body"
+        ],
+        "meaning": "food の所在または保持者"
+      },
+      "consent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent"
+      },
+      "inspected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "inspected"
+      },
+      "permit": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "permit"
+      },
+      "delivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered"
+      },
+      "funeral": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "funeral"
+      },
+      "postponed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed"
+      },
+      "declared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "declared"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "yoru": {
+        "holder": "yoruAt",
+        "kind": "person",
+        "character": "yoru"
+      },
+      "family": {
+        "holder": "familyAt",
+        "kind": "group",
+        "character": "family"
+      },
+      "bearers": {
+        "holder": "bearersAt",
+        "kind": "group",
+        "character": "bearers"
+      },
+      "recipient": {
+        "holder": "recipientAt",
+        "kind": "person",
+        "character": "recipient"
+      },
+      "inspector": {
+        "holder": "inspectorAt",
+        "kind": "person",
+        "character": "inspector"
+      },
+      "coffin": {
+        "holder": "coffinAt",
+        "kind": "item"
+      },
+      "body": {
+        "holder": "bodyAt",
+        "kind": "item"
+      },
+      "food": {
+        "holder": "foodAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "cargo": {
+        "text": "棺の外底には食料の包みが隠されている"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "水葬場の岸",
+        "place": "shore",
+        "cast": [
+          {
+            "entity": "yoru"
+          },
+          {
+            "entity": "family"
+          },
+          {
+            "entity": "bearers"
+          }
+        ],
+        "requires": true
+      },
+      "cargo": {
+        "title": "水葬場の岸",
+        "place": "shore",
+        "cast": [
+          {
+            "entity": "yoru"
+          },
+          {
+            "entity": "family"
+          },
+          {
+            "entity": "bearers"
+          }
+        ],
+        "requires": true
+      },
+      "application": {
+        "title": "検査窓口",
+        "place": "office",
+        "cast": [
+          {
+            "entity": "yoru"
+          },
+          {
+            "entity": "inspector"
+          }
+        ],
+        "requires": true
+      },
+      "postponed": {
+        "title": "水葬場の岸",
+        "place": "shore",
+        "cast": [
+          {
+            "entity": "yoru"
+          },
+          {
+            "entity": "recipient"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_inspect": {
+        "from": [
+          "entry"
+        ],
+        "to": "cargo",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "bearers"
+            ],
+            "path": [
+              "shore",
+              "threshold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "threshold",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "bearers"
+            ],
+            "path": [
+              "threshold",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "party",
+            "to": "shore"
+          },
+          {
+            "op": "set",
+            "key": "inspected",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "cargo",
+            "source": "food",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "entry_tow": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "bearers"
+            ],
+            "path": [
+              "shore",
+              "threshold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "threshold",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "bearers"
+            ],
+            "path": [
+              "threshold",
+              "jetty"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "food",
+            "from": "coffin",
+            "to": "recipient"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "bearers"
+            ],
+            "path": [
+              "jetty",
+              "river"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "party",
+            "to": "river"
+          },
+          {
+            "op": "set",
+            "key": "funeral",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "cargo_declare": {
+        "from": [
+          "cargo"
+        ],
+        "to": "application",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "food",
+            "from": "coffin",
+            "to": "yoru"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "shore",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "family",
+              "bearers"
+            ],
+            "path": [
+              "shore",
+              "river"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "party",
+            "to": "river"
+          },
+          {
+            "op": "set",
+            "key": "funeral",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "family",
+              "bearers"
+            ],
+            "path": [
+              "river",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "yoru"
+            ],
+            "path": [
+              "shore",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "declared",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "cargo_quiet": {
+        "from": [
+          "cargo"
+        ],
+        "to": "postponed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "shore",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "family",
+              "bearers"
+            ],
+            "path": [
+              "shore",
+              "mortuary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coffin",
+            "from": "party",
+            "to": "mortuary"
+          },
+          {
+            "op": "set",
+            "key": "postponed",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "mortuary",
+              "shore",
+              "threshold",
+              "jetty"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "recipient"
+            ],
+            "path": [
+              "jetty",
+              "threshold",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "application_permit": {
+        "from": [
+          "application"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "office",
+              "shore",
+              "threshold",
+              "jetty"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "recipient"
+            ],
+            "path": [
+              "jetty",
+              "threshold",
+              "shore",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "permit",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "recipient",
+              "yoru"
+            ],
+            "path": [
+              "office",
+              "shore",
+              "threshold",
+              "jetty"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "food",
+            "from": "yoru",
+            "to": "recipient"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "postponed_deliver": {
+        "from": [
+          "postponed"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "recipient",
+              "yoru"
+            ],
+            "path": [
+              "shore",
+              "mortuary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "food",
+            "from": "coffin",
+            "to": "recipient"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "recipient",
+              "yoru"
+            ],
+            "path": [
+              "mortuary",
+              "shore",
+              "threshold",
+              "jetty"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.funeral"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.permit"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.delivered"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.bodyAt"
+            },
+            "right": "coffin"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.foodAt"
+            },
+            "right": "recipient"
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.funeral"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.delivered"
+            },
+            "right": true
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q008.values.inspected"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.coffinAt"
+            },
+            "right": "river"
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.postponed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.coffinAt"
+            },
+            "right": "mortuary"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q008.values.delivered"
+            },
+            "right": true
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q008.values.funeral"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
     }
   }
 }

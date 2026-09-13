@@ -35,90 +35,185 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "二人に油を分け、帰り道を一緒に点灯する",
-      "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "二人の帰還と油の教え直し",
+      "text": "二人が詰所に戻った後、老人は新人を叱る前に油の配り方を教えた。報告を受けたリネが、夜番には予備を含め二瓶持つ規則を記した。"
     },
     "contract": {
-      "label": "老人だけの救出として始末書を出す",
-      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "老人だけの救出報告",
+      "text": "老人は詰所へ戻った。入口の新人は救出名簿に載らず、老人は自分の不始末として始末書を書いた。新人の帰還はまだ確認されていない。"
     },
     "compromise": {
-      "label": "二人の位置を救助隊へ知らせる",
-      "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "救助隊へ引き継ぎ、二人の帰還を確認",
+      "text": "夜明け、救助隊が未帰還者を連れ戻した。リネの名簿で二人の帰還を確認した。油の教え直しや、新しい携行規則の決定には至っていない。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
+      "truth": "交代前、老人は道に迷った新人へ自分の油を渡した。新人は入口へ出たが、老人の名を呼べずにいる。",
       "history": [
         {
-          "id": "e0",
-          "event": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "交代前、老人は道に迷った新人へ自分の油を渡した。新人は入口へ出たが、老人の名を呼べずにいる。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "灯番組合のリネ",
-        "observation": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
-        "belief": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
-        "goal": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。"
+        "id": "elder",
+        "character": "elder",
+        "name": "老灯番",
+        "goal": "新人を帰し、仕事を教え直す",
+        "initialLocation": "branch"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "rookie",
+        "character": "rookie",
+        "name": "新人灯番",
+        "goal": "失敗を隠したいが老人を見捨てたくない",
+        "initialLocation": "entry"
+      },
+      {
+        "id": "rine",
+        "character": "rine",
+        "name": "リネ",
+        "goal": "帰還者を名前で数え、取り残しを防ぐ",
+        "initialLocation": "post"
+      },
+      {
+        "id": "rescuers",
+        "character": "rescuers",
+        "name": "灯番救助隊",
+        "goal": "地図に従って未帰還者を連れ戻す",
+        "initialLocation": "post"
       }
     ],
     "conflict": {
       "request": "交代時刻を過ぎても灯番が戻りません。最後に点いた灯をたどってください。",
-      "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。"
+      "progression": "入口の新人、支道の老人、詰所を区別する。先に運んだ老人は詰所に残り、新人との再会では移動しない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q001.flow.entry"
+          "script": "q001.v11.entry",
+          "assertion": {
+            "title": "灯路の入口",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "rookie",
-          "script": "q001.flow.rookie"
+          "script": "q001.v11.rookie",
+          "assertion": {
+            "title": "灯路の入口",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "old",
-          "script": "q001.flow.old"
+          "script": "q001.v11.old",
+          "assertion": {
+            "title": "杖の音がする支道",
+            "place": "branch",
+            "cast": [
+              {
+                "entity": "elder"
+              },
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "carried",
-          "script": "q001.flow.carried"
+          "script": "q001.v11.carried",
+          "assertion": {
+            "title": "灯番詰所",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "rine"
+              },
+              {
+                "entity": "elder"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "marked",
-          "script": "q001.flow.marked"
+          "id": "reunion",
+          "script": "q001.v11.reunion",
+          "assertion": {
+            "title": "灯路の入口",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "lesson",
+          "script": "q001.v11.lesson",
+          "assertion": {
+            "title": "灯番詰所",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "rine"
+              },
+              {
+                "entity": "elder"
+              },
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "report",
+          "script": "q001.v11.report",
+          "assertion": {
+            "title": "灯番詰所",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "rine"
+              },
+              {
+                "entity": "rescuers"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -130,165 +225,496 @@
       "operator": "causeSwap",
       "newInformation": "灯番は迷った新人に自分の油を渡し、暗がりで帰路を待っています。",
       "retroactiveTargets": [
-        "old"
+        "entry",
+        "rookie",
+        "old",
+        "carried",
+        "reunion",
+        "lesson",
+        "report"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q001.flow.entry"
+        "script": "q001.v11.entry",
+        "assertion": {
+          "title": "灯路の入口",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "rookie",
-        "script": "q001.flow.rookie"
+        "script": "q001.v11.rookie",
+        "assertion": {
+          "title": "灯路の入口",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "old",
-        "script": "q001.flow.old"
+        "script": "q001.v11.old",
+        "assertion": {
+          "title": "杖の音がする支道",
+          "place": "branch",
+          "cast": [
+            {
+              "entity": "elder"
+            },
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "carried",
-        "script": "q001.flow.carried"
+        "script": "q001.v11.carried",
+        "assertion": {
+          "title": "灯番詰所",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "rine"
+            },
+            {
+              "entity": "elder"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "marked",
-        "script": "q001.flow.marked"
+        "id": "reunion",
+        "script": "q001.v11.reunion",
+        "assertion": {
+          "title": "灯路の入口",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "lesson",
+        "script": "q001.v11.lesson",
+        "assertion": {
+          "title": "灯番詰所",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "rine"
+            },
+            {
+              "entity": "elder"
+            },
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "report",
+        "script": "q001.v11.report",
+        "assertion": {
+          "title": "灯番詰所",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "rine"
+            },
+            {
+              "entity": "rescuers"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q001.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q001.values.partyAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
       },
       {
-        "path": "flags.flow.q001.rookie",
-        "meaning": "各場面に明記した rookie の行為・合意の記録",
-        "writer": [
-          "rookie"
+        "path": "stories.q001.values.elderAt",
+        "type": "enum",
+        "initial": "branch",
+        "values": [
+          "entry",
+          "branch",
+          "post"
         ],
+        "meaning": "elder の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
       },
       {
-        "path": "flags.flow.q001.carried",
-        "meaning": "各場面に明記した carried の行為・合意の記録",
-        "writer": [
-          "carried"
+        "path": "stories.q001.values.rookieAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "branch",
+          "post"
         ],
+        "meaning": "rookie の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.rineAt",
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "rine の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.rescuersAt",
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "rescuers の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oldBottleAt",
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "entry",
+          "branch",
+          "post",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "rescuers",
+          "newBottle"
+        ],
+        "meaning": "oldBottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.newBottleAt",
+        "type": "enum",
+        "initial": "rookie",
+        "values": [
+          "entry",
+          "branch",
+          "post",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "rescuers",
+          "oldBottle"
+        ],
+        "meaning": "newBottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.elderMobility",
+        "type": "enum",
+        "initial": "assisted",
+        "values": [
+          "assisted",
+          "mobile"
+        ],
+        "meaning": "老人は意識があるが、帰路には介助が必要",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.consent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.taught",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "taught",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.mapped",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "mapped",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.dawn",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "dawn",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oldOil",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "老人の油瓶に残る油",
+        "container": "oldBottle",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.newOil",
+        "type": "integer",
+        "initial": 2,
+        "min": 0,
+        "max": 2,
+        "meaning": "新人が受け取った油",
+        "container": "newBottle",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oilUsed",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "灯に使った油",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "灯を追う捜索と先行救助が別れて始まり、救出後にも新人の帰還を選べる。",
-    "flowVersion": 2,
-    "entryScript": "q001.flow.visit",
+    "progression": "入口の新人、支道の老人、詰所を区別する。先に運んだ老人は詰所に残り、新人との再会では移動しない。",
+    "flowVersion": 3,
+    "entryScript": "q001.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "消えた灯の先で杖が鳴る。出口には、新しい油瓶を抱えて立ち尽くす新人がいる。",
+        "text": "最後の灯の下で、新人が油瓶を抱えている。支道から杖の音が一度した。老人の姿はまだ見えない。",
         "options": [
           {
-            "id": "oil",
-            "text": "新品の油瓶を持つ新人に声をかける",
-            "to": "rookie"
+            "id": "talk",
+            "text": "新人に、油瓶と老人のことを尋ねる",
+            "to": "rookie",
+            "action": "entry_talk"
           },
           {
             "id": "clear",
-            "text": "暗い通路を掃討し、先に老人を運ぶ",
+            "text": "暗い支道を掃討し、老人を詰所へ運ぶ",
             "to": "carried",
-            "combat": true
+            "combat": true,
+            "action": "entry_clear"
           },
           {
-            "id": "mark",
-            "text": "杖の音がする支道を地図に記す",
-            "to": "marked"
+            "id": "map",
+            "text": "杖の音がした範囲を地図に記し、詰所へ届ける",
+            "to": "report",
+            "action": "entry_map"
           }
         ]
       },
       {
         "id": "rookie",
-        "text": "「借りた油を返すまで帰れない」新人は出口から動けない。瓶にはまだ半分残っている。",
+        "text": "「油は、あの人にもらいました。僕が帰らないと、叱られると思って」。新人は話し終えると、支道へ同行すると答えた。",
         "options": [
           {
             "id": "together",
-            "text": "新人と油を持ち、杖の音へ向かう",
+            "text": "新人と一緒に支道へ向かう",
             "to": "old",
-            "set": {
-              "rookie": true
-            }
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.consent"
+              },
+              "right": true
+            },
+            "action": "rookie_together"
           },
           {
-            "id": "mark",
-            "text": "無理に連れず、救助隊へ渡す地図を作る",
-            "to": "marked"
+            "id": "team",
+            "text": "新人には入口で待ってもらい、救助を頼む",
+            "to": "report",
+            "action": "rookie_team"
           }
         ]
       },
       {
         "id": "old",
-        "text": "$truth 老人は、新人に最後の灯の点け方を教えたいと言う。",
+        "text": "老人は壁にもたれ、空の瓶を差し出した。「叱るのは、明るい所へ帰ってからでもできる」。二人とも、あなたと戻ることに同意した。",
         "options": [
           {
             "id": "share",
-            "text": "二人に油を分け、帰り道を一緒に点灯する",
-            "to": "@informed"
+            "text": "油を一単位ずつ分け、二人を介助して帰路を点灯する",
+            "to": "@informed",
+            "action": "old_share"
           },
           {
             "id": "team",
-            "text": "二人の位置を救助隊へ知らせる",
-            "to": "@compromise"
+            "text": "二人を支道で待たせ、位置を救助隊へ知らせる",
+            "to": "report",
+            "action": "old_team"
           }
         ]
       },
       {
         "id": "carried",
-        "text": "老人は出口へ着いた。しかし足音が一人分足りない。「あいつに油を渡したんだ」。救助は済んでも、帰還はまだ揃っていない。",
+        "text": "老人を詰所の寝台へ運び入れた。新人は入口に残っている。「私の油はあの子が持っとる」。老人は救出名簿の空欄を指した。",
         "options": [
           {
             "id": "return",
-            "text": "老人を休ませ、新人を迎えに戻る",
-            "to": "rookie",
-            "set": {
-              "carried": true
-            }
+            "text": "老人を詰所に残し、新人を迎えに戻る",
+            "to": "reunion",
+            "action": "carried_return"
           },
           {
-            "id": "report",
-            "text": "老人だけの救出として始末書を出す",
-            "to": "@contract"
+            "id": "contract",
+            "text": "老人だけの救出として始末書を提出する",
+            "to": "@contract",
+            "action": "carried_contract"
+          },
+          {
+            "id": "team",
+            "text": "新人の残る入口を救助隊へ知らせる",
+            "to": "report",
+            "action": "carried_team"
           }
         ]
       },
       {
-        "id": "marked",
-        "text": "支道の曲がり角と二人の位置を地図へ記した。救助班は夜明けの交代を待って出発する。",
+        "id": "reunion",
+        "text": "新人は同じ灯の下で待っていた。老人が詰所にいると伝えると、油瓶を握り直した。「一緒なら、戻れます」。",
         "options": [
           {
-            "id": "handoff",
-            "text": "地図を渡して救助を引き継ぐ",
-            "to": "@compromise"
-          },
+            "id": "bring",
+            "text": "新人を詰所へ連れて帰る",
+            "to": "lesson",
+            "action": "reunion_bring"
+          }
+        ]
+      },
+      {
+        "id": "lesson",
+        "text": "老人は寝台から新人を呼んだ。今度は帰路の点灯ではなく、詰所の灯を使って油の配り方を教える。",
+        "options": [
           {
-            "id": "search",
-            "text": "引継ぎ前に新人へ話しかける",
-            "to": "rookie"
+            "id": "share",
+            "text": "二つの瓶に分け、詰所の灯で配分を教え直す",
+            "to": "@informed",
+            "action": "lesson_share"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.mapped"
+            },
+            "right": true
+          },
+          "yes": "リネは地図に、目で確認した位置と音だけを聞いた範囲を別々に記した。救助隊が引き受ける。夜明けまで、ここで帰還を待つ。",
+          "no": "リネは救出名簿を開いた。"
+        },
+        "options": [
+          {
+            "id": "wait",
+            "text": "救助隊の帰還と名簿を、夜明けまで確認する",
+            "to": "@compromise",
+            "action": "report_wait"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q001.clue_a": {
@@ -1273,6 +1699,1688 @@
           ]
         }
       ]
+    },
+    "q001.v11.entry": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "最後の灯の下で、新人が油瓶を抱えている。支道から杖の音が一度した。老人の姿はまだ見えない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "新人に、油瓶と老人のことを尋ねる",
+              "storyAction": {
+                "quest": "q001",
+                "action": "entry_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "entry_talk"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.rookie"
+                }
+              ]
+            },
+            {
+              "id": "clear",
+              "text": "暗い支道を掃討し、老人を詰所へ運ぶ",
+              "storyAction": {
+                "quest": "q001",
+                "action": "entry_clear"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q001",
+                      "action": "entry_clear"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.carried"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "map",
+              "text": "杖の音がした範囲を地図に記し、詰所へ届ける",
+              "storyAction": {
+                "quest": "q001",
+                "action": "entry_map"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "entry_map"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.rookie": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "rookie"
+        },
+        {
+          "op": "say",
+          "text": "「油は、あの人にもらいました。僕が帰らないと、叱られると思って」。新人は話し終えると、支道へ同行すると答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "together",
+              "text": "新人と一緒に支道へ向かう",
+              "storyAction": {
+                "quest": "q001",
+                "action": "rookie_together"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.consent"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "rookie_together"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.old"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "新人には入口で待ってもらい、救助を頼む",
+              "storyAction": {
+                "quest": "q001",
+                "action": "rookie_team"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "rookie_team"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.old": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "old"
+        },
+        {
+          "op": "say",
+          "text": "老人は壁にもたれ、空の瓶を差し出した。「叱るのは、明るい所へ帰ってからでもできる」。二人とも、あなたと戻ることに同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "油を一単位ずつ分け、二人を介助して帰路を点灯する",
+              "storyAction": {
+                "quest": "q001",
+                "action": "old_share"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "old_share"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "二人を支道で待たせ、位置を救助隊へ知らせる",
+              "storyAction": {
+                "quest": "q001",
+                "action": "old_team"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "old_team"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.carried": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "carried"
+        },
+        {
+          "op": "say",
+          "text": "老人を詰所の寝台へ運び入れた。新人は入口に残っている。「私の油はあの子が持っとる」。老人は救出名簿の空欄を指した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "老人を詰所に残し、新人を迎えに戻る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "carried_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "carried_return"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.reunion"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "老人だけの救出として始末書を提出する",
+              "storyAction": {
+                "quest": "q001",
+                "action": "carried_contract"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "carried_contract"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "新人の残る入口を救助隊へ知らせる",
+              "storyAction": {
+                "quest": "q001",
+                "action": "carried_team"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "carried_team"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.report"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.reunion": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "reunion"
+        },
+        {
+          "op": "say",
+          "text": "新人は同じ灯の下で待っていた。老人が詰所にいると伝えると、油瓶を握り直した。「一緒なら、戻れます」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bring",
+              "text": "新人を詰所へ連れて帰る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "reunion_bring"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "reunion_bring"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.lesson"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.lesson": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "lesson"
+        },
+        {
+          "op": "say",
+          "text": "老人は寝台から新人を呼んだ。今度は帰路の点灯ではなく、詰所の灯を使って油の配り方を教える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "二つの瓶に分け、詰所の灯で配分を教え直す",
+              "storyAction": {
+                "quest": "q001",
+                "action": "lesson_share"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "lesson_share"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.report": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "report"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.mapped"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "リネは地図に、目で確認した位置と音だけを聞いた範囲を別々に記した。救助隊が引き受ける。夜明けまで、ここで帰還を待つ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "リネは救出名簿を開いた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "救助隊の帰還と名簿を、夜明けまで確認する",
+              "storyAction": {
+                "quest": "q001",
+                "action": "report_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "report_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q001",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "二人が詰所に戻った後、老人は新人を叱る前に油の配り方を教えた。報告を受けたリネが、夜番には予備を含め二瓶持つ規則を記した。"
+        }
+      ]
+    },
+    "q001.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q001",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "老人は詰所へ戻った。入口の新人は救出名簿に載らず、老人は自分の不始末として始末書を書いた。新人の帰還はまだ確認されていない。"
+        }
+      ]
+    },
+    "q001.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q001",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "夜明け、救助隊が未帰還者を連れ戻した。リネの名簿で二人の帰還を確認した。油の教え直しや、新しい携行規則の決定には至っていない。"
+        }
+      ]
+    },
+    "q001.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q001"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q001.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q001.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q001.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "二人が詰所に戻った後、老人は新人を叱る前に油の配り方を教えた。報告を受けたリネが、夜番には予備を含め二瓶持つ規則を記した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "老人は詰所へ戻った。入口の新人は救出名簿に載らず、老人は自分の不始末として始末書を書いた。新人の帰還はまだ確認されていない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "夜明け、救助隊が未帰還者を連れ戻した。リネの名簿で二人の帰還を確認した。油の教え直しや、新しい携行規則の決定には至っていない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q001"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q001.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rookie",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.rookie"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "old",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.old"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "carried",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.carried"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reunion",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.reunion"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lesson",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.lesson"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.report"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "二人に油を分け、帰り道を一緒に点灯する",
+      "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "老人だけの救出として始末書を出す",
+      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "二人の位置を救助隊へ知らせる",
+      "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "灯路の入口",
+      "branch": "杖の音がする支道",
+      "post": "灯番詰所"
+    },
+    "connections": [
+      [
+        "entry",
+        "branch"
+      ],
+      [
+        "entry",
+        "post"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "elderAt": {
+        "type": "enum",
+        "initial": "branch",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "elder の所在または保持者"
+      },
+      "rookieAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "rookie の所在または保持者"
+      },
+      "rineAt": {
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "rine の所在または保持者"
+      },
+      "rescuersAt": {
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "branch",
+          "post"
+        ],
+        "meaning": "rescuers の所在または保持者"
+      },
+      "oldBottleAt": {
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "entry",
+          "branch",
+          "post",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "rescuers",
+          "newBottle"
+        ],
+        "meaning": "oldBottle の所在または保持者"
+      },
+      "newBottleAt": {
+        "type": "enum",
+        "initial": "rookie",
+        "values": [
+          "entry",
+          "branch",
+          "post",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "rescuers",
+          "oldBottle"
+        ],
+        "meaning": "newBottle の所在または保持者"
+      },
+      "elderMobility": {
+        "type": "enum",
+        "initial": "assisted",
+        "values": [
+          "assisted",
+          "mobile"
+        ],
+        "meaning": "老人は意識があるが、帰路には介助が必要"
+      },
+      "consent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent"
+      },
+      "taught": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "taught"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "mapped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "mapped"
+      },
+      "dawn": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "dawn"
+      },
+      "oldOil": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "老人の油瓶に残る油",
+        "container": "oldBottle"
+      },
+      "newOil": {
+        "type": "integer",
+        "initial": 2,
+        "min": 0,
+        "max": 2,
+        "meaning": "新人が受け取った油",
+        "container": "newBottle"
+      },
+      "oilUsed": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "灯に使った油"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "elder": {
+        "holder": "elderAt",
+        "kind": "person",
+        "character": "elder",
+        "mobility": "elderMobility"
+      },
+      "rookie": {
+        "holder": "rookieAt",
+        "kind": "person",
+        "character": "rookie"
+      },
+      "rine": {
+        "holder": "rineAt",
+        "kind": "person",
+        "character": "rine"
+      },
+      "rescuers": {
+        "holder": "rescuersAt",
+        "kind": "group",
+        "character": "rescuers"
+      },
+      "oldBottle": {
+        "holder": "oldBottleAt",
+        "kind": "item"
+      },
+      "newBottle": {
+        "holder": "newBottleAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "gift": {
+        "text": "老人は新人に残りの油を渡した"
+      },
+      "position": {
+        "text": "二人の位置を直接確認した"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "oil_total",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "args": [
+              {
+                "ref": "stories.q001.values.oldOil"
+              },
+              {
+                "ref": "stories.q001.values.newOil"
+              },
+              {
+                "ref": "stories.q001.values.oilUsed"
+              }
+            ]
+          },
+          "right": 2
+        },
+        "message": "油は受け渡しで増えず、点灯分だけ減る"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "灯路の入口",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
+      "rookie": {
+        "title": "灯路の入口",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
+      "old": {
+        "title": "杖の音がする支道",
+        "place": "branch",
+        "cast": [
+          {
+            "entity": "elder"
+          },
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
+      "carried": {
+        "title": "灯番詰所",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "rine"
+          },
+          {
+            "entity": "elder"
+          }
+        ],
+        "requires": true
+      },
+      "reunion": {
+        "title": "灯路の入口",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
+      "lesson": {
+        "title": "灯番詰所",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "rine"
+          },
+          {
+            "entity": "elder"
+          },
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
+      "report": {
+        "title": "灯番詰所",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "rine"
+          },
+          {
+            "entity": "rescuers"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_talk": {
+        "from": [
+          "entry"
+        ],
+        "to": "rookie",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "gift",
+            "source": "rookie",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_clear": {
+        "from": [
+          "entry"
+        ],
+        "to": "carried",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "entry",
+              "branch"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "position",
+            "source": "elder",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder"
+            ],
+            "path": [
+              "branch",
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "entry_map": {
+        "from": [
+          "entry"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "mapped",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "rookie_together": {
+        "from": [
+          "rookie"
+        ],
+        "to": "old",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q001.values.consent"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "rookie"
+            ],
+            "path": [
+              "entry",
+              "branch"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "position",
+            "source": "elder",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "rookie_team": {
+        "from": [
+          "rookie"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "mapped",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "old_share": {
+        "from": [
+          "old"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "pour",
+            "from": "newOil",
+            "to": "oldOil",
+            "amount": 1
+          },
+          {
+            "op": "consume",
+            "key": "oldOil",
+            "amount": 1,
+            "sink": "oilUsed"
+          },
+          {
+            "op": "consume",
+            "key": "newOil",
+            "amount": 1,
+            "sink": "oilUsed"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder",
+              "rookie"
+            ],
+            "path": [
+              "branch",
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "taught",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "old_team": {
+        "from": [
+          "old"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "branch",
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "mapped",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "carried_return": {
+        "from": [
+          "carried"
+        ],
+        "to": "reunion",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "post",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "carried_contract": {
+        "from": [
+          "carried"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "carried_team": {
+        "from": [
+          "carried"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "mapped",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "reunion_bring": {
+        "from": [
+          "reunion"
+        ],
+        "to": "lesson",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "rookie"
+            ],
+            "path": [
+              "entry",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "lesson_share": {
+        "from": [
+          "lesson"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "pour",
+            "from": "newOil",
+            "to": "oldOil",
+            "amount": 1
+          },
+          {
+            "op": "consume",
+            "key": "oldOil",
+            "amount": 1,
+            "sink": "oilUsed"
+          },
+          {
+            "op": "consume",
+            "key": "newOil",
+            "amount": 1,
+            "sink": "oilUsed"
+          },
+          {
+            "op": "set",
+            "key": "taught",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "report_wait": {
+        "from": [
+          "report"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "rescuers"
+            ],
+            "path": [
+              "post",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.elderAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers",
+              "elder"
+            ],
+            "path": [
+              "entry",
+              "post"
+            ],
+            "assistant": "rescuers",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.elderAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers"
+            ],
+            "path": [
+              "post",
+              "entry",
+              "branch"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.elderAt"
+              },
+              "right": "branch"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers",
+              "elder"
+            ],
+            "path": [
+              "branch",
+              "entry",
+              "post"
+            ],
+            "assistant": "rescuers",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.elderAt"
+              },
+              "right": "branch"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers"
+            ],
+            "path": [
+              "post",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.rookieAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers",
+              "rookie"
+            ],
+            "path": [
+              "entry",
+              "post"
+            ],
+            "assistant": "rescuers",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.rookieAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers"
+            ],
+            "path": [
+              "post",
+              "entry",
+              "branch"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.rookieAt"
+              },
+              "right": "branch"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rescuers",
+              "rookie"
+            ],
+            "path": [
+              "branch",
+              "entry",
+              "post"
+            ],
+            "assistant": "rescuers",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.rookieAt"
+              },
+              "right": "branch"
+            }
+          },
+          {
+            "op": "set",
+            "key": "dawn",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.elderAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.rookieAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.partyAt"
+                },
+                "right": "post"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.taught"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.reported"
+            },
+            "right": true
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.elderAt"
+            },
+            "right": "post"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.rookieAt"
+            },
+            "right": "entry"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.reported"
+            },
+            "right": true
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.elderAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.rookieAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.partyAt"
+                },
+                "right": "post"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.dawn"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.reported"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   }
 }

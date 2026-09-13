@@ -35,86 +35,121 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
-      "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "菌床を分離して運用を確かめる",
+      "text": "冷水で管理する別の溜めへ菌床を移し、一晩の試運転で排水本管の流れを確認した。別に採取した樹液は食用試験を通った。トトは維持費を負い、少量の食料を得る。"
     },
     "contract": {
-      "label": "菌床を焼き、詰まりを除く",
-      "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "菌床を焼却する",
+      "text": "菌床を焼いて取り除くと排水は流れた。甘みの由来も失われ、この菌床を食料へ転用する道は閉じた。"
     },
     "compromise": {
-      "label": "流出口へ網を張り、毎日の回収を引き受ける",
-      "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "回収網と清掃当番",
+      "text": "回収網を設置し、トトが毎日の清掃を引き受けた。菌床は本管側に残る。流れを保つには継続的な手入れが必要で、増殖の原因を除いたわけではない。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
+      "truth": "排水の甘みは菌床に由来する。温かい排水で増殖が進み、管を塞いだ。食用可否は温度試験とは別に確かめる必要がある。",
       "history": [
         {
-          "id": "e0",
-          "event": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "排水の甘みは菌床に由来する。温かい排水で増殖が進み、管を塞いだ。食用可否は温度試験とは別に確かめる必要がある。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "菓子職人のトト",
-        "observation": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
-        "belief": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
-        "goal": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。"
-      },
-      {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "toto",
+        "character": "toto",
+        "name": "トト",
+        "goal": "工房の排水を直し、甘みを無駄にしない",
+        "initialLocation": "drain"
       }
     ],
     "conflict": {
       "request": "菓子工房の地下に甘い泥が溜まり、魔物が寄ってきます。詰まりの原因を探してください。",
-      "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。"
+      "progression": "温水の溢水を記憶し、清掃・冷却・移設・一晩の試運転を順に行う。焼いた菌床は再利用しない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q005.flow.entry"
+          "script": "q005.v11.entry",
+          "assertion": {
+            "title": "排水作業室",
+            "place": "drain",
+            "cast": [
+              {
+                "entity": "toto"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "overflow",
-          "script": "q005.flow.overflow"
+          "script": "q005.v11.overflow",
+          "assertion": {
+            "title": "排水作業室",
+            "place": "drain",
+            "cast": [
+              {
+                "entity": "toto"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "cold",
-          "script": "q005.flow.cold"
+          "script": "q005.v11.cold",
+          "assertion": {
+            "title": "排水作業室",
+            "place": "drain",
+            "cast": [
+              {
+                "entity": "toto"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "transfer",
-          "script": "q005.flow.transfer"
+          "id": "test",
+          "script": "q005.v11.test",
+          "assertion": {
+            "title": "隣の空き溜め",
+            "place": "sump",
+            "cast": [
+              {
+                "entity": "toto"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "net",
+          "script": "q005.v11.net",
+          "assertion": {
+            "title": "排水作業室",
+            "place": "drain",
+            "cast": [
+              {
+                "entity": "toto"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -126,132 +161,345 @@
       "operator": "frameShift",
       "newInformation": "工房の砂糖より先に、地下の菌床が甘い樹液を分泌して管を塞いでいます。",
       "retroactiveTargets": [
-        "cold"
+        "entry",
+        "overflow",
+        "cold",
+        "test",
+        "net"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q005.flow.entry"
+        "script": "q005.v11.entry",
+        "assertion": {
+          "title": "排水作業室",
+          "place": "drain",
+          "cast": [
+            {
+              "entity": "toto"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "overflow",
-        "script": "q005.flow.overflow"
+        "script": "q005.v11.overflow",
+        "assertion": {
+          "title": "排水作業室",
+          "place": "drain",
+          "cast": [
+            {
+              "entity": "toto"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "cold",
-        "script": "q005.flow.cold"
+        "script": "q005.v11.cold",
+        "assertion": {
+          "title": "排水作業室",
+          "place": "drain",
+          "cast": [
+            {
+              "entity": "toto"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "transfer",
-        "script": "q005.flow.transfer"
+        "id": "test",
+        "script": "q005.v11.test",
+        "assertion": {
+          "title": "隣の空き溜め",
+          "place": "sump",
+          "cast": [
+            {
+              "entity": "toto"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "net",
+        "script": "q005.v11.net",
+        "assertion": {
+          "title": "排水作業室",
+          "place": "drain",
+          "cast": [
+            {
+              "entity": "toto"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q005.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q005.values.partyAt",
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
       },
       {
-        "path": "flags.flow.q005.warmTrial",
-        "meaning": "各場面に明記した warmTrial の行為・合意の記録",
-        "writer": [
-          "overflow"
+        "path": "stories.q005.values.totoAt",
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump"
         ],
+        "meaning": "toto の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.bedAt",
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump",
+          "party",
+          "toto",
+          "net"
+        ],
+        "meaning": "bed の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.netAt",
+        "type": "enum",
+        "initial": "toto",
+        "values": [
+          "drain",
+          "sump",
+          "party",
+          "toto",
+          "bed"
+        ],
+        "meaning": "net の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.fungus",
+        "type": "enum",
+        "initial": "growing",
+        "values": [
+          "growing",
+          "cooled",
+          "burned"
+        ],
+        "meaning": "同じ菌床の状態",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.coldTrial",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "coldTrial",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.warmTrial",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "warmTrial",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.overflow",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "overflow",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.pipes",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "pipes",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.overnight",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "overnight",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.foodTest",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "foodTest",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q005.values.maintenance",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "maintenance",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "温度を変える実験で排水の性質を確かめ、失敗した温水試験からも修理へ戻れる。",
-    "flowVersion": 2,
-    "entryScript": "q005.flow.visit",
+    "progression": "温水の溢水を記憶し、清掃・冷却・移設・一晩の試運転を順に行う。焼いた菌床は再利用しない。",
+    "flowVersion": 3,
+    "entryScript": "q005.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "トトは工房を止めたが泥は増える。温水管と冷水管が、詰まった槽へ並んでいる。",
+        "text": "トトが桶に排水を取った。「甘いのは困る。けど、焼けばそれで終わりかな」。管口に柔らかな菌の塊が詰まっている。",
         "options": [
           {
             "id": "cold",
-            "text": "小さな菌床へ冷水を流す",
-            "to": "cold"
+            "text": "一部へ冷水を流し、増殖の変化を見る",
+            "to": "cold",
+            "action": "entry_cold"
           },
           {
             "id": "warm",
-            "text": "温水で泥を溶かしてみる",
-            "to": "overflow"
+            "text": "温水を流して反応を確かめる",
+            "to": "overflow",
+            "action": "entry_warm"
           },
           {
             "id": "burn",
-            "text": "菌床を焼き、詰まりを除く",
-            "to": "@contract"
+            "text": "菌床を焼き、残骸を除去する",
+            "to": "@contract",
+            "action": "entry_burn"
+          },
+          {
+            "id": "net",
+            "text": "回収網と清掃当番による維持を相談する",
+            "to": "net",
+            "action": "entry_net"
           }
         ]
       },
       {
         "id": "overflow",
-        "text": "温水をかけた側ほど甘い汁が増えた。トトが栓を閉じる。「砂糖を洗っているだけじゃないね」",
+        "text": "菌が膨れ、甘い泥水が床へ溢れた。温水を止めても、こぼれた泥は残る。トトは排水口を守り、あなたへ掻き出し道具を渡した。",
         "options": [
           {
-            "id": "cool",
-            "text": "温水を止め、冷水へ切り替える",
+            "id": "clean",
+            "text": "床の泥を回収してから冷水を試す",
             "to": "cold",
-            "set": {
-              "warmTrial": true
-            }
+            "action": "overflow_clean"
           },
           {
             "id": "net",
-            "text": "流出口へ網を張り、毎日の回収を引き受ける",
-            "to": "@compromise"
+            "text": "泥を回収し、網による維持へ切り替える",
+            "to": "net",
+            "action": "overflow_net"
           }
         ]
       },
       {
         "id": "cold",
-        "text": "冷えた側へ菌は広がらない。$truth 空の別槽なら、工房の排水から切り離せる。",
+        "text": "冷水を流すと増殖が止まった。菌床はまだここにある。隣の空き溜めへ移せば排水本管と切り離せるが、配管と運転の確認が要る。",
         "options": [
           {
-            "id": "divert",
-            "text": "冷水の迂回管を組む",
-            "to": "transfer"
+            "id": "move",
+            "text": "トトと菌床を空き溜めへ運び、冷水管を分岐する",
+            "to": "test",
+            "action": "cold_move"
           },
           {
             "id": "net",
-            "text": "設備を変えず、網で回収する",
-            "to": "@compromise"
+            "text": "菌床を残し、回収網と清掃当番を整える",
+            "to": "net",
+            "action": "cold_net"
           }
         ]
       },
       {
-        "id": "transfer",
-        "text": "冷水を境に菌床を別槽へ移した。トトは食材として試す前に、排水を一晩通して点検したいと言う。",
+        "id": "test",
+        "text": "菌床を本管から離した。冷水を流し、一晩、増殖と排水量を測る。味見だけで食料にはしない。",
         "options": [
           {
-            "id": "test",
-            "text": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
-            "to": "@informed"
-          },
+            "id": "verify",
+            "text": "一晩の排水試験と、別採取した樹液の食用試験を終える",
+            "to": "@informed",
+            "action": "test_verify"
+          }
+        ]
+      },
+      {
+        "id": "net",
+        "text": "トトは網の目と交換時刻を紙に書いた。「毎日ここを回るのは、うちの仕事にする」。あなたが今後も無償で通う約束ではない。",
+        "options": [
           {
-            "id": "undo",
-            "text": "槽の運用を断り、網で管理する",
-            "to": "@compromise"
+            "id": "accept",
+            "text": "トトの引受けを確認して網を設置する",
+            "to": "@compromise",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q005.values.overflow"
+                },
+                "right": true
+              }
+            },
+            "action": "net_accept"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q005.clue_a": {
@@ -1108,6 +1356,1036 @@
           ]
         }
       ]
+    },
+    "q005.v11.entry": {
+      "storyQuest": "q005",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q005",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "トトが桶に排水を取った。「甘いのは困る。けど、焼けばそれで終わりかな」。管口に柔らかな菌の塊が詰まっている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cold",
+              "text": "一部へ冷水を流し、増殖の変化を見る",
+              "storyAction": {
+                "quest": "q005",
+                "action": "entry_cold"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "entry_cold"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.cold"
+                }
+              ]
+            },
+            {
+              "id": "warm",
+              "text": "温水を流して反応を確かめる",
+              "storyAction": {
+                "quest": "q005",
+                "action": "entry_warm"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "entry_warm"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.overflow"
+                }
+              ]
+            },
+            {
+              "id": "burn",
+              "text": "菌床を焼き、残骸を除去する",
+              "storyAction": {
+                "quest": "q005",
+                "action": "entry_burn"
+              },
+              "requirement": "松明 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "entry_burn"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "net",
+              "text": "回収網と清掃当番による維持を相談する",
+              "storyAction": {
+                "quest": "q005",
+                "action": "entry_net"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "entry_net"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.net"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.v11.overflow": {
+      "storyQuest": "q005",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q005",
+          "scene": "overflow"
+        },
+        {
+          "op": "say",
+          "text": "菌が膨れ、甘い泥水が床へ溢れた。温水を止めても、こぼれた泥は残る。トトは排水口を守り、あなたへ掻き出し道具を渡した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "clean",
+              "text": "床の泥を回収してから冷水を試す",
+              "storyAction": {
+                "quest": "q005",
+                "action": "overflow_clean"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "overflow_clean"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.cold"
+                }
+              ]
+            },
+            {
+              "id": "net",
+              "text": "泥を回収し、網による維持へ切り替える",
+              "storyAction": {
+                "quest": "q005",
+                "action": "overflow_net"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "overflow_net"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.net"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.v11.cold": {
+      "storyQuest": "q005",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q005",
+          "scene": "cold"
+        },
+        {
+          "op": "say",
+          "text": "冷水を流すと増殖が止まった。菌床はまだここにある。隣の空き溜めへ移せば排水本管と切り離せるが、配管と運転の確認が要る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "move",
+              "text": "トトと菌床を空き溜めへ運び、冷水管を分岐する",
+              "storyAction": {
+                "quest": "q005",
+                "action": "cold_move"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "cold_move"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.test"
+                }
+              ]
+            },
+            {
+              "id": "net",
+              "text": "菌床を残し、回収網と清掃当番を整える",
+              "storyAction": {
+                "quest": "q005",
+                "action": "cold_net"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "cold_net"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.net"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.v11.test": {
+      "storyQuest": "q005",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q005",
+          "scene": "test"
+        },
+        {
+          "op": "say",
+          "text": "菌床を本管から離した。冷水を流し、一晩、増殖と排水量を測る。味見だけで食料にはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "verify",
+              "text": "一晩の排水試験と、別採取した樹液の食用試験を終える",
+              "storyAction": {
+                "quest": "q005",
+                "action": "test_verify"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "test_verify"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.v11.net": {
+      "storyQuest": "q005",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q005",
+          "scene": "net"
+        },
+        {
+          "op": "say",
+          "text": "トトは網の目と交換時刻を紙に書いた。「毎日ここを回るのは、うちの仕事にする」。あなたが今後も無償で通う約束ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "accept",
+              "text": "トトの引受けを確認して網を設置する",
+              "storyAction": {
+                "quest": "q005",
+                "action": "net_accept"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q005.values.overflow"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q005",
+                  "action": "net_accept"
+                },
+                {
+                  "op": "jump",
+                  "script": "q005.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q005.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q005",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "冷水で管理する別の溜めへ菌床を移し、一晩の試運転で排水本管の流れを確認した。別に採取した樹液は食用試験を通った。トトは維持費を負い、少量の食料を得る。"
+        }
+      ]
+    },
+    "q005.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q005",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "菌床を焼いて取り除くと排水は流れた。甘みの由来も失われ、この菌床を食料へ転用する道は閉じた。"
+        }
+      ]
+    },
+    "q005.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q005",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "回収網を設置し、トトが毎日の清掃を引き受けた。菌床は本管側に残る。流れを保つには継続的な手入れが必要で、増殖の原因を除いたわけではない。"
+        }
+      ]
+    },
+    "q005.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q005"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q005.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q005.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q005.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "冷水で管理する別の溜めへ菌床を移し、一晩の試運転で排水本管の流れを確認した。別に採取した樹液は食用試験を通った。トトは維持費を負い、少量の食料を得る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "菌床を焼いて取り除くと排水は流れた。甘みの由来も失われ、この菌床を食料へ転用する道は閉じた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "回収網を設置し、トトが毎日の清掃を引き受けた。菌床は本管側に残る。流れを保つには継続的な手入れが必要で、増殖の原因を除いたわけではない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q005"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q005.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "overflow",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.v11.overflow"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cold",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.v11.cold"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.v11.test"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "net",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q005.v11.net"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q005.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "一晩の通水試験を行い、詰まりが再発しないと確かめる",
+      "text": "排水は流れ、職人は少量の樹液を新しい菓子に使いました。菌槽の掃除が新しい仕事になります。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "菌床を焼き、詰まりを除く",
+      "text": "工房はすぐ再開しました。甘い香りは消え、味を覚えた子供だけが首をかしげます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "流出口へ網を張り、毎日の回収を引き受ける",
+      "text": "詰まりは管理できる量になりました。毎朝の網洗いを条件に仕事は残ります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "drain": "排水作業室",
+      "sump": "隣の空き溜め"
+    },
+    "connections": [
+      [
+        "drain",
+        "sump"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "totoAt": {
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump"
+        ],
+        "meaning": "toto の所在または保持者"
+      },
+      "bedAt": {
+        "type": "enum",
+        "initial": "drain",
+        "values": [
+          "drain",
+          "sump",
+          "party",
+          "toto",
+          "net"
+        ],
+        "meaning": "bed の所在または保持者"
+      },
+      "netAt": {
+        "type": "enum",
+        "initial": "toto",
+        "values": [
+          "drain",
+          "sump",
+          "party",
+          "toto",
+          "bed"
+        ],
+        "meaning": "net の所在または保持者"
+      },
+      "fungus": {
+        "type": "enum",
+        "initial": "growing",
+        "values": [
+          "growing",
+          "cooled",
+          "burned"
+        ],
+        "meaning": "同じ菌床の状態"
+      },
+      "coldTrial": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "coldTrial"
+      },
+      "warmTrial": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "warmTrial"
+      },
+      "overflow": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "overflow"
+      },
+      "pipes": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "pipes"
+      },
+      "overnight": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "overnight"
+      },
+      "foodTest": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "foodTest"
+      },
+      "maintenance": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "maintenance"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "toto": {
+        "holder": "totoAt",
+        "kind": "person",
+        "character": "toto"
+      },
+      "bed": {
+        "holder": "bedAt",
+        "kind": "item"
+      },
+      "net": {
+        "holder": "netAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "temperature": {
+        "text": "冷水で増殖が止まり、温水で増殖する"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "排水作業室",
+        "place": "drain",
+        "cast": [
+          {
+            "entity": "toto"
+          }
+        ],
+        "requires": true
+      },
+      "overflow": {
+        "title": "排水作業室",
+        "place": "drain",
+        "cast": [
+          {
+            "entity": "toto"
+          }
+        ],
+        "requires": true
+      },
+      "cold": {
+        "title": "排水作業室",
+        "place": "drain",
+        "cast": [
+          {
+            "entity": "toto"
+          }
+        ],
+        "requires": true
+      },
+      "test": {
+        "title": "隣の空き溜め",
+        "place": "sump",
+        "cast": [
+          {
+            "entity": "toto"
+          }
+        ],
+        "requires": true
+      },
+      "net": {
+        "title": "排水作業室",
+        "place": "drain",
+        "cast": [
+          {
+            "entity": "toto"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cold": {
+        "from": [
+          "entry"
+        ],
+        "to": "cold",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "coldTrial",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "fungus",
+            "value": "cooled"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "temperature",
+            "source": "bed",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "entry_warm": {
+        "from": [
+          "entry"
+        ],
+        "to": "overflow",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "warmTrial",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "overflow",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_burn": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "fungus",
+            "value": "burned"
+          }
+        ],
+        "cost": {
+          "torch": 1
+        },
+        "once": true
+      },
+      "entry_net": {
+        "from": [
+          "entry"
+        ],
+        "to": "net",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "overflow_clean": {
+        "from": [
+          "overflow"
+        ],
+        "to": "cold",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "overflow",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "coldTrial",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "fungus",
+            "value": "cooled"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "temperature",
+            "source": "bed",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "overflow_net": {
+        "from": [
+          "overflow"
+        ],
+        "to": "net",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "overflow",
+            "value": false
+          }
+        ],
+        "once": true
+      },
+      "cold_move": {
+        "from": [
+          "cold"
+        ],
+        "to": "test",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bed",
+            "from": "drain",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "toto"
+            ],
+            "path": [
+              "drain",
+              "sump"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "bed",
+            "from": "party",
+            "to": "sump"
+          },
+          {
+            "op": "set",
+            "key": "pipes",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "cold_net": {
+        "from": [
+          "cold"
+        ],
+        "to": "net",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "test_verify": {
+        "from": [
+          "test"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "overnight",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "foodTest",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "net_accept": {
+        "from": [
+          "net"
+        ],
+        "ending": "compromise",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.overflow"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "net",
+            "from": "toto",
+            "to": "drain"
+          },
+          {
+            "op": "set",
+            "key": "maintenance",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.bedAt"
+            },
+            "right": "sump"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.pipes"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.overnight"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.foodTest"
+            },
+            "right": true
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q005.values.overflow"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.fungus"
+            },
+            "right": "cooled"
+          }
+        ]
+      },
+      "contract": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q005.values.fungus"
+        },
+        "right": "burned"
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.maintenance"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q005.values.netAt"
+            },
+            "right": "drain"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q005.values.overflow"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
     }
   }
 }

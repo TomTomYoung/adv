@@ -1,6 +1,7 @@
+import {initStory,enterStoryScene,applyStoryAction,storyCanAct} from './story.js';
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -23,6 +24,7 @@ export function chooseOption(engine,id){
   const frame=engine.state.vm.at(-1),command=commandsAt(engine.data,frame)[wait.index];
   const optionIndex=command.options.findIndex(o=>o.id===id),option=command.options[optionIndex];
   if(!option||(option.visibleWhen!==undefined&&!engine.value(option.visibleWhen))||(option.condition!==undefined&&!engine.value(option.condition)))return false;
+  if(option.storyAction&&!storyCanAct(engine,option.storyAction.quest,option.storyAction.action))return false;
   engine.state.waiting=null;engine.log(`選択：${option.text}`);pushBranch(engine,frame,wait.index,['options',optionIndex,'commands']);pump(engine);return true;
 }
 export function pump(engine){
@@ -34,6 +36,9 @@ export function pump(engine){
     if(frame.index>=commands.length){state.vm.pop();const parent=state.vm.at(-1);if(frame.branch&&parent?.scope===frame.scope)parent.local=clone(frame.local);continue;}
     const index=frame.index++,c=commands[index],v=x=>engine.value(x),branch=path=>pushBranch(engine,frame,index,path);
     switch(c.op){
+      case 'story.init':initStory(engine,c.quest);break;
+      case 'story.scene':enterStoryScene(engine,c.quest,c.scene);break;
+      case 'story.action':applyStoryAction(engine,c.quest,c.action);break;
       case 'say':case 'narrate':{
         const text=String(v(c.text));state.waiting={type:'text',text,speaker:c.name??c.speaker??''};engine.log(text);break;
       }
