@@ -1,6 +1,10 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-12。本文の対象: 灯帰りの迷宮 1.3.2（PR #3）。
+更新日: 2026-09-13。現在の作業版: 灯帰りの迷宮 1.4.0。
+
+q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、状態エンジンは `src/core/story.js`、人物は `authoring/characters.mjs`。36種類のPNGとAIPaint原稿を保存しています。[実装・検証記録](SCENARIO_V11_IMPLEMENTATION.md) と [モデル仕様](SCENARIO_MODEL_V11.md) を先に参照してください。以降のPR #3に関する説明は1.3.2までの履歴です。
+
+旧 `.flow.*` 配列は継続位置を守るため変更しないこと。新規受注は `.v11.*`、旧セーブは `legacyStoryRoutes` を経由します。通常の再生成は `npm run build:scenarios` 全体を実行し、人物素材を変えた場合は `npm run build:characters` も実行します。
 
 ## 引き継ぐ現在地
 

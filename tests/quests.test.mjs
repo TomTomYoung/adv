@@ -7,6 +7,7 @@ import {validateSave} from '../src/core/save.js';
 for(const outcome of ['informed','contract','compromise'])test(`legacy continuation: walk all 100 quests to the ${outcome} outcome (real maps/events/commands)`,()=>{
   const g=newGame(1907);
   // Scenario coverage fixture isolates reachability and continuation behavior from combat balance.
+  g.state.flags.legacyStoryRoutes=Object.fromEntries(Object.values(data.quests).filter(q=>q.story).map(q=>[q.id,true]));
   g.state.flags.legacyQuestRoutes=Object.fromEntries(Object.values(data.quests).filter(q=>q.number<=100).map(q=>[q.id,true]));
   g.award(0,data.system.xpBase*24*25);g.state.gold=5000;g.state.inventory.rope=99;g.healAll();
   for(const quest of Object.values(data.quests).filter(q=>q.number<=100)){
@@ -21,7 +22,7 @@ for(const outcome of ['informed','contract','compromise'])test(`legacy continuat
 });
 test('a new unmodified party can investigate the first quest, return, rest and recruit',()=>{
   const g=newGame(4);g.dispatch({type:'accept',id:'q001'});
-  exploreSpot(g,data.quests.q001.locations[2]);for(const id of ['oil','together','share']){assert.ok(g.dispatch({type:'choose',id}));drain(g);}assert.equal(g.state.quests.q001.stage,'completed');g.dispatch({type:'retreat'});g.dispatch({type:'service',id:'inn'});drain(g);assert.equal(g.state.actors.ada.hp,g.stats('ada').hp);g.dispatch({type:'service',id:'recruit'});drain(g);g.dispatch({type:'choose',id:'join'});drain(g);assert.equal(g.state.members.length,5);g.dispatch({type:'service',id:'recruit'});drain(g);assert.equal(g.state.members.length,5);
+  exploreSpot(g,data.quests.q001.locations[2]);for(const id of ['talk','together','share']){assert.ok(g.dispatch({type:'choose',id}));drain(g);}assert.equal(g.state.quests.q001.stage,'completed');g.dispatch({type:'retreat'});g.dispatch({type:'service',id:'inn'});drain(g);assert.equal(g.state.actors.ada.hp,g.stats('ada').hp);g.dispatch({type:'service',id:'recruit'});drain(g);g.dispatch({type:'choose',id:'join'});drain(g);assert.equal(g.state.members.length,5);g.dispatch({type:'service',id:'recruit'});drain(g);assert.equal(g.state.members.length,5);
 });
 test('full 100-quest campaign is completable from normal starting stats and earned resources',()=>{
   const g=newGame(4);

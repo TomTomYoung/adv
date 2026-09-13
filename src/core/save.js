@@ -1,3 +1,4 @@
+import {storyStateErrors,storyEnding} from './story.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
@@ -16,23 +17,26 @@ function addScenarioState(save,data){
   for(const [id,q] of Object.entries(s.quests))if(q.stage==='active')s.records.baselines[id]=snapshotRecords(s.records);
 }
 function keepLegacyRoutes(save,data,migration){
+  save.state.stories??={};
+  const storyRoutes=save.state.flags.legacyStoryRoutes??={};
+  for(const [id,q] of Object.entries(save.state.quests))if(q.stage!=='available'&&data.quests[id]?.story)storyRoutes[id]=true;
   if(!migration.legacyQuestRouting)return;
   const routes=save.state.flags.legacyQuestRoutes??={};
-  for(const [id,q] of Object.entries(save.state.quests))if(q.stage==='active'&&data.quests[id]?.model.flowVersion===2)routes[id]=true;
+  for(const [id,q] of Object.entries(save.state.quests))if(q.stage==='active'&&data.quests[id]?.model.flowVersion>=2)routes[id]=true;
 }
 export function migrateSave(original,data){
   if(!isRecord(original)||original.contentVersion===data.game.version)return original;
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
   const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
   if(migration.scenarioRevision){
-    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,recordVersion:migration.preserveRecords?data.game.recordVersion:undefined}};
+    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,storyVersion:undefined,recordVersion:migration.preserveRecords?data.game.recordVersion:undefined}};
     if(validateSave(original,legacy).length)return original;
     const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
     if(!migration.preserveRecords)addScenarioState(save,data);
     keepLegacyRoutes(save,data,migration);return save;
   }
   // Old records must pass their old growth limits before any normalization.
-  const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
+  const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,storyVersion:undefined,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
   if(validateSave(original,legacy).length)return original;
   const save=clone(original),s=save.state;
   save.contentVersion=data.game.version;s.contentVersion=data.game.version;
@@ -92,6 +96,15 @@ export function validateSave(save,data){
     const evidenceKeys=q.locations.filter(loc=>loc.role!=='decision').map(loc=>loc.role);
     if(qs.evidence.some(e=>!evidenceKeys.includes(e))||new Set(qs.evidence).size!==qs.evidence.length)fail('証拠不正');
     if(qs.stage==='completed'?!q.outcomes[qs.outcome]:qs.outcome!==null)fail('結末不正');
+  }
+  if(data.game.storyVersion===1){
+    if(!isRecord(s.stories))fail('物語状態不正');
+    else for(const [id,story] of Object.entries(s.stories)){
+      const def=data.quests[id]?.story;
+      if(!def){fail('不明な物語状態');continue;}
+      try{errors.push(...storyStateErrors(def,story,s,id,{scene:s.quests[id]?.stage==='active'}));}catch{fail('物語状態不正');}
+    }
+    for(const [id,q] of Object.entries(data.quests))if(q.story&&s.quests[id]?.stage==='completed'&&!s.flags.legacyStoryRoutes?.[id])try{storyEnding({data,state:s},id,s.quests[id].outcome);}catch{fail('物語の結末条件不正');}
   }
   if(s.trackedQuest!==null&&!data.quests[s.trackedQuest])fail('追跡依頼不正');
   for(const [map,cells] of Object.entries(s.discovered))if(!data.maps[map]||!Array.isArray(cells)||cells.some(c=>typeof c!=='string'||!/^\d+,\d+$/.test(c)))fail('地図不正');

@@ -35,86 +35,165 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "本人と一緒に照合記録を提出する",
-      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "証言を伴う不正請求の審査",
+      "text": "審査所は標本を死者に見せた請求を止めた。運搬人は同意して証言したが、ベルトからの仕事を失った。返却済みの骨は学校に残る。"
     },
     "contract": {
-      "label": "骸兵を退け、荷札だけ回収して渡す",
-      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "荷札だけの納品",
+      "text": "ベルトは荷札を受け取り、箱は浅瀬に残された。あなたは請求書を見ていない。その後、ベルトの死亡保険請求は審査を通った。"
     },
     "compromise": {
-      "label": "標本だけを返し、証言は求めない",
-      "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "学校へ標本を返却",
+      "text": "箱と骨は学校へ戻った。運搬人の証言は得ず、保険請求の確認は審査所に持ち込まなかった。標本の返却と不正の立証は、別の仕事として残った。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
+      "truth": "ベルトは貸出標本を死者の骨に見せかけ、荷札で死亡保険を請求しようとした。運搬人は仕事を失うのを恐れて黙っている。",
       "history": [
         {
-          "id": "e0",
-          "event": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "ベルトは貸出標本を死者の骨に見せかけ、荷札で死亡保険を請求しようとした。運搬人は仕事を失うのを恐れて黙っている。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "運送人のベルト",
-        "observation": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
-        "belief": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
-        "goal": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。"
+        "id": "belt",
+        "character": "belt",
+        "name": "ベルト",
+        "goal": "荷札を回収し、偽装した保険請求を通す",
+        "initialLocation": "landing"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "porter",
+        "character": "porter",
+        "name": "運搬人",
+        "goal": "仕事を失わずに標本を返したい",
+        "initialLocation": "school"
+      },
+      {
+        "id": "curator",
+        "character": "curator",
+        "name": "標本係",
+        "goal": "標本と貸出台帳を学校へ戻す",
+        "initialLocation": "school"
+      },
+      {
+        "id": "examiner",
+        "character": "examiner",
+        "name": "保険審査員",
+        "goal": "請求と本人確認を照合する",
+        "initialLocation": "office"
       }
     ],
     "conflict": {
       "request": "流れてくる人骨から荷札を回収してほしいと依頼されました。行方不明者の名簿と合いません。",
-      "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。"
+      "progression": "荷札だけの回収、箱の引き揚げ、学校への照会を分ける。保険不正の確定には台帳・運搬人の同意・審査が必要。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q002.flow.entry"
+          "script": "q002.v11.entry",
+          "assertion": {
+            "title": "引き揚げ場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "belt"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "box",
-          "script": "q002.flow.box"
+          "script": "q002.v11.box",
+          "assertion": {
+            "title": "引き揚げ場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "belt"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "tags",
+          "script": "q002.v11.tags",
+          "assertion": {
+            "title": "引き揚げ場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "belt"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "school",
-          "script": "q002.flow.school"
+          "script": "q002.v11.school",
+          "assertion": {
+            "title": "学校の標本室",
+            "place": "school",
+            "cast": [
+              {
+                "entity": "porter"
+              },
+              {
+                "entity": "curator"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "witness",
-          "script": "q002.flow.witness"
+          "id": "returned",
+          "script": "q002.v11.returned",
+          "assertion": {
+            "title": "学校の標本室",
+            "place": "school",
+            "cast": [
+              {
+                "entity": "porter"
+              },
+              {
+                "entity": "curator"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "hearing",
+          "script": "q002.v11.hearing",
+          "assertion": {
+            "title": "保険審査所",
+            "place": "office",
+            "cast": [
+              {
+                "entity": "porter"
+              },
+              {
+                "entity": "examiner"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -126,126 +205,458 @@
       "operator": "evidenceRecode",
       "newInformation": "骨は医学校へ納める標本で、荷札は失踪者を装った保険詐欺に転用されています。",
       "retroactiveTargets": [
+        "entry",
         "box",
-        "witness"
+        "tags",
+        "school",
+        "returned",
+        "hearing"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q002.flow.entry"
+        "script": "q002.v11.entry",
+        "assertion": {
+          "title": "引き揚げ場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "belt"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "box",
-        "script": "q002.flow.box"
+        "script": "q002.v11.box",
+        "assertion": {
+          "title": "引き揚げ場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "belt"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "tags",
+        "script": "q002.v11.tags",
+        "assertion": {
+          "title": "引き揚げ場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "belt"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "school",
-        "script": "q002.flow.school"
+        "script": "q002.v11.school",
+        "assertion": {
+          "title": "学校の標本室",
+          "place": "school",
+          "cast": [
+            {
+              "entity": "porter"
+            },
+            {
+              "entity": "curator"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "witness",
-        "script": "q002.flow.witness"
+        "id": "returned",
+        "script": "q002.v11.returned",
+        "assertion": {
+          "title": "学校の標本室",
+          "place": "school",
+          "cast": [
+            {
+              "entity": "porter"
+            },
+            {
+              "entity": "curator"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "hearing",
+        "script": "q002.v11.hearing",
+        "assertion": {
+          "title": "保険審査所",
+          "place": "office",
+          "cast": [
+            {
+              "entity": "porter"
+            },
+            {
+              "entity": "examiner"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q002.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q002.values.partyAt",
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.beltAt",
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "belt の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.porterAt",
+        "type": "enum",
+        "initial": "school",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "porter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.curatorAt",
+        "type": "enum",
+        "initial": "school",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "curator の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.examinerAt",
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "examiner の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.boxAt",
+        "type": "enum",
+        "initial": "water",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "bones",
+          "tags",
+          "ledger"
+        ],
+        "meaning": "box の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.bonesAt",
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "tags",
+          "ledger"
+        ],
+        "meaning": "bones の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.tagsAt",
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "bones",
+          "ledger"
+        ],
+        "meaning": "tags の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.ledgerAt",
+        "type": "enum",
+        "initial": "curator",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "bones",
+          "tags"
+        ],
+        "meaning": "ledger の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.opened",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "opened",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.schoolKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "schoolKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.witnessConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.fraudChecked",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fraudChecked",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.returned",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q002.values.tagDelivered",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tagDelivered",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "回収した箱を開けるか封印して届けるかで、標本救出と告発の仕事が分かれる。",
-    "flowVersion": 2,
-    "entryScript": "q002.flow.visit",
+    "progression": "荷札だけの回収、箱の引き揚げ、学校への照会を分ける。保険不正の確定には台帳・運搬人の同意・審査が必要。",
+    "flowVersion": 3,
+    "entryScript": "q002.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "骨の束が水路の杭に引っ掛かっている。ベルトは「荷札だけ、封を開けずに」と念を押した。",
+        "text": "ベルトは水面の箱を指した。「中身は捨てていい。荷札だけ戻してくれ」。浅瀬へ降りれば箱を調べられる。",
         "options": [
           {
             "id": "lift",
-            "text": "縄を掛け、束ごと岸へ引き上げる",
+            "text": "縄を使って箱ごと引き揚げる",
             "to": "box",
-            "cost": {
-              "rope": 1
-            }
+            "action": "entry_lift"
           },
           {
             "id": "tags",
-            "text": "骸兵を退け、荷札だけ回収して渡す",
-            "to": "@contract",
-            "combat": true
+            "text": "浅瀬の魔物を退け、荷札だけ回収する",
+            "to": "tags",
+            "combat": true,
+            "action": "entry_tags"
           },
           {
             "id": "school",
-            "text": "赤い番号を見せ、学校の運搬係を呼ぶ",
-            "to": "school"
+            "text": "浅瀬で台座の番号を写し、学校へ照会する",
+            "to": "school",
+            "action": "entry_school"
           }
         ]
       },
       {
         "id": "box",
-        "text": "$a 封の下には学校へ戻す順番が書かれている。",
+        "text": "箱の中の骨は針金で連結され、台座に学校の番号が刻まれている。ベルトは荷札だけを差し出すよう急かした。",
         "options": [
           {
-            "id": "open",
-            "text": "封を開き、標本の返却先へ持っていく",
-            "to": "school"
+            "id": "school",
+            "text": "箱を保持したまま、標本室へ番号を照会する",
+            "to": "school",
+            "action": "box_school"
           },
           {
-            "id": "deliver",
-            "text": "中身には触れず、骸兵を退け荷札を届ける",
+            "id": "tags",
+            "text": "荷札を外してベルトへ渡す",
             "to": "@contract",
-            "combat": true
+            "action": "box_tags"
+          }
+        ]
+      },
+      {
+        "id": "tags",
+        "text": "荷札はあなたの手にある。箱と骨は浅瀬に残した。ベルトは札を数えるため手を伸ばした。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "荷札だけを渡して依頼を終える",
+            "to": "@contract",
+            "action": "tags_deliver"
+          },
+          {
+            "id": "inspect",
+            "text": "荷札を渡さず、浅瀬の台座を確かめて学校へ行く",
+            "to": "school",
+            "action": "tags_inspect"
           }
         ]
       },
       {
         "id": "school",
-        "text": "学校は標本の返還を求めた。荷役人は荷札が失踪届へ使われたと話すが、公の証言なら仕事を失うと恐れている。",
+        "text": "標本係は番号を貸出台帳と照合した。「授業の骨です。運搬を頼んだのは、この人」。運搬人は、回収の手伝いには応じたが、保険の話には口をつぐんだ。",
         "options": [
           {
-            "id": "specimens",
-            "text": "標本だけを返し、証言は求めない",
-            "to": "@compromise"
-          },
-          {
-            "id": "witness",
-            "text": "失職の危険も含め、証言する意思を確認する",
-            "to": "witness"
+            "id": "recover",
+            "text": "運搬人と標本を回収し、学校へ返す",
+            "to": "returned",
+            "action": "school_recover"
           }
         ]
       },
       {
-        "id": "witness",
-        "text": "荷役人は自分の名で証言すると決め、保険台帳と番号を並べた。$truth",
+        "id": "returned",
+        "text": "骨と箱を学校へ返した。標本係が返却を記帳する。運搬人は「証言したら次の仕事がなくなる」と言った。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "標本の返却だけで報告を終える",
+            "to": "@compromise",
+            "action": "returned_finish"
+          },
+          {
+            "id": "consent",
+            "text": "不利益も説明し、本人の同意を得て審査所へ同行する",
+            "to": "hearing",
+            "action": "returned_consent"
+          }
+        ]
+      },
+      {
+        "id": "hearing",
+        "text": "審査員が運搬人本人と貸出台帳を確認し、ベルトの請求書と照合した。死亡したとされる人が、目の前で署名する。",
         "options": [
           {
             "id": "file",
-            "text": "本人と一緒に照合記録を提出する",
-            "to": "@informed"
-          },
-          {
-            "id": "withdraw",
-            "text": "告発を取り下げ、学校への返却で終える",
-            "to": "@compromise"
+            "text": "本人の証言と台帳を受理してもらう",
+            "to": "@informed",
+            "action": "hearing_file"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q002.clue_a": {
@@ -1202,6 +1613,1465 @@
           ]
         }
       ]
+    },
+    "q002.v11.entry": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ベルトは水面の箱を指した。「中身は捨てていい。荷札だけ戻してくれ」。浅瀬へ降りれば箱を調べられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lift",
+              "text": "縄を使って箱ごと引き揚げる",
+              "storyAction": {
+                "quest": "q002",
+                "action": "entry_lift"
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "entry_lift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.box"
+                }
+              ]
+            },
+            {
+              "id": "tags",
+              "text": "浅瀬の魔物を退け、荷札だけ回収する",
+              "storyAction": {
+                "quest": "q002",
+                "action": "entry_tags"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q002",
+                      "action": "entry_tags"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q002.v11.tags"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "school",
+              "text": "浅瀬で台座の番号を写し、学校へ照会する",
+              "storyAction": {
+                "quest": "q002",
+                "action": "entry_school"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "entry_school"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.school"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.box": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "box"
+        },
+        {
+          "op": "say",
+          "text": "箱の中の骨は針金で連結され、台座に学校の番号が刻まれている。ベルトは荷札だけを差し出すよう急かした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "school",
+              "text": "箱を保持したまま、標本室へ番号を照会する",
+              "storyAction": {
+                "quest": "q002",
+                "action": "box_school"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "box_school"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.school"
+                }
+              ]
+            },
+            {
+              "id": "tags",
+              "text": "荷札を外してベルトへ渡す",
+              "storyAction": {
+                "quest": "q002",
+                "action": "box_tags"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "box_tags"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.tags": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "tags"
+        },
+        {
+          "op": "say",
+          "text": "荷札はあなたの手にある。箱と骨は浅瀬に残した。ベルトは札を数えるため手を伸ばした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "荷札だけを渡して依頼を終える",
+              "storyAction": {
+                "quest": "q002",
+                "action": "tags_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "tags_deliver"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "inspect",
+              "text": "荷札を渡さず、浅瀬の台座を確かめて学校へ行く",
+              "storyAction": {
+                "quest": "q002",
+                "action": "tags_inspect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "tags_inspect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.school"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.school": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "school"
+        },
+        {
+          "op": "say",
+          "text": "標本係は番号を貸出台帳と照合した。「授業の骨です。運搬を頼んだのは、この人」。運搬人は、回収の手伝いには応じたが、保険の話には口をつぐんだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recover",
+              "text": "運搬人と標本を回収し、学校へ返す",
+              "storyAction": {
+                "quest": "q002",
+                "action": "school_recover"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "school_recover"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.returned"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.returned": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "returned"
+        },
+        {
+          "op": "say",
+          "text": "骨と箱を学校へ返した。標本係が返却を記帳する。運搬人は「証言したら次の仕事がなくなる」と言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "標本の返却だけで報告を終える",
+              "storyAction": {
+                "quest": "q002",
+                "action": "returned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "returned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "consent",
+              "text": "不利益も説明し、本人の同意を得て審査所へ同行する",
+              "storyAction": {
+                "quest": "q002",
+                "action": "returned_consent"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "returned_consent"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.hearing"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.hearing": {
+      "storyQuest": "q002",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q002",
+          "scene": "hearing"
+        },
+        {
+          "op": "say",
+          "text": "審査員が運搬人本人と貸出台帳を確認し、ベルトの請求書と照合した。死亡したとされる人が、目の前で署名する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "file",
+              "text": "本人の証言と台帳を受理してもらう",
+              "storyAction": {
+                "quest": "q002",
+                "action": "hearing_file"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q002",
+                  "action": "hearing_file"
+                },
+                {
+                  "op": "jump",
+                  "script": "q002.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q002.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q002",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "審査所は標本を死者に見せた請求を止めた。運搬人は同意して証言したが、ベルトからの仕事を失った。返却済みの骨は学校に残る。"
+        }
+      ]
+    },
+    "q002.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q002",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "ベルトは荷札を受け取り、箱は浅瀬に残された。あなたは請求書を見ていない。その後、ベルトの死亡保険請求は審査を通った。"
+        }
+      ]
+    },
+    "q002.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q002",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "箱と骨は学校へ戻った。運搬人の証言は得ず、保険請求の確認は審査所に持ち込まなかった。標本の返却と不正の立証は、別の仕事として残った。"
+        }
+      ]
+    },
+    "q002.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q002"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q002.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q002.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q002.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "審査所は標本を死者に見せた請求を止めた。運搬人は同意して証言したが、ベルトからの仕事を失った。返却済みの骨は学校に残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ベルトは荷札を受け取り、箱は浅瀬に残された。あなたは請求書を見ていない。その後、ベルトの死亡保険請求は審査を通った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "箱と骨は学校へ戻った。運搬人の証言は得ず、保険請求の確認は審査所に持ち込まなかった。標本の返却と不正の立証は、別の仕事として残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q002"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q002.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "box",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.box"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tags",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.tags"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "school",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.school"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hearing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q002.v11.hearing"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q002.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "本人と一緒に照合記録を提出する",
+      "text": "失踪届は撤回され、標本は学校へ返りました。荷役人は証言と引き換えに職を失います。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "骸兵を退け、荷札だけ回収して渡す",
+      "text": "保険金は支払われ、骨はまた水に捨てられました。依頼人は約束以上の金を置いて去ります。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "標本だけを返し、証言は求めない",
+      "text": "学校の授業は再開しました。帳簿に残る架空の死者は、別の依頼の種になります。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "landing": "引き揚げ場",
+      "water": "浅瀬の荷崩れ",
+      "school": "学校の標本室",
+      "office": "保険審査所"
+    },
+    "connections": [
+      [
+        "landing",
+        "water"
+      ],
+      [
+        "landing",
+        "school"
+      ],
+      [
+        "landing",
+        "office"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "beltAt": {
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "belt の所在または保持者"
+      },
+      "porterAt": {
+        "type": "enum",
+        "initial": "school",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "porter の所在または保持者"
+      },
+      "curatorAt": {
+        "type": "enum",
+        "initial": "school",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "curator の所在または保持者"
+      },
+      "examinerAt": {
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office"
+        ],
+        "meaning": "examiner の所在または保持者"
+      },
+      "boxAt": {
+        "type": "enum",
+        "initial": "water",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "bones",
+          "tags",
+          "ledger"
+        ],
+        "meaning": "box の所在または保持者"
+      },
+      "bonesAt": {
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "tags",
+          "ledger"
+        ],
+        "meaning": "bones の所在または保持者"
+      },
+      "tagsAt": {
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "bones",
+          "ledger"
+        ],
+        "meaning": "tags の所在または保持者"
+      },
+      "ledgerAt": {
+        "type": "enum",
+        "initial": "curator",
+        "values": [
+          "landing",
+          "water",
+          "school",
+          "office",
+          "party",
+          "belt",
+          "porter",
+          "curator",
+          "examiner",
+          "box",
+          "bones",
+          "tags"
+        ],
+        "meaning": "ledger の所在または保持者"
+      },
+      "opened": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "opened"
+      },
+      "schoolKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "schoolKnown"
+      },
+      "witnessConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessConsent"
+      },
+      "fraudChecked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fraudChecked"
+      },
+      "returned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned"
+      },
+      "tagDelivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tagDelivered"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "belt": {
+        "holder": "beltAt",
+        "kind": "person",
+        "character": "belt"
+      },
+      "porter": {
+        "holder": "porterAt",
+        "kind": "person",
+        "character": "porter"
+      },
+      "curator": {
+        "holder": "curatorAt",
+        "kind": "person",
+        "character": "curator"
+      },
+      "examiner": {
+        "holder": "examinerAt",
+        "kind": "person",
+        "character": "examiner"
+      },
+      "box": {
+        "holder": "boxAt",
+        "kind": "item"
+      },
+      "bones": {
+        "holder": "bonesAt",
+        "kind": "item"
+      },
+      "tags": {
+        "holder": "tagsAt",
+        "kind": "item"
+      },
+      "ledger": {
+        "holder": "ledgerAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "number": {
+        "text": "骨の台座には学校の貸出番号がある"
+      },
+      "loan": {
+        "text": "貸出台帳は標本を学校の所有物と示す"
+      },
+      "fraud": {
+        "text": "生存している運搬人に死亡保険の請求が出ている"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "引き揚げ場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "belt"
+          }
+        ],
+        "requires": true
+      },
+      "box": {
+        "title": "引き揚げ場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "belt"
+          }
+        ],
+        "requires": true
+      },
+      "tags": {
+        "title": "引き揚げ場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "belt"
+          }
+        ],
+        "requires": true
+      },
+      "school": {
+        "title": "学校の標本室",
+        "place": "school",
+        "cast": [
+          {
+            "entity": "porter"
+          },
+          {
+            "entity": "curator"
+          }
+        ],
+        "requires": true
+      },
+      "returned": {
+        "title": "学校の標本室",
+        "place": "school",
+        "cast": [
+          {
+            "entity": "porter"
+          },
+          {
+            "entity": "curator"
+          }
+        ],
+        "requires": true
+      },
+      "hearing": {
+        "title": "保険審査所",
+        "place": "office",
+        "cast": [
+          {
+            "entity": "porter"
+          },
+          {
+            "entity": "examiner"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_lift": {
+        "from": [
+          "entry"
+        ],
+        "to": "box",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "water",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "water",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "opened",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "number",
+            "source": "bones",
+            "requires": true
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "entry_tags": {
+        "from": [
+          "entry"
+        ],
+        "to": "tags",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "tags",
+            "from": "box",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "water",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "entry_school": {
+        "from": [
+          "entry"
+        ],
+        "to": "school",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "number",
+            "source": "bones",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "water",
+              "landing",
+              "school"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "loan",
+            "source": "ledger",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "schoolKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "box_school": {
+        "from": [
+          "box"
+        ],
+        "to": "school",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "school"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "loan",
+            "source": "ledger",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "schoolKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "box_tags": {
+        "from": [
+          "box"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "tags",
+            "from": "box",
+            "to": "belt"
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "party",
+            "to": "belt"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "belt"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "belt",
+            "to": "water"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "belt"
+            ],
+            "path": [
+              "water",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "tagDelivered",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "tags_deliver": {
+        "from": [
+          "tags"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "tags",
+            "from": "party",
+            "to": "belt"
+          },
+          {
+            "op": "set",
+            "key": "tagDelivered",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "tags_inspect": {
+        "from": [
+          "tags"
+        ],
+        "to": "school",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "number",
+            "source": "bones",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "water",
+              "landing",
+              "school"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "loan",
+            "source": "ledger",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "schoolKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "school_recover": {
+        "from": [
+          "school"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "porter"
+            ],
+            "path": [
+              "school",
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q002.values.boxAt"
+              },
+              "right": "water"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "water",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q002.values.boxAt"
+              },
+              "right": "water"
+            }
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "porter"
+            ],
+            "path": [
+              "water",
+              "landing",
+              "school"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q002.values.partyAt"
+              },
+              "right": "water"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "party",
+            "to": "curator"
+          },
+          {
+            "op": "transfer",
+            "entity": "tags",
+            "from": "party",
+            "to": "curator",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q002.values.tagsAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "set",
+            "key": "returned",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "returned_finish": {
+        "from": [
+          "returned"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "returned_consent": {
+        "from": [
+          "returned"
+        ],
+        "to": "hearing",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "witnessConsent",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "ledger",
+            "from": "curator",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "porter"
+            ],
+            "path": [
+              "school",
+              "landing",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "hearing_file": {
+        "from": [
+          "hearing"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "fraud",
+            "source": "examiner",
+            "requires": true
+          },
+          {
+            "op": "transfer",
+            "entity": "ledger",
+            "from": "party",
+            "to": "examiner"
+          },
+          {
+            "op": "set",
+            "key": "fraudChecked",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.returned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.witnessConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.fraudChecked"
+            },
+            "right": true
+          },
+          {
+            "op": "contains",
+            "left": {
+              "ref": "stories.q002.knowledge.party"
+            },
+            "right": "fraud"
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.tagDelivered"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.tagsAt"
+            },
+            "right": "belt"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q002.values.boxAt"
+            },
+            "right": "water"
+          }
+        ]
+      },
+      "compromise": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q002.values.returned"
+        },
+        "right": true
+      }
     }
   }
 }

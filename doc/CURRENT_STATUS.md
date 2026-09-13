@@ -1,5 +1,8 @@
 # advの現状確認
 
+2026-09-13追記: q001〜q010 は作品版1.4.0で [人物・物品を追うモデル v1.1](SCENARIO_MODEL_V11.md) へ更新しました。[改稿全文](SCENARIOS_Q001_Q010_V11.md)、[人物一覧](CHARACTERS.md)、[今回の検証と残る範囲](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。以下の旧版の記録は当時の実装範囲を表します。
+
+
 確認日: 2026-09-12。対象リポジトリ: [TomTomYoung/adv](https://github.com/TomTomYoung/adv)。GitHubのブランチ・PR・Actionsと、取得したコード・原稿・生成済みJSONを照合した記録です。今回の変更対象はdocのみです。
 
 追記（同日）: masterの文書更新 `277a999` をPR #3へ取り込み、文書の競合を解消しました。このブランチのSPEC・一覧・再生成手順は1.3.2を対象とします。統合後の `npm run check` は313テストを含め成功しました。詳細は [PROGRESS.md](PROGRESS.md) を参照してください。以下のコミット・CI・PR状態は文書統合前の照合記録として残します。PR #3のmasterへのマージと、ブラウザ・文芸監査は今回行っていません。

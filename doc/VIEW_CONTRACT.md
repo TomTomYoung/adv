@@ -1,5 +1,8 @@
 # ビューだけで画面をデザインする
 
+2026-09-13追記: q001〜q010 は作品版1.4.0で [人物・物品を追うモデル v1.1](SCENARIO_MODEL_V11.md) へ更新しました。[改稿全文](SCENARIOS_Q001_Q010_V11.md)、[人物一覧](CHARACTERS.md)、[今回の検証と残る範囲](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。以下の旧版の記録は当時の実装範囲を表します。
+
+
 ## 境界
 
 データ読込 → GameEngine → projectGame → GameView の向きで情報を渡します。GameViewはJSON互換の表示用スナップショットだけを受け取り、ボタンやキーに相当する操作意図を外へ返します。
@@ -79,3 +82,7 @@ questsとtrackedにevidenceTotalを追加しました。証拠地点数が0の�
 ## 1.3.2の進行地点
 
 quests/trackedのlocationsとevidenceTotalは、現在使用している経路の案内です。個別進行では開始地点だけを投影し、旧二地点を数えません。旧版で進行中の依頼は移行フラグに基づき旧地点を投影します。保存互換用に残る全q.locationsをそのまま画面へ表示しないでください。モデルの本文・真相・未到達場面は引き続き渡しません。
+
+## 1.4.0 の会話人物
+
+`dialog.scene` は省略可能で、`title` と `cast` を持つ。cast の要素は `{id, name, role, portrait, remote}`。この場面で表示する人物だけを Application が投影する。View は元の entities、knowledge、作者向け truth を読まない。`remote` は伝声管・面会窓越しの人物で、同席を意味しない。完了後の結果文では最後の場面の人物像を残さない。

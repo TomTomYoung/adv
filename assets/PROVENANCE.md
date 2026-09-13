@@ -74,3 +74,11 @@ The same pinned AIMusic engine generated 28 original sound effects from the note
 The same pinned AIPaint PaintCore drew eight abstract pixel effect sheets, each with eight 128×128 RGBA frames. The sheets are 1024×128. Every pixel comes from AIPaint ellipse/line commands; the small PNG encoder only serializes PaintCore.composite() output. Commands with revisions are retained in `assets/source/effects/`. `node tools/assets/generate-effects.mjs` deterministically recreates both the SE and sheets. No new character illustrations or image-generation calls are involved in this expansion.
 
 All 28 OGG files were decoded with finite, non-silent, unclipped PCM. All 8 PNGs were decoded and checked for transparency and 64 distinct nonempty frames. The first lightning draft reused some frames with equal opacity; the geometry was adjusted across frames and the final eight frames are distinct. Selected sheets were visually inspected. Browser animation, real-device listening, precise audiovisual alignment and reduced-motion integration have not been exercised in a browser.
+
+## 1.4.0: q001–q010 NPC portraits (2026-09-13)
+
+36 original 112×128 transparent pixel portraits were drawn with the pinned AIPaint PaintCore above. Each portrait has three layers: silhouette, face, and workwear. Face shape, hair, age lines, work clothes and props distinguish the authored roles; groups use a representative composition. These are new art-direction choices, not assertions inferred from the old scenario text.
+
+Run `node tools/assets/generate-characters.mjs`. All drawing uses AIPaint shape commands. The PNG encoder only serializes the returned composite. `assets/images/characters/` contains the shipped PNGs and review sheet. `assets/source/characters/` contains all native `.paint.json` projects, exact `.commands.json` batches and a SHA-256 manifest including the renderer source hash. Each native project can be opened directly in AIPaint.
+
+The automated check reopens all 36 native projects with PaintCore.fromProject, replays every command batch, and compares both composites with the decoded shipped PNG pixels. The review sheet uses the same composites, copied as horizontal AIPaint line runs. Existing illustration and audio provenance above remains unchanged.

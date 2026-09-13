@@ -18,17 +18,17 @@ test('new map/journal routes do not advertise retired two-clue locations',()=>{
 });
 test('a completed rescue can open a new search; accepting the first report ends it instead',()=>{
  const g=prepareQuest('q001');choose(g,'clear');fight(g);
- assert.equal(g.state.quests.q001.stage,'active');assert.equal(g.state.flags.flow.q001.node,'carried');
- const checkpoint=g.save();choose(g,'report');assert.equal(g.state.quests.q001.outcome,'contract');
- g.load(checkpoint);choose(g,'return','together','share');assert.equal(g.state.quests.q001.outcome,'informed');
+ assert.equal(g.state.quests.q001.stage,'active');assert.equal(g.state.stories.q001.scene,'carried');
+ const checkpoint=g.save();choose(g,'contract');assert.equal(g.state.quests.q001.outcome,'contract');
+ g.load(checkpoint);choose(g,'return','bring','share');assert.equal(g.state.quests.q001.outcome,'informed');
  assert.deepEqual(g.state.quests.q001.evidence,[]);
 });
 test('q010 individual rescue actions survive a pause; opening the shaft is not rescuing everyone',()=>{
- const g=prepareQuest('q010');choose(g,'shaft');assert.equal(g.dispatch({type:'choose',id:'finish'}),false);
- choose(g,'near','records','pause');g.load(g.save());g.run('q010.flow.visit');drain(g);
- assert.equal(g.dispatch({type:'choose',id:'finish'}),false);const before=g.save();
+ const g=prepareQuest('q010');choose(g,'shaft');assert.equal(g.dispatch({type:'choose',id:'all'}),false);
+ choose(g,'near','book','pause');g.load(g.save());g.run(data.quests.q010.model.entryScript);drain(g);
+ assert.equal(g.dispatch({type:'choose',id:'all'}),false);const before=g.save();
  choose(g,'partial');assert.equal(g.state.quests.q010.outcome,'partial');
- g.load(before);choose(g,'deep','finish');assert.equal(g.state.quests.q010.outcome,'informed');
+ g.load(before);choose(g,'deep','all','testimony');assert.equal(g.state.quests.q010.outcome,'informed');
 });
 test('q015 stopping water before copying preserves names; late action does not restore erased text',()=>{
  const a=prepareQuest('q015');choose(a,'catch','complete');assert.equal(a.state.quests.q015.outcome,'informed');
@@ -59,7 +59,7 @@ test('material payment is checked atomically and a combat rescue pays only on vi
  const g=prepareQuest('q006');g.state.inventory.rope=0;const before=g.save();
  assert.equal(g.dispatch({type:'choose',id:'lift'}),false);assert.equal(g.save(),before);
  g.state.inventory.rope=1;choose(g,'lift');assert.equal(g.state.inventory.rope,1);fight(g);assert.equal(g.state.inventory.rope,0);
- assert.equal(g.state.quests.q006.stage,'active');choose(g,'open','public');assert.equal(g.state.quests.q006.outcome,'informed');
+ assert.equal(g.state.quests.q006.stage,'active');choose(g,'public','ledger','settle');assert.equal(g.state.quests.q006.outcome,'informed');
 });
 test('1.3.1 script arrays are byte-equivalent after canonical JSON encoding',async()=>{
  const hashes=JSON.parse(await fs.readFile(new URL('fixtures/scripts-1.3.1-sha256.json',import.meta.url)));
@@ -67,7 +67,7 @@ test('1.3.1 script arrays are byte-equivalent after canonical JSON encoding',asy
 });
 for(const phase of ['text','choice','battle'])test(`actual 1.3.1 ${phase} save preserves records and resumes active old quests`,async()=>{
  const source=await fs.readFile(new URL(`fixtures/save-1.3.1-${phase}.json`,import.meta.url),'utf8'),old=JSON.parse(source),g=newGame();
- g.load(source);assert.equal(g.state.contentVersion,'1.3.2');
+ g.load(source);assert.equal(g.state.contentVersion,data.game.version);
  for(const k of ['records','actors','inventory','rng','quests','waiting','vm','nextScope','battle'])assert.deepEqual(g.state[k],old.state[k],k);
  assert.equal(g.state.flags.legacyQuestRoutes.q001,true);assert.equal(g.state.flags.legacyQuestRoutes.q200,true);
  assert.deepEqual(g.state.flags.quest,old.state.flags.quest);
@@ -75,6 +75,6 @@ for(const phase of ['text','choice','battle'])test(`actual 1.3.1 ${phase} save p
  drain(g);if(phase!=='battle')choose(g,'contract');fight(g);assert.equal(g.state.quests.q001.outcome,'contract');
  g.run('q200.flow.visit');drain(g);choose(g,'river','visits');assert.equal(g.state.quests.q200.outcome,'visits');
  assert.ok(g.state.records.kills.moor_wolf>=1);
- g.accept('q002');g.run('q002.flow.visit');drain(g);assert.equal(g.state.flags.flow.q002.node,'entry');
+ g.accept('q002');g.run(data.quests.q002.model.entryScript);drain(g);assert.equal(g.state.stories.q002.scene,'entry');
  assert.equal(projectGame(g).tracked.evidenceTotal,0,'quests accepted after migration use the new progression');
 });

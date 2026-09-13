@@ -68,6 +68,12 @@ export class GameView {
     const log=node('div','travel-log');log.append(node('span','eyebrow','直近の記録'));for(const line of m.log.slice(-3))log.append(node('p','',line));section.append(log);parent.append(section);
   }
   dialog(parent,d){const section=node('section','story-window');section.setAttribute('aria-label','物語と選択肢');
+    if(d.scene){
+      section.append(node('p','story-place',d.scene.title));
+      const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
+      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':'')),img=node('img');img.src=c.portrait;img.alt=c.name;img.width=112;img.height=128;card.append(img,node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
+      section.append(cast);
+    }
     if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.act({type:'advance'}),'primary continue'));}
     else{section.append(node('span','eyebrow','あなたの判断'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
   }

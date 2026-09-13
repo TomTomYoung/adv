@@ -35,82 +35,144 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "空箱と未払い帳簿を職人全員の前へ出す",
-      "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "台帳を開き一部払いを成立させる",
+      "text": "ガロは盗難の説明を撤回し、荷役道具を売って給金の一部を払った。疑われた仲間は潔白になったが、残額と仕事の停止が残る。"
     },
     "contract": {
-      "label": "事情を聞かず、箱をガロへ返す",
-      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "給金箱を私的に返す",
+      "text": "ガロは箱を受け取り、盗難で金が失われたという説明を続けた。あなたは台帳を確認していない。疑われた荷役人への疑いは解けなかった。"
     },
     "compromise": {
-      "label": "箱の位置を職人へ教え、回収を任せる",
-      "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "証拠を荷役人へ引き渡す",
+      "text": "荷役人は箱・台帳・目撃報告を受け取り、自分たちで支払い交渉を始めた。不正の説明を追及する材料はあるが、実際の支払いはまだ確認していない。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
+      "truth": "ガロは未払いの給金を盗難に見せ、箱を石で重くして沈めた。疑われた荷役人は金を持っていない。",
       "history": [
         {
-          "id": "e0",
-          "event": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "ガロは未払いの給金を盗難に見せ、箱を石で重くして沈めた。疑われた荷役人は金を持っていない。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "工事頭のガロ",
-        "observation": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
-        "belief": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
-        "goal": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。"
+        "id": "garo",
+        "character": "garo",
+        "name": "ガロ",
+        "goal": "未払いを隠し、仕事を継続する",
+        "initialLocation": "landing"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "workers",
+        "character": "workers",
+        "name": "工事の職人たち",
+        "goal": "未払いを受け取り、仲間への疑いを解く",
+        "initialLocation": "shore"
+      },
+      {
+        "id": "accused",
+        "character": "accused",
+        "name": "疑われた職人",
+        "goal": "盗みの疑いを晴らす",
+        "initialLocation": "shore"
       }
     ],
     "conflict": {
       "request": "給金箱を落とした職人が疑われています。沈んだ箱を回収してください。",
-      "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。"
+      "progression": "私的な返却は証明を隠す。途中で撤回するなら箱を取り戻す必要がある。公開交渉と証拠の引渡しを分ける。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q006.flow.entry"
+          "script": "q006.v11.entry",
+          "assertion": {
+            "title": "沈没船の船着場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "garo"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "empty",
-          "script": "q006.flow.empty"
+          "id": "box",
+          "script": "q006.v11.box",
+          "assertion": {
+            "title": "沈没船の船着場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "garo"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "private",
+          "script": "q006.v11.private",
+          "assertion": {
+            "title": "沈没船の船着場",
+            "place": "landing",
+            "cast": [
+              {
+                "entity": "garo"
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "accounts",
-          "script": "q006.flow.accounts"
+          "script": "q006.v11.accounts",
+          "assertion": {
+            "title": "荷役人の待機岸",
+            "place": "shore",
+            "cast": [
+              {
+                "entity": "workers"
+              },
+              {
+                "entity": "accused"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ledger",
+          "script": "q006.v11.ledger",
+          "assertion": {
+            "title": "荷役人の待機岸",
+            "place": "shore",
+            "cast": [
+              {
+                "entity": "garo"
+              },
+              {
+                "entity": "workers"
+              },
+              {
+                "entity": "accused"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -122,99 +184,390 @@
       "operator": "pathHide",
       "newInformation": "箱を隠したのは工事頭で、穴埋めできない未払いを事故に見せています。",
       "retroactiveTargets": [
-        "accounts"
+        "entry",
+        "box",
+        "private",
+        "accounts",
+        "ledger"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q006.flow.entry"
+        "script": "q006.v11.entry",
+        "assertion": {
+          "title": "沈没船の船着場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "garo"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "empty",
-        "script": "q006.flow.empty"
+        "id": "box",
+        "script": "q006.v11.box",
+        "assertion": {
+          "title": "沈没船の船着場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "garo"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "private",
+        "script": "q006.v11.private",
+        "assertion": {
+          "title": "沈没船の船着場",
+          "place": "landing",
+          "cast": [
+            {
+              "entity": "garo"
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "accounts",
-        "script": "q006.flow.accounts"
+        "script": "q006.v11.accounts",
+        "assertion": {
+          "title": "荷役人の待機岸",
+          "place": "shore",
+          "cast": [
+            {
+              "entity": "workers"
+            },
+            {
+              "entity": "accused"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ledger",
+        "script": "q006.v11.ledger",
+        "assertion": {
+          "title": "荷役人の待機岸",
+          "place": "shore",
+          "cast": [
+            {
+              "entity": "garo"
+            },
+            {
+              "entity": "workers"
+            },
+            {
+              "entity": "accused"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q006.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q006.values.partyAt",
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.garoAt",
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "garo の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.workersAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "workers の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.accusedAt",
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "accused の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.boxAt",
+        "type": "enum",
+        "initial": "water",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "ledger",
+          "stones"
+        ],
+        "meaning": "box の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.ledgerAt",
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "box",
+          "stones"
+        ],
+        "meaning": "ledger の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.stonesAt",
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "box",
+          "ledger"
+        ],
+        "meaning": "stones の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.opened",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "opened",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.witnessed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.ledgerRead",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ledgerRead",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.handed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "handed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.partialPaid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "partialPaid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.delegated",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delegated",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q006.values.report",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "report",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "給金箱の回収そのものが空箱の露見を起こし、依頼人へ返す前に公開の場を作れる。",
-    "flowVersion": 2,
-    "entryScript": "q006.flow.visit",
+    "progression": "私的な返却は証明を隠す。途中で撤回するなら箱を取り戻す必要がある。公開交渉と証拠の引渡しを分ける。",
+    "flowVersion": 3,
+    "entryScript": "q006.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "ガロは職人に見つからぬうちに箱を上げてほしいという。職人たちは水の引く岸で待っている。",
+        "text": "「給金箱だけ戻せ」。ガロは岸の荷役人を見ずに言った。彼らは一人の仲間を盗人と疑いながら、支払いを待っている。",
         "options": [
           {
-            "id": "workers",
-            "text": "箱の位置を職人へ教え、回収を任せる",
-            "to": "@compromise"
+            "id": "lift",
+            "text": "縄で箱を引き上げ、船底の魔物を退ける",
+            "to": "box",
+            "combat": true,
+            "action": "entry_lift"
           },
           {
-            "id": "lift",
-            "text": "水棲獣を退け、縄で箱を引き上げる",
-            "to": "empty",
-            "combat": true,
-            "cost": {
-              "rope": 1
-            }
+            "id": "witness",
+            "text": "荷役人に沈没位置を伝え、彼らの道具で一緒に回収する",
+            "to": "accounts",
+            "action": "entry_witness"
           }
         ]
       },
       {
-        "id": "empty",
-        "text": "箱を抱えても給金の重さがない。蓋の隙間から石がこぼれ、ガロが慌てて拾った。",
+        "id": "box",
+        "text": "蓋の隙間から転がったのは石だった。ガロは「金を抜いた奴が入れた」と言い、箱を求める。あなたはまだ台帳を見ていない。",
         "options": [
           {
-            "id": "private",
-            "text": "事情を聞かず、箱をガロへ返す",
-            "to": "@contract"
+            "id": "return",
+            "text": "箱をガロへ返し、岸の問いを聞く",
+            "to": "private",
+            "action": "box_return"
           },
           {
-            "id": "open",
-            "text": "皆のいる岸で箱を開く",
-            "to": "accounts"
+            "id": "public",
+            "text": "箱を保持し、荷役人の前で開く",
+            "to": "accounts",
+            "action": "box_public"
+          }
+        ]
+      },
+      {
+        "id": "private",
+        "text": "箱はガロの足元にある。岸から「中身はあったのか」と声が届いた。ここで立ち去れば、ガロの説明だけが残る。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "箱を返した仕事として報告を終える",
+            "to": "@contract",
+            "action": "private_leave"
+          },
+          {
+            "id": "retract",
+            "text": "報告を保留し、箱を返してもらって荷役人の前へ運ぶ",
+            "to": "accounts",
+            "action": "private_retract"
           }
         ]
       },
       {
         "id": "accounts",
-        "text": "$truth 職人は給金の額を読み上げ、ガロは工具の売却を申し出た。",
+        "text": "箱から石を出すと、疑われた荷役人が息をついた。「これだけで、俺じゃないと決まるのか」。未払いと盗難の区別には、ガロの台帳が要る。",
         "options": [
           {
-            "id": "public",
-            "text": "空箱と未払い帳簿を職人全員の前へ出す",
-            "to": "@informed"
+            "id": "ledger",
+            "text": "ガロに同行を求め、全員で事務所の台帳を確かめる",
+            "to": "ledger",
+            "action": "accounts_ledger"
+          }
+        ]
+      },
+      {
+        "id": "ledger",
+        "text": "台帳の未払い額が、盗まれたとされた金額と重なる。ガロは盗難を装ったと認めた。箱と台帳は、まだあなたが保持している。",
+        "options": [
+          {
+            "id": "settle",
+            "text": "道具の売却による一部払いを全員の前で成立させる",
+            "to": "@informed",
+            "action": "ledger_settle"
           },
           {
-            "id": "entrust",
-            "text": "証拠を職人へ渡し、その後の交渉は任せる",
-            "to": "@compromise"
+            "id": "delegate",
+            "text": "箱・台帳・目撃報告を荷役人へ渡し、交渉を委ねる",
+            "to": "@compromise",
+            "action": "ledger_delegate"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q006.clue_a": {
@@ -1088,6 +1441,1270 @@
           ]
         }
       ]
+    },
+    "q006.v11.entry": {
+      "storyQuest": "q006",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q006",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "「給金箱だけ戻せ」。ガロは岸の荷役人を見ずに言った。彼らは一人の仲間を盗人と疑いながら、支払いを待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lift",
+              "text": "縄で箱を引き上げ、船底の魔物を退ける",
+              "storyAction": {
+                "quest": "q006",
+                "action": "entry_lift"
+              },
+              "requirement": "縄 1消費 ／ 戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q006",
+                      "action": "entry_lift"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q006.v11.box"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "witness",
+              "text": "荷役人に沈没位置を伝え、彼らの道具で一緒に回収する",
+              "storyAction": {
+                "quest": "q006",
+                "action": "entry_witness"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "entry_witness"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.accounts"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.v11.box": {
+      "storyQuest": "q006",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q006",
+          "scene": "box"
+        },
+        {
+          "op": "say",
+          "text": "蓋の隙間から転がったのは石だった。ガロは「金を抜いた奴が入れた」と言い、箱を求める。あなたはまだ台帳を見ていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "箱をガロへ返し、岸の問いを聞く",
+              "storyAction": {
+                "quest": "q006",
+                "action": "box_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "box_return"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.private"
+                }
+              ]
+            },
+            {
+              "id": "public",
+              "text": "箱を保持し、荷役人の前で開く",
+              "storyAction": {
+                "quest": "q006",
+                "action": "box_public"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "box_public"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.accounts"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.v11.private": {
+      "storyQuest": "q006",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q006",
+          "scene": "private"
+        },
+        {
+          "op": "say",
+          "text": "箱はガロの足元にある。岸から「中身はあったのか」と声が届いた。ここで立ち去れば、ガロの説明だけが残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "箱を返した仕事として報告を終える",
+              "storyAction": {
+                "quest": "q006",
+                "action": "private_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "private_leave"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "retract",
+              "text": "報告を保留し、箱を返してもらって荷役人の前へ運ぶ",
+              "storyAction": {
+                "quest": "q006",
+                "action": "private_retract"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "private_retract"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.accounts"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.v11.accounts": {
+      "storyQuest": "q006",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q006",
+          "scene": "accounts"
+        },
+        {
+          "op": "say",
+          "text": "箱から石を出すと、疑われた荷役人が息をついた。「これだけで、俺じゃないと決まるのか」。未払いと盗難の区別には、ガロの台帳が要る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ledger",
+              "text": "ガロに同行を求め、全員で事務所の台帳を確かめる",
+              "storyAction": {
+                "quest": "q006",
+                "action": "accounts_ledger"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "accounts_ledger"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.ledger"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.v11.ledger": {
+      "storyQuest": "q006",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q006",
+          "scene": "ledger"
+        },
+        {
+          "op": "say",
+          "text": "台帳の未払い額が、盗まれたとされた金額と重なる。ガロは盗難を装ったと認めた。箱と台帳は、まだあなたが保持している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "settle",
+              "text": "道具の売却による一部払いを全員の前で成立させる",
+              "storyAction": {
+                "quest": "q006",
+                "action": "ledger_settle"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "ledger_settle"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "delegate",
+              "text": "箱・台帳・目撃報告を荷役人へ渡し、交渉を委ねる",
+              "storyAction": {
+                "quest": "q006",
+                "action": "ledger_delegate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q006",
+                  "action": "ledger_delegate"
+                },
+                {
+                  "op": "jump",
+                  "script": "q006.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q006.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q006",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "ガロは盗難の説明を撤回し、荷役道具を売って給金の一部を払った。疑われた仲間は潔白になったが、残額と仕事の停止が残る。"
+        }
+      ]
+    },
+    "q006.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q006",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "ガロは箱を受け取り、盗難で金が失われたという説明を続けた。あなたは台帳を確認していない。疑われた荷役人への疑いは解けなかった。"
+        }
+      ]
+    },
+    "q006.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q006",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "荷役人は箱・台帳・目撃報告を受け取り、自分たちで支払い交渉を始めた。不正の説明を追及する材料はあるが、実際の支払いはまだ確認していない。"
+        }
+      ]
+    },
+    "q006.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q006"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q006.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q006.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q006.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ガロは盗難の説明を撤回し、荷役道具を売って給金の一部を払った。疑われた仲間は潔白になったが、残額と仕事の停止が残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ガロは箱を受け取り、盗難で金が失われたという説明を続けた。あなたは台帳を確認していない。疑われた荷役人への疑いは解けなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "荷役人は箱・台帳・目撃報告を受け取り、自分たちで支払い交渉を始めた。不正の説明を追及する材料はあるが、実際の支払いはまだ確認していない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q006"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q006.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "box",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.v11.box"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "private",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.v11.private"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "accounts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.v11.accounts"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ledger",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q006.v11.ledger"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q006.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "空箱と未払い帳簿を職人全員の前へ出す",
+      "text": "工事頭は工具を売って一部を支払いました。工事は止まりましたが、疑われた職人は戻れます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "事情を聞かず、箱をガロへ返す",
+      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えました。箱の石だけが増えます。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "箱の位置を職人へ教え、回収を任せる",
+      "text": "職人たちは自分の手で箱を開きました。あなたは裁く役を降り、証人として名を残します。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "landing": "沈没船の船着場",
+      "water": "船底の浅瀬",
+      "shore": "荷役人の待機岸",
+      "office": "ガロの事務所"
+    },
+    "connections": [
+      [
+        "landing",
+        "water"
+      ],
+      [
+        "landing",
+        "shore"
+      ],
+      [
+        "shore",
+        "office"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "garoAt": {
+        "type": "enum",
+        "initial": "landing",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "garo の所在または保持者"
+      },
+      "workersAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "workers の所在または保持者"
+      },
+      "accusedAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office"
+        ],
+        "meaning": "accused の所在または保持者"
+      },
+      "boxAt": {
+        "type": "enum",
+        "initial": "water",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "ledger",
+          "stones"
+        ],
+        "meaning": "box の所在または保持者"
+      },
+      "ledgerAt": {
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "box",
+          "stones"
+        ],
+        "meaning": "ledger の所在または保持者"
+      },
+      "stonesAt": {
+        "type": "enum",
+        "initial": "box",
+        "values": [
+          "landing",
+          "water",
+          "shore",
+          "office",
+          "party",
+          "garo",
+          "workers",
+          "accused",
+          "box",
+          "ledger"
+        ],
+        "meaning": "stones の所在または保持者"
+      },
+      "opened": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "opened"
+      },
+      "witnessed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessed"
+      },
+      "ledgerRead": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ledgerRead"
+      },
+      "handed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "handed"
+      },
+      "partialPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "partialPaid"
+      },
+      "delegated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delegated"
+      },
+      "report": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "report"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "garo": {
+        "holder": "garoAt",
+        "kind": "person",
+        "character": "garo"
+      },
+      "workers": {
+        "holder": "workersAt",
+        "kind": "group",
+        "character": "workers"
+      },
+      "accused": {
+        "holder": "accusedAt",
+        "kind": "person",
+        "character": "accused"
+      },
+      "box": {
+        "holder": "boxAt",
+        "kind": "item"
+      },
+      "ledger": {
+        "holder": "ledgerAt",
+        "kind": "item"
+      },
+      "stones": {
+        "holder": "stonesAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "stones": {
+        "text": "給金箱に金ではなく石が入っていた"
+      },
+      "debt": {
+        "text": "台帳には未払い給金があり、盗難額とされていた"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "沈没船の船着場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "garo"
+          }
+        ],
+        "requires": true
+      },
+      "box": {
+        "title": "沈没船の船着場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "garo"
+          }
+        ],
+        "requires": true
+      },
+      "private": {
+        "title": "沈没船の船着場",
+        "place": "landing",
+        "cast": [
+          {
+            "entity": "garo"
+          }
+        ],
+        "requires": true
+      },
+      "accounts": {
+        "title": "荷役人の待機岸",
+        "place": "shore",
+        "cast": [
+          {
+            "entity": "workers"
+          },
+          {
+            "entity": "accused"
+          }
+        ],
+        "requires": true
+      },
+      "ledger": {
+        "title": "荷役人の待機岸",
+        "place": "shore",
+        "cast": [
+          {
+            "entity": "garo"
+          },
+          {
+            "entity": "workers"
+          },
+          {
+            "entity": "accused"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_lift": {
+        "from": [
+          "entry"
+        ],
+        "to": "box",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "water",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "water",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "opened",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "stones",
+            "source": "stones",
+            "requires": true
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "entry_witness": {
+        "from": [
+          "entry"
+        ],
+        "to": "accounts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "workers",
+              "accused"
+            ],
+            "path": [
+              "shore",
+              "landing",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "water",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "workers",
+              "accused"
+            ],
+            "path": [
+              "water",
+              "landing",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "opened",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "witnessed",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "stones",
+            "source": "stones",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "box_return": {
+        "from": [
+          "box"
+        ],
+        "to": "private",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "party",
+            "to": "garo"
+          },
+          {
+            "op": "set",
+            "key": "handed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "box_public": {
+        "from": [
+          "box"
+        ],
+        "to": "accounts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "witnessed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "private_leave": {
+        "from": [
+          "private"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "report",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "private_retract": {
+        "from": [
+          "private"
+        ],
+        "to": "accounts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "garo",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "handed",
+            "value": false
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "landing",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "witnessed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "accounts_ledger": {
+        "from": [
+          "accounts"
+        ],
+        "to": "ledger",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "shore",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "garo"
+            ],
+            "path": [
+              "landing",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "garo",
+              "workers",
+              "accused"
+            ],
+            "path": [
+              "shore",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "debt",
+            "source": "ledger",
+            "requires": true
+          },
+          {
+            "op": "transfer",
+            "entity": "ledger",
+            "from": "office",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "ledgerRead",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "garo",
+              "workers",
+              "accused"
+            ],
+            "path": [
+              "office",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "ledger_settle": {
+        "from": [
+          "ledger"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "partialPaid",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "party",
+            "to": "workers"
+          },
+          {
+            "op": "transfer",
+            "entity": "ledger",
+            "from": "party",
+            "to": "workers"
+          },
+          {
+            "op": "set",
+            "key": "report",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "ledger_delegate": {
+        "from": [
+          "ledger"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "party",
+            "to": "workers"
+          },
+          {
+            "op": "transfer",
+            "entity": "ledger",
+            "from": "party",
+            "to": "workers"
+          },
+          {
+            "op": "set",
+            "key": "delegated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "report",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.witnessed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.ledgerRead"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.partialPaid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.report"
+            },
+            "right": true
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.boxAt"
+            },
+            "right": "garo"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.report"
+            },
+            "right": true
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q006.values.witnessed"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.delegated"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.boxAt"
+            },
+            "right": "workers"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.ledgerAt"
+            },
+            "right": "workers"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q006.values.ledgerRead"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   }
 }

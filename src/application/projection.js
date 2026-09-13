@@ -1,3 +1,4 @@
+import {storyCanAct} from '../core/story.js';
 import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob,allowedEquipmentActors} from './job-projection.js';
 import {activeActor} from '../core/battle.js';
 import {commandsAt} from '../core/script.js';
@@ -9,12 +10,16 @@ export function projectGame(engine){
   const baseActorView=actorView,jobActorView=id=>({...baseActorView(id),...projectActorJob(engine,id)});
   const party=s.members.map(jobActorView),editable=s.mode==='town'&&!s.waiting&&!s.battle;
   const roster=(d.game.tavern?.candidates??Object.keys(d.actors)).map(id=>{const active=s.members.includes(id),aliveAfterRemoval=s.members.some(other=>other!==id&&s.actors[other].hp>0);return {...jobActorView(id),active,canJoin:editable&&!active&&s.members.length<d.system.maxParty&&(s.actors[id].hp>0||s.members.some(other=>s.actors[other].hp>0)),canLeave:editable&&active&&s.members.length>1&&aliveAfterRemoval,swapCandidates:editable&&!active?s.members.filter(other=>s.actors[id].hp>0||s.members.some(remaining=>remaining!==other&&s.actors[remaining].hp>0)).map(other=>({id:other,name:d.actors[other].name})):[]};});
-  const routeLocations=q=>q.model.flowVersion===2&&!s.flags.legacyQuestRoutes?.[q.id]?q.locations.filter(l=>l.role==='decision'):q.locations;
-  const quests=Object.values(d.quests).map(q=>({id:q.id,number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone(q.outcomes[s.quests[q.id].outcome]):null}));
+  const routeLocations=q=>q.model.flowVersion>=2&&!s.flags.legacyQuestRoutes?.[q.id]?q.locations.filter(l=>l.role==='decision'):q.locations;
+  const quests=Object.values(d.quests).map(q=>({id:q.id,number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
   if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker};
   if(s.waiting?.type==='choice'){
-    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:o.condition===undefined||Boolean(engine.value(o.condition))}))};
+    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
+  }
+  if(dialog){
+    const qid=d.scripts[s.vm.at(-1)?.script]?.storyQuest,story=s.stories?.[qid],scene=d.quests[qid]?.story?.scenes[story?.scene];
+    if(scene&&s.quests[qid].stage==='active')dialog.scene={title:scene.title,cast:scene.cast.filter(c=>c.when===undefined||engine.value(c.when)).map(c=>{const def=d.characters[d.quests[qid].story.entities[c.entity].character];return {id:def.id,name:def.name,role:def.role,portrait:d.assets.images[def.portrait],remote:c.mode==='remote'};})};
   }
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;

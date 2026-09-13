@@ -35,86 +35,153 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "伝声管を開き、二人を会わせる",
-      "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。",
       "gold": 57,
-      "xp": 68
+      "xp": 68,
+      "label": "手紙を渡し、同意した二人を会わせる",
+      "text": "ミレは夫の手紙を受け取り、弟は保守通路を歩いて彼女の前へ出た。互いに望んだ面会は成立したが、許しや今後の関係までは決まっていない。"
     },
     "contract": {
-      "label": "壁を封じ、声を止める",
-      "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。",
       "gold": 77,
-      "xp": 47
+      "xp": 47,
+      "label": "同意を得て伝声口を塞ぐ",
+      "text": "ミレが望んで伝声口を塞いだ。声は止まった。弟と手紙は廃番所に残り、手紙を受け取ったことにも、二人が会ったことにもならない。"
     },
     "compromise": {
-      "label": "姿は見せなくてよいので手紙を預かる",
-      "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。",
       "gold": 37,
-      "xp": 51
+      "xp": 51,
+      "label": "手紙だけを届ける",
+      "text": "弟から預かった手紙をミレへ届け、誰が預かっていたかも伝えた。弟は廃番所に残った。二人の対面は成立させず、返事を決める時間をミレに渡した。"
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
+      "truth": "ミレの夫は亡くなっている。弟が保守通路の先の伝声室から声をまねた。手紙は弟が保持しており、管の向こうへ人が通れるわけではない。",
       "history": [
         {
-          "id": "e0",
-          "event": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "ミレの夫は亡くなっている。弟が保守通路の先の伝声室から声をまねた。手紙は弟が保持しており、管の向こうへ人が通れるわけではない。"
         }
-      ]
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
     },
     "agents": [
       {
-        "id": "client",
-        "name": "酒場のミレ",
-        "observation": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
-        "belief": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
-        "goal": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。"
+        "id": "mire",
+        "character": "mire",
+        "name": "ミレ",
+        "goal": "亡夫の声の正体を自分で確かめる",
+        "initialLocation": "port"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "brother",
+        "character": "brother",
+        "name": "ミレの夫の弟",
+        "goal": "手紙を渡せなかった罪悪感から逃れたい",
+        "initialLocation": "booth"
       }
     ],
     "conflict": {
       "request": "地下で亡夫の声が返ると噂されています。本人なのか確かめてください。",
-      "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。"
+      "progression": "声での応答と対面を区別する。手紙は弟から預かって通路を運び、面会は双方の同意がそろって初めて実行する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q007.flow.entry"
+          "script": "q007.v11.entry",
+          "assertion": {
+            "title": "地下室の伝声口",
+            "place": "port",
+            "cast": [
+              {
+                "entity": "mire"
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "reply",
-          "script": "q007.flow.reply"
+          "id": "voice",
+          "script": "q007.v11.voice",
+          "assertion": {
+            "title": "地下室の伝声口",
+            "place": "port",
+            "cast": [
+              {
+                "entity": "mire"
+              },
+              {
+                "entity": "brother",
+                "mode": "remote",
+                "requires": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q007.values.pipeOpen"
+                  },
+                  "right": true
+                }
+              }
+            ],
+            "requires": true
+          }
         },
         {
-          "id": "pipe",
-          "script": "q007.flow.pipe"
+          "id": "booth",
+          "script": "q007.v11.booth",
+          "assertion": {
+            "title": "廃番所の伝声室",
+            "place": "booth",
+            "cast": [
+              {
+                "entity": "brother"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "letters",
+          "script": "q007.v11.letters",
+          "assertion": {
+            "title": "地下室の伝声口",
+            "place": "port",
+            "cast": [
+              {
+                "entity": "mire"
+              },
+              {
+                "entity": "brother",
+                "mode": "remote",
+                "requires": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q007.values.pipeOpen"
+                  },
+                  "right": true
+                }
+              }
+            ],
+            "requires": true
+          }
         },
         {
           "id": "meeting",
-          "script": "q007.flow.meeting"
+          "script": "q007.v11.meeting",
+          "assertion": {
+            "title": "地下室の伝声口",
+            "place": "port",
+            "cast": [
+              {
+                "entity": "mire"
+              },
+              {
+                "entity": "brother"
+              }
+            ],
+            "requires": true
+          }
         }
       ]
     },
@@ -126,121 +193,369 @@
       "operator": "identitySplit",
       "newInformation": "壁の向こうに古い伝声管があり、夫の弟が遺品の手紙を読んでいます。",
       "retroactiveTargets": [
-        "pipe",
+        "entry",
+        "voice",
+        "booth",
+        "letters",
         "meeting"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q007.flow.entry"
+        "script": "q007.v11.entry",
+        "assertion": {
+          "title": "地下室の伝声口",
+          "place": "port",
+          "cast": [
+            {
+              "entity": "mire"
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "reply",
-        "script": "q007.flow.reply"
+        "id": "voice",
+        "script": "q007.v11.voice",
+        "assertion": {
+          "title": "地下室の伝声口",
+          "place": "port",
+          "cast": [
+            {
+              "entity": "mire"
+            },
+            {
+              "entity": "brother",
+              "mode": "remote",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q007.values.pipeOpen"
+                },
+                "right": true
+              }
+            }
+          ],
+          "requires": true
+        }
       },
       {
-        "id": "pipe",
-        "script": "q007.flow.pipe"
+        "id": "booth",
+        "script": "q007.v11.booth",
+        "assertion": {
+          "title": "廃番所の伝声室",
+          "place": "booth",
+          "cast": [
+            {
+              "entity": "brother"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "letters",
+        "script": "q007.v11.letters",
+        "assertion": {
+          "title": "地下室の伝声口",
+          "place": "port",
+          "cast": [
+            {
+              "entity": "mire"
+            },
+            {
+              "entity": "brother",
+              "mode": "remote",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q007.values.pipeOpen"
+                },
+                "right": true
+              }
+            }
+          ],
+          "requires": true
+        }
       },
       {
         "id": "meeting",
-        "script": "q007.flow.meeting"
+        "script": "q007.v11.meeting",
+        "assertion": {
+          "title": "地下室の伝声口",
+          "place": "port",
+          "cast": [
+            {
+              "entity": "mire"
+            },
+            {
+              "entity": "brother"
+            }
+          ],
+          "requires": true
+        }
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
-        "path": "flags.flow.q007.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "path": "stories.q007.values.partyAt",
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
         "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.mireAt",
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "mire の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.brotherAt",
+        "type": "enum",
+        "initial": "booth",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "brother の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.lettersAt",
+        "type": "enum",
+        "initial": "brother",
+        "values": [
+          "port",
+          "corridor",
+          "booth",
+          "party",
+          "mire",
+          "brother",
+          "pipe"
+        ],
+        "meaning": "letters の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.pipeAt",
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth",
+          "party",
+          "mire",
+          "brother",
+          "letters"
+        ],
+        "meaning": "pipe の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.voiceKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "voiceKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.mireConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "mireConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.brotherConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "brotherConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.lettersConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lettersConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.sealed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.met",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "met",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.delivered",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q007.values.pipeOpen",
+        "type": "boolean",
+        "initial": true,
+        "meaning": "pipeOpen",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
     },
-    "progression": "壁へ返事をすることで独白が崩れ、正体の発見より先に生きた相手との会話が始まる。",
-    "flowVersion": 2,
-    "entryScript": "q007.flow.visit",
+    "progression": "声での応答と対面を区別する。手紙は弟から預かって通路を運び、面会は双方の同意がそろって初めて実行する。",
+    "flowVersion": 3,
+    "entryScript": "q007.v11.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "壁が亡き夫の声で手紙を読む。ミレは、その次の言葉を知っている。",
+        "text": "壁の伝声口から、亡くなった夫の声がした。ミレは返事を待っている。横の点検札には、保守通路が廃番所へ続くと書かれていた。",
         "options": [
           {
             "id": "reply",
-            "text": "手紙にない質問を壁へ返す",
-            "to": "reply"
+            "text": "故人だけが知る言い回しを、ミレに尋ねて返す",
+            "to": "voice",
+            "action": "entry_reply"
           },
           {
-            "id": "listen",
-            "text": "声が途切れる箇所を聞く",
-            "to": "pipe"
+            "id": "trace",
+            "text": "ミレにここで待ってもらい、保守通路をたどる",
+            "to": "booth",
+            "action": "entry_trace"
           },
           {
             "id": "seal",
-            "text": "壁を封じ、声を止める",
-            "to": "@contract"
+            "text": "声を聞き続けるか尋ね、ミレの同意を得て伝声口を塞ぐ",
+            "to": "@contract",
+            "action": "entry_seal"
           }
         ]
       },
       {
-        "id": "reply",
-        "text": "声が止まり、紙を落とす音がした。「兄さんなら、何て答えるだろう」。ミレが壁へ手を置いた。",
+        "id": "voice",
+        "text": "返事が詰まった。「兄貴の手紙を、渡せなくて」。弟は向こうの伝声室にいると名乗った。ミレは会う前に、手紙を読みたいと言った。",
         "options": [
           {
-            "id": "name",
-            "text": "弟本人の言葉で話してほしいと頼む",
-            "to": "meeting"
+            "id": "walk",
+            "text": "ミレを待たせ、保守通路から弟を訪ねる",
+            "to": "booth",
+            "action": "voice_walk"
           },
+          {
+            "id": "seal",
+            "text": "ミレの意思を確かめ、この声のやり取りを終える",
+            "to": "@contract",
+            "action": "voice_seal"
+          }
+        ]
+      },
+      {
+        "id": "booth",
+        "text": "弟は手紙の束を机へ出した。「真似をしていれば、渡さなくても許される気がした」。手紙を届けることには同意した。面会の意思は、二人に別々に聞かなければならない。",
+        "options": [
           {
             "id": "letters",
-            "text": "姿は見せなくてよいので手紙を預かる",
-            "to": "@compromise"
+            "text": "差出人と預かり人を確認し、手紙を預かってミレへ戻る",
+            "to": "letters",
+            "action": "booth_letters"
           }
         ]
       },
       {
-        "id": "pipe",
-        "text": "$a 煙の漏れる伝声管の先で、弟が古い便箋を抱えていた。",
+        "id": "letters",
+        "text": "ミレは夫の手紙を読み、弟が預かっていたと確かめた。管越しに弟へ「自分の声で話して」と言う。あなたは、顔を合わせたいかを尋ねた。",
         "options": [
           {
-            "id": "ask",
-            "text": "弟にミレへ会う意思を聞く",
-            "to": "meeting"
+            "id": "meet",
+            "text": "双方の面会への同意を確かめ、弟を迎えに行く",
+            "to": "meeting",
+            "action": "letters_meet"
           },
           {
-            "id": "carry",
-            "text": "正体を明かさず便箋だけ持ち帰る",
-            "to": "@compromise"
+            "id": "finish",
+            "text": "手紙の受け渡しで区切り、面会は強いない",
+            "to": "@compromise",
+            "action": "letters_finish"
           }
         ]
       },
       {
         "id": "meeting",
-        "text": "弟は自分の名で謝りたいと答え、ミレも会うと決めた。$truth",
+        "text": "弟は伝声口の外で、初めて自分の声で謝った。ミレは手紙を閉じた。「返事を決めるのは、私にさせて」。",
         "options": [
           {
-            "id": "open",
-            "text": "伝声管を開き、二人を会わせる",
-            "to": "@informed"
-          },
-          {
-            "id": "letter",
-            "text": "対面を取りやめ、手紙だけ届ける",
-            "to": "@compromise"
+            "id": "finish",
+            "text": "二人の面会を見届け、その場を離れる",
+            "to": "@informed",
+            "action": "meeting_finish"
           }
         ]
       }
-    ]
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
   },
   "scripts": {
     "q007.clue_a": {
@@ -1092,6 +1407,1126 @@
           ]
         }
       ]
+    },
+    "q007.v11.entry": {
+      "storyQuest": "q007",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q007",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "壁の伝声口から、亡くなった夫の声がした。ミレは返事を待っている。横の点検札には、保守通路が廃番所へ続くと書かれていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "故人だけが知る言い回しを、ミレに尋ねて返す",
+              "storyAction": {
+                "quest": "q007",
+                "action": "entry_reply"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "entry_reply"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.voice"
+                }
+              ]
+            },
+            {
+              "id": "trace",
+              "text": "ミレにここで待ってもらい、保守通路をたどる",
+              "storyAction": {
+                "quest": "q007",
+                "action": "entry_trace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "entry_trace"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.booth"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "声を聞き続けるか尋ね、ミレの同意を得て伝声口を塞ぐ",
+              "storyAction": {
+                "quest": "q007",
+                "action": "entry_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "entry_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.v11.voice": {
+      "storyQuest": "q007",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q007",
+          "scene": "voice"
+        },
+        {
+          "op": "say",
+          "text": "返事が詰まった。「兄貴の手紙を、渡せなくて」。弟は向こうの伝声室にいると名乗った。ミレは会う前に、手紙を読みたいと言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "ミレを待たせ、保守通路から弟を訪ねる",
+              "storyAction": {
+                "quest": "q007",
+                "action": "voice_walk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "voice_walk"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.booth"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "ミレの意思を確かめ、この声のやり取りを終える",
+              "storyAction": {
+                "quest": "q007",
+                "action": "voice_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "voice_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.v11.booth": {
+      "storyQuest": "q007",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q007",
+          "scene": "booth"
+        },
+        {
+          "op": "say",
+          "text": "弟は手紙の束を机へ出した。「真似をしていれば、渡さなくても許される気がした」。手紙を届けることには同意した。面会の意思は、二人に別々に聞かなければならない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "letters",
+              "text": "差出人と預かり人を確認し、手紙を預かってミレへ戻る",
+              "storyAction": {
+                "quest": "q007",
+                "action": "booth_letters"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "booth_letters"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.letters"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.v11.letters": {
+      "storyQuest": "q007",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q007",
+          "scene": "letters"
+        },
+        {
+          "op": "say",
+          "text": "ミレは夫の手紙を読み、弟が預かっていたと確かめた。管越しに弟へ「自分の声で話して」と言う。あなたは、顔を合わせたいかを尋ねた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "双方の面会への同意を確かめ、弟を迎えに行く",
+              "storyAction": {
+                "quest": "q007",
+                "action": "letters_meet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "letters_meet"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.meeting"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "手紙の受け渡しで区切り、面会は強いない",
+              "storyAction": {
+                "quest": "q007",
+                "action": "letters_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "letters_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.v11.meeting": {
+      "storyQuest": "q007",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q007",
+          "scene": "meeting"
+        },
+        {
+          "op": "say",
+          "text": "弟は伝声口の外で、初めて自分の声で謝った。ミレは手紙を閉じた。「返事を決めるのは、私にさせて」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "二人の面会を見届け、その場を離れる",
+              "storyAction": {
+                "quest": "q007",
+                "action": "meeting_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q007",
+                  "action": "meeting_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q007.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q007.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q007",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "ミレは夫の手紙を受け取り、弟は保守通路を歩いて彼女の前へ出た。互いに望んだ面会は成立したが、許しや今後の関係までは決まっていない。"
+        }
+      ]
+    },
+    "q007.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q007",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "ミレが望んで伝声口を塞いだ。声は止まった。弟と手紙は廃番所に残り、手紙を受け取ったことにも、二人が会ったことにもならない。"
+        }
+      ]
+    },
+    "q007.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q007",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "弟から預かった手紙をミレへ届け、誰が預かっていたかも伝えた。弟は廃番所に残った。二人の対面は成立させず、返事を決める時間をミレに渡した。"
+        }
+      ]
+    },
+    "q007.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q007"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q007.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q007.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q007.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ミレは夫の手紙を受け取り、弟は保守通路を歩いて彼女の前へ出た。互いに望んだ面会は成立したが、許しや今後の関係までは決まっていない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ミレが望んで伝声口を塞いだ。声は止まった。弟と手紙は廃番所に残り、手紙を受け取ったことにも、二人が会ったことにもならない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弟から預かった手紙をミレへ届け、誰が預かっていたかも伝えた。弟は廃番所に残った。二人の対面は成立させず、返事を決める時間をミレに渡した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q007"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q007.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "voice",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.v11.voice"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "booth",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.v11.booth"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "letters",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.v11.letters"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meeting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q007.v11.meeting"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q007.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "伝声管を開き、二人を会わせる",
+      "text": "弟は手紙を渡しました。ミレは声を失い直しましたが、返事を書ける相手を得ます。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "壁を封じ、声を止める",
+      "text": "噂は止まりました。弟は手紙を出せず、ミレは最後の言葉だけを覚えています。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "姿は見せなくてよいので手紙を預かる",
+      "text": "ミレは筆跡を確かめ、壁へ通うのをやめました。弟の名は手紙の余白に残します。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "port": "地下室の伝声口",
+      "corridor": "保守通路",
+      "booth": "廃番所の伝声室"
+    },
+    "connections": [
+      [
+        "port",
+        "corridor"
+      ],
+      [
+        "corridor",
+        "booth"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "mireAt": {
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "mire の所在または保持者"
+      },
+      "brotherAt": {
+        "type": "enum",
+        "initial": "booth",
+        "values": [
+          "port",
+          "corridor",
+          "booth"
+        ],
+        "meaning": "brother の所在または保持者"
+      },
+      "lettersAt": {
+        "type": "enum",
+        "initial": "brother",
+        "values": [
+          "port",
+          "corridor",
+          "booth",
+          "party",
+          "mire",
+          "brother",
+          "pipe"
+        ],
+        "meaning": "letters の所在または保持者"
+      },
+      "pipeAt": {
+        "type": "enum",
+        "initial": "port",
+        "values": [
+          "port",
+          "corridor",
+          "booth",
+          "party",
+          "mire",
+          "brother",
+          "letters"
+        ],
+        "meaning": "pipe の所在または保持者"
+      },
+      "voiceKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "voiceKnown"
+      },
+      "mireConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "mireConsent"
+      },
+      "brotherConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "brotherConsent"
+      },
+      "lettersConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lettersConsent"
+      },
+      "sealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed"
+      },
+      "met": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "met"
+      },
+      "delivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered"
+      },
+      "pipeOpen": {
+        "type": "boolean",
+        "initial": true,
+        "meaning": "pipeOpen"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mire": {
+        "holder": "mireAt",
+        "kind": "person",
+        "character": "mire"
+      },
+      "brother": {
+        "holder": "brotherAt",
+        "kind": "person",
+        "character": "brother"
+      },
+      "letters": {
+        "holder": "lettersAt",
+        "kind": "item"
+      },
+      "pipe": {
+        "holder": "pipeAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "voice": {
+        "text": "夫の声をまねていたのは、その弟"
+      },
+      "letters": {
+        "text": "弟は故人の手紙を預かっていた"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "地下室の伝声口",
+        "place": "port",
+        "cast": [
+          {
+            "entity": "mire"
+          }
+        ],
+        "requires": true
+      },
+      "voice": {
+        "title": "地下室の伝声口",
+        "place": "port",
+        "cast": [
+          {
+            "entity": "mire"
+          },
+          {
+            "entity": "brother",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q007.values.pipeOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      },
+      "booth": {
+        "title": "廃番所の伝声室",
+        "place": "booth",
+        "cast": [
+          {
+            "entity": "brother"
+          }
+        ],
+        "requires": true
+      },
+      "letters": {
+        "title": "地下室の伝声口",
+        "place": "port",
+        "cast": [
+          {
+            "entity": "mire"
+          },
+          {
+            "entity": "brother",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q007.values.pipeOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      },
+      "meeting": {
+        "title": "地下室の伝声口",
+        "place": "port",
+        "cast": [
+          {
+            "entity": "mire"
+          },
+          {
+            "entity": "brother"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_reply": {
+        "from": [
+          "entry"
+        ],
+        "to": "voice",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "voice",
+            "source": "pipe",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q007.values.pipeOpen"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "set",
+            "key": "voiceKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_trace": {
+        "from": [
+          "entry"
+        ],
+        "to": "booth",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "port",
+              "corridor",
+              "booth"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "voice",
+            "source": "brother",
+            "requires": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "letters",
+            "source": "letters",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "voiceKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_seal": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "mireConsent",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "pipeOpen",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "voice_walk": {
+        "from": [
+          "voice"
+        ],
+        "to": "booth",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "port",
+              "corridor",
+              "booth"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "letters",
+            "source": "letters",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "voice_seal": {
+        "from": [
+          "voice"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "mireConsent",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "pipeOpen",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "booth_letters": {
+        "from": [
+          "booth"
+        ],
+        "to": "letters",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lettersConsent",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "letters",
+            "from": "brother",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "booth",
+              "corridor",
+              "port"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letters",
+            "from": "party",
+            "to": "mire"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "letters_meet": {
+        "from": [
+          "letters"
+        ],
+        "to": "meeting",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "mireConsent",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "brotherConsent",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "port",
+              "corridor",
+              "booth"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "brother"
+            ],
+            "path": [
+              "booth",
+              "corridor",
+              "port"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "met",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "letters_finish": {
+        "from": [
+          "letters"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "meeting_finish": {
+        "from": [
+          "meeting"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.delivered"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.met"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.mireConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.brotherConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.brotherAt"
+            },
+            "right": "port"
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.sealed"
+            },
+            "right": true
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q007.values.pipeOpen"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.mireConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.lettersAt"
+            },
+            "right": "brother"
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.delivered"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.lettersAt"
+            },
+            "right": "mire"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q007.values.brotherAt"
+            },
+            "right": "booth"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q007.values.met"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
     }
   }
 }
