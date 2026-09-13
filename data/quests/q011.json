@@ -4,7 +4,7 @@
   "number": 11,
   "title": "塩の花嫁",
   "client": "坑夫のメル",
-  "brief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+  "brief": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻りません。同僚の足跡と像の正体を調べてください。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,169 +35,351 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "像の向く安全坑へ人を導き、標示を塗り直す",
-      "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。",
+      "label": "安全坑から全員を導き、標示を直す",
+      "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.signKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.rescued"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.repainted"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
-      "label": "像を砕き、白い姿を取り除く",
-      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。",
+      "label": "像を砕いて今回の救助を終える",
+      "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.signDestroyed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.rescued"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "compromise": {
-      "label": "像を目印に縄1本で帰路をつなぐ",
-      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。",
+      "label": "足跡を追い、縄で帰路を残す",
+      "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.ropeLaid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q011.rescued"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
+      "truth": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。",
       "history": [
         {
-          "id": "e0",
-          "event": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq011を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "古い坑道では、識字に頼らない避難標識として、灯を掲げた人型と、その腕が指す方向で安全坑を示していました。像の台座には同じ方向を示す矢印も刻まれています。",
+          "塩水が像の表面で乾燥を繰り返し、人型の頭部と肩へ薄い塩の層を重ねたため、坑夫には白い花嫁の姿に見えます。像は魔物でも人間でもありません。",
+          "同僚と迷った坑夫たちは像が指す安全坑にいます。像を壊した場合でも、砕けた塩の下から台座の矢印が一時的に現れるため、今回の救助だけは可能です。ただし標識そのものは失われます。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "坑夫のメル",
-        "observation": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
-        "belief": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
-        "goal": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。"
+        "id": "mel",
+        "name": "メル",
+        "goal": "戻らない同僚を連れ帰る"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "colleague",
+        "name": "メルの同僚",
+        "goal": "迷った坑夫たちを再び一人にしない"
       }
     ],
     "conflict": {
-      "request": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
-      "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。"
+      "request": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻りません。同僚の足跡と像の正体を調べてください。",
+      "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q011.flow.entry"
+          "script": "q011.catalog1.entry"
         },
         {
           "id": "sign",
-          "script": "q011.flow.sign"
+          "script": "q011.catalog1.sign"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "坑道奥で花嫁の姿を見た同僚が戻りません。白い像を調べてください。",
+      "initialHypothesis": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻りません。同僚の足跡と像の正体を調べてください。",
       "openQuestion": "塩の花嫁の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "causeSwap",
-      "newInformation": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。",
+      "newInformation": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。",
       "retroactiveTargets": [
+        "entry",
         "sign"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q011.flow.entry"
+        "script": "q011.catalog1.entry"
       },
       {
         "id": "sign",
-        "script": "q011.flow.sign"
+        "script": "q011.catalog1.sign"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q011.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "sign"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q011.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.signKnown",
+        "initial": false,
+        "meaning": "原稿に明記した signKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.signDestroyed",
+        "initial": false,
+        "meaning": "原稿に明記した signDestroyed の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.arrowKnown",
+        "initial": false,
+        "meaning": "原稿に明記した arrowKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.rescued",
+        "initial": false,
+        "meaning": "原稿に明記した rescued の事実・行為・所在",
+        "writer": [
+          "entry",
+          "sign"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.repainted",
+        "initial": false,
+        "meaning": "原稿に明記した repainted の事実・行為・所在",
+        "writer": [
+          "sign"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.ropeLaid",
+        "initial": false,
+        "meaning": "原稿に明記した ropeLaid の事実・行為・所在",
+        "writer": [
+          "entry",
+          "sign"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q011.peopleAt",
+        "initial": "safeTunnel",
+        "meaning": "原稿に明記した peopleAt の事実・行為・所在",
+        "writer": [
+          "entry",
+          "sign"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "像の塩を払うだけで役目が分かり、その発見をすぐ避難誘導へ使える短い仕事。",
+    "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。",
     "flowVersion": 2,
-    "entryScript": "q011.flow.visit",
+    "entryScript": "q011.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "白い像の足元に「出口」の矢印が透けている。坑夫は像の顔ばかり見ていた。",
         "options": [
           {
+            "text": "像の足元から塩を払い、台座と指先を調べる",
+            "to": "sign",
             "id": "brush",
-            "text": "足元から塩を払う",
-            "to": "sign"
+            "set": {
+              "signKnown": true,
+              "arrowKnown": true
+            }
           },
           {
+            "text": "像を砕き、現れた台座の矢印と足跡をたどる",
+            "to": "@contract",
             "id": "break",
-            "text": "像を砕き、白い姿を取り除く",
-            "to": "@contract"
+            "set": {
+              "signDestroyed": true,
+              "arrowKnown": true,
+              "rescued": true,
+              "peopleAt": "entrance"
+            },
+            "textAfter": "砕けた塩の下に台座の矢印が現れた。足跡と重なる方向へ進むと、同僚が迷った坑夫たちと待っている。「一人で戻れば、またはぐれると思った」。全員を分岐の外へ連れ帰った。"
           },
           {
-            "id": "rope",
-            "text": "像を目印に縄1本で帰路をつなぐ",
+            "text": "同僚の足跡を追いながら、分岐から帰路の縄を延ばす",
             "to": "@compromise",
+            "id": "rope",
             "cost": {
               "rope": 1
-            }
+            },
+            "set": {
+              "ropeLaid": true,
+              "rescued": true,
+              "peopleAt": "entrance"
+            },
+            "textAfter": "像の正体は決めず、帰路の縄を延ばして足跡を追う。同僚は迷った坑夫たちと安全坑で待っていた。全員に縄をたどってもらい、メルのいる入口へ戻った。"
           }
-        ]
+        ],
+        "text": "白い塊は、灯を掲げた人のようにも、ヴェールをかぶった花嫁のようにも見えた。メルの同僚の靴跡は、その前を通って分岐の奥へ続く。台座と指先には塩が厚く積もっていた。"
       },
       {
         "id": "sign",
-        "text": "$a $truth",
         "options": [
           {
+            "text": "像が指す安全坑から全員を導き、像と矢印を塗り直す",
+            "to": "@informed",
             "id": "guide",
-            "text": "像の向く安全坑へ人を導き、標示を塗り直す",
-            "to": "@informed"
+            "set": {
+              "rescued": true,
+              "peopleAt": "entrance",
+              "repainted": true
+            },
+            "textAfter": "標識の先で同僚と坑夫たちを見つけた。全員を入口へ導いてから、像の腕、矢印、避難先を塗り直した。"
           },
           {
-            "id": "rope",
-            "text": "塗装は後日にし、縄1本で帰路をつなぐ",
+            "text": "標示の修復は後日にし、縄で全員の帰路をつなぐ",
             "to": "@compromise",
+            "id": "rope",
             "cost": {
               "rope": 1
-            }
+            },
+            "set": {
+              "ropeLaid": true,
+              "rescued": true,
+              "peopleAt": "entrance"
+            },
+            "textAfter": "標識の役目は記録した。修復は後日に回し、足跡に沿って縄を延ばして全員の帰路をつないだ。"
           }
-        ]
+        ],
+        "text": "塩を払うと、灯を掲げた腕と台座の矢印が同じ坑を指した。避難先を示す標識だった。人の声はその先から聞こえる。像が何か分かっても、坑夫を連れ帰ったことにはならない。"
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q011.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q011.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -940,6 +1122,526 @@
           ]
         }
       ]
+    },
+    "q011.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "白い塊は、灯を掲げた人のようにも、ヴェールをかぶった花嫁のようにも見えた。メルの同僚の靴跡は、その前を通って分岐の奥へ続く。台座と指先には塩が厚く積もっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brush",
+              "text": "像の足元から塩を払い、台座と指先を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.signKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.arrowKnown",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "像を砕き、現れた台座の矢印と足跡をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.signDestroyed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.arrowKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "砕けた塩の下に台座の矢印が現れた。足跡と重なる方向へ進むと、同僚が迷った坑夫たちと待っている。「一人で戻れば、またはぐれると思った」。全員を分岐の外へ連れ帰った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "同僚の足跡を追いながら、分岐から帰路の縄を延ばす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.ropeLaid",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "像の正体は決めず、帰路の縄を延ばして足跡を追う。同僚は迷った坑夫たちと安全坑で待っていた。全員に縄をたどってもらい、メルのいる入口へ戻った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.catalog1.sign": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "sign"
+        },
+        {
+          "op": "say",
+          "text": "塩を払うと、灯を掲げた腕と台座の矢印が同じ坑を指した。避難先を示す標識だった。人の声はその先から聞こえる。像が何か分かっても、坑夫を連れ帰ったことにはならない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "像が指す安全坑から全員を導き、像と矢印を塗り直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.repainted",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "標識の先で同僚と坑夫たちを見つけた。全員を入口へ導いてから、像の腕、矢印、避難先を塗り直した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "標示の修復は後日にし、縄で全員の帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.ropeLaid",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "標識の役目は記録した。修復は後日に回し、足跡に沿って縄を延ばして全員の帰路をつないだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.signKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.signDestroyed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.arrowKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.rescued",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.repainted",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.ropeLaid",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.peopleAt",
+          "value": "safeTunnel"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.entry"
+        }
+      ]
+    },
+    "q011.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q011.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q011.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q011"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q011.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q011.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q011.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q011.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q011.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sign",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q011.catalog1.sign"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q011.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "像の向く安全坑へ人を導き、標示を塗り直す",
+      "text": "迷った坑夫が帰りました。花嫁の噂は、助ける方角を教える話へ変わります。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "像を砕き、白い姿を取り除く",
+      "text": "行方不明者は見つかりましたが、帰り道を新しく測り直す必要が生まれます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "像を目印に縄1本で帰路をつなぐ",
+      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになりました。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

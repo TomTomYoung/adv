@@ -114,6 +114,7 @@ export function applyStoryAction(engine,id,action){
 export function storyCanAct(engine,id,action){try{storyActionPlan(engine.data,engine.state,id,action);return true;}catch{return false;}}
 export function storyEnding(engine,id,outcome){
   const q=engine.data.quests[id];
+  if(q.model?.progressionUpgrade&&!evaluate(q.model.progressionUpgrade.current,engine.state))return q.legacyOutcomes?.[outcome]??q.outcomes[outcome];
   if(engine.state.flags.legacyStoryRoutes?.[id])return q.legacyOutcomes?.[outcome]??q.outcomes[outcome];
   if(q.story){const s=engine.state.stories?.[id];if(!s||!own(q.story.endings,outcome)||!check(q.story.endings[outcome],engine.state,id,s))throw Error(`${id}/${outcome}: 物語の終了条件を満たしていません`);}
   return q.outcomes[outcome];

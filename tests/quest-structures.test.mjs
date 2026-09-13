@@ -30,9 +30,10 @@ test('q010 individual rescue actions survive a pause; opening the shaft is not r
  choose(g,'partial');assert.equal(g.state.quests.q010.outcome,'partial');
  g.load(before);choose(g,'deep','all','testimony');assert.equal(g.state.quests.q010.outcome,'informed');
 });
-test('q015 stopping water before copying preserves names; late action does not restore erased text',()=>{
- const a=prepareQuest('q015');choose(a,'catch','complete');assert.equal(a.state.quests.q015.outcome,'informed');
- const b=prepareQuest('q015');choose(b,'copy');const before=b.save();assert.equal(b.dispatch({type:'choose',id:'complete'}),false);assert.equal(b.save(),before);
+test('legacy q015 water and copying choices retain their original outcomes',()=>{
+ const old=()=>{const g=prepareQuest('q015');choose(g,'pause');delete g.state.flags.flow.q015;g.run('q015.flow.visit');drain(g);return g;};
+ const a=old();choose(a,'catch','complete');assert.equal(a.state.quests.q015.outcome,'informed');
+ const b=old();choose(b,'copy');const before=b.save();assert.equal(b.dispatch({type:'choose',id:'complete'}),false);assert.equal(b.save(),before);
  choose(b,'missing');assert.equal(b.state.quests.q015.outcome,'missing');
 });
 test('q063 and q067 need physical operating conditions, with recoverable failed trials',()=>{

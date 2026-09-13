@@ -4,7 +4,7 @@
   "number": 19,
   "title": "底なしの計量器",
   "client": "鉱山会計のルチ",
-  "brief": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+  "brief": "同じ袋の塩鉱石を量っているのに、朝と夕方で重さが変わります。会計のルチは秤の故障を疑い、計量室を調べてほしいと依頼しています。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,187 +35,440 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "全員の差額と新しい計算式を帳簿へ載せる",
-      "text": "過去の賃金が一部戻りました。会計は秤の横に乾燥皿を置きます。",
+      "label": "確認可能な差額と乾燥重量を帳簿へ載せる",
+      "text": "基準石で秤が正常だと確認し、同じ試料を乾燥前後で量って水分量を求めた。保存試料と過去の記録を乾燥重量でそろえ、当時の賃金契約に対して確認できる期間の不足額を算定し、その一部を坑夫へ返した。今後は賃金と販売の双方に乾燥重量を使う単価で合意し、秤の横に試料用の乾燥皿を置くことになった。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.scaleChecked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.driedToConstant"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.moistureKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.recordsCompared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.contractCompared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.arrearsCalculated"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.partRefunded"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q019.dryBasis"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
       "label": "秤を新品へ交換する",
-      "text": "新品でも数字は変わりました。坑主は魔物が戻ったと新しい依頼を出します。",
+      "text": "原因を調べず秤を新品へ交換した。新しい秤も、その時点で袋に含まれる水分を正しく量るため、朝夕で異なる数字を示した。坑主は計量室の異常が続いているとして、新たな調査を依頼した。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q019.replaced"
+        },
+        "right": true
+      }
     },
     "compromise": {
-      "label": "朝夕二度量り、平均で取引する契約を結ぶ",
-      "text": "不公平は小さくなりました。坑夫は二度列に並ぶ手間を引き受けます。",
+      "label": "朝夕二度量り、平均で取引する",
+      "text": "同じ荷を朝夕に量り、その平均を賃金と販売へ使う契約を結んだ。乾燥重量を基準にするより湿度の影響が残り、坑夫には二度列へ並ぶ手間も増えたが、坑主が都合のよい時刻だけを選ぶ余地は小さくなった。過去の差額は精算していない。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q019.averageAgreed"
+        },
+        "right": true
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
+      "truth": "採掘される塩鉱石には吸湿性の高い苦汁成分が混じっている。坑主は、坑夫への出来高賃金を計算するときは乾燥室に置いた後の軽い重量を使い、商人へ販売するときは湿った保管庫で吸湿させた後の重い重量を使っている。秤はいずれの計量でも正しく、重量差は鉱石が出入りさせた水分である。",
       "history": [
         {
-          "id": "e0",
-          "event": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "採掘される塩鉱石には吸湿性の高い苦汁成分が混じっている。坑主は、坑夫への出来高賃金を計算するときは乾燥室に置いた後の軽い重量を使い、商人へ販売するときは湿った保管庫で吸湿させた後の重い重量を使っている。秤はいずれの計量でも正しく、重量差は鉱石が出入りさせた水分である。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq019を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "計量室の秤は、重量が変わらない基準石で検査すれば正常だと確認できます。同じ密封袋を続けて量る限り、秤の値は変わりません。",
+          "袋を開けた塩鉱石は、乾燥室では水分を失って軽くなり、湿った保管庫では空気中の水分を吸って重くなります。重量変化には時間がかかるため、朝夕の差として現れます。",
+          "賃金と販売の公正な基準には、水分が減らなくなるまで試料を乾かした乾燥重量を使います。過去の給金差額は、保存試料、計量時刻、乾燥室と保管庫の記録、賃金台帳を照合できる期間に限って算定できます。",
+          "当時の賃金契約は、販売と同じ計量基準で精算すると定めています。坑主は販売時の湿った重量と賃金計算時の乾いた重量を換算せず、軽い方だけで給金を払っていました。重量差だけでは未払いとは断定せず、当時の契約単価と換算条件まで確認できる分を不足額として扱います。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "鉱山会計のルチ",
-        "observation": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
-        "belief": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
-        "goal": "同じ鉱石が毎回違う重さになります。計量室を調査してください。"
+        "id": "ruchi",
+        "name": "ルチ",
+        "goal": "朝夕の重量差の原因を確かめ、会計を直す"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "owner",
+        "name": "坑主",
+        "goal": "賃金と販売で有利な計量時刻を使い分ける"
+      },
+      {
+        "id": "miners",
+        "name": "坑夫たち",
+        "goal": "契約に合う給金と、恣意的でない計量を求める"
       }
     ],
     "conflict": {
-      "request": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
-      "progression": "同じ塩を乾燥前後で量る実験と、賃金再計算の交渉を分ける。"
+      "request": "同じ袋の塩鉱石を量っているのに、朝と夕方で重さが変わります。会計のルチは秤の故障を疑い、計量室を調べてほしいと依頼しています。",
+      "progression": "基準石による秤の検査、同じ試料の乾燥前後の計量、過去記録による差額計算を分ける。秤の交換では水分量は一定にならず、平均計量では過去の不足分を返したことにはしない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q019.flow.entry"
+          "script": "q019.catalog1.entry"
         },
         {
           "id": "weigh",
-          "script": "q019.flow.weigh"
+          "script": "q019.catalog1.weigh"
         },
         {
           "id": "arrears",
-          "script": "q019.flow.arrears"
+          "script": "q019.catalog1.arrears"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "同じ鉱石が毎回違う重さになります。計量室を調査してください。",
+      "initialHypothesis": "同じ袋の塩鉱石を量っているのに、朝と夕方で重さが変わります。会計のルチは秤の故障を疑い、計量室を調べてほしいと依頼しています。",
       "openQuestion": "底なしの計量器の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "observerSwap",
-      "newInformation": "計量器は正しく、塩の吸湿で重さが変わることを坑主が賃金計算に利用しています。",
+      "newInformation": "採掘される塩鉱石には吸湿性の高い苦汁成分が混じっている。坑主は、坑夫への出来高賃金を計算するときは乾燥室に置いた後の軽い重量を使い、商人へ販売するときは湿った保管庫で吸湿させた後の重い重量を使っている。秤はいずれの計量でも正しく、重量差は鉱石が出入りさせた水分である。",
       "retroactiveTargets": [
-        "weigh"
+        "entry",
+        "weigh",
+        "arrears"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q019.flow.entry"
+        "script": "q019.catalog1.entry"
       },
       {
         "id": "weigh",
-        "script": "q019.flow.weigh"
+        "script": "q019.catalog1.weigh"
       },
       {
         "id": "arrears",
-        "script": "q019.flow.arrears"
+        "script": "q019.catalog1.arrears"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q019.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "weigh",
+          "arrears"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q019.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.scaleChecked",
+        "initial": false,
+        "meaning": "原稿に明記した scaleChecked の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.controlSealed",
+        "initial": true,
+        "meaning": "原稿に明記した controlSealed の事実・行為・所在",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.sampleOpen",
+        "initial": false,
+        "meaning": "原稿に明記した sampleOpen の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.driedToConstant",
+        "initial": false,
+        "meaning": "原稿に明記した driedToConstant の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.moistureKnown",
+        "initial": false,
+        "meaning": "原稿に明記した moistureKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.recordsCompared",
+        "initial": false,
+        "meaning": "原稿に明記した recordsCompared の事実・行為・所在",
+        "writer": [
+          "weigh"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.contractCompared",
+        "initial": false,
+        "meaning": "原稿に明記した contractCompared の事実・行為・所在",
+        "writer": [
+          "weigh"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.arrearsCalculated",
+        "initial": false,
+        "meaning": "原稿に明記した arrearsCalculated の事実・行為・所在",
+        "writer": [
+          "weigh"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.partRefunded",
+        "initial": false,
+        "meaning": "原稿に明記した partRefunded の事実・行為・所在",
+        "writer": [
+          "arrears"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.dryBasis",
+        "initial": false,
+        "meaning": "原稿に明記した dryBasis の事実・行為・所在",
+        "writer": [
+          "arrears"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.averageAgreed",
+        "initial": false,
+        "meaning": "原稿に明記した averageAgreed の事実・行為・所在",
+        "writer": [
+          "entry",
+          "weigh",
+          "arrears"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q019.replaced",
+        "initial": false,
+        "meaning": "原稿に明記した replaced の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "同じ塩を乾燥前後で量る実験と、賃金再計算の交渉を分ける。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "基準石による秤の検査、同じ試料の乾燥前後の計量、過去記録による差額計算を分ける。秤の交換では水分量は一定にならず、平均計量では過去の不足分を返したことにはしない。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "同じ塩を乾燥前後で量る実験と、賃金再計算の交渉を分ける。",
+    "progression": "基準石による秤の検査、同じ試料の乾燥前後の計量、過去記録による差額計算を分ける。秤の交換では水分量は一定にならず、平均計量では過去の不足分を返したことにはしない。",
     "flowVersion": 2,
-    "entryScript": "q019.flow.visit",
+    "entryScript": "q019.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "朝と夕方で同じ袋の重さが変わった。坑主は重い時に仕入れ、軽い時に賃金を計算する。",
         "options": [
           {
+            "text": "基準石と密封した対照袋で秤の安定を確かめ、別に取り分けた試料を乾燥皿へ移して重さを追う",
+            "to": "weigh",
             "id": "dry",
-            "text": "袋を封じて乾燥させ、重さを追う",
-            "to": "weigh"
+            "set": {
+              "scaleChecked": true,
+              "sampleOpen": true,
+              "driedToConstant": true,
+              "moistureKnown": true
+            },
+            "textAfter": "基準石と密封した対照袋の値は安定していた。別に取り分けて開放した同じ試料を量り、時間をかけて乾燥させる。重さが減らなくなるまで量って、失われた水分量を求めた。"
           },
           {
+            "text": "朝夕二度の計量値を平均する契約を結ぶ",
+            "to": "@compromise",
             "id": "average",
-            "text": "朝夕二度量り、平均で取引する契約を結ぶ",
-            "to": "@compromise"
+            "set": {
+              "averageAgreed": true
+            },
+            "textAfter": "同じ荷を朝夕に二度量り、その平均を賃金と販売の双方へ使う契約を取り交わした。秤や水分量の原因調査と、過去の精算は行っていない。"
           },
           {
+            "text": "原因を調べず秤を新品へ交換する",
+            "to": "@contract",
             "id": "replace",
-            "text": "秤を新品へ交換する",
-            "to": "@contract"
+            "set": {
+              "replaced": true
+            },
+            "textAfter": "原因を調べず、新品の秤へ交換した。時間を置くと同じ袋の重量はまた変わり、ルチは新しい調査票を出した。"
           }
-        ]
+        ],
+        "text": "同じ袋に付けた朝夕の荷札は、違う重量を示している。ルチは秤を疑っていた。「袋を取り替えた形跡はない」。計量室には基準石、封をした対照袋、試料を取り分ける乾燥皿がある。"
       },
       {
         "id": "weigh",
-        "text": "水分が減る間だけ塩は軽くなった。標準分銅の値は朝夕変わらない。$truth",
         "options": [
           {
+            "text": "保存試料、計量時刻、乾燥室と保管庫の記録を、当時の賃金契約と台帳に照合する",
+            "to": "arrears",
             "id": "books",
-            "text": "職人と過去の帳簿を乾燥重量へ換算する",
-            "to": "arrears"
+            "set": {
+              "recordsCompared": true,
+              "contractCompared": true,
+              "arrearsCalculated": true
+            },
+            "textAfter": "保存試料、計量時刻、保管状況を当時の賃金契約と台帳へ照合した。契約は販売と同じ基準での精算だったが、軽い時の重量だけが換算なしで給金に使われていた。確認可能な期間に限り不足額を計算した。"
           },
           {
-            "id": "average",
             "text": "過去は精算せず、今後の二回計量を決める",
-            "to": "@compromise"
+            "to": "@compromise",
+            "id": "average",
+            "set": {
+              "averageAgreed": true
+            },
+            "textAfter": "調べた水分変化は記録に残した。過去の精算は行わず、今後の賃金と販売を朝夕二度の平均重量にそろえた。"
           }
-        ]
+        ],
+        "text": "吸湿性の高い苦汁成分を含む塩鉱石は、開放すれば空気と水分をやり取りした。乾燥室の後は軽く、湿った保管庫の後は重い。秤の故障ではない。ただし重量差だけでは、賃金の未払い額は決まらない。"
       },
       {
         "id": "arrears",
-        "text": "再計算すると職人ごとの未払い額が出た。坑主はその写しを受け取る。",
         "options": [
           {
+            "text": "確認できる期間の差額と乾燥重量の計算方法を帳簿へ載せる",
+            "to": "@informed",
             "id": "settle",
-            "text": "全員の差額と新しい計算式を帳簿へ載せる",
-            "to": "@informed"
+            "set": {
+              "partRefunded": true,
+              "dryBasis": true
+            },
+            "textAfter": "確認可能な不足額を台帳へ載せ、その一部が坑夫へ支払われるのを見届けた。今後は賃金と販売を乾燥重量でそろえる単価に合意した。残額や未確認の期間まで清算済みにはしていない。"
           },
           {
+            "text": "差額の請求を行わず、今後の平均計量だけを契約する",
+            "to": "@compromise",
             "id": "limit",
-            "text": "差額の請求をせず、今後の平均計量だけ結ぶ",
-            "to": "@compromise"
+            "set": {
+              "averageAgreed": true
+            },
+            "textAfter": "算定した表は残したが、差額を請求せず返金も受けなかった。今後の賃金と販売だけ、朝夕の平均重量で契約した。"
           }
-        ]
+        ],
+        "text": "保存試料と契約単価まで照合できた期間について、不足額の表ができた。記録のない期間は推測で埋めていない。坑主は表を受け取ったが、まだ返金していない。"
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q019.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q019.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -1018,6 +1271,577 @@
           ]
         }
       ]
+    },
+    "q019.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q019.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "同じ袋に付けた朝夕の荷札は、違う重量を示している。ルチは秤を疑っていた。「袋を取り替えた形跡はない」。計量室には基準石、封をした対照袋、試料を取り分ける乾燥皿がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dry",
+              "text": "基準石と密封した対照袋で秤の安定を確かめ、別に取り分けた試料を乾燥皿へ移して重さを追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.scaleChecked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.sampleOpen",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.driedToConstant",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.moistureKnown",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "基準石と密封した対照袋の値は安定していた。別に取り分けて開放した同じ試料を量り、時間をかけて乾燥させる。重さが減らなくなるまで量って、失われた水分量を求めた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.weigh"
+                }
+              ]
+            },
+            {
+              "id": "average",
+              "text": "朝夕二度の計量値を平均する契約を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.averageAgreed",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "同じ荷を朝夕に二度量り、その平均を賃金と販売の双方へ使う契約を取り交わした。秤や水分量の原因調査と、過去の精算は行っていない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "原因を調べず秤を新品へ交換する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.replaced",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "原因を調べず、新品の秤へ交換した。時間を置くと同じ袋の重量はまた変わり、ルチは新しい調査票を出した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q019.catalog1.weigh": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q019.node",
+          "value": "weigh"
+        },
+        {
+          "op": "say",
+          "text": "吸湿性の高い苦汁成分を含む塩鉱石は、開放すれば空気と水分をやり取りした。乾燥室の後は軽く、湿った保管庫の後は重い。秤の故障ではない。ただし重量差だけでは、賃金の未払い額は決まらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "books",
+              "text": "保存試料、計量時刻、乾燥室と保管庫の記録を、当時の賃金契約と台帳に照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.recordsCompared",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.contractCompared",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.arrearsCalculated",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "保存試料、計量時刻、保管状況を当時の賃金契約と台帳へ照合した。契約は販売と同じ基準での精算だったが、軽い時の重量だけが換算なしで給金に使われていた。確認可能な期間に限り不足額を計算した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.arrears"
+                }
+              ]
+            },
+            {
+              "id": "average",
+              "text": "過去は精算せず、今後の二回計量を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.averageAgreed",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "調べた水分変化は記録に残した。過去の精算は行わず、今後の賃金と販売を朝夕二度の平均重量にそろえた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q019.catalog1.arrears": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q019.node",
+          "value": "arrears"
+        },
+        {
+          "op": "say",
+          "text": "保存試料と契約単価まで照合できた期間について、不足額の表ができた。記録のない期間は推測で埋めていない。坑主は表を受け取ったが、まだ返金していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "settle",
+              "text": "確認できる期間の差額と乾燥重量の計算方法を帳簿へ載せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.partRefunded",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.dryBasis",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "確認可能な不足額を台帳へ載せ、その一部が坑夫へ支払われるのを見届けた。今後は賃金と販売を乾燥重量でそろえる単価に合意した。残額や未確認の期間まで清算済みにはしていない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "limit",
+              "text": "差額の請求を行わず、今後の平均計量だけを契約する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q019.averageAgreed",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "算定した表は残したが、差額を請求せず返金も受けなかった。今後の賃金と販売だけ、朝夕の平均重量で契約した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q019.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q019.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q019.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.scaleChecked",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.controlSealed",
+          "value": true
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.sampleOpen",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.driedToConstant",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.moistureKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.recordsCompared",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.contractCompared",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.arrearsCalculated",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.partRefunded",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.dryBasis",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.averageAgreed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q019.replaced",
+          "value": false
+        },
+        {
+          "op": "jump",
+          "script": "q019.catalog1.entry"
+        }
+      ]
+    },
+    "q019.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q019.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q019",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "基準石で秤が正常だと確認し、同じ試料を乾燥前後で量って水分量を求めた。保存試料と過去の記録を乾燥重量でそろえ、当時の賃金契約に対して確認できる期間の不足額を算定し、その一部を坑夫へ返した。今後は賃金と販売の双方に乾燥重量を使う単価で合意し、秤の横に試料用の乾燥皿を置くことになった。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q019.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q019.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q019",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "原因を調べず秤を新品へ交換した。新しい秤も、その時点で袋に含まれる水分を正しく量るため、朝夕で異なる数字を示した。坑主は計量室の異常が続いているとして、新たな調査を依頼した。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q019.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q019.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q019",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "同じ荷を朝夕に量り、その平均を賃金と販売へ使う契約を結んだ。乾燥重量を基準にするより湿度の影響が残り、坑夫には二度列へ並ぶ手間も増えたが、坑主が都合のよい時刻だけを選ぶ余地は小さくなった。過去の差額は精算していない。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q019.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q019.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q019.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q019"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q019.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q019.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q019.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q019.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "基準石で秤が正常だと確認し、同じ試料を乾燥前後で量って水分量を求めた。保存試料と過去の記録を乾燥重量でそろえ、当時の賃金契約に対して確認できる期間の不足額を算定し、その一部を坑夫へ返した。今後は賃金と販売の双方に乾燥重量を使う単価で合意し、秤の横に試料用の乾燥皿を置くことになった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "原因を調べず秤を新品へ交換した。新しい秤も、その時点で袋に含まれる水分を正しく量るため、朝夕で異なる数字を示した。坑主は計量室の異常が続いているとして、新たな調査を依頼した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "同じ荷を朝夕に量り、その平均を賃金と販売へ使う契約を結んだ。乾燥重量を基準にするより湿度の影響が残り、坑夫には二度列へ並ぶ手間も増えたが、坑主が都合のよい時刻だけを選ぶ余地は小さくなった。過去の差額は精算していない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q019.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q019.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "weigh",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q019.catalog1.weigh"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "arrears",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q019.catalog1.arrears"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q019.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "全員の差額と新しい計算式を帳簿へ載せる",
+      "text": "過去の賃金が一部戻りました。会計は秤の横に乾燥皿を置きます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "秤を新品へ交換する",
+      "text": "新品でも数字は変わりました。坑主は魔物が戻ったと新しい依頼を出します。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "朝夕二度量り、平均で取引する契約を結ぶ",
+      "text": "不公平は小さくなりました。坑夫は二度列に並ぶ手間を引き受けます。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

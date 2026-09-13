@@ -123,9 +123,9 @@ test('q100 still requires the original 99 completions, even after the additional
  for(const q of Object.values(data.quests).filter(q=>q.number<100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  assert.equal(g.unlocked(data.quests.q100),true);
 });
-test('earlier proof unlocks q011 before collecting its second clue; incomplete q001 proof stays hidden',()=>{
+test('legacy q011 proof unlocks its original disclosure; incomplete q001 proof stays hidden',()=>{
  const g=newGame();g.accept('q011');g.evidence('q011','clue_a','観察');g.run('q011.visit');drain(g);
- assert.ok(options(g).find(o=>o.id==='informed').visibleWhen);assert.ok(g.state.log.includes(data.quests.q011.model.world.truth));
+ assert.ok(options(g).find(o=>o.id==='informed').visibleWhen);assert.ok(g.state.log.includes('花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導しています。'));
  choose(g,'informed');assert.equal(g.state.quests.q011.outcome,'informed');
  const h=newGame();h.accept('q001');h.evidence('q001','clue_a','観察');h.run('q001.visit');drain(h);
  const json=JSON.stringify(projectGame(h));assert.ok(!json.includes(data.quests.q001.model.world.truth));

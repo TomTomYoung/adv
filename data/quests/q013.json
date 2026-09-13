@@ -4,7 +4,7 @@
   "number": 13,
   "title": "呼吸する鉱脈",
   "client": "鉱石商のセイ",
-  "brief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+  "brief": "塩の鉱脈が周期的に膨らんで坑道を圧迫し、採掘を続けられません。膨張の原因を確かめ、作業方針を決めてください。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,163 +35,331 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "湖へ続く根を避け、迂回坑の線を引く",
-      "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。",
+      "label": "巨根と湖岸を避け、迂回坑の線を引く",
+      "text": "根の膨張範囲と地下湖岸の地盤を測り、その外側へ迂回坑の線を引いた。採掘できる塩は減ったが、根の吸水は続き、湖面は保たれた。膨張範囲の外には、周期を記録するための安全な観測場所が残された。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.rootKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.waterRouteKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.rangeMeasured"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.detourMarked"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
       "label": "根を切り、採掘を続ける",
-      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。",
+      "text": "根を切ると塩層の膨張は止まり、根の周囲に析出した良質な塩を採掘できた。地下湖から地上へ運ばれる水は減り、湖面は少しずつ上昇した。やがて低い坑道の排水と封鎖に費用が必要になる。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q013.rootCut"
+        },
+        "right": true
+      }
     },
     "compromise": {
-      "label": "調査標を置き、今日の採掘を凍結する",
-      "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。",
+      "label": "調査標を置き、採掘を凍結する",
+      "text": "膨張範囲の外へ調査標を置き、周期と湖面の記録を専門家へ引き継いだ。調査で根を確認していれば、その情報も渡した。セイは採掘停止に不満を残したが、坑夫は危険な切羽へ入らずに済んだ。根を残すか切るか、迂回坑を掘るかは決めていない。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.miningStopped"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q013.monitoring"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
+      "truth": "鉱脈に見える塩層の内側には、地上の巨木へつながる生きた根が通っている。根は地下湖から水を吸い上げるたびに膨らみ、周囲へ析出した塩層を押している。この膨張が坑道を周期的に狭め、落石を起こしている。根は地下湖から地上へ水を運ぶ経路の一つでもあり、切断すれば吸水量が減って湖面が徐々に上昇する。",
       "history": [
         {
-          "id": "e0",
-          "event": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "鉱脈に見える塩層の内側には、地上の巨木へつながる生きた根が通っている。根は地下湖から水を吸い上げるたびに膨らみ、周囲へ析出した塩層を押している。この膨張が坑道を周期的に狭め、落石を起こしている。根は地下湖から地上へ水を運ぶ経路の一つでもあり、切断すれば吸水量が減って湖面が徐々に上昇する。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq013を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "根の吸水と収縮には一定の周期があり、塩層全体が呼吸しているように見えます。動いているのは鉱石そのものではありません。",
+          "根の周囲には濃い塩水が毛細管で運ばれ、根の表面へ良質な塩が析出しています。セイは原因を知った後も、この塩を採るため根の切断を選択肢として残します。",
+          "この根は地下湖の水を地上の巨木へ運ぶ複数の太根の一つです。一本を切っても直ちに洪水にはなりませんが、湖の排水能力が落ちるため、時間をかけて水位が上がり、低い坑道から溢れ始めます。",
+          "迂回坑は根の膨張範囲と地下湖岸の崩れやすい地盤を避けて引きます。根の観察場所を設ける場合も、膨張範囲の外側に置きます。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "鉱石商のセイ",
-        "observation": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
-        "belief": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
-        "goal": "鉱脈が膨らむため掘れません。奥の異変を止めてください。"
-      },
-      {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "sei",
+        "name": "セイ",
+        "goal": "塩を採る利益と、膨張に対する作業方針を決める"
       }
     ],
     "conflict": {
-      "request": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
-      "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。"
+      "request": "塩の鉱脈が周期的に膨らんで坑道を圧迫し、採掘を続けられません。膨張の原因を確かめ、作業方針を決めてください。",
+      "progression": "塩層を薄く削って膨張源と水の移動を確かめる。根と地下湖の関係を確認した後、根を避けた採掘路、根の切断、調査のための採掘停止を選ぶ。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q013.flow.entry"
+          "script": "q013.catalog1.entry"
         },
         {
           "id": "root",
-          "script": "q013.flow.root"
+          "script": "q013.catalog1.root"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "鉱脈が膨らむため掘れません。奥の異変を止めてください。",
+      "initialHypothesis": "塩の鉱脈が周期的に膨らんで坑道を圧迫し、採掘を続けられません。膨張の原因を確かめ、作業方針を決めてください。",
       "openQuestion": "呼吸する鉱脈の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "ruleReveal",
-      "newInformation": "鉱脈ではなく、塩の下に生きた巨根があり地下湖の水を吸っています。",
+      "newInformation": "鉱脈に見える塩層の内側には、地上の巨木へつながる生きた根が通っている。根は地下湖から水を吸い上げるたびに膨らみ、周囲へ析出した塩層を押している。この膨張が坑道を周期的に狭め、落石を起こしている。根は地下湖から地上へ水を運ぶ経路の一つでもあり、切断すれば吸水量が減って湖面が徐々に上昇する。",
       "retroactiveTargets": [
+        "entry",
         "root"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q013.flow.entry"
+        "script": "q013.catalog1.entry"
       },
       {
         "id": "root",
-        "script": "q013.flow.root"
+        "script": "q013.catalog1.root"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q013.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "root"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q013.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.rootKnown",
+        "initial": false,
+        "meaning": "原稿に明記した rootKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.waterRouteKnown",
+        "initial": false,
+        "meaning": "原稿に明記した waterRouteKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.rangeMeasured",
+        "initial": false,
+        "meaning": "原稿に明記した rangeMeasured の事実・行為・所在",
+        "writer": [
+          "root"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.rootCut",
+        "initial": false,
+        "meaning": "原稿に明記した rootCut の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.miningStopped",
+        "initial": false,
+        "meaning": "原稿に明記した miningStopped の事実・行為・所在",
+        "writer": [
+          "entry",
+          "root"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.detourMarked",
+        "initial": false,
+        "meaning": "原稿に明記した detourMarked の事実・行為・所在",
+        "writer": [
+          "root"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q013.monitoring",
+        "initial": false,
+        "meaning": "原稿に明記した monitoring の事実・行為・所在",
+        "writer": [
+          "entry",
+          "root"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "塩層を薄く削って膨張源と水の移動を確かめる。根と地下湖の関係を確認した後、根を避けた採掘路、根の切断、調査のための採掘停止を選ぶ。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "試掘で生きた根に触れた時点で、掘る目的を捨てるか進路を変えるかを選ぶ。",
+    "progression": "塩層を薄く削って膨張源と水の移動を確かめる。根と地下湖の関係を確認した後、根を避けた採掘路、根の切断、調査のための採掘停止を選ぶ。",
     "flowVersion": 2,
-    "entryScript": "q013.flow.visit",
+    "entryScript": "q013.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "採掘前の塩が脈打つ。坑夫は試し穴を開けるか尋ねた。",
         "options": [
           {
+            "text": "塩層の表面だけを薄く削り、膨張周期と水の動きを見る",
+            "to": "root",
             "id": "sample",
-            "text": "表面だけ薄く削り、水の動きを見る",
-            "to": "root"
+            "set": {
+              "rootKnown": true,
+              "waterRouteKnown": true
+            }
           },
           {
+            "text": "膨張範囲の外へ調査標を置き、今日の採掘を止める",
+            "to": "@compromise",
             "id": "stop",
-            "text": "調査標を置き、今日の採掘を凍結する",
-            "to": "@compromise"
+            "set": {
+              "miningStopped": true,
+              "monitoring": true
+            },
+            "textAfter": "膨らむ範囲を外から測って調査標を置いた。中の正体は断定せず、周期と湖面の記録を専門家へ引き継ぎ、今日の採掘を止めた。"
           },
           {
+            "text": "塩層を割って内部の根を切り、周囲の塩を採掘する",
+            "to": "@contract",
             "id": "cut",
-            "text": "根を切り、採掘を続ける",
-            "to": "@contract"
+            "set": {
+              "rootKnown": true,
+              "rootCut": true
+            },
+            "textAfter": "塩層を割ると湿った太根が現れた。セイは周囲の良質な塩を指し、切断を求める。根を切ると膨張は止まった。湖の水を運ぶ根の一本を失い、後日の観測では湖面が徐々に上がった。"
           }
-        ]
+        ],
+        "text": "塩層がゆっくり張り出し、しばらくすると緩む。小石が切羽の下へ落ちた。セイは採掘を止めている。「薄く剥がして中を見るか、ここを止めるか」。膨張範囲の外には、調査標を置ける足場があった。"
       },
       {
         "id": "root",
-        "text": "$b 刃を外すと根の水が戻る。$truth",
         "options": [
           {
+            "text": "根の膨張範囲と湖岸を測り、その外側へ迂回坑の線を引く",
+            "to": "@informed",
             "id": "trace",
-            "text": "湖へ続く根を避け、迂回坑の線を引く",
-            "to": "@informed"
+            "set": {
+              "rangeMeasured": true,
+              "detourMarked": true,
+              "monitoring": true
+            },
+            "textAfter": "根の膨張範囲と湖岸の地盤を測り、両方を避けて迂回坑の線を引いた。周期を記録する場所も膨張範囲の外へ置いた。"
           },
           {
+            "text": "根と湖面の記録を専門家へ渡し、採掘を止める",
+            "to": "@compromise",
             "id": "stop",
-            "text": "根の調査を専門家へ渡し、採掘を止める",
-            "to": "@compromise"
+            "set": {
+              "miningStopped": true,
+              "monitoring": true
+            },
+            "textAfter": "根を切らず、周期と湖面の観測を専門家へ引き継いだ。迂回坑を掘るかも決めず、採掘停止を届け出た。"
           }
-        ]
+        ],
+        "text": "薄く削った塩の下で、生きた根が水を吸って膨らんだ。根は地下湖から地上の巨木へ続いている。セイは析出した塩を手で量った。「これを避ける分、採れる量は減る」。根の外側にも、崩れやすい湖岸があった。"
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q013.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q013.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -904,6 +1072,476 @@
           ]
         }
       ]
+    },
+    "q013.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q013.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "塩層がゆっくり張り出し、しばらくすると緩む。小石が切羽の下へ落ちた。セイは採掘を止めている。「薄く剥がして中を見るか、ここを止めるか」。膨張範囲の外には、調査標を置ける足場があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sample",
+              "text": "塩層の表面だけを薄く削り、膨張周期と水の動きを見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.rootKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.waterRouteKnown",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q013.catalog1.root"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "膨張範囲の外へ調査標を置き、今日の採掘を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.miningStopped",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.monitoring",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "膨らむ範囲を外から測って調査標を置いた。中の正体は断定せず、周期と湖面の記録を専門家へ引き継ぎ、今日の採掘を止めた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q013.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "塩層を割って内部の根を切り、周囲の塩を採掘する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.rootKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.rootCut",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "塩層を割ると湿った太根が現れた。セイは周囲の良質な塩を指し、切断を求める。根を切ると膨張は止まった。湖の水を運ぶ根の一本を失い、後日の観測では湖面が徐々に上がった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q013.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.catalog1.root": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q013.node",
+          "value": "root"
+        },
+        {
+          "op": "say",
+          "text": "薄く削った塩の下で、生きた根が水を吸って膨らんだ。根は地下湖から地上の巨木へ続いている。セイは析出した塩を手で量った。「これを避ける分、採れる量は減る」。根の外側にも、崩れやすい湖岸があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trace",
+              "text": "根の膨張範囲と湖岸を測り、その外側へ迂回坑の線を引く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.rangeMeasured",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.detourMarked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.monitoring",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "根の膨張範囲と湖岸の地盤を測り、両方を避けて迂回坑の線を引いた。周期を記録する場所も膨張範囲の外へ置いた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q013.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "根と湖面の記録を専門家へ渡し、採掘を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.miningStopped",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q013.monitoring",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "根を切らず、周期と湖面の観測を専門家へ引き継いだ。迂回坑を掘るかも決めず、採掘停止を届け出た。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q013.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q013.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q013.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.rootKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.waterRouteKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.rangeMeasured",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.rootCut",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.miningStopped",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.detourMarked",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q013.monitoring",
+          "value": false
+        },
+        {
+          "op": "jump",
+          "script": "q013.catalog1.entry"
+        }
+      ]
+    },
+    "q013.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "根の膨張範囲と地下湖岸の地盤を測り、その外側へ迂回坑の線を引いた。採掘できる塩は減ったが、根の吸水は続き、湖面は保たれた。膨張範囲の外には、周期を記録するための安全な観測場所が残された。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "根を切ると塩層の膨張は止まり、根の周囲に析出した良質な塩を採掘できた。地下湖から地上へ運ばれる水は減り、湖面は少しずつ上昇した。やがて低い坑道の排水と封鎖に費用が必要になる。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q013.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q013",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "膨張範囲の外へ調査標を置き、周期と湖面の記録を専門家へ引き継いだ。調査で根を確認していれば、その情報も渡した。セイは採掘停止に不満を残したが、坑夫は危険な切羽へ入らずに済んだ。根を残すか切るか、迂回坑を掘るかは決めていない。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q013.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q013.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q013.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q013"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q013.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q013.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q013.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q013.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "根の膨張範囲と地下湖岸の地盤を測り、その外側へ迂回坑の線を引いた。採掘できる塩は減ったが、根の吸水は続き、湖面は保たれた。膨張範囲の外には、周期を記録するための安全な観測場所が残された。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "根を切ると塩層の膨張は止まり、根の周囲に析出した良質な塩を採掘できた。地下湖から地上へ運ばれる水は減り、湖面は少しずつ上昇した。やがて低い坑道の排水と封鎖に費用が必要になる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "膨張範囲の外へ調査標を置き、周期と湖面の記録を専門家へ引き継いだ。調査で根を確認していれば、その情報も渡した。セイは採掘停止に不満を残したが、坑夫は危険な切羽へ入らずに済んだ。根を残すか切るか、迂回坑を掘るかは決めていない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q013.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q013.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "root",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q013.catalog1.root"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q013.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "湖へ続く根を避け、迂回坑の線を引く",
+      "text": "採掘量は減りましたが湖は濁らず、巨根の傍に安全な休憩所ができます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "根を切り、採掘を続ける",
+      "text": "良質な塩が取れました。地下湖は少しずつ溢れ、次の排水費が積まれます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "調査標を置き、今日の採掘を凍結する",
+      "text": "鉱石商は不満でしたが、坑夫は休暇を得ました。根の動きは記録に残ります。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

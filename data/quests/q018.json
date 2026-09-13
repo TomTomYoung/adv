@@ -4,7 +4,7 @@
   "number": 18,
   "title": "白い借金",
   "client": "質屋のオウ",
-  "brief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+  "brief": "塩板に刻まれた借用証が川辺へ運ばれています。オウは、雨や水で溶ける前に回収してほしいと依頼しています。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,187 +35,475 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "板を慣習通り溶かし、写しを届ける",
-      "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。",
+      "label": "最終返済を確認し、塩板を溶かす",
+      "text": "返済役人が最後の支払いを受理し、紙へ完済印と立会人を記録した。塩板は慣習どおり水へ沈められ、原本として失効した。借り手は債務から解放され、オウにも完済記録の写しが届けられた。オウは以後、あなたとの取引を控えた。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.paymentConfirmed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.owPresent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.paperReceipt"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.dissolved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.debtEnded"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
-      "label": "証文を回収して質屋へ納める",
-      "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。",
+      "label": "借用証を回収して質屋へ納める",
+      "text": "完済儀礼より先に塩板を回収し、オウへ渡した。オウは儀礼へ出席せず、借り手が最終返済を完了しなかったとして、残額と延滞金を請求した。借り手の家には再び赤札が付いた。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.seized"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.tabletAt"
+            },
+            "right": "ow"
+          }
+        ]
+      }
     },
     "compromise": {
-      "label": "双方の前で板を割り、半分ずつ渡す",
-      "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。",
+      "label": "完済後の塩板を割り、半分ずつ渡す",
+      "text": "返済役人が最後の支払いを確認し、板を横切る完済線を刻んだ。その線で塩板を割り、オウと借り手へ半分ずつ渡した。二片を合わせれば完済を確認でき、どちらか一方だけでは原本として再請求できない。債務は終わったが、慣習どおり原本を消滅させたわけではない。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.paymentConfirmed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.owPresent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.completionLine"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.split"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.debtEnded"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
+      "truth": "借り手は分割返済を続けており、今日、返済役所へ最後の一回分を納める。当地では、返済役人が完済を確認した後、債権者と借り手の立会いで塩の借用証を水へ沈め、再請求に使えないよう溶かす慣習がある。オウは完済儀礼の時刻を知りながら、その前に借用証を取り戻し、借り手が儀礼を欠席したとして延滞扱いにするつもりである。",
       "history": [
         {
-          "id": "e0",
-          "event": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "借り手は分割返済を続けており、今日、返済役所へ最後の一回分を納める。当地では、返済役人が完済を確認した後、債権者と借り手の立会いで塩の借用証を水へ沈め、再請求に使えないよう溶かす慣習がある。オウは完済儀礼の時刻を知りながら、その前に借用証を取り戻し、借り手が儀礼を欠席したとして延滞扱いにするつもりである。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq018を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "塩板は原本の借用証であり、元金、返済回数、債権者、借り手が刻まれています。各回の支払いは返済役所にも記録されます。",
+          "最終回の支払いを返済役人が確認するまでは、塩板を溶かしても完済にはなりません。確認後に完済印を紙へ写し、塩板を溶かせば債務の終了と原本の失効が成立します。双方が原本を残す案に同意した場合は、役人が刻む完済線で二分し、それぞれに完済記録を残す方法でも再請求を防げます。",
+          "借り手は最終回の金を用意しており、予定時刻に川辺へ来ています。オウが塩板を先に回収して儀礼へ出席しなければ、原本だけを根拠に延滞を主張できます。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "質屋のオウ",
-        "observation": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
-        "belief": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
-        "goal": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。"
+        "id": "ow",
+        "name": "オウ",
+        "goal": "儀礼前に原本を取り戻し、完済を成立させず再請求する"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "borrower",
+        "name": "借り手",
+        "goal": "用意した最終回の金を払い、借用証を失効させる"
+      },
+      {
+        "id": "official",
+        "name": "返済役人",
+        "goal": "最終支払いと原本の失効を立会人の前で記録する"
       }
     ],
     "conflict": {
-      "request": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
-      "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。"
+      "request": "塩板に刻まれた借用証が川辺へ運ばれています。オウは、雨や水で溶ける前に回収してほしいと依頼しています。",
+      "progression": "塩板を回収する依頼と、同じ日に予定された最終返済を衝突させる。最終支払いの確認前に板をオウへ渡せば再請求が可能になり、確認後に溶かすか完済線で割れば債務は終了する。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q018.flow.entry"
+          "script": "q018.catalog1.entry"
         },
         {
           "id": "ritual",
-          "script": "q018.flow.ritual"
+          "script": "q018.catalog1.ritual"
         },
         {
           "id": "meeting",
-          "script": "q018.flow.meeting"
+          "script": "q018.catalog1.meeting"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "塩の板に刻まれた借用証を回収してください。雨で溶ける前が期限です。",
+      "initialHypothesis": "塩板に刻まれた借用証が川辺へ運ばれています。オウは、雨や水で溶ける前に回収してほしいと依頼しています。",
       "openQuestion": "白い借金の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "valueInvert",
-      "newInformation": "塩の証文は返済日に水へ沈める慣習で、質屋が回収を頼んだ日は完済日です。",
+      "newInformation": "借り手は分割返済を続けており、今日、返済役所へ最後の一回分を納める。当地では、返済役人が完済を確認した後、債権者と借り手の立会いで塩の借用証を水へ沈め、再請求に使えないよう溶かす慣習がある。オウは完済儀礼の時刻を知りながら、その前に借用証を取り戻し、借り手が儀礼を欠席したとして延滞扱いにするつもりである。",
       "retroactiveTargets": [
-        "ritual"
+        "entry",
+        "ritual",
+        "meeting"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q018.flow.entry"
+        "script": "q018.catalog1.entry"
       },
       {
         "id": "ritual",
-        "script": "q018.flow.ritual"
+        "script": "q018.catalog1.ritual"
       },
       {
         "id": "meeting",
-        "script": "q018.flow.meeting"
+        "script": "q018.catalog1.meeting"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q018.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "ritual",
+          "meeting"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q018.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.scheduleKnown",
+        "initial": false,
+        "meaning": "原稿に明記した scheduleKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.owPresent",
+        "initial": false,
+        "meaning": "原稿に明記した owPresent の事実・行為・所在",
+        "writer": [
+          "entry",
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.paymentConfirmed",
+        "initial": false,
+        "meaning": "原稿に明記した paymentConfirmed の事実・行為・所在",
+        "writer": [
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.paperReceipt",
+        "initial": false,
+        "meaning": "原稿に明記した paperReceipt の事実・行為・所在",
+        "writer": [
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.completionLine",
+        "initial": false,
+        "meaning": "原稿に明記した completionLine の事実・行為・所在",
+        "writer": [
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.split",
+        "initial": false,
+        "meaning": "原稿に明記した split の事実・行為・所在",
+        "writer": [
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.dissolved",
+        "initial": false,
+        "meaning": "原稿に明記した dissolved の事実・行為・所在",
+        "writer": [
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.seized",
+        "initial": false,
+        "meaning": "原稿に明記した seized の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.tabletAt",
+        "initial": "borrower",
+        "meaning": "原稿に明記した tabletAt の事実・行為・所在",
+        "writer": [
+          "entry",
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q018.debtEnded",
+        "initial": false,
+        "meaning": "原稿に明記した debtEnded の事実・行為・所在",
+        "writer": [
+          "ritual",
+          "meeting"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "塩板を回収する依頼と、同じ日に予定された最終返済を衝突させる。最終支払いの確認前に板をオウへ渡せば再請求が可能になり、確認後に溶かすか完済線で割れば債務は終了する。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "証文が溶ける返済儀礼へ立ち会い、回収依頼と完済の時間が衝突する。",
+    "progression": "塩板を回収する依頼と、同じ日に予定された最終返済を衝突させる。最終支払いの確認前に板をオウへ渡せば再請求が可能になり、確認後に溶かすか完済線で割れば債務は終了する。",
     "flowVersion": 2,
-    "entryScript": "q018.flow.visit",
+    "entryScript": "q018.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "返済者が塩の証文を水へ沈めようとしている。板の端には今日の完済印がある。",
         "options": [
           {
+            "text": "借り手と返済役人に会い、最終支払いの金額と儀礼時刻を確かめる",
+            "to": "ritual",
             "id": "copy",
-            "text": "沈める前に完済印だけ紙へ写す",
-            "to": "ritual"
+            "set": {
+              "scheduleKnown": true
+            }
           },
           {
+            "text": "塩板を完済儀礼より先に回収し、オウへ納める",
+            "to": "@contract",
             "id": "seize",
-            "text": "証文を回収して質屋へ納める",
-            "to": "@contract"
+            "set": {
+              "seized": true,
+              "tabletAt": "ow"
+            },
+            "textAfter": "支払いの確認前に塩板を回収し、オウへ納めた。オウは儀礼へ出席せず、原本を根拠に残額と延滞金を請求した。借り手が用意していた金を、完済済みとは記録できなかった。"
           },
           {
+            "text": "オウを川辺へ呼び、借り手と返済役人の前で扱いを相談する",
+            "to": "meeting",
             "id": "both",
-            "text": "質屋を呼び、二人の前で扱いを相談する",
-            "to": "meeting"
+            "set": {
+              "owPresent": true,
+              "scheduleKnown": true
+            },
+            "textAfter": "オウを川辺へ呼んだ。オウは原本の扱いを見届けるため現れ、借り手と返済役人の前で相談が始まった。"
           }
-        ]
+        ],
+        "text": "借り手は川辺で、塩板を布に包んで待っている。最後の一回分の金は別の袋にあり、返済役人の机はまだ開いていない。オウの依頼は、この板を水へ入れる前に回収することだった。"
       },
       {
         "id": "ritual",
-        "text": "$truth 返済者は、印の写しを質屋へ渡すことに同意した。",
         "options": [
           {
+            "text": "オウを立会いに呼び、返済役人に最後の支払いを確認してもらい、完済印を紙へ写して塩板を溶かす",
+            "to": "@informed",
             "id": "dissolve",
-            "text": "板を慣習通り溶かし、写しを届ける",
-            "to": "@informed"
+            "set": {
+              "owPresent": true,
+              "paymentConfirmed": true,
+              "paperReceipt": true,
+              "dissolved": true,
+              "tabletAt": "dissolved",
+              "debtEnded": true
+            },
+            "textAfter": "オウを呼び、双方の立会いで役人が最後の支払いを受理した。紙に完済印と立会人を記し、原本を水へ沈める。完済記録の写しをオウにも渡した。"
           },
           {
-            "id": "call",
-            "text": "儀礼を止め、質屋をこの場へ呼ぶ",
-            "to": "meeting"
+            "text": "支払いを確認した後、塩板を残す案についてオウを呼ぶ",
+            "to": "meeting",
+            "id": "meet",
+            "set": {
+              "paymentConfirmed": true,
+              "owPresent": true
+            },
+            "textAfter": "役人が最後の支払いを確認し、受領を記録した。塩板はまだ失効させず、オウを呼んで原本を残す案を相談した。"
           }
-        ]
+        ],
+        "text": "役人は最終回の金額と時刻を帳簿で確かめた。まだ受理印は押していない。借り手が金袋を置く。「払ったあとで、この板をもう請求に使われないようにしたい」。塩板の扱いには債権者の立会いも必要だった。"
       },
       {
         "id": "meeting",
-        "text": "質屋は原本を、返済者は消える証を求める。二人とも、ここで板を半分に割る案なら受け入れるという。",
         "options": [
           {
+            "text": "最終支払いの確認後、完済線で塩板を割り、双方へ半分ずつ渡す",
+            "to": "@compromise",
             "id": "split",
-            "text": "双方の前で板を割り、半分ずつ渡す",
-            "to": "@compromise"
+            "set": {
+              "paymentConfirmed": true,
+              "paperReceipt": true,
+              "completionLine": true,
+              "split": true,
+              "tabletAt": "halves",
+              "debtEnded": true
+            },
+            "textAfter": "未受理なら役人が最終支払いを受け取り、完済を確認した。双方の了承を得て板を横切る完済線を刻み、その線で二分して一片ずつ渡す。双方にも完済記録を残した。"
           },
           {
-            "id": "stamp",
-            "text": "完済印の写しを残す案を説明する",
-            "to": "ritual"
+            "text": "完済記録を紙へ残し、双方の立会いで塩板を溶かす",
+            "to": "@informed",
+            "id": "dissolve",
+            "set": {
+              "owPresent": true,
+              "paymentConfirmed": true,
+              "paperReceipt": true,
+              "dissolved": true,
+              "tabletAt": "dissolved",
+              "debtEnded": true
+            },
+            "textAfter": "未受理なら役人が最後の支払いを受け取り、紙へ完済印と立会人を記録した。双方が見守る中で塩板を溶かした。"
           }
+        ],
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q018.paymentConfirmed"
+              },
+              "right": true
+            },
+            "yes": "最後の金は受理済みだ。二度払う必要はない。",
+            "no": "最終回の金は用意されているが、役人の受理はまだだ。"
+          },
+          "オウは川辺に来た。役人は、完済を紙に残して溶かす方法と、完済線を刻んで二分する方法を説明した。借り手とオウはどちらを採るか返事を待っている。"
         ]
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q018.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q018.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -982,6 +1270,645 @@
           ]
         }
       ]
+    },
+    "q018.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "借り手は川辺で、塩板を布に包んで待っている。最後の一回分の金は別の袋にあり、返済役人の机はまだ開いていない。オウの依頼は、この板を水へ入れる前に回収することだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "copy",
+              "text": "借り手と返済役人に会い、最終支払いの金額と儀礼時刻を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.scheduleKnown",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.ritual"
+                }
+              ]
+            },
+            {
+              "id": "seize",
+              "text": "塩板を完済儀礼より先に回収し、オウへ納める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.seized",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.tabletAt",
+                  "value": "ow"
+                },
+                {
+                  "op": "say",
+                  "text": "支払いの確認前に塩板を回収し、オウへ納めた。オウは儀礼へ出席せず、原本を根拠に残額と延滞金を請求した。借り手が用意していた金を、完済済みとは記録できなかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "オウを川辺へ呼び、借り手と返済役人の前で扱いを相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.owPresent",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.scheduleKnown",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "オウを川辺へ呼んだ。オウは原本の扱いを見届けるため現れ、借り手と返済役人の前で相談が始まった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.meeting"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.catalog1.ritual": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "ritual"
+        },
+        {
+          "op": "say",
+          "text": "役人は最終回の金額と時刻を帳簿で確かめた。まだ受理印は押していない。借り手が金袋を置く。「払ったあとで、この板をもう請求に使われないようにしたい」。塩板の扱いには債権者の立会いも必要だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dissolve",
+              "text": "オウを立会いに呼び、返済役人に最後の支払いを確認してもらい、完済印を紙へ写して塩板を溶かす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.owPresent",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paymentConfirmed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paperReceipt",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.dissolved",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.tabletAt",
+                  "value": "dissolved"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.debtEnded",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "オウを呼び、双方の立会いで役人が最後の支払いを受理した。紙に完済印と立会人を記し、原本を水へ沈める。完済記録の写しをオウにも渡した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "meet",
+              "text": "支払いを確認した後、塩板を残す案についてオウを呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paymentConfirmed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.owPresent",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "役人が最後の支払いを確認し、受領を記録した。塩板はまだ失効させず、オウを呼んで原本を残す案を相談した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.meeting"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.catalog1.meeting": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.node",
+          "value": "meeting"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q018.paymentConfirmed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "最後の金は受理済みだ。二度払う必要はない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "最終回の金は用意されているが、役人の受理はまだだ。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "オウは川辺に来た。役人は、完済を紙に残して溶かす方法と、完済線を刻んで二分する方法を説明した。借り手とオウはどちらを採るか返事を待っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "最終支払いの確認後、完済線で塩板を割り、双方へ半分ずつ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paymentConfirmed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paperReceipt",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.completionLine",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.split",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.tabletAt",
+                  "value": "halves"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.debtEnded",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "未受理なら役人が最終支払いを受け取り、完済を確認した。双方の了承を得て板を横切る完済線を刻み、その線で二分して一片ずつ渡す。双方にも完済記録を残した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "dissolve",
+              "text": "完済記録を紙へ残し、双方の立会いで塩板を溶かす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.owPresent",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paymentConfirmed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.paperReceipt",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.dissolved",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.tabletAt",
+                  "value": "dissolved"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q018.debtEnded",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "未受理なら役人が最後の支払いを受け取り、紙へ完済印と立会人を記録した。双方が見守る中で塩板を溶かした。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q018.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q018.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q018.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.scheduleKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.owPresent",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.paymentConfirmed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.paperReceipt",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.completionLine",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.split",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.dissolved",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.seized",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.tabletAt",
+          "value": "borrower"
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q018.debtEnded",
+          "value": false
+        },
+        {
+          "op": "jump",
+          "script": "q018.catalog1.entry"
+        }
+      ]
+    },
+    "q018.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "返済役人が最後の支払いを受理し、紙へ完済印と立会人を記録した。塩板は慣習どおり水へ沈められ、原本として失効した。借り手は債務から解放され、オウにも完済記録の写しが届けられた。オウは以後、あなたとの取引を控えた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "完済儀礼より先に塩板を回収し、オウへ渡した。オウは儀礼へ出席せず、借り手が最終返済を完了しなかったとして、残額と延滞金を請求した。借り手の家には再び赤札が付いた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q018.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q018",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "返済役人が最後の支払いを確認し、板を横切る完済線を刻んだ。その線で塩板を割り、オウと借り手へ半分ずつ渡した。二片を合わせれば完済を確認でき、どちらか一方だけでは原本として再請求できない。債務は終わったが、慣習どおり原本を消滅させたわけではない。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q018.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q018.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q018.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q018"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q018.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q018.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q018.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q018.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "返済役人が最後の支払いを受理し、紙へ完済印と立会人を記録した。塩板は慣習どおり水へ沈められ、原本として失効した。借り手は債務から解放され、オウにも完済記録の写しが届けられた。オウは以後、あなたとの取引を控えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "完済儀礼より先に塩板を回収し、オウへ渡した。オウは儀礼へ出席せず、借り手が最終返済を完了しなかったとして、残額と延滞金を請求した。借り手の家には再び赤札が付いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "返済役人が最後の支払いを確認し、板を横切る完済線を刻んだ。その線で塩板を割り、オウと借り手へ半分ずつ渡した。二片を合わせれば完済を確認でき、どちらか一方だけでは原本として再請求できない。債務は終わったが、慣習どおり原本を消滅させたわけではない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q018.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ritual",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.catalog1.ritual"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meeting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q018.catalog1.meeting"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q018.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "板を慣習通り溶かし、写しを届ける",
+      "text": "借り手は解放されました。質屋は紙の帳簿を作り、あなたとは取引を控えます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "証文を回収して質屋へ納める",
+      "text": "質屋はまだ読める額を請求しました。借り手の家には再び赤札が付きます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "双方の前で板を割り、半分ずつ渡す",
+      "text": "再請求には互いの確認が必要になりました。塩の角は、会うたびに少し丸くなります。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

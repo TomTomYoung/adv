@@ -4,10 +4,12 @@ import stories1 from '../authoring/stories-v11-1.mjs';
 import stories2 from '../authoring/stories-v11-2.mjs';
 import characters from '../authoring/characters.mjs';
 import {ref,eq} from '../authoring/story-kit.mjs';
+import {applyCatalogRevisions} from './apply-catalog-revisions.mjs';
 const root=path.resolve(import.meta.dirname,'..'),read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8')),write=async(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
 const standard={id:'game-scenario-model',version:'1.1',source:'https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4',adapter:'adv-story-state/1',revision:'2026-09-13',scope:'quest-episode'};
 const previous={id:'game-scenario-model',version:'1.0',source:'https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3'};
 const drafts=[...stories1,...stories2],game=await read('data/game.json'),quests=[];
+await applyCatalogRevisions(root);
 const say=text=>({op:'say',text}),render=t=>Array.isArray(t)?t.flatMap(render):typeof t==='string'?[say(t)]:[{op:'if',condition:t.when,then:render(t.yes),else:render(t.no)}];
 for(const file of game.files.quests){
  const q=await read(file),s=drafts.find(s=>s.id===q.id);q.model.standard??=previous;
@@ -50,7 +52,7 @@ const assets=await read('data/assets.json');for(const c of characters)assets.ima
 await write('data/characters.json',Object.fromEntries(characters.map(({design,...c})=>[c.id,{...c,visualDesign:design}])));
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';
 game.migrations['1.3.2']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true};await write('data/game.json',game);
-const catalog=['# シナリオ一覧','',`全 ${quests.length} 本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} 結末。作品版 1.4.0。更新日: 2026-09-13。`,'','q001〜q010 は [シナリオモデル v1.1]('+standard.source+') と状態モデル `adv-story-state/1` に準拠。q011〜q200 は既存の v1.0 原稿・経路を維持する。作者向けの一覧のため真相と結末を含む。','','[改稿全文](SCENARIOS_Q001_Q010_V11.md) ／ [人物一覧](CHARACTERS.md) ／ [状態モデルと互換性](SCENARIO_MODEL_V11.md)',''];
+const catalog=['# シナリオ一覧','',`全 ${quests.length} 本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} 結末。作品版 1.4.0。更新日: 2026-09-13。`,'','q001〜q010 は [シナリオモデル v1.1]('+standard.source+') と状態モデル `adv-story-state/1` に準拠。q011〜q200 は v1.0 のモデルと個別進行を使用する。作者向けの一覧のため真相と結末を含む。','','[q001〜q010改稿全文](SCENARIOS_Q001_Q010_V11.md) ／ [q011〜q020反映全文](SCENARIOS_Q011_Q020.md) ／ [人物一覧](CHARACTERS.md) ／ [状態モデルと互換性](SCENARIO_MODEL_V11.md)',''];
 const authoringNotes=notes=>notes?[`AI向け注釈: ${notes.notice}`,'',`${notes.factsHeading??'事実'}:`,'',...notes.facts.flatMap(text=>[text,''])]:[];
 for(const q of quests){
  catalog.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`,'',q.brief,'',`モデル: ${q.model.standard.version}。実装: [JSON](../data/quests/${q.id}.json)。場面 ${q.model.graph?.length??0}、結末 ${Object.keys(q.outcomes).length}。`,'',`固定された過去: ${q.model.world.truth}`,'',...authoringNotes(q.model.world.authoringNotes));

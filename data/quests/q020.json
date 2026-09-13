@@ -4,7 +4,7 @@
   "number": 20,
   "title": "坑道の王冠",
   "client": "坑夫のメル",
-  "brief": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
+  "brief": "現役坑道から地上へ通じる予備出口が、廃坑側の防柵で閉ざされています。内側では「廃坑の王」と呼ばれる責任者が、交代者か補修計画が示されるまで開放を拒んでいます。坑夫の代表として会ってください。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -41,200 +41,532 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "入口を先に支え、奥から順に補修する",
-      "text": "王冠は資料室へ置かれました。メルは坑夫に、最後の一人を作らない交代表を配ります。",
+      "label": "入口を先に支え、奥へ進みながら補修する",
+      "text": "地上側の入口を先に補強して退路を確保し、補修図に従って奥の危険支柱を交換し、不要な枝坑を封鎖した。予備出口は通行人数を制限した避難路として再開された。常駐責任者を置く必要がなくなり、王冠と監視記録は坑道組合の資料室へ収められた。メルは最後の一人を作らない交代規則を新しい閉鎖手順へ加えた。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.entranceBraced"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.deepRepaired"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.branchesClosed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.limitedTraffic"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.roleEnded"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
       "label": "守護兵を倒して出口を奪う",
-      "text": "出口は開きました。王と呼ばれた坑夫は、誰もいない地下へ戻っていきます。",
+      "text": "守護兵を倒して防柵を破り、予備出口を強制的に開いた。支柱の危険と通行人数は管理されず、閉鎖記録も更新されなかった。王と呼ばれた責任者は王冠を手放さず、崩落を警告するため補強されていない坑道へ一人で戻った。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.guardsDefeated"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.exitOpen"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "compromise": {
       "label": "一日だけ責任者となり、明日の交代を募る",
-      "text": "王は眠れました。仕事を知った人々が、短い交代を引き受け始めます。",
+      "text": "王冠、鍵、監視記録を正式に引き継ぎ、一日だけ出口の閉鎖と巡回を担当した。前任者は地上で眠り、メルは翌日以降を短時間ずつ受け持つ交代者を募った。予備出口の補修は終わっておらず、交代者が途切れれば同じ問題が戻る。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.shiftHeld"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.keysHeld"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.recordsHeld"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.dayServed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.recruitsSought"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "王冠は最後まで坑道に残る責任者の印で、王は交代役を待っています。",
+      "truth": "廃坑を閉鎖した際、坑道組合は、残置物の回収、支柱の監視、隣接坑からの立入り防止を担う最終責任者を一人置いた。責任者は真鍮の冠形をした職責標を預かるため、坑夫から「坑道の王」と呼ばれている。本来は一日ごとに交代する役目だったが、閉鎖費用と補修担当をめぐる争いで交代表が途絶え、現在の責任者だけが残った。予備出口の支柱に危険があり、責任者は通行中の崩落を防ぐため内側から防柵を閉じ、番兵に守らせている。",
       "history": [
         {
-          "id": "e0",
-          "event": "王冠は最後まで坑道に残る責任者の印で、王は交代役を待っています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "廃坑を閉鎖した際、坑道組合は、残置物の回収、支柱の監視、隣接坑からの立入り防止を担う最終責任者を一人置いた。責任者は真鍮の冠形をした職責標を預かるため、坑夫から「坑道の王」と呼ばれている。本来は一日ごとに交代する役目だったが、閉鎖費用と補修担当をめぐる争いで交代表が途絶え、現在の責任者だけが残った。予備出口の支柱に危険があり、責任者は通行中の崩落を防ぐため内側から防柵を閉じ、番兵に守らせている。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq020を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "「坑道の王」は君主や廃坑の所有者ではなく、廃坑閉鎖時の最終責任者に対する坑夫の通称です。王冠は権力の証ではなく、引継ぎ時刻、監視責任、鍵の所在を明確にする職責標です。",
+          "廃坑は現役坑道と一部で接続しており、問題の出入口は事故時の予備避難路でもあります。現在は入口周辺の支柱が傷み、人が集中して通れば崩落するおそれがあるため、責任者が閉鎖しています。",
+          "守護兵は王の私兵ではなく、廃坑閉鎖時に坑道組合が配置した二体の番兵です。王冠の保持者と正式な交代記録に従い、無断で防柵を開けようとする者を排除します。",
+          "責任者は王位へ執着しているのではなく、交代記録を残さず持ち場を離れれば、崩落監視と立入り管理の責任が消えるため残っています。一時交代でも、王冠と監視記録を正式に引き継げば休めます。",
+          "恒久的に役目を終えるには、まず地上へ通じる入口を補強して退路を確保し、その後、奥へ進みながら危険支柱を交換し、不要な枝坑を封鎖します。予備出口の安全と廃坑の立入り区分が確定すれば、常時一人を残す必要はなくなります。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "坑夫のメル",
-        "observation": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
-        "belief": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
-        "goal": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。"
+        "id": "mel",
+        "name": "メル",
+        "goal": "現役坑道の予備出口を安全に使える状態へ戻す"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "keeper",
+        "name": "廃坑の王と呼ばれる責任者",
+        "goal": "崩落監視と立入り管理を引き継がずには持ち場を離れられない"
       }
     ],
     "conflict": {
-      "request": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
-      "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。"
+      "request": "現役坑道から地上へ通じる予備出口が、廃坑側の防柵で閉ざされています。内側では「廃坑の王」と呼ばれる責任者が、交代者か補修計画が示されるまで開放を拒んでいます。坑夫の代表として会ってください。",
+      "progression": "王冠を預かる一時交代と、支柱を補修して役職自体を終える恒久対応を分ける。守護兵を倒せば防柵は開くが、支柱の安全と監視責任は解決しない。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q020.flow.entry"
+          "script": "q020.catalog1.entry"
         },
         {
           "id": "shift",
-          "script": "q020.flow.shift"
+          "script": "q020.catalog1.shift"
         },
         {
           "id": "supports",
-          "script": "q020.flow.supports"
+          "script": "q020.catalog1.supports"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "廃坑の王を名乗る者が出口を塞いでいます。代表として会ってください。",
+      "initialHypothesis": "現役坑道から地上へ通じる予備出口が、廃坑側の防柵で閉ざされています。内側では「廃坑の王」と呼ばれる責任者が、交代者か補修計画が示されるまで開放を拒んでいます。坑夫の代表として会ってください。",
       "openQuestion": "坑道の王冠の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "frameShift",
-      "newInformation": "王冠は最後まで坑道に残る責任者の印で、王は交代役を待っています。",
+      "newInformation": "廃坑を閉鎖した際、坑道組合は、残置物の回収、支柱の監視、隣接坑からの立入り防止を担う最終責任者を一人置いた。責任者は真鍮の冠形をした職責標を預かるため、坑夫から「坑道の王」と呼ばれている。本来は一日ごとに交代する役目だったが、閉鎖費用と補修担当をめぐる争いで交代表が途絶え、現在の責任者だけが残った。予備出口の支柱に危険があり、責任者は通行中の崩落を防ぐため内側から防柵を閉じ、番兵に守らせている。",
       "retroactiveTargets": [
-        "shift"
+        "entry",
+        "shift",
+        "supports"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q020.flow.entry"
+        "script": "q020.catalog1.entry"
       },
       {
         "id": "shift",
-        "script": "q020.flow.shift"
+        "script": "q020.catalog1.shift"
       },
       {
         "id": "supports",
-        "script": "q020.flow.supports"
+        "script": "q020.catalog1.supports"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q020.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
-        "scope": "quest",
-        "lifetime": "保存して後続場面で参照"
-      },
-      {
-        "path": "flags.flow.q020.relieved",
-        "meaning": "各場面に明記した relieved の行為・合意の記録",
+        "initial": "entry",
+        "meaning": "現在の再開場面",
         "writer": [
-          "shift"
+          "entry",
+          "shift",
+          "supports"
         ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q020.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.shiftHeld",
+        "initial": false,
+        "meaning": "原稿に明記した shiftHeld の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.keysHeld",
+        "initial": false,
+        "meaning": "原稿に明記した keysHeld の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.recordsHeld",
+        "initial": false,
+        "meaning": "原稿に明記した recordsHeld の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.formerAt",
+        "initial": "barrier",
+        "meaning": "原稿に明記した formerAt の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.supportsChecked",
+        "initial": false,
+        "meaning": "原稿に明記した supportsChecked の事実・行為・所在",
+        "writer": [
+          "entry",
+          "shift"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.entranceBraced",
+        "initial": false,
+        "meaning": "原稿に明記した entranceBraced の事実・行為・所在",
+        "writer": [
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.deepRepaired",
+        "initial": false,
+        "meaning": "原稿に明記した deepRepaired の事実・行為・所在",
+        "writer": [
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.branchesClosed",
+        "initial": false,
+        "meaning": "原稿に明記した branchesClosed の事実・行為・所在",
+        "writer": [
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.exitOpen",
+        "initial": false,
+        "meaning": "原稿に明記した exitOpen の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.limitedTraffic",
+        "initial": false,
+        "meaning": "原稿に明記した limitedTraffic の事実・行為・所在",
+        "writer": [
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.roleEnded",
+        "initial": false,
+        "meaning": "原稿に明記した roleEnded の事実・行為・所在",
+        "writer": [
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.dayServed",
+        "initial": false,
+        "meaning": "原稿に明記した dayServed の事実・行為・所在",
+        "writer": [
+          "shift",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.recruitsSought",
+        "initial": false,
+        "meaning": "原稿に明記した recruitsSought の事実・行為・所在",
+        "writer": [
+          "shift",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.guardsDefeated",
+        "initial": false,
+        "meaning": "原稿に明記した guardsDefeated の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q020.crownAt",
+        "initial": "keeper",
+        "meaning": "原稿に明記した crownAt の事実・行為・所在",
+        "writer": [
+          "entry",
+          "supports"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "王冠を預かる一時交代と、支柱を補修して役職自体を終える恒久対応を分ける。守護兵を倒せば防柵は開くが、支柱の安全と監視責任は解決しない。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "王冠を預かる一時交代から、支柱補修を終えて役職自体を終える仕事へ進める。",
+    "progression": "王冠を預かる一時交代と、支柱を補修して役職自体を終える恒久対応を分ける。守護兵を倒せば防柵は開くが、支柱の安全と監視責任は解決しない。",
     "flowVersion": 2,
-    "entryScript": "q020.flow.visit",
+    "entryScript": "q020.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "王は出口を塞いでいない。ただ王冠を外す人が来るまで立っている。",
         "options": [
           {
+            "text": "王冠、鍵、監視記録を一時的に引き継ぎ、責任者を休ませる",
+            "to": "shift",
             "id": "relieve",
-            "text": "一時的に王冠を預かり、王を休ませる",
-            "to": "shift"
+            "set": {
+              "shiftHeld": true,
+              "keysHeld": true,
+              "recordsHeld": true,
+              "formerAt": "ground",
+              "crownAt": "party"
+            },
+            "textAfter": "交代時刻と監視範囲を正式に記録し、王冠、鍵、監視記録を引き継いだ。番兵が交代記録を受け入れ、前任者は地上へ休みに出た。防柵は閉じたままだ。"
           },
           {
-            "id": "fight",
-            "text": "守護兵を倒して出口を奪う",
+            "text": "守護兵を倒して防柵を破り、予備出口を開く",
             "to": "@contract",
-            "combat": true
+            "combat": true,
+            "id": "fight",
+            "set": {
+              "guardsDefeated": true,
+              "exitOpen": true,
+              "formerAt": "dangerTunnel"
+            },
+            "textAfter": "二体の番兵を倒して防柵を破った。支柱は補強していない。責任者は王冠を手放さず、一人で崩落を警告するため坑道へ戻った。"
           },
           {
+            "text": "責任者の案内で入口と危険支柱を調べる",
+            "to": "supports",
             "id": "supports",
-            "text": "残された支柱の危険箇所を確かめる",
-            "to": "supports"
+            "set": {
+              "supportsChecked": true
+            },
+            "textAfter": "責任者の案内で地上側の入口と奥の危険支柱を調べた。入口を先に支えて退路を作り、奥へ進みながら補修する図を確認した。"
           }
-        ]
+        ],
+        "text": "地上へ続く予備出口には防柵があり、組合が置いた二体の番兵が守っている。冠形の職責標を持つ責任者は、傷んだ支柱を示した。「人をまとめて通したら落ちる。交代か補修の引継ぎを出してくれ」。王の称号は命令書にはなかった。"
       },
       {
         "id": "shift",
-        "text": "$truth 休んだ王が、最後の支柱の補修図を持って戻った。",
         "options": [
           {
+            "text": "一日分の監視を引き受け、メルと翌日以降の交代者を募る",
+            "to": "@compromise",
             "id": "recruit",
-            "text": "一日だけ責任者となり、明日の交代を募る",
-            "to": "@compromise"
+            "set": {
+              "dayServed": true,
+              "recruitsSought": true
+            },
+            "textAfter": "一日分の閉鎖監視と巡回を終え、メルと翌日以降の交代者を募った。補修はまだ終わっておらず、出口は閉鎖を続ける。"
           },
           {
-            "id": "repair",
-            "text": "補修図を受け取り、見張りの要らない坑にする",
+            "text": "補修図と閉鎖記録を受け取り、常駐の要らない状態へ直す",
             "to": "supports",
+            "id": "repair",
             "set": {
-              "relieved": true
-            }
+              "supportsChecked": true
+            },
+            "textAfter": "補修図と閉鎖記録を確認し、入口と危険支柱を調べた。前任者を勝手に呼び戻さず、引継ぎを受けた側として作業を始める。"
           }
-        ]
+        ],
+        "text": "前任者は地上で休んでいる。引き継いだ記録には、途切れた交代表と補修図が挟まれていた。メルが巡回の時刻を読む。「明日も最後の一人を残すのか、役目そのものを終わらせるのか」。"
       },
       {
         "id": "supports",
-        "text": "入口側の支柱を固定すれば、奥を直す人にも帰路が残る。王も作業へ加わった。",
         "options": [
           {
+            "text": "地上側の入口を補強して退路を確保し、奥の危険支柱と不要な枝坑を順に処理する",
+            "to": "@informed",
             "id": "brace",
-            "text": "入口を先に支え、奥から順に補修する",
-            "to": "@informed"
+            "need": [
+              "supportsChecked"
+            ],
+            "set": {
+              "entranceBraced": true,
+              "deepRepaired": true,
+              "branchesClosed": true,
+              "exitOpen": true,
+              "limitedTraffic": true,
+              "roleEnded": true,
+              "crownAt": "archive",
+              "keysHeld": false,
+              "recordsHeld": false,
+              "formerAt": "ground"
+            },
+            "textAfter": "地上側の入口を先に補強し、退路を確保してから奥へ進んだ。危険支柱を交換し、不要な枝坑を閉じ、人数制限付きの避難路として通行を確認する。閉鎖記録を更新し、王冠と監視記録を組合の資料室へ納めた。"
           },
           {
+            "text": "補修を翌日に延ばし、王冠と監視記録を一日だけ引き継ぐ",
+            "to": "@compromise",
             "id": "shift",
-            "text": "補修を翌日に延ばし、一日交代を引き受ける",
-            "to": "@compromise"
+            "set": {
+              "shiftHeld": true,
+              "keysHeld": true,
+              "recordsHeld": true,
+              "formerAt": "ground",
+              "crownAt": "party",
+              "dayServed": true,
+              "recruitsSought": true
+            },
+            "textAfter": "未交代なら王冠、鍵、監視記録を正式に引き継いだ。交代済みならその記録を継続し、一日分の閉鎖監視を終えた。メルと次の交代者を募るが、補修も予備出口の開放も済んでいない。"
           }
+        ],
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.flow.q020.shiftHeld"
+              },
+              "right": true
+            },
+            "yes": "王冠、鍵、監視記録はあなたが引き継いでいる。前任者は地上にいる。",
+            "no": "王冠と鍵は責任者が保持している。補修をしない場合は、先に正式な交代記録が要る。"
+          },
+          "まず地上側の入口を補強すれば、奥へ入る者の退路を残せる。その後で危険支柱を交換し、不要な枝坑を閉じれば、避難路と立入り禁止区画を分けられる。"
         ]
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q020.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q020.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -1086,6 +1418,724 @@
           ]
         }
       ]
+    },
+    "q020.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "地上へ続く予備出口には防柵があり、組合が置いた二体の番兵が守っている。冠形の職責標を持つ責任者は、傷んだ支柱を示した。「人をまとめて通したら落ちる。交代か補修の引継ぎを出してくれ」。王の称号は命令書にはなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relieve",
+              "text": "王冠、鍵、監視記録を一時的に引き継ぎ、責任者を休ませる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.shiftHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.keysHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.recordsHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.formerAt",
+                  "value": "ground"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.crownAt",
+                  "value": "party"
+                },
+                {
+                  "op": "say",
+                  "text": "交代時刻と監視範囲を正式に記録し、王冠、鍵、監視記録を引き継いだ。番兵が交代記録を受け入れ、前任者は地上へ休みに出た。防柵は閉じたままだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.shift"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "守護兵を倒して防柵を破り、予備出口を開く",
+              "requirement": "戦闘（作業と支払いは勝利時に確定）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_2",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.flow.q020.guardsDefeated",
+                      "value": true
+                    },
+                    {
+                      "op": "set",
+                      "target": "flags.flow.q020.exitOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "set",
+                      "target": "flags.flow.q020.formerAt",
+                      "value": "dangerTunnel"
+                    },
+                    {
+                      "op": "say",
+                      "text": "二体の番兵を倒して防柵を破った。支柱は補強していない。責任者は王冠を手放さず、一人で崩落を警告するため坑道へ戻った。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q020.catalog1.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻ると直前の場面から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "supports",
+              "text": "責任者の案内で入口と危険支柱を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.supportsChecked",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "責任者の案内で地上側の入口と奥の危険支柱を調べた。入口を先に支えて退路を作り、奥へ進みながら補修する図を確認した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.supports"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.catalog1.shift": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "shift"
+        },
+        {
+          "op": "say",
+          "text": "前任者は地上で休んでいる。引き継いだ記録には、途切れた交代表と補修図が挟まれていた。メルが巡回の時刻を読む。「明日も最後の一人を残すのか、役目そのものを終わらせるのか」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recruit",
+              "text": "一日分の監視を引き受け、メルと翌日以降の交代者を募る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.dayServed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.recruitsSought",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "一日分の閉鎖監視と巡回を終え、メルと翌日以降の交代者を募った。補修はまだ終わっておらず、出口は閉鎖を続ける。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "repair",
+              "text": "補修図と閉鎖記録を受け取り、常駐の要らない状態へ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.supportsChecked",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "補修図と閉鎖記録を確認し、入口と危険支柱を調べた。前任者を勝手に呼び戻さず、引継ぎを受けた側として作業を始める。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.supports"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.catalog1.supports": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.node",
+          "value": "supports"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q020.shiftHeld"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "王冠、鍵、監視記録はあなたが引き継いでいる。前任者は地上にいる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "王冠と鍵は責任者が保持している。補修をしない場合は、先に正式な交代記録が要る。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "まず地上側の入口を補強すれば、奥へ入る者の退路を残せる。その後で危険支柱を交換し、不要な枝坑を閉じれば、避難路と立入り禁止区画を分けられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "地上側の入口を補強して退路を確保し、奥の危険支柱と不要な枝坑を順に処理する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q020.supportsChecked"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.entranceBraced",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.deepRepaired",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.branchesClosed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.exitOpen",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.limitedTraffic",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.roleEnded",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.crownAt",
+                  "value": "archive"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.keysHeld",
+                  "value": false
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.recordsHeld",
+                  "value": false
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.formerAt",
+                  "value": "ground"
+                },
+                {
+                  "op": "say",
+                  "text": "地上側の入口を先に補強し、退路を確保してから奥へ進んだ。危険支柱を交換し、不要な枝坑を閉じ、人数制限付きの避難路として通行を確認する。閉鎖記録を更新し、王冠と監視記録を組合の資料室へ納めた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "shift",
+              "text": "補修を翌日に延ばし、王冠と監視記録を一日だけ引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.shiftHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.keysHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.recordsHeld",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.formerAt",
+                  "value": "ground"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.crownAt",
+                  "value": "party"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.dayServed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q020.recruitsSought",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "未交代なら王冠、鍵、監視記録を正式に引き継いだ。交代済みならその記録を継続し、一日分の閉鎖監視を終えた。メルと次の交代者を募るが、補修も予備出口の開放も済んでいない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q020.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q020.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q020.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.shiftHeld",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.keysHeld",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.recordsHeld",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.formerAt",
+          "value": "barrier"
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.supportsChecked",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.entranceBraced",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.deepRepaired",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.branchesClosed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.exitOpen",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.limitedTraffic",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.roleEnded",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.dayServed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.recruitsSought",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.guardsDefeated",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q020.crownAt",
+          "value": "keeper"
+        },
+        {
+          "op": "jump",
+          "script": "q020.catalog1.entry"
+        }
+      ]
+    },
+    "q020.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "地上側の入口を先に補強して退路を確保し、補修図に従って奥の危険支柱を交換し、不要な枝坑を封鎖した。予備出口は通行人数を制限した避難路として再開された。常駐責任者を置く必要がなくなり、王冠と監視記録は坑道組合の資料室へ収められた。メルは最後の一人を作らない交代規則を新しい閉鎖手順へ加えた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "守護兵を倒して防柵を破り、予備出口を強制的に開いた。支柱の危険と通行人数は管理されず、閉鎖記録も更新されなかった。王と呼ばれた責任者は王冠を手放さず、崩落を警告するため補強されていない坑道へ一人で戻った。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q020.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q020",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "王冠、鍵、監視記録を正式に引き継ぎ、一日だけ出口の閉鎖と巡回を担当した。前任者は地上で眠り、メルは翌日以降を短時間ずつ受け持つ交代者を募った。予備出口の補修は終わっておらず、交代者が途切れれば同じ問題が戻る。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q020.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q020.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q020.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q020"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q020.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q020.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q020.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q020.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上側の入口を先に補強して退路を確保し、補修図に従って奥の危険支柱を交換し、不要な枝坑を封鎖した。予備出口は通行人数を制限した避難路として再開された。常駐責任者を置く必要がなくなり、王冠と監視記録は坑道組合の資料室へ収められた。メルは最後の一人を作らない交代規則を新しい閉鎖手順へ加えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "守護兵を倒して防柵を破り、予備出口を強制的に開いた。支柱の危険と通行人数は管理されず、閉鎖記録も更新されなかった。王と呼ばれた責任者は王冠を手放さず、崩落を警告するため補強されていない坑道へ一人で戻った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "王冠、鍵、監視記録を正式に引き継ぎ、一日だけ出口の閉鎖と巡回を担当した。前任者は地上で眠り、メルは翌日以降を短時間ずつ受け持つ交代者を募った。予備出口の補修は終わっておらず、交代者が途切れれば同じ問題が戻る。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q020.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shift",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.catalog1.shift"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supports",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q020.catalog1.supports"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q020.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "入口を先に支え、奥から順に補修する",
+      "text": "王冠は資料室へ置かれました。メルは坑夫に、最後の一人を作らない交代表を配ります。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "守護兵を倒して出口を奪う",
+      "text": "出口は開きました。王と呼ばれた坑夫は、誰もいない地下へ戻っていきます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "一日だけ責任者となり、明日の交代を募る",
+      "text": "王は眠れました。仕事を知った人々が、短い交代を引き受け始めます。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

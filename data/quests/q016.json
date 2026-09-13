@@ -4,7 +4,7 @@
   "number": 16,
   "title": "無音の発破",
   "client": "発破師のネフ",
-  "brief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+  "brief": "導火線は燃えたのに爆発音がせず、支給した火薬も装薬孔から消えています。発破師のネフは盗難を疑い、火薬の行方を調べてほしいと依頼しています。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,197 +35,462 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "住民と寝台を移し、退避後に小規模発破を試す",
-      "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。",
+      "label": "住民を安全区画へ移し、小規模発破を試す",
+      "text": "避難区画の住民と寝台を、補強済みで二方向へ逃げられる区画へ移した。助手は保管していた火薬を倉へ戻して無断変更を申告し、少量の標準火薬による試験発破を行った。振動を測ってから採掘を再開し、助手は配合表と作業記録へ自分の名を書いた。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.siteChecked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.peopleMoved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.powderReturned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.booksCorrected"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.trial"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.vibrationChecked"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
-      "label": "疑われた魔物を倒し、強い火薬で発破する",
-      "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。",
+      "label": "疑われた魔物を倒し、標準火薬で発破する",
+      "text": "火薬を盗んだ証拠のない魔物を倒し、別の標準火薬を装填して発破した。坑道は一気に延びたが、図面にない避難区画へ強い振動が届いた。住民は割れた食器と寝台を残し、さらに奥の未補強区画へ逃れた。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q016.forceBlasted"
+        },
+        "right": true
+      }
     },
     "compromise": {
-      "label": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
-      "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。",
+      "label": "安全資材を買い上げ、盗難の疑いを解く",
+      "text": "助手の湿式封止材を20Gで工事用資材として買い上げ、耐火容器の標準火薬を倉へ戻して帳簿を訂正した。利得目的の盗難ではなかったと確認された。避難区画の住民は移らず、発破と採掘は停止したままになった。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.purchased"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.powderReturned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q016.booksCorrected"
+            },
+            "right": true
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
+      "truth": "発破師の助手は、古い坑道図に載っていない避難区画が発破面の先にあり、振動に弱い住民が暮らしていることを知った。助手は発破前に標準火薬を装薬孔から抜いて耐火容器へ保管し、代わりに自費で用意した湿式の封止材を詰めた。導火線だけが燃えたため爆発音はせず、帳簿上は支給火薬が使われたままになっている。",
       "history": [
         {
-          "id": "e0",
-          "event": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "発破師の助手は、古い坑道図に載っていない避難区画が発破面の先にあり、振動に弱い住民が暮らしていることを知った。助手は発破前に標準火薬を装薬孔から抜いて耐火容器へ保管し、代わりに自費で用意した湿式の封止材を詰めた。導火線だけが燃えたため爆発音はせず、帳簿上は支給火薬が使われたままになっている。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq016を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "装薬孔に詰められた湿式封止材は火薬ではなく、水と粘土を主体とする不燃性の安全材です。導火線の火を吸収し、装薬孔に火種を残しません。「水で薄めた火薬」が正常に発破した扱いにはしません。",
+          "抜き取った標準火薬は助手が耐火容器へ保管しており、転売も消費もされていません。助手が無断で装薬を変更したため規則違反ではありますが、利得目的の盗難ではありません。",
+          "ネフは避難区画が現行図面にないため住民の存在を知りません。装薬後の孔から火薬が消え、導火線だけが燃えたことから、坑道内の魔物または人間による盗難を疑っています。",
+          "20Gは助手が自費で購入した封止材を工事用の安全資材として正式に買い上げる費用です。同時に保管火薬を倉へ戻して帳簿を訂正すれば、火薬盗難の疑いを解消できます。この結末では発破を再開しません。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
-        "name": "発破師のネフ",
-        "observation": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
-        "belief": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
-        "goal": "爆発音がしない発破が続いています。火薬泥棒を探してください。"
+        "id": "nef",
+        "name": "ネフ",
+        "goal": "火薬の行方を確かめ、採掘を再開する"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "assistant",
+        "name": "発破師の助手",
+        "goal": "図面にない避難区画を発破の振動から守る"
       }
     ],
     "conflict": {
-      "request": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
-      "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。"
+      "request": "導火線は燃えたのに爆発音がせず、支給した火薬も装薬孔から消えています。発破師のネフは盗難を疑い、火薬の行方を調べてほしいと依頼しています。",
+      "progression": "装薬孔と助手の行動を追えば、隠された避難区画と保管火薬に到達する。発破を再開するには住民の移転先を検査し、移転後に少量の試験発破と振動確認を行う。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q016.flow.entry"
+          "script": "q016.catalog1.entry"
         },
         {
           "id": "shelter",
-          "script": "q016.flow.shelter"
+          "script": "q016.catalog1.shelter"
         },
         {
           "id": "move",
-          "script": "q016.flow.move"
+          "script": "q016.catalog1.move"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "爆発音がしない発破が続いています。火薬泥棒を探してください。",
+      "initialHypothesis": "導火線は燃えたのに爆発音がせず、支給した火薬も装薬孔から消えています。発破師のネフは盗難を疑い、火薬の行方を調べてほしいと依頼しています。",
       "openQuestion": "無音の発破の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "pathHide",
-      "newInformation": "発破師の助手は振動に弱い避難区画を守るため、水割り火薬へ替えています。",
+      "newInformation": "発破師の助手は、古い坑道図に載っていない避難区画が発破面の先にあり、振動に弱い住民が暮らしていることを知った。助手は発破前に標準火薬を装薬孔から抜いて耐火容器へ保管し、代わりに自費で用意した湿式の封止材を詰めた。導火線だけが燃えたため爆発音はせず、帳簿上は支給火薬が使われたままになっている。",
       "retroactiveTargets": [
-        "shelter"
+        "entry",
+        "shelter",
+        "move"
       ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q016.flow.entry"
+        "script": "q016.catalog1.entry"
       },
       {
         "id": "shelter",
-        "script": "q016.flow.shelter"
+        "script": "q016.catalog1.shelter"
       },
       {
         "id": "move",
-        "script": "q016.flow.move"
+        "script": "q016.catalog1.move"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q016.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "shelter",
+          "move"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q016.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.materialKnown",
+        "initial": false,
+        "meaning": "原稿に明記した materialKnown の事実・行為・所在",
+        "writer": [
+          "entry",
+          "shelter",
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.shelterKnown",
+        "initial": false,
+        "meaning": "原稿に明記した shelterKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.siteChecked",
+        "initial": false,
+        "meaning": "原稿に明記した siteChecked の事実・行為・所在",
+        "writer": [
+          "shelter"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.peopleMoved",
+        "initial": false,
+        "meaning": "原稿に明記した peopleMoved の事実・行為・所在",
+        "writer": [
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.powderReturned",
+        "initial": false,
+        "meaning": "原稿に明記した powderReturned の事実・行為・所在",
+        "writer": [
+          "entry",
+          "shelter",
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.booksCorrected",
+        "initial": false,
+        "meaning": "原稿に明記した booksCorrected の事実・行為・所在",
+        "writer": [
+          "entry",
+          "shelter",
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.purchased",
+        "initial": false,
+        "meaning": "原稿に明記した purchased の事実・行為・所在",
+        "writer": [
+          "entry",
+          "shelter",
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.trial",
+        "initial": false,
+        "meaning": "原稿に明記した trial の事実・行為・所在",
+        "writer": [
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.vibrationChecked",
+        "initial": false,
+        "meaning": "原稿に明記した vibrationChecked の事実・行為・所在",
+        "writer": [
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.blasted",
+        "initial": false,
+        "meaning": "原稿に明記した blasted の事実・行為・所在",
+        "writer": [
+          "entry",
+          "move"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q016.forceBlasted",
+        "initial": false,
+        "meaning": "原稿に明記した forceBlasted の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "装薬孔と助手の行動を追えば、隠された避難区画と保管火薬に到達する。発破を再開するには住民の移転先を検査し、移転後に少量の試験発破と振動確認を行う。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "発破前に助手を訪ねれば避難へ、強行すれば元の火薬へ進む。避難は移転先の確保から行う。",
+    "progression": "装薬孔と助手の行動を追えば、隠された避難区画と保管火薬に到達する。発破を再開するには住民の移転先を検査し、移転後に少量の試験発破と振動確認を行う。",
     "flowVersion": 2,
-    "entryScript": "q016.flow.visit",
+    "entryScript": "q016.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "発破師は音のしない火薬を不良品と呼ぶ。助手は避難区画を見ている。",
         "options": [
           {
+            "text": "装薬孔に残る湿式封止材と助手の足跡を調べ、足跡の向く区画へ行く",
+            "to": "shelter",
             "id": "assistant",
-            "text": "助手の向いた区画へ行く",
-            "to": "shelter"
+            "set": {
+              "materialKnown": true,
+              "shelterKnown": true
+            },
+            "textAfter": "残った詰め物は火薬ではなく、水と粘土を主体とする不燃性の封止材だった。助手を追うと、支給火薬を入れた耐火容器と図面にない避難区画が見つかった。"
           },
           {
-            "id": "blast",
-            "text": "疑われた魔物を倒し、強い火薬で発破する",
+            "text": "火薬を盗んだと疑われた魔物を倒し、別の標準火薬で発破する",
             "to": "@contract",
-            "combat": true
+            "combat": true,
+            "id": "blast",
+            "set": {
+              "blasted": true,
+              "forceBlasted": true
+            },
+            "textAfter": "疑いだけで魔物を倒し、別の標準火薬を装薬した。退避確認をしないまま発破すると、現行図にない区画へ振動が届いた。住民は割れた食器と寝台を残し、さらに奥へ逃げた。"
           },
           {
-            "id": "buy",
-            "text": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
+            "text": "助手の封止材を20Gで買い上げ、保管火薬を倉へ戻す",
             "to": "@compromise",
+            "id": "buy",
             "cost": {
               "gold": 20
-            }
+            },
+            "set": {
+              "materialKnown": true,
+              "powderReturned": true,
+              "booksCorrected": true,
+              "purchased": true
+            },
+            "textAfter": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
           }
-        ]
+        ],
+        "text": "導火線は燃えたが、岩は割れていない。ネフが支給簿を示す。「装薬した分がない。盗られたのか」。孔には湿った灰色の詰め物が残り、助手の足跡が脇の区画へ続いていた。"
       },
       {
         "id": "shelter",
-        "text": "$truth 寝台の脚が小さな振動でも沈む。助手は、空いている倉なら移せると指した。",
         "options": [
           {
+            "text": "図面にない避難区画の住民を確認し、移転候補の床、支柱、二つの出口を点検する",
+            "to": "move",
             "id": "warehouse",
-            "text": "倉の床と入口を点検する",
-            "to": "move"
+            "set": {
+              "siteChecked": true
+            },
+            "textAfter": "床と補強済みの支柱を点検し、二つの出口まで寝台を通せることを確認した。まだ住民を移したわけではない。"
           },
           {
-            "id": "buy",
-            "text": "今の火薬を20Gで買い取り、発破を止める",
+            "text": "発破を止め、封止材の買上げと火薬の返却で帳簿を訂正する",
             "to": "@compromise",
+            "id": "buy",
             "cost": {
               "gold": 20
-            }
+            },
+            "set": {
+              "materialKnown": true,
+              "powderReturned": true,
+              "booksCorrected": true,
+              "purchased": true
+            },
+            "textAfter": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
           }
-        ]
+        ],
+        "text": "古い図にはない部屋に寝台が並ぶ。助手は抜き取った火薬の耐火容器を指した。「売ったんじゃない。ここへ振動を通したくなかった」。ネフは初めて住民を見た。移転候補の区画は、床と支柱、二つの出口を確かめる必要がある。"
       },
       {
         "id": "move",
-        "text": "倉へ寝台が通ることを確かめた。住民は荷の運搬を手伝ってほしいと言う。",
         "options": [
           {
+            "text": "住民と寝台を安全区画へ移し、少量の試験発破後に振動を確認する",
+            "to": "@informed",
             "id": "evacuate",
-            "text": "住民と寝台を移し、退避後に小規模発破を試す",
-            "to": "@informed"
+            "need": [
+              "siteChecked"
+            ],
+            "set": {
+              "peopleMoved": true,
+              "powderReturned": true,
+              "booksCorrected": true,
+              "trial": true,
+              "vibrationChecked": true,
+              "blasted": true
+            },
+            "textAfter": "住民と寝台を移して到着を確認した。助手は保管火薬を倉へ戻し、無断変更を申告する。少量の試験発破を行い、移転先の振動を測ってから採掘を再開した。"
           },
           {
-            "id": "cancel",
-            "text": "移転を中止し、火薬を20Gで引き取る",
+            "text": "移転を中止し、火薬と封止材の帳尻を合わせて発破を止める",
             "to": "@compromise",
+            "id": "cancel",
             "cost": {
               "gold": 20
-            }
+            },
+            "set": {
+              "materialKnown": true,
+              "powderReturned": true,
+              "booksCorrected": true,
+              "purchased": true
+            },
+            "textAfter": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
           }
-        ]
+        ],
+        "text": "移転先の安全と二方向の退路は確認できた。住民はまだ元の区画にいる。ネフは少量の標準火薬を別に用意し、先に全員と寝台を運び出すよう求めた。"
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q016.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q016.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -1148,6 +1413,700 @@
           ]
         }
       ]
+    },
+    "q016.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "導火線は燃えたが、岩は割れていない。ネフが支給簿を示す。「装薬した分がない。盗られたのか」。孔には湿った灰色の詰め物が残り、助手の足跡が脇の区画へ続いていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "assistant",
+              "text": "装薬孔に残る湿式封止材と助手の足跡を調べ、足跡の向く区画へ行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.materialKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.shelterKnown",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "残った詰め物は火薬ではなく、水と粘土を主体とする不燃性の封止材だった。助手を追うと、支給火薬を入れた耐火容器と図面にない避難区画が見つかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.shelter"
+                }
+              ]
+            },
+            {
+              "id": "blast",
+              "text": "火薬を盗んだと疑われた魔物を倒し、別の標準火薬で発破する",
+              "requirement": "戦闘（作業と支払いは勝利時に確定）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.flow.q016.blasted",
+                      "value": true
+                    },
+                    {
+                      "op": "set",
+                      "target": "flags.flow.q016.forceBlasted",
+                      "value": true
+                    },
+                    {
+                      "op": "say",
+                      "text": "疑いだけで魔物を倒し、別の標準火薬を装薬した。退避確認をしないまま発破すると、現行図にない区画へ振動が届いた。住民は割れた食器と寝台を残し、さらに奥へ逃げた。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q016.catalog1.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻ると直前の場面から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "助手の封止材を20Gで買い上げ、保管火薬を倉へ戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.materialKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.powderReturned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.booksCorrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.purchased",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.catalog1.shelter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "shelter"
+        },
+        {
+          "op": "say",
+          "text": "古い図にはない部屋に寝台が並ぶ。助手は抜き取った火薬の耐火容器を指した。「売ったんじゃない。ここへ振動を通したくなかった」。ネフは初めて住民を見た。移転候補の区画は、床と支柱、二つの出口を確かめる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warehouse",
+              "text": "図面にない避難区画の住民を確認し、移転候補の床、支柱、二つの出口を点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.siteChecked",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "床と補強済みの支柱を点検し、二つの出口まで寝台を通せることを確認した。まだ住民を移したわけではない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.move"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "発破を止め、封止材の買上げと火薬の返却で帳簿を訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.materialKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.powderReturned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.booksCorrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.purchased",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.catalog1.move": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.node",
+          "value": "move"
+        },
+        {
+          "op": "say",
+          "text": "移転先の安全と二方向の退路は確認できた。住民はまだ元の区画にいる。ネフは少量の標準火薬を別に用意し、先に全員と寝台を運び出すよう求めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evacuate",
+              "text": "住民と寝台を安全区画へ移し、少量の試験発破後に振動を確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q016.siteChecked"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.peopleMoved",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.powderReturned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.booksCorrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.trial",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.vibrationChecked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.blasted",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "住民と寝台を移して到着を確認した。助手は保管火薬を倉へ戻し、無断変更を申告する。少量の試験発破を行い、移転先の振動を測ってから採掘を再開した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "移転を中止し、火薬と封止材の帳尻を合わせて発破を止める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.materialKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.powderReturned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.booksCorrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q016.purchased",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "助手の耐火容器に支給火薬が全量残っていることを確認した。20Gで自費の封止材を工事用資材として買い上げ、火薬を倉へ戻して帳簿を訂正する。避難区画は移さず、発破も再開しなかった。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q016.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q016.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.materialKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.shelterKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.siteChecked",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.peopleMoved",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.powderReturned",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.booksCorrected",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.purchased",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.trial",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.vibrationChecked",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.blasted",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q016.forceBlasted",
+          "value": false
+        },
+        {
+          "op": "jump",
+          "script": "q016.catalog1.entry"
+        }
+      ]
+    },
+    "q016.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "避難区画の住民と寝台を、補強済みで二方向へ逃げられる区画へ移した。助手は保管していた火薬を倉へ戻して無断変更を申告し、少量の標準火薬による試験発破を行った。振動を測ってから採掘を再開し、助手は配合表と作業記録へ自分の名を書いた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "火薬を盗んだ証拠のない魔物を倒し、別の標準火薬を装填して発破した。坑道は一気に延びたが、図面にない避難区画へ強い振動が届いた。住民は割れた食器と寝台を残し、さらに奥の未補強区画へ逃れた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q016.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q016",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "助手の湿式封止材を20Gで工事用資材として買い上げ、耐火容器の標準火薬を倉へ戻して帳簿を訂正した。利得目的の盗難ではなかったと確認された。避難区画の住民は移らず、発破と採掘は停止したままになった。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q016.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q016.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q016.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q016"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q016.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q016.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q016.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q016.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "避難区画の住民と寝台を、補強済みで二方向へ逃げられる区画へ移した。助手は保管していた火薬を倉へ戻して無断変更を申告し、少量の標準火薬による試験発破を行った。振動を測ってから採掘を再開し、助手は配合表と作業記録へ自分の名を書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "火薬を盗んだ証拠のない魔物を倒し、別の標準火薬を装填して発破した。坑道は一気に延びたが、図面にない避難区画へ強い振動が届いた。住民は割れた食器と寝台を残し、さらに奥の未補強区画へ逃れた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "助手の湿式封止材を20Gで工事用資材として買い上げ、耐火容器の標準火薬を倉へ戻して帳簿を訂正した。利得目的の盗難ではなかったと確認された。避難区画の住民は移らず、発破と採掘は停止したままになった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q016.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shelter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.catalog1.shelter"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "move",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q016.catalog1.move"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q016.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "住民と寝台を移し、退避後に小規模発破を試す",
+      "text": "採掘は遅くても進みました。助手は初めて配合表へ自分の名を書きます。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "疑われた魔物を倒し、強い火薬で発破する",
+      "text": "坑道は一気に延びました。避難者は食器を捨てて、さらに奥へ移ります。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "薄い火薬を20Gで買い取り、盗難の疑いを晴らす",
+      "text": "帳尻は合いました。発破師は音だけで出来を決めないと約束します。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }

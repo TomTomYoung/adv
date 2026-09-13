@@ -4,7 +4,7 @@
   "number": 17,
   "title": "二度掘られた墓",
   "client": "坑夫遺族会",
-  "brief": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
+  "brief": "同じ坑夫の名を刻んだ墓が、地上墓地と地下坑道の両方にあります。地下の墓に遺骨があるのか確かめ、二つの墓の扱いを決めてください。",
   "region": 2,
   "type": "authored_progression",
   "recommendedLevel": 2,
@@ -35,161 +35,371 @@
   ],
   "outcomes": {
     "informed": {
-      "label": "空墓の由来を、仲間の名と一緒に刻む",
-      "text": "家族は地下の弁当箱へ花を置きました。どちらの弔いも偽物とは呼ばれなくなります。",
+      "label": "空墓の由来を仲間の名とともに刻む",
+      "text": "地上墓の埋葬記録と救助坑の回収記録から、遺骨が地上にあることを確認した。地下墓には、遺体未回収時に仲間が弁当箱を納めて作った空墓であることと、建立した者の名を刻んだ。家族は地下の弁当箱へ花を供え、二つの弔いは異なる時期と人のために残った。",
       "gold": 69,
-      "xp": 76
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.recordsCompared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.remainsKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.familyConsulted"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.inscribed"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "contract": {
       "label": "地下の空墓を撤去する",
-      "text": "遺骨の混乱は解消しました。坑夫は空いた穴を見て、弁当を黙って分けます。",
+      "text": "記録を照合して地下墓に遺骨がないことを確認し、混乱を避けるため空墓を撤去した。遺骨の所在は地上墓へ一本化されたが、遺体の帰還を待った仲間たちの弔いの場所は失われた。",
       "gold": 89,
-      "xp": 54
+      "xp": 54,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.recordsCompared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.emptyKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.removed"
+            },
+            "right": true
+          }
+        ]
+      }
     },
     "compromise": {
-      "label": "弁当箱だけ届け、墓の扱いには立ち入らない",
-      "text": "家族は初めて仕事場の話を聞きました。空墓には仲間が新しい箱を置きます。",
+      "label": "弁当箱を遺族へ届ける",
+      "text": "地下墓を作った仲間の了承を得て、弁当箱を遺族へ渡した。家族は初めて坑内での暮らしと事故直後の弔いを知った。地下墓の由来は刻まず、仲間たちは空いた場所へ共同の弁当箱を置いた。",
       "gold": 44,
-      "xp": 57
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.peersConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q017.boxAt"
+            },
+            "right": "family"
+          }
+        ]
+      }
     }
   },
   "model": {
     "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
     "world": {
-      "truth": "地上の墓は家族のため、地下の墓は帰れなかった仲間のための空墓です。",
+      "truth": "坑内事故の直後、坑夫の遺体は崩落区画に残り、回収不能と判断された。同じ組の坑夫たちは、本人が毎日使っていた弁当箱を納め、地下に空墓を作った。その後、別方向から掘った救助坑によって遺体が回収され、遺族は事情を知らないまま遺骨を地上墓地へ埋葬した。地下墓には遺骨がなく、地上墓には回収された遺骨がある。",
       "history": [
         {
-          "id": "e0",
-          "event": "地上の墓は家族のため、地下の墓は帰れなかった仲間のための空墓です。",
-          "causes": []
-        },
-        {
-          "id": "e1",
-          "event": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
-          "causes": [
-            "e0"
-          ]
+          "id": "fixed_0",
+          "text": "坑内事故の直後、坑夫の遺体は崩落区画に残り、回収不能と判断された。同じ組の坑夫たちは、本人が毎日使っていた弁当箱を納め、地下に空墓を作った。その後、別方向から掘った救助坑によって遺体が回収され、遺族は事情を知らないまま遺骨を地上墓地へ埋葬した。地下墓には遺骨がなく、地上墓には回収された遺骨がある。"
         }
-      ]
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq017を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "地下墓は遺体を回収できないと考えた仲間が先に作った空墓であり、地上墓を偽装したものでも、遺骨を分けた墓でもありません。",
+          "地上墓の埋葬記録、救助坑の回収記録、地下墓に納められた弁当箱を照合すれば、遺骨の所在を確定できます。",
+          "地下墓を残す場合は、空墓であること、作られた時期、建立した仲間の名を刻めば、後世に遺骨の所在を誤認させません。弁当箱を遺族へ渡す場合は、地下墓を作った仲間の了承を得ます。"
+        ]
+      }
     },
     "agents": [
       {
-        "id": "client",
+        "id": "family",
         "name": "坑夫遺族会",
-        "observation": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
-        "belief": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
-        "goal": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。"
+        "goal": "遺骨の所在を確かめ、二つの墓の扱いを決める"
       },
       {
-        "id": "party",
-        "name": "冒険者の隊",
-        "observation": "探索開始時点では依頼文だけを知る",
-        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
-        "resources": [
-          "hp",
-          "mp",
-          "rope",
-          "gold"
-        ]
+        "id": "peers",
+        "name": "空墓を作った坑夫たち",
+        "goal": "回収不能と思った仲間を待った場所を残す"
       }
     ],
     "conflict": {
-      "request": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
-      "progression": "墓守の説明で最初から空墓だと分かり、遺族への配慮と記念の仕事へ移る。"
+      "request": "同じ坑夫の名を刻んだ墓が、地上墓地と地下坑道の両方にあります。地下の墓に遺骨があるのか確かめ、二つの墓の扱いを決めてください。",
+      "progression": "記録を照合する経路では、二つの墓と回収記録から遺骨の所在を確定する。空墓を撤去する場合も先に照合する。弁当箱だけを届ける場合は仲間の了承を得て、墓の扱いは決めずに残す。"
     },
     "narrative": {
       "viewpoint": "冒険者の限定視点",
       "units": [
         {
           "id": "entry",
-          "script": "q017.flow.entry"
+          "script": "q017.catalog1.entry"
         },
         {
           "id": "family",
-          "script": "q017.flow.family"
+          "script": "q017.catalog1.family"
         }
       ]
     },
     "audience": {
-      "initialHypothesis": "死んだ坑夫の墓が地下にもあります。遺骨をどちらへ戻すか調べてください。",
+      "initialHypothesis": "同じ坑夫の名を刻んだ墓が、地上墓地と地下坑道の両方にあります。地下の墓に遺骨があるのか確かめ、二つの墓の扱いを決めてください。",
       "openQuestion": "二度掘られた墓の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
       "operator": "identitySplit",
-      "newInformation": "地上の墓は家族のため、地下の墓は帰れなかった仲間のための空墓です。",
-      "retroactiveTargets": [],
+      "newInformation": "坑内事故の直後、坑夫の遺体は崩落区画に残り、回収不能と判断された。同じ組の坑夫たちは、本人が毎日使っていた弁当箱を納め、地下に空墓を作った。その後、別方向から掘った救助坑によって遺体が回収され、遺族は事情を知らないまま遺骨を地上墓地へ埋葬した。地下墓には遺骨がなく、地上墓には回収された遺骨がある。",
+      "retroactiveTargets": [
+        "entry",
+        "family"
+      ],
       "gate": null,
-      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
       "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
       "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
     },
     "beats": [
       {
         "id": "entry",
-        "script": "q017.flow.entry"
+        "script": "q017.catalog1.entry"
       },
       {
         "id": "family",
-        "script": "q017.flow.family"
+        "script": "q017.catalog1.family"
       }
     ],
     "revision": "game-scenario-1.0",
     "stateRegistry": [
       {
         "path": "flags.flow.q017.node",
-        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
-        "writer": [],
+        "initial": "entry",
+        "meaning": "現在の再開場面",
+        "writer": [
+          "entry",
+          "family"
+        ],
         "scope": "quest",
         "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q017.catalogRevision",
+        "initial": 1,
+        "meaning": "カタログ反映後の進行を識別する版",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.recordsCompared",
+        "initial": false,
+        "meaning": "原稿に明記した recordsCompared の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.remainsKnown",
+        "initial": false,
+        "meaning": "原稿に明記した remainsKnown の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.emptyKnown",
+        "initial": false,
+        "meaning": "原稿に明記した emptyKnown の事実・行為・所在",
+        "writer": [
+          "entry",
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.peersConsent",
+        "initial": false,
+        "meaning": "原稿に明記した peersConsent の事実・行為・所在",
+        "writer": [
+          "entry",
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.familyConsulted",
+        "initial": false,
+        "meaning": "原稿に明記した familyConsulted の事実・行為・所在",
+        "writer": [
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.inscribed",
+        "initial": false,
+        "meaning": "原稿に明記した inscribed の事実・行為・所在",
+        "writer": [
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.removed",
+        "initial": false,
+        "meaning": "原稿に明記した removed の事実・行為・所在",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
+      },
+      {
+        "path": "flags.flow.q017.boxAt",
+        "initial": "undergroundTomb",
+        "meaning": "原稿に明記した boxAt の事実・行為・所在",
+        "writer": [
+          "entry",
+          "family"
+        ],
+        "scope": "quest",
+        "lifetime": "保存・中断・完了後まで保持"
       }
     ],
     "choiceContract": {
-      "progression": "墓守の説明で最初から空墓だと分かり、遺族への配慮と記念の仕事へ移る。",
-      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
-      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+      "progression": "記録を照合する経路では、二つの墓と回収記録から遺骨の所在を確定する。空墓を撤去する場合も先に照合する。弁当箱だけを届ける場合は仲間の了承を得て、墓の扱いは決めずに残す。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
     },
-    "progression": "墓守の説明で最初から空墓だと分かり、遺族への配慮と記念の仕事へ移る。",
+    "progression": "記録を照合する経路では、二つの墓と回収記録から遺骨の所在を確定する。空墓を撤去する場合も先に照合する。弁当箱だけを届ける場合は仲間の了承を得て、墓の扱いは決めずに残す。",
     "flowVersion": 2,
-    "entryScript": "q017.flow.visit",
+    "entryScript": "q017.catalog1.visit",
     "graph": [
       {
         "id": "entry",
-        "text": "墓守は蓋を開けた。中には弁当箱だけがある。「体は家へ返した。ここには皆が別れる場所を残した」",
         "options": [
           {
+            "text": "地上墓の埋葬記録、救助坑の回収記録、地下墓の中身を照合する",
+            "to": "family",
             "id": "family",
-            "text": "弁当箱を持ち、遺族の望みを聞く",
-            "to": "family"
+            "set": {
+              "recordsCompared": true,
+              "remainsKnown": true,
+              "emptyKnown": true
+            },
+            "textAfter": "埋葬記録と救助坑の回収記録を合わせ、回収された遺骨が地上墓にあることを確認した。地下墓には弁当箱だけがあり、仲間は遺体を回収できないと思った時に作ったと話した。"
           },
           {
-            "id": "inscription",
-            "text": "空墓の由来を、仲間の名と一緒に刻む",
-            "to": "@informed"
-          },
-          {
+            "text": "記録を照合して空墓と確認したうえで、地下墓を撤去する",
+            "to": "@contract",
             "id": "remove",
-            "text": "地下の空墓を撤去する",
-            "to": "@contract"
+            "set": {
+              "recordsCompared": true,
+              "remainsKnown": true,
+              "emptyKnown": true,
+              "removed": true,
+              "boxAt": "peers"
+            },
+            "textAfter": "埋葬記録、回収記録、地下墓の中身を照合し、遺骨が地上にあることを確認した。弁当箱は建立した仲間へ返し、空墓を撤去した。"
+          },
+          {
+            "text": "仲間の了承を得て、弁当箱を遺族へ届ける",
+            "to": "@compromise",
+            "id": "box",
+            "set": {
+              "emptyKnown": true,
+              "peersConsent": true,
+              "boxAt": "family"
+            },
+            "textAfter": "地下墓を開けた仲間に弁当箱の来歴を聞き、持ち出す了承を得た。家族へ届け、事故直後に作られた弔いの場所の話を伝えた。記録全体の照合や墓の処分までは決めていない。"
           }
-        ]
+        ],
+        "text": "地上墓の埋葬記録には事故の後の日付がある。地下には同じ名前の墓があり、墓守は納めた物を見せると言った。救助坑の回収記録も手元にある。二つの墓がある理由は、まだ照合していない。"
       },
       {
         "id": "family",
-        "text": "遺族は地上の墓を残したいと言い、地下の仲間が集まる場所にも反対しなかった。",
         "options": [
           {
+            "text": "遺族と仲間の言葉を聞き、空墓の由来と建立者の名を刻む",
+            "to": "@informed",
             "id": "both",
-            "text": "双方の言葉を二つの墓へ刻む",
-            "to": "@informed"
+            "set": {
+              "familyConsulted": true,
+              "inscribed": true
+            },
+            "textAfter": "遺族と建立した仲間の言葉を聞き、空墓であること、作られた時期、建立者の名を刻んだ。家族は地下の弁当箱へ花を供えた。"
           },
           {
+            "text": "地下墓の扱いは決めず、弁当箱だけを遺族へ届ける",
+            "to": "@compromise",
             "id": "box",
-            "text": "弁当箱だけ届け、墓の扱いには立ち入らない",
-            "to": "@compromise"
+            "set": {
+              "emptyKnown": true,
+              "peersConsent": true,
+              "boxAt": "family"
+            },
+            "textAfter": "照合した遺骨の所在は記録に残した。仲間の了承を得て弁当箱を遺族へ渡したが、地下墓の由来の刻字は見送った。"
           }
-        ]
+        ],
+        "text": "仲間が地下の空墓を作った後、別方向の救助坑から遺体が戻っていた。家族は地上の埋葬だけを知っていた。「二つに分けた骨じゃなかったのね」。弁当箱はまだ地下墓にある。"
       }
     ],
+    "catalogRevision": 1,
+    "progressionUpgrade": {
+      "current": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.flow.q017.catalogRevision"
+        },
+        "right": 1
+      },
+      "legacyEntryScript": "q017.flow.visit"
+    },
     "standard": {
       "id": "game-scenario-model",
       "version": "1.0",
@@ -902,6 +1112,510 @@
           ]
         }
       ]
+    },
+    "q017.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q017.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "地上墓の埋葬記録には事故の後の日付がある。地下には同じ名前の墓があり、墓守は納めた物を見せると言った。救助坑の回収記録も手元にある。二つの墓がある理由は、まだ照合していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "family",
+              "text": "地上墓の埋葬記録、救助坑の回収記録、地下墓の中身を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.recordsCompared",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.remainsKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.emptyKnown",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "埋葬記録と救助坑の回収記録を合わせ、回収された遺骨が地上墓にあることを確認した。地下墓には弁当箱だけがあり、仲間は遺体を回収できないと思った時に作ったと話した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q017.catalog1.family"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "記録を照合して空墓と確認したうえで、地下墓を撤去する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.recordsCompared",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.remainsKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.emptyKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.removed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.boxAt",
+                  "value": "peers"
+                },
+                {
+                  "op": "say",
+                  "text": "埋葬記録、回収記録、地下墓の中身を照合し、遺骨が地上にあることを確認した。弁当箱は建立した仲間へ返し、空墓を撤去した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q017.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "box",
+              "text": "仲間の了承を得て、弁当箱を遺族へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.emptyKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.peersConsent",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.boxAt",
+                  "value": "family"
+                },
+                {
+                  "op": "say",
+                  "text": "地下墓を開けた仲間に弁当箱の来歴を聞き、持ち出す了承を得た。家族へ届け、事故直後に作られた弔いの場所の話を伝えた。記録全体の照合や墓の処分までは決めていない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q017.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q017.catalog1.family": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q017.node",
+          "value": "family"
+        },
+        {
+          "op": "say",
+          "text": "仲間が地下の空墓を作った後、別方向の救助坑から遺体が戻っていた。家族は地上の埋葬だけを知っていた。「二つに分けた骨じゃなかったのね」。弁当箱はまだ地下墓にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "both",
+              "text": "遺族と仲間の言葉を聞き、空墓の由来と建立者の名を刻む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.familyConsulted",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.inscribed",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "遺族と建立した仲間の言葉を聞き、空墓であること、作られた時期、建立者の名を刻んだ。家族は地下の弁当箱へ花を供えた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q017.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "box",
+              "text": "地下墓の扱いは決めず、弁当箱だけを遺族へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.emptyKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.peersConsent",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q017.boxAt",
+                  "value": "family"
+                },
+                {
+                  "op": "say",
+                  "text": "照合した遺骨の所在は記録に残した。仲間の了承を得て弁当箱を遺族へ渡したが、地下墓の由来の刻字は見送った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q017.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q017.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q017.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.recordsCompared",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.remainsKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.emptyKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.peersConsent",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.familyConsulted",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.inscribed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.removed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q017.boxAt",
+          "value": "undergroundTomb"
+        },
+        {
+          "op": "jump",
+          "script": "q017.catalog1.entry"
+        }
+      ]
+    },
+    "q017.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q017.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q017",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "地上墓の埋葬記録と救助坑の回収記録から、遺骨が地上にあることを確認した。地下墓には、遺体未回収時に仲間が弁当箱を納めて作った空墓であることと、建立した者の名を刻んだ。家族は地下の弁当箱へ花を供え、二つの弔いは異なる時期と人のために残った。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q017.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q017.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q017",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "記録を照合して地下墓に遺骨がないことを確認し、混乱を避けるため空墓を撤去した。遺骨の所在は地上墓へ一本化されたが、遺体の帰還を待った仲間たちの弔いの場所は失われた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q017.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q017.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q017",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "地下墓を作った仲間の了承を得て、弁当箱を遺族へ渡した。家族は初めて坑内での暮らしと事故直後の弔いを知った。地下墓の由来は刻まず、仲間たちは空いた場所へ共同の弁当箱を置いた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q017.catalog1.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.flow.q017.catalogRevision"
+                  },
+                  "right": 1
+                }
+              },
+              {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "exists",
+                    "value": {
+                      "ref": "flags.flow.q017.node"
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q017"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q017.stage"
+                    },
+                    "right": "completed"
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q017.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q017.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q017.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上墓の埋葬記録と救助坑の回収記録から、遺骨が地上にあることを確認した。地下墓には、遺体未回収時に仲間が弁当箱を納めて作った空墓であることと、建立した者の名を刻んだ。家族は地下の弁当箱へ花を供え、二つの弔いは異なる時期と人のために残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "記録を照合して地下墓に遺骨がないことを確認し、混乱を避けるため空墓を撤去した。遺骨の所在は地上墓へ一本化されたが、遺体の帰還を待った仲間たちの弔いの場所は失われた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地下墓を作った仲間の了承を得て、弁当箱を遺族へ渡した。家族は初めて坑内での暮らしと事故直後の弔いを知った。地下墓の由来は刻まず、仲間たちは空いた場所へ共同の弁当箱を置いた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q017.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q017.catalog1.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "family",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q017.catalog1.family"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q017.catalog1.start"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "空墓の由来を、仲間の名と一緒に刻む",
+      "text": "家族は地下の弁当箱へ花を置きました。どちらの弔いも偽物とは呼ばれなくなります。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "地下の空墓を撤去する",
+      "text": "遺骨の混乱は解消しました。坑夫は空いた穴を見て、弁当を黙って分けます。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "弁当箱だけ届け、墓の扱いには立ち入らない",
+      "text": "家族は初めて仕事場の話を聞きました。空墓には仲間が新しい箱を置きます。",
+      "gold": 44,
+      "xp": 57
     }
   }
 }
