@@ -4,9 +4,9 @@
 
 ## GitHubへの反映
 
-masterの確認対象は [80d60c7d](https://github.com/TomTomYoung/adv/commit/80d60c7d9351e69d7808b4b1012d4565f19447f3) です。PR #8、[PR #9](https://github.com/TomTomYoung/adv/pull/9)、[PR #10](https://github.com/TomTomYoung/adv/pull/10)はマージ済みで、作品版1.8.0の立方体地形・貯水立坑と、水面・床材・装置の向きの修正まで含みます。
+masterの確認対象は [5e6c256e](https://github.com/TomTomYoung/adv/commit/5e6c256e28439e5607aa1bd95705939f3f0c52ee) です。PR #8、[PR #9](https://github.com/TomTomYoung/adv/pull/9)、[PR #10](https://github.com/TomTomYoung/adv/pull/10)、[PR #11](https://github.com/TomTomYoung/adv/pull/11)はマージ済みで、立方体地形・描画修正と、2D・3Dのセル仕様まで含みます。
 
-描画の変更点と比較画像は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)へ記録しています。今回の `docs/map-cell-spec` は文書のみのブランチです。[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)に2D・3Dのセルと方向別通行を整理しています。この文書追加のmasterへのマージは未実施です。
+描画の変更点と比較画像は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)、セルの共通仕様は[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)へ記録しています。今回の `docs/cell-catalog` は[CELL_CATALOG.md](CELL_CATALOG.md)と文書用の集計処理を追加するブランチです。このカタログ追加のmasterへのマージは未実施です。
 
 ## 配布データからの集計
 

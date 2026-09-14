@@ -5,6 +5,7 @@ import {loadContent} from '../src/core/loader.js';
 import {GameEngine} from '../src/core/engine.js';
 import {COMMANDS} from '../src/core/script.js';
 import {EXPRESSION_OPS} from '../src/core/expression.js';
+import {cellCatalogInventory} from './cell-catalog.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
 const data=await loadContent(read),engine=new GameEngine(data),version=data.game.version,date=new Date().toISOString().slice(0,10);
@@ -26,6 +27,7 @@ const enemies=[`## 現行の敵${count(data.enemies)}定義`,'',`作品版${vers
 for(const [id,e] of Object.entries(data.enemies)){const encounters=Object.entries(data.encounters).filter(([,c])=>(c.enemies??[]).some(v=>typeof v==='string'?v===id:v.id===id||v.enemy===id)).map(([id])=>id);enemies.push(`### ${e.name} (${id})`,'',`基礎能力：${stats(e.stats)}。報酬：${e.rewards?.gold??0}G / ${e.rewards?.xp??0}EXP。`,`代表技能：${names([e.skill??'attack'])}。属性倍率：${JSON.stringify(e.resist??{})}。`,`画像：[${e.sprite}](../${data.assets.images[e.sprite]})。出現定義：${encounters.join('・')||'data/encounters.json を参照'}。`,'');}await section('MONSTER_CATALOG.md','enemies',enemies.join('\n'));
 const dungeons=['## 配布データの構成',''];for(const dungeon of Object.values(data.dungeons))dungeons.push(`${dungeon.name} (${dungeon.id})：${dungeon.maps.length}マップ。部品：${Object.entries(dungeon.systems).map(([id,s])=>`${id}=${s.use}${s.enabled===false?'（無効）':''}`).join(' / ')}。現地調査：${(dungeon.fieldScenes??[]).map(s=>`${s.title} → ${s.quest}`).join(' / ')||'なし'}。`,'');await section('DUNGEON_CATALOG.md','dungeons',dungeons.join('\n'));
 await section('SCRIPT_REFERENCE.md','commands',`## 実装との照合用一覧\n\n${COMMANDS.size}命令：${[...COMMANDS].map(v=>'`'+v+'`').join(' / ')}。\n\n${EXPRESSION_OPS.size}式演算子：${[...EXPRESSION_OPS].map(v=>'`'+v+'`').join(' / ')}。`);
+await section('CELL_CATALOG.md','cell-inventory',cellCatalogInventory(data));
 // Update metadata only: authored quest prose must survive documentation-only builds.
 for(const name of ['QUEST_CATALOG.md','SCENARIOS_Q001_Q010_V11.md']){const f=path.join(folder,name);let s=await fs.readFile(f,'utf8');s=s.replace(/作品版 \d+\.\d+\.\d+。/g,`作品版 ${version}。`).replace(/更新日: \d{4}-\d{2}-\d{2}。/g,`更新日: ${date}。`);await fs.writeFile(f,s);}
 // Plain prose/numbered lists are the repository owner's preferred documentation format.
