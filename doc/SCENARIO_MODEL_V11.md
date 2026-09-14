@@ -1,32 +1,38 @@
 # シナリオモデル v1.1 の実装範囲
 
-作品版: 1.4.0。更新日: 2026-09-13。
+作品版: 1.7.0。更新日: 2026-09-14。v1.1の状態モデルは1.4.0から導入しています。
 
 設計基準は [ゲームシナリオモデル v1.1](https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4)。q001〜q010 をこの基準で改稿し、人物・物品の所在と行為の成立条件を `adv-story-state/1` として実装した。q011〜q200 の準拠モデルは v1.0。q011〜q020はカタログ改稿を[別原稿](SCENARIOS_Q011_Q020.md)へ反映し、個別のフラグと結末条件を持つ `.catalog1.*` で実行する。v1.1の所在検査を備えたものとしては扱わない。
 
 ## 版の区別
 
-| 値 | 意味 |
-|---|---|
-| `game.version: 1.4.0` | 配布作品の内容版。セーブ移行に使う |
-| `game.storyVersion: 1` | 保存する物語状態の形式 |
-| `model.standard.version: 1.1` | Notion の設計基準 |
-| `model.standard.adapter: adv-story-state/1` | このゲームで実装した解釈・機能範囲 |
-| `story.version: 1` | 各物語の状態定義版 |
-| `story.revision` | 同一形式内の状態構成の改訂。省略時は1。q008は外底追加により2 |
-| `model.flowVersion: 3` | 新規開始時の `.v11.*` 実行経路 |
+値：`game.version: 1.7.0` / 意味：配布作品の内容版。セーブ移行に使う
+
+値：`game.storyVersion: 1` / 意味：保存する物語状態の形式
+
+値：`model.standard.version: 1.1` / 意味：Notion の設計基準
+
+値：`model.standard.adapter: adv-story-state/1` / 意味：このゲームで実装した解釈・機能範囲
+
+値：`story.version: 1` / 意味：各物語の状態定義版
+
+値：`story.revision` / 意味：同一形式内の状態構成の改訂。省略時は1。q008は外底追加により2
+
+値：`model.flowVersion: 3` / 意味：新規開始時の `.v11.*` 実行経路
 
 `model.standard` には基準ページの URL、改稿日、適用範囲も記録する。作品版とモデル版を同じ番号として扱わない。
 
 ## 五層と実行データ
 
-| 設計層 | 今回の実体 |
-|---|---|
-| World | `model.world.history` の固定された過去、`story.places/connections/entities`、型付き初期状態 |
-| Agent | 同一性を保つ `data/characters.json`、人物の動機、物語内の所在・介助状態・認識 |
-| Narrative | `.v11.*` の本文・選択肢。各場面は場所・同席者・遠隔会話の条件を宣言する |
-| Audience | ViewModel は表示中の人物・画像・本文・選択可否だけを渡す。作者向け真相や全人物の認識を渡さない |
-| Transformation / Reveal | 情報源と取得条件を持つ `observe`、状態に応じた本文、行為後に成立する結末条件 |
+設計層：World / 今回の実体：`model.world.history` の固定された過去、`story.places/connections/entities`、型付き初期状態
+
+設計層：Agent / 今回の実体：同一性を保つ `data/characters.json`、人物の動機、物語内の所在・介助状態・認識
+
+設計層：Narrative / 今回の実体：`.v11.*` の本文・選択肢。各場面は場所・同席者・遠隔会話の条件を宣言する
+
+設計層：Audience / 今回の実体：ViewModel は表示中の人物・画像・本文・選択可否だけを渡す。作者向け真相や全人物の認識を渡さない
+
+設計層：Transformation / Reveal / 今回の実体：情報源と取得条件を持つ `observe`、状態に応じた本文、行為後に成立する結末条件
 
 人物名がない役割には役割 ID を割り当てる。`rine` は q001 と q010 で共通。故人を生存人物に混ぜず、集団は集団として登録する。肖像の外見は今回の美術設定で、旧シナリオから読み取れた事実とは分ける。
 
@@ -36,14 +42,17 @@
 
 人物・物品は実体ごとに一つの所在フィールドを持つ。物品は人物や別の物品を保持者にできる。例えば q008 の遺体は内室 `coffin` に、食料は `outerBase` に入る。外底は当初内室に取り付けられ、取り外した後は別の所在を持つ。保持者をたどると一つの実在場所に着かなければならず、循環や不明な保持者は拒否する。
 
-| 効果 | 検査する条件 |
-|---|---|
-| `move` | 出発地が一致し、経路の隣同士が接続されている。介助が要る人には同行者が、物品には運搬者が必要 |
-| `transfer` | 物品の現在の保持者が合い、渡す側と受け取る側が同じ場所にいる |
-| `set` | 登録した状態だけを更新。所在フィールドへの直接書込みは不可 |
-| `pour` | 容器の同席、残量、正の整数量、分配後の容量を確認 |
-| `consume` | 容器の残量から消費量へ移す。q001 では油の総量を不変条件で確認 |
-| `observe` | 登録済みの命題・観察者・情報源・前提条件。観察者が情報源に接触している |
+効果：`move` / 検査する条件：出発地が一致し、経路の隣同士が接続されている。介助が要る人には同行者が、物品には運搬者が必要
+
+効果：`transfer` / 検査する条件：物品の現在の保持者が合い、渡す側と受け取る側が同じ場所にいる
+
+効果：`set` / 検査する条件：登録した状態だけを更新。所在フィールドへの直接書込みは不可
+
+効果：`pour` / 検査する条件：容器の同席、残量、正の整数量、分配後の容量を確認
+
+効果：`consume` / 検査する条件：容器の残量から消費量へ移す。q001 では油の総量を不変条件で確認
+
+効果：`observe` / 検査する条件：登録済みの命題・観察者・情報源・前提条件。観察者が情報源に接触している
 
 会話の開始には `story.scene` が場所・同席者を照合する。伝声管や面会窓は `mode: remote` と通信路の条件を持つ。声が聞こえても、人物や手紙を移動させたことにはならない。
 
@@ -69,7 +78,7 @@
 
 ## 旧セーブ
 
-1.0.0〜1.3.2 から移行する。進行中・完了済みの q001〜q010 は `flags.legacyStoryRoutes` を付け、元の `.flow.*` へ案内する。1.3.1 以前の進行中依頼は既存の `legacyQuestRoutes` も維持する。1.3.2 の記録を、さらに古い二地点回収ルートへ戻してはいけない。
+作品全体は1.0.0〜1.6.0のセーブを移行する。以下はv1.1導入以前の1.0.0〜1.3.2に対する物語経路の移行である。進行中・完了済みの q001〜q010 は `flags.legacyStoryRoutes` を付け、元の `.flow.*` へ案内する。1.3.1 以前の進行中依頼は既存の `legacyQuestRoutes` も維持する。1.3.2 の記録を、さらに古い二地点回収ルートへ戻してはいけない。
 
 既存スクリプト配列は変更せず、旧報酬・結末文を `legacyOutcomes` に保持する。旧版で完了済みの依頼に新しい所在条件を後付けしない。移行後に新規受注した依頼は `.v11.*` を使う。
 
@@ -83,7 +92,7 @@ q008は `model.storyUpgrades` で改訂1から2へ移行する。旧定義は `a
 
 ```bash
 npm run build:scenarios
-node tools/build-fixtures.mjs
+npm run build:docs
 npm run check
 ```
 
@@ -91,4 +100,4 @@ npm run check
 
 カタログのAI向け注釈と世界設定上の事実は、原稿の `authoringNotes` とJSONの `model.world.authoringNotes` に保持する。台詞へ機械的に挿入せず、人物の目的・情報の取得順・状態遷移が制約と矛盾しないように編集する。
 
-人物素材の編集は `authoring/characters.mjs` と `tools/assets/generate-characters.mjs`。`npm run build:characters` で再生成する。112×128 の透過 PNG、3レイヤーのネイティブ原稿、再実行可能な描画コマンドを36組保持する。出所・ハッシュは [PROVENANCE](../assets/PROVENANCE.md) と [manifest](../assets/source/characters/manifest.json) を参照。
+人物定義は `authoring/characters.mjs`、現在表示する36人の肖像は `assets/images/characters/generated/*.webp`。画像生成の英語・日本語プロンプトとハッシュを [生成記録](../assets/source/characters/imagegen-manifest.json)へ保持する。旧112×128のAIPaint PNG、編集原稿、描画コマンドも保存している。`npm run build:characters` は旧素材の再現と人物・物語データの生成を行い、採用中のWebPを画像生成し直すコマンドではない。[PROVENANCE](../assets/PROVENANCE.md)と[人物一覧](CHARACTERS.md)を確認する。

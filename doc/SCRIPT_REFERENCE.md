@@ -1,11 +1,8 @@
-# JSON DSL 1.0 実装リファレンス
+# JSON DSL 実装リファレンス
 
-2026-09-13追記: q001〜q010 は作品版1.4.0で [人物・物品を追うモデル v1.1](SCENARIO_MODEL_V11.md) へ更新しました。[改稿全文](SCENARIOS_Q001_Q010_V11.md)、[人物一覧](CHARACTERS.md)、[今回の検証と残る範囲](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。以下の旧版の記録は当時の実装範囲を表します。
+更新日: 2026-09-14。作品版1.7.0の48命令・30式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
-
-JSON_SCRIPT_SPEC.mdの設計原本を、現行エンジンが実行できる範囲へ具体化した文書です。JSONの追加・編集だけで新しい場面を記述します。任意JavaScript・YAML文字列・関数名の文字列評価は受け付けません。
-
-2026-09-12照合: master 1.3.1は45命令・30式演算子です。PR #3（1.3.2）でもこの数は同じです。未実装の条件拡張と版の区分は [CURRENT_STATUS.md](CURRENT_STATUS.md) を参照してください。
+JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
 ## ファイルとID
 
@@ -52,58 +49,93 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 
 定数はJSON値、参照は `{ "ref": "vars.completed" }` です。flags/varsはネストしたオブジェクトです。例えば `flags.region_1.open` は `flags: { region_1: { open: true } }` を参照します。ドットを含む単一キーにはしません。
 
-- 比較: eq / ne / gt / gte / lt / lte / in / contains。leftとrightを指定します。
-- 論理: and / orにはargs配列、notにはarg。
-- 存在: existsにはvalue。
-- 所持: has_item(item,count)、has_member(actor)、has_status(actor,status)。
-- 履歴: event_done(event)、map_discovered(map,x,y)。
-- 計算: add/sub/mul/div/mod/min/max/floor/ceil/round/abs/clamp。args配列です。clampは値・下限・上限、div/modは2引数。ゼロ除算はエラーです。
-- 表示文字列: `{ "format": "所持金は{g}G", "values": { "g": { "ref": "gold" } } }`。
+1. 比較: eq / ne / gt / gte / lt / lte / in / contains。leftとrightを指定します。
+1. 論理: and / orにはargs配列、notにはarg。
+1. 存在: existsにはvalue。
+1. 所持: has_item(item,count)、has_member(actor)、has_status(actor,status)。
+1. 履歴: event_done(event)、map_discovered(map,x,y)。
+1. 計算: add/sub/mul/div/mod/min/max/floor/ceil/round/abs/clamp。args配列です。clampは値・下限・上限、div/modは2引数。ゼロ除算はエラーです。
+1. 表示文字列: `{ "format": "所持金は{g}G", "values": { "g": { "ref": "gold" } } }`。
 
 戦闘式にはsource/targetのstats等を追加します。敵AIにはselfとself.hp_ratio・self.roundを追加します。chance/random_intという式は現行では未対応です。乱数が必要なシナリオはrandom.set/random.branchを使用します。
 
 `has_member` は出撃隊への所属だけを判定します。不在は `not`、生存も必要なら `actors.<id>.hp > 0` を組み合わせます。現在HP・MP・職業・状態異常は保存状態から参照できますが、装備・職歴を含む最終能力値を任意人物から読む `actor_stat` はありません。戦闘式の `source.stats` を一般のシナリオ条件でそのまま使えるわけではありません。戦績用の `record_count` と受注時差分は末尾のシナリオ拡張節を参照してください。
 
-## 実装した45命令
+## 実装した48命令
 
-| 命令 | 主なフィールドと動作 |
-| --- | --- |
-| say / narrate | text、任意でname/speaker。本文を表示し、advanceまで待機 |
-| choice | options[]のid/text/commands、任意condition/visibleWhen/requirement。chooseまで待機 |
-| if | condition、then[]、else[]。両枝を配列として定義 |
-| switch | value、cases[{equals,commands}]、default[] |
-| call | script、任意args。新しいlocal.argsを持つ呼出 |
-| jump | script。現在の呼出を置き換え、localを引き継ぐ。反復しても呼出スタックを積まない |
-| return | 現在の呼出全体を終了。呼出側の次命令へ |
-| set / add | target、value。vars/flags/localだけに直接書込 |
-| flag.set | key、value。flags領域への書込 |
-| random.set | target、min、max。閉区間の整数、エンジンのPRNGを使用 |
-| random.branch | branches[{weight,commands}]。正の重みから一枝を選択 |
-| item.give / item.take | item、count。上限99、不足する消費は拒否 |
-| gold.change | amount。所持金は0を下回らない |
-| actor.heal / actor.damage / actor.restore_mp | target、amount。targetはactor ID、参照式、またはparty |
-| party.heal_all | 任意ratio。最低でも最大値×ratioへ回復、毒除去、灯の補充 |
-| party.join / party.leave | actor。最大5人・最低1人の生存者を維持。joinは既存のHP・MP・状態・装備を保持し、回復しない |
-| status.apply / status.remove | target、status。状態異常の追加・削除 |
-| map.teleport | map、x、y、任意facing。実在する通行可能マスへ移動 |
-| map.reveal | radius。現在位置の周囲を探索済みにする |
-| facing.set | direction。north/east/south/west |
-| object.state.set | map、object、state。オブジェクトの永続状態変更 |
-| event.mark_done | event。イベント完了を保存 |
-| battle.start | encounter、on_win[]、on_lose[]、on_escape[] |
-| quest.accept | quest。受注条件を満たす依頼を受注 |
-| quest.evidence | quest、key、text。重複しない観察結果を記録 |
-| quest.complete | quest、outcome。結末・報酬・完了数を確定 |
-| scene.background | asset。表示に渡す背景ID |
-| audio.bgm / audio.se | asset。BGM変更または効果音イベント。audio.seはvolume（0〜1）・delay（0〜5000ms）を省略可能。音はユーザー操作で有効化 |
-| effect.play | effect、任意のtarget・delay。表示専用の効果を予約 |
-| screen.set | layer、color、opacity、任意のshade。探索画面の持続レイヤーを保存 |
-| screen.clear | layer。持続レイヤーを解除 |
-| rest | 任意cost/ratio。料金確認後、回復と毒除去・灯の補充 |
-| town.return | 町へ帰還 |
-| ending.set | title、text。終幕を手帳へ表示 |
-| job.change / job.action | actorとjob / ability。職業変更・探索特技の共通検査を実行 |
-| light.refill | 灯だけを満タンにする。HPや毒は変更しない |
+命令：say / narrate / 主なフィールドと動作：text、任意でname/speaker。本文を表示し、advanceまで待機
+
+命令：choice / 主なフィールドと動作：options[]のid/text/commands、任意condition/visibleWhen/requirement。chooseまで待機
+
+命令：if / 主なフィールドと動作：condition、then[]、else[]。両枝を配列として定義
+
+命令：switch / 主なフィールドと動作：value、cases[{equals,commands}]、default[]
+
+命令：call / 主なフィールドと動作：script、任意args。新しいlocal.argsを持つ呼出
+
+命令：jump / 主なフィールドと動作：script。現在の呼出を置き換え、localを引き継ぐ。反復しても呼出スタックを積まない
+
+命令：return / 主なフィールドと動作：現在の呼出全体を終了。呼出側の次命令へ
+
+命令：set / add / 主なフィールドと動作：target、value。vars/flags/localだけに直接書込
+
+命令：flag.set / 主なフィールドと動作：key、value。flags領域への書込
+
+命令：random.set / 主なフィールドと動作：target、min、max。閉区間の整数、エンジンのPRNGを使用
+
+命令：random.branch / 主なフィールドと動作：branches[{weight,commands}]。正の重みから一枝を選択
+
+命令：item.give / item.take / 主なフィールドと動作：item、count。上限99、不足する消費は拒否
+
+命令：gold.change / 主なフィールドと動作：amount。所持金は0を下回らない
+
+命令：actor.heal / actor.damage / actor.restore_mp / 主なフィールドと動作：target、amount。targetはactor ID、参照式、またはparty
+
+命令：party.heal_all / 主なフィールドと動作：任意ratio。最低でも最大値×ratioへ回復、毒除去、灯の補充
+
+命令：party.join / party.leave / 主なフィールドと動作：actor。最大5人・最低1人の生存者を維持。joinは既存のHP・MP・状態・装備を保持し、回復しない
+
+命令：status.apply / status.remove / 主なフィールドと動作：target、status。状態異常の追加・削除
+
+命令：map.teleport / 主なフィールドと動作：map、x、y、任意facing。実在する通行可能マスへ移動
+
+命令：map.reveal / 主なフィールドと動作：radius。現在位置の周囲を探索済みにする
+
+命令：facing.set / 主なフィールドと動作：direction。north/east/south/west
+
+命令：object.state.set / 主なフィールドと動作：map、object、state。オブジェクトの永続状態変更
+
+命令：event.mark_done / 主なフィールドと動作：event。イベント完了を保存
+
+命令：battle.start / 主なフィールドと動作：encounter、on_win[]、on_lose[]、on_escape[]
+
+命令：quest.accept / 主なフィールドと動作：quest。受注条件を満たす依頼を受注
+
+命令：quest.evidence / 主なフィールドと動作：quest、key、text。重複しない観察結果を記録
+
+命令：quest.complete / 主なフィールドと動作：quest、outcome。結末・報酬・完了数を確定
+
+命令：scene.background / 主なフィールドと動作：asset。表示に渡す背景ID
+
+命令：audio.bgm / audio.se / 主なフィールドと動作：asset。BGM変更または効果音イベント。audio.seはvolume（0〜1）・delay（0〜5000ms）を省略可能。音はユーザー操作で有効化
+
+命令：effect.play / 主なフィールドと動作：effect、任意のtarget・delay。表示専用の効果を予約
+
+命令：screen.set / 主なフィールドと動作：layer、color、opacity、任意のshade。探索画面の持続レイヤーを保存
+
+命令：screen.clear / 主なフィールドと動作：layer。持続レイヤーを解除
+
+命令：rest / 主なフィールドと動作：任意cost/ratio。料金確認後、回復と毒除去・灯の補充
+
+命令：town.return / 主なフィールドと動作：町へ帰還
+
+命令：ending.set / 主なフィールドと動作：title、text。終幕を手帳へ表示
+
+命令：job.change / job.action / 主なフィールドと動作：actorとjob / ability。職業変更・探索特技の共通検査を実行
+
+命令：story.init / story.scene / story.action / 主なフィールドと動作：questとscene／action。宣言された物語状態を初期化し、場面の同席と行為の成立条件を検査
+
+命令：light.refill / 主なフィールドと動作：灯だけを満タンにする。HPや毒は変更しない
 
 battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行して呼出側へ戻ります。全滅時は共通の救助・町帰還を行い、敗北した呼出スタックを破棄したうえでon_loseだけを町で実行します。敗北後に元の成功処理へ戻ることはありません。3つの配列を全て定義してください。
 
@@ -131,7 +163,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 ## 1.3.1の戦績と場面継続
 
-`record_count` は `metric` に battles / wins / escapes / losses / kills / encounters を取り、killsには敵ID、encountersには遭遇IDを `id` として指定します。任意の `sinceQuest` は受注時との差分です。例：
+`record_count` は `metric` に battles / wins / escapes / losses / repels / kills / encounters を取り、killsには敵ID、encountersには遭遇IDを `id` として指定します。任意の `sinceQuest` は受注時との差分です。例：
 
 ```json
 {"op":"gte","left":{"op":"record_count","metric":"kills","id":"moor_wolf","sinceQuest":"q121"},"right":1}
@@ -159,10 +191,26 @@ map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"w
 
 ## 1.4.0 物語状態の専用命令
 
-| 命令 | 必須引数 | 作用 |
-|---|---|---|
-| story.init | quest | 登録済みの型・初期値で受注中の物語を開始。再訪で初期化し直さない |
-| story.scene | quest, scene | 所在と同席者・遠隔通信の条件を確認して場面を開く |
-| story.action | quest, action | 宣言済みの前提・費用・効果・終了条件を確認し、一括確定 |
+命令：story.init / 必須引数：quest / 作用：登録済みの型・初期値で受注中の物語を開始。再訪で初期化し直さない
+
+命令：story.scene / 必須引数：quest, scene / 作用：所在と同席者・遠隔通信の条件を確認して場面を開く
+
+命令：story.action / 必須引数：quest, action / 作用：宣言済みの前提・費用・効果・終了条件を確認し、一括確定
 
 choice.options の `storyAction: {quest, action}` は同じ行為を選択可否の検査に使う。`stories` へ set/add で書き込むことはできない。詳細と効果一覧は [モデル仕様](SCENARIO_MODEL_V11.md) を参照。
+
+## ダンジョンの操作と観察
+
+`dungeon.action` と `dungeon.scene` は画面から送る操作意図です。48命令のJSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は authoring/dungeon-scenes.json から既存のif・narrate・choice・setへ生成します。
+
+観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
+
+<!-- generated:commands -->
+
+## 実装との照合用一覧
+
+48命令：`story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+
+30式演算子：`record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
+
+<!-- /generated:commands -->

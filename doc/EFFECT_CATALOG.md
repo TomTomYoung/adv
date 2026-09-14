@@ -1,33 +1,56 @@
 # 戦闘・フィールドエフェクト一覧
 
+確認日: 2026-09-14。作品版1.7.0、表示効果24種。
+
 2026-09-09、実装前に確定した一覧です。スクリプト式8種・連番画像8種・フィールド8種を作成します。既存の青緑と琥珀色の画面、古典的なピクセル演出に合わせます。
 
-| ID | 効果 | 基準時間 | 方式 |
-| --- | --- | --- | --- |
-| hit_shake | 小振動 | 280 ms | JSONの動き・色・分割だけ |
-| heavy_shake | 強い振動 | 420 ms | JSONの動き・色・分割だけ |
-| spin | 回転 | 460 ms | JSONの動き・色・分割だけ |
-| skew | スキュ | 400 ms | JSONの動き・色・分割だけ |
-| squash | 伸縮 | 380 ms | JSONの動き・色・分割だけ |
-| split_vertical | 縦切断 | 430 ms | JSONの動き・色・分割だけ |
-| split_diagonal | 斜め切断 | 430 ms | JSONの動き・色・分割だけ |
-| fade_out | 消散 | 480 ms | JSONの動き・色・分割だけ |
-| slash_arc | 斬撃の弧 | 560 ms | 8コマの透過PNGシート |
-| impact_burst | 打撃の火花 | 560 ms | 8コマの透過PNGシート |
-| fire_burst | 炎の噴出 | 560 ms | 8コマの透過PNGシート |
-| ice_shards | 氷片の飛散 | 560 ms | 8コマの透過PNGシート |
-| lightning_arc | 枝分かれする雷 | 560 ms | 8コマの透過PNGシート |
-| healing_ring | 治療の輪 | 560 ms | 8コマの透過PNGシート |
-| poison_cloud | 毒の雲 | 560 ms | 8コマの透過PNGシート |
-| mana_orbit | 魔力の軌道 | 560 ms | 8コマの透過PNGシート |
-| field_shake | 地響き | 420 ms | JSONの動き・色・分割だけ |
-| field_damage | 被害の赤色化 | 650 ms | JSONの動き・色・分割だけ |
-| field_dark | 暗転 | 650 ms | JSONの動き・色・分割だけ |
-| field_shade | 周辺シェード | 650 ms | JSONの動き・色・分割だけ |
-| field_reveal | 発見の光 | 650 ms | JSONの動き・色・分割だけ |
-| field_recover | 泉・休息の光 | 650 ms | JSONの動き・色・分割だけ |
-| field_transition | 移動の暗幕 | 650 ms | JSONの動き・色・分割だけ |
-| field_poison | 毒の紫色化 | 650 ms | JSONの動き・色・分割だけ |
+ID：hit_shake / 効果：小振動 / 基準時間：280 ms / 方式：JSONの動き・色・分割だけ
+
+ID：heavy_shake / 効果：強い振動 / 基準時間：420 ms / 方式：JSONの動き・色・分割だけ
+
+ID：spin / 効果：回転 / 基準時間：460 ms / 方式：JSONの動き・色・分割だけ
+
+ID：skew / 効果：スキュ / 基準時間：400 ms / 方式：JSONの動き・色・分割だけ
+
+ID：squash / 効果：伸縮 / 基準時間：380 ms / 方式：JSONの動き・色・分割だけ
+
+ID：split_vertical / 効果：縦切断 / 基準時間：430 ms / 方式：JSONの動き・色・分割だけ
+
+ID：split_diagonal / 効果：斜め切断 / 基準時間：430 ms / 方式：JSONの動き・色・分割だけ
+
+ID：fade_out / 効果：消散 / 基準時間：480 ms / 方式：JSONの動き・色・分割だけ
+
+ID：slash_arc / 効果：斬撃の弧 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：impact_burst / 効果：打撃の火花 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：fire_burst / 効果：炎の噴出 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：ice_shards / 効果：氷片の飛散 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：lightning_arc / 効果：枝分かれする雷 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：healing_ring / 効果：治療の輪 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：poison_cloud / 効果：毒の雲 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：mana_orbit / 効果：魔力の軌道 / 基準時間：560 ms / 方式：8コマの透過PNGシート
+
+ID：field_shake / 効果：地響き / 基準時間：420 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_damage / 効果：被害の赤色化 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_dark / 効果：暗転 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_shade / 効果：周辺シェード / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_reveal / 効果：発見の光 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_recover / 効果：泉・休息の光 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_transition / 効果：移動の暗幕 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
+
+ID：field_poison / 効果：毒の紫色化 / 基準時間：650 ms / 方式：JSONの動き・色・分割だけ
 
 ## 定義と合成
 
@@ -51,59 +74,97 @@ OSの動きを減らす設定と、ゲームの演出設定に対応します。
 
 全8種、各8コマ、1コマ128×128、シート1024×128の透過PNGです。左から右へ560msで再生します。AIPaintの図形命令で発生・広がり・消散を描き分けています。
 
-| アニメーション | コマ一覧 | AIPaint命令 |
-| --- | --- | --- |
-| 斬撃の弧 | <img src="../assets/effects/fx_slash_arc.png" width="512" alt="slash_arcの8コマ"> | [命令JSON](../assets/source/effects/fx_slash_arc.paint.commands.json) |
-| 打撃の火花 | <img src="../assets/effects/fx_impact_burst.png" width="512" alt="impact_burstの8コマ"> | [命令JSON](../assets/source/effects/fx_impact_burst.paint.commands.json) |
-| 炎の噴出 | <img src="../assets/effects/fx_fire_burst.png" width="512" alt="fire_burstの8コマ"> | [命令JSON](../assets/source/effects/fx_fire_burst.paint.commands.json) |
-| 氷片の飛散 | <img src="../assets/effects/fx_ice_shards.png" width="512" alt="ice_shardsの8コマ"> | [命令JSON](../assets/source/effects/fx_ice_shards.paint.commands.json) |
-| 枝分かれする雷 | <img src="../assets/effects/fx_lightning_arc.png" width="512" alt="lightning_arcの8コマ"> | [命令JSON](../assets/source/effects/fx_lightning_arc.paint.commands.json) |
-| 治療の輪 | <img src="../assets/effects/fx_healing_ring.png" width="512" alt="healing_ringの8コマ"> | [命令JSON](../assets/source/effects/fx_healing_ring.paint.commands.json) |
-| 毒の雲 | <img src="../assets/effects/fx_poison_cloud.png" width="512" alt="poison_cloudの8コマ"> | [命令JSON](../assets/source/effects/fx_poison_cloud.paint.commands.json) |
-| 魔力の軌道 | <img src="../assets/effects/fx_mana_orbit.png" width="512" alt="mana_orbitの8コマ"> | [命令JSON](../assets/source/effects/fx_mana_orbit.paint.commands.json) |
+アニメーション：斬撃の弧 / コマ一覧：<img src="../assets/effects/fx_slash_arc.png" width="512" alt="slash_arcの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_slash_arc.paint.commands.json)
+
+アニメーション：打撃の火花 / コマ一覧：<img src="../assets/effects/fx_impact_burst.png" width="512" alt="impact_burstの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_impact_burst.paint.commands.json)
+
+アニメーション：炎の噴出 / コマ一覧：<img src="../assets/effects/fx_fire_burst.png" width="512" alt="fire_burstの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_fire_burst.paint.commands.json)
+
+アニメーション：氷片の飛散 / コマ一覧：<img src="../assets/effects/fx_ice_shards.png" width="512" alt="ice_shardsの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_ice_shards.paint.commands.json)
+
+アニメーション：枝分かれする雷 / コマ一覧：<img src="../assets/effects/fx_lightning_arc.png" width="512" alt="lightning_arcの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_lightning_arc.paint.commands.json)
+
+アニメーション：治療の輪 / コマ一覧：<img src="../assets/effects/fx_healing_ring.png" width="512" alt="healing_ringの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_healing_ring.paint.commands.json)
+
+アニメーション：毒の雲 / コマ一覧：<img src="../assets/effects/fx_poison_cloud.png" width="512" alt="poison_cloudの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_poison_cloud.paint.commands.json)
+
+アニメーション：魔力の軌道 / コマ一覧：<img src="../assets/effects/fx_mana_orbit.png" width="512" alt="mana_orbitの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_mana_orbit.paint.commands.json)
 
 ## 技能と演出・SEの対応
 
 1回の技能につき1つのcueを発行します。全体技は対象全員へ同時に画像効果を適用しますが、SEは1回です。敵の行動は180ms間隔で開始し、表示の長い余韻は重なります。操作を続けた場合は前の演出を打ち切り、次の操作を優先します。
 
-| 技能 | cue | 効果 | SE |
-| --- | --- | --- | --- |
-| 攻撃（attack） | attack | 斬撃の弧＋小振動 | 斬撃 |
-| 強打（power） | power | 打撃の火花＋強い振動 | 重打 |
-| 灯火の術（fire） | fire | 炎の噴出＋小振動 | 炎 |
-| 手当の祈り（heal） | heal | 治療の輪 | 回復 |
-| 防御（guard） | guard | 伸縮 | 防御 |
-| 毒の刃（venom） | venom | 毒の雲＋小振動 | 毒 |
-| 解毒（cleanse） | cleanse | 治療の輪＋伸縮 | 回復 |
-| 貫通突き（pierce） | pierce | 斬撃の弧＋スキュ | 貫通 |
-| 氷の符（ice） | ice | 氷片の飛散＋スキュ | 氷 |
-| 雷の符（lightning） | lightning | 枝分かれする雷＋小振動 | 雷 |
-| 薬草の霧（group_heal） | heal | 治療の輪 | 回復 |
-| 盾の壁（party_guard） | guard | 伸縮 | 防御 |
-| 気付けの節（inspire） | mana | 魔力の軌道 | 魔力 |
-| 水車の尾（water_tail） | power | 打撃の火花＋強い振動 | 重打 |
-| 水門落とし（gate_slam） | power | 打撃の火花＋強い振動 | 重打 |
-| 螺旋突進（drill_thrust） | pierce | 斬撃の弧＋スキュ | 貫通 |
-| 殻の体当たり（shell_roll） | roll | 打撃の火花＋回転 | 重打 |
-| 蜜蝋の火（wax_flame） | fire | 炎の噴出＋小振動 | 炎 |
-| 引き鋸（saw_cut） | cut | 斬撃の弧＋斜め切断 | 斬撃 |
-| 虹彩光線（iris_ray） | lightning | 枝分かれする雷＋小振動 | 雷 |
-| 硝子の刃（glass_shards） | cut | 斬撃の弧＋斜め切断 | 斬撃 |
-| 活字の針（type_needles） | pierce | 斬撃の弧＋スキュ | 貫通 |
-| 墨すすり（ink_sip） | drain | 魔力の軌道＋スキュ | 魔力 |
-| 金庫の歯（vault_bite） | power | 打撃の火花＋強い振動 | 重打 |
-| 縫い直し（stitch_mend） | heal | 治療の輪 | 回復 |
-| 肋骨の雨（bone_rain） | power | 打撃の火花＋強い振動 | 重打 |
-| 碇打ち（anchor_strike） | power | 打撃の火花＋強い振動 | 重打 |
-| 殻の放電（discharge） | lightning | 枝分かれする雷＋小振動 | 雷 |
-| 列車突進（rail_charge） | power | 打撃の火花＋強い振動 | 重打 |
-| 尾針突き（needle_lunge） | pierce | 斬撃の弧＋スキュ | 貫通 |
-| 月輪払い（moon_sweep） | cut | 斬撃の弧＋斜め切断 | 斬撃 |
-| すれ違い斬り（blade_pass） | cut | 斬撃の弧＋斜め切断 | 斬撃 |
-| 姿勢を立て直す（recover_stance） | guard | 伸縮 | 防御 |
-| 毒牙（poison_bite） | venom | 毒の雲＋小振動 | 毒 |
-| 傷薬（potion） | heal | 治療の輪 | 回復 |
-| 解毒薬（antidote） | cleanse | 治療の輪＋伸縮 | 回復 |
+技能：攻撃（attack） / cue：attack / 効果：斬撃の弧＋小振動 / SE：斬撃
+
+技能：強打（power） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：灯火の術（fire） / cue：fire / 効果：炎の噴出＋小振動 / SE：炎
+
+技能：手当の祈り（heal） / cue：heal / 効果：治療の輪 / SE：回復
+
+技能：防御（guard） / cue：guard / 効果：伸縮 / SE：防御
+
+技能：毒の刃（venom） / cue：venom / 効果：毒の雲＋小振動 / SE：毒
+
+技能：解毒（cleanse） / cue：cleanse / 効果：治療の輪＋伸縮 / SE：回復
+
+技能：貫通突き（pierce） / cue：pierce / 効果：斬撃の弧＋スキュ / SE：貫通
+
+技能：氷の符（ice） / cue：ice / 効果：氷片の飛散＋スキュ / SE：氷
+
+技能：雷の符（lightning） / cue：lightning / 効果：枝分かれする雷＋小振動 / SE：雷
+
+技能：薬草の霧（group_heal） / cue：heal / 効果：治療の輪 / SE：回復
+
+技能：盾の壁（party_guard） / cue：guard / 効果：伸縮 / SE：防御
+
+技能：気付けの節（inspire） / cue：mana / 効果：魔力の軌道 / SE：魔力
+
+技能：水車の尾（water_tail） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：水門落とし（gate_slam） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：螺旋突進（drill_thrust） / cue：pierce / 効果：斬撃の弧＋スキュ / SE：貫通
+
+技能：殻の体当たり（shell_roll） / cue：roll / 効果：打撃の火花＋回転 / SE：重打
+
+技能：蜜蝋の火（wax_flame） / cue：fire / 効果：炎の噴出＋小振動 / SE：炎
+
+技能：引き鋸（saw_cut） / cue：cut / 効果：斬撃の弧＋斜め切断 / SE：斬撃
+
+技能：虹彩光線（iris_ray） / cue：lightning / 効果：枝分かれする雷＋小振動 / SE：雷
+
+技能：硝子の刃（glass_shards） / cue：cut / 効果：斬撃の弧＋斜め切断 / SE：斬撃
+
+技能：活字の針（type_needles） / cue：pierce / 効果：斬撃の弧＋スキュ / SE：貫通
+
+技能：墨すすり（ink_sip） / cue：drain / 効果：魔力の軌道＋スキュ / SE：魔力
+
+技能：金庫の歯（vault_bite） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：縫い直し（stitch_mend） / cue：heal / 効果：治療の輪 / SE：回復
+
+技能：肋骨の雨（bone_rain） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：碇打ち（anchor_strike） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：殻の放電（discharge） / cue：lightning / 効果：枝分かれする雷＋小振動 / SE：雷
+
+技能：列車突進（rail_charge） / cue：power / 効果：打撃の火花＋強い振動 / SE：重打
+
+技能：尾針突き（needle_lunge） / cue：pierce / 効果：斬撃の弧＋スキュ / SE：貫通
+
+技能：月輪払い（moon_sweep） / cue：cut / 効果：斬撃の弧＋斜め切断 / SE：斬撃
+
+技能：すれ違い斬り（blade_pass） / cue：cut / 効果：斬撃の弧＋斜め切断 / SE：斬撃
+
+技能：姿勢を立て直す（recover_stance） / cue：guard / 効果：伸縮 / SE：防御
+
+技能：毒牙（poison_bite） / cue：venom / 効果：毒の雲＋小振動 / SE：毒
+
+技能：傷薬（potion） / cue：heal / 効果：治療の輪 / SE：回復
+
+技能：解毒薬（antidote） / cue：cleanse / 効果：治療の輪＋伸縮 / SE：回復
 
 ## JSONで作る
 
@@ -160,6 +221,6 @@ motionのキーはx/y（±200px）、rotate（±360度）、skewX/skewY（±40�
 
 ## 検証結果と範囲
 
-32テストが合格し、100件×3結末、通常条件の100件通し、1,200戦の既存バランス検査も維持しました。演出を無効化した実行と有効な実行で、同じ入力・seedから同じ保存状態になることを検査しています。瞬間演出のロード時抑止、持続レイヤーの保存・クリア、倒した敵の画像保持、全体技能のSE重複防止、予約の取消し、8音の上限、不正なJSONの拒否を確認しました。
+現行の全428テストに表示効果の検証を含みます。演出の有無で同じ入力・seedから同じ保存状態になること、持続レイヤー、予約取消し、SE重複防止、不正な定義の拒否を検査しています。最新の全体検証は[PROGRESS.md](PROGRESS.md)を参照してください。
 
 全8シートをデコードし、透過と64コマの非空・差異を検査しました。SE全28種はOGGをデコードして音量・有限値を測定しました。実ブラウザ上の動き、端末での聴感、OSの動き軽減との連携は未検証です。
