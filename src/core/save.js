@@ -1,3 +1,4 @@
+import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
 import {scaledEnemy} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock} from './dungeons.js';
 import {storyStateErrors,storyEnding} from './story.js';
@@ -127,7 +128,7 @@ export function validateSave(save,data){
   for(const [key,min,max] of [['gold',0,1e9],['xp',0,1e9],['level',1,data.system.maxLevel],['steps',0,1e9],['light',0,data.system.lightCapacity],['rng',1,4294967295]])if(!integer(s[key],min,max))fail(`${key}不正`);
   if(s.mode==='dungeon'){
     const l=s.location,m=data.maps[l?.map];
-    try{if(!m||dungeonTile(data,s,m,l?.x,l?.y)!=='.'||dungeonBlock(data,s,m,l?.x,l?.y)||!['north','east','south','west'].includes(l?.facing))fail('位置不正');}catch{fail('位置または地形状態不正');}
+    try{if(!m||!integer(l?.z??0,-32,32)||(m.voxels?(!Number.isSafeInteger(l.z)||Boolean(voxelOccupancyReason(m,voxelMapState(data,s,m),l))):((l?.z??0)!==0||dungeonTile(data,s,m,l?.x,l?.y)!=='.'||dungeonBlock(data,s,m,l?.x,l?.y)))||!['north','east','south','west'].includes(l?.facing))fail('位置不正');}catch{fail('位置または地形状態不正');}
   }else if(s.location!==null)fail('町の位置不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
@@ -158,7 +159,7 @@ export function validateSave(save,data){
     for(const [id,q] of Object.entries(data.quests))if(q.story&&s.quests[id]?.stage==='completed'&&!s.flags.legacyStoryRoutes?.[id])try{storyEnding({data,state:s},id,s.quests[id].outcome);}catch{fail('物語の結末条件不正');}
   }
   if(s.trackedQuest!==null&&!data.quests[s.trackedQuest])fail('追跡依頼不正');
-  for(const [map,cells] of Object.entries(s.discovered))if(!data.maps[map]||!Array.isArray(cells)||cells.some(c=>typeof c!=='string'||!/^\d+,\d+$/.test(c)))fail('地図不正');
+  for(const [id,cells] of Object.entries(s.discovered)){const map=data.maps[id];if(!map||!Array.isArray(cells)||cells.some(c=>typeof c!=='string'||!(map.voxels?/^\d+,\d+,-?\d+$/:/^\d+,\d+$/).test(c)||map.voxels&&voxelAt(map,null,voxelPoint(c))===null))fail('地図不正');}
   if(s.vm.length>32)fail('スタック超過');
   if(!integer(s.nextScope,1,1e9))fail('スクリプトスコープ不正');
   for(const frame of s.vm){try{if(!isRecord(frame)||!Array.isArray(frame.path)||!isRecord(frame.local)||!integer(frame.scope,1,s.nextScope-1)||typeof frame.branch!=='boolean'||frame.path.some(p=>typeof p!=='string'&&!Number.isInteger(p))||frame.path.some(p=>['__proto__','constructor','prototype'].includes(p)))throw Error();const commands=commandsAt(data,frame);if(!integer(frame.index,0,commands.length))throw Error();}catch{fail('スクリプト位置不正');}}

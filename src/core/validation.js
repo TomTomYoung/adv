@@ -1,3 +1,4 @@
+import {voxelAt} from './voxels.js';
 import {validateDungeonScenes} from './dungeon-scenes.js';
 import {validateDungeons} from './dungeons.js';
 import {validateStories} from './story.js';
@@ -45,7 +46,7 @@ export function validateContent(data){
       if(['item.give','item.take'].includes(c.op)&&typeof c.item==='string')reference(data.items,c.item,at);
       if(c.count!==undefined&&typeof c.count==='number'&&(!Number.isInteger(c.count)||c.count<1))fail(at,'個数は正の整数です');
       if(c.op==='map.teleport'){
-        reference(data.maps,c.map,at);const m=data.maps[c.map];if(m?.tiles[c.y]?.[c.x]===undefined||m?.tiles[c.y]?.[c.x]==='#')fail(at,'移動座標が通行不能です');
+        reference(data.maps,c.map,at);const m=data.maps[c.map];if(m?.voxels?voxelAt(m,null,{x:c.x,y:c.y,z:c.z??0})!=='.':(c.z??0)!==0||m?.tiles[c.y]?.[c.x]===undefined||m?.tiles[c.y]?.[c.x]==='#')fail(at,'移動座標が通行不能です');
         if(c.facing!==undefined&&!['north','east','south','west'].includes(c.facing))fail(at,'方角が不正です');
       }
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
@@ -97,17 +98,17 @@ export function validateContent(data){
     if(map.tiles.some(row=>typeof row!=='string'||row.length!==width||/[^#.]/.test(row)))fail(id,'タイルは同じ幅の #/. 文字列です');
     const ids=new Set();for(const object of map.objects){
       if(ids.has(object.id))fail(id,`object ID重複: ${object.id}`);ids.add(object.id);
-      if(map.tiles[object.y]?.[object.x]!=='.')fail(id,`object座標不正: ${object.id}`);
+      if(map.voxels?voxelAt(map,null,{x:object.x,y:object.y,z:object.z??0})!=='.':map.tiles[object.y]?.[object.x]!=='.')fail(id,`object座標不正: ${object.id}`);
       if(!['enter','interact'].includes(object.trigger))fail(id,'トリガーが不正です');
       reference(data.scripts,object.script,id);if(object.condition)expression(object.condition,id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);
     if(map.encounterPool!==undefined){if(!Array.isArray(map.encounterPool)||!map.encounterPool.length)fail(id,'遭遇候補が必要です');else for(const e of map.encounterPool){reference(data.encounters,e.encounter,id);if(!Number.isFinite(e.weight)||e.weight<=0)fail(id,'遭遇重みは正数です');}}
-    const start=map.entrance;if(map.tiles[start.y]?.[start.x]!=='.')fail(id,'入口不正');
+    const start=map.entrance;if(map.voxels?voxelAt(map,null,{x:start.x,y:start.y,z:start.z??0})!=='.':map.tiles[start.y]?.[start.x]!=='.')fail(id,'入口不正');
     // Ignore locked objects when checking geometric connectivity; their scripts unlock them.
     const seen=new Set([`${start.x},${start.y}`]),queue=[[start.x,start.y]];
     for(let n=0;n<queue.length;n++){const [x,y]=queue[n];for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const key=`${x+dx},${y+dy}`;if(map.tiles[y+dy]?.[x+dx]==='.'&&!seen.has(key)){seen.add(key);queue.push([x+dx,y+dy]);}}}
-    for(const o of map.objects)if(!seen.has(`${o.x},${o.y}`))fail(id,`到達不能: ${o.id}`);
+    for(const o of map.objects)if(!map.voxels&&!seen.has(`${o.x},${o.y}`))fail(id,`到達不能: ${o.id}`);
   }
   for(const [id,q] of Object.entries(data.quests)){
     if(q.schemaVersion!==1||q.id!==id||typeof q.title!=='string')fail(id,'依頼定義不正');

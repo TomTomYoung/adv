@@ -1,6 +1,6 @@
 # ダンジョン一覧
 
-更新日: 2026-09-14。対象: 作品版1.7.0。13件の固有システムはmasterへ反映済みです。素材・現地調査の追加はPR #8にあります。全13ダンジョン・25マップ・200クエストです。
+更新日: 2026-09-14。対象: 作品版1.8.0。13件の固有システムと素材・現地調査はmasterへ反映済みです。立方体地形と貯水立坑は今回の作業ブランチにあります。全13ダンジョン・26マップ・200クエストです。
 
 設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
@@ -12,7 +12,9 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    火台へ種火を配置し、火の種類に応じた範囲効果を利用します。携帯松明の燃料、くらがり、灯番に対応します。実装済み。設定: `authoring/dungeons/kagaribi.json`。詳細: [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)。[Notion](https://app.notion.com/p/3dac3c1966b38057b740df426b57da09)。
 
-2. 灯守の地下水道（`region_1`、2階層）
+2. 灯守の地下水道（`region_1`、従来2階層と貯水立坑の計3マップ）
+
+   入口から入れる貯水立坑を追加しました。高さ-1・0・1の立方体、共有する六面、水門・排水蓋・給水ポンプ、梯子・渡り縄・登攀誘導・掘削を配置しています。設定: `authoring/voxel-content.json`。詳細: [VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)。
 
    周期的な水位変化、水門・バルブによる止水と通水、完全水没セルの通行禁止を扱います。実装済み。設定: `authoring/dungeons/region_1.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf)。
 
@@ -144,7 +146,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 祈りの届かない谷 (prayerless_valley)：1マップ。部品：boundary=suppression_zone。現地調査：境界の内側の祈り → q193。
 
-灯守の地下水道 (region_1)：2マップ。部品：water=waterworks。現地調査：排水された横道 → q010。
+灯守の地下水道 (region_1)：3マップ。部品：water=waterworks / space=voxel_space。現地調査：排水された横道 → q010。
 
 帰還者の深淵 (region_10)：2マップ。部品：return_flow=vector_curse。現地調査：逆らった足取り → q100。
 

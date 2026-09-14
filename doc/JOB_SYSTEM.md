@@ -1,6 +1,6 @@
 # 職業システムと職業一覧
 
-更新日: 2026-09-14。作品版1.7.0の30職と、転職・技能・バフ・装備制限・履歴成長の仕様です。検証状況は[PROGRESS.md](PROGRESS.md)を参照してください。
+更新日: 2026-09-14。作品版1.8.0の30職と、転職・技能・バフ・装備制限・履歴成長の仕様です。検証状況は[PROGRESS.md](PROGRESS.md)を参照してください。
 
 参照：[RPG職業・ジョブ・クラス生成モデル v1.0](https://app.notion.com/p/3d6c3c1966b381da8284e6cca487b9eb)。モデルの「限定された操作権限」「人物と職業の分離」「付与元と寿命」「支払い前後の検査」を、このゲームのターン制と探索へ適用します。参照ページは設計モデルであり、以下の数値は本作向けの初期調整値です。
 
@@ -54,7 +54,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ## 現行30職の定義
 
-作品版1.7.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
+作品版1.8.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
 
 ### 戦士 (warrior)
 
@@ -116,7 +116,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 7 / MP 1.8 / STR 2.1 / VIT 0.9 / AGI 0.7 / INT 1.2。現在職の加算：なし。
 装備：weapon＝bow・dagger / armor＝light / charm＝charm。
-習得：Lv1 貫通突き (battle.skill) / Lv5 狙いの矢 (battle.skill) / Lv10 一斉射撃 (battle.skill)。
+習得：Lv1 貫通突き (battle.skill) / Lv5 狙いの矢 (battle.skill) / Lv10 一斉射撃 (battle.skill) / Lv1 登攀誘導 (voxel.traverse)。
 特性：{"revealRadius":2}。印と一斉射撃には弓が必要です。
 
 ### 盗賊 (rogue)
@@ -143,7 +143,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 6.5 / MP 2 / STR 1.8 / VIT 0.9 / AGI 0.8 / INT 1.3。現在職の加算：なし。
 装備：weapon＝dagger・bow / armor＝light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal)。
+習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal) / Lv1 登攀誘導 (voxel.traverse)。
 特性：{"encounterRate":0.9,"escapeBonus":0.08}。直接火力より行軍の安全を重視します。
 
 ### 魔術師 (mage)
@@ -326,7 +326,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 習得：Lv1 手当の祈り (battle.skill) / Lv5 帰路の祈り (battle.skill) / Lv10 解毒 (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
 特性：{"retreatCost":0.5}。割引は帰還印のみで、敗北時の救援費は変わりません。
 
-## 探索特技10定義
+## 探索特技11定義
 
 ### 周辺測量 (survey)
 
@@ -368,4 +368,12 @@ MP1と薬効葉2枚・赤い蜜1個から、傷薬2個を作ります。 API: in
 
 MP1と植物繊維3個から補修用の縄1個を作ります。 API: inventory.convert。使用場所: town / dungeon。
 
+### 登攀誘導 (climb_route)
+
+立体地形の指定経路で、仲間全員を渡り綱に沿って誘導します。密・閉じた境界・完全水没は通過できません。 API: voxel.traverse。使用場所: dungeon。
+
 <!-- /generated:jobs -->
+
+## 1.8.0の登攀誘導
+
+探索特技は11種です。斥候と狩人はLv1でclimb_route（登攀誘導）を使えます。APIはvoxel.traverse、対象はlocation、使用は探索中に限り、MP3を支払う技能者が隊全員を指定経路の終点へ誘導します。経路の空間、境界、水没、終点の足場を検査してから消費します。自由飛行や完全水没の通過を許可する技能ではありません。移動手段と掘削の接続は[立方体地形の仕様](VOXEL_TERRAIN_AND_WATER.md)を参照してください。

@@ -622,6 +622,9 @@
             "y": {
               "type": "integer",
               "minimum": 0
+            },
+            "z": {
+              "type": "integer"
             }
           },
           "required": [
@@ -1336,6 +1339,9 @@
               "type": "integer",
               "minimum": 0
             },
+            "z": {
+              "type": "integer"
+            },
             "facing": {
               "enum": [
                 "north",
@@ -1832,6 +1838,493 @@
       "type": "string",
       "minLength": 1
     },
+    "voxels": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "minZ": {
+          "type": "integer",
+          "minimum": -32,
+          "maximum": 0
+        },
+        "layers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "string",
+              "pattern": "^[#.]+$"
+            }
+          }
+        },
+        "faces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "at": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "z": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "side": {
+                "enum": [
+                  "north",
+                  "east",
+                  "south",
+                  "west",
+                  "up",
+                  "down"
+                ]
+              },
+              "operable": {
+                "type": "boolean"
+              },
+              "initiallyOpen": {
+                "type": "boolean"
+              },
+              "closed": {
+                "type": "object",
+                "properties": {
+                  "passage": {
+                    "type": "boolean"
+                  },
+                  "water": {
+                    "type": "boolean"
+                  },
+                  "support": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "passage",
+                  "water",
+                  "support"
+                ],
+                "additionalProperties": false
+              },
+              "open": {
+                "type": "object",
+                "properties": {
+                  "passage": {
+                    "type": "boolean"
+                  },
+                  "water": {
+                    "type": "boolean"
+                  },
+                  "support": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "passage",
+                  "water",
+                  "support"
+                ],
+                "additionalProperties": false
+              },
+              "handle": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "z": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "at",
+              "side",
+              "operable",
+              "initiallyOpen",
+              "closed",
+              "open"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "ladder",
+                  "stairs",
+                  "vine",
+                  "rope",
+                  "bridge"
+                ]
+              },
+              "path": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 64,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "y": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "z": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "z"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "bidirectional": {
+                "type": "boolean"
+              },
+              "access": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "fixed"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "install"
+                      },
+                      "item": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "count": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 99
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "item",
+                      "count"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "skill"
+                      },
+                      "ability": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "ability"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "kind",
+              "path",
+              "bidirectional",
+              "access"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "devices": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "kind": {
+                    "const": "pump"
+                  },
+                  "at": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "z": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "target": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "z": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 30
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "kind",
+                  "at",
+                  "target",
+                  "amount"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "kind": {
+                    "const": "dig"
+                  },
+                  "at": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "z": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "target": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "z": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "item": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 99
+                  },
+                  "ability": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "kind",
+                  "at",
+                  "target",
+                  "item",
+                  "count"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "initialWater": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "at": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "z": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "additionalProperties": false
+              },
+              "amount": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3
+              }
+            },
+            "required": [
+              "at",
+              "amount"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "minZ",
+        "layers",
+        "faces",
+        "links",
+        "devices",
+        "initialWater"
+      ],
+      "additionalProperties": false
+    },
     "tiles": {
       "type": "array",
       "minItems": 3,
@@ -1850,6 +2343,9 @@
         "y": {
           "type": "integer",
           "minimum": 0
+        },
+        "z": {
+          "type": "integer"
         },
         "facing": {
           "enum": [
@@ -1911,7 +2407,7 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "pattern": "^\\d+,\\d+$"
+        "pattern": "^\\d+,\\d+(,-?\\d+)?$"
       }
     },
     "objects": {
@@ -1930,6 +2426,9 @@
           "y": {
             "type": "integer",
             "minimum": 0
+          },
+          "z": {
+            "type": "integer"
           },
           "name": {
             "type": "string",

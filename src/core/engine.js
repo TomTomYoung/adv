@@ -1,3 +1,4 @@
+import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxelMap} from './voxels.js';
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason} from './dungeons.js';
 import {openDungeonScene} from './dungeon-scenes.js';
 import {storyEnding} from './story.js';
@@ -80,22 +81,24 @@ export class GameEngine {
   }
   map(){return this.data.maps[this.state.location?.map];}
   objectState(object){return this.state.objects[`${this.map().id}/${object.id}`]??object.initialState??'ready';}
-  objectAt(x,y){return this.map()?.objects.filter(o=>o.x===x&&o.y===y)??[];}
-  walkable(map,x,y){
+  objectAt(x,y,z=this.state.location?.z??0){return this.map()?.objects.filter(o=>o.x===x&&o.y===y&&(o.z??0)===z)??[];}
+  walkable(map,x,y,z=map?.id===this.state.location?.map?(this.state.location.z??0):0){
+    if(map?.voxels){const terrain=voxelMapState(this.data,this.state,map);if(voxelOccupancyReason(map,terrain,{x,y,z}))return false;return !map.objects.some(o=>o.x===x&&o.y===y&&(o.z??0)===z&&o.blocking&&(this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');}
+    if(z!==0)return false;
     if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||dungeonTile(this.data,this.state,map,x,y)!=='.'||dungeonBlock(this.data,this.state,map,x,y))return false;
     return !map.objects.some(o=>o.x===x&&o.y===y&&o.blocking && (this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
   }
   reveal(radius=this.partyEffect('revealRadius',1,'max')){
     const loc=this.state.location;if(!loc)return;
     const seen=new Set(this.state.discovered[loc.map]??[]),map=this.map();
-    for(let y=loc.y-radius;y<=loc.y+radius;y++)for(let x=loc.x-radius;x<=loc.x+radius;x++)if(y>=0&&y<map.tiles.length&&x>=0&&x<map.tiles[0].length)seen.add(`${x},${y}`);
+    for(let y=loc.y-radius;y<=loc.y+radius;y++)for(let x=loc.x-radius;x<=loc.x+radius;x++)if(y>=0&&y<map.tiles.length&&x>=0&&x<map.tiles[0].length)seen.add(map.voxels?`${x},${y},${loc.z??0}`:`${x},${y}`);
     this.state.discovered[loc.map]=[...seen];
   }
-  teleport(mapId,x,y,facing='north'){
-    const map=this.data.maps[mapId];if(!this.walkable(map,x,y))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+  teleport(mapId,x,y,facing='north',z=0){
+    const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
-    this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing};enterDungeon(this,mapId);this.reveal();
+    this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
   }
   returnTown(emergency=false,quiet=false){
@@ -115,13 +118,19 @@ export class GameEngine {
     if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];return true;}
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
-    if(!this.walkable(this.map(),x,y)){this.notify(dungeonBlock(this.data,this.state,this.map(),x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
-    const from={...loc};loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    const map=this.map(),point={x,y,z:loc.z??0};
+    if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point)||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
+    if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
+    return this.finishMove(point);
+  }
+  finishMove(point){
+    const loc=this.state.location,{x,y}=point,z=point.z??0;
+    const from={...loc};loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     stepDungeon(this,{from,to:{...loc}});
     if(this.state.waiting||this.state.battle)return true;
-    if(this.state.mode!=='dungeon'||loc.x!==x||loc.y!==y)return true;
+    if(this.state.mode!=='dungeon'||loc.map!==from.map||loc.x!==x||loc.y!==y||(loc.z??0)!==z)return true;
     if(dungeonDanger(this))return true;
     if(this.trigger('enter'))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
@@ -135,7 +144,7 @@ export class GameEngine {
   trigger(kind){
     const loc=this.state.location;if(!loc)return false;
     const [dx,dy]=DELTAS[DIRECTIONS.indexOf(loc.facing)];
-    const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'?this.objectAt(loc.x+dx,loc.y+dy):[];
+    const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
     for(const object of [...blockers,...at,...ahead.filter(o=>!blockers.includes(o))]){
@@ -176,7 +185,7 @@ export class GameEngine {
       const region=this.data.regions.find(r=>r.id===intent.region);
       const mapId=dungeon?.entries.main.map??region?.entrance;if(!mapId)return false;
       this.state.light=this.data.system.lightCapacity;
-      const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing);return true;
+      const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;this.run(service.script);return true;

@@ -1,3 +1,5 @@
+import {voxelAt,voxelPoint} from './voxels.js';
+import {voxelSpace} from './systems/voxel-space.js';
 import {fireNetwork} from './systems/fire-network.js';
 import {waterworks} from './systems/waterworks.js';
 import {corrosion} from './systems/corrosion.js';
@@ -13,7 +15,7 @@ import {marketPacts} from './systems/market-pacts.js';
 import {powerGrid} from './systems/power-grid.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
-export const DUNGEON_SYSTEMS={fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
+export const DUNGEON_SYSTEMS={voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
 export const freshDungeons=()=>({version:1,nextRun:1,active:null,persistent:{}});
 export const dungeonForMap=(data,map)=>Object.values(data.dungeons??{}).find(d=>d.maps.includes(map))??null;
 export function dungeonContexts(data,state){
@@ -111,7 +113,7 @@ export function dungeonAction(engine,intent){
   DUNGEON_SYSTEMS[plan.ctx.spec.use].act({...plan.ctx,engine},intent,plan);
   dungeonDanger(engine);return true;
 }
-export function dungeonViews(data,state){return dungeonContexts(data,state).map(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].project(ctx));}
+export function dungeonViews(data,state){return dungeonContexts(data,state).map(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].project(ctx)).filter(v=>!v.hidden);}
 export function validateDungeons(data){
   if(!data.game.dungeonVersion)return [];
   const errors=[],owned=new Set(),bad=m=>errors.push(`dungeons: ${m}`);
@@ -131,7 +133,8 @@ export function validateDungeons(data){
   }
   for(const [id,map] of Object.entries(data.maps)){
     if(!owned.has(id))bad(`所属のないマップ ${id}`);
-    if(map.initiallyKnown!==undefined&&(!Array.isArray(map.initiallyKnown)||map.initiallyKnown.some(cell=>typeof cell!=='string'||!/^\d+,\d+$/.test(cell)||map.tiles[Number(cell.split(',')[1])]?.[Number(cell.split(',')[0])]===undefined)))bad(`${id}: 初期踏査セルが不正です`);
+    if(map.voxels&&Object.values(data.dungeons).flatMap(d=>Object.values(d.systems)).filter(s=>s.use==='voxel_space'&&s.enabled!==false&&s.maps?.includes(id)).length!==1)bad(`${id}: 立体地形の制御部品が必要です`);
+    if(map.initiallyKnown!==undefined&&(!Array.isArray(map.initiallyKnown)||map.initiallyKnown.some(cell=>typeof cell!=='string'||!(map.voxels?/^\d+,\d+,-?\d+$/:/^\d+,\d+$/).test(cell)||(map.voxels?voxelAt(map,null,voxelPoint(cell))===null:map.tiles[Number(cell.split(',')[1])]?.[Number(cell.split(',')[0])]===undefined))))bad(`${id}: 初期踏査セルが不正です`);
   }
   return errors;
 }

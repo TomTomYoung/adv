@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-14。対象は作品版1.7.0とPR #8のダンジョン素材・現地調査です。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
+更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8の素材・現地調査はマージ済みです。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
 
 ## 正本と生成
 
@@ -10,7 +10,7 @@ q011〜q020は `authoring/catalog-q011-q020.json` と `catalog-q011-q020.mjs` �
 
 その他の依頼は `authoring/structures-*.mjs`、`structures-additional.mjs`、`scenarios-*.mjs` を確認します。過去の原稿は `quests.txt` と `reference`、旧セーブの固定定義は `compat` です。依頼番号や共通類型から調査手順・戦闘・結末を決める実装を通常経路へ戻さないでください。
 
-ダンジョン定義は `authoring/dungeons/*.json`、追加アイテム・敵・装置・マップは `kagaribi-content.json`、`terrain-content.json`、`dungeon-content.json`、素材と現地調査は `dungeon-scenes.json` です。
+ダンジョン定義は `authoring/dungeons/*.json`、追加アイテム・敵・装置・マップは `kagaribi-content.json`、`terrain-content.json`、`dungeon-content.json`、立体地形は `voxel-content.json`、素材と現地調査は `dungeon-scenes.json` です。
 
 職業は `authoring/jobs.json`、敵と仲間は `authoring/entities.json`、NPCは `authoring/characters.mjs`、SEと表示効果は `authoring/presentation.json` が正本です。採用中の画像と出所は `data/assets.json` と `assets/PROVENANCE.md` を確認してください。採用済みの生成肖像を古い小型PNGへ戻さないでください。
 
@@ -36,6 +36,12 @@ Coreはゲーム状態を所有し、ApplicationはコピーしたViewModelを�
 失敗した操作でMP・材料だけを先に失わせないでください。戦闘後の作業は勝利時だけ確定し、逃走・敗北・中断で未成立の救助や合意を追加しません。乱数は保存されたPRNGを使います。
 
 旧script ID・配列順・分岐path・呼出scopeを保持します。`legacyQuestRoutes`、`legacyStoryRoutes`、`catalogRevision`、q008の状態改訂を混同しません。現地調査の会話構造を変える場合は原稿の revision を上げ、旧版を残します。
+
+## 立体地形の保守
+
+仕様と確認ルートは[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)です。立体区画はvoxel_spaceの一部品が担当します。閉鎖と排水を同じ処理にせず、水門閉鎖時の残水と水量保存を維持してください。経路途中の完全水没、閉じた面、密の立方体、終点の足場を費用支払い前に検査します。
+
+従来マップの踏査キーはx,y、立体マップはx,y,zです。既存25マップの地形パッチや周期水域を自動変換しません。1.7.0からは既存の水門・周期時刻を保持して不足するspace部品だけを補います。
 
 ## 次に残る作業
 
