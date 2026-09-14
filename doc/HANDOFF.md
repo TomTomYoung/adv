@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8・PR #9はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
+更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8・PR #9・PR #10はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
 
 ## 正本と生成
 
@@ -38,6 +38,8 @@ Coreはゲーム状態を所有し、ApplicationはコピーしたViewModelを�
 旧script ID・配列順・分岐path・呼出scopeを保持します。`legacyQuestRoutes`、`legacyStoryRoutes`、`catalogRevision`、q008の状態改訂を混同しません。現地調査の会話構造を変える場合は原稿の revision を上げ、旧版を残します。
 
 ## 立体地形の保守
+
+セル・壁・境界の定義は[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)です。2Dの25マップとその四方移動・保存形式を保守対象として残します。方向別境界と入口依存の出口制限は拡張仕様であり、現行JSONへそのまま追加しないでください。導入時には移動・経路・退避・保存・到達性・Viewの許可判定を揃えます。
 
 仕様と確認ルートは[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)です。立体区画はvoxel_spaceの一部品が担当します。閉鎖と排水を同じ処理にせず、水門閉鎖時の残水と水量保存を維持してください。経路途中の完全水没、閉じた面、密の立方体、終点の足場を費用支払い前に検査します。
 
