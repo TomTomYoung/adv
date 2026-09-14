@@ -1,10 +1,10 @@
 # ダンジョン一覧
 
-更新日: 2026-09-14。対象: このブランチの1.7.0。master 1.6.0（PR #6反映済み）を基準に、本書を先に作成してから以下の追加設定を実装しました。全13ダンジョン・25マップ・200クエストです。
+更新日: 2026-09-14。対象: 作品版1.7.0。13件の固有システムはmasterへ反映済みです。素材・現地調査の追加はPR #8にあります。全13ダンジョン・25マップ・200クエストです。
 
 設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
-Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234553b6) と各ページの「ダンジョン固有設定」を2026-09-14に照合しました。既存の物語設定と、今回ゲームへ追加する数値・配置は区別して記載します。
+Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234553b6) と各ページの「ダンジョン固有設定」を2026-09-14に照合しました。既存の物語設定と、ゲームに設定した数値・配置は区別して記載します。
 
 ## 既存の固有システム
 
@@ -20,7 +20,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    戦闘ごとに装備が腐食し、退出時に解除されます。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `authoring/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
 
-## 今回実装した固有システム
+## 庭園から移動集落までの固有システム
 
 4. 根喰みの地下庭園（`region_3`）
 
@@ -96,7 +96,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    帰還方向への移動がベクトルに逆らうように配置し、帰ろうとするとデバフが累積するダンジョンとします。
 
-   デバフの具体的な効果、蓄積量、解除条件は別途定めます。
+   初期設定では逆行1歩ごとに1重累積し、攻撃・防御・素早さ・知力を0.6の累積数乗倍にします。上限100重で、深淵から退出すると解除されます。HP・MPの上限は変えません。
 
    状態: 実装済み。設定: `authoring/dungeons/region_10.json`。[Notion](https://app.notion.com/p/3dac3c1966b381b8a90bfba1009b5bdf)。
 
@@ -126,9 +126,42 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 谷と移動集落には、町から選べる専用の探索マップを用意しました。既存10地域の分類と200クエストの進行は維持します。q193・q194の分岐結果は各クエストの選択に従い、探索装置の状態から物語上の結末を確定させません。
 
-未指定の消費量、成長時間、警戒値、空気量、動力容量、変化周期、デバフ係数はJSONで調整できる初期値を置き、実装仕様に明記します。技能や魔法の禁止対象はIDで個別指定し、町での行先選択と境界外でも確認可能にします。
+未指定の消費量、成長時間、警戒値、空気量、動力容量、変化周期、デバフ係数はJSONで調整できる初期値を置き、[実装仕様](DUNGEON_SYSTEMS_1_7.md)に記載しています。技能や魔法の禁止対象はIDで個別指定し、町での行先選択と境界外でも確認できます。
 
 保存データには設置物・開通・装置などの永続状態と、技能貸出・空気・護衛・逆行デバフなど探索中だけの状態を分けて保持します。旧版のセーブは進行や乱数を保ったまま追加部品を補います。
 
-
 実際の操作、初期数値、JSON項目、保存期間、検証結果は [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md) を参照してください。
+
+素材と依頼の対応、現地の観察条件は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。GitHub反映状態は[CURRENT_STATUS.md](CURRENT_STATUS.md)へ記載します。
+
+<!-- generated:dungeons -->
+
+## 配布データの構成
+
+篝火の迷宮 (kagaribi)：3マップ。部品：fires=fire_network。現地調査：灯を受け渡す準備 → q001。
+
+巨獣上の移動集落 (moving_village)：1マップ。部品：terrain=terrain_shift。現地調査：暮らしを揺らす足場 → q194。
+
+祈りの届かない谷 (prayerless_valley)：1マップ。部品：boundary=suppression_zone。現地調査：境界の内側の祈り → q193。
+
+灯守の地下水道 (region_1)：2マップ。部品：water=waterworks。現地調査：排水された横道 → q010。
+
+帰還者の深淵 (region_10)：2マップ。部品：return_flow=vector_curse。現地調査：逆らった足取り → q100。
+
+塩哭きの廃坑 (region_2)：2マップ。部品：salt=corrosion / walls=breakable_walls。現地調査：塩壁の向こうの退路 → q011。
+
+根喰みの地下庭園 (region_3)：2マップ。部品：garden=plant_garden。現地調査：根が支える橋 → q030。
+
+鏡沈みの礼拝堂 (region_4)：2マップ。部品：mirrors=warp_network。現地調査：仮面を運ぶ鏡路 → q039。
+
+灰時計の書庫 (region_5)：2マップ。部品：library=skill_library。現地調査：閉じた頁と開いた通路 → q049。
+
+眠れる地下市場 (region_6)：2マップ。部品：market=market_pacts。現地調査：通行を約束する相手 → q060。
+
+黒潮の沈没城 (region_7)：2マップ。部品：air=air_supply。現地調査：一つだけ浮かぶ区画 → q070。
+
+鉄胎の機関廟 (region_8)：2マップ。部品：power=power_grid。現地調査：動力の届く範囲 → q080。
+
+星欠けの地下観測所 (region_9)：2マップ。部品：terrain=terrain_shift。現地調査：観測のための足場 → q090。
+
+<!-- /generated:dungeons -->

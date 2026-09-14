@@ -1,3 +1,4 @@
+import {validateDungeonScenes} from './dungeon-scenes.js';
 import {validateDungeons} from './dungeons.js';
 import {validateStories} from './story.js';
 import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
@@ -116,6 +117,7 @@ export function validateContent(data){
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
-  errors.push(...validateDungeons(data));
+  errors.push(...validateDungeons(data),...validateDungeonScenes(data));
+  for(const d of Object.values(data.dungeons??{}))if(Array.isArray(d.fieldScenes))for(const s of d.fieldScenes)if(s)expression(s.condition,`dungeons.${d.id}.fieldScenes.${s.id}.condition`);
   return errors;
 }

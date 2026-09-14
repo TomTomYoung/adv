@@ -1,0 +1,835 @@
+{
+  "scripts": {
+    "dungeon.scene.kagaribi.v1": {
+      "dungeonScene": "kagaribi",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "灯番の捜索に備え、入口の篝火で携帯する灯を確かめる。置かれた火が明るくても、その明かりを道中へ持ち出せるとは限らない。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.active.systems.fires.portable.lit"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "携帯松明に火がある。台座に残る火と、隊が持ち歩く燃料を別々に確かめた。帰路に必要な残量は、移動のたびに確認する必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.kagaribi"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.kagaribi",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "携帯松明は消えている。入口の篝火の操作から点火し、携帯する灯を改めて確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_1.v1": {
+      "dungeonScene": "region_1",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "上層の水門には横道へ流れ込む水路が接続している。住民の避難方法を考える前に、この操作がどこへ作用するかを確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.persistent.region_1.systems.water.controls.upper_gate"
+            },
+            "right": false
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "上層の水門が閉じ、水路へ流入する水が止まっている。排水された横道は通行可能だ。これはこの水路の観察であり、奥の住民五人の避難確認はまだ別に必要となる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_1"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_1",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "上層の水門は開き、水路に水が流れている。探索画面でこの水門を閉じてから、横道の変化を調べられる。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_2.v1": {
+      "dungeonScene": "region_2",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口脇の脆い塩壁には道具を差し込める亀裂がある。遭難者を案内する前に、ここから通れる道を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_2.systems.walls.broken"
+            },
+            "right": "upper_entry"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "塩壁は除かれ、入口脇の通路がつながっている。開けた場所を地図に記した。人型の避難標識とは別の地点なので、標識の向きも現場で読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_2"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_2",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "塩壁はまだ通路を塞いでいる。壁の正面から発破薬か対応する探索スキルで開通させ、改めて確認できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_3.v1": {
+      "dungeonScene": "region_3",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "亀裂沿いの植床には、根を支えとして渡せる空間がある。庭園の大根をどう扱うか決める前に、こちらの小さな根橋の成長を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.species"
+                },
+                "right": "root_bridge"
+              },
+              {
+                "op": "gte",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.age"
+                },
+                "right": 5
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "育った根が亀裂をまたぎ、床のなかった区画を通れるようになった。採取するとこの橋も失われる。根が道を作る働きと、既存の天井へ及ぼす負荷は、それぞれ確かめる必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_3"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_3",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この植床には、渡れるまで育った根橋がない。種と培養土を使って根橋草を植え、成長を待ってから調べよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_4.v1": {
+      "dungeonScene": "region_4",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "礼拝に使われる物がどの道を通るのか、入口の鏡とその接続先を地図に照合する。鏡に映る見た目だけでは、持ち主の名は分からない。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.mirrors.uses"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で鏡を通り、離れた地点へ転移した。歩行経路だけを追っても、仮面の移動を追い切れないことが分かった。誰が運んだかは証言と照合する必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_4"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_4",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ鏡の転移を確かめていない。鏡を通り、到着した鏡の前で調査を再開できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_5.v1": {
+      "dungeonScene": "region_5",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "書見台のそばで、封じられた通路と貸出の仕組みを照合する。ここで借りる知識には、代わりに使えなくなる自分の技がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_5.systems.library.opened"
+            },
+            "right": "seal_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "第1層の封印通路が解かれている。通路を読む知識を借り、封印へ作用させる手順が確かめられた。返却すると元の技を使えるようになるが、開いた通路は残る。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_5"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_5",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "第1層の対象通路はまだ封印されている。通路を読む本を借り、封印の前で探索スキルを使ってから、書見台へ戻って確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_6.v1": {
+      "dungeonScene": "region_6",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "市場の横道を通す相手に、通行料の対象を確かめる。市場全体の保証を相談する前に、一件の取引がどこまで有効なのかを見る。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_6.systems.market.paid"
+            },
+            "right": "toll_1"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "この相手への通行料は支払われ、横道が開いている。取引の効力はこの通路に及ぶ。市場全体の結界を維持する共同保証には、さらに商人たちの意思確認が必要だ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_6"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_6",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この横道の通行料はまだ支払われていない。相手の前で取引を成立させ、開く通路を確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_7.v1": {
+      "dungeonScene": "region_7",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "第1層の浮上装置には、一つの区画へ伸びる配管がある。城全体を動かす前に、小区画の変化を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_7.systems.air.raised"
+            },
+            "right": "float_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "対象区画が浮上し、息継ぎできる空気溜まりと横道が生まれた。他の装置は個別に操作できる。全体浮上の旧手順を、そのまま選ぶ必要はない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_7"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_7",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この装置の区画はまだ浮上していない。装置で区画を浮かせた後、空気溜まりと通路を確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_8.v1": {
+      "dungeonScene": "region_8",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "門扉系統の配電盤から配管をたどる。中枢への命令を考える前に、一つの系統へ動力を送った影響を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_8.systems.power.circuits"
+            },
+            "right": "circuit_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "門扉系統へ動力が送られている。同じ系統に属する設備にも電力が届くため、門だけを見て操作を決めることはできない。中枢の署名条件は、別途その記録を読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_8"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_8",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "門扉系統に動力は送られていない。配電盤の操作で起動する設備を確認し、番兵への対応も済ませてから調査を続けよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_9.v1": {
+      "dungeonScene": "region_9",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "天球儀の環には、周囲の床を動かす連結部がある。観測蓋と生活灯の電源を調べるため、まず現地の移動手段を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.terrain.changes"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で天球儀を操作し、接続する床と通路の配置が変わることを確認した。操作するタイミングは隊で選べる。蓄電器の働きや生活灯への給電は、設備の記録と照合しよう。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_9"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_9",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ天球儀による地形変化を確認していない。現在と異なる地形を選んでから、改めて調べよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_10.v1": {
+      "dungeonScene": "region_10",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口の記録台には、道順と並べて流れの向きを書く余白がある。距離だけで帰還の難しさを測れるか、隊の状態を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.return_flow.stacks"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "流れに逆らった移動による衰弱が、今回の探索で蓄積している。同じ距離でも進む向きによって負担が違う。安全な町へ出れば、この探索での衰弱は解ける。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_10"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_10",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ逆流による衰弱が蓄積していない。帰路で実際に変化が起きたとき、流れと隊の状態を記録できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.prayerless_valley.v1": {
+      "dungeonScene": "prayerless_valley",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "境界石の内と外で、祈りの届き方を確かめる。治療へ向かう道を作るなら、どこで術を使えるかを確かめておく必要がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "location.x"
+            },
+            "right": 5
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "境界の内側にいる。回復の祈りと指定された術は使用できず、この区域が遮る祈りや呪いの効果も停止する。病人をどちら側へ運ぶかは、本人の意思と移動の負担を確かめて相談する。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.prayerless_valley"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.prayerless_valley",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今は境界の外側にいる。境界石を越えた区画で、術の制限がどう変わるかを調べられる。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.moving_village.v1": {
+      "dungeonScene": "moving_village",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口の安全な足場から、建物をつなぐ道を見渡す。契約に記された土地が動くとき、住民の暮らしに何が起きるかを確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.terrain.changes"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の滞在中に巨獣の姿勢が変わり、通路の配置が変化した。隊の操作で時刻を選ぶことはできない。巡回の理由は、住民の話と巨獣の状態を照合して確かめる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.moving_village"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.moving_village",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の滞在では、まだ足場の変化を見ていない。安全な場所で様子を見るか、探索を続けてから戻って調べよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

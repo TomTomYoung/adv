@@ -1,4 +1,5 @@
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason} from './dungeons.js';
+import {openDungeonScene} from './dungeon-scenes.js';
 import {storyEnding} from './story.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
@@ -162,6 +163,7 @@ export class GameEngine {
     if(type==='choose')return chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='dungeon.scene')return openDungeonScene(this,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
     if(type==='move')return this.move(intent.direction);
     if(type==='interact')return this.interact();

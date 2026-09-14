@@ -1,3 +1,4 @@
+import {artRect} from './dungeon-art.js';
 // A presentation-only ray caster. Geometry is a snapshot; it never moves or mutates the game.
 const textures=new Map();
 function texture(src,draw){if(textures.has(src)){const image=textures.get(src);if(!image.complete)image.addEventListener('load',draw,{once:true});return image;}const image=new Image();image.onload=draw;image.src=src;textures.set(src,image);return image;}
@@ -8,7 +9,7 @@ export function paintDungeon(canvas,dungeon,battle){
     if(!canvas.isConnected)return;
     ctx.imageSmoothingEnabled=false;
     const sky=ctx.createLinearGradient(0,0,0,height);sky.addColorStop(0,'#080e12');sky.addColorStop(.5,'#17282b');sky.addColorStop(.5,'#2a2924');sky.addColorStop(1,'#0a1011');ctx.fillStyle=sky;ctx.fillRect(0,0,width,height);
-    const art=texture(dungeon.background,draw), {x,y,facing}=dungeon.location;
+    const art=texture(dungeon.wall?.url??dungeon.background,draw), {x,y,facing}=dungeon.location;
     const angle={north:-Math.PI/2,east:0,south:Math.PI/2,west:Math.PI}[facing],fov=Math.PI/2.6;
     for(let column=0;column<width;column+=3){
       const ray=angle+(column/width-.5)*fov,dx=Math.cos(ray),dy=Math.sin(ray);
@@ -18,14 +19,20 @@ export function paintDungeon(canvas,dungeon,battle){
       const u=((Math.abs(hx-Math.round(hx))<.04?hy:hx)%1+1)%1;
       const water=dungeon.cells[Math.floor(hy)]?.[Math.floor(hx)]?.water;
       if(water){ctx.fillStyle='#287f9a';ctx.fillRect(column,top,3,wallHeight);ctx.fillStyle='#8fd4dd';for(let line=top+8;line<top+wallHeight;line+=18)ctx.fillRect(column,line,3,2);}
-      else if(art.complete&&art.naturalWidth)ctx.drawImage(art,Math.floor(18+u*50),45,2,76,column,top,3,wallHeight);
+      else if(art.complete&&art.naturalWidth){
+        if(dungeon.wall){const [sx,sy,sw,sh]=artRect(art,dungeon.wall);ctx.drawImage(art,sx+u*(sw-1),sy,1,sh,column,top,3,wallHeight);}
+        else ctx.drawImage(art,Math.floor(18+u*50),45,2,76,column,top,3,wallHeight);
+      }
       else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,3,wallHeight);}
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.92,.16+corrected*.095)})`;ctx.fillRect(column,top,3,wallHeight);
     }
     const shade=ctx.createRadialGradient(width*.5,height*.55,60,width*.5,height*.5,width*.62);shade.addColorStop(0,'#00000000');shade.addColorStop(1,'#000000d8');ctx.fillStyle=shade;ctx.fillRect(0,0,width,height);
     if(!battle){
       const ahead=dungeon.objects.filter(o=>{const vx=o.x-x,vy=o.y-y;return Math.abs(vx)+Math.abs(vy)<=1&&vx*Math.cos(angle)+vy*Math.sin(angle)>=-.1;});
-      if(ahead.length){ctx.textAlign='center';ctx.font='bold 38px serif';ctx.fillStyle='#edc989';ctx.fillText(ahead[0].glyph,width/2,height*.6);}
+      if(ahead.length){
+        const object=ahead.find(o=>o.art)??ahead[0],sprite=object.art?texture(object.art.url,draw):null;
+        if(sprite?.complete&&sprite.naturalWidth){ctx.drawImage(sprite,...artRect(sprite,object.art),width/2-60,height*.45,120,120);return;}
+        ctx.textAlign='center';ctx.font='bold 38px serif';ctx.fillStyle='#edc989';ctx.fillText(ahead[0].glyph,width/2,height*.6);}
     }
   };draw();
 }

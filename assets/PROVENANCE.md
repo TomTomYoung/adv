@@ -1,3 +1,5 @@
+2026-09-14：ダンジョン用の壁面・装置アトラス2枚を組み込みImageGenで各1回生成しました。1254×1254の生成画像を寸法・構図を保持してWebPへ変換しています。英語プロンプトと日本語訳は assets/source/dungeons/imagegen-prompts.json、生成元PNGと採用WebPのハッシュは同ディレクトリの imagegen-manifest.json を参照してください。既存の素材を保持しています。
+
 # ADV art and score resources
 
 The original 1.0 dungeon pixel images and scores were created for TomTomYoung/adv with the user's requested AIPaint and AIMusic repositories. They are newly authored geometry and musical note arrangements, with no copied third-party game artwork, recorded audio, fonts, or samples.
