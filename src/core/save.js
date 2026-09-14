@@ -1,3 +1,5 @@
+import {scaledEnemy} from './enemy.js';
+import {freshDungeons,enterDungeon,validateDungeonState} from './dungeons.js';
 import {storyStateErrors,storyEnding} from './story.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
@@ -44,20 +46,25 @@ function upgradeStoryRevisions(original,data){
   }
   return save;
 }
-export function migrateSave(original,data){
+function migrateContentSave(original,data){
   if(!isRecord(original))return original;
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
   const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
+  if(migration.dungeonRevision){
+    const legacy={...data,game:{...data.game,version:original.contentVersion,dungeonVersion:undefined}};
+    if(validateSave(original,legacy).length)return original;
+    const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;return upgradeStoryRevisions(save,{...data,game:{...data.game,dungeonVersion:undefined}});
+  }
   if(migration.scenarioRevision){
-    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,storyVersion:undefined,recordVersion:migration.preserveRecords?data.game.recordVersion:undefined}};
+    const legacy={...data,quests:oldQuests,game:{...data.game,version:original.contentVersion,dungeonVersion:undefined,storyVersion:undefined,recordVersion:migration.preserveRecords?data.game.recordVersion:undefined}};
     if(validateSave(original,legacy).length)return original;
     const save=clone(original);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
     if(!migration.preserveRecords)addScenarioState(save,data);
     keepLegacyRoutes(save,data,migration);return save;
   }
   // Old records must pass their old growth limits before any normalization.
-  const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,storyVersion:undefined,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
+  const legacy={...data,quests:oldQuests,jobs:undefined,game:{...data.game,version:original.contentVersion,dungeonVersion:undefined,storyVersion:undefined,recordVersion:undefined},actors:Object.fromEntries(migration.actors.map(id=>[id,data.actors[id]]))};
   if(validateSave(original,legacy).length)return original;
   const save=clone(original),s=save.state;
   save.contentVersion=data.game.version;s.contentVersion=data.game.version;
@@ -78,6 +85,13 @@ export function migrateSave(original,data){
   addScenarioState(save,data);
   keepLegacyRoutes(save,data,migration);
 
+  return save;
+}
+export function migrateSave(original,data){
+  const migrated=migrateContentSave(original,data);
+  if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
+  const save=clone(migrated);save.state.dungeons=freshDungeons();
+  if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;
 }
 export function validateSave(save,data){
@@ -141,9 +155,10 @@ export function validateSave(save,data){
     const b=s.battle,e=data.encounters[b?.encounter];
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
+      if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&e.hp===0))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
-      b.enemies.forEach((enemy,i)=>{const def=data.enemies[e.enemies[i]];if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
+      b.enemies.forEach((enemy,i)=>{const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}
@@ -151,5 +166,6 @@ export function validateSave(save,data){
     if(s.waiting?.type!=='battle')fail('戦闘待機不正');
   }else if(s.waiting?.type==='battle')fail('戦闘がありません');
   if(s.vm.length&&!s.waiting)fail('待機位置がありません');
+  errors.push(...validateDungeonState(data,s));
   return [...new Set(errors)];
 }

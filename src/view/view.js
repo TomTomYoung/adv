@@ -1,3 +1,4 @@
+import {dungeonSystems} from './dungeon-systems.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
@@ -49,8 +50,16 @@ export class GameView {
       const actions=node('div','quest-actions');if(q.stage!=='completed'){actions.append(button(q.stage==='active'?'この依頼を追う':'依頼を受ける',()=>this.act({type:q.stage==='active'?'track':'accept',id:q.id}),'primary',!q.unlocked));if(q.stage==='active')actions.append(button('迷宮へ向かう',()=>this.act({type:'travel',region:q.region})));}body.append(actions);card.append(num,body);list.append(card);
     }section.append(node('p','muted',`${qs.length}件を表示`),list);parent.append(section);
   }
-  regions(parent,m){const section=node('div','panel-content');section.append(heading('DESCENT / 10 DOMAINS','潜る場所を選ぶ'));
-    const list=node('div','region-list');for(const r of m.regions){const item=node('article','region-card'),count=m.quests.filter(q=>q.region===r.id&&q.stage==='completed').length;item.style.setProperty('--region-color',r.color);item.append(node('span','eyebrow',`${String(r.id).padStart(2,'0')} / 推奨 Lv.${r.recommendedLevel} / ${count}件完了`),node('h3','',r.name),node('p','',r.description),button('地下一層へ',()=>this.act({type:'travel',region:r.id}),'primary'));list.append(item);}section.append(list);parent.append(section);}
+  regions(parent,m){
+    const section=node('div','panel-content');section.append(heading('DESCENT / DUNGEONS','潜る場所を選ぶ'));
+    const list=node('div','region-list'),destinations=m.dungeons??m.regions;
+    destinations.forEach((r,index)=>{
+      const item=node('article','region-card');item.style.setProperty('--region-color',r.color);
+      const detail=m.dungeons?`${r.mapCount}階層`: `${m.quests.filter(q=>q.region===r.id&&q.stage==='completed').length}件完了`;
+      item.append(node('span','eyebrow',`${String(index+1).padStart(2,'0')} / 推奨 Lv.${r.recommendedLevel} / ${detail}`),node('h3','',r.name),node('p','',r.description),button('迷宮に入る',()=>this.act(m.dungeons?{type:'travel',dungeon:r.id}:{type:'travel',region:r.id}),'primary'));
+      list.append(item);
+    });section.append(list);parent.append(section);
+  }
   scene(parent,m){
     const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.dataset.fx='scene';scene.append(canvas);
     const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`B${m.dungeon.floor} / ${m.dungeon.location.x}, ${m.dungeon.location.y}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
@@ -65,6 +74,7 @@ export class GameView {
     const controls=node('div','explore-controls'),movement=node('div','movement-pad');
     for(const [label,direction,cl] of [['前へ','forward','forward'],['左を向く','left','left'],['後ろへ','back','back'],['右を向く','right','right']])movement.append(button(label,()=>this.act({type:'move',direction}),cl));
     const actions=node('div','explore-actions');actions.append(button('足元・正面を調べる',()=>this.act({type:'interact'}),'primary'),button('帰還印で町へ戻る',()=>this.ui.retreat()),node('small','muted','帰還印：所持金の8%。入口の階段からは無料で帰れます。'));controls.append(movement,actions);section.append(controls);
+    dungeonSystems(section,m.dungeon.systems,intent=>this.act(intent));
     const log=node('div','travel-log');log.append(node('span','eyebrow','直近の記録'));for(const line of m.log.slice(-3))log.append(node('p','',line));section.append(log);parent.append(section);
   }
   dialog(parent,d){const section=node('section','story-window');section.setAttribute('aria-label','物語と選択肢');
@@ -123,7 +133,7 @@ export class GameView {
   }
   sidebar(parent,m){
     const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=node('div',`party-row ${a.hp<=0?'fallen':''}`),avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
-    if(m.dungeon){const mapSection=node('section','side-section');mapSection.append(node('span','eyebrow','測量図'),node('p','muted',`灯油 ${m.light}/${m.lightMax}${m.light===0?'・暗闇では遭遇が増えます':''}`));const grid=node('div','minimap');grid.style.setProperty('--map-width',m.dungeon.width);grid.setAttribute('aria-label','探索済みの地図');for(const row of m.dungeon.cells)for(const cell of row){const obj=m.dungeon.objects.find(o=>o.x===cell.x&&o.y===cell.y),here=cell.x===m.dungeon.location.x&&cell.y===m.dungeon.location.y;const square=node('span',`map-cell ${cell.known?(cell.wall?'wall':'floor'):'unknown'} ${here?'current':''}`);if(here)square.textContent=({north:'↑',east:'→',south:'↓',west:'←'})[m.dungeon.location.facing];else if(cell.known&&obj)square.textContent=obj.glyph;if(cell.known)square.title=`${cell.x},${cell.y}${obj?' '+obj.name:''}`;grid.append(square);}mapSection.append(grid,node('p','map-legend','? 手掛かり　! 決着　▣ 補給　⇵ 階段'));parent.append(mapSection);}
+    if(m.dungeon){const mapSection=node('section','side-section');mapSection.append(node('span','eyebrow','測量図'),node('p','muted',`${m.lightLabel??'灯油'} ${m.light}/${m.lightMax}${m.light===0?(m.dungeon.systems?.length?'・台座の守りを確認してください':'・暗闇では遭遇が増えます'):''}`));const grid=node('div','minimap');grid.style.setProperty('--map-width',m.dungeon.width);grid.setAttribute('aria-label','探索済みの地図');for(const row of m.dungeon.cells)for(const cell of row){const obj=m.dungeon.objects.find(o=>o.x===cell.x&&o.y===cell.y),here=cell.x===m.dungeon.location.x&&cell.y===m.dungeon.location.y;const square=node('span',`map-cell ${cell.known?(cell.wall?'wall':'floor'):'unknown'} ${here?'current':''}`);if(here)square.textContent=({north:'↑',east:'→',south:'↓',west:'←'})[m.dungeon.location.facing];else if(cell.known&&obj)square.textContent=obj.glyph;if(cell.known)square.title=`${cell.x},${cell.y}${obj?' '+obj.name:''}`;grid.append(square);}mapSection.append(grid,node('p','map-legend','? 手掛かり　! 決着　▣ 補給　⇵ 階段'));parent.append(mapSection);}
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','追跡中の依頼'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief),node('p','',m.tracked.evidenceTotal===0?'現地で相談・調査。中断後も続きから再開できます。':`手掛かり ${m.tracked.evidenceCount} / ${m.tracked.evidenceTotal??2}`));for(const loc of m.tracked.locations){const floor=loc.map.endsWith('f1')?1:2;tracked.append(node('p','coordinates',`地下${floor}層 (${loc.x}, ${loc.y}) / ${loc.role==='decision'?(m.tracked.evidenceTotal===0?'相談・調査':'決着'):loc.role==='clue_a'?'痕跡':'記録・証言'}`));}if(m.mode==='town')tracked.append(button('この迷宮へ',()=>this.act({type:'travel',region:m.tracked.region}),'primary'));parent.append(tracked);}
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','まず地下水道の依頼を受けてください。位置は追跡欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
   }

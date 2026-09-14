@@ -1361,8 +1361,8 @@
     },
     "lantern_keeper": {
       "id": "lantern_keeper",
-      "name": "灯守",
-      "role": "行軍三歩ごとに灯油を節約し、火と雷への備えを整える。",
+      "name": "灯番",
+      "role": "灯と隊を守る。篝火の迷宮では携帯松明や台座を点火し、くらがりを撃退する。",
       "growth": {
         "hp": 7,
         "mp": 2.4,
@@ -1411,6 +1411,38 @@
           "level": 10,
           "api": "battle.skill",
           "target": "enemy",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "kuragari_ward",
+          "level": 1,
+          "api": "fire.kindling",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "kindle_calm",
+          "level": 5,
+          "api": "fire.kindling",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "kindle_lure",
+          "level": 10,
+          "api": "fire.kindling",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "repel_kuragari",
+          "level": 1,
+          "api": "battle.skill",
+          "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
         }
@@ -2052,6 +2084,45 @@
       },
       "description": "MP2と傷薬2個・解毒薬1個を野営糧食1個へ変換します。",
       "cue": "item"
+    },
+    "kuragari_ward": {
+      "id": "kuragari_ward",
+      "name": "くらがり除けの火",
+      "api": "fire.kindling",
+      "target": "location",
+      "mp": 3,
+      "modes": [
+        "dungeon"
+      ],
+      "effect": "ward",
+      "cue": "light",
+      "description": "篝火の迷宮で携帯松明にくらがり除けの火を灯す。足元・正面の消灯した台座にも探索画面から点火できる。"
+    },
+    "kindle_calm": {
+      "id": "kindle_calm",
+      "name": "鎮めの火",
+      "api": "fire.kindling",
+      "target": "location",
+      "mp": 4,
+      "modes": [
+        "dungeon"
+      ],
+      "effect": "calm",
+      "cue": "light",
+      "description": "篝火の迷宮で携帯松明に鎮めの火を灯す。足元・正面の消灯した台座にも探索画面から点火できる。"
+    },
+    "kindle_lure": {
+      "id": "kindle_lure",
+      "name": "呼び寄せの火",
+      "api": "fire.kindling",
+      "target": "location",
+      "mp": 4,
+      "modes": [
+        "dungeon"
+      ],
+      "effect": "lure",
+      "cue": "light",
+      "description": "篝火の迷宮で携帯松明に呼び寄せの火を灯す。足元・正面の消灯した台座にも探索画面から点火できる。"
     }
   },
   "skills": {
@@ -2597,6 +2668,18 @@
         }
       ],
       "description": "MP7。生存する味方を小回復し、敵1巡の被害を半減。撤退までの態勢を整えます。"
+    },
+    "repel_kuragari": {
+      "name": "くらがり除けの火",
+      "mp": 3,
+      "target": "self",
+      "effects": [
+        {
+          "type": "repel"
+        }
+      ],
+      "fireEffect": "ward",
+      "description": "篝火の迷宮のくらがりを撃退し、携帯松明にもくらがり除けの火を灯す。撃破・勝利報酬は発生しない。"
     }
   },
   "formulas": {
@@ -3097,6 +3180,7 @@
     "weak_notes": "guard",
     "roots": "fire",
     "blood_light": "fire",
-    "homeward": "heal"
+    "homeward": "heal",
+    "repel_kuragari": "light"
   }
 }

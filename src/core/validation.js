@@ -1,3 +1,4 @@
+import {validateDungeons} from './dungeons.js';
 import {validateStories} from './story.js';
 import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
 import {validateJobs} from './job-validation.js';
@@ -17,7 +18,7 @@ export function validateContent(data){
     for(const key of ['left','right','arg','value'])if(key in value)expression(value[key],`${path}.${key}`,depth+1);
     if(value.args!==undefined){if(!Array.isArray(value.args))fail(path,'argsは配列です');else value.args.forEach(v=>expression(v,path,depth+1));}
     if(['and','or','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp'].includes(value.op)&&(!Array.isArray(value.args)||!value.args.length))fail(path,'argsが必要です');
-    if(value.op==='record_count'){if(!['battles','wins','escapes','losses','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
+    if(value.op==='record_count'){if(!['battles','wins','escapes','losses','repels','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
     if(value.op==='has_item')reference(data.items,value.item,path);
     if(value.op==='has_member'||value.op==='has_status')reference(data.actors,value.actor,path);
   };
@@ -79,7 +80,7 @@ export function validateContent(data){
   for(const [id,formula] of Object.entries(data.formulas))expression(formula,`formulas.${id}`);
   for(const [id,skill] of Object.entries(data.skills)){
     if(!['enemy','ally','self','all_enemies','all_allies'].includes(skill.target)||!Number.isInteger(skill.mp)||skill.mp<0)fail(id,'スキル対象・MPが不正です');
-    for(const effect of skill.effects??[]){if(!['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
+    for(const effect of skill.effects??[]){if(!['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
   }
   for(const [id,a] of Object.entries(data.actors)){for(const skill of a.skills)reference(data.skills,skill,id);if(a.portrait)reference(data.assets.images,a.portrait,id);}
   for(const [id,e] of Object.entries(data.enemies)){reference(data.assets.images,e.sprite,id);for(const rule of e.ai){reference(data.skills,rule.skill,id);if(!['self','random','weakest'].includes(rule.target))fail(id,'敵の対象選択が不正です');if(rule.condition)expression(rule.condition,id);}}
@@ -115,5 +116,6 @@ export function validateContent(data){
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
+  errors.push(...validateDungeons(data));
   return errors;
 }

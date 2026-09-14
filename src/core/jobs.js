@@ -1,7 +1,8 @@
+import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert']);
-export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling']);
+export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
 export const passives=(data,state,id)=>actorJob(data,state,id)?.passives??{};
@@ -99,6 +100,7 @@ export function fieldActionPlan(data,state,id,abilityId){
   if(state.waiting||state.battle||!ability.modes.includes(state.mode)||!state.members.includes(id))return {ok:false,reason:'この場所・状態では使用できません。'};
   const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
+  if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -112,5 +114,6 @@ export function fieldAction(engine,id,abilityId){
   const plan=fieldActionPlan(engine.data,engine.state,id,abilityId);if(!plan.ok){engine.notify(plan.reason);return false;}
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
+  if(plan.ability.api==='fire.kindling')kindlePortable(engine.data,engine.state,plan.ability.effect);
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;
 }

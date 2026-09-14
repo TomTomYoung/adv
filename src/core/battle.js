@@ -1,14 +1,17 @@
+import {canRepel,kindlePortable} from './systems/fire-network.js';
+import {scaledEnemy} from './enemy.js';
 import {recordDefeated,recordResult} from './records.js';
 import {skillDefinitionErrors} from './job-validation.js';
 import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
 import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
-export function startBattle(engine,id,continuations){
+export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
   engine.state.records.battles++;
-  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>({...clone(engine.data.enemies[id]),instance:`enemy_${i}`,hp:engine.data.enemies[id].stats.hp,mp:engine.data.enemies[id].stats.mp,statuses:[],guard:false})),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
 }
 export function activeActor(engine){
@@ -29,8 +32,9 @@ function endBattle(engine,result){
   if(result==='win'){
     const gold=b.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=b.enemies.reduce((n,e)=>n+e.rewards.xp,0);
     engine.award(gold,xp);engine.notify(`勝利しました。${gold}G・${xp}EXP。`);
-  }else engine.notify('戦闘から離脱しました。依頼の決着はついていません。');
-  if(continuation.frame)pushBranch(engine,continuation.frame,continuation.index,[continuation[result]]);
+  }else if(result==='repel')engine.notify('くらがりは火を恐れ、通路の奥へ逃げ去りました。携帯松明にくらがり除けの火が灯っています。');
+  else engine.notify('戦闘から離脱しました。依頼の決着はついていません。');
+  if(continuation.frame)pushBranch(engine,continuation.frame,continuation.index,[continuation[result==='repel'?'escape':result]]);
   pump(engine);
 }
 function effectsProblem(data,skill){return skillDefinitionErrors(data,skill).join(' / ');}
@@ -43,6 +47,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   const grant=permission(engine.data,s,actorId,skillId,'battle.skill');
   if(!grant)return fail('この職業・レベルでは習得していません。');
   const reason=effectsProblem(engine.data,skill)||costProblem(engine.data,s,actorId,skill);if(reason)return fail(reason);
+  if(skill.effects.some(e=>e.type==='repel')&&!canRepel(engine.data,s,skill))return fail('この火で撃退できるのは、篝火の迷宮のくらがりです。');
   let targets;
   if(skill.target==='all_enemies')targets=b.enemies.filter(e=>e.hp>0);
   else if(skill.target==='all_allies')targets=s.members.map(id=>s.actors[id]).filter(a=>a.hp>0);
@@ -150,6 +155,7 @@ export function battleAction(engine,intent){
     const plan=battleSkillPlan(engine,actorId,intent.skill,intent.target);
     if(!plan.ok){engine.notify(plan.reason);return false;}
     const {skill,targets}=plan;payCost(engine,actorId,skill);
+    if(skill.effects.some(e=>e.type==='repel')){kindlePortable(engine.data,s,skill.fireEffect);engine.eventCue('light');endBattle(engine,'repel');return true;}
     engine.cue(engine.data.presentation?.bindings.skills[intent.skill],targets.map(unitKey));
     for(const target of targets)applySkill(engine,actor,target,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);

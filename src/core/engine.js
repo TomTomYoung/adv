@@ -1,3 +1,4 @@
+import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction} from './dungeons.js';
 import {storyEnding} from './story.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
@@ -16,6 +17,7 @@ export class GameEngine {
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
+    if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
     this.state.nextScope=1;
     this.run(data.game.startScript);
   }
@@ -91,10 +93,12 @@ export class GameEngine {
   teleport(mapId,x,y,facing='north'){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
-    this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing};this.reveal();
+    if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
+    this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing};enterDungeon(this,mapId);this.reveal();
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
   }
   returnTown(emergency=false,quiet=false){
+    leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
     this.state.mode='town';this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';
@@ -111,15 +115,17 @@ export class GameEngine {
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
     if(!this.walkable(this.map(),x,y)){this.notify('石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
-    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0)this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
+    stepDungeon(this);
+    if(dungeonDanger(this))return true;
     if(this.trigger('enter'))return true;
-    const map=this.map();
-    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0))*this.partyEffect('encounterRate'))){
+    const map=this.map(),environment=dungeonEncounter(this.data,this.state);
+    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0))*this.partyEffect('encounterRate')*environment.rate)){
       let encounter=map.encounter;
       if(map.encounterPool?.length){let roll=this.random()*map.encounterPool.reduce((sum,e)=>sum+e.weight,0);encounter=map.encounterPool.at(-1).encounter;for(const entry of map.encounterPool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
-      this.startBattle(encounter,{win:[],escape:[],lose:[]});
+      this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
     }
     return true;
   }
@@ -141,10 +147,10 @@ export class GameEngine {
     return false;
   }
   interact(){if(this.state.mode!=='dungeon'||this.state.waiting)return false;if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
-  startBattle(id,continuations){startBattle(this,id,continuations);}
+  startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
     beginFeedback(this);const changed=this.perform(intent);
-    if(changed)this.cue(this.data.presentation?.bindings.actions[intent.type]);
+    if(changed){if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
     return changed;
   }
   perform(intent){
@@ -154,15 +160,19 @@ export class GameEngine {
     if(type==='choose')return chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='dungeon.action')return dungeonAction(this,intent);
     if(type==='move')return this.move(intent.direction);
     if(type==='interact')return this.interact();
     if(type==='retreat'&&this.state.mode==='dungeon'){this.returnTown(true);return true;}
     if(type==='accept'&&this.state.mode==='town')return this.accept(intent.id);
     if(type==='track'&&this.state.quests[intent.id]?.stage==='active'){this.state.trackedQuest=intent.id;return true;}
     if(type==='travel'&&this.state.mode==='town'){
-      const region=this.data.regions.find(r=>r.id===intent.region);if(!region)return false;
+      const dungeon=intent.dungeon?this.data.dungeons?.[intent.dungeon]:null;
+      if(intent.dungeon&&!dungeon)return false;
+      const region=this.data.regions.find(r=>r.id===intent.region);
+      const mapId=dungeon?.entries.main.map??region?.entrance;if(!mapId)return false;
       this.state.light=this.data.system.lightCapacity;
-      const start=this.data.maps[region.entrance].entrance;this.teleport(region.entrance,start.x,start.y,start.facing);return true;
+      const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;this.run(service.script);return true;
@@ -202,6 +212,7 @@ export class GameEngine {
     delete a.equipment[slot];this.give(item,1);const stats=this.stats(actorId);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);return true;
   }
   useItem(itemId,actorId){
+    const handled=dungeonUseItem(this,itemId);if(handled!==null)return handled;
     const item=this.data.items[itemId];if(!item||!item.field||!(this.state.inventory[itemId]>0)||!this.state.members.includes(actorId))return false;
     this.give(itemId,-1);this.eventCue('item');this.run(item.script,{target:actorId});return true;
   }

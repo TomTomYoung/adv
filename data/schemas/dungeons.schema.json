@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ダンジョン一覧 v1",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "schemaVersion": {
+        "const": 1
+      },
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": {
+        "type": "string",
+        "minLength": 1
+      },
+      "region": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "recommendedLevel": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "profile": {
+        "const": "classic"
+      },
+      "entries": {
+        "type": "object",
+        "properties": {
+          "main": {
+            "type": "object",
+            "properties": {
+              "map": {
+                "type": "string",
+                "minLength": 1
+              },
+              "point": {
+                "const": "entrance"
+              }
+            },
+            "required": [
+              "map",
+              "point"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "main"
+        ],
+        "additionalProperties": false
+      },
+      "maps": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "systems": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "use": {
+              "const": "fire_network"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "entryFixture": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fuelItem": {
+              "type": "string",
+              "minLength": 1
+            },
+            "emberItem": {
+              "type": "string",
+              "minLength": 1
+            },
+            "portable": {
+              "type": "object",
+              "properties": {
+                "item": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "capacity": {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 100000
+                },
+                "baseEffect": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "entryEffect": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "warnings": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "required": [
+                "item",
+                "capacity",
+                "baseEffect",
+                "entryEffect",
+                "warnings"
+              ],
+              "additionalProperties": false
+            },
+            "threat": {
+              "type": "object",
+              "properties": {
+                "encounter": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "encounter"
+              ],
+              "additionalProperties": false
+            },
+            "effects": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "repels": {
+                    "type": "boolean"
+                  },
+                  "encounterRate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "enemyScale": {
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 5
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1000
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "repels",
+                  "encounterRate",
+                  "enemyScale",
+                  "priority"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "fixtures": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "map": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "effect": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "radius": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 30
+                  },
+                  "capacity": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "initiallyLit": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "map",
+                  "x",
+                  "y",
+                  "effect",
+                  "radius",
+                  "capacity",
+                  "initiallyLit"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "use",
+            "entryFixture",
+            "fuelItem",
+            "emberItem",
+            "portable",
+            "threat",
+            "effects",
+            "fixtures"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "source": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "schemaVersion",
+      "id",
+      "name",
+      "description",
+      "region",
+      "recommendedLevel",
+      "profile",
+      "entries",
+      "maps",
+      "systems"
+    ],
+    "additionalProperties": false
+  }
+}

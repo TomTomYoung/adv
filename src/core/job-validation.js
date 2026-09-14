@@ -29,6 +29,7 @@ export function skillDefinitionErrors(data,skill){
     const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status'];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
+  if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
   if(skill.maxTargets!==undefined&&!integer(skill.maxTargets,1,8))fail('対象数不正');
   if(skill.selection!==undefined&&skill.selection!=='lowest_hp_ratio')fail('対象選択不正');
   if(skill.requiresAnalyzed!==undefined&&typeof skill.requiresAnalyzed!=='boolean')fail('解析条件不正');
@@ -84,11 +85,12 @@ export function validateJobs(data){
   for(const [id,skill] of Object.entries(data.skills))for(const message of skillDefinitionErrors(data,skill))fail(`skills.${id}`,message);
   for(const [id,a] of Object.entries(data.fieldAbilities??{})){
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
+    if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='map.reveal'&&(a.target!=='location'||!integer(a.radius,1,8)||a.modes.includes('town')||a.output!==undefined))fail(id,'測量範囲不正');
     if(a.api==='inventory.convert'&&(a.target!=='self'||!isRecord(a.materials)||!Object.keys(a.materials).length||!isRecord(a.output)||!Object.keys(a.output).length))fail(id,'変換入出力不正');
     for(const field of ['materials','output'])if(a[field]!==undefined&&(!isRecord(a[field])||Object.entries(a[field]).some(([item,n])=>!own(data.items,item)||!integer(n,1,data.system.maxStack))))fail(id,'材料・出力不正');
   }
-  for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
+  for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
   return errors;
 }
 export function validateJobState(data,state){
