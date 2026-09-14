@@ -1,5 +1,7 @@
 # adv ドキュメント
 
+[ダンジョン一覧](DUNGEON_CATALOG.md)：全13件の固有設定、Notion出典、JSON編集元、実装状況。
+
 2026-09-13追記: q001〜q010 は作品版1.4.0で [人物・物品を追うモデル v1.1](SCENARIO_MODEL_V11.md) へ更新しました。[改稿全文](SCENARIOS_Q001_Q010_V11.md)、[人物一覧](CHARACTERS.md)、[今回の検証と残る範囲](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。以下の旧版の記録は当時の実装範囲を表します。
 
 
