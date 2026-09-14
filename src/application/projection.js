@@ -1,6 +1,6 @@
-import {projectVoxels} from './voxel-projection.js';
+import {projectDungeonSurfaces} from './dungeon-surfaces.js';
 import {projectArt,projectFieldNotes,projectFieldLinks,projectDungeonScenes,projectSceneArt} from './dungeon-projection.js';
-import {dungeonViews,dungeonTile,dungeonBlock,dungeonPreview,dungeonAbilityReason,dungeonEffectActive} from '../core/dungeons.js';
+import {dungeonViews,dungeonPreview,dungeonAbilityReason,dungeonEffectActive} from '../core/dungeons.js';
 import {storyCanAct} from '../core/story.js';
 import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob,allowedEquipmentActors} from './job-projection.js';
 import {activeActor} from '../core/battle.js';
@@ -8,7 +8,7 @@ import {commandsAt} from '../core/script.js';
 import {clone} from '../core/expression.js';
 const glyphs={exit:'↑',stairs:'⇵',chest:'▣',fountain:'♧',door:'▥',clue:'?',decision:'!',trap:'×'};
 export function projectGame(engine){
-  const s=engine.state,d=engine.data,map=engine.map(),seen=new Set(s.discovered[map?.id]??[]);
+  const s=engine.state,d=engine.data,map=engine.map();
   const actorView=id=>{const a=s.actors[id],def=d.actors[id],stats=engine.stats(id);return {id,name:def.name,class:def.class,role:def.role,color:def.color,bio:def.bio??'',portrait:d.assets.images[def.portrait]??null,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,statuses:a.statuses.map(x=>d.statuses[x].name+(dungeonEffectActive(d,s,'status',x)?'':'（停止中）')),stats,skills:engine.skills(id).map(id=>({id,...clone(d.skills[id])})),equipment:Object.fromEntries(Object.entries(a.equipment).map(([slot,item])=>[slot,d.items[item].name])),equipmentSlots:Object.entries(a.equipment).map(([slot,item])=>({slot,name:d.items[item].name,canRemove:s.mode==='town'&&!s.waiting&&(s.inventory[item]??0)<d.system.maxStack}))};};
   const baseActorView=actorView,jobActorView=id=>({...baseActorView(id),...projectActorJob(engine,id)});
   const party=s.members.map(jobActorView),editable=s.mode==='town'&&!s.waiting&&!s.battle;
@@ -31,9 +31,9 @@ export function projectGame(engine){
     battle={background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&(!o.condition||engine.value(o.condition))&&!(o.once&&s.events[`${map.id}/${o.id}`])).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
-  const {systems,wall,scenes}=projectDungeonScenes(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
+  const {systems,wall,floorArt,scenes}=projectDungeonScenes(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
-  const geometry=map?.tiles.map((row,y)=>Array.from(row,(_tile,x)=>engine.walkable(map,x,y)?'.':'#').join(''));
+  const terrain=projectDungeonSurfaces(engine,systems);
   const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};
   const fire=systems.find(system=>system.kind==='fire_network'),light=fire?fire.portable.fuel:s.light,lightMax=fire?fire.portable.capacity:d.system.lightCapacity;
   const dark=d.presentation?.ambient.darkness,shade=d.presentation?.ambient.shade;
@@ -44,7 +44,7 @@ export function projectGame(engine){
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,level:s.level,xp:s.xp,nextXp:d.system.xpBase*s.level*(s.level+1),completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light,lightMax,lightLabel:fire?'携帯松明':'灯油',
     party,roster,jobs:jobCatalog(engine),statNames:clone(d.jobProfile?.statNames??{}),tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),dungeons:d.dungeons?Object.values(d.dungeons).sort((a,b)=>a.region-b.region||Object.keys(a.systems).length-Object.keys(b.systems).length).map(v=>({id:v.id,art:projectArt(d,v.art?.wall),name:v.name,description:v.description,preview:dungeonPreview(d,v),region:v.region,mapCount:v.maps.length,recommendedLevel:v.recommendedLevel,color:d.regions.find(r=>r.id===v.region)?.color??'#c6ae77'})):null,tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),
     inventory:Object.entries(s.inventory).filter(([,n])=>n>0).map(([id,count])=>({id,count,...clone(d.items[id]),allowedActors:d.items[id].slot?allowedEquipmentActors(engine,id):s.members.slice()})),shop:d.shops.goods.map(g=>({id:g.item,name:d.items[g.item].name,description:d.items[g.item].description,price:engine.price(g.price),basePrice:g.price,canBuy:s.gold>=engine.price(g.price)&&(s.inventory[g.item]??0)<d.system.maxStack})),
-    dungeon:map?{systems,wall,scenes,name:map.name,region:map.region,floor:map.floor,location:clone(s.location),width:map.tiles[0].length,height:map.tiles.length,cells:map.tiles.map((row,y)=>Array.from(row,(tile,x)=>({x,y,known:seen.has(`${x},${y}`),wall:dungeonTile(d,s,map,x,y)==='#',blocked:Boolean(dungeonBlock(d,s,map,x,y)),water:systems.some(system=>system.kind==='waterworks')&&Boolean(dungeonBlock(d,s,map,x,y))}))),geometry,objects,here:current,background:d.assets.images[s.presentation.background]??d.assets.images[map.background],color:d.regions[map.region-1].color,...projectVoxels(engine)}:null,
+    dungeon:map?{systems,wall,floorArt,scenes,name:map.name,region:map.region,floor:map.floor,location:clone(s.location),width:map.tiles[0].length,height:map.tiles.length,objects,here:current,background:d.assets.images[s.presentation.background]??d.assets.images[map.background],color:d.regions[map.region-1].color,...terrain}:null,
     dialog,battle,fieldNotes,busy:Boolean(s.waiting||s.battle),journal:clone(s.journal),log:s.log.slice(-20),notice:s.notice,ending:clone(s.ending),music:d.assets.audio[s.presentation.music]??null,se:null
   };
 }

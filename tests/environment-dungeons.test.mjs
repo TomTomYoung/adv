@@ -118,7 +118,7 @@ test('environment projection is detached, respects exploration visibility and sh
     }
     const text=g.save();vm.dungeon.systems[0].id='changed';vm.dungeon.cells[1][1].wall=true;assert.equal(g.save(),text);
   }
-  const g=begin(1);g.teleport('region_1_f1',3,1);wait(g,18);const vm=projectGame(g);assert.equal(vm.dungeon.cells[2][3].blocked,true);assert.equal(vm.dungeon.geometry[2][3],'#');
+  const g=begin(1);g.teleport('region_1_f1',3,1);wait(g,18);const vm=projectGame(g);assert.equal(vm.dungeon.cells[2][3].blocked,true);assert.equal(vm.dungeon.geometry[2][3],'.');assert.equal(vm.dungeon.cells[2][3].waterDepth,3);
 });
 test('v1.5 saves add only missing system state and retain existing fire, script, battle, resources and random position',()=>{
   const legacy=structuredClone(data);legacy.game.version='1.5.0';legacy.dungeons.region_1.systems={};legacy.dungeons.region_2.systems={};

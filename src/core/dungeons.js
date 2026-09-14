@@ -101,6 +101,9 @@ export function dungeonEncounter(data,state){
   }
   return result;
 }
+export function dungeonWaterDepth(data,state,map,x,y){
+  return dungeonContexts(data,state).reduce((depth,ctx)=>Math.max(depth,DUNGEON_SYSTEMS[ctx.spec.use].waterDepth?.(ctx,map,x,y)??0),0);
+}
 export function dungeonActionPlan(data,state,intent){
   if(state.mode!=='dungeon'||state.waiting||state.battle)return {ok:false,reason:'探索中に操作してください。'};
   const ctx=dungeonContexts(data,state).find(c=>c.id===intent.system);

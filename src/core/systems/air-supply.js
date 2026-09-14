@@ -15,6 +15,7 @@ function plan(ctx,intent){
   return {ok:false,reason:'未作動の浮上装置か、空気の残る部屋で操作してください。'};
 }
 export const airSupply={createPersistent:()=>({raised:[]}),createRun:s=>({air:s.capacity}),plan,
+  waterDepth:(ctx,map,x,y)=>ctx.spec.water.some(p=>sameCell(p,{map:map.id,x,y}))&&!pockets(ctx).some(p=>sameCell(p,{map:map.id,x,y}))?3:0,
   step:ctx=>consume(ctx,ctx.spec.perStep),battleStart:ctx=>consume(ctx,ctx.spec.perBattle),battleRound:ctx=>consume(ctx,ctx.spec.perRound),
   danger(ctx){if(ctx.state.members.every(id=>ctx.state.actors[id].hp<=0)){ctx.engine.defeat();return true;}return false;},
   act(ctx,intent,p){if(p.device){ctx.persistent.raised.push(p.device.id);ctx.engine.reveal();ctx.engine.notify(`${p.device.name}を作動させ、空気の補給地点と出入口を増やしました。`);}if(!submerged(ctx))ctx.run.air=ctx.spec.capacity;},

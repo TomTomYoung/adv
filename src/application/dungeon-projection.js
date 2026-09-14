@@ -12,15 +12,15 @@ export function projectFieldLinks(data,quest){
 }
 export function projectDungeonScenes(engine,systems){
   const {data,state}=engine,definition=dungeonForMap(data,state.location?.map);
-  if(!definition)return {systems,scenes:[],wall:null};
+  if(!definition)return {systems,scenes:[],wall:null,floorArt:null};
   const device=projectArt(data,definition.art?.device);
-  const decorated=systems.map(system=>({...system,art:device,cards:system.cards?.map(card=>({...card,art:projectArt(data,definition.art?.variants?.[card.artKey]??definition.art?.device)})),markers:system.markers?.map(marker=>({...marker,art:marker.kind==='vector'?null:device}))}));
+  const decorated=systems.map(system=>({...system,art:device,cards:system.cards?.map(card=>({...card,art:projectArt(data,definition.art?.variants?.[card.artKey]??definition.art?.device)})),markers:system.markers?.map(marker=>({...marker,art:['vector','water','boundary','voxel_link'].includes(marker.kind)?null:device}))}));
   const scenes=(definition.fieldScenes??[]).filter(s=>s.points.some(p=>closeTo(state,p))).map(s=>{
     const plan=dungeonScenePlan(data,state,s.id),recorded=state.flags.dungeonNotes?.[s.id]===true;
     return {name:s.title,art:device,text:`関連依頼：${data.quests[s.quest].title}${recorded?' ／ 観察を記録済み':''}`,actions:[{label:'現地を調査する',enabled:plan.ok,reason:plan.reason??'',intent:{type:'dungeon.scene',id:s.id}}]};
   });
   const panels=scenes.length?[{kind:'field_scenes',id:'field_scenes',title:'依頼と現地の調査',summary:'仕掛けを操作した後で調べると、観察できる内容が変わります。',cards:scenes,actions:[],markers:[]}]:[];
-  return {systems:decorated,scenes:panels,wall:projectArt(data,definition.art?.wall)};
+  return {systems:decorated,scenes:panels,wall:projectArt(data,definition.art?.wall),floorArt:projectArt(data,definition.art?.floor)};
 }
 export function projectSceneArt(data,state){
   const id=data.scripts[state.vm.at(-1)?.script]?.dungeonScene,scene=fieldScenes(data).find(s=>s.id===id);
