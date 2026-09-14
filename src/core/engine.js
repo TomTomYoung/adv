@@ -1,4 +1,4 @@
-import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock} from './dungeons.js';
+import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason} from './dungeons.js';
 import {storyEnding} from './story.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
@@ -115,10 +115,11 @@ export class GameEngine {
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
     if(!this.walkable(this.map(),x,y)){this.notify(dungeonBlock(this.data,this.state,this.map(),x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
-    loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
-    for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
+    const from={...loc};loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
-    stepDungeon(this);
+    stepDungeon(this,{from,to:{...loc}});
+    if(this.state.waiting||this.state.battle)return true;
     if(this.state.mode!=='dungeon'||loc.x!==x||loc.y!==y)return true;
     if(dungeonDanger(this))return true;
     if(this.trigger('enter'))return true;
@@ -215,6 +216,7 @@ export class GameEngine {
   useItem(itemId,actorId){
     const handled=dungeonUseItem(this,itemId);if(handled!==null)return handled;
     const item=this.data.items[itemId];if(!item||!item.field||!(this.state.inventory[itemId]>0)||!this.state.members.includes(actorId))return false;
+    if(!dungeonEffectActive(this.data,this.state,'item',itemId)||item.battleSkill&&dungeonAbilityReason(this.data,this.state,item.battleSkill,'battle.skill')){this.notify('この場所では道具の術を使用できません。');return false;}
     this.give(itemId,-1);this.eventCue('item');this.run(item.script,{target:actorId});return true;
   }
   save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,state:clone(this.state)});}

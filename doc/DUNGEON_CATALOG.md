@@ -1,6 +1,6 @@
 # ダンジョン一覧
 
-更新日: 2026-09-14。基準: master 1.6.0（PR #6反映済み）。本書を先に作成し、以下の追加設定を実装します。
+更新日: 2026-09-14。対象: このブランチの1.7.0。master 1.6.0（PR #6反映済み）を基準に、本書を先に作成してから以下の追加設定を実装しました。全13ダンジョン・25マップ・200クエストです。
 
 設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
@@ -20,7 +20,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    戦闘ごとに装備が腐食し、退出時に解除されます。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `authoring/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
 
-## 今回追加する固有システム
+## 今回実装した固有システム
 
 4. 根喰みの地下庭園（`region_3`）
 
@@ -32,7 +32,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    植物を採取・伐採して取り除くと素材を得られますが、その植物による効果や地形変化は失われます。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_3.json`。[Notion](https://app.notion.com/p/3dac3c1966b38185ba02c5a96de1cd0d)。
+   状態: 実装済み。設定: `authoring/dungeons/region_3.json`。[Notion](https://app.notion.com/p/3dac3c1966b38185ba02c5a96de1cd0d)。
 
 5. 鏡沈みの礼拝堂（`region_4`）
 
@@ -40,7 +40,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    鏡ごとの移動先と接続関係を定義し、ワープを組み合わせて探索するダンジョンとします。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_4.json`。[Notion](https://app.notion.com/p/3dac3c1966b381c7ade8d37c5f844fd8)。
+   状態: 実装済み。設定: `authoring/dungeons/region_4.json`。[Notion](https://app.notion.com/p/3dac3c1966b381c7ade8d37c5f844fd8)。
 
 6. 灰時計の書庫（`region_5`）
 
@@ -50,7 +50,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    書庫を出ると、借りた技能は失われ、封じた自分の技能は元に戻ります。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_5.json`。[Notion](https://app.notion.com/p/3dac3c1966b38108bea6d2319ae0665a)。
+   状態: 実装済み。設定: `authoring/dungeons/region_5.json`。[Notion](https://app.notion.com/p/3dac3c1966b38108bea6d2319ae0665a)。
 
 7. 眠れる地下市場（`region_6`）
 
@@ -58,7 +58,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    戦闘を起こすと周辺の警戒が強まり、店が閉まったり、用心棒が増えたりします。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_6.json`。[Notion](https://app.notion.com/p/3dac3c1966b3810683f5ecb24c746c01)。
+   状態: 実装済み。設定: `authoring/dungeons/region_6.json`。[Notion](https://app.notion.com/p/3dac3c1966b3810683f5ecb24c746c01)。
 
 8. 黒潮の沈没城（`region_7`）
 
@@ -66,7 +66,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    区画ごとの浮上装置を動かすと、新しい空気の補給地点や出入口ができ、活動範囲が広がります。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_7.json`。[Notion](https://app.notion.com/p/3dac3c1966b381bfab6fc23f7f2f23c3)。
+   状態: 実装済み。設定: `authoring/dungeons/region_7.json`。[Notion](https://app.notion.com/p/3dac3c1966b381bfab6fc23f7f2f23c3)。
 
 9. 鉄胎の機関廟（`region_8`）
 
@@ -76,7 +76,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    配線の切り替えや部品の取り外しによって、必要な装置だけを動かす方法を探します。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_8.json`。[Notion](https://app.notion.com/p/3dac3c1966b3816e8707e7982104b489)。
+   状態: 実装済み。設定: `authoring/dungeons/region_8.json`。[Notion](https://app.notion.com/p/3dac3c1966b3816e8707e7982104b489)。
 
 10. 星欠けの地下観測所（`region_9`）
 
@@ -86,7 +86,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    プレイヤーが天球儀を操作することで、地形変化を起こすタイミングを選べます。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_9.json`。[Notion](https://app.notion.com/p/3dac3c1966b38156a3e0dd8801998533)。
+   状態: 実装済み。設定: `authoring/dungeons/region_9.json`。[Notion](https://app.notion.com/p/3dac3c1966b38156a3e0dd8801998533)。
 
 11. 帰還者の深淵（`region_10`）
 
@@ -98,7 +98,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    デバフの具体的な効果、蓄積量、解除条件は別途定めます。
 
-   状態: 実装予定。設定: `authoring/dungeons/region_10.json`。[Notion](https://app.notion.com/p/3dac3c1966b381b8a90bfba1009b5bdf)。
+   状態: 実装済み。設定: `authoring/dungeons/region_10.json`。[Notion](https://app.notion.com/p/3dac3c1966b381b8a90bfba1009b5bdf)。
 
 12. 祈りの届かない谷（`prayerless_valley`）
 
@@ -108,7 +108,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    敵の呪いを止めるために谷へ誘い込む、回復祈祷を使うために境界外へ出るなど、境界を利用した位置取りが攻略に関わります。制限の対象は、境界へ入る前に確認できるようにします。
 
-   状態: 実装予定。設定: `authoring/dungeons/prayerless_valley.json`。[Notion](https://app.notion.com/p/3dac3c1966b3817ab7b4eeb4f70890f1)。
+   状態: 実装済み。設定: `authoring/dungeons/prayerless_valley.json`。[Notion](https://app.notion.com/p/3dac3c1966b3817ab7b4eeb4f70890f1)。
 
 13. 巨獣上の移動集落（`moving_village`）
 
@@ -118,15 +118,17 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    地形変化はプレイヤーの操作によらず発生し、プレイヤーはそのタイミングを選べません。
 
-   状態: 実装予定。設定: `authoring/dungeons/moving_village.json`。[Notion](https://app.notion.com/p/3dac3c1966b381e88b2ad3f28cbb6573)。
+   状態: 実装済み。設定: `authoring/dungeons/moving_village.json`。[Notion](https://app.notion.com/p/3dac3c1966b381e88b2ad3f28cbb6573)。
 
 ## 実装方針と確認事項
 
-植物、鏡ワープ、技能貸出、取引・警戒、空気、動力配分、地形変化、ベクトルによる弱体化、境界の効果停止を、再利用可能な部品として実装します。天球儀と巨獣は同じ地形変化部品を使い、手動操作と自動の乱数進行を設定で切り替えます。
+植物、鏡ワープ、技能貸出、取引・警戒、空気、動力配分、地形変化、ベクトルによる弱体化、境界の効果停止を、再利用可能な部品として実装しました。天球儀と巨獣は同じ地形変化部品を使い、手動操作と自動の乱数進行を設定で切り替えます。
 
-谷と移動集落には、町から選べる専用の探索マップを用意します。既存10地域の分類と200クエストの進行は維持します。q193・q194の分岐結果は各クエストの選択に従い、探索装置の状態から物語上の結末を確定させません。
+谷と移動集落には、町から選べる専用の探索マップを用意しました。既存10地域の分類と200クエストの進行は維持します。q193・q194の分岐結果は各クエストの選択に従い、探索装置の状態から物語上の結末を確定させません。
 
 未指定の消費量、成長時間、警戒値、空気量、動力容量、変化周期、デバフ係数はJSONで調整できる初期値を置き、実装仕様に明記します。技能や魔法の禁止対象はIDで個別指定し、町での行先選択と境界外でも確認可能にします。
 
 保存データには設置物・開通・装置などの永続状態と、技能貸出・空気・護衛・逆行デバフなど探索中だけの状態を分けて保持します。旧版のセーブは進行や乱数を保ったまま追加部品を補います。
 
+
+実際の操作、初期数値、JSON項目、保存期間、検証結果は [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md) を参照してください。

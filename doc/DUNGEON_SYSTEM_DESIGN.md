@@ -4,7 +4,7 @@
 
 採用方式は「ダンジョン定義＋組合せ可能なシステム部品＋条件付きルール」です。保存はJSON、最終的な編集手段は専用フォームとし、同じ構造のYAML入出力を提供する設計です。
 
-本書は目標仕様です。1.5.0ではダンジョン分離とfire_network、1.6.0ではwaterworks・corrosion・breakable_wallsを実装しました。全体を実装済みとは扱いません。現在使える設定と検証は [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md) と [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md) を参照してください。
+本書は目標仕様です。1.5.0ではダンジョン分離とfire_network、1.6.0ではwaterworks・corrosion・breakable_wallsを実装しました。1.7.0では植物、ワープ、技能貸出、取引・警戒、空気、動力配分、地形変化、逆行デバフ、術の遮断を追加しました。汎用ルールエディタなどを含む目標全体の完成ではありません。1.7.0の設定は [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md)、全件一覧は [DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)、以前の設定と検証は [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md) と [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md) を参照してください。
 
 1. ダンジョンを独立した設定単位にします。
 
@@ -148,3 +148,7 @@ profileは部品と標準値のまとまりです。優先順位はプリセッ�
 1.6.0時点の追加実装
 
 waterworksに水位周期・装置による止水と通水、corrosionに戦闘開始時の装備補正、breakable_wallsに永続的な地形開通を実装しました。共通境界へtile/block/equipmentStats/battleStart/fieldIntentを追加しています。水位の時間は部品が管理する探索行動単位で、世界全体の時計や任意の条件付きイベントキューとは別です。汎用resource、酸素、騒音警戒、YAML、編集フォームは引き続き将来範囲です。
+
+1.7.0時点の実装境界
+
+合計13種の部品を登録しました。移動元・移動先、戦闘ラウンド・終了、隊員能力、技能許可、効果停止も共通窓口へ接続しています。専用の酸素管理と市場の警戒は実装済みです。深淵のセルベクトルには、JSON内の矢印マップを正規化する編集方法を追加しました。任意の条件式による汎用resource/rule、YAML入出力、専用編集フォームは将来範囲です。

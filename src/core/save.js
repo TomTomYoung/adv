@@ -51,7 +51,7 @@ function migrateContentSave(original,data){
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
   if(migration.environmentRevision){
-    // Validate v1.5 against the exact system membership it shipped before adding new state.
+    // Validate the old version's system membership before adding only the missing state.
     const dungeons=clone(data.dungeons);
     for(const [id,systems] of Object.entries(migration.addedSystems))for(const system of systems)delete dungeons[id].systems[system];
     const legacy={...data,dungeons,game:{...data.game,version:original.contentVersion}};

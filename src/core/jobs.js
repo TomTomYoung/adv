@@ -1,8 +1,8 @@
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
-import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction} from './dungeons.js';
+import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs} from './dungeons.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal']);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -26,7 +26,8 @@ export function actorStats(data,state,id,battle=true){
   }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(state.level-1);
   for(const item of Object.values(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item)))stats[key]=(stats[key]??0)+amount;
   for(const key of STAT_KEYS)stats[key]=Math.max(key==='hp'?1:0,Math.floor(stats[key]));
-  return battle?buffStats(data,state.battle,`actor:${id}`,stats):stats;
+  const environmental=dungeonActorStats(data,state,id,stats);
+  return battle?buffStats(data,dungeonBuffs(data,state),`actor:${id}`,environmental):environmental;
 }
 export function initializeJob(data,actor){
   actor.job=data.actors[actor.id].initialJob;actor.growthHistory={};
@@ -59,16 +60,18 @@ export function changeJob(engine,id,jobId){
   engine.notify(`${engine.data.actors[id].name}は${engine.data.jobs[jobId].name}に転職しました。${plan.returned.length?'適合しない装備は袋に戻しました。':''}`);
   return true;
 }
-export function grantsFor(data,state,id){
+export function baseGrantsFor(data,state,id){
   const job=actorJob(data,state,id);if(!job)return [];
   const common=data.jobProfile.commonSkills.map(skill=>({skill,level:1,api:'battle.skill',target:data.skills[skill].target,maxTargets:1,lifetime:'equipped'}));
   return [...common,...job.grants];
 }
+export const grantsFor=(data,state,id)=>dungeonGrants(data,state,id,baseGrantsFor(data,state,id));
 export function knownSkills(data,state,id){
   if(!data.jobs)return [...data.actors[id].skills];
   return grantsFor(data,state,id).filter(g=>g.api==='battle.skill'&&state.level>=g.level).map(g=>g.skill);
 }
 export function permission(data,state,id,skill,api){
+  if(dungeonAbilityReason(data,state,skill,api))return null;
   const spec=api==='battle.skill'?data.skills[skill]:data.fieldAbilities[skill];
   return grantsFor(data,state,id).find(g=>g.skill===skill&&g.api===api&&g.target===spec?.target&&g.lifetime==='equipped'&&state.level>=g.level)??null;
 }
@@ -97,12 +100,13 @@ export function partyEffect(data,state,key,neutral=1,mode='min'){
 export const purchasePrice=(data,state,price)=>Math.ceil(price*(1-partyEffect(data,state,'shopDiscount',0,'max')));
 export function fieldActionPlan(data,state,id,abilityId){
   const ability=data.fieldAbilities?.[abilityId];
+  const restriction=dungeonAbilityReason(data,state,abilityId,ability?.api);if(restriction)return {ok:false,reason:restriction};
   if(!ability||!FIELD_APIS.has(ability.api)||!permission(data,state,id,abilityId,ability.api))return {ok:false,reason:'この探索特技は習得していません。'};
   if(state.waiting||state.battle||!ability.modes.includes(state.mode)||!state.members.includes(id))return {ok:false,reason:'この場所・状態では使用できません。'};
   const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
-  if(ability.api==='wall.break')return {...dungeonFieldPlan(data,state,id,abilityId),ability};
+  if(['wall.break','archive.unlock'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -118,5 +122,6 @@ export function fieldAction(engine,id,abilityId){
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
   if(plan.ability.api==='fire.kindling')kindlePortable(engine.data,engine.state,plan.ability.effect);
+  if(plan.ability.api==='party.heal')for(const member of engine.state.members){const a=engine.state.actors[member];if(a.hp>0)a.hp=Math.min(engine.stats(member).hp,a.hp+plan.ability.amount);}
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;
 }

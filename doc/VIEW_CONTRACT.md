@@ -92,3 +92,5 @@ quests/trackedのlocationsとevidenceTotalは、現在使用している経路�
 1.6.0追記：dungeon.systems[]はwaterworks（現在の水位・残り刻・既知の区画・近くの装置・待機操作）、corrosion（装備名・累積腐食）、breakable_walls（近くの壁・破壊済み状態・許可された操作）も投影します。waterworks.controls[].actionsとbreakable_walls.walls[].actionsのintentはdungeon.actionでsystem/action/targetを返し、破壊手段に応じitemまたはactor/abilityを付けます。操作条件は同じコアのplanで判定し、実行時にも検査します。
 
 動的地形はdungeon.geometryとcellsへ反映します。開いた壁はfloor、完全水没はcells[].blocked=trueで、当該マスの通行を禁止します。水域は既知のマスだけ青い表示・マーカーにし、固有システムの有無を灯油と火台の判別に流用しません。Viewは周期、腐食計算、資源消費、地形変更を行いません。
+
+1.7.0追記：追加部品はdungeon.systems[]へtitle、summary、cards（name/text/actions）、actions、markersを投影します。各actionはlabel/intent/enabled/reasonを持ちます。dungeons[].previewは入場前の区域制限です。戦闘中もsummaryを表示でき、battle.items[].enabledで道具の術の使用可否を確認します。停止中の状態異常・戦闘補正は表示名へ「停止中」を付けます。cells[].blockedは一般の通行不能、cells[].waterは水没の描画指定です。波模様の判定にはwaterを使います。
