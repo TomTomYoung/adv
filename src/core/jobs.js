@@ -1,7 +1,8 @@
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
+import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction} from './dungeons.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break']);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -23,7 +24,7 @@ export function actorStats(data,state,id,battle=true){
       stats[key]+=(Math.floor(growth+1e-9)+(job.stats[key]??0));
     }
   }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(state.level-1);
-  for(const item of Object.values(actor.equipment))for(const [key,amount] of Object.entries(data.items[item]?.stats??{}))stats[key]=(stats[key]??0)+amount;
+  for(const item of Object.values(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item)))stats[key]=(stats[key]??0)+amount;
   for(const key of STAT_KEYS)stats[key]=Math.max(key==='hp'?1:0,Math.floor(stats[key]));
   return battle?buffStats(data,state.battle,`actor:${id}`,stats):stats;
 }
@@ -101,6 +102,7 @@ export function fieldActionPlan(data,state,id,abilityId){
   const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
+  if(ability.api==='wall.break')return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -112,6 +114,7 @@ export function fieldActionPlan(data,state,id,abilityId){
 }
 export function fieldAction(engine,id,abilityId){
   const plan=fieldActionPlan(engine.data,engine.state,id,abilityId);if(!plan.ok){engine.notify(plan.reason);return false;}
+  if(plan.dungeonIntent)return dungeonAction(engine,plan.dungeonIntent);
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
   if(plan.ability.api==='fire.kindling')kindlePortable(engine.data,engine.state,plan.ability.effect);

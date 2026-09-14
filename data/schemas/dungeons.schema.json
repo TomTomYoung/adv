@@ -69,199 +69,455 @@
       "systems": {
         "type": "object",
         "additionalProperties": {
-          "type": "object",
-          "properties": {
-            "use": {
-              "const": "fire_network"
-            },
-            "enabled": {
-              "type": "boolean"
-            },
-            "entryFixture": {
-              "type": "string",
-              "minLength": 1
-            },
-            "fuelItem": {
-              "type": "string",
-              "minLength": 1
-            },
-            "emberItem": {
-              "type": "string",
-              "minLength": 1
-            },
-            "portable": {
+          "oneOf": [
+            {
               "type": "object",
               "properties": {
-                "item": {
+                "use": {
+                  "const": "fire_network"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "entryFixture": {
                   "type": "string",
                   "minLength": 1
                 },
-                "capacity": {
-                  "type": "integer",
-                  "minimum": 2,
-                  "maximum": 100000
-                },
-                "baseEffect": {
+                "fuelItem": {
                   "type": "string",
                   "minLength": 1
                 },
-                "entryEffect": {
+                "emberItem": {
                   "type": "string",
                   "minLength": 1
                 },
-                "warnings": {
+                "portable": {
+                  "type": "object",
+                  "properties": {
+                    "item": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "capacity": {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 100000
+                    },
+                    "baseEffect": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "entryEffect": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "warnings": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "item",
+                    "capacity",
+                    "baseEffect",
+                    "entryEffect",
+                    "warnings"
+                  ],
+                  "additionalProperties": false
+                },
+                "threat": {
+                  "type": "object",
+                  "properties": {
+                    "encounter": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "encounter"
+                  ],
+                  "additionalProperties": false
+                },
+                "effects": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "description": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "repels": {
+                        "type": "boolean"
+                      },
+                      "encounterRate": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 5
+                      },
+                      "enemyScale": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 5
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 1000
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description",
+                      "repels",
+                      "encounterRate",
+                      "enemyScale",
+                      "priority"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "fixtures": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "effect": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "radius": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 30
+                      },
+                      "capacity": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100000
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "initiallyLit": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "map",
+                      "x",
+                      "y",
+                      "effect",
+                      "radius",
+                      "capacity",
+                      "initiallyLit"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "use",
+                "entryFixture",
+                "fuelItem",
+                "emberItem",
+                "portable",
+                "threat",
+                "effects",
+                "fixtures"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "use": {
+                  "const": "waterworks"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "phases": {
                   "type": "array",
                   "minItems": 2,
-                  "maxItems": 2,
                   "items": {
-                    "type": "integer",
-                    "minimum": 1
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "duration": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 10000
+                      },
+                      "level": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 2
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "duration",
+                      "level"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "controls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "kind": {
+                        "enum": [
+                          "gate",
+                          "valve"
+                        ]
+                      },
+                      "initiallyOpen": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "x",
+                      "y",
+                      "id",
+                      "name",
+                      "kind",
+                      "initiallyOpen"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "zones": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "kind": {
+                        "enum": [
+                          "tidal",
+                          "channel"
+                        ]
+                      },
+                      "control": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "cells": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "x": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "y": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "y"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "map",
+                      "kind",
+                      "cells"
+                    ],
+                    "additionalProperties": false
                   }
                 }
               },
               "required": [
-                "item",
-                "capacity",
-                "baseEffect",
-                "entryEffect",
-                "warnings"
+                "use",
+                "phases",
+                "controls",
+                "zones"
               ],
               "additionalProperties": false
             },
-            "threat": {
+            {
               "type": "object",
               "properties": {
-                "encounter": {
-                  "type": "string",
-                  "minLength": 1
+                "use": {
+                  "const": "corrosion"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "perBattle": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
                 }
               },
               "required": [
-                "encounter"
+                "use",
+                "perBattle"
               ],
               "additionalProperties": false
             },
-            "effects": {
+            {
               "type": "object",
-              "minProperties": 1,
-              "additionalProperties": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "description": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "repels": {
-                    "type": "boolean"
-                  },
-                  "encounterRate": {
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 5
-                  },
-                  "enemyScale": {
-                    "type": "number",
-                    "minimum": 0.1,
-                    "maximum": 5
-                  },
-                  "priority": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 1000
-                  }
+              "properties": {
+                "use": {
+                  "const": "breakable_walls"
                 },
-                "required": [
-                  "name",
-                  "description",
-                  "repels",
-                  "encounterRate",
-                  "enemyScale",
-                  "priority"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "fixtures": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "map": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "x": {
-                    "type": "integer",
-                    "minimum": 0
-                  },
-                  "y": {
-                    "type": "integer",
-                    "minimum": 0
-                  },
-                  "effect": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "radius": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 30
-                  },
-                  "capacity": {
-                    "anyOf": [
-                      {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 100000
+                "enabled": {
+                  "type": "boolean"
+                },
+                "walls": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
                       },
-                      {
-                        "type": "null"
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "items": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "abilities": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
                       }
-                    ]
-                  },
-                  "initiallyLit": {
-                    "type": "boolean"
+                    },
+                    "required": [
+                      "map",
+                      "x",
+                      "y",
+                      "id",
+                      "name",
+                      "items",
+                      "abilities"
+                    ],
+                    "additionalProperties": false
                   }
-                },
-                "required": [
-                  "id",
-                  "name",
-                  "map",
-                  "x",
-                  "y",
-                  "effect",
-                  "radius",
-                  "capacity",
-                  "initiallyLit"
-                ],
-                "additionalProperties": false
-              }
+                }
+              },
+              "required": [
+                "use",
+                "walls"
+              ],
+              "additionalProperties": false
             }
-          },
-          "required": [
-            "use",
-            "entryFixture",
-            "fuelItem",
-            "emberItem",
-            "portable",
-            "threat",
-            "effects",
-            "fixtures"
-          ],
-          "additionalProperties": false
+          ]
         }
       },
       "source": {

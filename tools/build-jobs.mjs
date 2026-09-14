@@ -13,7 +13,7 @@ export async function applyJobs(){
   for(const good of p.shopGoods){const at=shop.goods.findIndex(g=>g.item===good.item);if(at<0)shop.goods.push(good);else shop.goods[at]=good;}
   game.version=p.version;
   game.files.databases={...game.files.databases,jobs:'data/jobs.json',jobProfile:'data/job-profile.json',buffs:'data/buffs.json',fieldAbilities:'data/field-abilities.json'};
-  game.migrations={...game.migrations,'1.2.0':{actors:Object.keys(actors)}};
+  game.migrations={...game.migrations,'1.2.0':{...game.migrations?.['1.2.0'],actors:Object.keys(actors)}};
   const presentation=await read('data/presentation.json');
   Object.assign(presentation.bindings.skills,p.skillCues);
   presentation.bindings.actions['job.change']=presentation.bindings.actions.equip;

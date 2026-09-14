@@ -1,13 +1,40 @@
 import {fireNetwork} from './systems/fire-network.js';
+import {waterworks} from './systems/waterworks.js';
+import {corrosion} from './systems/corrosion.js';
+import {breakableWalls} from './systems/breakable-walls.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
-export const DUNGEON_SYSTEMS={fire_network:fireNetwork};
+export const DUNGEON_SYSTEMS={fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls};
 export const freshDungeons=()=>({version:1,nextRun:1,active:null,persistent:{}});
 export const dungeonForMap=(data,map)=>Object.values(data.dungeons??{}).find(d=>d.maps.includes(map))??null;
 export function dungeonContexts(data,state){
   const active=state.dungeons?.active,definition=data.dungeons?.[active?.id];
   if(!definition||state.mode!=='dungeon'||!definition.maps.includes(state.location?.map))return [];
-  return Object.entries(definition.systems).filter(([,spec])=>spec.enabled!==false).map(([id,spec])=>({data,state,definition,id,spec,run:active.systems[id],persistent:state.dungeons.persistent[definition.id].systems[id]}));
+  return Object.entries(definition.systems).filter(([,spec])=>spec.enabled!==false).map(([id,spec])=>({data,state,definition,id,spec,run:active.systems?.[id],persistent:state.dungeons.persistent?.[definition.id]?.systems?.[id]})).filter(ctx=>ctx.run&&ctx.persistent);
+}
+export function dungeonTile(data,state,map,x,y){
+  let tile=map?.tiles[y]?.[x];
+  for(const ctx of dungeonContexts(data,state))tile=DUNGEON_SYSTEMS[ctx.spec.use].tile?.(ctx,map,x,y)??tile;
+  return tile;
+}
+export function dungeonBlock(data,state,map,x,y){
+  for(const ctx of dungeonContexts(data,state)){const reason=DUNGEON_SYSTEMS[ctx.spec.use].block?.(ctx,map,x,y);if(reason)return reason;}
+  return null;
+}
+export function dungeonEquipmentStats(data,state,item){
+  let stats={...data.items[item]?.stats};
+  for(const ctx of dungeonContexts(data,state))stats=DUNGEON_SYSTEMS[ctx.spec.use].equipmentStats?.(ctx,item,stats)??stats;
+  return stats;
+}
+export function dungeonBattleStart(engine){
+  for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].battleStart?.({...ctx,engine});
+}
+export function dungeonFieldPlan(data,state,actor,ability){
+  for(const ctx of dungeonContexts(data,state)){
+    const action=DUNGEON_SYSTEMS[ctx.spec.use].fieldIntent?.(ctx,actor,ability);
+    if(action){const intent={type:'dungeon.action',system:ctx.id,...action};return {...dungeonActionPlan(data,state,intent),dungeonIntent:intent};}
+  }
+  return {ok:false,reason:'この迷宮ではその探索スキルを使えません。'};
 }
 export function enterDungeon(engine,mapId){
   const {data,state}=engine;if(!data.game.dungeonVersion)return;
@@ -104,7 +131,7 @@ export function validateDungeonState(data,state){
     for(const [system,spec] of Object.entries(d.systems))if(spec.enabled!==false){
       const run=active?.id===id?active.systems?.[system]:null;
       if(active?.id===id&&!object(run))bad('現在の探索部品の状態がありません');
-      errors.push(...DUNGEON_SYSTEMS[spec.use].validateState(spec,p.systems[system],run,state).map(e=>`迷宮保存 ${id}/${system}: ${e}`));
+      errors.push(...DUNGEON_SYSTEMS[spec.use].validateState(spec,p.systems[system],run,state,data).map(e=>`迷宮保存 ${id}/${system}: ${e}`));
     }
   }
   if(active){if(!s.persistent[active.id])bad('現在の迷宮の保存領域がありません');for(const system of Object.keys(active.systems??{}))if(!data.dungeons[active.id]?.systems[system]||data.dungeons[active.id].systems[system].enabled===false)bad('未知の探索部品');}

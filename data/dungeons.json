@@ -213,7 +213,142 @@
       "region_1_f1",
       "region_1_f2"
     ],
-    "systems": {}
+    "systems": {
+      "water": {
+        "use": "waterworks",
+        "phases": [
+          {
+            "id": "low",
+            "name": "干潮",
+            "duration": 12,
+            "level": 0
+          },
+          {
+            "id": "rising",
+            "name": "増水",
+            "duration": 6,
+            "level": 1
+          },
+          {
+            "id": "high",
+            "name": "満水",
+            "duration": 8,
+            "level": 2
+          },
+          {
+            "id": "falling",
+            "name": "減水",
+            "duration": 6,
+            "level": 1
+          }
+        ],
+        "controls": [
+          {
+            "id": "upper_gate",
+            "name": "上層の水門",
+            "kind": "gate",
+            "map": "region_1_f1",
+            "x": 2,
+            "y": 1,
+            "initiallyOpen": true
+          },
+          {
+            "id": "upper_valve",
+            "name": "上層水路のバルブ",
+            "kind": "valve",
+            "map": "region_1_f1",
+            "x": 2,
+            "y": 3,
+            "initiallyOpen": true
+          },
+          {
+            "id": "lower_gate",
+            "name": "下層の水門",
+            "kind": "gate",
+            "map": "region_1_f2",
+            "x": 2,
+            "y": 1,
+            "initiallyOpen": true
+          },
+          {
+            "id": "lower_valve",
+            "name": "下層水路のバルブ",
+            "kind": "valve",
+            "map": "region_1_f2",
+            "x": 5,
+            "y": 2,
+            "initiallyOpen": true
+          }
+        ],
+        "zones": [
+          {
+            "id": "upper_basin",
+            "name": "上層の低い通路",
+            "kind": "tidal",
+            "map": "region_1_f1",
+            "control": "upper_gate",
+            "cells": [
+              {
+                "x": 3,
+                "y": 2
+              },
+              {
+                "x": 3,
+                "y": 3
+              }
+            ]
+          },
+          {
+            "id": "lower_basin",
+            "name": "下層の低い通路",
+            "kind": "tidal",
+            "map": "region_1_f2",
+            "control": "lower_gate",
+            "cells": [
+              {
+                "x": 5,
+                "y": 5
+              },
+              {
+                "x": 6,
+                "y": 5
+              },
+              {
+                "x": 7,
+                "y": 5
+              }
+            ]
+          },
+          {
+            "id": "upper_channel",
+            "name": "上層の横断水路",
+            "kind": "channel",
+            "map": "region_1_f1",
+            "control": "upper_valve",
+            "cells": [
+              {
+                "x": 4,
+                "y": 3
+              }
+            ]
+          },
+          {
+            "id": "lower_channel",
+            "name": "下層の横断水路",
+            "kind": "channel",
+            "map": "region_1_f2",
+            "control": "lower_valve",
+            "cells": [
+              {
+                "x": 6,
+                "y": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "source": "https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf"
   },
   "region_10": {
     "schemaVersion": 1,
@@ -253,7 +388,70 @@
       "region_2_f1",
       "region_2_f2"
     ],
-    "systems": {}
+    "systems": {
+      "salt": {
+        "use": "corrosion",
+        "perBattle": 1
+      },
+      "walls": {
+        "use": "breakable_walls",
+        "walls": [
+          {
+            "id": "upper_entry",
+            "name": "入口脇の脆い塩壁",
+            "map": "region_2_f1",
+            "x": 6,
+            "y": 1,
+            "items": [
+              "blasting_charge"
+            ],
+            "abilities": [
+              "break_rock"
+            ]
+          },
+          {
+            "id": "upper_crossing",
+            "name": "上層の亀裂壁",
+            "map": "region_2_f1",
+            "x": 3,
+            "y": 6,
+            "items": [
+              "blasting_charge"
+            ],
+            "abilities": [
+              "break_rock"
+            ]
+          },
+          {
+            "id": "lower_entry",
+            "name": "下層入口の塩壁",
+            "map": "region_2_f2",
+            "x": 6,
+            "y": 1,
+            "items": [
+              "blasting_charge"
+            ],
+            "abilities": [
+              "break_rock"
+            ]
+          },
+          {
+            "id": "lower_crossing",
+            "name": "下層の亀裂壁",
+            "map": "region_2_f2",
+            "x": 10,
+            "y": 9,
+            "items": [
+              "blasting_charge"
+            ],
+            "abilities": [
+              "break_rock"
+            ]
+          }
+        ]
+      }
+    },
+    "source": "https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13"
   },
   "region_3": {
     "schemaVersion": 1,

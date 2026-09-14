@@ -1,4 +1,5 @@
 import {canRepel,kindlePortable} from './systems/fire-network.js';
+import {dungeonBattleStart} from './dungeons.js';
 import {scaledEnemy} from './enemy.js';
 import {recordDefeated,recordResult} from './records.js';
 import {skillDefinitionErrors} from './job-validation.js';
@@ -9,6 +10,7 @@ import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
+  dungeonBattleStart(engine);
   engine.state.records.battles++;
   engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
