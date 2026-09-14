@@ -20,7 +20,7 @@ GitHub Pagesでは、このリポジトリの `master` のルートを配信で�
 
 ## 人物の所在を追うシナリオ（1.4.0）
 
-q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物品の所在、介助、受け渡し、油の残量、救助人数を状態として保存し、行為と結末の成立条件を検査します。36種類のNPC画像をAIPaintで作成し、会話にはその場にいる人物を表示します。伝声管や面会窓越しの人物には「声」と表示します。
+q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物品の所在、介助、受け渡し、油の残量、救助人数を状態として保存し、行為と結末の成立条件を検査します。36種類のNPC肖像を画像生成で制作し、旧AIPaint素材も保存しています。会話にはその場にいる人物を表示します。伝声管や面会窓越しの人物には「声」と表示します。
 
 [改稿全文](doc/SCENARIOS_Q001_Q010_V11.md) ／ [人物一覧・画像](doc/CHARACTERS.md) ／ [モデル・保存互換性](doc/SCENARIO_MODEL_V11.md)
 
@@ -77,7 +77,7 @@ node --test tests/*.test.mjs
 
 `authoring/structures-1.mjs`〜`5.mjs` は既存100件の個別進行、`structures-additional.mjs` は追加篇10件の改稿です。`authoring/quests.txt` と `authoring/scenarios-01.mjs`〜`10.mjs` は基礎原稿・旧進行の互換用生成にも使います。生成済みJSONを同梱しているため、遊ぶ際の生成は不要です。
 
-q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、人物設定は `authoring/characters.mjs` です。人物素材は `npm run build:characters` で再生成できます。
+q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、人物設定は `authoring/characters.mjs` です。`npm run build:characters` は旧AIPaint素材を再生成し、新しい画像生成肖像への参照を維持します。画像生成用の英語・日本語プロンプトは `assets/source/characters/imagegen-prompts.json` に保存しています。
 
 全200件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 

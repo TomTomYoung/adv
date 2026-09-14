@@ -82,3 +82,18 @@ All 28 OGG files were decoded with finite, non-silent, unclipped PCM. All 8 PNGs
 Run `node tools/assets/generate-characters.mjs`. All drawing uses AIPaint shape commands. The PNG encoder only serializes the returned composite. `assets/images/characters/` contains the shipped PNGs and review sheet. `assets/source/characters/` contains all native `.paint.json` projects, exact `.commands.json` batches and a SHA-256 manifest including the renderer source hash. Each native project can be opened directly in AIPaint.
 
 The automated check reopens all 36 native projects with PaintCore.fromProject, replays every command batch, and compares both composites with the decoded shipped PNG pixels. The review sheet uses the same composites, copied as horizontal AIPaint line runs. Existing illustration and audio provenance above remains unchanged.
+
+
+## 2026-09-14: Illustrated quest NPC portraits
+
+The user requested image-generated replacements for the 36 AIPaint NPC portraits, with the existing files retained. Each new portrait was created in an individual built-in `image_gen` call. Complete English and Japanese prompts are retained in `assets/source/characters/imagegen-prompts.json`.
+
+Runtime images are in `assets/images/characters/generated/<id>.webp`. The artwork carries forward each authored role, hairstyle, clothing palette and principal prop. Finer age, face, gender and representative group designs are new art direction, rather than facts established by the scenario prose. `nearpeople` depicts exactly three residents and `deeppeople` exactly two. Other group portraits are representative compositions and do not establish story headcounts.
+
+The selected illustrations use muted teal backgrounds, warm light, readable faces and detailed work clothing. ImageMagick only resized the generated artwork proportionally to fit 896×1024 and encoded WebP at quality 90. It did not draw, retouch, recolor or remove backgrounds. `assets/source/characters/imagegen-manifest.json` records source PNG hashes, shipped WebP hashes, dimensions and sizes; `assets/manifest.json` also lists the shipped files.
+
+`data/assets.json` retains all `npc_<id>` keys and points them to the new images. `tools/build-stories-v11.mjs` writes those same paths and documentation links on regeneration. The view displays 168px-wide portraits on desktop and 112px on small screens, using normal image interpolation. Story logic, NPC identity, cast visibility and saved progress are unchanged.
+
+All previous character PNGs, the original contact sheet, AIPaint native projects, command streams and their original manifest remain in their original locations. `npm run build:characters` still reconstructs the old AIPaint set and keeps runtime references on the new illustrated set. For a deliberate rollback, change both the data mapping and builder mapping to `assets/images/characters/<id>.png`.
+
+Validation: all 36 shipped WebP files decode successfully (896px wide, 1022–1024px tall; 2,664,504 bytes total). Alias coverage, file existence and SHA-256 checks pass. The original PNGs, editable sources, commands and existing asset manifest entries are byte-for-byte unchanged. Regeneration in an isolated checkout preserves the new references and both image links in the character catalog. `npm run check` passes data validation, static checks and all 357 tests, including the existing AIPaint reproduction tests. Each generated image was visually reviewed. The available browser blocked the local preview URL with `net::ERR_BLOCKED_BY_CLIENT`, so in-browser layout validation remains unverified.

@@ -1,10 +1,10 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-13。現在の作業版: 灯帰りの迷宮 1.4.0。
+更新日: 2026-09-14。現在の作業版: 灯帰りの迷宮 1.4.0。
 
-q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、状態エンジンは `src/core/story.js`、人物は `authoring/characters.mjs`。36種類のPNGとAIPaint原稿を保存しています。[実装・検証記録](SCENARIO_V11_IMPLEMENTATION.md) と [モデル仕様](SCENARIO_MODEL_V11.md) を先に参照してください。以降のPR #3に関する説明は1.3.2までの履歴です。
+q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、状態エンジンは `src/core/story.js`、人物は `authoring/characters.mjs`。会話では `assets/images/characters/generated/` の36種類の画像生成WebPを表示します。旧PNGとAIPaint原稿・描画コマンドは保存しています。[実装・検証記録](SCENARIO_V11_IMPLEMENTATION.md) と [モデル仕様](SCENARIO_MODEL_V11.md) を先に参照してください。以降のPR #3に関する説明は1.3.2までの履歴です。
 
-旧 `.flow.*` 配列は継続位置を守るため変更しないこと。q001〜q010の新規受注は `.v11.*`、旧セーブは `legacyStoryRoutes` を経由します。通常の再生成は `npm run build:scenarios` 全体を実行し、人物素材を変えた場合は `npm run build:characters` も実行します。
+旧 `.flow.*` 配列は継続位置を守るため変更しないこと。q001〜q010の新規受注は `.v11.*`、旧セーブは `legacyStoryRoutes` を経由します。通常の再生成は `npm run build:scenarios` 全体を実行し、`npm run build:characters` は旧AIPaint素材の再現用で、新しい肖像への参照を維持します。画像生成肖像を更新する場合は `assets/source/characters/imagegen-prompts.json` と `imagegen-manifest.json`、`assets/manifest.json` も更新してください。
 
 q011〜q020はカタログ改稿を反映済みです。準拠モデルはv1.0を維持し、原稿は `authoring/catalog-q011-q020.json`（依頼・過去・制約・結末・選択肢）と `authoring/catalog-q011-q020.mjs`（本文・行為・状態・終了条件）です。[反映全文](SCENARIOS_Q011_Q020.md) を参照してください。`tools/apply-catalog-revisions.mjs` を最終生成段階で呼び、新しい `.catalog1.*` と `flags.flow.<quest>.catalogRevision: 1` を作ります。
 

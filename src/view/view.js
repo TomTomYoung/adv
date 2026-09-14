@@ -71,7 +71,7 @@ export class GameView {
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
       const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
-      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':'')),img=node('img');img.src=c.portrait;img.alt=c.name;img.width=112;img.height=128;card.append(img,node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
+      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':'')),img=node('img');img.src=c.portrait;img.alt=c.name;img.width=896;img.height=1024;img.decoding='async';card.append(img,node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
       section.append(cast);
     }
     if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.act({type:'advance'}),'primary continue'));}

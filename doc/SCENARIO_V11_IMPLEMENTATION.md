@@ -14,6 +14,8 @@
 
 [改稿全文](SCENARIOS_Q001_Q010_V11.md) ／ [人物一覧](CHARACTERS.md) ／ [実装範囲](SCENARIO_MODEL_V11.md)
 
+2026-09-14追記: 現在の会話表示は画像生成版36種類へ切り替えました。[人物一覧](CHARACTERS.md) と [生成プロンプト](../assets/source/characters/imagegen-prompts.json) を参照してください。以下の一覧とAIPaint検証は保存した旧素材についての記録です。
+
 ![AIPaint人物素材一覧](../assets/images/characters/contact-sheet.png)
 
 画像は人物一覧の順に左から右、上から下へ配置。外見はこの版の美術設定であり、旧原稿から確定した描写ではない。
