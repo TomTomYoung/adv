@@ -1813,196 +1813,144 @@
       "additionalProperties": false
     }
   },
-  "title": "灯帰り DSL v1 グリッドマップ",
+  "title": "ダンジョン素材・現地調査原稿",
   "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "minLength": 1
+    "schemaVersion": {
+      "const": 1
     },
-    "region": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "floor": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "name": {
-      "type": "string",
-      "minLength": 1
-    },
-    "tiles": {
-      "type": "array",
-      "minItems": 3,
-      "items": {
-        "type": "string",
-        "pattern": "^[#.]+$"
-      }
-    },
-    "entrance": {
+    "assets": {
       "type": "object",
       "properties": {
-        "x": {
-          "type": "integer",
-          "minimum": 0
+        "walls": {
+          "type": "string",
+          "minLength": 1
         },
-        "y": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "facing": {
-          "enum": [
-            "north",
-            "east",
-            "south",
-            "west"
-          ]
+        "devices": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
-        "x",
-        "y",
-        "facing"
+        "walls",
+        "devices"
       ],
       "additionalProperties": false
     },
-    "background": {
-      "type": "string",
-      "minLength": 1
-    },
-    "music": {
-      "type": "string",
-      "minLength": 1
-    },
-    "encounter": {
-      "type": "string",
-      "minLength": 1
-    },
-    "encounterPool": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "properties": {
-          "encounter": {
-            "type": "string",
-            "minLength": 1
-          },
-          "weight": {
-            "type": "number",
-            "exclusiveMinimum": 0
-          }
-        },
-        "required": [
-          "encounter",
-          "weight"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "encounterRate": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1
-    },
-    "initiallyKnown": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "pattern": "^\\d+,\\d+$"
-      }
-    },
-    "objects": {
+    "entries": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "id": {
+          "dungeon": {
             "type": "string",
             "minLength": 1
           },
-          "x": {
+          "wall": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 15
           },
-          "y": {
+          "device": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 15
           },
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "kind": {
-            "enum": [
-              "exit",
-              "stairs",
-              "chest",
-              "fountain",
-              "trap",
-              "door",
-              "clue",
-              "decision"
-            ]
-          },
-          "trigger": {
-            "enum": [
-              "enter",
-              "interact"
-            ]
-          },
-          "safe": {
-            "type": "boolean"
-          },
-          "once": {
-            "type": "boolean"
-          },
-          "blocking": {
-            "type": "boolean"
-          },
-          "initialState": {
-            "type": "string",
-            "minLength": 1
-          },
-          "condition": {
-            "$ref": "#/$defs/value"
-          },
-          "quest": {
-            "type": "string",
-            "minLength": 1
-          },
-          "script": {
-            "type": "string",
-            "minLength": 1
+          "scene": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "quest": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "points": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "map": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "x": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "y": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "map",
+                    "x",
+                    "y"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "condition": {
+                "$ref": "#/$defs/value"
+              },
+              "intro": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observed": {
+                "type": "string",
+                "minLength": 1
+              },
+              "pending": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "quest",
+              "title",
+              "points",
+              "condition",
+              "intro",
+              "observed",
+              "pending",
+              "note"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
-          "id",
-          "x",
-          "y",
-          "name",
-          "kind",
-          "trigger",
-          "script"
+          "dungeon",
+          "wall",
+          "device",
+          "scene"
         ],
         "additionalProperties": false
       }
     }
   },
   "required": [
-    "id",
-    "region",
-    "floor",
-    "name",
-    "tiles",
-    "entrance",
-    "background",
-    "music",
-    "encounter",
-    "encounterRate",
-    "objects"
+    "schemaVersion",
+    "assets",
+    "entries"
   ],
   "additionalProperties": false
 }

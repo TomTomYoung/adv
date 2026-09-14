@@ -1,3 +1,4 @@
+import {appendDungeonArt} from './dungeon-art.js';
 import {dungeonSystems} from './dungeon-systems.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
@@ -45,6 +46,8 @@ export class GameView {
     if(!qs.length)list.append(node('p','empty','条件に合う依頼はありません。地域や状態を変えてください。'));
     for(const q of qs){const card=node('article',`quest-card ${q.tracked?'tracked':''}`),num=node('span','quest-number',String(q.number).padStart(3,'0')),body=node('div','quest-body');
       const title=node('div','quest-title');title.append(node('h3','',q.title),node('span','badge',q.stage==='completed'?'完了':q.stage==='active'?'受注中':q.unlocked?`推奨 Lv.${q.recommendedLevel}`:'解放待ち'));body.append(title,node('p','quest-client',`${q.client} / ${q.regionName}`),node('p','quest-brief',q.brief));
+      for(const note of q.fieldNotes??[])body.append(node('p','field-note',`現地記録：${note.text}`));
+      if(q.stage!=='available')for(const link of q.fieldLinks??[]){body.append(node('p','muted',`${link.dungeonName}：${link.title} ／ ${link.points.map(p=>`${p.name} (${p.x}, ${p.y})`).join('・')}`));body.append(button('現地調査へ向かう',()=>this.act({type:'travel',dungeon:link.dungeon})));}
       if(!q.unlocked)body.append(node('p','requirement',q.unlockHint));
       if(q.outcome)body.append(node('p','outcome',q.outcome.text));
       const actions=node('div','quest-actions');if(q.stage!=='completed'){actions.append(button(q.stage==='active'?'この依頼を追う':'依頼を受ける',()=>this.act({type:q.stage==='active'?'track':'accept',id:q.id}),'primary',!q.unlocked));if(q.stage==='active')actions.append(button('迷宮へ向かう',()=>this.act({type:'travel',region:q.region})));}body.append(actions);card.append(num,body);list.append(card);
@@ -54,7 +57,7 @@ export class GameView {
     const section=node('div','panel-content');section.append(heading('DESCENT / DUNGEONS','潜る場所を選ぶ'));
     const list=node('div','region-list'),destinations=m.dungeons??m.regions;
     destinations.forEach((r,index)=>{
-      const item=node('article','region-card');item.style.setProperty('--region-color',r.color);
+      const item=node('article','region-card');item.style.setProperty('--region-color',r.color);appendDungeonArt(item,r.art,r.name,'dungeon-art destination-art');
       const detail=m.dungeons?`${r.mapCount}階層`: `${m.quests.filter(q=>q.region===r.id&&q.stage==='completed').length}件完了`;
       item.append(node('span','eyebrow',`${String(index+1).padStart(2,'0')} / 推奨 Lv.${r.recommendedLevel} / ${detail}`),node('h3','',r.name),node('p','',r.description),...(r.preview??[]).map(text=>node('p','muted',text)),button('迷宮に入る',()=>this.act(m.dungeons?{type:'travel',dungeon:r.id}:{type:'travel',region:r.id}),'primary'));
       list.append(item);
@@ -74,10 +77,10 @@ export class GameView {
     const controls=node('div','explore-controls'),movement=node('div','movement-pad');
     for(const [label,direction,cl] of [['前へ','forward','forward'],['左を向く','left','left'],['後ろへ','back','back'],['右を向く','right','right']])movement.append(button(label,()=>this.act({type:'move',direction}),cl));
     const actions=node('div','explore-actions');actions.append(button('足元・正面を調べる',()=>this.act({type:'interact'}),'primary'),button('帰還印で町へ戻る',()=>this.ui.retreat()),node('small','muted','帰還印：所持金の8%。入口の階段からは無料で帰れます。'));controls.append(movement,actions);section.append(controls);
-    dungeonSystems(section,m.dungeon.systems,intent=>this.act(intent));
+    dungeonSystems(section,[...m.dungeon.systems,...(m.dungeon.scenes??[])],intent=>this.act(intent));
     const log=node('div','travel-log');log.append(node('span','eyebrow','直近の記録'));for(const line of m.log.slice(-3))log.append(node('p','',line));section.append(log);parent.append(section);
   }
-  dialog(parent,d){const section=node('section','story-window');section.setAttribute('aria-label','物語と選択肢');
+  dialog(parent,d){const section=node('section','story-window');section.setAttribute('aria-label','物語と選択肢');if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
       const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
@@ -129,7 +132,8 @@ export class GameView {
   }
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
     const active=m.quests.filter(q=>q.stage==='active');if(active.length){section.append(node('h3','','受注中'));for(const q of active)section.append(button(`${q.tracked?'◆ ':''}${q.title} / ${q.evidenceTotal===0?'相談・調査を進める':`手掛かり ${q.evidenceCount}/${q.evidenceTotal??2}`}`,()=>this.act({type:'track',id:q.id}),'journal-track'));}
-    if(!m.journal.length)section.append(node('p','empty','現場で調べた手掛かりと、選んだ結末がここへ残ります。'));
+    for(const note of m.fieldNotes??[]){const row=node('article','journal-entry');row.append(node('span','eyebrow','現地の観察'),node('h3','',note.title),node('p','muted',m.quests.find(q=>q.id===note.quest)?.title??''),node('p','',note.text));section.append(row);}
+    if(!m.journal.length&&!m.fieldNotes?.length)section.append(node('p','empty','現場で調べた手掛かりと、選んだ結末がここへ残ります。'));
     for(const entry of [...m.journal].reverse()){const row=node('article','journal-entry');row.append(node('span','eyebrow',entry.type==='evidence'?'手掛かり':'決着'),node('h3','',entry.title),node('p','',entry.text));section.append(row);}parent.append(section);
   }
   sidebar(parent,m){

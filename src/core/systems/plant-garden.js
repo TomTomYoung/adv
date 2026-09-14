@@ -54,7 +54,7 @@ export const plantGarden={createPersistent:()=>({plants:{},supplied:false}),crea
       const plant=ctx.persistent.plants[p.id],s=speciesOf(ctx,p),actions=[];
       if(plant){actions.push(action(ctx,plan,'採取・伐採する',{action:'harvest',target:p.id}));if(s.terrain==='vine')actions.push(action(ctx,plan,'ツタを登る',{action:'climb',target:p.id}));}
       else for(const [id,s] of Object.entries(ctx.spec.species))if(!s.terrain||p.terrain[s.terrain])actions.push(action(ctx,plan,`${s.name}を植える（${Object.entries(s.materials).map(([id,n])=>`${ctx.data.items[id].name}×${n}`).join('・')}）`,{action:'plant',target:p.id,species:id}));
-      return {name:p.name,text:plant?`${s.name}：${mature(ctx,p)?'生長済み':`生長 ${plant.age}/${s.growth}`}。${s.description}`:'種や胞子を植えられます。',actions};
+      return {artKey:plant?.species,name:p.name,text:plant?`${s.name}：${mature(ctx,p)?'生長済み':`生長 ${plant.age}/${s.growth}`}。${s.description}`:'種や胞子を植えられます。',actions};
     });
     if(closeTo(ctx.state,ctx.spec.supply)&&!ctx.persistent.supplied)cards.unshift({name:ctx.spec.supply.name,text:'種・胞子と培養土の初回支給です。追加分は町でも購入できます。',actions:[action(ctx,plan,'育苗資材を受け取る',{action:'supplies'})]});
     return panel(ctx,'植物の育成','植物の種類に応じて周囲に効果を与えます。橋・茨・階段ツタは地形も変えます。',cards,{actions:[action(ctx,plan,'生長を待つ',{action:'wait'})],markers:markers(ctx,ctx.spec.plots,'芽')});
