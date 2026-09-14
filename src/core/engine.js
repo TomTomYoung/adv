@@ -1,4 +1,4 @@
-import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction} from './dungeons.js';
+import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock} from './dungeons.js';
 import {storyEnding} from './story.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
@@ -81,7 +81,7 @@ export class GameEngine {
   objectState(object){return this.state.objects[`${this.map().id}/${object.id}`]??object.initialState??'ready';}
   objectAt(x,y){return this.map()?.objects.filter(o=>o.x===x&&o.y===y)??[];}
   walkable(map,x,y){
-    if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||map.tiles[y][x]==='#')return false;
+    if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||dungeonTile(this.data,this.state,map,x,y)!=='.'||dungeonBlock(this.data,this.state,map,x,y))return false;
     return !map.objects.some(o=>o.x===x&&o.y===y&&o.blocking && (this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
   }
   reveal(radius=this.partyEffect('revealRadius',1,'max')){
@@ -114,11 +114,12 @@ export class GameEngine {
     if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];return true;}
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
-    if(!this.walkable(this.map(),x,y)){this.notify('石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
+    if(!this.walkable(this.map(),x,y)){this.notify(dungeonBlock(this.data,this.state,this.map(),x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
     loc.x=x;loc.y=y;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     stepDungeon(this);
+    if(this.state.mode!=='dungeon'||loc.x!==x||loc.y!==y)return true;
     if(dungeonDanger(this))return true;
     if(this.trigger('enter'))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);

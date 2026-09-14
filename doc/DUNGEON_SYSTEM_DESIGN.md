@@ -4,7 +4,7 @@
 
 採用方式は「ダンジョン定義＋組合せ可能なシステム部品＋条件付きルール」です。保存はJSON、最終的な編集手段は専用フォームとし、同じ構造のYAML入出力を提供する設計です。
 
-本書は目標仕様です。1.5.0ではダンジョン分離とfire_network部品、篝火の迷宮を実装しました。全体を実装済みとは扱いません。今回の実装済み範囲・設定値・検証は [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md) を参照してください。
+本書は目標仕様です。1.5.0ではダンジョン分離とfire_network、1.6.0ではwaterworks・corrosion・breakable_wallsを実装しました。全体を実装済みとは扱いません。現在使える設定と検証は [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md) と [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md) を参照してください。
 
 1. ダンジョンを独立した設定単位にします。
 
@@ -144,3 +144,7 @@ profileは部品と標準値のまとまりです。優先順位はプリセッ�
 1.5.0時点の実装境界
 
 ダンジョン定義の分離、JSON編集元と再生成、部品レジストリ、入退場・歩数・危険判定・遭遇・操作・投影・保存検証の接続、fire_networkを実装しています。classicは既存探索処理を維持する互換プロファイルです。汎用プリセット継承、区画ルール、汎用イベントキュー、resource/周期部品、YAML入出力、専用編集フォームは目標仕様として残っています。
+
+1.6.0時点の追加実装
+
+waterworksに水位周期・装置による止水と通水、corrosionに戦闘開始時の装備補正、breakable_wallsに永続的な地形開通を実装しました。共通境界へtile/block/equipmentStats/battleStart/fieldIntentを追加しています。水位の時間は部品が管理する探索行動単位で、世界全体の時計や任意の条件付きイベントキューとは別です。汎用resource、酸素、騒音警戒、YAML、編集フォームは引き続き将来範囲です。

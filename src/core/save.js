@@ -1,5 +1,5 @@
 import {scaledEnemy} from './enemy.js';
-import {freshDungeons,enterDungeon,validateDungeonState} from './dungeons.js';
+import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock} from './dungeons.js';
 import {storyStateErrors,storyEnding} from './story.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
@@ -50,6 +50,20 @@ function migrateContentSave(original,data){
   if(!isRecord(original))return original;
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
+  if(migration.environmentRevision){
+    // Validate v1.5 against the exact system membership it shipped before adding new state.
+    const dungeons=clone(data.dungeons);
+    for(const [id,systems] of Object.entries(migration.addedSystems))for(const system of systems)delete dungeons[id].systems[system];
+    const legacy={...data,dungeons,game:{...data.game,version:original.contentVersion}};
+    if(validateSave(original,legacy).length)return original;
+    const save=clone(original),s=save.state;save.contentVersion=data.game.version;s.contentVersion=data.game.version;
+    for(const [id,persistent] of Object.entries(s.dungeons.persistent))for(const [system,spec] of Object.entries(data.dungeons[id].systems))if(spec.enabled!==false){
+      const implementation=DUNGEON_SYSTEMS[spec.use];
+      persistent.systems[system]??=implementation.createPersistent(spec);
+      if(s.dungeons.active?.id===id)s.dungeons.active.systems[system]??=implementation.createRun(spec);
+    }
+    return upgradeStoryRevisions(save,data);
+  }
   const oldQuests=Object.fromEntries((migration.quests??Object.keys(data.quests)).map(id=>[id,data.quests[id]]));
   if(migration.dungeonRevision){
     const legacy={...data,game:{...data.game,version:original.contentVersion,dungeonVersion:undefined}};
@@ -90,6 +104,7 @@ function migrateContentSave(original,data){
 export function migrateSave(original,data){
   const migrated=migrateContentSave(original,data);
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;
@@ -111,7 +126,8 @@ export function validateSave(save,data){
   if(!['town','dungeon'].includes(s.mode))fail('モード不正');
   for(const [key,min,max] of [['gold',0,1e9],['xp',0,1e9],['level',1,data.system.maxLevel],['steps',0,1e9],['light',0,data.system.lightCapacity],['rng',1,4294967295]])if(!integer(s[key],min,max))fail(`${key}不正`);
   if(s.mode==='dungeon'){
-    const l=s.location,m=data.maps[l?.map];if(!m||m.tiles[l?.y]?.[l?.x]!=='.'||!['north','east','south','west'].includes(l?.facing))fail('位置不正');
+    const l=s.location,m=data.maps[l?.map];
+    try{if(!m||dungeonTile(data,s,m,l?.x,l?.y)!=='.'||dungeonBlock(data,s,m,l?.x,l?.y)||!['north','east','south','west'].includes(l?.facing))fail('位置不正');}catch{fail('位置または地形状態不正');}
   }else if(s.location!==null)fail('町の位置不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');

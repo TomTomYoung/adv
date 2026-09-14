@@ -84,7 +84,7 @@ test('every floor and the deep seed can be reached using actual movement and sta
   g.dispatch({type:'travel',dungeon:'kagaribi'});assert.equal(fireContext(data,g.state).run.ember.effect,'deep');assert.equal(g.state.inventory.kagaribi_torch,1);
 });
 test('persistent fixtures survive re-entry; fresh expeditions do not duplicate items or leak effects',()=>{
-  const g=begin(true);place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');action(g,'collect','calm');const old=g.state.dungeons.active.run;g.returnTown();g.dispatch({type:'travel',region:1});assert.equal(fireContext(data,g.state),null);assert.deepEqual(dungeonEncounter(data,g.state),{rate:1,enemyScale:1});assert.deepEqual(projectGame(g).dungeon.systems,[]);assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'kuragari_ward'}),false);
+  const g=begin(true);place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');action(g,'collect','calm');const old=g.state.dungeons.active.run;g.returnTown();g.dispatch({type:'travel',region:1});assert.equal(fireContext(data,g.state),null);assert.deepEqual(dungeonEncounter(data,g.state),{rate:1,enemyScale:1});assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['waterworks']);assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'kuragari_ward'}),false);
   g.returnTown();g.dispatch({type:'travel',dungeon:'kagaribi'});assert.ok(g.state.dungeons.active.run>old);assert.equal(fireContext(data,g.state).persistent.fixtures.calm.effect,'calm');assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).fuel,90);roundtrip(g);
 });
 test('old 1.4 saves migrate text/choice/battle without altering ongoing script, resources or RNG',()=>{

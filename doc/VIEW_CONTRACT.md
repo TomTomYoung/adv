@@ -88,3 +88,7 @@ quests/trackedのlocationsとevidenceTotalは、現在使用している経路�
 `dialog.scene` は省略可能で、`title` と `cast` を持つ。cast の要素は `{id, name, role, portrait, remote}`。この場面で表示する人物だけを Application が投影する。View は元の entities、knowledge、作者向け truth を読まない。`remote` は伝声管・面会窓越しの人物で、同席を意味しない。完了後の結果文では最後の場面の人物像を残さない。
 
 1.5.0追記：dungeons[]で地域とは独立した探索先を表示します。travelは任意のdungeon IDを受け取り、旧region指定も維持します。dungeon.systems[]のfire_networkにportable、fixtures、保持種火、保護状態、表示倍率、描画用markersを投影します。actions[].intentはdungeon.actionでsystem/action/target、点火スキルではactor/abilityを返します。enabledと理由はコアの同じplanから取得し、実行時に再検査します。lightLabelは携帯松明と灯油を区別します。
+
+1.6.0追記：dungeon.systems[]はwaterworks（現在の水位・残り刻・既知の区画・近くの装置・待機操作）、corrosion（装備名・累積腐食）、breakable_walls（近くの壁・破壊済み状態・許可された操作）も投影します。waterworks.controls[].actionsとbreakable_walls.walls[].actionsのintentはdungeon.actionでsystem/action/targetを返し、破壊手段に応じitemまたはactor/abilityを付けます。操作条件は同じコアのplanで判定し、実行時にも検査します。
+
+動的地形はdungeon.geometryとcellsへ反映します。開いた壁はfloor、完全水没はcells[].blocked=trueで、当該マスの通行を禁止します。水域は既知のマスだけ青い表示・マーカーにし、固有システムの有無を灯油と火台の判別に流用しません。Viewは周期、腐食計算、資源消費、地形変更を行いません。
