@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8の素材・現地調査はマージ済みです。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
+更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8・PR #9はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
 
 ## 正本と生成
 

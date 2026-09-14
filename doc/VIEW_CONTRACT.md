@@ -141,8 +141,16 @@ quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fiel
 
 ## 立方体の断面と六面
 
-立体マップではdungeon.voxel=true、z、currentCube、boundariesを追加します。locationはzを含み、cellsは現在の高さだけを投影します。cellsのwaterDepthは0〜3、waterLabelは水深の表示名、floorは足場の有無、edgesは横四面の通行を遮る境界です。geometryは密の立方体だけを壁として扱い、完全水没や穴の通行不可はcells.blockedへ分離します。
+立体マップではdungeon.voxel=true、z、currentCube、boundariesを追加します。locationはzを含み、cellsは現在の高さだけを投影します。cellsのwaterDepthは0〜3、waterLabelは水深の表示名、floorは足場の有無、edgesは横四面の通行を遮る境界です。geometryは密の立方体と閉じたオブジェクト扉を壁として扱い、完全水没や穴の通行不可はcells.blockedへ分離します。
 
 boundariesは「x,y/side」をキーにした描画用の壁面です。currentCube.neighborsは六方向のkind（密・空・範囲外）とpassage/water/supportを持ちます。Viewは水深ごとの色・波、穴、境界壁、現在高を表示します。上下を自由に見回す描画ではありません。
 
 voxel_spaceのcards/actionsはvisit/toggle/pump/dig/install/traverseのdungeon.action意図を返します。対象のtarget、必要時のitemまたはactor/abilityを付け、Coreで同じplanを再実行します。リンクを渡るとCoreが終点のzへ移動します。測量とイベント表示も現在高を区別します。
+
+## 床材と水面の共通描画
+
+dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-scenes.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
+
+従来マップにもwaterDepthとwaterLabelを渡します。旧waterworksの水位0/1/2は描画上0/1/3へ対応し、足元までの水も表示します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
+
+surfaceNoticeは正面の水深と通行可否、その対処の文章です。周期水域にはCoreの待機actionをコピーし、常設水路には対応するバルブ名を案内します。水・流れ・境界のマーカーへ装置画像を割り当てず、左右や閉じた境界の向こうの装置を正面へ表示しません。[修正記録と比較](DUNGEON_RENDER_REVIEW.md)を参照してください。

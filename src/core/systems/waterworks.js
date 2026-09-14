@@ -56,7 +56,7 @@ function project(ctx){
   const phase=waterPhase(ctx.spec,ctx.run.elapsed),states=['水なし','浅い水・通行可','完全水没・通行不可'];
   const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c)).map(c=>({id:c.id,name:c.name,open:ctx.persistent.controls[c.id],actions:[['open','開く・水を流す'],['close','閉じる・水を止める']].map(([action,label])=>available(ctx,{type:'dungeon.action',system:ctx.id,action,target:c.id},plan,label))}));
   const markers=[];
-  for(const z of ctx.spec.zones)for(const cell of z.cells){const point={map:z.map,...cell};if(knownPoint(ctx.state,point)){const level=zoneLevel(ctx,z);markers.push({...cell,id:`${z.id}/${cell.x}/${cell.y}`,name:`${z.name}：${states[level]}`,kind:'water',glyph:level===2?'≈':level===1?'~':'·',level});}}
+  for(const z of ctx.spec.zones)for(const cell of z.cells){const point={map:z.map,...cell};if(knownPoint(ctx.state,point)){const level=zoneLevel(ctx,z);markers.push({...cell,id:`${z.id}/${cell.x}/${cell.y}`,name:`${z.name}：${states[level]}`,kind:'water',glyph:level===2?'≈':level===1?'~':'·',level,waitable:z.kind==='tidal',controlName:ctx.spec.controls.find(c=>c.id===z.control)?.name??null});}}
   for(const c of ctx.spec.controls)if(knownPoint(ctx.state,c))markers.push({id:c.id,name:`${c.name}：${ctx.persistent.controls[c.id]?'開':'閉'}`,x:c.x,y:c.y,kind:'water_control',glyph:c.kind==='gate'?'門':'弁'});
   const zones=ctx.spec.zones.filter(z=>z.map===ctx.state.location.map&&z.cells.some(c=>knownPoint(ctx.state,{map:z.map,...c}))).map(z=>({id:z.id,name:z.name,level:zoneLevel(ctx,z),status:states[zoneLevel(ctx,z)]}));
   return {kind:'waterworks',id:ctx.id,title:'水位と水路',phase:phase.name,remaining:phase.remaining,elapsed:ctx.run.elapsed,zones,controls,markers,actions:[available(ctx,{type:'dungeon.action',system:ctx.id,action:'wait'},plan,'1刻待つ')]};
@@ -83,4 +83,5 @@ function validateState(spec,persistent,run){
   return [];
 }
 export const waterworks={createPersistent:spec=>({controls:Object.fromEntries(spec.controls.map(c=>[c.id,c.initiallyOpen]))}),createRun:()=>({elapsed:0}),step:advance,plan,act,project,validate,validateState,
+  waterDepth:(ctx,map,x,y)=>[0,1,3][waterAt(ctx,map.id,x,y)],
   block:(ctx,map,x,y)=>waterAt(ctx,map.id,x,y)===2?'完全に水没しています。水が引くのを待つか、水門・バルブで水を止めてください。':null};

@@ -74,6 +74,7 @@ export class GameView {
   explore(parent,m){
     this.scene(parent,m);const section=node('div','panel-content exploration-content');
     section.append(node('p','location-text',m.dungeon.here.length?m.dungeon.here.map(o=>o.name).join(' / '):'灯の届く通路が続いています。足元と正面に注意して進みます。'));
+    if(m.dungeon.surfaceNotice){const info=node('div','surface-notice');info.append(node('p','',m.dungeon.surfaceNotice.text));const a=m.dungeon.surfaceNotice.action;if(a)info.append(button(a.label,()=>this.act(a.intent),'',!a.enabled));section.append(info);}
     const controls=node('div','explore-controls'),movement=node('div','movement-pad');
     for(const [label,direction,cl] of [['前へ','forward','forward'],['左を向く','left','left'],['後ろへ','back','back'],['右を向く','right','right']])movement.append(button(label,()=>this.act({type:'move',direction}),cl));
     const actions=node('div','explore-actions');actions.append(button('足元・正面を調べる',()=>this.act({type:'interact'}),'primary'),button('帰還印で町へ戻る',()=>this.ui.retreat()),node('small','muted','帰還印：所持金の8%。入口の階段からは無料で帰れます。'));controls.append(movement,actions);section.append(controls);

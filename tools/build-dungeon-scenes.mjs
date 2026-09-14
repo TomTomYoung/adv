@@ -18,6 +18,7 @@ export async function buildDungeonScenes(root,definitions){
     const d=definitions[entry.dungeon],s=entry.scene;
     if(!d||ids.has(s.id))throw Error('Unknown dungeon or duplicate scene');ids.add(s.id);
     d.art={wall:art('dungeon_walls',entry.wall),device:art('dungeon_devices',entry.device)};
+    if(entry.floor??source.floor)d.art.floor=structuredClone(entry.floor??source.floor);
     if(d.systems.garden)d.art.variants={root_bridge:art('dungeon_devices',13),thorn_wall:art('dungeon_devices',14),stair_vine:art('dungeon_devices',15)};
     if(!Number.isSafeInteger(s.revision)||s.revision<1)throw Error('Invalid scene revision');
     const script=`dungeon.scene.${s.id}.v${s.revision}`,flag=`flags.dungeonNotes.${s.id}`,ref=p=>({ref:p}),say=text=>({op:'narrate',text});
