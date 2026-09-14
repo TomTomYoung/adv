@@ -85,7 +85,7 @@ export function pump(engine){
       case 'status.apply':case 'status.remove':{
         for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply'){if(!a.statuses.includes(c.status))a.statuses.push(c.status);}else a.statuses=a.statuses.filter(s=>s!==c.status);}break;
       }
-      case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing);break;
+      case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
       case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
       case 'facing.set':state.location.facing=c.direction;break;

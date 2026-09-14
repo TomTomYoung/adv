@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-14。対象は作品版1.7.0と、PR #8のダンジョン素材・現地調査を含むこのブランチです。masterとPRの反映状況は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認してください。
+更新日: 2026-09-14。対象は作品版1.8.0の立方体地形・貯水立坑を含む作業ブランチです。素材・現地調査と前回のdoc整備はPR #8でマージ済みです。masterとPRの反映状況は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -13,6 +13,8 @@
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
 
 ## ダンジョン
+
+[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)：立方体・六面の境界・水量・梯子と上下移動の仕様。
 
 [DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの一覧、固有設定、編集元と出典。
 

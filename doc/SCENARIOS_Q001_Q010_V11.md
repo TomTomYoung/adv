@@ -1,6 +1,6 @@
 # q001〜q010 改稿全文
 
-準拠: [ゲームシナリオモデル v1.1](https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4)。原稿は authoring/stories-v11-*.mjs、人物の定義は authoring/characters.mjs。作品版 1.7.0。
+準拠: [ゲームシナリオモデル v1.1](https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4)。原稿は authoring/stories-v11-*.mjs、人物の定義は authoring/characters.mjs。作品版 1.8.0。
 
 以下は実行データから生成した本文・選択・結果。状態条件も併記する作者向け原稿。新たな役割や物品の扱いは、この版で補完した設定であり、旧シナリオの既成事実とは区別する。
 

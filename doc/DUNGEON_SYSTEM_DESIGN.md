@@ -1,6 +1,6 @@
 # 複数ダンジョンと固有システムの設計
 
-更新日: 2026-09-14。作品版1.7.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
+更新日: 2026-09-14。作品版1.8.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
 
 ## 編集するデータ
 
@@ -10,7 +10,7 @@
 
 ## 共通部品
 
-`systems` のキーはダンジョン内の部品ID、`use` は `src/core/dungeons.js` に登録された実装名です。同じ部品を別のダンジョンへ設定値を変えて配置できます。現在は fire_network、waterworks、corrosion、breakable_walls、plant_garden、warp_network、skill_library、market_pacts、air_supply、power_grid、terrain_shift、vector_curse、suppression_zone の13種です。
+`systems` のキーはダンジョン内の部品ID、`use` は `src/core/dungeons.js` に登録された実装名です。同じ部品を別のダンジョンへ設定値を変えて配置できます。現在は fire_network、waterworks、corrosion、breakable_walls、plant_garden、warp_network、skill_library、market_pacts、air_supply、power_grid、terrain_shift、vector_curse、suppression_zone、voxel_space の14種です。
 
 `enabled: false` は部品を無効にします。各部品の `validate`／`validateState` が定義とセーブを検査し、`plan` が対象・費用・条件を調べ、`act` が成立した操作を実行します。入口・退場・移動・戦闘・能力・技能・通行判定のフックを必要に応じて提供します。
 
@@ -26,7 +26,7 @@
 
 ## シナリオと表示
 
-現地調査と素材は `authoring/dungeon-scenes.json` に定義します。PR #8は実状態を読む調査、手帳への記録、画像の割当を追加しています。操作中の本筋のフラグをビューが直接変更する設計にはしません。
+現地調査と素材は `authoring/dungeon-scenes.json` に定義します。マージ済みのPR #8は実状態を読む調査、手帳への記録、画像の割当を追加しています。操作中の本筋のフラグをビューが直接変更する設計にはしません。
 
 Coreの投影をApplicationがViewModelへ変換し、Viewは文字・画像・地図と、許可された操作を表示します。画像の切り出し矩形は表示用データです。装置の費用計算や地形変更をViewへ持たせません。
 
@@ -35,3 +35,9 @@ Coreの投影をApplicationがViewModelへ変換し、Viewは文字・画像・�
 既存部品の値・配置・接続・材料の変更ならJSONを編集します。新しいゲーム規則が必要なら `src/core/systems/` に共通部品を実装し、レジストリ、定義検証、保存検証、Schema、投影と操作の一致を追加します。個別のダンジョンIDによる分岐を共通コアへ増やしません。
 
 現行JSONで表現できない規則を、未登録の `use` や任意JavaScriptの文字列として追加してはいけません。汎用ルールエンジンやフォーム編集は、実際の編集負担と必要性を確認してから検討する拡張です。
+
+## 立体区画への拡張
+
+voxel_spaceはmap.voxelsの層・六面・移動経路・装置を読みます。水量、面の開閉、掘削、設置を永続状態へ保存し、planで高さ・距離・経路・費用をまとめて検査します。Coreのvoxels.jsが形状・足場・水の再配分、voxel-validation.jsが配置と保存検証、Applicationのvoxel-projection.jsが現在高の表示を担当します。
+
+編集元はauthoring/voxel-content.jsonです。新規の立体マップにはvoxel_spaceを一つだけ対応させます。従来のterrain_shiftなどの二次元パッチを立体マップへ併用する対応は今回の範囲外です。[定義例と制約](VOXEL_TERRAIN_AND_WATER.md)を参照してください。

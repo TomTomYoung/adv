@@ -187,7 +187,7 @@ test('v1.6 saves gain only missing components while preserving ongoing text, cho
     const g=new GameEngine(old);drain(g);g.dispatch({type:'travel',region});if(kind==='text')g.run('service.inn');else if(kind==='choice'){g.accept('q001');g.run('q001.decision');drain(g);}else g.startBattle('roaming_1',{win:[],escape:[],lose:[]});
     const text=g.save(),before=JSON.parse(text).state,h=newGame();h.load(text);
     for(const key of ['actors','inventory','location','vm','waiting','battle','rng','records','steps','quests','events','objects','discovered'])assert.deepEqual(h.state[key],before[key],`${region}/${kind}/${key}`);
-    if(region<=2)assert.deepEqual(h.state.dungeons,before.dungeons);roundtrip(h);
+    if(region===2)assert.deepEqual(h.state.dungeons,before.dungeons);if(region===1){const retained=structuredClone(h.state.dungeons);delete retained.active.systems.space;delete retained.persistent.region_1.systems.space;assert.deepEqual(retained,before.dungeons);assert.deepEqual(h.state.dungeons.persistent.region_1.systems.space,{maps:{}});}roundtrip(h);
   }
 });
 

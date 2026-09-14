@@ -1,6 +1,6 @@
 # ビューと表示データの契約
 
-更新日: 2026-09-14。作品版1.7.0とPR #8の素材・現地調査を含みます。
+更新日: 2026-09-14。作品版1.8.0の立方体地形・素材・現地調査を含みます。
 
 ## 境界
 
@@ -31,7 +31,7 @@ HTMLの構成や絵の大きさまで変える場合は `view.js` と `style.css
 
 項目：quests[]/tracked / 内容：公開依頼情報、受注可能か、段階、調査座標、完了済みなら選んだ結末
 
-項目：dungeon / 内容：位置・方角、探索済みセル、衝突を反映したgeometry、可視のイベント、画像URL
+項目：dungeon / 内容：位置・方角、探索済みセル、描画用geometryと通行可否を持つcells、可視のイベント、画像URL
 
 項目：dialog / 内容：textなら本文と話者、choiceならid/本文/条件説明/enabled
 
@@ -133,8 +133,16 @@ partyとrosterには、現在職、成長履歴、習得技能、探索特技、
 
 ## ダンジョン素材と現地調査
 
-dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `[x,y,width,height]` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。
+dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `{x,y,width,height}` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。
 
 dungeon.scenesは現在地または正面で調査できる場面のパネルです。各カードの操作はdungeon.scene意図を返し、コアが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
 quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
+
+## 立方体の断面と六面
+
+立体マップではdungeon.voxel=true、z、currentCube、boundariesを追加します。locationはzを含み、cellsは現在の高さだけを投影します。cellsのwaterDepthは0〜3、waterLabelは水深の表示名、floorは足場の有無、edgesは横四面の通行を遮る境界です。geometryは密の立方体だけを壁として扱い、完全水没や穴の通行不可はcells.blockedへ分離します。
+
+boundariesは「x,y/side」をキーにした描画用の壁面です。currentCube.neighborsは六方向のkind（密・空・範囲外）とpassage/water/supportを持ちます。Viewは水深ごとの色・波、穴、境界壁、現在高を表示します。上下を自由に見回す描画ではありません。
+
+voxel_spaceのcards/actionsはvisit/toggle/pump/dig/install/traverseのdungeon.action意図を返します。対象のtarget、必要時のitemまたはactor/abilityを付け、Coreで同じplanを再実行します。リンクを渡るとCoreが終点のzへ移動します。測量とイベント表示も現在高を区別します。

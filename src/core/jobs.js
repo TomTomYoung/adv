@@ -2,7 +2,7 @@ import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs} from './dungeons.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse']);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -106,7 +106,7 @@ export function fieldActionPlan(data,state,id,abilityId){
   const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
-  if(['wall.break','archive.unlock'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
+  if(['wall.break','archive.unlock','voxel.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){

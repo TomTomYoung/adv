@@ -24,7 +24,7 @@ export async function buildDungeons(){
     }
     definitions[d.id]=d;
   }
-  const content=await read('authoring/kagaribi-content.json'),terrain=await read('authoring/terrain-content.json'),extra=await read('authoring/dungeon-content.json'),game=await read('data/game.json');
+  const content=await read('authoring/kagaribi-content.json'),terrain=await read('authoring/terrain-content.json'),extra=await read('authoring/dungeon-content.json'),voxel=await read('authoring/voxel-content.json'),game=await read('data/game.json');
   for(const type of ['items','enemies','encounters'])await write(`data/${type}.json`,{...await read(`data/${type}.json`),...content[type]});
   for(const [id,map] of Object.entries(content.maps))await write(`data/maps/${id}.json`,map);
   for(const type of ['items','enemies','encounters','statuses'])await write(`data/${type}.json`,{...await read(`data/${type}.json`),...extra[type]});
@@ -39,18 +39,21 @@ export async function buildDungeons(){
     const row=Array.from(map.tiles[point.y]);row[point.x]='.';map.tiles[point.y]=row.join('');await write(file,map);
   }
   for(const [id,cells] of Object.entries(extra.mapKnown)){const file=`data/maps/${id}.json`,map=await read(file);map.initiallyKnown=[...new Set([...(map.initiallyKnown??[]),...cells])];await write(file,map);}
+  for(const [id,map] of Object.entries(voxel.maps))await write(`data/maps/${id}.json`,map);
+  await write('data/scripts/voxel-space.json',{scripts:voxel.scripts});
   await write('data/scripts/dungeon-systems.json',{scripts:extra.scripts});
   await write('data/scripts/kagaribi.json',{scripts:content.scripts});
   await buildDungeonScenes(root,definitions);
   await write('data/dungeons.json',definitions);
-  game.version='1.7.0';game.dungeonVersion=1;
+  game.version='1.8.0';game.dungeonVersion=1;
   game.migrations={...game.migrations,'1.4.0':{actors:Object.keys(await read('data/actors.json')),dungeonRevision:true}};
   const addedSystems=Object.fromEntries(Object.values(definitions).filter(d=>!['kagaribi','region_1','region_2'].includes(d.id)).map(d=>[d.id,Object.keys(d.systems)]));
-  game.migrations['1.5.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['water'],region_2:['salt','walls'],...addedSystems}};
-  game.migrations['1.6.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems};
+  game.migrations['1.5.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['water','space'],region_2:['salt','walls'],...addedSystems}};
+  game.migrations['1.6.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{...addedSystems,region_1:['space']}};
+  game.migrations['1.7.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['space']}};
   game.files.databases.dungeons='data/dungeons.json';
-  game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps}).map(id=>`data/maps/${id}.json`)])];
-  game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/dungeon-scenes.json'])];
+  game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps,...voxel.maps}).map(id=>`data/maps/${id}.json`)])];
+  game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/dungeon-scenes.json','data/scripts/voxel-space.json'])];
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);

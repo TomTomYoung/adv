@@ -1,6 +1,6 @@
 # doc 全ファイル照合記録
 
-照合日: 2026-09-14。元のdoc直下31ファイルを、実装head f8bf8a6fbf4c9bba6f126e06b135ea781744586b、配布JSON、原稿、生成器と照合しました。GitHubのmasterはcf2920f6（1.7.0）、素材・現地調査はPR #8の追加です。確認時点の状態は[CURRENT_STATUS.md](CURRENT_STATUS.md)へ記載します。
+照合日: 2026-09-14。元のdoc直下31ファイルを、実装head f8bf8a6fbf4c9bba6f126e06b135ea781744586b、配布JSON、原稿、生成器と照合しました。GitHubのmasterはcf2920f6（1.7.0）、素材・現地調査はPR #8の追加です。この監査はPR #8のマージ前に行った履歴です。PR #8は後にマージされ、現在の版と作業ブランチは[CURRENT_STATUS.md](CURRENT_STATUS.md)へ記載します。
 
 ## 整理結果
 

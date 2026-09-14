@@ -87,6 +87,7 @@ export function validateJobs(data){
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
+    if(a.api==='voxel.traverse'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'立体移動技能が不正です');
     if(a.api==='archive.unlock'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'書庫の開門技能が不正です');
     if(a.api==='party.heal'&&(a.target!=='self'||!integer(a.amount,1,999)||a.output!==undefined))fail(id,'探索祈祷が不正です');
     if(a.api==='map.reveal'&&(a.target!=='location'||!integer(a.radius,1,8)||a.modes.includes('town')||a.output!==undefined))fail(id,'測量範囲不正');

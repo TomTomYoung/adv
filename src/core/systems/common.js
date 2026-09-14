@@ -3,7 +3,7 @@ export const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 export const integer=(v,min=0,max=1000000)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
 export const identifier=v=>typeof v==='string'&&/^[a-z][a-z0-9_]*$/.test(v)&&!['constructor','prototype','__proto__'].includes(v);
 export const closeTo=(state,point)=>{
-  const loc=state.location;if(!loc||loc.map!==point.map)return false;
+  const loc=state.location;if(!loc||loc.map!==point.map||(loc.z??0)!==(point.z??0))return false;
   const [dx,dy]=faces[loc.facing]??[0,0];
   return point.x===loc.x&&point.y===loc.y||point.x===loc.x+dx&&point.y===loc.y+dy;
 };

@@ -1,6 +1,6 @@
 # JSON DSL 実装リファレンス
 
-更新日: 2026-09-14。作品版1.7.0の48命令・30式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
+更新日: 2026-09-14。作品版1.8.0の48命令・30式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
 JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
@@ -53,7 +53,7 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 1. 論理: and / orにはargs配列、notにはarg。
 1. 存在: existsにはvalue。
 1. 所持: has_item(item,count)、has_member(actor)、has_status(actor,status)。
-1. 履歴: event_done(event)、map_discovered(map,x,y)。
+1. 履歴: event_done(event)、map_discovered(map,x,y,z省略可)。
 1. 計算: add/sub/mul/div/mod/min/max/floor/ceil/round/abs/clamp。args配列です。clampは値・下限・上限、div/modは2引数。ゼロ除算はエラーです。
 1. 表示文字列: `{ "format": "所持金は{g}G", "values": { "g": { "ref": "gold" } } }`。
 
@@ -97,7 +97,7 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 
 命令：status.apply / status.remove / 主なフィールドと動作：target、status。状態異常の追加・削除
 
-命令：map.teleport / 主なフィールドと動作：map、x、y、任意facing。実在する通行可能マスへ移動
+命令：map.teleport / 主なフィールドと動作：map、x、y、任意zとfacing。z省略は0。実在する通行可能な立方体へ移動し、完全水没・足場不足は拒否
 
 命令：map.reveal / 主なフィールドと動作：radius。現在位置の周囲を探索済みにする
 
@@ -198,6 +198,12 @@ map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"w
 命令：story.action / 必須引数：quest, action / 作用：宣言済みの前提・費用・効果・終了条件を確認し、一括確定
 
 choice.options の `storyAction: {quest, action}` は同じ行為を選択可否の検査に使う。`stories` へ set/add で書き込むことはできない。詳細と効果一覧は [モデル仕様](SCENARIO_MODEL_V11.md) を参照。
+
+## 高さの指定
+
+1.8.0の立体マップではmap.teleportのzを省略すると0へ移動します。例えば `{"op":"map.teleport","map":"waterworks_shaft","x":3,"y":2,"z":1,"facing":"east"}` は橋上の踊り場です。到着時点の足場・水没も確認します。
+
+map_discoveredは立体マップを参照するとき `{"op":"map_discovered","map":"waterworks_shaft","x":3,"y":2,"z":1}` と高さを明示します。省略時は従来のx,y形式の踏査記録を読みます。
 
 ## ダンジョンの操作と観察
 

@@ -60,7 +60,7 @@ export function evaluate(value, context, depth = 0) {
     case 'has_member': return context.members?.includes(value.actor) ?? false;
     case 'has_status': return context.actors?.[value.actor]?.statuses?.includes(value.status) ?? false;
     case 'event_done': return Boolean(context.events?.[value.event]);
-    case 'map_discovered': return Boolean(context.discovered?.[value.map]?.includes(`${value.x},${value.y}`));
+    case 'map_discovered': return Boolean(context.discovered?.[value.map]?.includes(value.z===undefined?`${value.x},${value.y}`:`${value.x},${value.y},${value.z}`));
     default: throw new Error(`未対応の式: ${value.op}`);
   }
 }
