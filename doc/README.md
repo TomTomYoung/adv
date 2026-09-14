@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-14。対象は作品版1.8.0です。素材・現地調査はPR #8、立方体地形はPR #9、水面・床材の描画修正はPR #10でマージ済みです。今回の作業は2D・3Dのセルと方向別通行の仕様整理です。masterと作業ブランチの反映状況は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認してください。
+更新日: 2026-09-14。対象は作品版1.8.0です。素材・現地調査はPR #8、立方体地形はPR #9、水面・床材の描画修正はPR #10、セルと方向別通行の仕様はPR #11でマージ済みです。今回の作業は現行セル種と状態・配置物のカタログ化です。masterと作業ブランチの反映状況は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -13,6 +13,8 @@
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
 
 ## ダンジョン
+
+[CELL_CATALOG.md](CELL_CATALOG.md)：現在の空・密、足場、水深、地形変化、境界、移動手段、環境効果、イベント種別の仕様と自動集計した配置索引。
 
 [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：2Dの四辺・3Dの六面、壁セルと境界壁、方向別の進入・退出、現行実装と拡張仕様、2Dの保持方針。
 

@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8・PR #9・PR #10はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
+更新日: 2026-09-14。対象は作品版1.8.0の立方体地形と貯水立坑です。PR #8・PR #9・PR #10・PR #11はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
 
 ## 正本と生成
 
@@ -38,6 +38,8 @@ Coreはゲーム状態を所有し、ApplicationはコピーしたViewModelを�
 旧script ID・配列順・分岐path・呼出scopeを保持します。`legacyQuestRoutes`、`legacyStoryRoutes`、`catalogRevision`、q008の状態改訂を混同しません。現地調査の会話構造を変える場合は原稿の revision を上げ、旧版を残します。
 
 ## 立体地形の保守
+
+[CELL_CATALOG.md](CELL_CATALOG.md)に現行セル種・状態・境界・移動手段・配置物の仕様を整理しています。配置索引は `tools/cell-catalog.mjs` からbuild:docsで更新します。新しい部品を加えたら、カタログ本文の仕様と集計の両方を更新してください。
 
 セル・壁・境界の定義は[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)です。2Dの25マップとその四方移動・保存形式を保守対象として残します。方向別境界と入口依存の出口制限は拡張仕様であり、現行JSONへそのまま追加しないでください。導入時には移動・経路・退避・保存・到達性・Viewの許可判定を揃えます。
 
