@@ -1,3 +1,5 @@
+2026-09-14追記：作品1.5.0。篝火の迷宮を追加し、11ダンジョン・23マップに対応しました。[実装詳細](KAGARIBI_DUNGEON.md)と[複数ダンジョン設計](DUNGEON_SYSTEM_DESIGN.md)を参照してください。灯番の点火・くらがり撃退、火台・種火・携帯松明、旧セーブ移行を含みます。以下の旧版の数値は当時の記録です。
+
 # 灯帰りの迷宮 現行仕様 1.4.0
 
 更新日: 2026-09-13。1.4.0では q001〜q010 の人物・物品状態と36種類のNPC表示を追加しました。詳細は [SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)、検証結果は [SCENARIO_V11_IMPLEMENTATION.md](SCENARIO_V11_IMPLEMENTATION.md) を参照してください。JSONを正式形式とし、ブラウザのES Modulesで実行する静的アプリです。Phaser試作から共通エンジンを再構成し、CDN依存を取り除きました。

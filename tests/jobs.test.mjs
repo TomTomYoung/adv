@@ -25,7 +25,12 @@ for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/1
     const checkpoint=g.save();g.load(checkpoint);assert.equal(g.save(),checkpoint);
     for(const grant of job.grants.filter(grant=>grant.api==='battle.skill'&&grant.level<=level)){
       const run=setup(job.id,level);equipSkill(run,grant.skill);run.healAll();start(run);
-      const spec=data.skills[grant.skill],target=spec.target==='ally'?'nio':spec.target==='self'?'ada':'enemy_0';
+      const spec=data.skills[grant.skill];
+      if(spec.effects.some(e=>e.type==='repel')){
+        assert.equal(battleSkillPlan(run,'ada',grant.skill,'ada').ok,false);
+        run.state.battle=null;run.state.waiting=null;run.returnTown();run.dispatch({type:'travel',dungeon:'kagaribi'});run.startBattle('kuragari_hunt',{win:[],lose:[],escape:[]});actAs(run,'ada');
+      }
+      const target=spec.target==='ally'?'nio':spec.target==='self'?'ada':'enemy_0';
       if(spec.requiresAnalyzed)run.state.battle.analyzed.push('enemy_0','enemy_1');
       assert.ok(battleSkillPlan(run,'ada',grant.skill,target).ok,`${job.id}/${level}/${grant.skill}`);
       assert.ok(run.dispatch({type:'battle',action:'skill',skill:grant.skill,target}),`${job.id}/${level}/${grant.skill}`);
