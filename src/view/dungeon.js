@@ -16,7 +16,7 @@ export function paintDungeon(canvas,dungeon,battle){
       while(dist<16){hx=x+.5+dx*dist;hy=y+.5+dy*dist;if(dungeon.geometry[Math.floor(hy)]?.[Math.floor(hx)]!=='.')break;dist+=.025;}
       const corrected=dist*Math.cos(ray-angle),wallHeight=Math.min(height*2,height/Math.max(.2,corrected)),top=(height-wallHeight)/2;
       const u=((Math.abs(hx-Math.round(hx))<.04?hy:hx)%1+1)%1;
-      const water=dungeon.cells[Math.floor(hy)]?.[Math.floor(hx)]?.blocked;
+      const water=dungeon.cells[Math.floor(hy)]?.[Math.floor(hx)]?.water;
       if(water){ctx.fillStyle='#287f9a';ctx.fillRect(column,top,3,wallHeight);ctx.fillStyle='#8fd4dd';for(let line=top+8;line<top+wallHeight;line+=18)ctx.fillRect(column,line,3,2);}
       else if(art.complete&&art.naturalWidth)ctx.drawImage(art,Math.floor(18+u*50),45,2,76,column,top,3,wallHeight);
       else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,3,wallHeight);}

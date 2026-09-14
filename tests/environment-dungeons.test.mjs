@@ -47,7 +47,7 @@ test('water channels are blocked by default, drain by the matching valve, and re
 test('water phases pause during dialog and battle and do not affect a different dungeon',()=>{
   const g=begin(1);g.run('service.inn');assert.equal(action(g,'water','wait'),false);assert.equal(water(g).elapsed,0);drain(g);
   g.startBattle('roaming_1',{win:[],escape:[],lose:[]});assert.equal(action(g,'water','wait'),false);escape(g);assert.equal(water(g).elapsed,0);
-  g.returnTown();g.dispatch({type:'travel',region:3});assert.equal(action(g,'water','wait'),false);assert.deepEqual(projectGame(g).dungeon.systems,[]);roundtrip(g);
+  g.returnTown();g.dispatch({type:'travel',region:3});assert.equal(action(g,'water','wait'),false);assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['plant_garden']);roundtrip(g);
 });
 test('both waterway floors remain traversable through real movement, gate operations and stairs',()=>{
   const g=begin(1);g.random=()=>.999999;assert.ok(action(g,'water','close','upper_gate'));
@@ -77,7 +77,7 @@ test('corrosion clamps HP/MP maxima, survives battle save replay, and clears on 
   const before=g.stats('sera').mp;g.startBattle('roaming_2',{win:[],escape:[],lose:[]});assert.equal(g.stats('sera').mp,before-1);assert.equal(g.state.actors.sera.mp,before-1);roundtrip(g);
   const h=newGame();h.load(g.save());for(const engine of [g,h])engine.dispatch({type:'battle',action:'skill',skill:'guard'});assert.equal(g.save(),h.save());
   g.defeat();assert.equal(g.state.dungeons.active,null);assert.equal(g.stats('sera').mp,before);roundtrip(g);
-  const other=equipped();other.startBattle('roaming_2',{win:[],escape:[],lose:[]});escape(other);other.teleport('region_3_f1',1,1);assert.deepEqual(projectGame(other).dungeon.systems,[]);roundtrip(other);
+  const other=equipped();other.startBattle('roaming_2',{win:[],escape:[],lose:[]});escape(other);other.teleport('region_3_f1',1,1);assert.deepEqual(projectGame(other).dungeon.systems.map(s=>s.kind),['plant_garden']);roundtrip(other);
 });
 test('wall item usage checks reach, matching item and supplies before payment; opening changes movement and remains after reentry',()=>{
   const g=begin(2);g.give('blasting_charge',2);const count=g.state.inventory.blasting_charge;

@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {COMMANDS} from '../src/core/script.js';
+import {additionalDungeonSystems} from './dungeon-system-schemas.mjs';
 const folder=path.resolve(import.meta.dirname,'../data/schemas');await fs.mkdir(folder,{recursive:true});
 const string={type:'string',minLength:1},integer={type:'integer',minimum:0},boolean={type:'boolean'},value={$ref:'#/$defs/value'},expr={$ref:'#/$defs/expression'},commands={type:'array',items:{$ref:'#/$defs/command'}};
 const obj=(properties,required=Object.keys(properties),additionalProperties=false)=>({type:'object',properties,required,additionalProperties});
@@ -56,7 +57,7 @@ await fs.writeFile(path.join(folder,'sounds.schema.json'),JSON.stringify({$schem
 const jobStats=Object.fromEntries(['hp','mp','str','vit','agi','int'].map(k=>[k,numeric(0,100)]));
 const strings={type:'array',uniqueItems:true,items:string};
 const rates={type:'object',additionalProperties:numeric(0,3)};
-const grants=obj({skill:string,level:{type:'integer',minimum:1,maximum:30},api:{enum:['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break']},target:{enum:['self','ally','enemy','all_allies','all_enemies','location']},maxTargets:{type:'integer',minimum:1,maximum:8},lifetime:{const:'equipped'}});
+const grants=obj({skill:string,level:{type:'integer',minimum:1,maximum:30},api:{enum:['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal']},target:{enum:['self','ally','enemy','all_allies','all_enemies','location']},maxTargets:{type:'integer',minimum:1,maximum:8},lifetime:{const:'equipped'}});
 const job=obj({id:string,name:string,role:string,limitation:string,growth:obj(jobStats),stats:obj(Object.fromEntries(Object.keys(jobStats).map(k=>[k,numeric(-100,100)])),[]),equipment:obj({weapon:strings,armor:strings,charm:strings}),passives:{type:'object',additionalProperties:{oneOf:[numeric(0,100),rates]}},grants:{type:'array',minItems:1,items:grants}});
 await fs.writeFile(path.join(folder,'jobs.schema.json'),JSON.stringify({$schema:base.$schema,title:'灯帰り 職業定義 v1.3',type:'object',additionalProperties:job},null,2)+'\n');
 const buff=obj({id:string,name:string,turns:{type:'integer',minimum:1,maximum:10},stats:obj(Object.fromEntries(['str','vit','agi','int'].map(k=>[k,numeric(.1,3)])),[]),resist:{type:'object',additionalProperties:numeric(0,1)}});
@@ -69,6 +70,7 @@ const point={map:string,x:integer,y:integer};
 const waterSystem=obj({use:{const:'waterworks'},enabled:boolean,phases:{type:'array',minItems:2,items:obj({id:string,name:string,duration:numeric(1,10000),level:{type:'integer',minimum:0,maximum:2}})},controls:{type:'array',items:obj({...point,id:string,name:string,kind:{enum:['gate','valve']},initiallyOpen:boolean})},zones:{type:'array',minItems:1,items:obj({id:string,name:string,map:string,kind:{enum:['tidal','channel']},control:string,cells:{type:'array',minItems:1,items:obj({x:integer,y:integer})}},['id','name','map','kind','cells'])}},['use','phases','controls','zones']);
 const corrosionSystem=obj({use:{const:'corrosion'},enabled:boolean,perBattle:{type:'integer',minimum:1,maximum:100}},['use','perBattle']);
 const wallSystem=obj({use:{const:'breakable_walls'},enabled:boolean,walls:{type:'array',minItems:1,items:obj({...point,id:string,name:string,items:strings,abilities:strings})}},['use','walls']);
-const dungeon=obj({schemaVersion:{const:1},id:string,name:string,description:string,region:{type:'integer',minimum:1},recommendedLevel:{type:'integer',minimum:1},profile:{const:'classic'},entries:obj({main:obj({map:string,point:{const:'entrance'}})}),maps:{type:'array',minItems:1,uniqueItems:true,items:string},systems:{type:'object',additionalProperties:{oneOf:[fireSystem,waterSystem,corrosionSystem,wallSystem]}},source:string},['schemaVersion','id','name','description','region','recommendedLevel','profile','entries','maps','systems']);
-await fs.writeFile(path.join(folder,'dungeon.schema.json'),JSON.stringify({$schema:base.$schema,title:'ダンジョン編集元 v1',...dungeon},null,2)+'\n');
+const dungeon=obj({schemaVersion:{const:1},id:string,name:string,description:string,region:{type:'integer',minimum:1},recommendedLevel:{type:'integer',minimum:1},profile:{const:'classic'},entries:obj({main:obj({map:string,point:{const:'entrance'}})}),maps:{type:'array',minItems:1,uniqueItems:true,items:string},systems:{type:'object',additionalProperties:{oneOf:[fireSystem,waterSystem,corrosionSystem,wallSystem,...additionalDungeonSystems()]}},source:string},['schemaVersion','id','name','description','region','recommendedLevel','profile','entries','maps','systems']);
+const authoredDungeon=structuredClone(dungeon);authoredDungeon.properties.systems.additionalProperties.oneOf=[fireSystem,waterSystem,corrosionSystem,wallSystem,...additionalDungeonSystems(true)];
+await fs.writeFile(path.join(folder,'dungeon.schema.json'),JSON.stringify({$schema:base.$schema,title:'ダンジョン編集元 v1',...authoredDungeon},null,2)+'\n');
 await fs.writeFile(path.join(folder,'dungeons.schema.json'),JSON.stringify({$schema:base.$schema,title:'ダンジョン一覧 v1',type:'object',additionalProperties:dungeon},null,2)+'\n');

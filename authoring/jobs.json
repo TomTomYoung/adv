@@ -993,6 +993,14 @@
           "target": "all_allies",
           "maxTargets": 5,
           "lifetime": "equipped"
+        },
+        {
+          "skill": "field_prayer",
+          "level": 1,
+          "api": "party.heal",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
         }
       ]
     },
@@ -1193,6 +1201,22 @@
           "level": 10,
           "api": "battle.skill",
           "target": "ally",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "garden_medicine",
+          "level": 1,
+          "api": "inventory.convert",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "weave_rope",
+          "level": 1,
+          "api": "inventory.convert",
+          "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
         }
@@ -1891,6 +1915,14 @@
           "target": "ally",
           "maxTargets": 1,
           "lifetime": "equipped"
+        },
+        {
+          "skill": "field_prayer",
+          "level": 1,
+          "api": "party.heal",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
         }
       ]
     }
@@ -2151,6 +2183,70 @@
       ],
       "cue": "unlock",
       "description": "MP3。正面にある対応する破壊壁を崩し、通路を開きます。"
+    },
+    "read_path": {
+      "id": "read_path",
+      "name": "余白の開門",
+      "api": "archive.unlock",
+      "target": "location",
+      "mp": 3,
+      "modes": [
+        "dungeon"
+      ],
+      "cue": "unlock",
+      "description": "MP3。書庫の本から借り、正面の封印に隠れた通路を開きます。"
+    },
+    "field_prayer": {
+      "id": "field_prayer",
+      "name": "旅の回復祈祷",
+      "api": "party.heal",
+      "target": "self",
+      "mp": 5,
+      "amount": 18,
+      "modes": [
+        "dungeon"
+      ],
+      "cue": "heal",
+      "description": "MP5。生存する隊員全員のHPを18回復。谷の遮断区域では使用できません。"
+    },
+    "garden_medicine": {
+      "id": "garden_medicine",
+      "name": "庭園薬の調合",
+      "api": "inventory.convert",
+      "target": "self",
+      "mp": 1,
+      "modes": [
+        "town",
+        "dungeon"
+      ],
+      "materials": {
+        "medicinal_leaf": 2,
+        "red_nectar": 1
+      },
+      "output": {
+        "potion": 2
+      },
+      "cue": "item",
+      "description": "MP1と薬効葉2枚・赤い蜜1個から、傷薬2個を作ります。"
+    },
+    "weave_rope": {
+      "id": "weave_rope",
+      "name": "植物繊維の縄編み",
+      "api": "inventory.convert",
+      "target": "self",
+      "mp": 1,
+      "modes": [
+        "town",
+        "dungeon"
+      ],
+      "materials": {
+        "soft_fiber": 3
+      },
+      "output": {
+        "rope": 1
+      },
+      "cue": "item",
+      "description": "MP1と植物繊維3個から補修用の縄1個を作ります。"
     }
   },
   "skills": {
@@ -2708,6 +2804,19 @@
       ],
       "fireEffect": "ward",
       "description": "篝火の迷宮のくらがりを撃退し、携帯松明にもくらがり除けの火を灯す。撃破・勝利報酬は発生しない。"
+    },
+    "valley_curse": {
+      "id": "valley_curse",
+      "name": "途切れぬ呪詠",
+      "mp": 2,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "status",
+          "status": "hollow_curse",
+          "chance": 1
+        }
+      ]
     }
   },
   "formulas": {
@@ -3209,6 +3318,7 @@
     "roots": "fire",
     "blood_light": "fire",
     "homeward": "heal",
-    "repel_kuragari": "light"
+    "repel_kuragari": "light",
+    "valley_curse": "power"
   }
 }

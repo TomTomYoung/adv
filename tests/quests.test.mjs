@@ -13,7 +13,7 @@ for(const outcome of ['informed','contract','compromise'])test(`legacy continuat
   for(const quest of Object.values(data.quests).filter(q=>q.number<=100)){
     if(g.state.mode==='dungeon')g.dispatch({type:'retreat'});
     assert.ok(g.dispatch({type:'accept',id:quest.id}),quest.id+' must unlock');g.healAll();
-    if(outcome==='informed')for(const spot of quest.locations.slice(0,2)){exploreSpot(g,spot,{heal:true});assert.equal(g.state.quests[quest.id].stage,'active');}
+    if(outcome==='informed')for(const spot of quest.locations.slice(0,2)){exploreSpot(g,spot,{heal:true});assert.equal(g.state.quests[quest.id].stage,'active');if(quest.region===10)g.dispatch({type:'retreat'});}
     exploreSpot(g,quest.locations[2],{heal:true});assert.equal(g.state.waiting?.type,'choice',quest.id);
     const checkpoint=g.save();g.load(checkpoint);assert.ok(g.dispatch({type:'choose',id:outcome}),quest.id);drain(g);if(g.state.battle){g.load(g.save());fight(g);}drain(g);
     assert.equal(g.state.quests[quest.id].stage,'completed',quest.id);assert.equal(g.state.quests[quest.id].outcome,outcome,quest.id);assert.equal(g.state.vm.length,0,quest.id+' continuation drained');

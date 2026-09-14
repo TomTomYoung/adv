@@ -2,9 +2,18 @@ import {fireNetwork} from './systems/fire-network.js';
 import {waterworks} from './systems/waterworks.js';
 import {corrosion} from './systems/corrosion.js';
 import {breakableWalls} from './systems/breakable-walls.js';
+import {plantGarden} from './systems/plant-garden.js';
+import {warpNetwork} from './systems/warp-network.js';
+import {terrainShift} from './systems/terrain-shift.js';
+import {vectorCurse} from './systems/vector-curse.js';
+import {suppressionZone,restrictionText} from './systems/suppression-zone.js';
+import {skillLibrary} from './systems/skill-library.js';
+import {airSupply} from './systems/air-supply.js';
+import {marketPacts} from './systems/market-pacts.js';
+import {powerGrid} from './systems/power-grid.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
-export const DUNGEON_SYSTEMS={fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls};
+export const DUNGEON_SYSTEMS={fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
 export const freshDungeons=()=>({version:1,nextRun:1,active:null,persistent:{}});
 export const dungeonForMap=(data,map)=>Object.values(data.dungeons??{}).find(d=>d.maps.includes(map))??null;
 export function dungeonContexts(data,state){
@@ -29,6 +38,14 @@ export function dungeonEquipmentStats(data,state,item){
 export function dungeonBattleStart(engine){
   for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].battleStart?.({...ctx,engine});
 }
+export function dungeonBattleRound(engine){for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].battleRound?.({...ctx,engine});}
+export function dungeonBattleEnd(engine,battle,result){for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].battleEnd?.({...ctx,engine,battle,result});}
+export function dungeonActorStats(data,state,id,base){let stats=base;for(const ctx of dungeonContexts(data,state))stats=DUNGEON_SYSTEMS[ctx.spec.use].actorStats?.(ctx,id,stats)??stats;return stats;}
+export function dungeonGrants(data,state,id,base){let grants=base;for(const ctx of dungeonContexts(data,state))grants=DUNGEON_SYSTEMS[ctx.spec.use].grants?.(ctx,id,grants)??grants;return grants;}
+export function dungeonAbilityReason(data,state,id,api){for(const ctx of dungeonContexts(data,state)){const reason=DUNGEON_SYSTEMS[ctx.spec.use].abilityReason?.(ctx,id,api);if(reason)return reason;}return null;}
+export function dungeonEffectActive(data,state,kind,id){return dungeonContexts(data,state).every(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].effectActive?.(ctx,kind,id)!==false);}
+export function dungeonBuffs(data,state){const b=state.battle;return b?{...b,buffs:b.buffs.filter(v=>dungeonEffectActive(data,state,'buff',v.id))}:null;}
+export function dungeonPreview(data,definition){return Object.values(definition.systems).filter(s=>s.enabled!==false&&s.use==='suppression_zone').map(s=>restrictionText(data,s));}
 export function dungeonFieldPlan(data,state,actor,ability){
   for(const ctx of dungeonContexts(data,state)){
     const action=DUNGEON_SYSTEMS[ctx.spec.use].fieldIntent?.(ctx,actor,ability);
@@ -66,9 +83,9 @@ export function dungeonUseItem(engine,item){
   }
   return null;
 }
-export function stepDungeon(engine){
+export function stepDungeon(engine,movement){
   if(engine.state.dungeons?.active)engine.state.dungeons.active.steps++;
-  for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].step?.({...ctx,engine});
+  for(const ctx of dungeonContexts(engine.data,engine.state))DUNGEON_SYSTEMS[ctx.spec.use].step?.({...ctx,engine,movement});
 }
 export function dungeonDanger(engine){
   if(engine.state.waiting||engine.state.battle)return false;

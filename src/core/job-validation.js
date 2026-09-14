@@ -1,5 +1,5 @@
 import {isRecord} from './expression.js';
-import {STAT_KEYS,FIELD_APIS,SKILL_EFFECTS} from './jobs.js';
+import {STAT_KEYS,FIELD_APIS,SKILL_EFFECTS,grantsFor} from './jobs.js';
 export const ELEMENTS=['physical','fire','ice','lightning','water','light','earth','dark'];
 const integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
 const own=(object,key)=>typeof key==='string'&&Object.hasOwn(object??{},key);
@@ -87,6 +87,8 @@ export function validateJobs(data){
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
+    if(a.api==='archive.unlock'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'書庫の開門技能が不正です');
+    if(a.api==='party.heal'&&(a.target!=='self'||!integer(a.amount,1,999)||a.output!==undefined))fail(id,'探索祈祷が不正です');
     if(a.api==='map.reveal'&&(a.target!=='location'||!integer(a.radius,1,8)||a.modes.includes('town')||a.output!==undefined))fail(id,'測量範囲不正');
     if(a.api==='inventory.convert'&&(a.target!=='self'||!isRecord(a.materials)||!Object.keys(a.materials).length||!isRecord(a.output)||!Object.keys(a.output).length))fail(id,'変換入出力不正');
     for(const field of ['materials','output'])if(a[field]!==undefined&&(!isRecord(a[field])||Object.entries(a[field]).some(([item,n])=>!own(data.items,item)||!integer(n,1,data.system.maxStack))))fail(id,'材料・出力不正');
@@ -107,7 +109,7 @@ export function validateJobState(data,state){
   const enemyKeys=b.enemies.map(e=>`enemy:${e?.instance}`),actorKeys=state.members.map(id=>`actor:${id}`),targets=new Set([...enemyKeys,...actorKeys]);
   const source=(record)=>{
     const actor=state.actors[record.sourceActor],job=data.jobs[record.sourceJob],skill=data.skills[record.sourceSkill];
-    return actor&&state.members.includes(record.sourceActor)&&actor.job===record.sourceJob&&job?.grants.some(g=>g.skill===record.sourceSkill&&g.api==='battle.skill'&&g.level<=state.level)&&skill;
+    return actor&&state.members.includes(record.sourceActor)&&actor.job===record.sourceJob&&job&&grantsFor(data,state,record.sourceActor).some(g=>g.skill===record.sourceSkill&&g.api==='battle.skill'&&g.level<=state.level)&&skill;
   };
   const seen=new Set();
   for(const record of b.buffs){

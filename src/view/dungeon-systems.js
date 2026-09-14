@@ -1,6 +1,11 @@
 const element=(tag,text,className)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;};
 export function dungeonSystems(parent,systems,dispatch){
   for(const system of systems??[]){
+    if(system.cards){
+      const panel=element('section',undefined,'environment-panel');panel.setAttribute('aria-label',system.title);panel.append(element('h3',system.title),element('p',system.summary));appendActions(panel,system.actions,dispatch);
+      for(const card of system.cards){const box=element('details',undefined,'environment-target');box.open=true;box.append(element('summary',card.name),element('p',card.text));appendActions(box,card.actions,dispatch);panel.append(box);}
+      parent.append(panel);continue;
+    }
     if(system.kind==='waterworks'){
       const panel=element('section',undefined,'environment-panel water-panel');panel.setAttribute('aria-label',system.title);
       panel.append(element('h3',system.title),element('p',`${system.phase} ／ 次の水位まで${system.remaining}刻`),element('p','移動・待機・水門操作で1刻進みます。完全水没した区画は通れません。','muted'));

@@ -1,0 +1,82 @@
+{
+  "id": "moving_village_f1",
+  "region": 10,
+  "floor": 1,
+  "name": "巨獣上の移動集落",
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "tiles": [
+    "#############",
+    "#...........#",
+    "#.###.###.#.#",
+    "#...#...#...#",
+    "#.#.#.#.#.#.#",
+    "#...#...#...#",
+    "#.###.###.#.#",
+    "#...........#",
+    "#############"
+  ],
+  "encounter": "roaming_10",
+  "encounterRate": 0.12,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "灯帰りへの帰路",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "moving_village.exit"
+    },
+    {
+      "id": "q194_scene",
+      "x": 9,
+      "y": 7,
+      "name": "売れた故郷：移動集落の住人サナ",
+      "kind": "decision",
+      "quest": "q194",
+      "trigger": "interact",
+      "safe": true,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q194.visit"
+    }
+  ],
+  "encounterPool": [
+    {
+      "encounter": "roaming_10",
+      "weight": 20
+    },
+    {
+      "encounter": "wild_moon_wolf",
+      "weight": 40
+    },
+    {
+      "encounter": "wild_jackknife",
+      "weight": 40
+    }
+  ]
+}
