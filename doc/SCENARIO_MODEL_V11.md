@@ -2,7 +2,7 @@
 
 作品版: 1.9.0。更新日: 2026-09-14。v1.1の状態モデルは1.4.0から導入しています。
 
-設計基準は [ゲームシナリオモデル v1.1](https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4)。q001〜q010 をこの基準で改稿し、人物・物品の所在と行為の成立条件を `adv-story-state/1` として実装した。q011〜q200 の準拠モデルは v1.0。q011〜q020はカタログ改稿を[別原稿](SCENARIOS_Q011_Q020.md)へ反映し、個別のフラグと結末条件を持つ `.catalog1.*` で実行する。v1.1の所在検査を備えたものとしては扱わない。
+設計基準は [ゲームシナリオモデル v1.1](https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4)。q001〜q010 をこの基準で改稿し、人物・物品の所在と行為の成立条件を `adv-story-state/1` として実装した。q011〜q200 の準拠モデルは v1.0。q011〜q020はカタログ改稿を[シナリオ一覧](QUEST_CATALOG.md#q011-塩の花嫁)へ統合し、個別のフラグと結末条件を持つ `.catalog1.*` で実行する。v1.1の所在検査を備えたものとしては扱わない。
 
 ## 版の区別
 
@@ -90,7 +90,7 @@ npm run build:docs
 npm run check
 ```
 
-q001の原稿は `authoring/story-q001.mjs`。共通記法と他9本の原稿は `authoring/story-kit.mjs` と `authoring/stories-v11-1.mjs / stories-v11-2.mjs`。`tools/build-stories-v11.mjs` が実行 JSON、改稿全文、人物一覧、全依頼カタログを生成する。生成済み JSON だけの修正はしない。
+q001の原稿は `authoring/story-q001.mjs`。共通記法と他9本の原稿は `authoring/story-kit.mjs` と `authoring/stories-v11-1.mjs / stories-v11-2.mjs`。`tools/build-stories-v11.mjs` が実行JSONと人物一覧を生成し、ダンジョン・イベントを反映した後に `tools/build-quest-catalog.mjs` が配布JSONから統合カタログを生成する。生成済み JSON だけの修正はしない。
 
 カタログのAI向け注釈と世界設定上の事実は、原稿の `authoringNotes` とJSONの `model.world.authoringNotes` に保持する。台詞へ機械的に挿入せず、人物の目的・情報の取得順・状態遷移が制約と矛盾しないように編集する。
 

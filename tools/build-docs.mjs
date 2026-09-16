@@ -33,7 +33,7 @@ const observations=[];
 for(const e of questEvents(data).filter(e=>e.note))observations.push(`### ${data.dungeons[e.dungeon]?.name??e.quest} / ${e.title}`,'',`正本: [${e.quest}](../data/quests/${e.quest}.json) の events.${e.id}。調査地点: ${e.points.map(p=>`${p.map} (${p.x}, ${p.y})`).join(' / ')}。`,'',e.note.text,'',`記録の表示条件: \`${JSON.stringify(e.note.when)}\`。本文・観察条件・選択肢は同じJSONの \`${e.script}\`。`,'');
 await section('DUNGEON_ART_AND_SCENARIOS.md','quest-observations',observations.join('\n'));
 // Update metadata only: authored quest prose must survive documentation-only builds.
-for(const name of ['QUEST_CATALOG.md','SCENARIOS_Q001_Q010_V11.md']){const f=path.join(folder,name);let s=await fs.readFile(f,'utf8');s=s.replace(/作品版 \d+\.\d+\.\d+。/g,`作品版 ${version}。`).replace(/更新日: \d{4}-\d{2}-\d{2}。/g,`更新日: ${date}。`);await fs.writeFile(f,s);}
+for(const name of ['QUEST_CATALOG.md']){const f=path.join(folder,name);let s=await fs.readFile(f,'utf8');s=s.replace(/作品版 \d+\.\d+\.\d+。/g,`作品版 ${version}。`).replace(/更新日: \d{4}-\d{2}-\d{2}。/g,`更新日: ${date}。`);await fs.writeFile(f,s);}
 // Plain prose/numbered lists are the repository owner's preferred documentation format.
 export function plainMarkdown(source){
  const lines=source.split('\n'),out=[];let code=false;

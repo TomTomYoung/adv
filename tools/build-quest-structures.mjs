@@ -68,21 +68,4 @@ game.version='1.3.2';
 for(const migration of Object.values(game.migrations))migration.legacyQuestRouting=true;
 game.migrations['1.3.1']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true,legacyQuestRouting:true};
 await write('data/game.json',game);
-// Generate the catalog from final data, including new outcomes and current labels.
-const catalog=['# シナリオ一覧','',`全${quests.length}本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)}結末。1.3.2。更新日: 2026-09-10。`, '',
- '既存100本の進行を個別に再実装し、追加篇10本も改稿しました。各依頼の場面・行為・接続先を下に記載します。作者向けのため真相と結末を含みます。','',
- '設計基準: [ゲームシナリオモデル v1.0](https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3)。詳細は [SCENARIO_DESIGN](SCENARIO_DESIGN.md) を参照してください。','',
- '町で受注し、追跡欄の地点を調べて開始します。中断後は同じ場所から続けられ、完了後は結果だけを再読できます。旧版で進行中の依頼は旧経路を完了できます。','',
- 'q100は元のq001〜q099の完了で解放します。追加100本の完了数では代用できません。場面内の移動は本文と選択で表し、NPCは自動で戦闘隊へ加入しません。',''];
-for(const q of quests){
- const graph=q.model.graph??[];
- catalog.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`,'',`概要: ${q.brief}`,'',
-  `実装: [シナリオJSON](../data/quests/${q.id}.json)。場面 ${graph.length}、結末 ${Object.keys(q.outcomes).length}。${q.model.sourceDraft?`原稿: [Notion](${q.model.sourceDraft})。`:''}`,'',
-  `真相と人物: ${q.model.world.truth}`,'');
- for(const [k,o] of Object.entries(q.outcomes))catalog.push(`${k} — ${o.label}（${o.gold}G / ${o.xp}EXP）: ${o.text}`,'');
- catalog.push(`進行: ${q.model.progression??'各場面の行為と応答に沿って進む。以下が実際の接続先です。'}`,'');
- for(const n of graph)catalog.push(`- ${n.id}: ${n.options.map(o=>`${o.text} → ${o.to}${o.when||o.need?.length?'（条件あり）':''}${o.combat?'［戦闘］':''}`).join(' / ')}`);
- catalog.push('');
-}
-await fs.writeFile(path.join(root,'doc/QUEST_CATALOG.md'),catalog.join('\n'));
 console.log(`Individual progressions: ${specs.length} revised quests; ${quests.reduce((n,q)=>n+(q.model.graph?.length??0),0)} playable scenes`);

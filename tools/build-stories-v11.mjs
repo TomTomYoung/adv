@@ -54,20 +54,6 @@ const assets=await read('data/assets.json');for(const c of characters)assets.ima
 await write('data/characters.json',Object.fromEntries(characters.map(({design,...c})=>[c.id,{...c,visualDesign:design}])));
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';
 game.migrations['1.3.2']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true};await write('data/game.json',game);
-const catalog=['# シナリオ一覧','',`全 ${quests.length} 本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} 結末。作品版 1.4.0。更新日: 2026-09-13。`,'','q001〜q010 は [シナリオモデル v1.1]('+standard.source+') と状態モデル `adv-story-state/1` に準拠。q011〜q200 は v1.0 のモデルと個別進行を使用する。作者向けの一覧のため真相と結末を含む。','','[q001〜q010改稿全文](SCENARIOS_Q001_Q010_V11.md) ／ [q011〜q020反映全文](SCENARIOS_Q011_Q020.md) ／ [人物一覧](CHARACTERS.md) ／ [状態モデルと互換性](SCENARIO_MODEL_V11.md)',''];
-const authoringNotes=notes=>notes?[`AI向け注釈: ${notes.notice}`,'',`${notes.factsHeading??'事実'}:`,'',...notes.facts.flatMap(text=>[text,''])]:[];
-for(const q of quests){
- catalog.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`,'',q.brief,'',`モデル: ${q.model.standard.version}。実装: [JSON](../data/quests/${q.id}.json)。場面 ${q.model.graph?.length??0}、結末 ${Object.keys(q.outcomes).length}。`,'',`固定された過去: ${q.model.world.truth}`,'',...authoringNotes(q.model.world.authoringNotes));
- for(const [k,o] of Object.entries(q.outcomes))catalog.push(`${k} — ${o.label}（${o.gold}G / ${o.xp}EXP）: ${o.text}`,'');
- catalog.push(`進行: ${q.model.progression??'各場面の選択に従う。'}`,'');
- for(const n of q.model.graph??[])catalog.push(`- ${n.id}: ${n.options.map(o=>`${o.text} → ${o.to}${o.combat?'［戦闘］':''}`).join(' / ')}`);
- catalog.push('');
-}
-await fs.writeFile(path.join(root,'doc/QUEST_CATALOG.md'),catalog.join('\n'));
-const prose=t=>Array.isArray(t)?t.flatMap(prose):typeof t==='string'?[t]:[`［状態に応じた本文］ 条件: \`${JSON.stringify(t.when)}\``,...prose(t.yes),'［それ以外］',...prose(t.no)];
-const manuscript=['# q001〜q010 改稿全文','',`準拠: [ゲームシナリオモデル v1.1](${standard.source})。原稿は authoring/story-q001.mjs と stories-v11-*.mjs、人物の定義は authoring/characters.mjs。作品版 1.4.0。`,'','以下は実行データから生成した本文・選択・結果。状態条件も併記する作者向け原稿。新たな役割や物品の扱いは、この版で補完した設定であり、旧シナリオの既成事実とは区別する。',''];
-for(const s of drafts){const q=quests.find(q=>q.id===s.id);manuscript.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}`,'',...s.past,'',...authoringNotes(s.authoringNotes),s.progression,'','| 実体 | 初期の所在・保持者 |','|---|---|');for(const [key,e] of Object.entries(s.story.entities))manuscript.push(`| ${e.character?characters.find(c=>c.id===e.character).name:key} (${key}) | ${s.story.registry[e.holder].initial} |`);manuscript.push('');for(const n of s.nodes){manuscript.push(`### ${n.id} — ${s.story.scenes[n.id].title}`,'',...prose(n.text).flatMap(t=>[t,'']));for(const o of n.options)manuscript.push(`- **${o.id}** ${o.text} → ${o.to}${o.combat?'［戦闘］':''}${o.cost?`［消費 ${JSON.stringify(o.cost)}］`:''}`);manuscript.push('');}for(const [key,o] of Object.entries(q.outcomes))manuscript.push(`### 結末 ${key} — ${o.label}`,'',o.text,'',`${o.gold}G / ${o.xp}EXP`,'');}
-await fs.writeFile(path.join(root,'doc/SCENARIOS_Q001_Q010_V11.md'),manuscript.join('\n'));
 const doc=['# 登場人物一覧','','更新: 2026-09-14。q001〜q010 の登場人物は安定した ID で定義し、会話場面に画像生成で制作した肖像を表示する。従来の AIPaint 製PNG・編集原稿・描画コマンドは保存している。同じリネを別人として増やさず、関所番と水門番は分ける。名無しの役割に本名を捏造せず、集団は集団実体として記載する。','','外見・服装・小道具は今回の美術設定であり、元のシナリオから確定した外見ではない。NPC は戦闘隊員へ自動加入しない。','','[画像生成プロンプト（英語・日本語）](../assets/source/characters/imagegen-prompts.json) ／ [画像とハッシュの一覧](../assets/source/characters/imagegen-manifest.json)','','## q001〜q010 の実装済み人物','','| ID | 名前・役割 | 登場 | 動機 |','|---|---|---|---|'];
 for(const c of characters)doc.push(`| ${c.id} | ${c.name}／${c.role} | ${c.quests.join(', ')} | ${c.goal} |`);
 for(const c of characters)doc.push('',`### ${c.name} (${c.id})`,'',`![${c.name}](../${assets.images[c.portrait]})`,'',c.detail,'',`[旧AIPaint PNG](../assets/images/characters/${c.id}.png) ／ [AIPaint 編集原稿](../assets/source/characters/${c.id}.paint.json) ／ [描画コマンド](../assets/source/characters/${c.id}.commands.json)`);
