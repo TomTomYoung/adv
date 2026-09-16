@@ -90,11 +90,11 @@
 
 ### SCENARIOS_Q001_Q010_V11.md
 
-[SCENARIOS_Q001_Q010_V11.md](SCENARIOS_Q001_Q010_V11.md)：現行の10本の本文・選択肢を保持し、作品版と書式を更新。
+当時はSCENARIOS_Q001_Q010_V11.mdの本文・選択肢を保持し、作品版と書式を更新しました。2026-09-16に[カタログ](QUEST_CATALOG.md#q001-帰らない灯番)へ統合し、別文書を廃止しました。
 
 ### SCENARIOS_Q011_Q020.md
 
-[SCENARIOS_Q011_Q020.md](SCENARIOS_Q011_Q020.md)：現行catalog1の10本の本文・選択肢を保持し、書式を統一。
+当時はSCENARIOS_Q011_Q020.mdの本文・選択肢を保持し、書式を統一しました。2026-09-16に[カタログ](QUEST_CATALOG.md#q011-塩の花嫁)へ統合し、別文書を廃止しました。
 
 ### SCENARIO_DESIGN.md
 

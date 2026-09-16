@@ -1,6 +1,6 @@
 # 実装引き継ぎ
 
-更新日: 2026-09-16。対象は作品版1.9.0のq001・火・水没・装備個体です。[今回の改訂](DUNGEON_REVISION_1_9.md)を参照してください。PR #8・PR #9・PR #10・PR #11はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
+更新日: 2026-09-16。対象は作品版1.9.0と改稿全文のカタログ統合です。[実装の改訂](DUNGEON_REVISION_1_9.md)を参照してください。q001・ダンジョン改訂のPR #14はマージ済みです。水面・床材の修正記録は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。[CURRENT_STATUS.md](CURRENT_STATUS.md)でmasterと作業ブランチの違いを確認し、[SPEC.md](SPEC.md)と[PROGRESS.md](PROGRESS.md)を読んでください。
 
 ## 正本と生成
 
@@ -13,6 +13,10 @@ q011〜q020は `authoring/catalog-q011-q020.json` と `catalog-q011-q020.mjs` �
 ダンジョン定義は `authoring/dungeons/*.json`、追加アイテム・敵・装置・マップは `kagaribi-content.json`、`terrain-content.json`、`dungeon-content.json`、立体地形は `voxel-content.json`、素材は `dungeon-art.json`、クエスト固有イベントは `quests/qXXX.events.json` です。
 
 職業は `authoring/jobs.json`、敵と仲間は `authoring/entities.json`、NPCは `authoring/characters.mjs`、SEと表示効果は `authoring/presentation.json` が正本です。採用中の画像と出所は `data/assets.json` と `assets/PROVENANCE.md` を確認してください。採用済みの生成肖像を古い小型PNGへ戻さないでください。
+
+改稿全文は `doc/QUEST_CATALOG.md` に統合しました。q001〜q020は現在の実行スクリプトの全文・選択・応答・条件・結末を掲載し、q021〜q200は概要と進行一覧です。旧SCENARIOS_Q001_Q010_V11.md／SCENARIOS_Q011_Q020.mdは再作成しません。
+
+配布データからの統合は `npm run build:catalog`、全文生成器は `tools/quest-catalog.mjs` です。build:scenarios・build:jobs・build:dungeons・build:charactersの末尾で、最終データを使って実行します。build:docs単独は本文を保持します。カタログへ直接改稿した内容は先にauthoringへ取り込み、再生成で失わないようにしてください。
 
 ## 生成と検証
 

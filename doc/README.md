@@ -36,13 +36,13 @@
 
 ## シナリオと人物
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。作者向けのため真相を含みます。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。q001〜q020は実装済みの本文・選択肢・応答・条件・結末を統合しています。作者向けのため真相を含みます。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：v1.0／v1.1の適用範囲、編集する原稿、生成順序。
 
 [SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：q001〜q010の人物・物品・所在・行為・結末条件。
 
-[SCENARIOS_Q001_Q010_V11.md](SCENARIOS_Q001_Q010_V11.md) ／ [SCENARIOS_Q011_Q020.md](SCENARIOS_Q011_Q020.md)：現在の原稿本文と選択肢。
+改稿全文の別文書は廃止し、[q001〜q010](QUEST_CATALOG.md#q001-帰らない灯番)・[q011〜q020](QUEST_CATALOG.md#q011-塩の花嫁)の各項目へ統合しました。
 
 [CHARACTERS.md](CHARACTERS.md)：36人のNPC定義と生成肖像、その他の依頼人索引。
 

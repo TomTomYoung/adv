@@ -1,3 +1,4 @@
+import {catalogContentHash} from './quest-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -39,6 +40,8 @@ for(const file of [...current,...indexes,'README.md']){
 }
 const data=await loadContent(read),snapshot=await read('doc/DATA_SNAPSHOT.json'),count=o=>Object.keys(o??{}).length;
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
+const catalog=await fs.readFile(path.join(folder,'QUEST_CATALOG.md'),'utf8');
+check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
 for(const [key,n] of Object.entries(snapshot.counts))check(n===count(data[key]),`DATA_SNAPSHOT: ${key} count differs`);
 const quests=Object.values(data.quests);
 check(snapshot.questOutcomes===quests.reduce((n,q)=>n+count(q.outcomes),0),'DATA_SNAPSHOT: endings differ');
