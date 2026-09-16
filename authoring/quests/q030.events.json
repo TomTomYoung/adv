@@ -1,0 +1,221 @@
+{
+  "events": [
+    {
+      "id": "q030_clue_a",
+      "title": "根の向こうの朝：現場の痕跡",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 5,
+          "y": 4
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q030_clue_b",
+      "title": "根の向こうの朝：記録と証言",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 7,
+          "y": 9
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q030_decision",
+      "title": "根の向こうの朝：決着の場",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_3",
+      "title": "根が支える橋",
+      "dungeon": "region_3",
+      "points": [
+        {
+          "map": "region_3_f1",
+          "x": 1,
+          "y": 3
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_3.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q030.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "第1層の根橋草が亀裂を渡すまで育ったことを確認した。採取すれば通路も戻る。大根を通した場合の天井の強度は、別の調査が必要だ。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_3"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_3.v1": {
+      "dungeonScene": "region_3",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "亀裂沿いの植床には、根を支えとして渡せる空間がある。庭園の大根をどう扱うか決める前に、こちらの小さな根橋の成長を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.species"
+                },
+                "right": "root_bridge"
+              },
+              {
+                "op": "gte",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.age"
+                },
+                "right": 5
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "育った根が亀裂をまたぎ、床のなかった区画を通れるようになった。採取するとこの橋も失われる。根が道を作る働きと、既存の天井へ及ぼす負荷は、それぞれ確かめる必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_3"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_3",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この植床には、渡れるまで育った根橋がない。種と培養土を使って根橋草を植え、成長を待ってから調べよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

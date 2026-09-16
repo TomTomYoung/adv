@@ -10,26 +10,133 @@
   "recommendedLevel": 3,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q025_clue_a",
+      "title": "地下の雨乞い：現場の痕跡",
+      "points": [
+        {
+          "map": "region_3_f1",
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q025.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q025"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q025_clue_b",
+      "title": "地下の雨乞い：記録と証言",
+      "points": [
+        {
+          "map": "region_3_f1",
+          "x": 3,
+          "y": 13
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q025.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q025"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q025_decision",
+      "title": "地下の雨乞い：決着の場",
+      "points": [
+        {
+          "map": "region_3_f1",
+          "x": 17,
+          "y": 3
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q025.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q025.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_3_f1",
-      "object": "q025_clue_a",
       "x": 4,
       "y": 5,
+      "object": "q025_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_3_f1",
-      "object": "q025_clue_b",
       "x": 3,
       "y": 13,
+      "object": "q025_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_3_f1",
-      "object": "q025_decision",
       "x": 17,
       "y": 3,
+      "object": "q025_decision",
       "role": "decision"
     }
   ],

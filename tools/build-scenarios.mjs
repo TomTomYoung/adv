@@ -1,3 +1,4 @@
+import {readQuestEvents,eventLocations} from './quest-event-source.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
@@ -13,8 +14,6 @@ export async function buildScenarios(){
  const game=await read('data/game.json');
  const maps=Object.fromEntries(await Promise.all(game.files.maps.map(async f=>{const m=await read(f);return [m.id,m];})));
  const quests=[];
- const authoredHubs=new Set(Array.from({length:100},(_,i)=>`q${i+101}_scene`));
- for(const map of Object.values(maps))map.objects=map.objects.filter(o=>!authoredHubs.has(o.id));
  const oneClueProof={11:'clue_a',13:'clue_b',17:'clue_a',18:'clue_a'};
  for(let n=1;n<=100;n++){
   const id=`q${String(n).padStart(3,'0')}`,q=await read(`data/quests/${id}.json`);
@@ -43,10 +42,7 @@ export async function buildScenarios(){
   q.scripts[decision]={commands:[old[0],{op:'if',condition:evidence,then:[say(truth),{op:'flag.set',key:`quest.${id}.disclosed`,value:true}],else:[]},choice]};
   // Revisit the result without awarding it again; recall only information actually disclosed.
   q.scripts[`${id}.aftermath`]={commands:[{op:'switch',value:ref(`quests.${id}.outcome`),cases:Object.entries(q.outcomes).map(([key,out])=>({equals:key,commands:[say(out.text),{op:'if',condition:eq(ref(`flags.quest.${id}.questioned`),true),then:[say('依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。')],else:[]}]})),default:[]}]};
-  const loc=q.locations.find(l=>l.role==='decision'),obj=maps[loc.map].objects.find(o=>o.id===loc.object);
-  obj.condition=or(eq(ref(`quests.${id}.stage`),'active'),eq(ref(`quests.${id}.stage`),'completed'));
-  obj.script=`${id}.visit`;
-  q.scripts[obj.script]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'completed'),then:[{op:'jump',script:`${id}.aftermath`}],else:[{op:'jump',script:decision}]}]};
+  q.scripts[`${id}.visit`]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'completed'),then:[{op:'jump',script:`${id}.aftermath`}],else:[{op:'jump',script:decision}]}]};
   // q100 depends on the original 99 IDs, not a counter that the new side stories can inflate.
   if(n===100){q.requires=and(...Array.from({length:99},(_,i)=>eq(ref(`quests.q${String(i+1).padStart(3,'0')}.stage`),'completed')));}
   q.model.source=source;q.model.revision='game-scenario-1.0';
@@ -102,13 +98,8 @@ export async function buildScenarios(){
   }
   for(const [end,out] of Object.entries(outcomes))scripts[`${id}.end.${end}`]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'active'),then:[say(out.text),{op:'quest.complete',quest:id,outcome:end}],else:[]}]};
   scripts[`${id}.visit`]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${id}.outcome`),cases:Object.entries(outcomes).map(([k,v])=>({equals:k,commands:[say(v.text)]})),default:[]}],else:[{op:'switch',value:ref(state('node')),cases:spec.nodes.map(n=>({equals:n.id,commands:[{op:'jump',script:sid(n.id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]};
-  const used=new Set(map.objects.flatMap(o=>[`${o.x},${o.y}`,...(o.kind==='door'?[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>`${o.x+dx},${o.y+dy}`):[])]));
-  let point;
-  for(let y=1;y<map.tiles.length-1&&!point;y++)for(let x=1;x<map.tiles[y].length-1;x++)if(map.tiles[y][x]==='.'&&!used.has(`${x},${y}`)){point={x,y};break;}
-  if(!point)throw Error(`${id}: no free map location`);
-  const object=`${id}_scene`;
-  map.objects.push({id:object,...point,name:`${draft.title}：${spec.client}`,kind:'decision',quest:id,trigger:'interact',safe:true,condition:or(eq(ref(`quests.${id}.stage`),'active'),eq(ref(`quests.${id}.stage`),'completed')),script:`${id}.visit`});
-  const q={schemaVersion:1,id,number:spec.number,title:draft.title,client:spec.client,brief:spec.brief,region:r,type:spec.type??'scene_graph',recommendedLevel:r,requires:null,unlockHint:'いつでも受注できます。場面内の移動は文章と選択で進みます。',locations:[{map:map.id,object,...point,role:'decision'}],outcomes,model:{source,sourceDraft:draft.source,revision:'game-scenario-1.0',world:{truth:draft['展開と開示'],fixedPast:draft['依頼と人物']},agents:[{id:'cast',name:spec.client,beliefsAndGoals:draft['依頼と人物']},{id:'party',name:'冒険者の隊',goal:spec.brief}],conflict:{design:draft['経路']},narrative:{viewpoint:'冒険者の観察と当事者の発言',units:spec.nodes.map(n=>({id:n.id,script:sid(n.id)}))},audience:{initialHypothesis:spec.brief},reveal:{newInformation:draft['展開と開示'],retroactiveTargets:['source.request','source.disclosure'],policy:'各経路で提示した本文だけを後続の選択の根拠とする'},beats:spec.nodes.map(n=>({id:n.id,script:sid(n.id)})),adaptation:{setting:'各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現',reward:'原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない',npc:'固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない',limits:spec.limits??[]},stateRegistry:[],graph:replace(spec.nodes)},scripts};
+  const sourceEvents=await readQuestEvents(root,id),events=sourceEvents.events,locations=eventLocations(events);
+  const q={schemaVersion:1,id,number:spec.number,title:draft.title,client:spec.client,brief:spec.brief,region:r,type:spec.type??'scene_graph',recommendedLevel:r,requires:null,unlockHint:'いつでも受注できます。場面内の移動は文章と選択で進みます。',events,locations,outcomes,model:{source,sourceDraft:draft.source,revision:'game-scenario-1.0',world:{truth:draft['展開と開示'],fixedPast:draft['依頼と人物']},agents:[{id:'cast',name:spec.client,beliefsAndGoals:draft['依頼と人物']},{id:'party',name:'冒険者の隊',goal:spec.brief}],conflict:{design:draft['経路']},narrative:{viewpoint:'冒険者の観察と当事者の発言',units:spec.nodes.map(n=>({id:n.id,script:sid(n.id)}))},audience:{initialHypothesis:spec.brief},reveal:{newInformation:draft['展開と開示'],retroactiveTargets:['source.request','source.disclosure'],policy:'各経路で提示した本文だけを後続の選択の根拠とする'},beats:spec.nodes.map(n=>({id:n.id,script:sid(n.id)})),adaptation:{setting:'各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現',reward:'原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない',npc:'固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない',limits:spec.limits??[]},stateRegistry:[],graph:replace(spec.nodes)},scripts};
   const stateKeys=new Set(['node']);
   for(const node of spec.nodes)for(const o of node.options)for(const k of Object.keys(o.set??{}))stateKeys.add(k);
   q.model.stateRegistry=[...stateKeys].map(k=>({path:state(k),meaning:k==='node'?'中断時の再開場面':`作者原稿の ${k} に対応する選択・発言・行為の履歴`,initial:k==='node'?'entry':'未設定。条件の成立とは扱わない',writer:spec.nodes.filter(n=>n.options.some(o=>Object.hasOwn(o.set??{},k))).map(n=>n.id),scope:'quest',lifetime:'保存データ内に保持'}));

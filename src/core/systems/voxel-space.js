@@ -1,3 +1,4 @@
+import {objectBlocks} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 import {voxelKey,voxelAt,sameVoxel,neighbor,faceRules,voxelDepth,depthName,freshVoxelState,voxelRouteReason,voxelOccupancyReason,voxelReachableNear,redistributeWater} from '../voxels.js';
 import {validateVoxelMap,validateVoxelState} from '../voxel-validation.js';
@@ -5,7 +6,7 @@ import {object,integer,available,closeTo} from './common.js';
 const current=ctx=>{const map=ctx.data.maps[ctx.state.location?.map];return map?.voxels&&ctx.spec.maps.includes(map.id)?{map,terrain:ctx.persistent.maps[map.id]??freshVoxelState(map)}:null;};
 const known=(ctx,p)=>(ctx.state.discovered[ctx.state.location.map]??[]).includes(voxelKey(p));
 const near=(ctx,c,p)=>voxelReachableNear(c.map,c.terrain,ctx.state.location,p);
-const blockedObject=(map,state,p)=>map.objects.some(o=>o.x===p.x&&o.y===p.y&&(o.z??0)===p.z&&o.blocking&&(state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
+const blockedObject=(map,state,p)=>map.objects.some(o=>o.x===p.x&&o.y===p.y&&(o.z??0)===p.z&&objectBlocks(state,map,o));
 const oriented=(link,loc)=>sameVoxel(link.path[0],loc)?link.path:link.bidirectional&&sameVoxel(link.path.at(-1),loc)?[...link.path].reverse():null;
 function skillPlan(ctx,actor,id,api){
   const spec=ctx.data.fieldAbilities[id];

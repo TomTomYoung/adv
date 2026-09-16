@@ -1,5 +1,6 @@
+import {objectVisible} from '../core/quest-events.js';
 import {projectDungeonSurfaces} from './dungeon-surfaces.js';
-import {projectArt,projectFieldNotes,projectFieldLinks,projectDungeonScenes,projectSceneArt} from './dungeon-projection.js';
+import {projectArt,projectQuestNotes,projectQuestLinks,projectDungeonEvents,projectEventArt} from './dungeon-projection.js';
 import {dungeonViews,dungeonPreview,dungeonAbilityReason,dungeonEffectActive} from '../core/dungeons.js';
 import {storyCanAct} from '../core/story.js';
 import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob,allowedEquipmentActors} from './job-projection.js';
@@ -14,8 +15,8 @@ export function projectGame(engine){
   const party=s.members.map(jobActorView),editable=s.mode==='town'&&!s.waiting&&!s.battle;
   const roster=(d.game.tavern?.candidates??Object.keys(d.actors)).map(id=>{const active=s.members.includes(id),aliveAfterRemoval=s.members.some(other=>other!==id&&s.actors[other].hp>0);return {...jobActorView(id),active,canJoin:editable&&!active&&s.members.length<d.system.maxParty&&(s.actors[id].hp>0||s.members.some(other=>s.actors[other].hp>0)),canLeave:editable&&active&&s.members.length>1&&aliveAfterRemoval,swapCandidates:editable&&!active?s.members.filter(other=>s.actors[id].hp>0||s.members.some(remaining=>remaining!==other&&s.actors[remaining].hp>0)).map(other=>({id:other,name:d.actors[other].name})):[]};});
   const routeLocations=q=>q.model.flowVersion>=2&&!s.flags.legacyQuestRoutes?.[q.id]?q.locations.filter(l=>l.role==='decision'):q.locations;
-  const fieldNotes=projectFieldNotes(d,s);
-  const quests=Object.values(d.quests).map(q=>({id:q.id,fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectFieldLinks(d,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
+  const fieldNotes=projectQuestNotes(d,s);
+  const quests=Object.values(d.quests).map(q=>({id:q.id,fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
   if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker};
   if(s.waiting?.type==='choice'){
@@ -25,13 +26,13 @@ export function projectGame(engine){
     const qid=d.scripts[s.vm.at(-1)?.script]?.storyQuest,story=s.stories?.[qid],scene=d.quests[qid]?.story?.scenes[story?.scene];
     if(scene&&s.quests[qid].stage==='active')dialog.scene={title:scene.title,cast:scene.cast.filter(c=>c.when===undefined||engine.value(c.when)).map(c=>{const def=d.characters[d.quests[qid].story.entities[c.entity].character];return {id:def.id,name:def.name,role:def.role,portrait:d.assets.images[def.portrait],remote:c.mode==='remote'};})};
   }
-  if(dialog)dialog.fieldScene=projectSceneArt(d,s);
+  if(dialog)dialog.fieldScene=projectEventArt(d,s);
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;
     battle={background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
   }
-  const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&(!o.condition||engine.value(o.condition))&&!(o.once&&s.events[`${map.id}/${o.id}`])).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
-  const {systems,wall,floorArt,scenes}=projectDungeonScenes(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
+  const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectVisible(s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
+  const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
   const terrain=projectDungeonSurfaces(engine,systems);
   const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};

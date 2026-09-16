@@ -1,0 +1,144 @@
+{
+  "events": [
+    {
+      "id": "q194_scene",
+      "title": "売れた故郷：移動集落の住人サナ",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 6,
+          "y": 1
+        },
+        {
+          "map": "moving_village_f1",
+          "x": 9,
+          "y": 7
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q194.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q194.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "moving_village",
+      "title": "暮らしを揺らす足場",
+      "dungeon": "moving_village",
+      "points": [
+        {
+          "map": "moving_village_f1",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.moving_village.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q194.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "巨獣の姿勢によって通路が変わることを確認した。故郷の契約を調べる際は、固定された土地の条件だけでなく、移動し続ける生活も確かめる。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.moving_village"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.moving_village.v1": {
+      "dungeonScene": "moving_village",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口の安全な足場から、建物をつなぐ道を見渡す。契約に記された土地が動くとき、住民の暮らしに何が起きるかを確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.terrain.changes"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の滞在中に巨獣の姿勢が変わり、通路の配置が変化した。隊の操作で時刻を選ぶことはできない。巡回の理由は、住民の話と巨獣の状態を照合して確かめる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.moving_village"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.moving_village",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の滞在では、まだ足場の変化を見ていない。安全な場所で様子を見るか、探索を続けてから戻って調べよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

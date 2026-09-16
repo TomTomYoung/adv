@@ -81,7 +81,7 @@ type：job.action / フィールド：actor、ability: 探索特技ID
 
 type：dungeon.action / フィールド：system、action、target。操作に応じactor、ability、itemなど
 
-type：dungeon.scene / フィールド：id: 現地調査ID
+type：quest.event / フィールド：quest: クエストID、id: クエスト内イベントID
 
 type：battle / フィールド：action: skill/item/escape、該当するskill/itemとtarget
 
@@ -135,7 +135,7 @@ partyとrosterには、現在職、成長履歴、習得技能、探索特技、
 
 dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `{x,y,width,height}` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。
 
-dungeon.scenesは現在地または正面で調査できる場面のパネルです。各カードの操作はdungeon.scene意図を返し、コアが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
+dungeon.scenesは現在地または正面で調査できる場面のパネルです。各カードの操作はquest.event意図を返し、コアが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
 quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
 
@@ -149,7 +149,7 @@ voxel_spaceのcards/actionsはvisit/toggle/pump/dig/install/traverseのdungeon.a
 
 ## 床材と水面の共通描画
 
-dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-scenes.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
+dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-art.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
 
 従来マップにもwaterDepthとwaterLabelを渡します。旧waterworksの水位0/1/2は描画上0/1/3へ対応し、足元までの水も表示します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
 

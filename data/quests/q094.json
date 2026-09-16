@@ -10,26 +10,133 @@
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q094_clue_a",
+      "title": "帰還税：現場の痕跡",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 3,
+          "y": 5
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q094.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q094"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q094_clue_b",
+      "title": "帰還税：記録と証言",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 11,
+          "y": 4
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q094.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q094"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q094_decision",
+      "title": "帰還税：決着の場",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q094.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q094.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_10_f1",
-      "object": "q094_clue_a",
       "x": 3,
       "y": 5,
+      "object": "q094_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_10_f1",
-      "object": "q094_clue_b",
       "x": 11,
       "y": 4,
+      "object": "q094_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_10_f1",
-      "object": "q094_decision",
       "x": 12,
       "y": 9,
+      "object": "q094_decision",
       "role": "decision"
     }
   ],

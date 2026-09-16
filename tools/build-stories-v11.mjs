@@ -1,3 +1,4 @@
+import {applyQuestEvents} from './quest-event-source.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import stories1 from '../authoring/stories-v11-1.mjs';
@@ -44,10 +45,10 @@ for(const file of game.files.quests){
   }
   for(const [key,o] of Object.entries(q.outcomes))q.scripts[sid(`end.${key}`)]={commands:[{op:'quest.complete',quest:q.id,outcome:key},...(['informed','contract','compromise'].includes(key)?[{op:'add',target:`vars.${key}`,value:1}]:[]),say(o.text)]};
   q.scripts[sid('visit')]={commands:[{op:'if',condition:eq(ref(`flags.legacyStoryRoutes.${q.id}`),true),then:[{op:'jump',script:`${q.id}.flow.visit`}],else:[{op:'if',condition:eq(ref(`quests.${q.id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${q.id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text)]})),default:[]}],else:[{op:'story.init',quest:q.id},{op:'switch',value:ref(`stories.${q.id}.scene`),cases:[...s.nodes.map(n=>n.id),...Object.keys(s.sceneAliases??{})].map(id=>({equals:id,commands:[{op:'jump',script:sid(id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]}]};
-  const spot=q.locations.find(l=>l.role==='decision'),file=`data/maps/${spot.map}.json`,map=await read(file);map.objects.find(o=>o.id===spot.object).script=sid('visit');await write(file,map);
  }
  await write(file,q);quests.push(q);
 }
+await applyQuestEvents(root);
 const assets=await read('data/assets.json');for(const c of characters)assets.images[c.portrait]=`assets/images/characters/generated/${c.id}.webp`;await write('data/assets.json',assets);
 await write('data/characters.json',Object.fromEntries(characters.map(({design,...c})=>[c.id,{...c,visualDesign:design}])));
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';

@@ -10,26 +10,133 @@
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q043_clue_a",
+      "title": "墨を食う火：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q043"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q043_clue_b",
+      "title": "墨を食う火：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 3,
+          "y": 13
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q043"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q043_decision",
+      "title": "墨を食う火：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 9,
+          "y": 12
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_5_f1",
-      "object": "q043_clue_a",
       "x": 5,
       "y": 3,
+      "object": "q043_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_5_f1",
-      "object": "q043_clue_b",
       "x": 3,
       "y": 13,
+      "object": "q043_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_5_f1",
-      "object": "q043_decision",
       "x": 9,
       "y": 12,
+      "object": "q043_decision",
       "role": "decision"
     }
   ],

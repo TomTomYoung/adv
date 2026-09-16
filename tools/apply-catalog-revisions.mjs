@@ -43,7 +43,6 @@ export async function applyCatalogRevisions(root){
    graph:s.nodes,narrative:{...q.model.narrative,units:s.nodes.map(n=>({id:n.id,script:sid(n.id)}))},beats:s.nodes.map(n=>({id:n.id,script:sid(n.id)})),
    stateRegistry:[{path:state('node'),initial:'entry',meaning:'現在の再開場面',writer:s.nodes.map(n=>n.id),scope:'quest',lifetime:'保存して後続場面で参照'},...Object.entries(initial).map(([k,v])=>({path:state(k),initial:v,meaning:k==='catalogRevision'?'カタログ反映後の進行を識別する版':`原稿に明記した ${k} の事実・行為・所在`,writer:s.nodes.filter(n=>n.options.some(o=>Object.hasOwn(o.set??{},k))).map(n=>n.id),scope:'quest',lifetime:'保存・中断・完了後まで保持'}))],
    choiceContract:{progression:s.progression,resources:'各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する',residue:'調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する'}};
-  const hub=q.locations.find(l=>l.role==='decision'),mapFile=`data/maps/${hub.map}.json`,map=await read(mapFile);map.objects.find(o=>o.id===hub.object).script=sid('visit');await write(mapFile,map);
   await write(`data/quests/${id}.json`,q);
   const prose=t=>Array.isArray(t)?t.flatMap(prose):typeof t==='string'?[t]:[`［条件 ${JSON.stringify(t.when)}］`,...prose(t.yes),'［それ以外］',...prose(t.no??'')];
   manuscript.push(`## ${id} ${q.title}`,'',s.brief,'',`固定された過去: ${s.past}`,'',`AI向け注釈: ${s.authoringNotes.notice}`,'','世界設定上の事実:','',...s.authoringNotes.facts.flatMap(t=>[t,'']),s.progression,'');

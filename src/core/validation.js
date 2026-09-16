@@ -1,5 +1,6 @@
 import {voxelAt} from './voxels.js';
-import {validateDungeonScenes} from './dungeon-scenes.js';
+import {validateDungeonArt} from './dungeon-art.js';
+import {validateQuestEvents} from './quest-events.js';
 import {validateDungeons} from './dungeons.js';
 import {validateStories} from './story.js';
 import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
@@ -100,7 +101,7 @@ export function validateContent(data){
       if(ids.has(object.id))fail(id,`object ID重複: ${object.id}`);ids.add(object.id);
       if(map.voxels?voxelAt(map,null,{x:object.x,y:object.y,z:object.z??0})!=='.':map.tiles[object.y]?.[object.x]!=='.')fail(id,`object座標不正: ${object.id}`);
       if(!['enter','interact'].includes(object.trigger))fail(id,'トリガーが不正です');
-      reference(data.scripts,object.script,id);if(object.condition)expression(object.condition,id);
+      reference(data.scripts,object.script,id);for(const key of ['condition','visibleWhen'])if(object[key]!==undefined)expression(object[key],id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);
     if(map.encounterPool!==undefined){if(!Array.isArray(map.encounterPool)||!map.encounterPool.length)fail(id,'遭遇候補が必要です');else for(const e of map.encounterPool){reference(data.encounters,e.encounter,id);if(!Number.isFinite(e.weight)||e.weight<=0)fail(id,'遭遇重みは正数です');}}
@@ -118,7 +119,6 @@ export function validateContent(data){
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
-  errors.push(...validateDungeons(data),...validateDungeonScenes(data));
-  for(const d of Object.values(data.dungeons??{}))if(Array.isArray(d.fieldScenes))for(const s of d.fieldScenes)if(s)expression(s.condition,`dungeons.${d.id}.fieldScenes.${s.id}.condition`);
+  errors.push(...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression));
   return errors;
 }

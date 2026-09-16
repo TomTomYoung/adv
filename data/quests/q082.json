@@ -10,26 +10,133 @@
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q082_clue_a",
+      "title": "星売りの空瓶：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q082.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q082"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q082_clue_b",
+      "title": "星売りの空瓶：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 14,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q082.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q082"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q082_decision",
+      "title": "星売りの空瓶：決着の場",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 13,
+          "y": 7
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q082.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q082.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_9_f1",
-      "object": "q082_clue_a",
       "x": 1,
       "y": 8,
+      "object": "q082_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_9_f1",
-      "object": "q082_clue_b",
       "x": 14,
       "y": 1,
+      "object": "q082_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_9_f1",
-      "object": "q082_decision",
       "x": 13,
       "y": 7,
+      "object": "q082_decision",
       "role": "decision"
     }
   ],

@@ -6,7 +6,6 @@ const write=async(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+
 const ref=ref=>({ref}),eq=(left,right)=>({op:'eq',left,right}),and=(...args)=>({op:'and',args});
 const say=text=>({op:'say',text});
 const game=await read('data/game.json');
-const maps=Object.fromEntries(await Promise.all(game.files.maps.map(async f=>{const m=await read(f);return [m.id,m];})));
 const rows=(await fs.readFile(path.join(root,'authoring/quests.txt'),'utf8')).split('\n').filter(l=>l&&!l.startsWith('#')).map(l=>l.split('|'));
 const specs=[];
 for(let n=1;n<=5;n++)specs.push(...(await import(`../authoring/structures-${n}.mjs`)).default);
@@ -51,13 +50,8 @@ for(const file of game.files.quests){
   q.scripts[sid(`end.${key}`)]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'active'),then:[...render(out.text),...(['informed','contract','compromise'].includes(key)?[{op:'add',target:`vars.${key}`,value:1}]:[]),{op:'quest.complete',quest:id,outcome:key},...(q.number===100?[{op:'ending.set',title:{informed:'道を次へ渡す者',contract:'迷宮の鍵を持つ者',compromise:'灯を守って帰る者'}[key]??out.label,text:out.text}]:[])],else:[]}]};
  }
  // Legacy scripts are immutable: saved VM frame indices still address the old arrays.
- // Only map dispatch is switched. Already active older quests finish on their old route.
+ // Quest event sources select the entry script. Older active quests keep their route.
  q.scripts[sid('visit')]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text),...(spec.aftermath?render(spec.aftermath):[])]})),default:[]}],else:[{op:'if',condition:eq(ref(`flags.legacyQuestRoutes.${id}`),true),then:[{op:'jump',script:`${id}.visit`}],else:[{op:'switch',value:ref(state('node')),cases:spec.nodes.map(n=>({equals:n.id,commands:go(n.id)})),default:go('entry')}]}]}]};
- const hub=q.locations.find(l=>l.role==='decision');maps[hub.map].objects.find(o=>o.id===hub.object).script=sid('visit');
- for(const loc of q.locations.filter(l=>l.role!=='decision')){
-  const obj=maps[loc.map].objects.find(o=>o.id===loc.object);
-  obj.condition=and(eq(ref(`quests.${id}.stage`),'active'),eq(ref(`flags.legacyQuestRoutes.${id}`),true));
- }
  q.type='authored_progression';q.unlockHint=q.unlockHint.replace('手掛かりを二つ集めて判断します。','');
  q.model.progression=spec.progression;q.model.flowVersion=2;q.model.entryScript=sid('visit');
  delete q.model.dramaticQuestion;
@@ -70,7 +64,6 @@ for(const file of game.files.quests){
  q.model.choiceContract={progression:spec.progression,resources:'明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない',residue:'完了後の結末・各場面で得た合意と行為を保持'};
  await write(file,q);quests.push(q);
 }
-for(const m of Object.values(maps))await write(`data/maps/${m.id}.json`,m);
 game.version='1.3.2';
 for(const migration of Object.values(game.migrations))migration.legacyQuestRouting=true;
 game.migrations['1.3.1']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true,legacyQuestRouting:true};

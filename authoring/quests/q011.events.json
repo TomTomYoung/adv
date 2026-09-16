@@ -1,0 +1,209 @@
+{
+  "events": [
+    {
+      "id": "q011_clue_a",
+      "title": "塩の花嫁：現場の痕跡",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q011_clue_b",
+      "title": "塩の花嫁：記録と証言",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 9,
+          "y": 6
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q011_decision",
+      "title": "塩の花嫁：決着の場",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 11,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.catalog1.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_2",
+      "title": "塩壁の向こうの退路",
+      "dungeon": "region_2",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 5,
+          "y": 1
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_2.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q011.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "入口脇の塩壁を除いた通路を確認した。白い人型の標識を壊した記録ではなく、別地点の退路の記録である。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_2"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_2.v1": {
+      "dungeonScene": "region_2",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口脇の脆い塩壁には道具を差し込める亀裂がある。遭難者を案内する前に、ここから通れる道を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_2.systems.walls.broken"
+            },
+            "right": "upper_entry"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "塩壁は除かれ、入口脇の通路がつながっている。開けた場所を地図に記した。人型の避難標識とは別の地点なので、標識の向きも現場で読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_2"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_2",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "塩壁はまだ通路を塞いでいる。壁の正面から発破薬か対応する探索スキルで開通させ、改めて確認できる。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -10,26 +10,133 @@
   "recommendedLevel": 5,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q041_clue_a",
+      "title": "返却日のない本：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 7,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q041"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q041_clue_b",
+      "title": "返却日のない本：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 14,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q041"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q041_decision",
+      "title": "返却日のない本：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 15,
+          "y": 5
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_5_f1",
-      "object": "q041_clue_a",
       "x": 7,
       "y": 1,
+      "object": "q041_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_5_f1",
-      "object": "q041_clue_b",
       "x": 14,
       "y": 1,
+      "object": "q041_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_5_f1",
-      "object": "q041_decision",
       "x": 15,
       "y": 5,
+      "object": "q041_decision",
       "role": "decision"
     }
   ],

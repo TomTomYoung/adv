@@ -10,26 +10,133 @@
   "recommendedLevel": 8,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q075_clue_a",
+      "title": "無給の聖者：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q075.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q075"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q075_clue_b",
+      "title": "無給の聖者：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 5,
+          "y": 11
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q075.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q075"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q075_decision",
+      "title": "無給の聖者：決着の場",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 7,
+          "y": 13
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q075.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q075.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_8_f1",
-      "object": "q075_clue_a",
       "x": 1,
       "y": 8,
+      "object": "q075_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_8_f1",
-      "object": "q075_clue_b",
       "x": 5,
       "y": 11,
+      "object": "q075_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_8_f1",
-      "object": "q075_decision",
       "x": 7,
       "y": 13,
+      "object": "q075_decision",
       "role": "decision"
     }
   ],

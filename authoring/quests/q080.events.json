@@ -1,0 +1,209 @@
+{
+  "events": [
+    {
+      "id": "q080_clue_a",
+      "title": "鉄胎の継承：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q080"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q080_clue_b",
+      "title": "鉄胎の継承：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 11
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q080"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q080_decision",
+      "title": "鉄胎の継承：決着の場",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 15,
+          "y": 5
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_8",
+      "title": "動力の届く範囲",
+      "dungeon": "region_8",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_8.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q080.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "門扉系統への通電を確認した。動力を分配する操作と、中枢の命令を承認する署名は異なる手続きとして調べる。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_8"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_8.v1": {
+      "dungeonScene": "region_8",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "門扉系統の配電盤から配管をたどる。中枢への命令を考える前に、一つの系統へ動力を送った影響を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_8.systems.power.circuits"
+            },
+            "right": "circuit_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "門扉系統へ動力が送られている。同じ系統に属する設備にも電力が届くため、門だけを見て操作を決めることはできない。中枢の署名条件は、別途その記録を読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_8"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_8",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "門扉系統に動力は送られていない。配電盤の操作で起動する設備を確認し、番兵への対応も済ませてから調査を続けよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

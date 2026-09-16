@@ -1,3 +1,4 @@
+import {questEvents} from '../src/core/quest-events.js';
 import {emptyVoxels,freshVoxelState,hasFooting,voxelDepth} from '../src/core/voxels.js';
 
 // Documentation inventory: count authored records separately from runtime states.
@@ -24,7 +25,7 @@ export function cellCatalogInventory(data){
   }
   const objects=maps.flatMap(m=>m.objects.map(o=>({...o,map:m.id}))),objectGroups=grouped(objects,'kind');
   out.push('### セル上のイベント種別','');
-  line(`map.objects は計${objects.length}定義、${Object.keys(objectGroups).length}種、配置座標は${unique(objects)}か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。`);
+  line(`マップ固有とクエストから投影した map.objects は計${objects.length}定義、${Object.keys(objectGroups).length}種、配置座標は${unique(objects)}か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。`);
   for(const [kind,entries] of Object.entries(objectGroups)){
     line(`${code(kind)}：${entries.length}定義。進入時${entries.filter(o=>o.trigger==='enter').length}／調べる${entries.filter(o=>o.trigger==='interact').length}、blocking指定${entries.filter(o=>o.blocking).length}、safe指定${entries.filter(o=>o.safe).length}、once指定${entries.filter(o=>o.once).length}。配置例：${sample(entries)}。`);
   }
@@ -88,7 +89,7 @@ export function cellCatalogInventory(data){
   for(const dungeon of Object.values(data.dungeons)){
     out.push(`#### ${dungeon.name} (${dungeon.id})`,'');
     line(`定義：[${dungeon.id}.json](../authoring/dungeons/${dungeon.id}.json)。`);
-    for(const scene of dungeon.fieldScenes??[])line(`現地調査 ${code(scene.id)} ${scene.title}：関連${scene.quest}、操作点${locations(scene.points)}。`);
+    for(const scene of questEvents(data).filter(e=>e.dungeon===dungeon.id&&e.note))line(`現地調査 ${code(scene.id)} ${scene.title}：関連${scene.quest}、操作点${locations(scene.points)}。`);
     for(const [id,s] of Object.entries(dungeon.systems)){
       if(!handlers[s.use])throw Error(`セルカタログの集計を追加してください: ${s.use}`);
       line(`部品 ${code(id)} / ${code(s.use)} ${s.enabled===false?'無効':'有効'}。`);handlers[s.use](s);

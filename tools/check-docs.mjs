@@ -1,3 +1,4 @@
+import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
@@ -44,7 +45,9 @@ check(snapshot.questOutcomes===quests.reduce((n,q)=>n+count(q.outcomes),0),'DATA
 check(snapshot.questGraphScenes===quests.reduce((n,q)=>n+(q.model.graph?.length??0),0),'DATA_SNAPSHOT: graph scenes differ');
 check(snapshot.typedStoryQuests===quests.filter(q=>q.story).length,'DATA_SNAPSHOT: story count differs');
 check(snapshot.typedStoryScenesIncludingAliases===quests.reduce((n,q)=>n+count(q.story?.scenes),0),'DATA_SNAPSHOT: story aliases differ');
-check(snapshot.fieldScenes===Object.values(data.dungeons).reduce((n,d)=>n+(d.fieldScenes?.length??0),0),'DATA_SNAPSHOT: field scenes differ');
+check(snapshot.questEvents===questEvents(data).length,'DATA_SNAPSHOT: quest events differ');
+check(snapshot.questObservations===questEvents(data).filter(e=>e.note).length,'DATA_SNAPSHOT: quest observations differ');
+check(snapshot.questEventPlacements===questEvents(data).filter(e=>e.trigger!=='action').reduce((n,e)=>n+e.points.length,0),'DATA_SNAPSHOT: quest placements differ');
 for(const [label,actual] of [['commands',[...COMMANDS]],['operators',[...EXPRESSION_OPS]],['migrationVersions',Object.keys(data.game.migrations)]])check(JSON.stringify(snapshot[label])===JSON.stringify(actual),`DATA_SNAPSHOT: ${label} differ`);
 const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
 check(JSON.stringify(files)===JSON.stringify(snapshot.files),'DATA_SNAPSHOT: manifest files differ');

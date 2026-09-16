@@ -10,12 +10,101 @@
   "recommendedLevel": 10,
   "requires": null,
   "unlockHint": "いつでも受注できます。場面内の移動は文章と選択で進みます。",
+  "events": [
+    {
+      "id": "q193_scene",
+      "title": "祈りの届かない場所：谷の若者ルネ",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "map": "prayerless_valley_f1",
+          "x": 9,
+          "y": 7
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q193.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q193.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "prayerless_valley",
+      "title": "境界の内側の祈り",
+      "dungeon": "prayerless_valley",
+      "points": [
+        {
+          "map": "prayerless_valley_f1",
+          "x": 4,
+          "y": 1
+        },
+        {
+          "map": "prayerless_valley_f1",
+          "x": 5,
+          "y": 1
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.prayerless_valley.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q193.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "谷の境界内で、指定された祈り・術の使用と効果が止まる区域を確認した。セイとの相談では、治療場所に加え、病人の意思と移動の負担を確かめる。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.prayerless_valley"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_10_f1",
-      "object": "q193_scene",
       "x": 5,
       "y": 1,
+      "object": "q193_scene",
+      "role": "decision"
+    },
+    {
+      "map": "prayerless_valley_f1",
+      "x": 9,
+      "y": 7,
+      "object": "q193_scene",
       "role": "decision"
     }
   ],
@@ -465,6 +554,69 @@
                   "script": "q193.scene.entry"
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.prayerless_valley.v1": {
+      "dungeonScene": "prayerless_valley",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "境界石の内と外で、祈りの届き方を確かめる。治療へ向かう道を作るなら、どこで術を使えるかを確かめておく必要がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "location.x"
+            },
+            "right": 5
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "境界の内側にいる。回復の祈りと指定された術は使用できず、この区域が遮る祈りや呪いの効果も停止する。病人をどちら側へ運ぶかは、本人の意思と移動の負担を確かめて相談する。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.prayerless_valley"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.prayerless_valley",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今は境界の外側にいる。境界石を越えた区画で、術の制限がどう変わるかを調べられる。"
             }
           ]
         }
