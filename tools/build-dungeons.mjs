@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
-import {buildDungeonScenes} from './build-dungeon-scenes.mjs';
+import {buildDungeonArt} from './build-dungeon-art.mjs';
+import {applyQuestEvents} from './quest-event-source.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 const root=path.resolve(import.meta.dirname,'..');
@@ -43,7 +44,8 @@ export async function buildDungeons(){
   await write('data/scripts/voxel-space.json',{scripts:voxel.scripts});
   await write('data/scripts/dungeon-systems.json',{scripts:extra.scripts});
   await write('data/scripts/kagaribi.json',{scripts:content.scripts});
-  await buildDungeonScenes(root,definitions);
+  await buildDungeonArt(root,definitions);
+  await applyQuestEvents(root);
   await write('data/dungeons.json',definitions);
   game.version='1.8.0';game.dungeonVersion=1;
   game.migrations={...game.migrations,'1.4.0':{actors:Object.keys(await read('data/actors.json')),dungeonRevision:true}};
@@ -53,7 +55,7 @@ export async function buildDungeons(){
   game.migrations['1.7.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['space']}};
   game.files.databases.dungeons='data/dungeons.json';
   game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps,...voxel.maps}).map(id=>`data/maps/${id}.json`)])];
-  game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/dungeon-scenes.json','data/scripts/voxel-space.json'])];
+  game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);

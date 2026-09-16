@@ -1,6 +1,6 @@
 import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxelMap} from './voxels.js';
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason} from './dungeons.js';
-import {openDungeonScene} from './dungeon-scenes.js';
+import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding} from './story.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
@@ -83,10 +83,10 @@ export class GameEngine {
   objectState(object){return this.state.objects[`${this.map().id}/${object.id}`]??object.initialState??'ready';}
   objectAt(x,y,z=this.state.location?.z??0){return this.map()?.objects.filter(o=>o.x===x&&o.y===y&&(o.z??0)===z)??[];}
   walkable(map,x,y,z=map?.id===this.state.location?.map?(this.state.location.z??0):0){
-    if(map?.voxels){const terrain=voxelMapState(this.data,this.state,map);if(voxelOccupancyReason(map,terrain,{x,y,z}))return false;return !map.objects.some(o=>o.x===x&&o.y===y&&(o.z??0)===z&&o.blocking&&(this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');}
+    if(map?.voxels){const terrain=voxelMapState(this.data,this.state,map);if(voxelOccupancyReason(map,terrain,{x,y,z}))return false;return !map.objects.some(o=>o.x===x&&o.y===y&&(o.z??0)===z&&objectBlocks(this.state,map,o));}
     if(z!==0)return false;
     if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||dungeonTile(this.data,this.state,map,x,y)!=='.'||dungeonBlock(this.data,this.state,map,x,y))return false;
-    return !map.objects.some(o=>o.x===x&&o.y===y&&o.blocking && (this.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
+    return !map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(this.state,map,o));
   }
   reveal(radius=this.partyEffect('revealRadius',1,'max')){
     const loc=this.state.location;if(!loc)return;
@@ -148,10 +148,11 @@ export class GameEngine {
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
     for(const object of [...blockers,...at,...ahead.filter(o=>!blockers.includes(o))]){
+      if(!objectVisible(this.state,this.map(),object))continue;
       if(object.trigger!==kind)continue;
       const key=`${loc.map}/${object.id}`;
       if(object.once&&this.state.events[key])continue;
-      if(object.condition&&!this.value(object.condition))continue;
+      if(object.condition!==undefined&&!this.value(object.condition))continue;
       this.state.events[key]=(this.state.events[key]??0)+1;
       this.cue(this.data.presentation?.bindings.objects[object.kind]);
       this.run(object.script,{object:object.id,map:loc.map});return true;
@@ -172,7 +173,7 @@ export class GameEngine {
     if(type==='choose')return chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
-    if(type==='dungeon.scene')return openDungeonScene(this,intent.id);
+    if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
     if(type==='move')return this.move(intent.direction);
     if(type==='interact')return this.interact();

@@ -26,7 +26,7 @@ Computer Useとしてブラウザ操作を開始しましたが、ローカル�
 
 ## 編集と実装
 
-authoring/dungeon-scenes.jsonのfloorに、画像IDと正規化したrectを指定します。entriesごとのfloorで上書きできます。現在は既存dungeon_wallsの石材部分を全13ダンジョンの床へ割り当てています。新しい画像ファイルへの差し替えも同じ記法で可能です。
+authoring/dungeon-art.jsonのfloorに、画像IDと正規化したrectを指定します。entriesごとのfloorで上書きできます。現在は既存dungeon_wallsの石材部分を全13ダンジョンの床へ割り当てています。新しい画像ファイルへの差し替えも同じ記法で可能です。
 
 build:dungeonsがdata/dungeons.jsonのart.floorを生成し、Applicationがdungeon.floorArtへ解決します。waterDepth、waterLabel、floor、opaque、blockedは別の意味を持ちます。opaqueは描画で視界を遮る地形・扉・既存の非水障害、blockedは実際の通行制限です。水面はopaqueに含めません。
 

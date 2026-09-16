@@ -10,26 +10,173 @@
   "recommendedLevel": 4,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q039_clue_a",
+      "title": "顔を売る仮面：現場の痕跡",
+      "points": [
+        {
+          "map": "region_4_f2",
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q039.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q039"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q039_clue_b",
+      "title": "顔を売る仮面：記録と証言",
+      "points": [
+        {
+          "map": "region_4_f2",
+          "x": 3,
+          "y": 13
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q039.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q039"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q039_decision",
+      "title": "顔を売る仮面：決着の場",
+      "points": [
+        {
+          "map": "region_4_f2",
+          "x": 17,
+          "y": 3
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q039.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_4",
+      "title": "仮面を運ぶ鏡路",
+      "dungeon": "region_4",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "map": "region_4_f2",
+          "x": 13,
+          "y": 5
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_4.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q039.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "鏡を経由する転移を確認した。仮面の移動を調べる際は、歩行経路と鏡の接続先を照合する。所有者や運搬者の特定は証言から行う。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_4"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_4_f2",
-      "object": "q039_clue_a",
       "x": 3,
       "y": 6,
+      "object": "q039_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_4_f2",
-      "object": "q039_clue_b",
       "x": 3,
       "y": 13,
+      "object": "q039_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_4_f2",
-      "object": "q039_decision",
       "x": 17,
       "y": 3,
+      "object": "q039_decision",
       "role": "decision"
     }
   ],
@@ -998,6 +1145,69 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_4.v1": {
+      "dungeonScene": "region_4",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "礼拝に使われる物がどの道を通るのか、入口の鏡とその接続先を地図に照合する。鏡に映る見た目だけでは、持ち主の名は分からない。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.mirrors.uses"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で鏡を通り、離れた地点へ転移した。歩行経路だけを追っても、仮面の移動を追い切れないことが分かった。誰が運んだかは証言と照合する必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_4"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_4",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ鏡の転移を確かめていない。鏡を通り、到着した鏡の前で調査を再開できる。"
             }
           ]
         }

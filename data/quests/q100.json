@@ -707,26 +707,168 @@
     ]
   },
   "unlockHint": "他の99件を完了すると受注できます。",
+  "events": [
+    {
+      "id": "q100_clue_a",
+      "title": "百の帰還：現場の痕跡",
+      "points": [
+        {
+          "map": "region_10_f2",
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q100.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q100"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q100_clue_b",
+      "title": "百の帰還：記録と証言",
+      "points": [
+        {
+          "map": "region_10_f2",
+          "x": 3,
+          "y": 13
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q100.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q100"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q100_decision",
+      "title": "百の帰還：決着の場",
+      "points": [
+        {
+          "map": "region_10_f2",
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q100.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q100.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_10",
+      "title": "逆らった足取り",
+      "dungeon": "region_10",
+      "points": [
+        {
+          "map": "region_10_f1",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_10.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q100.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "流れに逆らう移動で衰弱が蓄積することを確認した。帰還方法を引き継ぐ際は、セルごとの流れと移動方向を併記する。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_10"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_10_f2",
-      "object": "q100_clue_a",
       "x": 3,
       "y": 6,
+      "object": "q100_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_10_f2",
-      "object": "q100_clue_b",
       "x": 3,
       "y": 13,
+      "object": "q100_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_10_f2",
-      "object": "q100_decision",
       "x": 12,
       "y": 9,
+      "object": "q100_decision",
       "role": "decision"
     }
   ],
@@ -2169,6 +2311,69 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_10.v1": {
+      "dungeonScene": "region_10",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口の記録台には、道順と並べて流れの向きを書く余白がある。距離だけで帰還の難しさを測れるか、隊の状態を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.return_flow.stacks"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "流れに逆らった移動による衰弱が、今回の探索で蓄積している。同じ距離でも進む向きによって負担が違う。安全な町へ出れば、この探索での衰弱は解ける。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_10"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_10",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ逆流による衰弱が蓄積していない。帰路で実際に変化が起きたとき、流れと隊の状態を記録できる。"
             }
           ]
         }

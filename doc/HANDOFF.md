@@ -10,7 +10,7 @@ q011〜q020は `authoring/catalog-q011-q020.json` と `catalog-q011-q020.mjs` �
 
 その他の依頼は `authoring/structures-*.mjs`、`structures-additional.mjs`、`scenarios-*.mjs` を確認します。過去の原稿は `quests.txt` と `reference`、旧セーブの固定定義は `compat` です。依頼番号や共通類型から調査手順・戦闘・結末を決める実装を通常経路へ戻さないでください。
 
-ダンジョン定義は `authoring/dungeons/*.json`、追加アイテム・敵・装置・マップは `kagaribi-content.json`、`terrain-content.json`、`dungeon-content.json`、立体地形は `voxel-content.json`、素材と現地調査は `dungeon-scenes.json` です。
+ダンジョン定義は `authoring/dungeons/*.json`、追加アイテム・敵・装置・マップは `kagaribi-content.json`、`terrain-content.json`、`dungeon-content.json`、立体地形は `voxel-content.json`、素材は `dungeon-art.json`、クエスト固有イベントは `quests/qXXX.events.json` です。
 
 職業は `authoring/jobs.json`、敵と仲間は `authoring/entities.json`、NPCは `authoring/characters.mjs`、SEと表示効果は `authoring/presentation.json` が正本です。採用中の画像と出所は `data/assets.json` と `assets/PROVENANCE.md` を確認してください。採用済みの生成肖像を古い小型PNGへ戻さないでください。
 
@@ -49,17 +49,13 @@ Coreはゲーム状態を所有し、ApplicationはコピーしたViewModelを�
 
 ## 次に残る作業
 
-### クエスト固有イベント定義をすべてクエストJSONへ集約する
+### クエスト固有イベントの集約は実装済み
 
-クエストに属する情報は、原則として対応する `qXXX` の原稿・クエストJSONを正本にする。現在 `dungeons[].fieldScenes`、`authoring/dungeon-scenes.json`、各 `data/maps/*.json` のクエスト専用objectなどへ分散しているクエスト固有データを、すべてクエスト側へ寄せる。
+`feat/quest-local-events` で全200クエストの専用オブジェクト402配置と現地調査13件をクエストJSONへ集約しました。正本は `authoring/quests/qXXX.events.json`、生成先は対応する `data/quests/qXXX.json` の events と scripts です。詳細は[QUEST_EVENTS.md](QUEST_EVENTS.md)を参照してください。masterへのマージ状態は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認します。
 
-移行対象には少なくとも、イベントオブジェクトの配置先map・座標・object ID・kind・trigger・safe・once・blocking・initialState・script、イベントオブジェクト自体の出現条件・有効条件、会話や文章の表示条件、選択肢の `visibleWhen`、選択可否の `condition`、選択肢本文・要求表示・commands、分岐、戦闘、報酬、物語状態、クエスト固有の関連ダンジョン・調査地点・調査条件・調査script・noteを含める。つまり「イベントがいつ出るか」「調べられるか」「中で何を話すか」「どの選択肢が見えるか」「どれを選べるか」「選択後に何が出現・消滅するか」までクエストJSONで完結して記述できる形にする。
+マップJSONにはマップ固有の121オブジェクトだけを残し、読込時にクエストから402オブジェクトを投影します。ダンジョンの fieldScenes と逆参照は廃止しました。調査パネル・依頼一覧・手帳はクエスト側のイベントを読み、操作意図は quest.event です。既存2355スクリプトの内容、map/object ID、イベント済み状態、調査記録は保持しています。
 
-マップ定義側には地形、入口、階段、汎用の宝箱・泉・罠・扉など、そのマップ自体に属する要素だけを残す。クエスト専用objectはクエストJSON側からmap・座標を参照して投影・実体化する方式へ変更する。ダンジョン定義側には `maps`、`systems`、`art`、入口など、そのダンジョン自体の構造と固有システムだけを残し、ダンジョン側からクエストを逆参照する構造を廃止する。
-
-`fieldScenes` という独立概念は廃止を前提に棚卸しし、単なるクエスト内イベントとして表現する。現行13件の `fieldScenes` はすべて対応するクエストへ移す。`projectFieldLinks`、`projectFieldNotes`、`dungeonScenePlan`、関連検証、UIの「現地調査へ向かう」もクエスト側定義を読む構造へ変更するか、不要なら整理する。
-
-移行時は現行のscript ID、object ID、イベント済み状態、調査済み状態、旧セーブ互換を壊さないこと。旧 `legacyQuestRoutes` / `legacyStoryRoutes` で必要なmap objectは互換層として残してもよいが、通常経路の正本はクエストJSONへ一本化する。移行後は「クエストJSONだけを読めば、そのクエスト固有の配置・出現条件・会話・選択肢・分岐・状態・結末まで追える」ことを検証条件にする。
+次のq001改稿ではこの形式を使って壁松明の配置・初期状態・調査scriptをクエスト原稿へ追加します。q001の既存本文・選択構造はこの集約では変更していません。以下の改稿要件を引き続き適用してください。
 
 ### q001「帰らない灯番」を火と恐怖を軸に改稿する
 

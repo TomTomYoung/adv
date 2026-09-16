@@ -1,3 +1,4 @@
+import {readQuestEvents,eventLocations} from './quest-event-source.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
@@ -132,16 +133,12 @@ for(let i=0;i<rows.length;i++){
   const informedCommands=[say(truth),...(useRope?[{op:'item.take',item:'rope',count:1}]:[]),...(index===1||index===5||index===9?[fight('informed',index===9)]:finish('informed'))];
   const choices=[{id:'informed',text:actionA,condition:useRope?and(clueCondition,{op:'has_item',item:'rope'}):clueCondition,requirement:`手掛かり2つ${useRope?'・補修用の縄1本（消費）':''}${[1,5,9].includes(index)?'・戦闘あり':''}`,commands:informedCommands},{id:'contract',text:actionB,requirement:`戦闘あり${index===9?'・逃走不可':''}`,commands:[fight('contract',index===9)]},{id:'compromise',text:actionC,requirement:'戦闘を伴わない決着',commands:finish('compromise')},{id:'leave',text:'まだ決めず、調査を続ける',commands:[]}];
   // Alternate presentation order and testimony framing across quest types, retaining separate evidence nodes.
-  const locations=[];
+  const source=await readQuestEvents(root,id),events=source.events,locations=eventLocations(events);
   for(const [j,key,text] of [[0,'clue_a',clueA],[1,'clue_b',clueB]]){
-    const point=take(map,j===0?0.12:0.45),sid=put(key,[{op:j===0?'narrate':'say',...(j===1?{name:client}:{}),text},{op:'quest.evidence',quest:id,key,text}]);
-    const object=`${id}_${key}`;
-    map.objects.push({id:object,...point,name:`${title}：${j===0?'現場の痕跡':'記録と証言'}`,kind:'clue',quest:id,trigger:'interact',safe:true,condition:and(active(id),{op:'not',arg:{op:'contains',left:ref(`quests.${id}.evidence`),right:key}}),script:sid});
-    locations.push({map:map.id,object,...point,role:key});
+    put(key,[{op:j===0?'narrate':'say',...(j===1?{name:client}:{}),text},{op:'quest.evidence',quest:id,key,text}]);
   }
-  const point=take(map,0.72),object=`${id}_decision`,sid=put('decision',[say(`${title}\n\n${brief}\n\nこの場所で、依頼の行方を決められます。`),{op:'choice',options:index%2?choices:[choices[1],choices[0],choices[2],choices[3]]}]);
-  map.objects.push({id:object,...point,name:`${title}：決着の場`,kind:'decision',quest:id,trigger:'interact',safe:true,condition:active(id),script:sid});locations.push({map:map.id,object,...point,role:'decision'});
-  const quest={schemaVersion:1,id,number:n,title,client,brief,region:r,type,recommendedLevel:r,requires:n===100?gte(ref('vars.completed'),99):index===9?gte(ref(`vars.region_${r}`),3):null,unlockHint:n===100?'他の99件を完了すると受注できます。':index===9?'この地域の依頼を3件完了すると受注できます。':'いつでも受注できます。',locations,outcomes,
+  put('decision',[say(`${title}\n\n${brief}\n\nこの場所で、依頼の行方を決められます。`),{op:'choice',options:index%2?choices:[choices[1],choices[0],choices[2],choices[3]]}]);
+  const quest={schemaVersion:1,id,number:n,title,client,brief,region:r,type,recommendedLevel:r,requires:n===100?gte(ref('vars.completed'),99):index===9?gte(ref(`vars.region_${r}`),3):null,unlockHint:n===100?'他の99件を完了すると受注できます。':index===9?'この地域の依頼を3件完了すると受注できます。':'いつでも受注できます。',events,locations,outcomes,
     model:{source:'https://app.notion.com/p/20260908-3d5c3c1966b3814c8e26ef30c00862e4',world:{truth,history:[{id:'e0',event:truth,causes:[]},{id:'e1',event:brief,causes:['e0']},{id:'e2',event:'冒険者が現場と記録を観察し、依頼の扱いを決める',causes:['e1']}]},agents:[{id:'client',name:client,observation:brief,belief:brief,goal:actionB},{id:'party',name:'冒険者の隊',observation:'探索開始時点では依頼文だけを知る',goal:'生存して帰還し、得た情報に基づいて決着を選ぶ',resources:['hp','mp','rope','gold']}],conflict:{request:actionB,alternative:actionA,cost:useRope?'補修用の縄と戦闘リスク':'依頼の即時達成と、事情を確かめる手間・利害の調整'},narrative:{viewpoint:'冒険者の限定視点',units:[{id:'brief',sourceEvent:'e1'},{id:'clue_a',sourceEvent:'e0',text:clueA},{id:'clue_b',sourceEvent:'e0',text:clueB},{id:'decision',sourceEvent:'e2'}]},audience:{initialHypothesis:brief,openQuestion:`${title}の問題は何から生じ、誰が費用を負うか`},reveal:{operator:operators[index],newInformation:truth,retroactiveTargets:['clue_a','clue_b'],gate:clueCondition},beats:[{id:'observation',changes:['knowledge'],script:`${id}.clue_a`},{id:'reinterpretation',changes:['belief'],script:`${id}.clue_b`},{id:'resolution',changes:['world','relationship'],script:`${id}.decision`}]},scripts:own};
   const file=`data/quests/${id}.json`;await write(file,quest);questFiles.push(file);
 }

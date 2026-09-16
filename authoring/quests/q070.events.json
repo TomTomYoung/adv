@@ -1,0 +1,209 @@
+{
+  "events": [
+    {
+      "id": "q070_clue_a",
+      "title": "沈没城の浮上：現場の痕跡",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q070"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q070_clue_b",
+      "title": "沈没城の浮上：記録と証言",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 3,
+          "y": 13
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q070"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q070_decision",
+      "title": "沈没城の浮上：決着の場",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 13,
+          "y": 7
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_7",
+      "title": "一つだけ浮かぶ区画",
+      "dungeon": "region_7",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_7.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q070.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "第1層の浮上装置1で小区画を浮かせ、空気溜まりと横道ができることを確認した。城の浮上方針を相談するための現地記録として残す。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_7"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_7.v1": {
+      "dungeonScene": "region_7",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "第1層の浮上装置には、一つの区画へ伸びる配管がある。城全体を動かす前に、小区画の変化を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_7.systems.air.raised"
+            },
+            "right": "float_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "対象区画が浮上し、息継ぎできる空気溜まりと横道が生まれた。他の装置は個別に操作できる。全体浮上の旧手順を、そのまま選ぶ必要はない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_7"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_7",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この装置の区画はまだ浮上していない。装置で区画を浮かせた後、空気溜まりと通路を確かめよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

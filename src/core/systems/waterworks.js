@@ -1,3 +1,4 @@
+import {objectBlocks} from '../quest-events.js';
 import {faces,object,integer,identifier,closeTo,validPoint,knownPoint,available} from './common.js';
 
 export function waterPhase(spec,elapsed){
@@ -24,7 +25,7 @@ function dryRetreat(ctx,previous){
     for(const [dx,dy] of Object.values(faces)){
       const nx=x+dx,ny=y+dy,key=`${nx},${ny}`;
       if(seen.has(key)||map.tiles[ny]?.[nx]!=='.'||waterAt(ctx,map.id,nx,ny,previous.elapsed,previous.controls)===2)continue;
-      if(map.objects.some(o=>o.x===nx&&o.y===ny&&o.blocking&&(state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open'))continue;
+      if(map.objects.some(o=>o.x===nx&&o.y===ny&&objectBlocks(state,map,o)))continue;
       seen.add(key);queue.push([nx,ny]);
     }
   }

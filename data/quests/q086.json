@@ -10,26 +10,133 @@
   "recommendedLevel": 9,
   "requires": null,
   "unlockHint": "いつでも受注できます。",
+  "events": [
+    {
+      "id": "q086_clue_a",
+      "title": "百年前の観測者：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q086"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q086_clue_b",
+      "title": "百年前の観測者：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 11,
+          "y": 4
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q086"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q086_decision",
+      "title": "百年前の観測者：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 13,
+          "y": 7
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_9_f2",
-      "object": "q086_clue_a",
       "x": 5,
       "y": 3,
+      "object": "q086_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_9_f2",
-      "object": "q086_clue_b",
       "x": 11,
       "y": 4,
+      "object": "q086_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_9_f2",
-      "object": "q086_decision",
       "x": 13,
       "y": 7,
+      "object": "q086_decision",
       "role": "decision"
     }
   ],

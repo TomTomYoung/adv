@@ -1,3 +1,4 @@
+import {objectBlocks} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 
 const faces={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
@@ -19,7 +20,7 @@ function closeTo(ctx,fixture){
   return fixture.x===l.x&&fixture.y===l.y||fixture.x===l.x+dx&&fixture.y===l.y+dy;
 }
 function passable(ctx,map,x,y){
-  return map.tiles[y]?.[x]==='.'&&!map.objects.some(o=>o.x===x&&o.y===y&&o.blocking&&(ctx.state.objects[`${map.id}/${o.id}`]??o.initialState)!=='open');
+  return map.tiles[y]?.[x]==='.'&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(ctx.state,map,o));
 }
 // Flood through passages, rather than leaking a circular aura through solid walls.
 function reaches(ctx,fixture){

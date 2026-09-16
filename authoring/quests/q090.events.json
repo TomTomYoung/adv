@@ -1,0 +1,209 @@
+{
+  "events": [
+    {
+      "id": "q090_clue_a",
+      "title": "空を返す日：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q090"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q090_clue_b",
+      "title": "空を返す日：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 9,
+          "y": 6
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q090"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q090_decision",
+      "title": "空を返す日：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_9",
+      "title": "観測のための足場",
+      "dungeon": "region_9",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_9.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q090.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "天球儀の操作によって通路の配置が変わることを確認した。観測場所への経路は選べるが、生活灯への給電方法は別途確認する。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_9"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_9.v1": {
+      "dungeonScene": "region_9",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "天球儀の環には、周囲の床を動かす連結部がある。観測蓋と生活灯の電源を調べるため、まず現地の移動手段を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.terrain.changes"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で天球儀を操作し、接続する床と通路の配置が変わることを確認した。操作するタイミングは隊で選べる。蓄電器の働きや生活灯への給電は、設備の記録と照合しよう。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_9"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_9",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ天球儀による地形変化を確認していない。現在と異なる地形を選んでから、改めて調べよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -16,26 +16,168 @@
     "right": 3
   },
   "unlockHint": "この地域の依頼を3件完了すると受注できます。",
+  "events": [
+    {
+      "id": "q060_clue_a",
+      "title": "市場の目覚まし：現場の痕跡",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q060_clue_b",
+      "title": "市場の目覚まし：記録と証言",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 14,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q060_decision",
+      "title": "市場の目覚まし：決着の場",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 11,
+          "y": 10
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_6",
+      "title": "通行を約束する相手",
+      "dungeon": "region_6",
+      "points": [
+        {
+          "map": "region_6_f1",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_6.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q060.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "入口側の通行取引が成立し、横道が開くことを確認した。この通行権と、市場全体を守る共同保証は別の約束として扱う。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_6"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
   "locations": [
     {
       "map": "region_6_f2",
-      "object": "q060_clue_a",
       "x": 4,
       "y": 5,
+      "object": "q060_clue_a",
       "role": "clue_a"
     },
     {
       "map": "region_6_f2",
-      "object": "q060_clue_b",
       "x": 14,
       "y": 1,
+      "object": "q060_clue_b",
       "role": "clue_b"
     },
     {
       "map": "region_6_f2",
-      "object": "q060_decision",
       "x": 11,
       "y": 10,
+      "object": "q060_decision",
       "role": "decision"
     }
   ],
@@ -1065,6 +1207,69 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_6.v1": {
+      "dungeonScene": "region_6",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "市場の横道を通す相手に、通行料の対象を確かめる。市場全体の保証を相談する前に、一件の取引がどこまで有効なのかを見る。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_6.systems.market.paid"
+            },
+            "right": "toll_1"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "この相手への通行料は支払われ、横道が開いている。取引の効力はこの通路に及ぶ。市場全体の結界を維持する共同保証には、さらに商人たちの意思確認が必要だ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_6"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_6",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この横道の通行料はまだ支払われていない。相手の前で取引を成立させ、開く通路を確かめよう。"
             }
           ]
         }

@@ -4,39 +4,40 @@ import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {data,newGame,drain,fight} from './helpers.mjs';
 import {projectGame} from '../src/application/projection.js';
-import {dungeonScenePlan} from '../src/core/dungeon-scenes.js';
+import {questEvents,questEventPlan} from '../src/core/quest-events.js';
 import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
 import {snapshotRecords} from '../src/core/records.js';
 import {artRect} from '../src/view/dungeon-art.js';
-const scene=id=>data.dungeons[id].fieldScenes[0];
+const scene=id=>questEvents(data).find(e=>e.id===id&&e.trigger==='action');
+const intent=id=>({type:'quest.event',quest:scene(id).quest,id});
 const at=(g,p)=>g.teleport(p.map,p.x,p.y,'east');
 const begin=id=>{const g=newGame(1789);g.random=()=>.999999;const s=scene(id);g.state.quests[s.quest].stage='active';g.state.records.baselines[s.quest]=snapshotRecords(g.state.records);g.dispatch({type:'travel',dungeon:id});at(g,s.points[0]);return g;};
 const act=(g,system,action,target,more={})=>{assert.ok(g.dispatch({type:'dungeon.action',system,action,target,...more}),g.state.notice);};
 const wait=(g,system,n)=>{for(let i=0;i<n;i++)act(g,system,'wait');};
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
-function pending(g,id){assert.ok(g.dispatch({type:'dungeon.scene',id}));drain(g);assert.equal(g.state.waiting,null);assert.equal(g.state.flags.dungeonNotes?.[id],undefined);}
+function pending(g,id){assert.ok(g.dispatch(intent(id)));drain(g);assert.equal(g.state.waiting,null);assert.equal(g.state.flags.dungeonNotes?.[id],undefined);}
 function record(g,id){
-  assert.ok(g.dispatch({type:'dungeon.scene',id}));assert.equal(projectGame(g).dialog.fieldScene.title,scene(id).title);roundtrip(g);drain(g);assert.equal(g.state.waiting?.type,'choice');roundtrip(g);
+  assert.ok(g.dispatch(intent(id)));assert.equal(projectGame(g).dialog.fieldScene.title,scene(id).title);roundtrip(g);drain(g);assert.equal(g.state.waiting?.type,'choice');roundtrip(g);
   assert.ok(g.dispatch({type:'choose',id:'record'}));drain(g);assert.equal(g.state.flags.dungeonNotes[id],true);roundtrip(g);
   const q=projectGame(g).quests.find(q=>q.id===scene(id).quest);assert.equal(q.fieldNotes.length,1);assert.equal(q.evidenceCount,0);assert.equal(q.stage,'active');
   // Reopening is current-state inspection; the observation cannot be recorded twice.
-  assert.ok(g.dispatch({type:'dungeon.scene',id}));drain(g);assert.equal(projectGame(g).dialog.options.find(o=>o.id==='record').enabled,false);assert.equal(g.dispatch({type:'choose',id:'record'}),false);assert.ok(g.dispatch({type:'choose',id:'leave'}));
+  assert.ok(g.dispatch(intent(id)));drain(g);assert.equal(projectGame(g).dialog.options.find(o=>o.id==='record').enabled,false);assert.equal(g.dispatch({type:'choose',id:'record'}),false);assert.ok(g.dispatch({type:'choose',id:'leave'}));
   g.returnTown();roundtrip(g);assert.equal(projectGame(g).fieldNotes.length,1);
 }
 
 test('field scenes require a related accepted quest, current dungeon, nearby point and idle exploration',()=>{
- const g=newGame();g.dispatch({type:'travel',dungeon:'region_3'});assert.equal(g.dispatch({type:'dungeon.scene',id:'region_3'}),false);
- g.state.quests.q030.stage='active';assert.equal(g.dispatch({type:'dungeon.scene',id:'region_3'}),false);
- at(g,scene('region_3').points[0]);assert.equal(dungeonScenePlan(data,g.state,'region_3').ok,true);assert.equal(g.dispatch({type:'dungeon.scene',id:'region_4'}),false);
- assert.ok(g.dispatch({type:'dungeon.scene',id:'region_3'}));assert.equal(g.dispatch({type:'dungeon.scene',id:'region_3'}),false);assert.equal(g.dispatch({type:'dungeon.action',system:'garden',action:'wait'}),false);drain(g);
- g.returnTown();assert.equal(g.dispatch({type:'dungeon.scene',id:'region_3'}),false);
+ const g=newGame();g.dispatch({type:'travel',dungeon:'region_3'});assert.equal(g.dispatch(intent('region_3')),false);
+ g.state.quests.q030.stage='active';assert.equal(g.dispatch(intent('region_3')),false);
+ at(g,scene('region_3').points[0]);assert.equal(questEventPlan(data,g.state,scene('region_3').quest,'region_3').ok,true);assert.equal(g.dispatch(intent('region_4')),false);
+ assert.ok(g.dispatch(intent('region_3')));assert.equal(g.dispatch(intent('region_3')),false);assert.equal(g.dispatch({type:'dungeon.action',system:'garden',action:'wait'}),false);drain(g);
+ g.returnTown();assert.equal(g.dispatch(intent('region_3')),false);
 });
 
 test('a living root bridge changes the field narrative, persists its note and reverts the live narrative after harvest',()=>{
  const g=begin('region_3');pending(g,'region_3');at(g,data.dungeons.region_3.systems.garden.supply);act(g,'garden','supplies');at(g,scene('region_3').points[0]);
  act(g,'garden','plant','bridge_1',{species:'root_bridge'});pending(g,'region_3');wait(g,'garden',5);const art=projectGame(g).dungeon.systems.find(s=>s.id==='garden').cards[0].art;assert.notDeepEqual(art.rect,data.dungeons.region_3.art.device.rect);
- record(g,'region_3');g.dispatch({type:'travel',dungeon:'region_3'});at(g,scene('region_3').points[0]);act(g,'garden','harvest','bridge_1');assert.ok(g.dispatch({type:'dungeon.scene',id:'region_3'}));drain(g);assert.equal(g.state.waiting,null);assert.equal(projectGame(g).fieldNotes.length,1);
+ record(g,'region_3');g.dispatch({type:'travel',dungeon:'region_3'});at(g,scene('region_3').points[0]);act(g,'garden','harvest','bridge_1');assert.ok(g.dispatch(intent('region_3')));drain(g);assert.equal(g.state.waiting,null);assert.equal(projectGame(g).fieldNotes.length,1);
 });
 
 test('closing a physical water gate supplies only its optional observation, never evacuation or main-story evidence',()=>{
@@ -94,21 +95,25 @@ test('13 destinations expose distinct wall crops and all generated files match t
  const box=artRect({naturalWidth:1000,naturalHeight:500},{rect:{x:.25,y:.5,width:.25,height:.25}});assert.deepEqual(box,[250,250,250,125]);
 });
 
-test('content validation rejects broken scene, image, quest and map references',()=>{
- for(const change of [d=>d.dungeons.region_3.art.wall.rect.width=2,d=>d.dungeons.region_3.fieldScenes[0].quest='missing',d=>d.dungeons.region_3.fieldScenes[0].script='missing',d=>d.dungeons.region_3.fieldScenes[0].points[0].map='region_1_f1',d=>d.dungeons.region_3.fieldScenes[0].condition={op:'unknown'}]){const d=structuredClone(data);change(d);assert.ok(validateContent(d).length);}
+test('content validation rejects broken event, image and map references',()=>{
+ const scene=d=>d.quests.q030.events.find(e=>e.id==='region_3');
+ for(const change of [d=>d.dungeons.region_3.art.wall.rect.width=2,d=>scene(d).dungeon='missing',d=>scene(d).script='missing',d=>scene(d).points[0].map='region_1_f1',d=>scene(d).condition={op:'unknown'}]){const d=structuredClone(data);change(d);assert.ok(validateContent(d).length);}
 });
 
-test('a revised field scene preserves the previous script and a saved choice can finish on that version',async()=>{
- const {buildDungeonScenes}=await import('../tools/build-dungeon-scenes.mjs');const {GameEngine}=await import('../src/core/engine.js');const {tmpdir}=await import('node:os');const path=await import('node:path');
- const g=begin('kagaribi');g.dispatch({type:'dungeon.scene',id:'kagaribi'});drain(g);const saved=g.save(),original=structuredClone(data.scripts['dungeon.scene.kagaribi.v1']);
- const dir=await fs.mkdtemp(path.join(tmpdir(),'adv-scene-revision-'));
+test('a revised quest event preserves the previous script and a saved choice can finish on that version',async()=>{
+ const {applyQuestEvents}=await import('../tools/quest-event-source.mjs');const {GameEngine}=await import('../src/core/engine.js');const {tmpdir}=await import('node:os');const path=await import('node:path');
+ const g=begin('kagaribi');g.dispatch(intent('kagaribi'));drain(g);const saved=g.save(),original=structuredClone(data.scripts['dungeon.scene.kagaribi.v1']);
+ const dir=await fs.mkdtemp(path.join(tmpdir(),'adv-event-revision-'));
  try{
-  for(const sub of ['authoring','data/scripts','doc'])await fs.mkdir(path.join(dir,sub),{recursive:true});
-  const source=JSON.parse(await fs.readFile(new URL('../authoring/dungeon-scenes.json',import.meta.url)));source.entries=source.entries.filter(e=>e.dungeon==='kagaribi');source.entries[0].scene.revision=2;source.entries[0].scene.intro='改稿後の導入。';
-  const write=(name,value)=>fs.writeFile(path.join(dir,name),JSON.stringify(value));await write('authoring/dungeon-scenes.json',source);await write('data/assets.json',data.assets);await write('data/scripts/dungeon-scenes.json',{scripts:{'dungeon.scene.kagaribi.v1':original}});await fs.writeFile(path.join(dir,'doc/DUNGEON_ART_AND_SCENARIOS.md'),'# 素材と調査\n');
-  const definition=structuredClone(data.dungeons.kagaribi);delete definition.fieldScenes;await buildDungeonScenes(dir,{kagaribi:definition});
-  const scripts=JSON.parse(await fs.readFile(path.join(dir,'data/scripts/dungeon-scenes.json'))).scripts;assert.deepEqual(scripts['dungeon.scene.kagaribi.v1'],original);assert.ok(scripts['dungeon.scene.kagaribi.v2']);
-  const upgraded={...data,dungeons:{...data.dungeons,kagaribi:definition},scripts:{...data.scripts,...scripts}};assert.deepEqual(validateContent(upgraded),[]);
+  for(const sub of ['authoring/quests','data/quests'])await fs.mkdir(path.join(dir,sub),{recursive:true});
+  const source=JSON.parse(await fs.readFile(new URL('../authoring/quests/q001.events.json',import.meta.url)));
+  source.events.find(e=>e.id==='kagaribi').script='dungeon.scene.kagaribi.v2';
+  source.scripts['dungeon.scene.kagaribi.v2']=structuredClone(original);source.scripts['dungeon.scene.kagaribi.v2'].commands[0].text='改稿後の導入。';
+  const write=(name,value)=>fs.writeFile(path.join(dir,name),JSON.stringify(value));
+  await write('authoring/quests/q001.events.json',source);await write('data/quests/q001.json',data.quests.q001);await write('data/game.json',{files:{quests:['data/quests/q001.json']}});
+  await applyQuestEvents(dir);
+  const q=JSON.parse(await fs.readFile(path.join(dir,'data/quests/q001.json')));assert.deepEqual(q.scripts['dungeon.scene.kagaribi.v1'],original);assert.ok(q.scripts['dungeon.scene.kagaribi.v2']);
+  const upgraded={...data,quests:{...data.quests,q001:q},scripts:{...data.scripts,...q.scripts}};assert.deepEqual(validateContent(upgraded),[]);
   const resumed=new GameEngine(upgraded);resumed.load(saved);assert.ok(resumed.dispatch({type:'choose',id:'record'}));drain(resumed);assert.equal(resumed.state.flags.dungeonNotes.kagaribi,true);roundtrip(resumed);
  }finally{await fs.rm(dir,{recursive:true,force:true});}
 });

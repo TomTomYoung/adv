@@ -1,0 +1,209 @@
+{
+  "events": [
+    {
+      "id": "q049_clue_a",
+      "title": "忘却の栞：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q049"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q049_clue_b",
+      "title": "忘却の栞：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 8,
+          "y": 7
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q049"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "q049_decision",
+      "title": "忘却の栞：決着の場",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 17,
+          "y": 3
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "region_5",
+      "title": "閉じた頁と開いた通路",
+      "dungeon": "region_5",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_5.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q049.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できます。",
+      "note": {
+        "text": "借りた知識で第1層の封印通路を開く手順を確認した。貸出による技の封印と、栞がどの頁を封じたかの調査を分けて記す。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_5"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "dungeon.scene.region_5.v1": {
+      "dungeonScene": "region_5",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "書見台のそばで、封じられた通路と貸出の仕組みを照合する。ここで借りる知識には、代わりに使えなくなる自分の技がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_5.systems.library.opened"
+            },
+            "right": "seal_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "第1層の封印通路が解かれている。通路を読む知識を借り、封印へ作用させる手順が確かめられた。返却すると元の技を使えるようになるが、開いた通路は残る。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_5"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_5",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "第1層の対象通路はまだ封印されている。通路を読む本を借り、封印の前で探索スキルを使ってから、書見台へ戻って確かめよう。"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
