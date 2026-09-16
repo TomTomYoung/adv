@@ -1,88 +1,83 @@
-import {objectBlocks} from '../quest-events.js';
-import {faces,object,integer,identifier,closeTo,validPoint,knownPoint,available} from './common.js';
+import {permission,costProblem,payCost} from '../jobs.js';
+import {voxelMapState,voxelLevel} from '../voxels.js';
+import {object,integer,identifier,closeTo,validPoint,available} from './common.js';
 
+export const floodDepth=level=>level===0?0:level<=3?1:level<=6?2:3;
 export function waterPhase(spec,elapsed){
-  let tick=elapsed%spec.phases.reduce((sum,p)=>sum+p.duration,0);
-  for(const phase of spec.phases){if(tick<phase.duration)return {...phase,remaining:phase.duration-tick};tick-=phase.duration;}
-}
-function zoneLevel(ctx,zone,elapsed=ctx.run.elapsed,controls=ctx.persistent.controls){
-  if(zone.control&&!controls[zone.control])return 0;
-  return zone.kind==='channel'?2:waterPhase(ctx.spec,elapsed).level;
+ let tick=elapsed%spec.phases.reduce((sum,p)=>sum+p.duration,0);
+ for(const phase of spec.phases){if(tick<phase.duration)return {...phase,remaining:phase.duration-tick};tick-=phase.duration;}
 }
 export function waterAt(ctx,map,x,y,elapsed=ctx.run.elapsed,controls=ctx.persistent.controls){
-  return ctx.spec.zones.filter(z=>z.map===map&&z.cells.some(c=>c.x===x&&c.y===y)).reduce((level,z)=>Math.max(level,zoneLevel(ctx,z,elapsed,controls)),0);
+ const floor=ctx.spec.floors.find(f=>f.map===map);if(!floor||ctx.data.maps[map].tiles[y]?.[x]!=='.')return 0;
+ return floor.controls.every(id=>controls[id])?waterPhase(ctx.spec,elapsed).level:0;
 }
-function dryRetreat(ctx,previous){
-  const {state,data,engine}=ctx,loc=state.location,map=data.maps[loc.map];
-  if(waterAt(ctx,loc.map,loc.x,loc.y)!==2)return;
-  // Search the routes that were open before the rise, respecting closed doors and other waterways.
-  const queue=[[loc.x,loc.y]],seen=new Set([`${loc.x},${loc.y}`]);
-  for(let i=0;i<queue.length;i++){
-    const [x,y]=queue[i];
-    if(waterAt(ctx,map.id,x,y)<2&&engine.walkable(map,x,y)){
-      loc.x=x;loc.y=y;engine.reveal();engine.notify('足元まで水が迫ったため、通ってきた区画内の水没していない足場へ退避しました。');return;
-    }
-    for(const [dx,dy] of Object.values(faces)){
-      const nx=x+dx,ny=y+dy,key=`${nx},${ny}`;
-      if(seen.has(key)||map.tiles[ny]?.[nx]!=='.'||waterAt(ctx,map.id,nx,ny,previous.elapsed,previous.controls)===2)continue;
-      if(map.objects.some(o=>o.x===nx&&o.y===ny&&objectBlocks(state,map,o)))continue;
-      seen.add(key);queue.push([nx,ny]);
-    }
-  }
-  // A custom layout can close every escape route. Return through the existing rescue system.
-  engine.returnTown(true);engine.notify('増水で安全な足場へ戻れず、帰還印で町へ退避しました。');
+export function waterLevel(ctx){
+ const l=ctx.state.location,m=ctx.data.maps[l?.map];if(!m)return 0;
+ return m.voxels?voxelLevel(voxelMapState(ctx.data,ctx.state,m),l):waterAt(ctx,m.id,l.x,l.y);
 }
-function advance(ctx,previous={elapsed:ctx.run.elapsed,controls:{...ctx.persistent.controls}}){
-  const before=waterPhase(ctx.spec,ctx.run.elapsed);ctx.run.elapsed++;
-  const after=waterPhase(ctx.spec,ctx.run.elapsed);
-  if(before.id!==after.id)ctx.engine.notify(`水位が「${after.name}」に変わりました。${after.level===2?'水没区画は通行できません。':after.level===1?'浅い水の区画は通行できます。':'周期で水没する区画の水が引いています。'}`);
-  dryRetreat(ctx,previous);
+function markWet(ctx){
+ if(waterLevel(ctx)>0)for(const id of ctx.state.members){const a=ctx.state.actors[id];if(a.hp>0&&!a.statuses.includes('wet'))a.statuses.push('wet');}
+}
+function immerse(ctx){
+ immerseAt(ctx.engine,waterLevel(ctx),ctx.run.protected);
+}
+export function immerseAt(engine,level,protectedWater){
+ if(level>0)for(const id of engine.state.members){const a=engine.state.actors[id];if(a.hp>0&&!a.statuses.includes('wet'))a.statuses.push('wet');}
+ if(level===10&&!protectedWater){engine.notify('水没度10。呼吸を確保できず、隊は溺れました。');for(const id of engine.state.members)engine.state.actors[id].hp=0;engine.defeat();}
+}
+function advance(ctx){
+ if(ctx.data.maps[ctx.state.location?.map]?.voxels){immerse(ctx);return;}
+ const before=waterPhase(ctx.spec,ctx.run.elapsed);ctx.run.elapsed++;
+ const after=waterPhase(ctx.spec,ctx.run.elapsed);
+ if(before.id!==after.id)ctx.engine.notify(`水位が「${after.name}」になりました。水没度${after.level}/10。${after.level>=6?'潜水の備えがなければ移動できません。水位が下がるのを待てます。':''}`);
+ immerse(ctx);
 }
 function plan(ctx,intent){
-  if(intent.action==='wait')return {ok:true};
-  const control=ctx.spec.controls.find(c=>c.id===intent.target);
-  if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'足元か正面の水門・バルブを選んでください。'};
-  if(!['open','close'].includes(intent.action))return {ok:false,reason:'水門・バルブの操作が不正です。'};
-  const open=intent.action==='open';
-  if(ctx.persistent.controls[control.id]===open)return {ok:false,reason:open?'すでに水を流しています。':'すでに水を止めています。'};
-  return {ok:true,control,open};
+ if(intent.action==='wait')return {ok:true};
+ if(intent.action==='protect'){
+  if(ctx.run.protected)return {ok:false,reason:'この探索の潜水準備は済んでいます。'};
+  if(intent.item===ctx.spec.protectionItem)return ctx.state.inventory[intent.item]>0?{ok:true,item:intent.item}:{ok:false,reason:'潜水具が必要です。'};
+  const ability=ctx.data.fieldAbilities[intent.ability];
+  if(ability?.api!=='water.traverse'||!ctx.state.members.includes(intent.actor)||!permission(ctx.data,ctx.state,intent.actor,intent.ability,'water.traverse'))return {ok:false,reason:'対応する潜水技能と生存する隊員が必要です。'};
+  const reason=costProblem(ctx.data,ctx.state,intent.actor,ability);return reason?{ok:false,reason}:{ok:true,ability};
+ }
+ const control=ctx.spec.controls.find(c=>c.id===intent.target);
+ if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'足元か正面の水門・バルブを選んでください。'};
+ if(!['open','close'].includes(intent.action))return {ok:false,reason:'水門・バルブの操作が不正です。'};
+ const open=intent.action==='open';if(ctx.persistent.controls[control.id]===open)return {ok:false,reason:'すでにその状態です。'};
+ return {ok:true,control,open};
 }
 function act(ctx,intent,p){
-  const previous={elapsed:ctx.run.elapsed,controls:{...ctx.persistent.controls}};
-  if(intent.action==='wait')ctx.engine.notify('水位を見ながら1刻待ちました。');
-  else{ctx.persistent.controls[p.control.id]=p.open;ctx.engine.notify(`${p.control.name}を${p.open?'開き、水を流しました':'閉じ、水を止めて排水しました'}。`);}
-  advance(ctx,previous);
+ if(intent.action==='protect'){if(p.item)ctx.engine.give(p.item,-1);if(p.ability)payCost(ctx.engine,intent.actor,p.ability);ctx.run.protected=true;ctx.engine.notify('隊全員の呼吸と移動を確保しました。この地下水道の探索中は水没度10まで通れます。');return;}
+ if(intent.action==='wait')ctx.engine.notify('水位を見ながら1刻待ちました。');
+ else{ctx.persistent.controls[p.control.id]=p.open;ctx.engine.notify(`${p.control.name}を${p.open?'開きました':'閉じ、フロアを排水しました'}。`);}
+ advance(ctx);
 }
 function project(ctx){
-  const phase=waterPhase(ctx.spec,ctx.run.elapsed),states=['水なし','浅い水・通行可','完全水没・通行不可'];
-  const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c)).map(c=>({id:c.id,name:c.name,open:ctx.persistent.controls[c.id],actions:[['open','開く・水を流す'],['close','閉じる・水を止める']].map(([action,label])=>available(ctx,{type:'dungeon.action',system:ctx.id,action,target:c.id},plan,label))}));
-  const markers=[];
-  for(const z of ctx.spec.zones)for(const cell of z.cells){const point={map:z.map,...cell};if(knownPoint(ctx.state,point)){const level=zoneLevel(ctx,z);markers.push({...cell,id:`${z.id}/${cell.x}/${cell.y}`,name:`${z.name}：${states[level]}`,kind:'water',glyph:level===2?'≈':level===1?'~':'·',level,waitable:z.kind==='tidal',controlName:ctx.spec.controls.find(c=>c.id===z.control)?.name??null});}}
-  for(const c of ctx.spec.controls)if(knownPoint(ctx.state,c))markers.push({id:c.id,name:`${c.name}：${ctx.persistent.controls[c.id]?'開':'閉'}`,x:c.x,y:c.y,kind:'water_control',glyph:c.kind==='gate'?'門':'弁'});
-  const zones=ctx.spec.zones.filter(z=>z.map===ctx.state.location.map&&z.cells.some(c=>knownPoint(ctx.state,{map:z.map,...c}))).map(z=>({id:z.id,name:z.name,level:zoneLevel(ctx,z),status:states[zoneLevel(ctx,z)]}));
-  return {kind:'waterworks',id:ctx.id,title:'水位と水路',phase:phase.name,remaining:phase.remaining,elapsed:ctx.run.elapsed,zones,controls,markers,actions:[available(ctx,{type:'dungeon.action',system:ctx.id,action:'wait'},plan,'1刻待つ')]};
+ const phase=waterPhase(ctx.spec,ctx.run.elapsed),level=waterLevel(ctx),actions=[available(ctx,{type:'dungeon.action',system:ctx.id,action:'wait'},plan,'1刻待つ'),available(ctx,{type:'dungeon.action',system:ctx.id,action:'protect',item:ctx.spec.protectionItem},plan,'潜水具を使う')];
+ const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c)).map(c=>({id:c.id,name:c.name,open:ctx.persistent.controls[c.id],actions:[['open','開く'],['close','閉じて排水']].map(([action,label])=>available(ctx,{type:'dungeon.action',system:ctx.id,action,target:c.id},plan,label))}));
+ const map=ctx.data.maps[ctx.state.location.map],markers=[];
+ if(!map.voxels)for(let y=0;y<map.tiles.length;y++)for(let x=0;x<map.tiles[y].length;x++)if(map.tiles[y][x]==='.'&&(ctx.state.discovered[map.id]??[]).includes(`${x},${y}`)){const n=waterAt(ctx,map.id,x,y);markers.push({id:`water/${x}/${y}`,name:`フロア水没度 ${n}/10`,x,y,kind:'water',glyph:n?'≈':'·',level:floodDepth(n),floodLevel:n,waitable:true});}
+ return {kind:'waterworks',id:ctx.id,title:'フロアの水没',phase:phase.name,remaining:phase.remaining,elapsed:ctx.run.elapsed,level,protected:ctx.run.protected,zones:[{id:map.id,name:map.name,level,status:`水没度 ${level}/10・${['乾燥','足元まで','腰まで','完全水没'][floodDepth(level)]}`}],controls,markers,actions};
 }
-function validate(data,definition,spec){
-  const errors=[],bad=m=>errors.push(m),ids=new Set(),cells=new Set();
-  if(!Array.isArray(spec.phases)||spec.phases.length<2||spec.phases.some(p=>!object(p)||!identifier(p.id)||!p.name||!integer(p.duration,1,10000)||!integer(p.level,0,2))||new Set(spec.phases.map(p=>p?.id)).size!==spec.phases.length)return ['水位周期が不正です'];
-  if(!spec.phases.some(p=>p.level===0)||!spec.phases.some(p=>p.level===2)||spec.phases[0].level!==0)bad('水位周期には初期の干潮と完全水没が必要です');
-  if(!Array.isArray(spec.controls)||!Array.isArray(spec.zones)||!spec.zones.length)return [...errors,'水門・区画一覧がありません'];
-  for(const c of spec.controls){if(!validPoint(data,definition,c)||!identifier(c.id)||ids.has(c.id)||!c.name||!['gate','valve'].includes(c.kind)||typeof c.initiallyOpen!=='boolean')bad('水門・バルブが不正です');ids.add(c.id);}
-  const zones=new Set();
-  for(const z of spec.zones){
-    if(!object(z)||!identifier(z.id)||zones.has(z.id)||!z.name||!definition.maps.includes(z.map)||!['tidal','channel'].includes(z.kind)||z.control!==undefined&&!ids.has(z.control)||!Array.isArray(z.cells)||!z.cells.length){bad('水域定義が不正です');continue;}zones.add(z.id);
-    for(const cell of z.cells){const point={map:z.map,...cell},key=`${z.map}/${cell?.x},${cell?.y}`,map=data.maps[z.map];
-      if(!validPoint(data,definition,point)||cells.has(key)||map.entrance.x===cell.x&&map.entrance.y===cell.y||map.objects.some(o=>o.x===cell.x&&o.y===cell.y)||spec.controls.some(c=>c.map===z.map&&c.x===cell.x&&c.y===cell.y))bad('水域は重複せず、入口・既存イベント・操作盤を避けた床に配置してください');cells.add(key);
-    }
-  }
-  for(const c of spec.controls)if(!spec.zones.some(z=>z.control===c.id))bad('接続先のない水門・バルブです');
-  return errors;
+function validate(data,d,s){
+ const errors=[];
+ if(!Array.isArray(s.phases)||s.phases.length<2||s.phases.some(p=>!object(p)||!identifier(p.id)||!p.name||!integer(p.duration,1,10000)||!integer(p.level,0,10))||s.phases[0]?.level!==0||!s.phases.some(p=>p.level===10))errors.push('0〜10の水没周期が必要です');
+ if(!data.items[s.protectionItem])errors.push('潜水具がありません');
+ if(!Array.isArray(s.controls)||s.controls.some(c=>!validPoint(data,d,c)||!identifier(c.id)||!['gate','valve'].includes(c.kind)||typeof c.initiallyOpen!=='boolean'))errors.push('水門が不正です');
+ if(!Array.isArray(s.floors)||s.floors.some(f=>!d.maps.includes(f.map)||data.maps[f.map]?.voxels||!Array.isArray(f.controls)||!f.controls.length||f.controls.some(id=>!s.controls.some(c=>c.id===id&&c.map===f.map))))errors.push('冠水フロアが不正です');
+ if(!Array.isArray(s.encounters)||s.encounters.some(e=>!integer(e.min,0,10)||!data.encounters[e.encounter]))errors.push('水位別の敵が不正です');
+ return errors;
 }
-function validateState(spec,persistent,run){
-  if(!object(persistent)||!object(persistent.controls)||Object.keys(persistent).some(k=>k!=='controls')||Object.keys(persistent.controls).length!==spec.controls.length||spec.controls.some(c=>typeof persistent.controls[c.id]!=='boolean'))return ['水門の保存が不正です'];
-  if(run&&(!object(run)||!integer(run.elapsed,0,1e9)||Object.keys(run).some(k=>k!=='elapsed')))return ['水位時刻の保存が不正です'];
-  return [];
-}
-export const waterworks={createPersistent:spec=>({controls:Object.fromEntries(spec.controls.map(c=>[c.id,c.initiallyOpen]))}),createRun:()=>({elapsed:0}),step:advance,plan,act,project,validate,validateState,
-  waterDepth:(ctx,map,x,y)=>[0,1,3][waterAt(ctx,map.id,x,y)],
-  block:(ctx,map,x,y)=>waterAt(ctx,map.id,x,y)===2?'完全に水没しています。水が引くのを待つか、水門・バルブで水を止めてください。':null};
+export const waterworks={
+ createPersistent:s=>({controls:Object.fromEntries(s.controls.map(c=>[c.id,c.initiallyOpen]))}),createRun:()=>({elapsed:0,protected:false}),step:advance,enter:immerse,battleStart:markWet,battleRound:markWet,plan,act,project,validate,
+ itemIntent:(ctx,item)=>item===ctx.spec.protectionItem?{action:'protect',item}:null,
+ fieldIntent:(ctx,actor,ability)=>ctx.data.fieldAbilities[ability]?.api==='water.traverse'?{action:'protect',actor,ability}:null,
+ actorStats:(ctx,_id,stats)=>{const n=waterLevel(ctx);return {...stats,agi:Math.max(0,Math.floor(stats.agi*(1-.06*n))),str:Math.max(0,Math.floor(stats.str*(1-.04*n)))};},
+ damageScale:(ctx,element)=>element==='fire'?Math.max(0,1-waterLevel(ctx)*.12):element==='water'?1+waterLevel(ctx)*.1:1,
+ abilityReason:(ctx,id,api)=>api==='battle.skill'&&waterLevel(ctx)>=7&&ctx.data.skills[id]?.effects.some(e=>e.type==='damage'&&e.element==='fire')?'完全水没では炎魔法を使用できません。':null,
+ encounter:ctx=>{const encounter=[...ctx.spec.encounters].sort((a,b)=>b.min-a.min).find(e=>waterLevel(ctx)>=e.min)?.encounter;return {rate:1,enemyScale:1,...(encounter?{encounter}:{})};},
+ waterDepth:(ctx,map,x,y)=>floodDepth(waterAt(ctx,map.id,x,y)),
+ block:(ctx,map,x,y)=>waterAt(ctx,map.id,x,y)>=6&&!ctx.run.protected?'水没度6以上は潜水具か潜水技能が必要です。水位が下がるまで待つこともできます。':null,
+ validateState(s,p,r){const errors=[];if(!object(p)||!object(p.controls)||Object.keys(p.controls).length!==s.controls.length||s.controls.some(c=>typeof p.controls[c.id]!=='boolean'))errors.push('水門の保存が不正です');if(r&&(!object(r)||!integer(r.elapsed,0,1e9)||typeof r.protected!=='boolean'))errors.push('水位・潜水状態の保存が不正です');return errors;}
+};

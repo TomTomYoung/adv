@@ -1,5 +1,6 @@
+import {wetResistance,wetAfterSkill} from './wet.js';
 import {canRepel,kindlePortable} from './systems/fire-network.js';
-import {dungeonBattleStart,dungeonBattleRound,dungeonBattleEnd,dungeonAbilityReason,dungeonEffectActive,dungeonBuffs} from './dungeons.js';
+import {dungeonBattleStart,dungeonBattleRound,dungeonBattleEnd,dungeonAbilityReason,dungeonEffectActive,dungeonBuffs,dungeonDamageScale} from './dungeons.js';
 import {scaledEnemy} from './enemy.js';
 import {recordDefeated,recordResult} from './records.js';
 import {skillDefinitionErrors} from './job-validation.js';
@@ -91,8 +92,8 @@ function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
       const guarded=target.instance?target.guard:b.guards.includes(target.id);
-      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element);
-      const power=(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
+      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*wetResistance(target,effect.element);
+      const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
       target.hp=Math.max(0,target.hp-damage);recordDefeated(engine);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
@@ -168,6 +169,8 @@ export function battleAction(engine,intent){
     for(const target of targets)applySkill(engine,actor,target,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;
+  const used=intent.action==='skill'?engine.data.skills[intent.skill]:engine.data.skills[engine.data.items[intent.item]?.battleSkill];if(used)wetAfterSkill(engine,actor,used);
+  if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return true;}
   b.acted.push(actorId);
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return true;}
   if(!activeActor(engine))enemiesTurn(engine);

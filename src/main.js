@@ -1,3 +1,4 @@
+import {restoreGame} from './application/restore.js';
 import {loadContent} from './core/loader.js';
 import {GameEngine} from './core/engine.js';
 import {projectGame} from './application/projection.js';
@@ -25,12 +26,12 @@ function toggleSound(){
 }
 function render(){lastModel=projectGame(engine);view.render(lastModel);syncAudio();}
 function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length||engine.state.notice)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
-function restore(text){try{engine.load(text);storageWrite('auto',engine.save());dialog.close();render();status('記録を読み込みました。');}catch(error){status(error.message);}}
+function restore(text){const result=restoreGame(data,text);engine=result.engine;storageWrite('auto',engine.save());dialog.close();render();status(result.message);}
 function menu(){
   modal('旅の記録');dialog.append(make('p','会話・選択肢・戦闘の途中も保存できます。記録はこのブラウザに保存されます。'));
   for(let i=1;i<=3;i++){const row=make('div');row.className='modal-row';const existing=storageRead(`slot${i}`);row.append(make('span',`記録 ${i}${existing?' / 保存あり':' / 空き'}`),btn('ここへ保存',()=>{if(storageWrite(`slot${i}`,engine.save())){status(`記録${i}へ保存しました。`);menu();}}));const load=btn('読み込む',()=>{const saved=storageRead(`slot${i}`);if(saved)restore(saved);});load.disabled=!existing;row.append(load);dialog.append(row);}
   const row=make('div');row.className='modal-row';row.append(btn('記録ファイルを書き出す',()=>download('lantern-archive-save.json',engine.save())));dialog.append(row);
-  const label=make('label','記録ファイルを読み込む'),input=make('input');input.type='file';input.accept='.json,application/json';input.addEventListener('change',async()=>{const f=input.files[0];if(!f)return;if(f.size>data.system.maxSaveBytes){status('記録ファイルが大きすぎます。');return;}restore(await f.text());});label.append(input);dialog.append(label);
+  const label=make('label','記録ファイルを読み込む'),input=make('input');input.type='file';input.accept='.json,application/json';input.addEventListener('change',async()=>{const f=input.files[0];if(!f)return;if(f.size>data.system.maxSaveBytes){restore(null);return;}try{restore(await f.text());}catch{restore(null);}});label.append(input);dialog.append(label);
   const section=make('div');section.className='modal-section';const volumeLabel=make('label','音量'),volume=make('input');volume.type='range';volume.min='0';volume.max='100';volume.value=String(settings.volume*100);volume.addEventListener('input',()=>{settings.volume=Number(volume.value)/100;storageWrite('settings',JSON.stringify(settings));syncAudio();});volumeLabel.append(volume);section.append(volumeLabel,make('p','音量0は消音です。右上の「音：再生中」で再生状態を確認できます。'));
   const seLabel=make('label','SE音量'),seVolume=make('input');seVolume.type='range';seVolume.min='0';seVolume.max='100';seVolume.value=String(settings.seVolume*100);seVolume.addEventListener('input',()=>{settings.seVolume=Number(seVolume.value)/100;storageWrite('settings',JSON.stringify(settings));syncAudio();});seLabel.append(seVolume);section.append(seLabel);
   const motionLabel=make('label','画面演出'),motion=make('select');for(const [id,name] of [['full','通常'],['reduced','動きを控える'],['off','切']])motion.append(new Option(name,id));motion.value=settings.effects;motion.addEventListener('change',()=>{settings.effects=motion.value;storageWrite('settings',JSON.stringify(settings));render();});motionLabel.append(motion);section.append(motionLabel);
@@ -39,7 +40,7 @@ function menu(){
   dialog.append(btn('最初から始める',()=>{modal('新しい隊で始めますか');dialog.append(make('p','自動記録は新しい旅で置き換わります。記録1〜3と書き出したファイルは残ります。'),btn('新しい旅を始める',()=>{engine=new GameEngine(data);storageWrite('auto',engine.save());dialog.close();render();}));closeButton();}));closeButton();
 }
 function help(){modal('遊び方');for(const paragraph of [
- '1. 町の依頼掲示板で受注します。複数受注でき、追跡する依頼を切り替えられます。最初は地下水道から進めると戦いやすくなります。',
+ '1. 町の依頼掲示板で受注します。複数受注でき、追跡する依頼を切り替えられます。最初の依頼「帰らない灯番」は篝火の迷宮で進めます。',
  '2. W/Sまたは前後ボタンで移動、A/Dで方向を変えます。Eか「調べる」で足元と正面を調べます。追跡欄の座標は横・縦の順です。',
  '3. 追跡欄の地点を調べると物語が始まります。人物の応答と選んだ行為が次の場面を決めます。一部の作業には縄や戦闘が必要です。結末はやり直せません。別の記録で比較できます。',
  '4. 素早い味方から1人ずつ行動し、その後に敵が動きます。敵の絵で攻撃対象、選択欄で回復対象を指定。毒は移動・ターン終了時にダメージ。防御は敵の行動終了まで有効です。',
@@ -52,7 +53,7 @@ function retreat(){modal('帰還印を使いますか');dialog.append(make('p',`
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   data=await loadContent();sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);
-  const autosave=storageRead('auto');if(autosave){try{engine.load(autosave);}catch(error){status(`自動記録は読み込めませんでした。手動記録やファイルを読み込めます。${error.message}`);}}
+  const autosave=storageRead('auto');if(autosave!==null){const result=restoreGame(data,autosave);engine=result.engine;if(result.restarted){storageWrite('auto',engine.save());status(result.message);}}
   view=new GameView(root,dispatch,{menu,help,retreat,status,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound});render();
   document.addEventListener('keydown',event=>{
     if(dialog.open||event.ctrlKey||event.metaKey||event.altKey||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;

@@ -1,7 +1,7 @@
 import {initStory,enterStoryScene,applyStoryAction,storyCanAct} from './story.js';
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -87,6 +87,7 @@ export function pump(engine){
       }
       case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
+      case 'fire.portable.set':engine.setPortableFire(c);break;
       case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
       case 'facing.set':state.location.facing=c.direction;break;
       case 'object.state.set':state.objects[`${c.map??state.location.map}/${c.object}`]=c.state;break;

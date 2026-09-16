@@ -1,6 +1,6 @@
 # ダンジョン一覧
 
-更新日: 2026-09-14。対象: 作品版1.8.0。13件の固有システムと素材・現地調査はmasterへ反映済みです。立方体地形と貯水立坑もPR #9でmasterへ反映済みです。今回の作業ブランチは水面・床材の描画を修正しています。全13ダンジョン・26マップ・200クエストです。
+更新日: 2026-09-16。対象: 作品版1.9.0。13ダンジョン・26マップ・200クエスト。q001と火・水没・装備個体の変更は[改訂概要](DUNGEON_REVISION_1_9.md)を参照してください。
 
 設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
@@ -16,11 +16,11 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    入口から入れる貯水立坑を追加しました。高さ-1・0・1の立方体、共有する六面、水門・排水蓋・給水ポンプ、梯子・渡り縄・登攀誘導・掘削を配置しています。設定: `authoring/voxel-content.json`。詳細: [VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)。
 
-   周期的な水位変化、水門・バルブによる止水と通水、完全水没セルの通行禁止を扱います。実装済み。設定: `authoring/dungeons/region_1.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf)。
+   フロア単位の水没度0〜10、水門・バルブ、潜水準備、濡れと魔法、水位別の魚型敵を扱います。実装済み。設定: `authoring/dungeons/region_1.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf)。
 
 3. 塩哭きの廃坑（`region_2`、2階層）
 
-   戦闘ごとに装備が腐食し、退出時に解除されます。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `authoring/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
+   戦闘ごとに装備個体へ塩が積もり、水没区画・退出時に洗浄します。塩の多い装備はソルトイーターに食べられると永久消失します。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `authoring/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
 
 ## 庭園から移動集落までの固有システム
 

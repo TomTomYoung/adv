@@ -1,4 +1,4 @@
-import {objectBlocks} from '../quest-events.js';
+import {objectBlocks,objectVisible} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 
 const faces={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
@@ -35,6 +35,7 @@ function reaches(ctx,fixture){
 export function fireEnvironment(ctx){
   const active=[];
   for(const fixture of ctx.spec.fixtures){const flame=ctx.persistent.fixtures[fixture.id];if(burning(flame)&&reaches(ctx,fixture))active.push({id:fixture.id,effect:flame.effect??fixture.effect});}
+  for(const fixture of ctx.data.maps[ctx.state.location.map].objects){if(!fixture.fire||!objectVisible(ctx.state,ctx.data.maps[ctx.state.location.map],fixture))continue;const status=ctx.state.objects[`${ctx.state.location.map}/${fixture.id}`]??fixture.initialState;if(fixture.fire.litStates.includes(status)&&reaches(ctx,{...fixture,map:ctx.state.location.map,radius:fixture.fire.radius}))active.push({id:fixture.id,effect:fixture.fire.effect});}
   if((ctx.state.inventory[ctx.spec.portable.item]??0)>0&&burning(ctx.run.portable))active.push({id:'portable',effect:ctx.run.portable.effect});
   active.sort((a,b)=>ctx.spec.effects[b.effect].priority-ctx.spec.effects[a.effect].priority||a.id.localeCompare(b.id,'en'));
   const strongest=active.length?ctx.spec.effects[active[0].effect]:null;
@@ -156,3 +157,8 @@ export const fireNetwork={
   encounter:ctx=>fireEnvironment(ctx),
   plan,act,project,validate,validateState
 };
+
+export function setPortableFire(data,state,{fuel,effect}){
+ const ctx=fireContext(data,state);if(!ctx||!Number.isInteger(fuel)||fuel<0||fuel>ctx.spec.portable.capacity||fuel>0&&!ctx.spec.effects[effect])throw Error("携行松明の状態指定が不正です");
+ Object.assign(ctx.run.portable,{lit:fuel>0,fuel,effect:fuel>0?effect:null});
+}

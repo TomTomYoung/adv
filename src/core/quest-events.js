@@ -63,6 +63,7 @@ export function validateQuestEvents(data,expression){
         }
       }
       if(event.trigger!=='action'&&!['exit','stairs','chest','fountain','trap','door','clue','decision'].includes(event.kind))fail(id,'イベントのkindが不正です');
+      if(event.fire){const d=data.dungeons[event.dungeon??Object.values(data.dungeons).find(d=>d.maps.includes(event.points?.[0]?.map))?.id],fires=Object.values(d?.systems??{}).find(s=>s.use==='fire_network');if(!fires?.effects[event.fire.effect]||!Number.isInteger(event.fire.radius)||event.fire.radius<0||event.fire.radius>30||!Array.isArray(event.fire.litStates)||!event.fire.litStates.length)fail(id,'壁灯の効果・範囲・点灯状態が不正です');}
       for(const key of ['safe','once','blocking'])if(event[key]!==undefined&&typeof event[key]!=='boolean')fail(id,`${key}は真偽値です`);
       if(event.initialState!==undefined&&(typeof event.initialState!=='string'||!event.initialState))fail(id,'初期状態は空でない文字列です');
       for(const key of ['visibleWhen','condition'])if(event[key]!==undefined)expression(event[key],`${id}.${key}`);

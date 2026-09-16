@@ -15,6 +15,7 @@ const say=text=>({op:'say',text}),render=t=>Array.isArray(t)?t.flatMap(render):t
 for(const file of game.files.quests){
  const q=await read(file),s=drafts.find(s=>s.id===q.id);q.model.standard??=previous;
  if(s){
+  if(s.resetScripts)q.scripts={};
   q.legacyOutcomes??=structuredClone(q.outcomes);const sid=n=>`${q.id}.v11.${n}`;
   if(s.brief){q.brief=s.brief;q.model.audience={...q.model.audience,initialHypothesis:s.brief};}
   if(s.revealText)q.model.reveal={...q.model.reveal,newInformation:s.revealText};
@@ -32,19 +33,19 @@ for(const file of game.files.quests){
   q.model.choiceContract={resources:'物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。',residue:'現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。',interruption:'中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。'};
   for(const n of s.nodes){
    const options=n.options.map(o=>{
-    const effect=[{op:'story.action',quest:q.id,action:o.action},{op:'jump',script:sid(o.to.startsWith('@')?`end.${o.to.slice(1)}`:o.to)}];
+    const effect=[{op:'story.action',quest:q.id,action:o.action},...(o.commands??[]),{op:'jump',script:sid(o.to.startsWith('@')?`end.${o.to.slice(1)}`:o.to)}];
     const commands=o.combat?[{op:'battle.start',encounter:`guard_${q.region}`,on_win:effect,on_escape:[say('退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。')],on_lose:[say('現場から救援された。依頼を再開すると、未完了の作業からやり直せる。')]}]:effect;
     return {id:o.id,text:o.text,storyAction:{quest:q.id,action:o.action},...(o.when?{condition:o.when}:{}),requirement:[o.requirement,...Object.entries(o.cost??{}).map(([k,n])=>`${{rope:'縄',torch:'松明',gold:'G'}[k]??k} ${n}消費`),...(o.combat?['戦闘・作業と消費は勝利時に確定']:[])].filter(Boolean).join(' ／ '),commands};
    });
-   options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
-   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...render(n.text),{op:'choice',options}]};
+   if(!s.noPauseScenes?.includes(n.id))options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
+   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[...(s.sceneCommands?.[n.id]??[]),{op:'story.scene',quest:q.id,scene:n.id},...render(n.text),{op:'choice',options}]};
   }
   for(const [alias,canonical] of Object.entries(s.sceneAliases??{})){
    q.scripts[sid(alias)]=structuredClone(q.scripts[sid(canonical)]);
    q.scripts[sid(alias)].commands[0].scene=alias;
   }
   for(const [key,o] of Object.entries(q.outcomes))q.scripts[sid(`end.${key}`)]={commands:[{op:'quest.complete',quest:q.id,outcome:key},...(['informed','contract','compromise'].includes(key)?[{op:'add',target:`vars.${key}`,value:1}]:[]),say(o.text)]};
-  q.scripts[sid('visit')]={commands:[{op:'if',condition:eq(ref(`flags.legacyStoryRoutes.${q.id}`),true),then:[{op:'jump',script:`${q.id}.flow.visit`}],else:[{op:'if',condition:eq(ref(`quests.${q.id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${q.id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text)]})),default:[]}],else:[{op:'story.init',quest:q.id},{op:'switch',value:ref(`stories.${q.id}.scene`),cases:[...s.nodes.map(n=>n.id),...Object.keys(s.sceneAliases??{})].map(id=>({equals:id,commands:[{op:'jump',script:sid(id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]}]};
+  q.scripts[sid('visit')]={commands:[{op:'if',condition:s.resetScripts?false:eq(ref(`flags.legacyStoryRoutes.${q.id}`),true),then:s.resetScripts?[]:[{op:'jump',script:`${q.id}.flow.visit`}],else:[{op:'if',condition:eq(ref(`quests.${q.id}.stage`),'completed'),then:[{op:'switch',value:ref(`quests.${q.id}.outcome`),cases:Object.entries(q.outcomes).map(([k,o])=>({equals:k,commands:[say(o.text)]})),default:[]}],else:[{op:'story.init',quest:q.id},{op:'switch',value:ref(`stories.${q.id}.scene`),cases:[...s.nodes.map(n=>n.id),...Object.keys(s.sceneAliases??{})].map(id=>({equals:id,commands:[{op:'jump',script:sid(id)}]})),default:[{op:'jump',script:sid('entry')}]}]}]}]};
  }
  await write(file,q);quests.push(q);
 }
@@ -64,7 +65,7 @@ for(const q of quests){
 }
 await fs.writeFile(path.join(root,'doc/QUEST_CATALOG.md'),catalog.join('\n'));
 const prose=t=>Array.isArray(t)?t.flatMap(prose):typeof t==='string'?[t]:[`［状態に応じた本文］ 条件: \`${JSON.stringify(t.when)}\``,...prose(t.yes),'［それ以外］',...prose(t.no)];
-const manuscript=['# q001〜q010 改稿全文','',`準拠: [ゲームシナリオモデル v1.1](${standard.source})。原稿は authoring/stories-v11-*.mjs、人物の定義は authoring/characters.mjs。作品版 1.4.0。`,'','以下は実行データから生成した本文・選択・結果。状態条件も併記する作者向け原稿。新たな役割や物品の扱いは、この版で補完した設定であり、旧シナリオの既成事実とは区別する。',''];
+const manuscript=['# q001〜q010 改稿全文','',`準拠: [ゲームシナリオモデル v1.1](${standard.source})。原稿は authoring/story-q001.mjs と stories-v11-*.mjs、人物の定義は authoring/characters.mjs。作品版 1.4.0。`,'','以下は実行データから生成した本文・選択・結果。状態条件も併記する作者向け原稿。新たな役割や物品の扱いは、この版で補完した設定であり、旧シナリオの既成事実とは区別する。',''];
 for(const s of drafts){const q=quests.find(q=>q.id===s.id);manuscript.push(`## ${q.id} ${q.title}`,'',`依頼人: ${q.client}`,'',...s.past,'',...authoringNotes(s.authoringNotes),s.progression,'','| 実体 | 初期の所在・保持者 |','|---|---|');for(const [key,e] of Object.entries(s.story.entities))manuscript.push(`| ${e.character?characters.find(c=>c.id===e.character).name:key} (${key}) | ${s.story.registry[e.holder].initial} |`);manuscript.push('');for(const n of s.nodes){manuscript.push(`### ${n.id} — ${s.story.scenes[n.id].title}`,'',...prose(n.text).flatMap(t=>[t,'']));for(const o of n.options)manuscript.push(`- **${o.id}** ${o.text} → ${o.to}${o.combat?'［戦闘］':''}${o.cost?`［消費 ${JSON.stringify(o.cost)}］`:''}`);manuscript.push('');}for(const [key,o] of Object.entries(q.outcomes))manuscript.push(`### 結末 ${key} — ${o.label}`,'',o.text,'',`${o.gold}G / ${o.xp}EXP`,'');}
 await fs.writeFile(path.join(root,'doc/SCENARIOS_Q001_Q010_V11.md'),manuscript.join('\n'));
 const doc=['# 登場人物一覧','','更新: 2026-09-14。q001〜q010 の登場人物は安定した ID で定義し、会話場面に画像生成で制作した肖像を表示する。従来の AIPaint 製PNG・編集原稿・描画コマンドは保存している。同じリネを別人として増やさず、関所番と水門番は分ける。名無しの役割に本名を捏造せず、集団は集団実体として記載する。','','外見・服装・小道具は今回の美術設定であり、元のシナリオから確定した外見ではない。NPC は戦闘隊員へ自動加入しない。','','[画像生成プロンプト（英語・日本語）](../assets/source/characters/imagegen-prompts.json) ／ [画像とハッシュの一覧](../assets/source/characters/imagegen-manifest.json)','','## q001〜q010 の実装済み人物','','| ID | 名前・役割 | 登場 | 動機 |','|---|---|---|---|'];
@@ -74,4 +75,4 @@ doc.push('','## 歴史上・物語内で言及される人物','','| 人物 | �
 for(const [id,c] of Object.entries(await read('data/actors.json')))doc.push(`| ${id} | ${c.name} | ${c.bio??c.role??c.class} |`);
 doc.push('','## q011〜q200 の依頼人索引','','原文の依頼人表記を列挙する。同名だけで同一人物とは確定せず、各クエスト内で言及される関係者も今後の人物化対象とする。この範囲の新規肖像と所在モデルは未実装。','','| 依頼 | 依頼人（既存表記） |','|---|---|');for(const q of quests.filter(q=>q.number>10))doc.push(`| [${q.id} ${q.title}](QUEST_CATALOG.md#${q.id}-${q.title}) | ${q.client} |`);
 await fs.writeFile(path.join(root,'doc/CHARACTERS.md'),doc.join('\n')+'\n');
-console.log(`v1.1: ${drafts.length} stories, ${drafts.reduce((n,s)=>n+s.nodes.length,0)} scenes, ${characters.length} NPC identities; old VM arrays preserved`);
+console.log(`v1.1: ${drafts.length} stories, ${drafts.reduce((n,s)=>n+s.nodes.length,0)} scenes, ${characters.length} NPC identities; authored revisions generated`);

@@ -58,7 +58,7 @@ const items={
  focus:{id:'focus',name:'青石の護符',description:'知力+5。誰でも装備可能。',type:'equipment',slot:'charm',stats:{int:5}}
 };
 for(let r=1;r<=10;r++)items[`key_${r}`]={id:`key_${r}`,name:`${regions[r-1].name}の鍵`,description:'この地域の封鎖扉を開けます。消費しません。',type:'key'};
-script('prologue',[say('灯を持って、帰ってくる。\n\n迷宮の口に築かれた町、灯帰り。ここでは剣の腕と同じほど、道を記し、話を聞き、仲間を連れて帰る力が買われます。'),say('ギルドの机に百の依頼が積まれています。\n\nまずは「帰らない灯番」を受注し、地下水道へ。記号のある足元、または正面を調べてください。手掛かりは冒険手帳に残ります。')]);
+script('prologue',[say('灯を持って、帰ってくる。\n\n篝火の迷宮の入口に築かれた町、灯帰り。ここでは剣の腕と同じほど、道を記し、話を聞き、仲間を連れて帰る力が買われます。'),say('ギルドの机に百の依頼が積まれています。\n\nまずは「帰らない灯番」を受注し、篝火の迷宮へ。記号のある足元、または正面を調べてください。手掛かりは冒険手帳に残ります。')]);
 script('service.inn',[{op:'rest',cost:24},say('灯を整え、町で一晩を過ごしました。手当の結果は隊の状態で確認できます。')]);
 script('service.clinic',[{op:'rest',cost:0,ratio:0.35},say('施療所で応急手当を受けました。HP・MPは最低35%まで戻り、毒は治ります。所持金がなくても再出発できます。')]);
 script('service.recruit',[{op:'if',condition:{op:'has_member',actor:'berg'},then:[say('ベルグはすでにあなたの隊にいます。')],else:[say('守衛ベルグが机の上の地図を見ています。「五人目が必要なら、次の帰り道を一緒に覚えよう」'),{op:'choice',options:[{id:'join',text:'ベルグを隊へ迎える',commands:[{op:'party.join',actor:'berg'},say('ベルグが隊へ加わりました。')]},{id:'later',text:'今の隊で進む',commands:[]}]}]}]);

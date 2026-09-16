@@ -1,6 +1,6 @@
 # ビューと表示データの契約
 
-更新日: 2026-09-14。作品版1.8.0の立方体地形・素材・現地調査を含みます。
+更新日: 2026-09-14。作品版1.9.0の立方体地形・素材・現地調査を含みます。
 
 ## 境界
 
@@ -151,6 +151,6 @@ voxel_spaceのcards/actionsはvisit/toggle/pump/dig/install/traverseのdungeon.a
 
 dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-art.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
 
-従来マップにもwaterDepthとwaterLabelを渡します。旧waterworksの水位0/1/2は描画上0/1/3へ対応し、足元までの水も表示します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
+従来マップにもwaterDepthとwaterLabelを渡します。水没度0は表示0、1〜3は表示1、4〜6は表示2、7〜10は表示3です。通行判定は水没度6から別途行い、潜水準備を考慮します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
 
 surfaceNoticeは正面の水深と通行可否、その対処の文章です。周期水域にはCoreの待機actionをコピーし、常設水路には対応するバルブ名を案内します。水・流れ・境界のマーカーへ装置画像を割り当てず、左右や閉じた境界の向こうの装置を正面へ表示しません。[修正記録と比較](DUNGEON_RENDER_REVIEW.md)を参照してください。

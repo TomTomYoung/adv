@@ -13,11 +13,11 @@ const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fro
 const hash=v=>createHash('sha256').update(JSON.stringify(stable(v))).digest('hex');
 const old=await read('tests/fixtures/quest-events-1.8.0.json');
 
-test('all original VM commands and map/object identities survive the quest-local migration',()=>{
- assert.equal(hash(data.scripts),old.allScriptsSha256);
+test('unrevised quest scripts and map objects remain unchanged outside the explicit q001 rewrite',()=>{
+ assert.equal(hash(Object.fromEntries(Object.entries(data.scripts).filter(([id])=>!id.startsWith('q001.')&&!id.startsWith('dungeon.scene.kagaribi.')&&id!=='prologue'))),old.unrevisedScriptsSha256);
  for(const [map,objects] of Object.entries(old.objects)){
-  assert.equal(data.maps[map].objects.length,Object.keys(objects).length);
-  for(const object of data.maps[map].objects){
+  assert.equal(data.maps[map].objects.filter(o=>o.quest!=='q001').length,Object.keys(objects).filter(id=>!id.startsWith('q001_')).length);
+  for(const object of data.maps[map].objects.filter(o=>o.quest!=='q001')){
    const original=structuredClone(object);if(original.quest){original.condition=original.visibleWhen;delete original.visibleWhen;}
    assert.equal(hash(original),objects[object.id],`${map}/${object.id}`);
   }

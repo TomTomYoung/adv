@@ -20,7 +20,7 @@
 
 素材の正本は authoring/dungeon-art.json、調査を含むクエストイベントの正本は authoring/quests/qXXX.events.json です。対応するクエストJSONへ集約し、ダンジョンからクエストへの逆参照は行いません。編集後は npm run build:dungeons を実行します。[イベントの仕様](QUEST_EVENTS.md)を参照してください。
 
-既存のスクリプト配列は保持し、追加場面は dungeon.scene.* の独立したIDを使います。会話構造を変更する場合は新しい版のIDを追加し、旧スクリプトもクエスト原稿に残してください。保存領域は既存の flags を使い、旧セーブの会話位置や仕掛けの保存形式を変更しません。調査中の保存・再開にも通常の会話機構を使用します。
+現地調査は dungeon.scene.* の独立したIDを使います。会話構造の改稿はrevisionを更新します。1.9.0は旧内容版セーブを移行せず、q001の旧場面を削除しました。同版の調査中の保存・再開には通常の会話機構を使用します。
 
 ## 対応一覧
 
@@ -44,9 +44,9 @@ dungeon.wall と各装置の art は画像URLと正規化した切り出し矩�
 
 正本: [q001](../data/quests/q001.json) の events.kagaribi。調査地点: kagaribi_f1 (1, 1)。
 
-篝火の迷宮で携帯松明の点火を確認した。固定の篝火と携帯燃料を分けて管理する。灯番の所在は引き続き地下水道で調べる。
+入口の篝火と携行松明がくらがりを遠ざける。老灯番の捜索先は篝火の迷宮の巡灯路。消えた壁灯は油切れであり、点火だけでは戻らない。
 
-記録の表示条件: `{"op":"eq","left":{"ref":"flags.dungeonNotes.kagaribi"},"right":true}`。本文・観察条件・選択肢は同じJSONの `dungeon.scene.kagaribi.v1`。
+記録の表示条件: `{"op":"eq","left":{"ref":"flags.dungeonNotes.kagaribi"},"right":true}`。本文・観察条件・選択肢は同じJSONの `dungeon.scene.kagaribi.v2`。
 
 ### 灯守の地下水道 / 排水された横道
 

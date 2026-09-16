@@ -8,7 +8,7 @@ import {validateSave} from '../src/core/save.js';
 import {simulateBalance} from '../tools/simulate-balance.mjs';
 
 test('tavern swaps are atomic and preserve wounds, poison, MP and equipment across saves',()=>{
-  const g=newGame();g.state.inventory.iron_sword=1;assert.ok(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}));g.state.actors.ada.hp=9;g.state.actors.ada.mp=1;g.state.actors.ada.statuses=['poison'];const original=structuredClone(g.state.actors.ada);
+  const g=newGame();g.give('iron_sword',1-(g.state.inventory.iron_sword??0));assert.ok(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}));g.state.actors.ada.hp=9;g.state.actors.ada.mp=1;g.state.actors.ada.statuses=['poison'];const original=structuredClone(g.state.actors.ada);
   assert.ok(g.dispatch({type:'party',action:'join',actor:'toma'}));assert.equal(g.dispatch({type:'party',action:'join',actor:'toma'}),false);assert.equal(g.dispatch({type:'party',action:'join',actor:'berg'}),false);
   assert.ok(g.dispatch({type:'party',action:'swap',actor:'berg',replace:'ada'}));g.load(g.save());assert.deepEqual(g.state.actors.ada,original);assert.ok(g.dispatch({type:'party',action:'swap',actor:'ada',replace:'berg'}));assert.deepEqual(g.state.actors.ada,original);
   for(const id of [...g.state.members].filter(id=>id!=='ada'))assert.ok(g.dispatch({type:'party',action:'leave',actor:id}));assert.equal(g.dispatch({type:'party',action:'leave',actor:'ada'}),false);
@@ -16,21 +16,11 @@ test('tavern swaps are atomic and preserve wounds, poison, MP and equipment acro
   g.dispatch({type:'travel',region:1});assert.equal(g.dispatch({type:'party',action:'join',actor:'nio'}),false);
 });
 test('reserve equipment never disappears when inventory is full and view data cannot change the roster',()=>{
-  const g=newGame();g.state.inventory.mail=1;g.dispatch({type:'equip',actor:'ada',item:'mail'});g.dispatch({type:'party',action:'leave',actor:'ada'});g.state.inventory.mail=99;
-  assert.equal(g.dispatch({type:'unequip',actor:'ada',slot:'body'}),false);const slot=Object.keys(g.state.actors.ada.equipment)[0];assert.equal(g.dispatch({type:'unequip',actor:'ada',slot}),false);g.state.inventory.mail=98;assert.ok(g.dispatch({type:'unequip',actor:'ada',slot}));assert.equal(g.state.inventory.mail,99);assert.deepEqual(g.state.actors.ada.equipment,{});
+  const g=newGame();g.give('mail',1-(g.state.inventory.mail??0));g.dispatch({type:'equip',actor:'ada',item:'mail'});g.dispatch({type:'party',action:'leave',actor:'ada'});g.give('mail',99-(g.state.inventory.mail??0));
+  assert.equal(g.dispatch({type:'unequip',actor:'ada',slot:'body'}),false);const slot=Object.keys(g.state.actors.ada.equipment)[0];assert.equal(g.dispatch({type:'unequip',actor:'ada',slot}),false);g.give('mail',98-(g.state.inventory.mail??0));assert.ok(g.dispatch({type:'unequip',actor:'ada',slot}));assert.equal(g.state.inventory.mail,99);assert.deepEqual(g.state.actors.ada.equipment,{});
   const vm=projectGame(g);assert.equal(vm.roster.length,10);assert.ok(vm.roster.every(a=>a.portrait));vm.roster[0].stats.hp=999;vm.roster[0].equipmentSlots.push({});assert.notEqual(g.stats('ada').hp,999);
 });
-test('legacy 1.0 saves migrate at text, choice and battle waits without losing progress',()=>{
-  for(const mode of ['text','choice','battle']){
-    const g=newGame(72);g.dispatch({type:'accept',id:'q001'});
-    if(mode==='text')g.run('q001.clue_a');
-    if(mode==='choice')exploreSpot(g,data.quests.q001.locations[2]);
-    if(mode==='battle'){exploreSpot(g,data.quests.q001.locations[2]);g.dispatch({type:'choose',id:'contract'});drain(g);}
-    const saved=JSON.parse(g.save());saved.contentVersion=saved.state.contentVersion='1.0.0';for(const id of ['luka','toma','mica','dora','ren'])delete saved.state.actors[id];
-    const expected=structuredClone(saved.state);expected.actors.ada.growthHistory={legacy:expected.level-1};const next=newGame();next.load(JSON.stringify(saved));assert.equal(next.state.contentVersion,data.game.version);assert.deepEqual(next.state.waiting,expected.waiting);assert.deepEqual(next.state.vm,expected.vm);assert.deepEqual(next.state.battle,expected.battle);assert.equal(next.state.rng,expected.rng);assert.deepEqual(next.state.actors.ada,expected.actors.ada);assert.equal(Object.keys(next.state.actors).length,10);assert.deepEqual(validateSave(JSON.parse(next.save()),data),[]);
-    const corrupt=structuredClone(saved);corrupt.state.actors.ada.hp=-1;const before=next.save();assert.throws(()=>next.load(JSON.stringify(corrupt)));assert.equal(next.save(),before);
-  }
-});
+
 test('group healing skips the fallen, group guard covers the party, and MP recovery cannot multiply MP',()=>{
   const g=newGame();g.state.members=['toma','dora','ren'];g.state.actors.dora.hp=0;g.state.actors.toma.hp=8;g.state.actors.ren.hp=8;g.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});
   assert.equal(activeActor(g),'ren');const total=g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0);g.dispatch({type:'battle',action:'skill',skill:'inspire',target:'ren'});assert.equal(g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0),total-3);

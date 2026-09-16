@@ -1,7 +1,7 @@
 import {voxelAt,voxelPoint} from './voxels.js';
 import {voxelSpace} from './systems/voxel-space.js';
 import {fireNetwork} from './systems/fire-network.js';
-import {waterworks} from './systems/waterworks.js';
+import {waterworks,waterLevel} from './systems/waterworks.js';
 import {corrosion} from './systems/corrosion.js';
 import {breakableWalls} from './systems/breakable-walls.js';
 import {plantGarden} from './systems/plant-garden.js';
@@ -32,9 +32,9 @@ export function dungeonBlock(data,state,map,x,y){
   for(const ctx of dungeonContexts(data,state)){const reason=DUNGEON_SYSTEMS[ctx.spec.use].block?.(ctx,map,x,y);if(reason)return reason;}
   return null;
 }
-export function dungeonEquipmentStats(data,state,item){
+export function dungeonEquipmentStats(data,state,item,actor,slot){
   let stats={...data.items[item]?.stats};
-  for(const ctx of dungeonContexts(data,state))stats=DUNGEON_SYSTEMS[ctx.spec.use].equipmentStats?.(ctx,item,stats)??stats;
+  for(const ctx of dungeonContexts(data,state))stats=DUNGEON_SYSTEMS[ctx.spec.use].equipmentStats?.(ctx,item,stats,actor,slot)??stats;
   return stats;
 }
 export function dungeonBattleStart(engine){
@@ -97,7 +97,7 @@ export function dungeonDanger(engine){
 export function dungeonEncounter(data,state){
   let result={rate:1,enemyScale:1};
   for(const ctx of dungeonContexts(data,state)){
-    const change=DUNGEON_SYSTEMS[ctx.spec.use].encounter?.(ctx);if(change)result={rate:result.rate*change.rate,enemyScale:result.enemyScale*change.enemyScale};
+    const change=DUNGEON_SYSTEMS[ctx.spec.use].encounter?.(ctx);if(change)result={...result,...change,rate:result.rate*(change.rate??1),enemyScale:result.enemyScale*(change.enemyScale??1)};
   }
   return result;
 }
@@ -160,3 +160,8 @@ export function validateDungeonState(data,state){
   if(active){if(!s.persistent[active.id])bad('現在の迷宮の保存領域がありません');for(const system of Object.keys(active.systems??{}))if(!data.dungeons[active.id]?.systems[system]||data.dungeons[active.id].systems[system].enabled===false)bad('未知の探索部品');}
   return errors;
 }
+
+export function dungeonFloodLevel(data,state){const ctx=dungeonContexts(data,state).find(c=>c.spec.use==='waterworks');return ctx?waterLevel(ctx):dungeonWaterDepth(data,state,data.maps[state.location?.map],state.location?.x,state.location?.y);}
+export function dungeonDamageScale(data,state,element){return dungeonContexts(data,state).reduce((n,c)=>n*(DUNGEON_SYSTEMS[c.spec.use].damageScale?.(c,element)??1),1);}
+
+export const dungeonWaterAccess=(data,state)=>dungeonContexts(data,state).some(c=>c.spec.use==='waterworks'&&c.run.protected);

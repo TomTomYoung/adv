@@ -6,7 +6,7 @@ export function prepareQuest(id){
  const g=newGame(1907);g.award(0,data.system.xpBase*24*25);g.healAll();
  for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number&&q.number<=100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;
- assert.ok(g.accept(id));g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
+ assert.ok(g.accept(id));if(id==='q001')g.dispatch({type:'travel',dungeon:'kagaribi'});g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
 }
 export function routeTo(id,outcome){
  const g=prepareQuest(id),queue=[{state:structuredClone(g.state),path:[]}],seen=new Set();

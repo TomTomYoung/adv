@@ -71,6 +71,12 @@
       "name": "機関部品",
       "description": "植物の育成・調合・取引、または装置の再接続に使う素材です。",
       "type": "material"
+    },
+    "diving_kit": {
+      "id": "diving_kit",
+      "name": "隊用の潜水具",
+      "description": "地下水道で1個使用すると、その探索中は隊全員が水没度10まで移動・呼吸できる。濡れと水圧の能力低下は残る。",
+      "type": "material"
     }
   },
   "enemies": {
@@ -106,6 +112,106 @@
           "target": "random"
         }
       ]
+    },
+    "water_darter": {
+      "id": "water_darter",
+      "name": "水路の小魚",
+      "sprite": "slime",
+      "stats": {
+        "hp": 22,
+        "mp": 0,
+        "str": 7,
+        "vit": 3,
+        "agi": 10,
+        "int": 4
+      },
+      "resist": {},
+      "rewards": {
+        "gold": 5,
+        "xp": 6
+      },
+      "ai": [
+        {
+          "skill": "attack",
+          "target": "random",
+          "priority": 1
+        }
+      ]
+    },
+    "water_predator": {
+      "id": "water_predator",
+      "name": "水路の牙魚",
+      "sprite": "slime",
+      "stats": {
+        "hp": 55,
+        "mp": 0,
+        "str": 13,
+        "vit": 6,
+        "agi": 9,
+        "int": 8
+      },
+      "resist": {},
+      "rewards": {
+        "gold": 12,
+        "xp": 15
+      },
+      "ai": [
+        {
+          "skill": "attack",
+          "target": "random",
+          "priority": 1
+        }
+      ]
+    },
+    "water_giant": {
+      "id": "water_giant",
+      "name": "大水喰い",
+      "sprite": "slime",
+      "stats": {
+        "hp": 145,
+        "mp": 0,
+        "str": 26,
+        "vit": 12,
+        "agi": 7,
+        "int": 16
+      },
+      "resist": {},
+      "rewards": {
+        "gold": 24,
+        "xp": 35
+      },
+      "ai": [
+        {
+          "skill": "attack",
+          "target": "random",
+          "priority": 1
+        }
+      ]
+    },
+    "salt_eater": {
+      "id": "salt_eater",
+      "name": "ソルトイーター",
+      "sprite": "slime",
+      "stats": {
+        "hp": 35,
+        "mp": 0,
+        "str": 7,
+        "vit": 3,
+        "agi": 8,
+        "int": 4
+      },
+      "resist": {},
+      "rewards": {
+        "gold": 9,
+        "xp": 10
+      },
+      "ai": [
+        {
+          "skill": "attack",
+          "target": "random",
+          "priority": 1
+        }
+      ]
     }
   },
   "encounters": {
@@ -133,6 +239,34 @@
       "enemies": [
         "valley_hexer"
       ]
+    },
+    "water_small": {
+      "enemies": [
+        "water_darter"
+      ],
+      "escape": true,
+      "text": "浅い冠水を小魚が走る。"
+    },
+    "water_predator": {
+      "enemies": [
+        "water_predator"
+      ],
+      "escape": true,
+      "text": "腰までの水に牙魚が姿を現した。"
+    },
+    "water_giant": {
+      "enemies": [
+        "water_giant"
+      ],
+      "escape": true,
+      "text": "完全に水没した通路を、巨大な魚影が塞いだ。"
+    },
+    "salt_eater_feeding": {
+      "enemies": [
+        "salt_eater"
+      ],
+      "escape": true,
+      "text": "ソルトイーターが装備に積もった塩を嗅ぎつけた。"
     }
   },
   "statuses": {
@@ -140,6 +274,12 @@
       "name": "帰らぬ呪い",
       "stepDamage": 2,
       "turnDamage": 4
+    },
+    "wet": {
+      "name": "濡れ",
+      "description": "雷・氷の被ダメージが1.5倍。雷・氷魔法で自身も最大HPの10%を失う。水のない場所で炎を使うと乾く。",
+      "turnDamage": 0,
+      "stepDamage": 0
     }
   },
   "maps": {
@@ -312,6 +452,10 @@
     {
       "item": "machine_part",
       "price": 10
+    },
+    {
+      "item": "diving_kit",
+      "price": 45
     }
   ],
   "mapOpenings": [

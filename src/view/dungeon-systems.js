@@ -9,15 +9,15 @@ export function dungeonSystems(parent,systems,dispatch){
     }
     if(system.kind==='waterworks'){
       const panel=element('section',undefined,'environment-panel water-panel');panel.setAttribute('aria-label',system.title);appendDungeonArt(panel,system.art,system.title);
-      panel.append(element('h3',system.title),element('p',`${system.phase} ／ 次の水位まで${system.remaining}刻`),element('p','移動・待機・水門操作で1刻進みます。完全水没した区画は通れません。','muted'));
+      panel.append(element('h3',system.title),element('p',`${system.phase} ／ 次の水位まで${system.remaining}刻`),element('p','移動・待機・水門操作で1刻進みます。水没6以上は潜水の備えが必要です。水没10は呼吸の備えがなければ溺れます。','muted'));
       for(const zone of system.zones)panel.append(element('p',`${zone.name}：${zone.status}`));
       appendActions(panel,system.actions,dispatch);
       for(const control of system.controls){const card=element('div',undefined,'environment-target');card.append(element('h4',`${control.name}：${control.open?'開・通水':'閉・排水'}`));appendActions(card,control.actions,dispatch);panel.append(card);}
-      panel.append(element('p','水路は通常、水が流れていて通れません。接続する水門やバルブを閉じると水が引き、開くと再び流れます。','muted'));parent.append(panel);continue;
+      panel.append(element('p','2Dではフロア全体が同じ水没度です。水門・バルブを閉じると排水できます。潜水具や水中行軍で、この探索中の移動と呼吸を確保できます。','muted'));parent.append(panel);continue;
     }
     if(system.kind==='corrosion'){
       const panel=element('section',undefined,'environment-panel corrosion-panel');panel.setAttribute('aria-label',system.title);appendDungeonArt(panel,system.art,system.title);
-      panel.append(element('h3',system.title),element('p',`戦闘ごとに装備の補正が−${system.perBattle}ずつ累積します。廃坑を出ると回復します。`));
+      panel.append(element('h3',system.title),element('p',`戦闘ごとに装備の補正が−${system.perBattle}ずつ累積します。水没区画で洗うか、廃坑を出ると回復します。塩4以上の装備はソルトイーターに食べられる危険があります。`));
       for(const item of system.items)panel.append(element('p',`${item.name}：腐食 −${item.penalty}`));
       if(!system.items.length)panel.append(element('p','現在、腐食した装備はありません。','muted'));parent.append(panel);continue;
     }

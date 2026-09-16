@@ -22,6 +22,7 @@ export function validateContent(data){
     if(value.args!==undefined){if(!Array.isArray(value.args))fail(path,'argsは配列です');else value.args.forEach(v=>expression(v,path,depth+1));}
     if(['and','or','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp'].includes(value.op)&&(!Array.isArray(value.args)||!value.args.length))fail(path,'argsが必要です');
     if(value.op==='record_count'){if(!['battles','wins','escapes','losses','repels','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
+    if(value.op==='object_state'&&!data.maps[value.map]?.objects.some(o=>o.id===value.object))fail(path,'object_stateの配置物がありません');
     if(value.op==='has_item')reference(data.items,value.item,path);
     if(value.op==='has_member'||value.op==='has_status')reference(data.actors,value.actor,path);
   };
@@ -50,6 +51,7 @@ export function validateContent(data){
         reference(data.maps,c.map,at);const m=data.maps[c.map];if(m?.voxels?voxelAt(m,null,{x:c.x,y:c.y,z:c.z??0})!=='.':(c.z??0)!==0||m?.tiles[c.y]?.[c.x]===undefined||m?.tiles[c.y]?.[c.x]==='#')fail(at,'移動座標が通行不能です');
         if(c.facing!==undefined&&!['north','east','south','west'].includes(c.facing))fail(at,'方角が不正です');
       }
+      if(c.op==='fire.portable.set'&&(!Number.isInteger(c.fuel)||c.fuel<0||c.fuel>100000||c.fuel>0&&!Object.values(data.dungeons??{}).some(d=>Object.values(d.systems).some(s=>s.use==='fire_network'&&s.effects[c.effect]))))fail(at,'携行松明の効果・燃料が不正です');
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
       if(c.op==='scene.background')reference(data.assets.images,c.asset,at);
       if(c.op==='audio.bgm')reference(data.assets.audio,c.asset,at);

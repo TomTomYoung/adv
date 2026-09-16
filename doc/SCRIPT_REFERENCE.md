@@ -159,7 +159,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 ## 保存互換性
 
-待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+1.9.0では旧内容版の記録を移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
 
 ## 1.3.1の戦績と場面継続
 
@@ -175,7 +175,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 追加依頼の現在場面は `flags.quest.<id>.node`、固有の選択・発言・行動履歴も同じ名前空間へ保存します。`quests.<id>.stage/outcome` と同じ意味のフラグは作りません。反復はjump、完了済み再訪は結果の表示だけにします。outcomesの任意requiresはquest.complete時にも検査します。
 
-旧100件の配信済みscript IDと配列順は互換用に残しています。1.3.0から本文・選択・戦闘待ちを読み込むと、その継続を最後まで進め、次の現地訪問から改稿後の経路へ接続します。
+他依頼の旧命令列は一部残っていますが、旧内容版の読込には使用しません。q001は改訂2の命令列へ置き換えました。
 
 ## 1.1.0の戦闘データ拡張
 
@@ -215,8 +215,14 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実装との照合用一覧
 
-48命令：`story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+49命令：`fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
 
-30式演算子：`record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
+31式演算子：`object_state` / `record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
 
 <!-- /generated:commands -->
+
+## 火とオブジェクト状態（1.9.0）
+
+`{"op":"object_state","map":"kagaribi_f1","object":"q001_last_lamp","default":"low"}` は `state.objects` の現在値を読み、未保存の場合だけdefaultを返します。
+
+`{"op":"fire.portable.set","fuel":0,"effect":null}` は現在の火部品の携行火を変更します。点火時は登録済みeffectと容量内のfuelが必要です。q001の場面の消灯・救助と実際の火を接続します。別ダンジョンで架空の火状態を追加しません。

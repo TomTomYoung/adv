@@ -1,6 +1,6 @@
 # 職業システムと職業一覧
 
-更新日: 2026-09-14。作品版1.8.0の30職と、転職・技能・バフ・装備制限・履歴成長の仕様です。検証状況は[PROGRESS.md](PROGRESS.md)を参照してください。
+更新日: 2026-09-14。作品版1.9.0の30職と、転職・技能・バフ・装備制限・履歴成長の仕様です。検証状況は[PROGRESS.md](PROGRESS.md)を参照してください。
 
 参照：[RPG職業・ジョブ・クラス生成モデル v1.0](https://app.notion.com/p/3d6c3c1966b381da8284e6cca487b9eb)。モデルの「限定された操作権限」「人物と職業の分離」「付与元と寿命」「支払い前後の検査」を、このゲームのターン制と探索へ適用します。参照ページは設計モデルであり、以下の数値は本作向けの初期調整値です。
 
@@ -34,7 +34,7 @@
 
 JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob.change意図、探索特技はjob.action意図で要求します。スクリプト側も同名命令から同じ条件検査を通します。移動・装備・戦闘と同様、一般変数setによる自由書込みは許可しません。
 
-旧1.0/1.1/1.2のセーブは旧能力計算で検査してから移行します。従来成長をlegacy履歴へ保存し、初期職業を付け、不適合装備を袋へ戻します。在庫満杯ならロードを拒否して理由を示し、元データも現在のゲームも変更しません。会話位置・戦闘継続・乱数・依頼は保持します。新規の職業と戦闘補正の状態も保存・検証します。
+旧内容版セーブは移行せず、読込失敗時は新規開始します。同版の職業・成長履歴・装備個体・戦闘補正・継続位置を保存検証します。
 
 ## 検証方針
 
@@ -54,7 +54,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ## 現行30職の定義
 
-作品版1.8.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
+作品版1.9.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
 
 ### 戦士 (warrior)
 
@@ -152,7 +152,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 5.5 / MP 3 / STR 1 / VIT 0.7 / AGI 0.3 / INT 2.8。現在職の加算：なし。
 装備：weapon＝staff / armor＝robe / charm＝charm。
-習得：Lv1 灯火の術 (battle.skill) / Lv5 氷の符 (battle.skill) / Lv10 雷の符 (battle.skill)。
+習得：Lv1 灯火の術 (battle.skill) / Lv5 氷の符 (battle.skill) / Lv10 雷の符 (battle.skill) / Lv1 乾かしの火 (party.dry)。
 特性：{"magicPower":1.04}。物理防御とHPの成長が低めです。
 
 ### 火術師 (pyromancer)
@@ -161,7 +161,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 5.5 / MP 3 / STR 1 / VIT 0.7 / AGI 0.3 / INT 2.8。現在職の加算：なし。
 装備：weapon＝staff / armor＝robe / charm＝charm。
-習得：Lv1 灯火の術 (battle.skill) / Lv5 炎嵐 (battle.skill) / Lv10 戦意高揚 (battle.skill)。
+習得：Lv1 灯火の術 (battle.skill) / Lv5 炎嵐 (battle.skill) / Lv10 戦意高揚 (battle.skill) / Lv1 乾かしの火 (party.dry)。
 特性：{"elementPower":{"fire":1.15}}。炎耐性の相手には効率が落ちます。
 
 ### 氷術師 (cryomancer)
@@ -296,7 +296,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 成長/Lv：HP 6.5 / MP 2.6 / STR 1.2 / VIT 1 / AGI 0.3 / INT 2.2。現在職の加算：なし。
 装備：weapon＝staff・tool / armor＝robe・light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv1 手当の祈り (battle.skill) / Lv5 根の拘束 (battle.skill) / Lv10 救護の祈り (battle.skill)。
+習得：Lv1 毒の刃 (battle.skill) / Lv1 手当の祈り (battle.skill) / Lv5 根の拘束 (battle.skill) / Lv10 救護の祈り (battle.skill) / Lv1 水中行軍 (water.traverse)。
 特性：{"healingPower":1.06}。即時火力や重装には向きません。
 
 ### 刻印師 (runesmith)
@@ -326,7 +326,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 習得：Lv1 手当の祈り (battle.skill) / Lv5 帰路の祈り (battle.skill) / Lv10 解毒 (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
 特性：{"retreatCost":0.5}。割引は帰還印のみで、敗北時の救援費は変わりません。
 
-## 探索特技11定義
+## 探索特技13定義
 
 ### 周辺測量 (survey)
 
@@ -371,6 +371,14 @@ MP1と植物繊維3個から補修用の縄1個を作ります。 API: inventory
 ### 登攀誘導 (climb_route)
 
 立体地形の指定経路で、仲間全員を渡り綱に沿って誘導します。密・閉じた境界・完全水没は通過できません。 API: voxel.traverse。使用場所: dungeon。
+
+### 水中行軍 (water_breath)
+
+MP4。地下水道の探索中、隊全員の移動と呼吸を水没度10まで確保する。 API: water.traverse。使用場所: dungeon。
+
+### 乾かしの火 (dry_clothes)
+
+MP2。水没していない場所で炎を使い、隊全員の濡れを解除する。 API: party.dry。使用場所: town / dungeon。
 
 <!-- /generated:jobs -->
 

@@ -181,15 +181,7 @@ test('every new panel is detached and exposes the same action permissions used b
   }
 });
 
-test('v1.6 saves gain only missing components while preserving ongoing text, choice, battle and earlier systems',()=>{
-  const old=structuredClone(data);old.game.version='1.6.0';for(const [id,systems] of Object.entries(data.game.migrations['1.6.0'].addedSystems))for(const key of systems)delete old.dungeons[id].systems[key];
-  for(const region of [1,2,3,4,5,6,7,8,9,10])for(const kind of ['text','choice','battle']){
-    const g=new GameEngine(old);drain(g);g.dispatch({type:'travel',region});if(kind==='text')g.run('service.inn');else if(kind==='choice'){g.accept('q001');g.run('q001.decision');drain(g);}else g.startBattle('roaming_1',{win:[],escape:[],lose:[]});
-    const text=g.save(),before=JSON.parse(text).state,h=newGame();h.load(text);
-    for(const key of ['actors','inventory','location','vm','waiting','battle','rng','records','steps','quests','events','objects','discovered'])assert.deepEqual(h.state[key],before[key],`${region}/${kind}/${key}`);
-    if(region===2)assert.deepEqual(h.state.dungeons,before.dungeons);if(region===1){const retained=structuredClone(h.state.dungeons);delete retained.active.systems.space;delete retained.persistent.region_1.systems.space;assert.deepEqual(retained,before.dungeons);assert.deepEqual(h.state.dungeons.persistent.region_1.systems.space,{maps:{}});}roundtrip(h);
-  }
-});
+
 
 test('corrupted new system saves reject atomically and malformed content reports configuration errors',()=>{
   for(const [id,key,change] of [[3,'garden',p=>p.plants={fake:{species:'cool_spore',age:0}}],[4,'mirrors',(p,r)=>r.uses=-1],[5,'library',(p,r)=>r.loans={ada:{book:'missing',sealed:'attack'}}],[6,'market',(p,r)=>r.alarm=99],[7,'air',(p,r)=>r.air=99999],[8,'power',p=>p.circuits=['missing']],[9,'terrain',p=>p.phase='missing'],[10,'return_flow',(p,r)=>r.stacks=-1],['prayerless_valley','boundary',(p,r)=>r.pursued='yes'],['moving_village','terrain',(p,r)=>r.remaining=-1]]){

@@ -1,4 +1,4 @@
-import {SIX_FACES,clearVoxelIndex,voxelAt,voxelKey,sharedFace,neighbor,freshVoxelState,hasFooting,voxelRouteReason,emptyVoxels,faceRules} from './voxels.js';
+import {SIX_FACES,clearVoxelIndex,voxelAt,voxelKey,sharedFace,neighbor,freshVoxelState,redistributeWater,hasFooting,voxelRouteReason,emptyVoxels,faceRules} from './voxels.js';
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v),integer=(v,min,max)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
 const id=v=>typeof v==='string'&&/^[a-z][a-z0-9_]*$/.test(v)&&!['constructor','prototype','__proto__'].includes(v);
 export function validateVoxelMap(data,map){
@@ -21,15 +21,15 @@ export function validateVoxelMap(data,map){
   }
   for(const device of v.devices){if(!object(device)){bad('装置が不正です');continue;}unique(device.id);
     if(!device.name||!point(device.at)||voxelAt(map,null,device.at)!=='.'||!point(device.target)){bad('装置の位置が不正です');continue;}
-    if(device.kind==='pump'){if(voxelAt(map,null,device.target)!=='.'||!integer(device.amount,1,30))bad('給水量・給水先が不正です');}
+    if(device.kind==='pump'){if(voxelAt(map,null,device.target)!=='.'||!integer(device.amount,1,10))bad('給水量・給水先が不正です');}
     else if(device.kind==='dig'){if(voxelAt(map,null,device.target)!=='#'||!data.items[device.item]||!integer(device.count,1,99)||device.ability&&data.fieldAbilities[device.ability]?.api!=='wall.break'||Math.abs(device.at.x-device.target.x)+Math.abs(device.at.y-device.target.y)+Math.abs(device.at.z-device.target.z)!==1)bad('掘削先・材料・技能が不正です');}
     else bad('未知の立体装置です');
   }
-  const wet=new Set();for(const p of v.initialWater){if(!object(p)||!point(p.at)||voxelAt(map,null,p.at)!=='.'||!integer(p.amount,1,3)||wet.has(voxelKey(p.at)))bad('初期水量が不正です');else wet.add(voxelKey(p.at));}
+  const wet=new Set();for(const p of v.initialWater){if(!object(p)||!point(p.at)||voxelAt(map,null,p.at)!=='.'||!integer(p.amount,1,10)||wet.has(voxelKey(p.at)))bad('初期水量が不正です');else wet.add(voxelKey(p.at));}
   if(emptyVoxels(map,null).length+v.devices.filter(d=>d?.kind==='dig').length>512)bad('空の立方体は512個以内です');
   if(errors.length)return errors;
   const state=freshVoxelState(map),future={...state,water:{},removed:v.devices.filter(d=>d.kind==='dig').map(d=>voxelKey(d.target)),faces:Object.fromEntries(v.faces.map(f=>[f.id,f.operable?(f.open.passage?true:false):f.initiallyOpen]))};
-  const entry={...map.entrance,z:map.entrance.z??0};if(voxelAt(map,state,entry)!=='.'||!hasFooting(map,state,entry)||state.water[voxelKey(entry)]===3)bad('入口に安全な足場がありません');
+  const entry={...map.entrance,z:map.entrance.z??0};if(voxelAt(map,state,entry)!=='.'||!hasFooting(map,state,entry)||(state.water[voxelKey(entry)]??0)>=6)bad('入口に安全な足場がありません');
   for(const link of v.links)if(voxelRouteReason(map,future,link.path)||link.bidirectional&&voxelRouteReason(map,future,[...link.path].reverse()))bad(`経路に閉じた面または足場のない終点があります: ${link.id}`);
   const queue=[entry],seen=new Set([voxelKey(entry)]),add=p=>{const key=voxelKey(p);if(!seen.has(key)){seen.add(key);queue.push(p);}};
   for(let i=0;i<queue.length;i++){
@@ -48,6 +48,7 @@ export function validateVoxelState(map,state){
   const diggable=new Set(v.devices.filter(d=>d.kind==='dig').map(d=>voxelKey(d.target))),installable=new Set(v.links.filter(l=>l.access.kind==='install').map(l=>l.id));
   if(new Set(state.removed).size!==state.removed.length||state.removed.some(k=>!diggable.has(k)))errors.push('掘削状態が不正です');
   if(new Set(state.installed).size!==state.installed.length||state.installed.some(k=>!installable.has(k)))errors.push('設置経路が不正です');
-  const spaces=new Set(emptyVoxels(map,state).map(voxelKey));for(const [k,n] of Object.entries(state.water))if(!spaces.has(k)||!integer(n,1,3))errors.push('水量・水の位置が不正です');
+  const spaces=new Set(emptyVoxels(map,state).map(voxelKey));for(const [k,n] of Object.entries(state.water))if(!spaces.has(k)||!integer(n,1,10))errors.push('水量・水の位置が不正です');
+  if(!errors.length){const normalized=redistributeWater(map,state);if(Object.entries(state.water).some(([k,n])=>normalized.water[k]!==n)||Object.keys(normalized.water).length!==Object.keys(state.water).length)errors.push('閉区域の水没度が不一致です');}
   return errors;
 }

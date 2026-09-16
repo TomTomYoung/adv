@@ -47,12 +47,8 @@ export async function buildDungeons(){
   await buildDungeonArt(root,definitions);
   await applyQuestEvents(root);
   await write('data/dungeons.json',definitions);
-  game.version='1.8.0';game.dungeonVersion=1;
-  game.migrations={...game.migrations,'1.4.0':{actors:Object.keys(await read('data/actors.json')),dungeonRevision:true}};
-  const addedSystems=Object.fromEntries(Object.values(definitions).filter(d=>!['kagaribi','region_1','region_2'].includes(d.id)).map(d=>[d.id,Object.keys(d.systems)]));
-  game.migrations['1.5.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['water','space'],region_2:['salt','walls'],...addedSystems}};
-  game.migrations['1.6.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{...addedSystems,region_1:['space']}};
-  game.migrations['1.7.0']={actors:Object.keys(await read('data/actors.json')),environmentRevision:true,addedSystems:{region_1:['space']}};
+  game.version='1.9.0';game.dungeonVersion=1;
+  game.migrations={};
   game.files.databases.dungeons='data/dungeons.json';
   game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps,...voxel.maps}).map(id=>`data/maps/${id}.json`)])];
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];

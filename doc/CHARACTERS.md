@@ -10,9 +10,9 @@
 
 ID：rine / 名前・役割：リネ／灯番組合の連絡係 / 登場：q001, q010 / 動機：帰還者を名前で数え、取り残しを防ぐ
 
-ID：elder / 名前・役割：老灯番／行方不明の灯番 / 登場：q001 / 動機：新人を帰し、仕事を教え直す
+ID：elder / 名前・役割：老灯番／行方不明の灯番 / 登場：q001 / 動機：新人を安全な入口へ帰し、自分も生きて戻る
 
-ID：rookie / 名前・役割：新人灯番／帰還をためらう見習い / 登場：q001 / 動機：失敗を隠したいが老人を見捨てたくない
+ID：rookie / 名前・役割：新人灯番／恐怖を抱える見習い / 登場：q001 / 動機：暗闇が怖い。それでも老人と探索隊を助けたい
 
 ID：rescuers / 名前・役割：灯番救助隊／引継ぎ先の救助班 / 登場：q001 / 動機：地図に従って未帰還者を連れ戻す
 
@@ -92,7 +92,7 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 ![老灯番](../assets/images/characters/generated/elder.webp)
 
-本名は未設定。支道で待つ老人は、先行救助後に詰所の寝台に残る。
+本名は未設定。新人へ油を渡し、最後の壁灯の下で救助を待つ。
 
 [旧AIPaint PNG](../assets/images/characters/elder.png) ／ [AIPaint 編集原稿](../assets/source/characters/elder.paint.json) ／ [描画コマンド](../assets/source/characters/elder.commands.json)
 
