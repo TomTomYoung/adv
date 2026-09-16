@@ -25,7 +25,12 @@ export function maintainParty(g){
   if(needsFood&&g.state.inventory.ration>0){g.dispatch({type:'item',item:'ration',actor:'ada'});drain(g);}
 }
 export function exploreSpot(engine,spot,options={}){
-  if(engine.state.mode==='town'){const region=data.maps[spot.map].region;assert.ok(engine.dispatch({type:'travel',region}));}
-  if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);}
+  const dungeon=Object.values(data.dungeons).find(d=>d.maps.includes(spot.map));
+  if(engine.state.mode==='town')assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));
+  const drainFloor=()=>{if(engine.state.dungeons.active?.id==='region_1'&&!engine.map().voxels){const target=engine.state.location.map.endsWith('f1')?'upper_gate':'lower_gate';if(engine.state.dungeons.persistent.region_1.systems.water.controls[target])assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'close',target}));}};
+  if(engine.state.location.x===1&&engine.state.location.y===1)drainFloor();
+  if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
+    if(dungeon.id==='region_1')for(let n=0;!engine.walkable(data.maps[spot.map],1,1)&&n<200;n++)assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'wait'}));
+    assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
   walk(engine,spot.x,spot.y,options);assert.ok(engine.dispatch({type:'interact'}));drain(engine);
 }

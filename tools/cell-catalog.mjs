@@ -3,7 +3,7 @@ import {emptyVoxels,freshVoxelState,hasFooting,voxelDepth} from '../src/core/vox
 
 // Documentation inventory: count authored records separately from runtime states.
 export function cellCatalogInventory(data){
-  const out=['## 配布データから生成した配置索引','',`作品版${data.game.version}。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・旧セーブ互換用のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。`,''];
+  const out=['## 配布データから生成した配置索引','',`作品版${data.game.version}。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。`,''];
   const maps=Object.values(data.maps),flat=maps.filter(m=>!m.voxels),cubic=maps.filter(m=>m.voxels);
   const countTiles=(layers,tile)=>layers.reduce((n,layer)=>n+layer.reduce((n,row)=>n+Array.from(row).filter(c=>c===tile).length,0),0);
   const point=p=>`${p.map??''}${p.map?' ':''}(${p.x},${p.y}${p.z===undefined?'':','+p.z})`;
@@ -36,11 +36,11 @@ export function cellCatalogInventory(data){
       for(const [id,e] of Object.entries(s.effects))line(`火の効果 ${code(id)} ${e.name}：くらがり除け${e.repels?'あり':'なし'}、通常遭遇率×${e.encounterRate}、敵倍率×${e.enemyScale}、優先度${e.priority}。`);
     },
     waterworks(s){
-      for(const z of s.zones)line(`${code(z.kind)} ${z.name} (${z.id})：${z.cells.length}セル。${locations(z.cells.map(p=>({...p,map:z.map})))}。制御：${z.control??'なし'}。`);
+      for(const f of s.floors)line(`フロア ${code(f.map)}：通路全体が一律の水没度0〜10。制御：${f.controls.join('・')}。`);
       line(`周期：${s.phases.map(p=>`${p.name} ${p.duration}刻／内部水位${p.level}`).join(' → ')}。制御点${s.controls.length}か所：${locations(s.controls)}。`);
     },
     breakable_walls(s){line(`破壊壁${s.walls.length}セル：${locations(s.walls)}。`);},
-    corrosion(s){line(`個別のセル指定なし。ダンジョン内の戦闘開始ごとに装備の正の補正を${s.perBattle}ずつ減らします。`);},
+    corrosion(s){line(`戦闘開始ごとに装備個体へ塩${s.perBattle}を加算。塩${s.eater.threshold}以上でソルトイーターの対象。洗浄地点：${locations(s.washZones)}。`);},
     plant_garden(s){
       line(`植床${s.plots.length}か所、育苗箱${point(s.supply)}。${locations(s.plots)}。`);
       for(const [id,p] of Object.entries(s.species)){
@@ -100,7 +100,7 @@ export function cellCatalogInventory(data){
     line(`${mapLink(m.id)}：面${m.voxels.faces.length}、経路${m.voxels.links.length}、装置${m.voxels.devices.length}。`);
     for(const f of m.voxels.faces)line(`面 ${code(f.id)} ${f.name}：${point(f.at)}/${f.side}。${f.operable?`開閉可、初期${f.initiallyOpen?'開':'閉'}、操作${point(f.handle)}`:`固定${f.initiallyOpen?'開':'閉'}（反対の状態は操作で使用しません）`}。閉：${bits(f.closed)}。開：${bits(f.open)}。人物・水の各値は両方向共通です。`);
     for(const l of m.voxels.links)line(`経路 ${code(l.id)} ${l.name}：${l.kind}、${l.bidirectional?'往復可':'順方向のみ'}。${l.path.map(point).join(' → ')}。利用${l.access.kind}${l.access.item?`／${l.access.item}×${l.access.count}`:l.access.ability?`／${l.access.ability}`:''}。`);
-    for(const d of m.voxels.devices)line(`装置 ${code(d.id)} ${d.name}：${d.kind}、操作${point(d.at)}、対象${point(d.target)}。${d.kind==='pump'?`給水${d.amount}単位。`:`材料${d.item}×${d.count}${d.ability?`または技能${d.ability}`:''}。`}`);
+    for(const d of m.voxels.devices)line(`装置 ${code(d.id)} ${d.name}：${d.kind}、操作${point(d.at)}、対象${point(d.target)}。${d.kind==='pump'?`区域の水没度を${d.amount}段階上げる操作。`:`材料${d.item}×${d.count}${d.ability?`または技能${d.ability}`:''}。`}`);
     const unused=['ladder','stairs','vine','rope','bridge'].filter(kind=>!m.voxels.links.some(l=>l.kind===kind));
     line(`経路kindとして対応済みで、このマップに配置のないもの：${unused.join('・')||'なし'}。橋の床板という共有面は、bridge経路の配置数に加算しません。`);
   }

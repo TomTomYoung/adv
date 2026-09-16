@@ -1,8 +1,9 @@
+import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
-import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs} from './dungeons.js';
+import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry']);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -24,7 +25,7 @@ export function actorStats(data,state,id,battle=true){
       stats[key]+=(Math.floor(growth+1e-9)+(job.stats[key]??0));
     }
   }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(state.level-1);
-  for(const item of Object.values(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item)))stats[key]=(stats[key]??0)+amount;
+  for(const [slot,item] of Object.entries(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item,id,slot)))stats[key]=(stats[key]??0)+amount;
   for(const key of STAT_KEYS)stats[key]=Math.max(key==='hp'?1:0,Math.floor(stats[key]));
   const environmental=dungeonActorStats(data,state,id,stats);
   return battle?buffStats(data,dungeonBuffs(data,state),`actor:${id}`,environmental):environmental;
@@ -55,7 +56,7 @@ export function jobChangePlan(data,state,id,jobId){
 }
 export function changeJob(engine,id,jobId){
   const plan=jobChangePlan(engine.data,engine.state,id,jobId);if(!plan.ok){engine.notify(plan.reason);return false;}
-  const actor=engine.state.actors[id];actor.job=jobId;actor.equipment=plan.equipment;engine.state.inventory=plan.inventory;
+  const actor=engine.state.actors[id];for(const slot of Object.keys(actor.equipment))if(!plan.equipment[slot])unequipGear(engine.state,id,slot);actor.job=jobId;actor.equipment=plan.equipment;engine.state.inventory=plan.inventory;
   actor.hp=Math.min(actor.hp,plan.stats.hp);actor.mp=Math.min(actor.mp,plan.stats.mp);
   engine.notify(`${engine.data.actors[id].name}は${engine.data.jobs[jobId].name}に転職しました。${plan.returned.length?'適合しない装備は袋に戻しました。':''}`);
   return true;
@@ -104,9 +105,10 @@ export function fieldActionPlan(data,state,id,abilityId){
   if(!ability||!FIELD_APIS.has(ability.api)||!permission(data,state,id,abilityId,ability.api))return {ok:false,reason:'この探索特技は習得していません。'};
   if(state.waiting||state.battle||!ability.modes.includes(state.mode)||!state.members.includes(id))return {ok:false,reason:'この場所・状態では使用できません。'};
   const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
+  if(ability.api==='party.dry'&&dungeonFloodLevel(data,state)>0)return {ok:false,reason:'水没していない場所で炎を使ってください。'};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
-  if(['wall.break','archive.unlock','voxel.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
+  if(['wall.break','archive.unlock','voxel.traverse','water.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -122,6 +124,7 @@ export function fieldAction(engine,id,abilityId){
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
   if(plan.ability.api==='fire.kindling')kindlePortable(engine.data,engine.state,plan.ability.effect);
+  if(plan.ability.api==='party.dry')for(const member of engine.state.members)engine.state.actors[member].statuses=engine.state.actors[member].statuses.filter(s=>s!=='wet');
   if(plan.ability.api==='party.heal')for(const member of engine.state.members){const a=engine.state.actors[member];if(a.hp>0)a.hp=Math.min(engine.stats(member).hp,a.hp+plan.ability.amount);}
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;
 }

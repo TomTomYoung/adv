@@ -142,9 +142,9 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 <!-- generated:enemies -->
 
-## 現行の敵55定義
+## 現行の敵59定義
 
-作品版1.8.0の data/enemies.json から生成。画像IDを共有する敵も含みます。基礎数値にダンジョンの敵倍率や戦闘補正が作用します。
+作品版1.9.0の data/enemies.json から生成。画像IDを共有する敵も含みます。基礎数値にダンジョンの敵倍率や戦闘補正が作用します。
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
 
@@ -475,5 +475,29 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 基礎能力：HP 112 / MP 8 / STR 28 / VIT 13 / AGI 15 / INT 26。報酬：20G / 30EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
 画像：[dragon](../assets/images/dragon.png)。出現定義：valley_roamers。
+
+### 水路の小魚 (water_darter)
+
+基礎能力：HP 22 / MP 0 / STR 7 / VIT 3 / AGI 10 / INT 4。報酬：5G / 6EXP。
+代表技能：攻撃。属性倍率：{}。
+画像：[slime](../assets/images/slime.png)。出現定義：water_small。
+
+### 水路の牙魚 (water_predator)
+
+基礎能力：HP 55 / MP 0 / STR 13 / VIT 6 / AGI 9 / INT 8。報酬：12G / 15EXP。
+代表技能：攻撃。属性倍率：{}。
+画像：[slime](../assets/images/slime.png)。出現定義：water_predator。
+
+### 大水喰い (water_giant)
+
+基礎能力：HP 145 / MP 0 / STR 26 / VIT 12 / AGI 7 / INT 16。報酬：24G / 35EXP。
+代表技能：攻撃。属性倍率：{}。
+画像：[slime](../assets/images/slime.png)。出現定義：water_giant。
+
+### ソルトイーター (salt_eater)
+
+基礎能力：HP 35 / MP 0 / STR 7 / VIT 3 / AGI 8 / INT 4。報酬：9G / 10EXP。
+代表技能：攻撃。属性倍率：{}。
+画像：[slime](../assets/images/slime.png)。出現定義：salt_eater_feeding。
 
 <!-- /generated:enemies -->

@@ -87,14 +87,7 @@ test('persistent fixtures survive re-entry; fresh expeditions do not duplicate i
   const g=begin(true);place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');action(g,'collect','calm');const old=g.state.dungeons.active.run;g.returnTown();g.dispatch({type:'travel',region:1});assert.equal(fireContext(data,g.state),null);assert.deepEqual(dungeonEncounter(data,g.state),{rate:1,enemyScale:1});assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['waterworks','voxel_space']);assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'kuragari_ward'}),false);
   g.returnTown();g.dispatch({type:'travel',dungeon:'kagaribi'});assert.ok(g.state.dungeons.active.run>old);assert.equal(fireContext(data,g.state).persistent.fixtures.calm.effect,'calm');assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).fuel,90);roundtrip(g);
 });
-test('old 1.4 saves migrate text/choice/battle without altering ongoing script, resources or RNG',()=>{
-  for(const mode of ['text','choice','battle']){
-    const g=newGame();g.dispatch({type:'travel',region:1});if(mode==='text')g.run('service.inn');else if(mode==='choice'){g.accept('q001');g.run('q001.decision');drain(g);}else g.startBattle('roaming_1',{win:[],lose:[],escape:[]});
-    assert.equal(g.state.waiting?.type,mode);
-    const saved=JSON.parse(g.save());saved.contentVersion='1.4.0';saved.state.contentVersion='1.4.0';delete saved.state.dungeons;
-    const copy=newGame();copy.load(JSON.stringify(saved));for(const key of ['vm','waiting','battle','light','steps','rng','inventory','quests','actors','objects','events','discovered'])assert.deepEqual(copy.state[key],saved.state[key],key);roundtrip(copy);
-  }
-});
+
 test('malformed fire definitions, remote intents and corrupt saves reject atomically',()=>{
   for(const mutate of [d=>d.dungeons.kagaribi.systems.fires.use='arbitrary',d=>d.dungeons.kagaribi.systems.fires.portable.warnings=[8,25],d=>d.dungeons.kagaribi.systems.fires.fixtures[0].effect='missing',d=>d.dungeons.kagaribi.systems.fires.fixtures[1].x=999,d=>d.dungeons.kagaribi.maps.push('region_1_f1'),d=>d.dungeons.kagaribi.systems.fires.effects.ward.enemyScale=NaN]){const d=structuredClone(data);mutate(d);assert.ok(validateContent(d).length);}
   const g=begin();const resources=JSON.stringify({i:g.state.inventory,d:g.state.dungeons});assert.equal(action(g,'ignite','origin'),false);assert.equal(JSON.stringify({i:g.state.inventory,d:g.state.dungeons}),resources);

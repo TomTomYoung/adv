@@ -1,107 +1,174 @@
 {
   "events": [
     {
-      "id": "q001_clue_a",
-      "title": "帰らない灯番：現場の痕跡",
-      "points": [
-        {
-          "map": "region_1_f1",
-          "x": 7,
-          "y": 1
-        }
-      ],
-      "kind": "clue",
-      "trigger": "interact",
-      "safe": true,
-      "script": "q001.clue_a",
-      "role": "clue_a",
-      "visibleWhen": {
-        "op": "and",
-        "args": [
-          {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q001.stage"
-            },
-            "right": "active"
-          },
-          {
-            "op": "eq",
-            "left": {
-              "ref": "flags.legacyQuestRoutes.q001"
-            },
-            "right": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "q001_clue_b",
-      "title": "帰らない灯番：記録と証言",
-      "points": [
-        {
-          "map": "region_1_f1",
-          "x": 14,
-          "y": 1
-        }
-      ],
-      "kind": "clue",
-      "trigger": "interact",
-      "safe": true,
-      "script": "q001.clue_b",
-      "role": "clue_b",
-      "visibleWhen": {
-        "op": "and",
-        "args": [
-          {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q001.stage"
-            },
-            "right": "active"
-          },
-          {
-            "op": "eq",
-            "left": {
-              "ref": "flags.legacyQuestRoutes.q001"
-            },
-            "right": true
-          }
-        ]
-      }
-    },
-    {
       "id": "q001_decision",
-      "title": "帰らない灯番：決着の場",
+      "title": "入口で待つ新人",
       "points": [
         {
-          "map": "region_1_f1",
-          "x": 13,
-          "y": 7
+          "map": "kagaribi_f1",
+          "x": 2,
+          "y": 1
         }
       ],
       "kind": "decision",
       "trigger": "interact",
-      "safe": true,
       "script": "q001.v11.visit",
-      "role": "decision",
       "visibleWhen": {
-        "op": "or",
-        "args": [
-          {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q001.stage"
-            },
-            "right": "active"
-          },
-          {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q001.stage"
-            },
-            "right": "completed"
-          }
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "role": "decision"
+    },
+    {
+      "id": "q001_return",
+      "title": "油切れの巡灯路",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 9,
+          "y": 1
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "script": "q001.v11.visit",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      }
+    },
+    {
+      "id": "q001_elder",
+      "title": "最後の灯の下の老人",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 3
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "script": "q001.v11.visit",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      }
+    },
+    {
+      "id": "q001_empty_west",
+      "title": "西の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 8,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_empty_west",
+      "initialState": "empty",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      }
+    },
+    {
+      "id": "q001_empty_east",
+      "title": "東の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 11,
+          "y": 1
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_empty_east",
+      "initialState": "empty",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      }
+    },
+    {
+      "id": "q001_last_lamp",
+      "title": "老人を守る最後の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 3
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_last_lamp",
+      "initialState": "low",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
         ]
       }
     },
@@ -117,7 +184,7 @@
         }
       ],
       "trigger": "action",
-      "script": "dungeon.scene.kagaribi.v1",
+      "script": "dungeon.scene.kagaribi.v2",
       "condition": {
         "op": "in",
         "left": {
@@ -130,7 +197,7 @@
       },
       "requirement": "関連する依頼を受けると調査できます。",
       "note": {
-        "text": "篝火の迷宮で携帯松明の点火を確認した。固定の篝火と携帯燃料を分けて管理する。灯番の所在は引き続き地下水道で調べる。",
+        "text": "入口の篝火と携行松明がくらがりを遠ざける。老灯番の捜索先は篝火の迷宮の巡灯路。消えた壁灯は油切れであり、点火だけでは戻らない。",
         "when": {
           "op": "eq",
           "left": {
@@ -142,12 +209,129 @@
     }
   ],
   "scripts": {
-    "dungeon.scene.kagaribi.v1": {
+    "q001.wall.q001_empty_west": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_empty_west",
+            "default": "empty"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "最後の油を燃やし尽くし、火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明に火が灯り、足元を守っている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "油受けは完全に乾いている。火を寄せても芯の先が一瞬赤くなるだけだ。点火の失敗ではなく、壁松明そのものの油切れだ。"
+            }
+          ]
+        }
+      ]
+    },
+    "q001.wall.q001_empty_east": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_empty_east",
+            "default": "empty"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "最後の油を燃やし尽くし、火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明に火が灯り、足元を守っている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "油受けは完全に乾いている。火を寄せても芯の先が一瞬赤くなるだけだ。点火の失敗ではなく、壁松明そのものの油切れだ。"
+            }
+          ]
+        }
+      ]
+    },
+    "q001.wall.q001_last_lamp": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_last_lamp",
+            "default": "low"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "最後の油を燃やし尽くし、火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明に火が灯り、足元を守っている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "まだ火はあるが、油受けの底が見えている。老人を守る最後の灯も、もう長くはもたない。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.kagaribi.v2": {
       "dungeonScene": "kagaribi",
       "commands": [
         {
           "op": "narrate",
-          "text": "灯番の捜索に備え、入口の篝火で携帯する灯を確かめる。置かれた火が明るくても、その明かりを道中へ持ち出せるとは限らない。"
+          "text": "老灯番を探す前に、篝火の迷宮の入口で、くらがり除けの携行松明を確認する。新人はその先の巡灯路の火が消えたと話している。"
         },
         {
           "op": "if",

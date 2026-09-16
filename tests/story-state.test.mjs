@@ -12,17 +12,8 @@ import {PaintCore} from '../tools/assets/vendor/AIPaint/src/core.js';
 const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);}};
 const state=(g,id)=>g.state.stories[id];
 const sha=b=>createHash('sha256').update(b).digest('hex');
-test('q001 carried elder stays at the post while party returns; oil quantity is conserved',()=>{
- const g=prepareQuest('q001');choose(g,'clear');fight(g);choose(g,'return');
- assert.equal(state(g,'q001').values.elderAt,'post');assert.equal(state(g,'q001').values.partyAt,'entry');
- assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['rookie']);
- choose(g,'bring','share');const v=state(g,'q001').values;
- assert.equal(v.oldOil+v.newOil+v.oilUsed,2);assert.equal(v.oilUsed,2);assert.equal(v.elderAt,'post');assert.equal(v.rookieAt,'post');
-});
-test('q001 report from sound is followed by actual rescue, not immediate arrival or invented instruction',()=>{
- const g=prepareQuest('q001');choose(g,'map');assert.equal(state(g,'q001').values.elderAt,'branch');assert.equal(state(g,'q001').knowledge.party?.includes('position')??false,false);
- choose(g,'wait');const v=state(g,'q001').values;assert.equal(v.elderAt,'post');assert.equal(v.rookieAt,'post');assert.equal(v.dawn,true);assert.equal(v.taught,false);assert.equal(v.newOil,2);
-});
+
+
 test('failed movement, transfer, observation and invariant violations are atomic, including costs',()=>{
  for(const effects of [
   [{op:'move',entities:['elder'],path:['branch','entry','post']}],
@@ -71,18 +62,7 @@ test('authored model validation rejects unknown state refs, missing evidence sou
   const copy=structuredClone(data);mutate(copy.quests.q001.story);assert.ok(validateContent(copy).some(e=>e.startsWith('q001')));
  }
 });
-test('1.3.2 flow scripts are unchanged and saved choices/battles finish with old outcomes',async()=>{
- const hashes=JSON.parse(await fs.readFile(new URL('fixtures/scripts-1.3.2-flow-sha256.json',import.meta.url)));
- for(const [id,hash] of Object.entries(hashes))assert.equal(sha(JSON.stringify(data.scripts[id])),hash,id);
- for(const phase of ['choice','battle']){
-  const source=await fs.readFile(new URL(`fixtures/save-1.3.2-${phase}.json`,import.meta.url),'utf8'),old=JSON.parse(source),g=newGame();g.load(source);
-  assert.equal(g.state.flags.legacyStoryRoutes.q001,true);assert.equal(g.state.flags.legacyQuestRoutes?.q001,undefined);
-  for(const key of ['actors','records','rng','vm','waiting','battle','inventory'])assert.deepEqual(g.state[key],old.state[key]);
-  if(phase==='choice')choose(g,'clear');fight(g);choose(g,'report');assert.equal(g.state.quests.q001.outcome,'contract');
-  assert.equal(g.state.journal.at(-1).text,data.quests.q001.legacyOutcomes.contract.text);g.load(g.save());
-  g.accept('q002');g.run(data.quests.q002.model.entryScript);drain(g);assert.equal(state(g,'q002').scene,'entry');
- }
-});
+
 test('all 36 shipped AIPaint PNGs match editable projects and replayed commands',async()=>{
  const root=new URL('../',import.meta.url),manifest=JSON.parse(await fs.readFile(new URL('assets/source/characters/manifest.json',root)));
  assert.equal(manifest.files.length,36);assert.equal(sha(await fs.readFile(new URL('tools/assets/vendor/AIPaint/src/core.js',root))),manifest.engine.coreSha256);

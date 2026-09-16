@@ -1,38 +1,6 @@
 import {story,O,move,give,set,see,when,and,or,not} from './story-kit.mjs';
-const rows=[];
-{
- const s=story(1,{entry:'灯路の入口',branch:'杖の音がする支道',post:'灯番詰所'},[['entry','branch'],['entry','post']]);
- s.entity('elder','branch','elder',{mobility:'elderMobility'}).entity('rookie','entry','rookie').entity('rine','post','rine').entity('rescuers','post','rescuers',{kind:'group'}).entity('oldBottle','elder').entity('newBottle','rookie');
- s.enum('elderMobility','assisted',['assisted','mobile'],'老人は意識があるが、帰路には介助が必要').bool('consent').bool('taught').bool('reported').bool('mapped').bool('dawn');
- s.int('oldOil',0,0,2,'老人の油瓶に残る油', 'oldBottle').int('newOil',2,0,2,'新人が受け取った油','newBottle').int('oilUsed',0,0,2,'灯に使った油');
- s.fact('gift','老人は新人に残りの油を渡した').fact('position','二人の位置を直接確認した');
- s.invariant('oil_total',{op:'eq',left:{op:'add',args:[s.v('oldOil'),s.v('newOil'),s.v('oilUsed')]},right:2},'油は受け渡しで増えず、点灯分だけ減る');
- s.past=['交代前、老人は道に迷った新人へ自分の油を渡した。新人は入口へ出たものの、事故を報告できず、その場で立ち尽くしている。'];
- s.authoringNotes={
-  notice:'以下の事実は世界設定上の整合性を保つための制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。',
-  facts:[
-   '灯番の通常の巡灯業務は、一つの担当経路につき一人で行います。',
-   '本件では、当直の老人が新人の実地教育のため、例外的に一人同行させました。',
-   '老人は正式な当直灯番であり、新人はまだ灯番として人数に数えない見習いです。そのため、依頼文の「戻らない灯番」は老人一人を指します。',
-   '依頼人のリネは、新人が実地教育に同行したことを把握しています。新人も帰還確認の対象ですが、正式な当直灯番ではありません。'
-  ]
- };
- s.progression='入口の新人、支道の老人、詰所を区別する。先に運んだ老人は詰所に残り、新人との再会では移動しない。';
- const report=[move('party','entry','post'),set('mapped'),set('reported')];
- s.node('entry','entry',['rookie'],'最後の灯の下で、新人が油瓶を抱えている。支道から杖の音が一度した。老人の姿はまだ見えない。',[O('talk','新人に、油瓶と老人のことを尋ねる','rookie',[see('gift','rookie'),set('consent')]),O('clear','暗い支道を掃討し、老人を詰所へ運ぶ','carried',[move('party','entry','branch'),see('position','elder'),move('party elder','branch','entry','post')],{combat:true}),O('map','杖の音がした範囲を地図に記し、詰所へ届ける','report',report)]);
- s.node('rookie','entry',['rookie'],'「油は、あの人にもらいました。詰所で事故のことを話したら、叱られると思って」。新人は話し終えると、支道へ同行すると答えた。',[O('together','新人と一緒に支道へ向かう','old',[move('party rookie','entry','branch'),see('position','elder')],{when:s.is('consent')}),O('team','新人には入口で待ってもらい、救助を頼む','report',report)]);
- s.node('old','branch',['elder','rookie'],'老人は壁にもたれ、空の瓶を差し出した。「叱るのは、明るい所へ帰ってからでもできる」。二人とも、あなたと戻ることに同意した。',[O('share','油を一単位ずつ分け、二人を介助して帰路を点灯する','@informed',[{op:'pour',from:'newOil',to:'oldOil',amount:1},{op:'consume',key:'oldOil',amount:1,sink:'oilUsed'},{op:'consume',key:'newOil',amount:1,sink:'oilUsed'},move('party elder rookie','branch','entry','post'),set('taught'),set('reported')]),O('team','二人を支道で待たせ、位置を救助隊へ知らせる','report',[move('party','branch','entry','post'),set('mapped'),set('reported')])]);
- s.node('carried','post',['rine','elder'],'老人を詰所の寝台へ運び入れた。新人は入口に残っている。「私の油はあの子が持っとる」。老人は名簿にある新人の帰還確認欄を指した。そこにはまだ印がない。',[O('return','老人を詰所に残し、新人を迎えに戻る','reunion',[move('party','post','entry')]),O('contract','老人だけの救出として始末書を提出する','@contract',[set('reported')]),O('team','新人の残る入口を救助隊へ知らせる','report',[set('mapped'),set('reported')])]);
- s.node('reunion','entry',['rookie'],'新人は同じ灯の下で待っていた。老人が詰所にいると伝えると、油瓶を握り直した。「一緒なら、戻れます」。',[O('bring','新人を詰所へ連れて帰る','lesson',[set('consent'),move('party rookie','entry','post')])]);
- s.node('lesson','post',['rine','elder','rookie'],'老人は寝台から新人を呼んだ。今度は帰路の点灯ではなく、詰所の灯を使って油の配り方を教える。',[O('share','二つの瓶に分け、詰所の灯で配分を教え直す','@informed',[{op:'pour',from:'newOil',to:'oldOil',amount:1},{op:'consume',key:'oldOil',amount:1,sink:'oilUsed'},{op:'consume',key:'newOil',amount:1,sink:'oilUsed'},set('taught'),set('reported')])]);
- const rescue=[];for(const who of ['elder','rookie'])for(const p of ['entry','branch'])rescue.push({...move(`rescuers`, 'post','entry',...(p==='branch'?['branch']:[])),when:s.is(`${who}At`,p)},{...move(`rescuers ${who}`,p,...(p==='branch'?['entry']:[]),'post'),assistant:'rescuers',when:s.is(`${who}At`,p)});
- s.node('report','post',['rine','rescuers'],when(s.is('mapped'),'リネは地図に、目で確認した位置と音だけを聞いた範囲を別々に記した。救助隊が引き受ける。夜明けまで、ここで帰還を待つ。','リネは救出名簿を開いた。'),[O('wait','救助隊の帰還と名簿を、夜明けまで確認する','@compromise',[...rescue,set('dawn')])]);
- const home=and(s.is('elderAt','post'),s.is('rookieAt','post'),s.is('partyAt','post'));
- s.end('informed','二人の帰還と油の教え直し','二人が詰所に戻った後、老人は新人を叱る前に油の配り方を教えた。報告を受けたリネが、夜番には予備を含め二瓶持つ規則を記した。',and(home,s.is('taught'),s.is('reported')));
- s.end('contract','老人だけの救出報告','老人は詰所へ戻った。新人は詰所へ戻らず、帰還確認が取れなかった。老人は自分の不始末として始末書を書いた。',and(s.is('elderAt','post'),s.is('rookieAt','entry'),s.is('reported')));
- s.end('compromise','救助隊へ引き継ぎ、二人の帰還を確認','夜明け、救助隊が未帰還者を連れ戻した。リネの名簿で二人の帰還を確認した。油の教え直しや、新しい携行規則の決定には至っていない。',and(home,s.is('dawn'),s.is('reported')));
- rows.push(s.done());
-}
+import q001 from './story-q001.mjs';
+const rows=[q001];
 {
  const s=story(2,{landing:'引き揚げ場',water:'浅瀬の荷崩れ',school:'医学校の標本室',office:'保険審査所'},[['landing','water'],['landing','school'],['landing','office']]);
  s.entity('belt','landing','belt').entity('porter','school','porter').entity('curator','school','curator').entity('examiner','office','examiner').entity('box','water').entity('bones','water').entity('tags','box').entity('ledger','curator');

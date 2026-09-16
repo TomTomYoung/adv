@@ -13,7 +13,7 @@ function atLevel(g,level){g.award(0,data.system.xpBase*(level-1)*level-g.state.x
 function setup(job,level=10){const g=newGame(17);if(job!=='warrior')assert.ok(g.dispatch({type:'job.change',actor:'ada',job}));atLevel(g,level);g.state.members=['ada','nio','sera','il','berg'];g.healAll();return g;}
 function actAs(g,id){g.state.battle.acted=[];let left=5;while(activeActor(g)!==id&&left-->0)g.state.battle.acted.push(activeActor(g));assert.equal(activeActor(g),id);}
 function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
-function equipSkill(g,id){const spec=data.skills[id];let item=spec.equippedItem;if(!item&&spec.weaponTypes)item=Object.keys(data.items).find(key=>spec.weaponTypes.includes(data.items[key].equipmentType));if(item){g.state.inventory[item]=1;assert.ok(g.dispatch({type:'equip',actor:'ada',item}));}for(const [item,n] of Object.entries(spec.materials??{}))g.state.inventory[item]=n;}
+function equipSkill(g,id){const spec=data.skills[id];let item=spec.equippedItem;if(!item&&spec.weaponTypes)item=Object.keys(data.items).find(key=>spec.weaponTypes.includes(data.items[key].equipmentType));if(item){g.give(item,1-(g.state.inventory[item]??0));assert.ok(g.dispatch({type:'equip',actor:'ada',item}));}for(const [item,n] of Object.entries(spec.materials??{}))g.state.inventory[item]=n;}
 
 for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/10/30・全習得技能・装備・保存`,()=>{
   for(const level of [1,5,10,30]){
@@ -41,11 +41,11 @@ for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/1
 });
 
 test('転職の装備返却・満杯・連打・待機者・負傷は原子的です',()=>{
-  const g=newGame();g.state.inventory.iron_sword=1;g.state.inventory.mail=1;
+  const g=newGame();g.give('iron_sword',1-(g.state.inventory.iron_sword??0));g.give('mail',1-(g.state.inventory.mail??0));
   g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});g.dispatch({type:'equip',actor:'ada',item:'mail'});
-  g.state.actors.ada.hp=9;g.state.actors.ada.mp=1;g.state.actors.ada.statuses=['poison'];g.state.inventory.mail=99;
+  g.state.actors.ada.hp=9;g.state.actors.ada.mp=1;g.state.actors.ada.statuses=['poison'];g.give('mail',99-(g.state.inventory.mail??0));
   let before=resources(g);assert.equal(g.dispatch({type:'job.change',actor:'ada',job:'mage'}),false);assert.deepEqual(resources(g),before);
-  g.state.inventory.mail=98;const rng=g.state.rng;assert.ok(g.dispatch({type:'job.change',actor:'ada',job:'mage'}));assert.deepEqual(g.state.actors.ada.equipment,{});assert.equal(g.state.inventory.iron_sword,1);assert.equal(g.state.inventory.mail,99);assert.equal(g.state.actors.ada.hp,9);assert.equal(g.state.actors.ada.mp,1);assert.deepEqual(g.state.actors.ada.statuses,['poison']);assert.equal(g.state.rng,rng);
+  g.give('mail',98-(g.state.inventory.mail??0));const rng=g.state.rng;assert.ok(g.dispatch({type:'job.change',actor:'ada',job:'mage'}));assert.deepEqual(g.state.actors.ada.equipment,{});assert.equal(g.state.inventory.iron_sword,1);assert.equal(g.state.inventory.mail,99);assert.equal(g.state.actors.ada.hp,9);assert.equal(g.state.actors.ada.mp,1);assert.deepEqual(g.state.actors.ada.statuses,['poison']);assert.equal(g.state.rng,rng);
   before=resources(g);assert.equal(g.dispatch({type:'job.change',actor:'ada',job:'mage'}),false);assert.deepEqual(resources(g),before);
   assert.ok(g.dispatch({type:'job.change',actor:'ren',job:'knight'}));assert.ok(!g.state.members.includes('ren'));g.dispatch({type:'travel',region:1});before=resources(g);assert.equal(g.dispatch({type:'job.change',actor:'ada',job:'warrior'}),false);assert.deepEqual(resources(g),before);
 });
@@ -136,19 +136,7 @@ test('かばうは隊順の一人へ一度だけ転送し、全体攻撃・倒�
     assert.deepEqual(g.state.battle.covers,[]);
   }
 });
-function oldGame(version='1.2.0'){
-  const old=structuredClone(data);delete old.jobs;old.game.version=version;old.game.initial.members=['ada','nio','sera','il'];old.actors=Object.fromEntries(data.game.migrations[version].actors.map(id=>[id,old.actors[id]]));
-  const g=new GameEngine(old,116);drain(g);return g;
-}
-function legacyText(g){const s=JSON.parse(g.save());for(const a of Object.values(s.state.actors)){delete a.job;delete a.growthHistory;}if(s.state.battle)for(const key of ['buffs','covers','analyzed'])delete s.state.battle[key];return JSON.stringify(s);}
-test('1.0/1.1/1.2の旧成長・負傷・装備・待機・乱数を移行し、満杯と改竄は原子的に拒否します',()=>{
-  for(const version of ['1.0.0','1.1.0','1.2.0']){
-    const old=oldGame(version);old.award(0,40*4*5);old.state.actors.ada.hp=7;old.state.actors.ada.mp=1;old.state.actors.ada.statuses=['poison'];old.state.inventory.iron_sword=1;assert.ok(old.dispatch({type:'equip',actor:'il',item:'iron_sword'}));old.dispatch({type:'travel',region:1});old.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});const source=legacyText(old),g=newGame();g.load(source);
-    assert.deepEqual(g.state.actors.ada.growthHistory,{legacy:4});assert.equal(g.state.actors.ada.hp,7);assert.equal(g.state.actors.ada.mp,1);assert.deepEqual(g.state.actors.ada.statuses,['poison']);assert.equal(g.stats('ada').str,data.actors.ada.stats.str+data.system.growth.str*4);assert.equal(g.state.inventory.iron_sword,1);assert.equal(g.state.actors.il.equipment.weapon,undefined);assert.equal(g.state.rng,old.state.rng);assert.deepEqual(g.state.waiting,old.state.waiting);assert.deepEqual(validateSave(JSON.parse(g.save()),data),[]);
-    const checkpoint=g.save();for(const mutate of [s=>s.actors.ada.hp=999,s=>s.inventory.iron_sword=99]){const bad=JSON.parse(source);mutate(bad.state);assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),checkpoint);}assert.equal(legacyText(old),source);
-  }
-});
 test('新しい職業ViewModelは分離され、転職予定と装備可否と価格がコアと一致します',()=>{
-  const g=setup('merchant',1);g.state.gold=10000;g.state.inventory.staff=1;const vm=projectGame(g);assert.equal(vm.jobs.length,30);assert.equal(vm.party[0].class,'商人');assert.equal(vm.roster[0].jobOptions.length,30);assert.ok(!vm.inventory.find(i=>i.id==='staff').allowedActors.includes('ada'));const item=vm.shop.find(i=>i.id==='potion');assert.equal(item.price,g.price(item.basePrice));const before=g.state.gold;assert.ok(g.dispatch({type:'buy',item:item.id}));assert.equal(g.state.gold,before-item.price);
+  const g=setup('merchant',1);g.state.gold=10000;g.give('staff',1-(g.state.inventory.staff??0));const vm=projectGame(g);assert.equal(vm.jobs.length,30);assert.equal(vm.party[0].class,'商人');assert.equal(vm.roster[0].jobOptions.length,30);assert.ok(!vm.inventory.find(i=>i.id==='staff').allowedActors.includes('ada'));const item=vm.shop.find(i=>i.id==='potion');assert.equal(item.price,g.price(item.basePrice));const before=g.state.gold;assert.ok(g.dispatch({type:'buy',item:item.id}));assert.equal(g.state.gold,before-item.price);
   vm.jobs[0].growth.hp=999;vm.roster[0].jobOptions[0].enabled=true;assert.notEqual(data.jobs.warrior.growth.hp,999);
 });

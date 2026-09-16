@@ -2,8 +2,8 @@
 const C=(id,name,role,quests,look,goal,detail)=>({id,name,role,quests:quests.split(' '),portrait:`npc_${id}`,goal,detail,design:{...look},provenance:'q001–q010 v1.1 改稿で役割と同一性を固定。外見は今回の素材制作で設定。'});
 export default [
  C('rine','リネ','灯番組合の連絡係','q001 q010',{hair:'bob',color:'teal',prop:'ledger'},'帰還者を名前で数え、取り残しを防ぐ','q001とq010は同一人物。依頼受付・救助名簿・報告を担当する。'),
- C('elder','老灯番','行方不明の灯番','q001',{hair:'bald',color:'brown',prop:'lantern',age:'old'},'新人を帰し、仕事を教え直す','本名は未設定。支道で待つ老人は、先行救助後に詰所の寝台に残る。'),
- C('rookie','新人灯番','帰還をためらう見習い','q001',{hair:'short',color:'teal',prop:'bottle',age:'young'},'失敗を隠したいが老人を見捨てたくない','本名は未設定。老人から受け取った油を保持する。'),
+ C('elder','老灯番','行方不明の灯番','q001',{hair:'bald',color:'brown',prop:'lantern',age:'old'},'新人を安全な入口へ帰し、自分も生きて戻る','本名は未設定。新人へ油を渡し、最後の壁灯の下で救助を待つ。'),
+ C('rookie','新人灯番','恐怖を抱える見習い','q001',{hair:'short',color:'teal',prop:'bottle',age:'young'},'暗闇が怖い。それでも老人と探索隊を助けたい','本名は未設定。老人から受け取った油を保持する。'),
  C('rescuers','灯番救助隊','引継ぎ先の救助班','q001',{hair:'cap',color:'ochre',prop:'rope',group:true},'地図に従って未帰還者を連れ戻す','集団実体。人数や隊員名は固定せず、代表像を表示する。'),
  C('belt','ベルト','運送人','q002',{hair:'slick',color:'plum',prop:'tag'},'偽装の証拠となる荷札を回収し、一味の保険請求を通す','生存する保険加入者を失踪者として届け出た一味から、標本を遺体に見せる仕事を受けた。骨箱を地下水路へ落とし、荷札だけを回収したがっている。'),
  C('porter','運搬人','標本の運搬を請けた荷役人','q002',{hair:'band',color:'brown',prop:'rope'},'仕事を失わずに標本を返したい','保険加入者本人ではなく、ベルトの依頼で箱を運んだ証人。一味の偽装を知っているが、仕事を失うことを恐れている。証言には本人の同意が必要。'),

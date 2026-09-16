@@ -102,17 +102,17 @@ test('content validation rejects broken event, image and map references',()=>{
 
 test('a revised quest event preserves the previous script and a saved choice can finish on that version',async()=>{
  const {applyQuestEvents}=await import('../tools/quest-event-source.mjs');const {GameEngine}=await import('../src/core/engine.js');const {tmpdir}=await import('node:os');const path=await import('node:path');
- const g=begin('kagaribi');g.dispatch(intent('kagaribi'));drain(g);const saved=g.save(),original=structuredClone(data.scripts['dungeon.scene.kagaribi.v1']);
+ const g=begin('kagaribi');g.dispatch(intent('kagaribi'));drain(g);const saved=g.save(),original=structuredClone(data.scripts['dungeon.scene.kagaribi.v2']);
  const dir=await fs.mkdtemp(path.join(tmpdir(),'adv-event-revision-'));
  try{
   for(const sub of ['authoring/quests','data/quests'])await fs.mkdir(path.join(dir,sub),{recursive:true});
   const source=JSON.parse(await fs.readFile(new URL('../authoring/quests/q001.events.json',import.meta.url)));
-  source.events.find(e=>e.id==='kagaribi').script='dungeon.scene.kagaribi.v2';
-  source.scripts['dungeon.scene.kagaribi.v2']=structuredClone(original);source.scripts['dungeon.scene.kagaribi.v2'].commands[0].text='改稿後の導入。';
+  source.events.find(e=>e.id==='kagaribi').script='dungeon.scene.kagaribi.v3';
+  source.scripts['dungeon.scene.kagaribi.v3']=structuredClone(original);source.scripts['dungeon.scene.kagaribi.v3'].commands[0].text='改稿後の導入。';
   const write=(name,value)=>fs.writeFile(path.join(dir,name),JSON.stringify(value));
   await write('authoring/quests/q001.events.json',source);await write('data/quests/q001.json',data.quests.q001);await write('data/game.json',{files:{quests:['data/quests/q001.json']}});
   await applyQuestEvents(dir);
-  const q=JSON.parse(await fs.readFile(path.join(dir,'data/quests/q001.json')));assert.deepEqual(q.scripts['dungeon.scene.kagaribi.v1'],original);assert.ok(q.scripts['dungeon.scene.kagaribi.v2']);
+  const q=JSON.parse(await fs.readFile(path.join(dir,'data/quests/q001.json')));assert.deepEqual(q.scripts['dungeon.scene.kagaribi.v2'],original);assert.ok(q.scripts['dungeon.scene.kagaribi.v3']);
   const upgraded={...data,quests:{...data.quests,q001:q},scripts:{...data.scripts,...q.scripts}};assert.deepEqual(validateContent(upgraded),[]);
   const resumed=new GameEngine(upgraded);resumed.load(saved);assert.ok(resumed.dispatch({type:'choose',id:'record'}));drain(resumed);assert.equal(resumed.state.flags.dungeonNotes.kagaribi,true);roundtrip(resumed);
  }finally{await fs.rm(dir,{recursive:true,force:true});}

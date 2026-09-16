@@ -639,6 +639,32 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "object_state"
+            },
+            "map": {
+              "type": "string",
+              "minLength": 1
+            },
+            "object": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "map",
+            "object"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "record_count"
             },
             "metric": {
@@ -671,6 +697,30 @@
     },
     "command": {
       "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "fire.portable.set"
+            },
+            "fuel": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "effect": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "fuel",
+            "effect"
+          ],
+          "additionalProperties": false
+        },
         {
           "type": "object",
           "properties": {
@@ -1865,6 +1915,35 @@
       "items": {
         "type": "object",
         "properties": {
+          "fire": {
+            "type": "object",
+            "properties": {
+              "effect": {
+                "type": "string",
+                "minLength": 1
+              },
+              "radius": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 30
+              },
+              "litStates": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "effect",
+              "radius",
+              "litStates"
+            ],
+            "additionalProperties": false
+          },
           "id": {
             "type": "string",
             "minLength": 1

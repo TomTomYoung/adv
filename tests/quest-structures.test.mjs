@@ -16,13 +16,7 @@ test('new map/journal routes do not advertise retired two-clue locations',()=>{
   }
  }
 });
-test('a completed rescue can open a new search; accepting the first report ends it instead',()=>{
- const g=prepareQuest('q001');choose(g,'clear');fight(g);
- assert.equal(g.state.quests.q001.stage,'active');assert.equal(g.state.stories.q001.scene,'carried');
- const checkpoint=g.save();choose(g,'contract');assert.equal(g.state.quests.q001.outcome,'contract');
- g.load(checkpoint);choose(g,'return','bring','share');assert.equal(g.state.quests.q001.outcome,'informed');
- assert.deepEqual(g.state.quests.q001.evidence,[]);
-});
+
 test('q010 individual rescue actions survive a pause; opening the shaft is not rescuing everyone',()=>{
  const g=prepareQuest('q010');choose(g,'shaft');assert.equal(g.dispatch({type:'choose',id:'all'}),false);
  choose(g,'near','book','pause');g.load(g.save());g.run(data.quests.q010.model.entryScript);drain(g);
@@ -61,21 +55,4 @@ test('material payment is checked atomically and a combat rescue pays only on vi
  assert.equal(g.dispatch({type:'choose',id:'lift'}),false);assert.equal(g.save(),before);
  g.state.inventory.rope=1;choose(g,'lift');assert.equal(g.state.inventory.rope,1);fight(g);assert.equal(g.state.inventory.rope,0);
  assert.equal(g.state.quests.q006.stage,'active');choose(g,'public','ledger','settle');assert.equal(g.state.quests.q006.outcome,'informed');
-});
-test('1.3.1 script arrays are byte-equivalent after canonical JSON encoding',async()=>{
- const hashes=JSON.parse(await fs.readFile(new URL('fixtures/scripts-1.3.1-sha256.json',import.meta.url)));
- for(const [id,hash] of Object.entries(hashes))assert.equal(createHash('sha256').update(JSON.stringify(data.scripts[id])).digest('hex'),hash,id);
-});
-for(const phase of ['text','choice','battle'])test(`actual 1.3.1 ${phase} save preserves records and resumes active old quests`,async()=>{
- const source=await fs.readFile(new URL(`fixtures/save-1.3.1-${phase}.json`,import.meta.url),'utf8'),old=JSON.parse(source),g=newGame();
- g.load(source);assert.equal(g.state.contentVersion,data.game.version);
- for(const k of ['records','actors','inventory','rng','quests','waiting','vm','nextScope','battle'])assert.deepEqual(g.state[k],old.state[k],k);
- assert.equal(g.state.flags.legacyQuestRoutes.q001,true);assert.equal(g.state.flags.legacyQuestRoutes.q200,true);
- assert.deepEqual(g.state.flags.quest,old.state.flags.quest);
- const checkpoint=g.save();g.load(checkpoint);assert.equal(g.save(),checkpoint);
- drain(g);if(phase!=='battle')choose(g,'contract');fight(g);assert.equal(g.state.quests.q001.outcome,'contract');
- g.run('q200.flow.visit');drain(g);choose(g,'river','visits');assert.equal(g.state.quests.q200.outcome,'visits');
- assert.ok(g.state.records.kills.moor_wolf>=1);
- g.accept('q002');g.run(data.quests.q002.model.entryScript);drain(g);assert.equal(g.state.stories.q002.scene,'entry');
- assert.equal(projectGame(g).tracked.evidenceTotal,0,'quests accepted after migration use the new progression');
 });

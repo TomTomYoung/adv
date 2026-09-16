@@ -21,7 +21,7 @@ export function setPath(object, path, value) {
   }
   target[last] = clone(value);
 }
-export const EXPRESSION_OPS = new Set(['record_count','eq','ne','gt','gte','lt','lte','and','or','not','exists','in','contains','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp','has_item','has_member','has_status','event_done','map_discovered']);
+export const EXPRESSION_OPS = new Set(['object_state','record_count','eq','ne','gt','gte','lt','lte','and','or','not','exists','in','contains','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp','has_item','has_member','has_status','event_done','map_discovered']);
 export function evaluate(value, context, depth = 0) {
   if (depth > 32) throw new Error('式の入れ子が深すぎます');
   if (!isRecord(value)) return value;
@@ -31,6 +31,7 @@ export function evaluate(value, context, depth = 0) {
   const args = () => (value.args ?? []).map(e);
   const binary = fn => fn(e(value.left), e(value.right));
   switch (value.op) {
+    case 'object_state': return context.objects?.[`${value.map}/${value.object}`]??value.default;
     case 'record_count': return recordCount(context.records,value);
     case 'eq': return binary((a,b) => a === b);
     case 'ne': return binary((a,b) => a !== b);

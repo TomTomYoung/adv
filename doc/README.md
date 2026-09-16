@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-14。対象は作品版1.8.0です。素材・現地調査はPR #8、立方体地形はPR #9、水面・床材の描画修正はPR #10、セルと方向別通行の仕様はPR #11でマージ済みです。今回の作業は現行セル種と状態・配置物のカタログ化です。masterと作業ブランチの反映状況は[CURRENT_STATUS.md](CURRENT_STATUS.md)で確認してください。
+更新日: 2026-09-16。対象は作品版1.9.0です。q001と指定ダンジョンの変更を反映しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -8,7 +8,7 @@
 
 [SPEC.md](SPEC.md)：探索・戦闘・隊編成・職業・シナリオ・保存の現行仕様。
 
-[SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：実行可能な48命令、30式演算子、状態参照、保存中の会話の互換性。
+[SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：実行可能な命令・式演算子、状態参照、会話の保存。
 
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
 
@@ -20,7 +20,7 @@
 
 [DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)：水の壁・床材・装置の向きを修正した記録と描画比較。
 
-[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)：立方体・六面の境界・水量・梯子と上下移動の仕様。
+[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)：立方体・六面の境界・区域の水没・梯子と上下移動の仕様。
 
 [DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの一覧、固有設定、編集元と出典。
 
@@ -36,7 +36,7 @@
 
 ## シナリオと人物
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・630結末の現行カタログ。作者向けのため真相を含みます。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。作者向けのため真相を含みます。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：v1.0／v1.1の適用範囲、編集する原稿、生成順序。
 
@@ -52,7 +52,7 @@
 
 [COMPANION_CATALOG.md](COMPANION_CATALOG.md)：仲間10人、初期能力、酒場での編成と肖像。
 
-[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵55定義、発想と戦闘画像、現行データへの参照。
+[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵59定義、発想と戦闘画像、現行データへの参照。
 
 [BALANCE_PLAN.md](BALANCE_PLAN.md)：現在の調整対象と検証条件、旧版の計測記録の位置。
 
@@ -66,4 +66,4 @@
 
 文書は冒頭への追記だけで済ませず、本文の件数・版・実装済み／未実装の記述を更新します。データから出る一覧は `npm run build:docs` で再生成します。原稿カタログを手直しした場合は、シナリオの正本へ反映してからコンテンツを再生成してください。
 
-[QUEST_EVENTS.md](QUEST_EVENTS.md)：クエスト固有イベントの正本、配置投影、出現・操作条件、調査記録、旧セーブ互換。
+[QUEST_EVENTS.md](QUEST_EVENTS.md)：クエスト固有イベントの正本、配置投影、出現・操作条件、調査記録、保存方針。
