@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain,fight,walk,exploreSpot} from './helpers.mjs';
+import {data,newGame,drain,fight,walk,exploreSpot,goTownLocation} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
@@ -32,7 +32,7 @@ test('corrupt and foreign saves fail atomically',()=>{
   assert.throws(()=>g.load('{broken'));assert.equal(g.save(),before);assert.deepEqual(validateSave(JSON.parse(before),data),[]);
 });
 test('free clinic prevents economic dead ends; torch does not cure poison; equipment costs inventory',()=>{
-  const g=newGame();g.state.gold=0;for(const id of g.state.members){g.state.actors[id].hp=1;g.state.actors[id].mp=0;g.state.actors[id].statuses=['poison'];}g.dispatch({type:'service',id:'clinic'});drain(g);assert.ok(g.state.actors.ada.hp>1);assert.deepEqual(g.state.actors.ada.statuses,[]);g.state.actors.nio.statuses=['poison'];g.dispatch({type:'item',item:'torch',actor:'nio'});drain(g);assert.deepEqual(g.state.actors.nio.statuses,['poison']);g.state.gold=200;assert.ok(g.dispatch({type:'buy',item:'iron_sword'}));const str=g.stats('ada').str;assert.ok(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}));assert.equal(g.stats('ada').str,str+5);assert.equal(g.state.inventory.iron_sword,0);assert.equal(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}),false);
+  const g=newGame();g.state.gold=0;for(const id of g.state.members){g.state.actors[id].hp=1;g.state.actors[id].mp=0;g.state.actors[id].statuses=['poison'];}goTownLocation(g,'hikarigaeri_medical');g.dispatch({type:'service',id:'clinic'});drain(g);assert.ok(g.state.actors.ada.hp>1);assert.deepEqual(g.state.actors.ada.statuses,[]);g.state.actors.nio.statuses=['poison'];g.dispatch({type:'item',item:'torch',actor:'nio'});drain(g);assert.deepEqual(g.state.actors.nio.statuses,['poison']);g.state.gold=200;goTownLocation(g,'hikarigaeri_shop');assert.ok(g.dispatch({type:'buy',item:'iron_sword'}));const str=g.stats('ada').str;assert.ok(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}));assert.equal(g.stats('ada').str,str+5);assert.equal(g.state.inventory.iron_sword,0);assert.equal(g.dispatch({type:'equip',actor:'ada',item:'iron_sword'}),false);
 });
 test('branch-local mutations and return survive save/reload without escaping call scope',()=>{
   const d=structuredClone(data);d.scripts.test={commands:[{op:'set',target:'local.n',value:1},{op:'if',condition:true,then:[{op:'add',target:'local.n',value:2},{op:'say',text:'pause'}],else:[]},{op:'set',target:'vars.result',value:{ref:'local.n'}},{op:'if',condition:true,then:[{op:'return'}],else:[]},{op:'set',target:'vars.unreachable',value:true}]};const g=new GameEngine(d);drain(g);g.run('test');g.load(g.save());drain(g);assert.equal(g.state.vars.result,3);assert.equal(g.state.vars.unreachable,undefined);

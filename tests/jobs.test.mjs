@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain} from './helpers.mjs';
+import {data,newGame,drain,goTownLocation} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {actorStats,jobChangePlan,fieldActionPlan,canEquip,partyEffect} from '../src/core/jobs.js';
 import {activeActor,battleSkillPlan} from '../src/core/battle.js';
@@ -137,6 +137,6 @@ test('かばうは隊順の一人へ一度だけ転送し、全体攻撃・倒�
   }
 });
 test('新しい職業ViewModelは分離され、転職予定と装備可否と価格がコアと一致します',()=>{
-  const g=setup('merchant',1);g.state.gold=10000;g.give('staff',1-(g.state.inventory.staff??0));const vm=projectGame(g);assert.equal(vm.jobs.length,30);assert.equal(vm.party[0].class,'商人');assert.equal(vm.roster[0].jobOptions.length,30);assert.ok(!vm.inventory.find(i=>i.id==='staff').allowedActors.includes('ada'));const item=vm.shop.find(i=>i.id==='potion');assert.equal(item.price,g.price(item.basePrice));const before=g.state.gold;assert.ok(g.dispatch({type:'buy',item:item.id}));assert.equal(g.state.gold,before-item.price);
+  const g=setup('merchant',1);goTownLocation(g,'hikarigaeri_shop');g.state.gold=10000;g.give('staff',1-(g.state.inventory.staff??0));const vm=projectGame(g);assert.equal(vm.jobs.length,30);assert.equal(vm.party[0].class,'商人');assert.equal(vm.roster[0].jobOptions.length,30);assert.ok(!vm.inventory.find(i=>i.id==='staff').allowedActors.includes('ada'));const item=vm.shop.find(i=>i.id==='potion');assert.equal(item.price,g.price(item.basePrice));const before=g.state.gold;assert.ok(g.dispatch({type:'buy',item:item.id}));assert.equal(g.state.gold,before-item.price);
   vm.jobs[0].growth.hp=999;vm.roster[0].jobOptions[0].enabled=true;assert.notEqual(data.jobs.warrior.growth.hp,999);
 });

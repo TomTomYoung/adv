@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import {structureHash} from './narration-helpers.mjs';
+import {editNarration} from '../authoring/narration.mjs';
 import {createHash} from 'node:crypto';
 import {data,newGame,drain} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
@@ -13,14 +15,14 @@ const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fro
 const hash=v=>createHash('sha256').update(JSON.stringify(stable(v))).digest('hex');
 const old={...await read('tests/fixtures/quest-events-1.8.0.json'),...await read('tests/fixtures/quest-events-1.9.0.json')};
 
-test('unrevised quest scripts and map objects remain unchanged outside the explicit q001 and q002 rewrites',()=>{
- assert.equal(hash(Object.fromEntries(Object.entries(data.scripts).filter(([id])=>!id.startsWith('q001.')&&!id.startsWith('q002.')&&!id.startsWith('dungeon.scene.kagaribi.')&&id!=='prologue'))),old.unrevisedScriptsSha256);
- for(const [map,objects] of Object.entries(old.objects)){
-  assert.equal(data.maps[map].objects.filter(o=>!['q001','q002'].includes(o.quest)).length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q002_')).length);
-  for(const object of data.maps[map].objects.filter(o=>!['q001','q002'].includes(o.quest))){
-   const original=structuredClone(object);if(original.quest){original.condition=original.visibleWhen;delete original.visibleWhen;}
-   assert.equal(hash(original),objects[object.id],`${map}/${object.id}`);
-  }
+test('pre-1.11 quest logic and map objects remain exact apart from narration and q001/q003 journeys',async()=>{
+ const before=await read('tests/fixtures/pre-1.11-structure.json');
+ for(const [id,q] of Object.entries(data.quests))if(!['q001','q003'].includes(id))assert.equal(structureHash(q),before.quests[id],id);
+ for(const [id,script] of Object.entries(data.scripts))if(!id.startsWith('q001.')&&!id.startsWith('q003.'))assert.equal(structureHash(script),before.scripts[id],id);
+ for(const [map,objects] of Object.entries(before.objects)){
+  const current=data.maps[map].objects.filter(o=>!['q001','q003'].includes(o.quest));
+  assert.equal(current.length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q003_')).length,map);
+  for(const object of current)assert.equal(structureHash(object),objects[object.id],`${map}/${object.id}`);
  }
 });
 
@@ -30,7 +32,7 @@ test('distributed maps and dungeons contain no quest-owned definitions; each que
  for(const q of Object.values(data.quests)){
   const expected=(await read(`authoring/quests/${q.id}.events.json`)).events;
   for(const e of expected){for(const p of e.points)p.dungeon=data.maps[p.map].dungeon;const owners=[...new Set(e.points.map(p=>p.dungeon))];if(owners.length===1)e.dungeon=owners[0];}
-  assert.deepEqual(q.events,expected);
+  assert.deepEqual(q.events,editNarration(expected));
   for(const e of q.events)assert.ok(q.scripts[e.script],`${q.id}/${e.id}`);
  }
  assert.equal(Object.values(data.quests).flatMap(q=>q.events).filter(e=>e.note).length,13);

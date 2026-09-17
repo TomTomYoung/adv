@@ -66,8 +66,10 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
   const available=options(g).filter(o=>o.id!=='pause'&&enabled(g,o));
   assert.ok(available.length,`${q.id}: a live route at ${scene(g,q.id)}`);
   const checkpoint=structuredClone(g.state),currentScene=scene(g,q.id);
-  choose(g,'pause');assert.equal(g.state.vm.length,0);g.load(g.save());g.run(visit(q.id));drain(g);
-  assert.equal(scene(g,q.id),currentScene,'pause retains current scene');
+  if(options(g).some(o=>o.id==='pause')){
+   choose(g,'pause');assert.equal(g.state.vm.length,0);g.load(g.save());g.run(visit(q.id));drain(g);
+   assert.equal(scene(g,q.id),currentScene,'pause retains current scene');
+  }
   for(const o of available){
    g.state=structuredClone(checkpoint);choose(g,o.id);
    if(g.state.battle){

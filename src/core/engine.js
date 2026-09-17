@@ -161,6 +161,11 @@ export class GameEngine {
       if(object.condition!==undefined&&!this.value(object.condition))continue;
       this.state.events[key]=(this.state.events[key]??0)+1;
       this.cue(this.data.presentation?.bindings.objects[object.kind]);
+      const quest=this.data.quests[object.quest];
+      if(quest?.story?.worldPlaces&&this.state.quests[quest.id].stage==='active'&&object.script===quest.model.entryScript){
+        if(!resumeWorldStory(this,quest.id))this.notify('この場面を進めるには、現在の目的地へ向かう。');
+        return true;
+      }
       this.run(object.script,{object:object.id,map:loc.map});return true;
     }
     return false;
@@ -194,17 +199,22 @@ export class GameEngine {
       if(intent.dungeon&&!dungeon)return false;
       const region=this.data.regions.find(r=>r.id===intent.region);
       const mapId=dungeon?.entries.main.map??region?.entrance;if(!mapId)return false;
+      const owner=this.data.maps[mapId].dungeon;
+      if(this.data.game.world&&!townLocation(this.data,this.state)?.dungeons?.includes(owner))return false;
       this.state.light=this.data.system.lightCapacity;
       const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
-      const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;const facility=Object.values(this.data.locations??{}).find(l=>l.services?.includes(service.id));if(facility){this.state.townLocation=facility.id;this.state.presentation.background=facility.background;syncWorldStories(this);}this.run(service.script);return true;
+      const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;
+      if(this.data.game.world&&!townLocation(this.data,this.state)?.services?.includes(service.id))return false;
+      this.run(service.script);return true;
     }
     if(type==='job.change')return this.changeJob(intent.actor,intent.job);
     if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
     if(type==='unequip')return this.unequip(intent.actor,intent.slot);
     if(type==='buy'&&this.state.mode==='town'){
+      if(this.data.game.world&&!townLocation(this.data,this.state)?.shop)return false;
       const stock=this.data.shops.goods.find(g=>g.item===intent.item);if(!stock||this.state.gold<this.price(stock.price)||(this.state.inventory[intent.item]??0)>=this.data.system.maxStack)return false;
       this.state.gold-=this.price(stock.price);this.give(stock.item,1);this.notify(`${this.data.items[stock.item].name}を購入しました。`);return true;
     }

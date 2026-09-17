@@ -26,11 +26,30 @@ export function maintainParty(g){
 }
 export function exploreSpot(engine,spot,options={}){
   const dungeon=Object.values(data.dungeons).find(d=>d.maps.includes(spot.map));
-  if(engine.state.mode==='town')assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));
+  if(engine.state.mode==='town'){goTownLocation(engine,data.game.world.townRoot);assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));}
   const drainFloor=()=>{if(engine.state.dungeons.active?.id==='region_1'&&!engine.map().voxels){const target=engine.state.location.map.endsWith('f1')?'upper_gate':'lower_gate';if(engine.state.dungeons.persistent.region_1.systems.water.controls[target])assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'close',target}));}};
   if(engine.state.location.x===1&&engine.state.location.y===1)drainFloor();
   if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
     if(dungeon.id==='region_1')for(let n=0;!engine.walkable(data.maps[spot.map],1,1)&&n<200;n++)assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'wait'}));
     assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
   walk(engine,spot.x,spot.y,options);if(options.interact!==false)assert.ok(engine.dispatch({type:'interact'}));drain(engine);
+}
+
+// Town navigation is deliberate; services and dungeon entrances do not relocate the party.
+export function goTownLocation(g,destination){
+  assert.equal(g.state.mode,'town');
+  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
+  const route=[];let id=destination;
+  while(data.locations[id].parent){route.unshift(id);id=data.locations[id].parent;}
+  for(const next of route)assert.ok(g.dispatch({type:'location.move',id:next}));
+  assert.equal(g.state.townLocation,destination);
+}
+export function leaveDungeonOnFoot(g){
+  if(g.state.mode!=='dungeon')return;
+  const dungeon=data.dungeons[g.state.dungeons.active.id],entry=dungeon.entries.main;
+  exploreSpot(g,{map:entry.map,...data.maps[entry.map][entry.point]},{maintain:true,interact:false});
+  const exit=g.map().objects.find(o=>o.type==='exit'||o.id==='exit');
+  assert.ok(exit,'normal dungeon exit');
+  walk(g,exit.x,exit.y,{maintain:true});assert.ok(g.dispatch({type:'interact'}));drain(g);
+  assert.equal(g.state.mode,'town');
 }

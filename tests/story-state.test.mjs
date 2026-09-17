@@ -58,7 +58,7 @@ test('new story save rejects out-of-domain flags, invented knowledge, inconsiste
  const save=JSON.parse(before);save.state.quests.q001={stage:'completed',outcome:'informed',evidence:[]};assert.throws(()=>g.load(JSON.stringify(save)));assert.equal(g.save(),before);
 });
 test('authored model validation rejects unknown state refs, missing evidence source and disconnected travel',()=>{
- for(const mutate of [d=>d.actions.entry_talk.requires={op:'eq',left:{ref:'stories.q001.values.typo'},right:true},d=>d.actions.entry_talk.effects[0].source='nobody',d=>d.actions.entry_talk.effects=[{op:'move',entities:['party'],path:['branch','post']}],d=>delete d.endings.informed]){
+ for(const mutate of [d=>d.actions.entry_talk.requires={op:'eq',left:{ref:'stories.q001.values.typo'},right:true},d=>d.actions.entry_talk.depart[0].source='nobody',d=>d.actions.entry_talk.effects=[{op:'move',entities:['party'],path:['branch','post']}],d=>delete d.endings.informed]){
   const copy=structuredClone(data);mutate(copy.quests.q001.story);assert.ok(validateContent(copy).some(e=>e.startsWith('q001')));
  }
 });

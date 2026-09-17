@@ -46,9 +46,10 @@ function assertScene(d,s,state,id,scene){
 }
 export function initStory(engine,id){
   const d=definition(engine.data,id);engine.state.stories??={};
+  if(engine.state.journey){engine.state.vm=[];engine.state.waiting=null;engine.notify('移動中だ。目的地に着いてから続きを進める。');return;}
   if(!engine.state.stories[id]){
     if(engine.state.quests[id].stage!=='active')throw Error('受注前に物語を開始できません');
-    if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes.entry.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('依頼の開始地点へ移動してください。');return;}
+    if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes.entry.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('依頼の開始地点へ移動する必要がある。');return;}
     const s={version:d.version,...(d.revision?{revision:d.revision}:{}),values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,clone(r.initial)])),knowledge:clone(d.initialKnowledge??{}),events:[],scene:null};
     assertValid(d,s,engine.state,id);engine.state.stories[id]=s;
   }
@@ -56,7 +57,7 @@ export function initStory(engine,id){
 }
 export function enterStoryScene(engine,id,scene){
   const d=definition(engine.data,id),s=engine.state.stories?.[id];if(!s)throw Error('物語が初期化されていません');
-  if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ移動してから再開してください。');return;}
+  if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
   assertScene(d,s,engine.state,id,scene);s.scene=scene;
 }
 export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false}={}){
@@ -194,18 +195,20 @@ export function beginStoryJourney(engine,id,action){
   const p=storyActionPlan(engine.data,engine.state,id,action,{depart:true});
   engine.state.stories[id]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=p.journey;
   engine.state.vm=[];engine.state.waiting=null;
-  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ移動してください。到着後に続きを進められます。`);
+  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ向かう。到着後に続きを進められる。`);
 }
 export function arriveStoryJourney(engine){
   const j=engine.state.journey;if(!j)return false;
   let p;try{p=storyActionPlan(engine.data,engine.state,j.quest,j.action,{arrive:true});}catch(e){engine.notify(e.message);return false;}
   engine.state.stories[j.quest]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=null;
+  engine.state.vm=[];engine.state.waiting=null;
   const q=engine.data.quests[j.quest],unit=q.model.narrative.units.find(n=>n.id===p.story.scene);
   engine.run(unit.script);return true;
 }
 export function resumeWorldStory(engine,id){
   const q=engine.data.quests[id],s=engine.state.stories?.[id];
-  if(engine.state.journey||engine.state.quests[id]?.stage!=='active'||!q?.story?.worldPlaces)return false;
+  if(engine.state.quests[id]?.stage!=='active'||!q?.story?.worldPlaces)return false;
+  if(engine.state.journey)return engine.state.journey.quest===id&&arriveStoryJourney(engine);
   const scene=s?.scene??'entry';if(!atWorldPlace(engine.state,q.story.worldPlaces[q.story.scenes[scene].place]))return false;
   engine.run(q.model.entryScript);return true;
 }
