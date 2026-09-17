@@ -42,13 +42,15 @@
 
 [EXPLORATION_AND_PROSE_1_11.md](EXPLORATION_AND_PROSE_1_11.md)：不要転送の除去、q001〜q003の到達待ち、全200件の常体化、残るq004以降。
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。q001〜q020は実装済みの本文・選択肢・応答・条件・結末を統合しています。作者向けのため真相を含みます。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。q001は専用ページへのリンク、q002〜q020は実装済みの本文・選択肢・応答・条件・結末を掲載します。作者向けのため真相を含みます。
+
+[QUEST_Q001.md](QUEST_Q001.md)：q001「帰らない灯番」の全文、8場面・7配置・2結末の一意ID、座標付き配置図、町との接続、マップJSONと5本の実移動。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：v1.0／v1.1の適用範囲、編集する原稿、生成順序。
 
 [SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：q001〜q010の人物・物品・所在・行為・結末条件。
 
-改稿全文の別文書は廃止し、[q001〜q010](QUEST_CATALOG.md#q001-帰らない灯番)・[q011〜q020](QUEST_CATALOG.md#q011-塩の花嫁)の各項目へ統合しました。
+q001の改稿全文は[専用ページ](QUEST_Q001.md)、q002〜q020は[カタログ](QUEST_CATALOG.md)で管理します。旧版の二つの全文文書は再作成しません。
 
 [CHARACTERS.md](CHARACTERS.md)：36人のNPC定義と生成肖像、その他の依頼人索引。
 
