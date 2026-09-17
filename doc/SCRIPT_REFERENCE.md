@@ -139,6 +139,14 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 
 battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行して呼出側へ戻ります。全滅時は共通の救助・町帰還を行い、敗北した呼出スタックを破棄したうえでon_loseだけを町で実行します。敗北後に元の成功処理へ戻ることはありません。3つの配列を全て定義してください。
 
+## 戦闘中イベントと強制終了（1.12.0）
+
+`battle.start.events` は `{id, triggers, condition?, commands}` の配列。idは同じ戦闘内で一意。triggersは `start`（戦闘開始時）、`round_start`（敵の行動後、第2ラウンド以降の開始時）、`before_end`（勝敗・逃走・撃退の確定前）から指定する。条件は `battle.round`、`battle.pendingResult`（win／lose／escape／repel、通常はnull）、通常の状態参照・式を使う。複数成立すると定義順に実行し、各IDは1戦に1回だけ発火する。
+
+イベント内で使える命令は `say`・`narrate`・`choice`・`if`・`switch`・`set`・`add`・`flag.set`・`story.action`・`fire.portable.set`・`battle.end`・`effect.play`・`audio.se`・`screen.set`・`screen.clear`。会話・選択待ちの間は戦闘操作を受けず、そのまま保存できる。イベント末尾では戦闘または保留中の通常終了処理を再開する。
+
+`battle.end` は戦闘中イベント専用。イベントの残りを破棄し、戦闘を `interrupted` として強制終了して `on_interrupt` を実行する。eventsを定義したbattle.startではon_interrupt配列も必須。勝利報酬は与えず、`records.interruptions` を増やす。`record_count` のmetricにもinterruptionsを指定できる。実際のq001のID・条件・接続は [EVENT_CATALOG.md](EVENT_CATALOG.md) と [QUEST_Q001.md](QUEST_Q001.md) を参照する。
+
 回復のratioは「現在値へ加算」ではなく「最大値の何割以上にするか」です。通常回復はactor.healを使ってください。restでお金が足りない場合は回復せず通知し、その後のコマンドへ進みます。料金不足で別の会話にする場合はifでgoldを確認します。
 
 ## マップイベント
@@ -215,7 +223,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実装との照合用一覧
 
-50命令：`story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+51命令：`story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
 
 31式演算子：`object_state` / `record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
 

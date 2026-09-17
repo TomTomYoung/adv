@@ -50,7 +50,7 @@ function floorColor(material,wx,wy,cell,distance){
   const depth=cell.waterDepth??(cell.water?3:0);
   if(depth){const color=[[0,0,0],[51,118,127],[32,98,126],[16,60,87]][depth],alpha=[0,.4,.65,.9][depth];r=r*(1-alpha)+color[0]*alpha;g=g*(1-alpha)+color[1]*alpha;b=b*(1-alpha)+color[2]*alpha;
     if(fraction(wy*4+Math.sin(wx*3)*.07)<.03){r+=28;g+=39;b+=40;}}
-  const light=Math.max(.22,1/(1+distance*.13));return [r*light,g*light,b*light];
+  const light=Math.max(.22,1/(1+distance*.13))*(.22+.78*(cell.illumination??8)/8);return [r*light,g*light,b*light];
 }
 export function visibleDungeonObjects(dungeon){
   const {x,y,facing}=dungeon.location,[dx,dy]={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]}[facing];
@@ -80,6 +80,8 @@ export function paintDungeon(canvas,dungeon,battle){
       if(drawable(wall)){const rect=dungeon.wall?artRect(wall,dungeon.wall):[18,45,50,76];ctx.drawImage(wall,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
       else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,STRIDE,h);}
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
+      const level=dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
+      ctx.fillStyle=`rgba(0,0,0,${.72*(1-level/8)})`;ctx.fillRect(column,top,STRIDE,h);
     }
     const shade=ctx.createRadialGradient(WIDTH*.5,HEIGHT*.55,100,WIDTH*.5,HEIGHT*.5,WIDTH*.65);shade.addColorStop(0,'#00000000');shade.addColorStop(1,'#000000b0');ctx.fillStyle=shade;ctx.fillRect(0,0,WIDTH,HEIGHT);
     if(!battle){

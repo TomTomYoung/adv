@@ -29,6 +29,7 @@ function resolveBattle(g,result){
   const before=g.state.records[result==='escape'?'escapes':'losses'];let fuel=150;
   if(result==='lose')for(const id of g.state.members)g.state.actors[id].hp=1;
   while(g.state.battle){
+   if(g.state.waiting?.type==='text'){drain(g);continue;}
    assert.ok(--fuel,'battle resolution terminates');
    if(result==='escape'){g.healAll();assert.ok(g.dispatch({type:'battle',action:'escape'}));}
    else {assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));}
@@ -61,6 +62,7 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
   }
   // Defeat can leave a scene to be resumed at its map hub.
   if(g.state.journey)finishJourney(g);
+  if(g.state.battle)fight(g);
   if(!g.state.waiting){if(q.story?.worldPlaces)exploreSpot(g,q.locations.find(l=>l.role==='decision'),{heal:true});else{g.run(visit(q.id));drain(g);}}
   assert.equal(g.state.waiting?.type,'choice');
   const available=options(g).filter(o=>o.id!=='pause'&&enabled(g,o));

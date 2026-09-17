@@ -28,7 +28,7 @@ for(const file of game.files.quests){
   q.model.agents=Object.entries(q.story.entities).filter(([,e])=>e.character).map(([id,e])=>{const c=characters.find(c=>c.id===e.character);return {id,character:c.id,name:c.name,goal:c.goal,initialLocation:q.story.registry[e.holder].initial};});
   q.model.stateRegistry=Object.entries(q.story.registry).map(([key,v])=>({path:`stories.${q.id}.values.${key}`,...v,writer:'story.action',scope:'quest',lifetime:'保存・再開・完了後まで保持'}));
   q.model.narrative={...q.model.narrative,units:s.nodes.map(n=>({id:n.id,script:sid(n.id),assertion:q.story.scenes[n.id]}))};q.model.beats=q.model.narrative.units;
-  q.model.graph=s.nodes.map(n=>({id:n.id,text:n.text,options:n.options.map(o=>({id:o.id,text:o.text,to:o.to,...(o.when?{when:o.when}:{}),...(o.combat?{combat:true}:{}),action:o.action}))}));
+  q.model.graph=s.nodes.map(n=>({id:n.id,text:n.text,...(s.sceneFlow?.[n.id]?{automatic:true}:{}),options:n.options.map(o=>({id:o.id,text:o.text,to:o.to,...(o.when?{when:o.when}:{}),...(o.combat?{combat:true}:{}),action:o.action}))}));
   q.model.conflict={request:q.brief,progression:s.progression};q.model.reveal={...q.model.reveal,gate:null,retroactiveTargets:s.nodes.map(n=>n.id),window:'story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する'};
   q.model.choiceContract={resources:'物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。',residue:'現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。',interruption:'中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。'};
   for(const n of s.nodes){
@@ -38,7 +38,7 @@ for(const file of game.files.quests){
     return {id:o.id,text:o.text,storyAction:{quest:q.id,action:o.action},...(o.when?{condition:o.when}:{}),requirement:[o.requirement,...Object.entries(o.cost??{}).map(([k,n])=>`${{rope:'縄',torch:'松明',gold:'G'}[k]??k} ${n}消費`),...(o.combat?['戦闘・作業と消費は勝利時に確定']:[])].filter(Boolean).join(' ／ '),commands};
    });
    if(!s.noPauseScenes?.includes(n.id))options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
-   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...(s.sceneCommands?.[n.id]??[]),...render(n.text),{op:'choice',options}]};
+   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...(s.sceneCommands?.[n.id]??[]),...render(n.text),...(s.sceneFlow?.[n.id]??[{op:'choice',options}])]};
   }
   for(const [alias,canonical] of Object.entries(s.sceneAliases??{})){
    q.scripts[sid(alias)]=structuredClone(q.scripts[sid(canonical)]);

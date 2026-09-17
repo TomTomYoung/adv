@@ -31,7 +31,7 @@ export function routeTo(id,outcome){
   if(g.state.quests[id].stage==='completed'){if(g.state.quests[id].outcome===outcome)return entry.path;continue;}
   const options=commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options.filter(o=>o.id!=='pause'&&(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.condition===undefined||g.value(o.condition))&&(o.visibleWhen===undefined||g.value(o.visibleWhen)));
   for(const o of options){
-   g.state=structuredClone(entry.state);assert.ok(g.dispatch({type:'choose',id:o.id}));drain(g);if(g.state.battle)fight(g);finishJourney(g);
+   g.state=structuredClone(entry.state);assert.ok(g.dispatch({type:'choose',id:o.id}));drain(g);if(g.state.battle)fight(g);finishJourney(g);if(g.state.battle)fight(g);
    queue.push({state:structuredClone(g.state),path:[...entry.path,o.id]});
   }
  }

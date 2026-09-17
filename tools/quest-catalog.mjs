@@ -51,9 +51,11 @@ export function questCatalog(data,date,{questId}={}){
           if(c.else?.length){add('［それ以外］');commands(q,c.else,{inChoice});}
           add('［条件分岐ここまで］');break;
         case 'battle.start':
-          add(`戦闘: ${code(c.encounter)}。`);
-          for(const [key,label] of [['on_win','勝利後'],['on_escape','逃走後'],['on_lose','敗北後']]){add(`［${label}］`);commands(q,c[key]??[],{inChoice:true});}
+          add(`強制戦闘: ${code(c.encounter)}。${c.id?`イベントID: ${code(c.id)}。`:''}`);
+          for(const e of c.events??[]){add(`戦闘中イベント ${code(e.id)}。判定: ${e.triggers.map(code).join(' / ')}。`);condition('発火条件',e.condition);commands(q,e.commands,{inChoice:true});}
+          for(const [key,label] of [['on_win','勝利後'],['on_escape','逃走後'],['on_lose','敗北後'],['on_interrupt','強制終了後']]){if(c[key]){add(`［${label}］`);commands(q,c[key],{inChoice:true});}}
           add('［戦闘の継続ここまで］');break;
+        case 'battle.end':add('戦闘を強制終了し、on_interruptへ移る。勝利報酬は発生しない。');break;
         case 'jump':add(`進行先: ${target(q,c.script)}。`);break;
         case 'story.journey':{
           const a=q.story.actions[c.action],place=q.story.worldPlaces[a.journey.to];

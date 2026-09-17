@@ -7,9 +7,11 @@ import {GameEngine} from '../src/core/engine.js';
 import {COMMANDS} from '../src/core/script.js';
 import {EXPRESSION_OPS} from '../src/core/expression.js';
 import {cellCatalogInventory} from './cell-catalog.mjs';
+import {eventCatalog} from './event-catalog.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
 const data=await loadContent(read),engine=new GameEngine(data),version=data.game.version,date=new Date().toISOString().slice(0,10);
+await fs.writeFile(path.join(folder,'EVENT_CATALOG.md'),eventCatalog(data));
 const quests=Object.values(data.quests),count=o=>Object.keys(o??{}).length;
 const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}

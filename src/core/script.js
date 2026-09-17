@@ -1,7 +1,8 @@
 import {initStory,enterStoryScene,applyStoryAction,storyCanAct,beginStoryJourney} from './story.js';
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+import {resumeBattleEvent,interruptBattle} from './battle-events.js';
+export const COMMANDS=new Set(['story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -30,7 +31,8 @@ export function chooseOption(engine,id){
 export function pump(engine){
   const state=engine.state;
   let fuel=engine.data.system.scriptBudget;
-  while(state.vm.length&&!state.waiting&&!state.battle){
+  while(state.vm.length&&!state.waiting&&(!state.battle||state.battle.event)){
+    if(state.battle?.event&&state.vm.length<=state.battle.event.depth){resumeBattleEvent(engine);return;}
     if(--fuel<0||state.vm.length>32)throw new Error('スクリプトが実行上限に達しました');
     const frame=state.vm.at(-1),commands=commandsAt(engine.data,frame);
     if(frame.index>=commands.length){state.vm.pop();const parent=state.vm.at(-1);if(frame.branch&&parent?.scope===frame.scope)parent.local=clone(frame.local);continue;}
@@ -94,6 +96,7 @@ export function pump(engine){
       case 'object.state.set':state.objects[`${c.map??state.location.map}/${c.object}`]=c.state;break;
       case 'event.mark_done':state.events[c.event]=1;break;
       case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'});break;
+      case 'battle.end':interruptBattle(engine);return;
       case 'quest.accept':engine.accept(c.quest);break;
       case 'quest.evidence':engine.evidence(c.quest,c.key,c.text);break;
       case 'quest.complete':engine.complete(c.quest,c.outcome);break;

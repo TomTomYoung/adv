@@ -13,6 +13,12 @@ export function questPageEvents(q){
   const entries=[
     ...q.model.graph.map(n=>({id:questEventId(q,'S',n.id),kind:'scene',source:n.id,place:q.story.worldPlaces[q.story.scenes[n.id].place]})),
     ...q.events.map(e=>({id:questEventId(q,'P',e.id),kind:'placement',source:e.id,points:e.points})),
+    ...q.model.graph.flatMap(n=>{
+      const unit=q.model.narrative.units.find(u=>u.id===n.id),place=q.story.worldPlaces[q.story.scenes[n.id].place];
+      return q.scripts[unit.script].commands.filter(c=>c.op==='battle.start').flatMap(c=>[
+        {id:c.id,kind:'fieldBattle',source:c.id,place},...(c.events??[]).map(e=>({id:e.id,kind:'battleEvent',source:e.id,place}))
+      ]);
+    }),
     ...Object.keys(q.outcomes).map(id=>({id:questEventId(q,'E',id),kind:'ending',source:id}))
   ];
   if(new Set(entries.map(e=>e.id)).size!==entries.length)throw Error(`${q.id}: duplicate documentation event ID`);
@@ -101,7 +107,7 @@ export function questPageBundle(data,id){
   add(`<!-- quest-page-source:${catalogContentHash(data)} -->`);
   add(`本編は${q.model.graph.length}場面、${Object.keys(q.outcomes).length}結末。ダンジョン内の必須経路は${maps.map(m=>code(m.id)).join('・')}の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。`);
   add('## イベントIDの規則');
-  add('本編の場面は `q001-S-場面キー`、配置物・操作調査は `q001-P-配置キー`、結末は `q001-E-結末キー` を使う。いずれもこのクエスト内で一意の文書用イベントID。元のキーから作るため、途中にイベントを追加しても既存IDは変わらない。実行時のイベントID・スクリプトIDは各項目に併記する。同じ座標の別場面にも別IDを割り当てる。');
+  add('本編の場面は `q001-S-場面キー`、配置物・操作調査は `q001-P-配置キー`、結末は `q001-E-結末キー` を使う。強制戦闘は `q001-F-kuragari`、戦闘中の新人登場は `q001-B-rookie`。全19個がクエスト内で一意。S・P・Eは文書用ID、F・Bは実行データにも記録するID。途中にイベントを追加しても既存IDは変わらない。同じ座標の別場面にも別IDを割り当てる。');
   add('選択肢は所属するイベントIDと選択キーの組で識別する。例：`q001-S-post/repair`。共通の階段、火台、依頼受注機能はマップ・町の機能として区別する。');
   add('## マップとイベント配置');
   for(const map of maps){
@@ -139,10 +145,12 @@ export function questPageBundle(data,id){
       if(!action)continue;
       const dest=option.to.startsWith('@')?questEventId(q,'E',option.to.slice(1)):questEventId(q,'S',option.to);
       if(action.journey)add(`選択 ${code(option.id)} → ${code(dest)}。行為 ${code(`${n.id}_${option.id}`)} で出発し、${describePlace(data,q.story.worldPlaces[action.journey.to])} に実際に到着して続行する。同行：${action.journey.companions.map(e=>data.characters[q.story.entities[e].character]?.name??e).join('・')||'探索隊のみ'}。`);
-      else add(`選択 ${code(option.id)} → ${code(dest)}。同じ地点で進む。`);
+      else add(`${n.automatic?'戦闘中の自動行為':'選択'} ${code(option.id)} → ${code(dest)}。同じ地点で進む。`);
     }
   }
-  add('新人が入口から巡灯路へ駆けつける救助は `q001-S-outage/call` のNPC側の物語行為。探索隊の座標は変えない。探索隊の往路・老人の介助・救助後の入口への移動・詰所への帰還は、出発を選んだ後にプレイヤーが実際に移動する。');
+  add('新人が入口から巡灯路へ駆けつける救助は、戦闘中イベント `q001-B-rookie` から物語行為 `outage_call` を実行する。帰路の消灯会話を送り終えると `q001-F-kuragari` がくらがりとの戦闘を開始する。1ラウンド終了後（第2ラウンド開始時）に新人が発言し、送ると新品油を1つ消費してくらがり除けの携帯松明を25歩分点灯し、`battle.end` で戦闘を強制終了する。`on_interrupt` から `q001-S-rescue` の現地会話へ進む。探索隊の座標は変えない。');
+  add('第1ラウンドで倒す・逃げる・火で撃退する場合も、その終了確定前に同じ新人イベントを1度だけ実行する。勝利や逃走としては記録せず、強制終了を記録し、戦闘報酬は与えない。新人到着前の全滅は通常の敗北・町への帰還となり、救助や油の消費は確定しない。再訪して同じ場面から再挑戦できる。戦闘中のセリフでも保存・再開できる。');
+  add('探索隊の往路・老人の介助・救助後の入口への移動・詰所への帰還は、出発を選んだ後にプレイヤーが実際に移動する。命令と配置の一覧は [EVENT_CATALOG.md](EVENT_CATALOG.md)、セルごとの明るさは [FIELD_LIGHTING.md](FIELD_LIGHTING.md) を参照する。');
   add('配置点のIDが同じでも本編場面は異なる。入口は初回の `q001-S-entry` と帰路の `q001-S-gate`、巡灯路は往路の `q001-S-dark`・`q001-S-empty` と帰路の `q001-S-outage`・`q001-S-rescue` が共用する。座標に来るだけで全場面が順番に発生するわけではなく、保存中の場面・移動行為と到着条件に従う。');
   add('## 配置イベントと操作条件');
   for(const e of q.events){

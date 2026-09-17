@@ -166,3 +166,9 @@ dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-art.jsonの
 従来マップにもwaterDepthとwaterLabelを渡します。水没度0は表示0、1〜3は表示1、4〜6は表示2、7〜10は表示3です。通行判定は水没度6から別途行い、潜水準備を考慮します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
 
 surfaceNoticeは正面の水深と通行可否、その対処の文章です。周期水域にはCoreの待機actionをコピーし、常設水路には対応するバルブ名を案内します。水・流れ・境界のマーカーへ装置画像を割り当てず、左右や閉じた境界の向こうの装置を正面へ表示しません。[修正記録と比較](DUNGEON_RENDER_REVIEW.md)を参照してください。
+
+## 1.12.0の照明と戦闘中会話
+
+`dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](FIELD_LIGHTING.md)を参照。
+
+`battle.event` がある間は戦闘画面の下へ `dialog` の会話・選択を表示し、戦闘操作ボタンは表示しない。会話を送るとゲーム側が戦闘再開または強制終了を判断する。`battle` が消えた後も `dialog` があればフィールドの会話として描画する。

@@ -674,6 +674,7 @@
                 "escapes",
                 "losses",
                 "repels",
+                "interruptions",
                 "kills",
                 "encounters"
               ]
@@ -1516,7 +1517,23 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "battle.end"
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "battle.start"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
             },
             "encounter": {
               "type": "string",
@@ -1538,6 +1555,52 @@
               "type": "array",
               "items": {
                 "$ref": "#/$defs/command"
+              }
+            },
+            "on_interrupt": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/command"
+              }
+            },
+            "events": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "triggers": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "start",
+                        "round_start",
+                        "before_end"
+                      ]
+                    }
+                  },
+                  "condition": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "commands": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/command"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "triggers",
+                  "commands"
+                ],
+                "additionalProperties": false
               }
             }
           },

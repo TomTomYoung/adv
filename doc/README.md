@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-17。対象は作品版1.11.0です。q001〜q003の実移動と全200件の地の文の常体化を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-17。対象は作品版1.12.0です。q001の強制戦闘・戦闘中の新人登場・救助会話への移行と、セル単位の照明を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -15,6 +15,10 @@
 [WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq001〜q003の実移動、所在・保存・表示・次の展開。
 
 [LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町10か所のID・親子・機能・背景・参照場面。
+
+[EVENT_CATALOG.md](EVENT_CATALOG.md)：実装したフィールド・戦闘中イベント、全配置と強制戦闘の定義位置。
+
+[FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離による0〜8のセル照度、遮蔽、歩行画面とミニマップの表示。
 
 ## ダンジョン
 
@@ -44,7 +48,7 @@
 
 [QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。q001は専用ページへのリンク、q002〜q020は実装済みの本文・選択肢・応答・条件・結末を掲載します。作者向けのため真相を含みます。
 
-[QUEST_Q001.md](QUEST_Q001.md)：q001「帰らない灯番」の全文、8場面・7配置・2結末の一意ID、座標付き配置図、町との接続、マップJSONと5本の実移動。
+[QUEST_Q001.md](QUEST_Q001.md)：q001「帰らない灯番」の全文、8場面・7配置・2結末と強制戦闘・戦闘中イベントの一意ID、座標付き配置図、町との接続、マップJSONと5本の実移動。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：v1.0／v1.1の適用範囲、編集する原稿、生成順序。
 

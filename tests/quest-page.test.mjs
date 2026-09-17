@@ -18,16 +18,17 @@ test('q001 is extracted once, retaining every scene and ending and leaving a cat
     const walk=commands=>{for(const c of commands){
       if(c.op==='say'||c.op==='narrate')assert.ok(page.includes(c.text));
       for(const o of c.options??[]){assert.ok(page.includes(o.text));walk(o.commands);}
-      for(const key of ['then','else','on_win','on_escape','on_lose'])if(c[key])walk(c[key]);
+      for(const key of ['then','else','on_win','on_escape','on_lose','on_interrupt'])if(c[key])walk(c[key]);
+      for(const e of c.events??[])walk(e.commands);
     }};
     walk(q.scripts[unit.script].commands);
   }
   for(const o of Object.values(q.outcomes))assert.ok(page.includes(o.text));
 });
 
-test('all 17 event IDs are unique, stable when reordered, and cover shared map cells',()=>{
+test('all 19 event IDs are unique, stable when reordered, and cover shared map cells',()=>{
   const q=data.quests.q001,entries=questPageEvents(q);
-  assert.equal(entries.length,17);assert.equal(new Set(entries.map(e=>e.id)).size,17);
+  assert.equal(entries.length,19);assert.equal(new Set(entries.map(e=>e.id)).size,19);
   const reordered=structuredClone(q);reordered.model.graph.reverse();reordered.events.reverse();
   assert.deepEqual(questPageEvents(reordered).map(e=>e.id).sort(),entries.map(e=>e.id).sort());
   const bundle=questPageBundle(data,'q001'),page=bundle['QUEST_Q001.md'],svg=bundle['quest-maps/q001-kagaribi_f1.svg'];
@@ -35,7 +36,7 @@ test('all 17 event IDs are unique, stable when reordered, and cover shared map c
     assert.ok(page.includes(e.id));
     assert.ok(svg.includes(e.id));
   }
-  assert.deepEqual(entries.filter(e=>e.place?.x===9&&e.place?.y===1).map(e=>e.source),['dark','empty','outage','rescue']);
+  assert.deepEqual(entries.filter(e=>e.place?.x===9&&e.place?.y===1).map(e=>e.source),['dark','empty','outage','rescue','q001-F-kuragari','q001-B-rookie']);
   const bad=structuredClone(q);bad.events.push({...bad.events[0],id:'decision'});
   assert.throws(()=>questPageEvents(bad),/duplicate/);
 });

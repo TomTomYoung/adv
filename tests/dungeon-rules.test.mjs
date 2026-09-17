@@ -26,7 +26,7 @@ for(const ending of ['informed','compromise'])test(`q001 ${ending}: fire rules, 
  const lamp=data.maps.kagaribi_f1.objects.find(o=>o.id==='q001_last_lamp');assert.equal(g.objectState(lamp),'low');
  assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);choose(g,'support');roundtrip(g);
  assert.equal(g.state.objects['kagaribi_f1/q001_last_lamp'],'extinguished');assert.equal(fireContext(data,g.state).run.portable.lit,false);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false);
- assert.equal(g.state.stories.q001.values.darkness,'attacking');choose(g,'call');roundtrip(g);
+ assert.equal(g.state.stories.q001.values.darkness,'attacking');fight(g);roundtrip(g);
  const v=g.state.stories.q001.values;assert.equal(v.afraid,true);assert.equal(v.steppedForward,true);assert.equal(v.rookieAt,'dark');assert.equal(v.oldOil+v.newOil+v.oilUsed,2);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);
  choose(g,'home','report','pause');roundtrip(g);g.run(data.quests.q001.model.entryScript);drain(g);choose(g,ending==='informed'?'repair':'rest');roundtrip(g);assert.equal(g.state.quests.q001.outcome,ending);assert.equal(g.state.mode,'town');
  const gold=g.state.gold;g.run(data.quests.q001.model.entryScript);drain(g);assert.equal(g.state.gold,gold);

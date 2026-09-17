@@ -1,7 +1,7 @@
 import {connectWorld,onceAtScene} from './world-story-kit.mjs';
-import {story,O,move,set,see,and,ref,eq} from './story-kit.mjs';
+import {story,O,move,set,see,and,or,ref,eq} from './story-kit.mjs';
 const s=story(1,{entry:'篝火の迷宮・入口の灯',dark:'油の尽きた巡灯路',branch:'支道の最後の壁灯',post:'灯番詰所'},[['entry','dark'],['dark','branch'],['entry','post']]);
-s.story.revision=3;s.resetScripts=true;
+s.story.revision=4;s.resetScripts=true;
 s.entity('elder','branch','elder',{mobility:'elderMobility'}).entity('rookie','entry','rookie').entity('rine','post','rine').entity('oldBottle','elder').entity('newBottle','rookie');
 s.enum('elderMobility','assisted',['assisted','mobile'],'老人の帰還には介助が必要');
 s.bool('afraid',true,'新人は暗闇を恐れたまま').bool('steppedForward',false,'新人が自分の意思で救助に踏み出した').bool('reported').bool('routeClosed').bool('repairsRequested').bool('restRequested');
@@ -22,9 +22,21 @@ s.sceneCommands={
  entry:onceAtScene('q001','entry',[portable(25)]),
  old:onceAtScene('q001','old',[portable(8)]),
  outage:onceAtScene('q001','outage',[wall('q001_last_lamp','extinguished'),portable(0)]),
- rescue:onceAtScene('q001','rescue',[portable(25)])
+ rescue:[]
 };
 s.noPauseScenes=['outage','rescue'];
+s.sceneFlow={outage:[{
+ op:'battle.start',id:'q001-F-kuragari',encounter:'kuragari_hunt',
+ events:[{id:'q001-B-rookie',triggers:['round_start','before_end'],
+  condition:or({op:'gte',left:ref('battle.round'),right:2},{op:'in',left:ref('battle.pendingResult'),right:['win','escape','repel']}),
+  commands:[
+   {op:'say',name:'新人灯番',text:'怖いです。今も。でも、二人とも、ここにいるから。……その人を、離して！'},
+   {op:'story.action',quest:'q001',action:'outage_call'},
+   portable(25),{op:'battle.end'}
+  ]}],
+ on_interrupt:[{op:'jump',script:'q001.v11.rescue'}],on_win:[],on_escape:[],
+ on_lose:[]
+}]};
 s.node('entry','entry',['rookie'],'入口の篝火の下で、新人が松明を両手で握っていた。「壁の松明か、くらがり除けの火を持っていれば、あれは寄れません。でも、巡灯路の火が消えて……あの人が、自分の油を僕にくれたんです」。奥で石をこする音がする。新人は一歩を出そうとし、足を引いた。「戻らなきゃいけないのに、怖くて」。',[
  O('talk','火を確かめ、老人を探しに行く。新人には入口の灯を守ってもらう','dark',[see('rule','rookie'),see('gift','rookie'),move('party','entry','dark')])
 ]);
@@ -37,10 +49,10 @@ s.node('empty','dark',[],'火を芯へ寄せると、一瞬だけ先端が赤く
 s.node('old','branch',['elder'],'老人は小さく燃える壁松明の真下にいた。油受けの底が見える。「あの子は入口まで行けたか」。頷くと、空の油瓶を伏せた。「あれは新人に持たせた。わしは、ここの火が消えるまでに誰か来てくれればと思ってな」。老人の足は腫れ、立つには肩が要る。携行松明にも油は残り少ない。',[
  O('support','老人に肩を貸し、最後の壁灯があるうちに入口へ戻る','outage',[move('party elder','branch','dark'),set('partyTorch','extinguished'),set('darkness','attacking')])
 ]);
-s.node('outage','dark',['elder'],'曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。',[
- O('call','老人を壁際に支え、入口へ向かって声を上げる','rescue',[{op:'consume',key:'newOil',amount:1,sink:'oilUsed'},move('rookie','entry','dark'),set('steppedForward'),set('darkness','repelled'),see('returningFire','rookie')])
+s.node('outage','dark',['elder'],'曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。老人を壁際へ支え、迫るくらがりに武器を構えた。',[
+ O('call','戦闘中に新人が火を掲げ、二人を救う','rescue',[{op:'consume',key:'newOil',amount:1,sink:'oilUsed'},move('rookie','entry','dark'),set('steppedForward'),set('darkness','repelled'),see('returningFire','rookie')])
 ]);
-s.node('rescue','dark',['elder','rookie'],'揺れる火が、入口の方から来た。新人の膝は震え、松明を差し出す手も定まらない。「怖いです。今も。でも、二人とも、ここにいるから」。老人にもらった油で灯した火を前へ出す。くらがりが身をよじり、明かりの外へ退いた。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。',[
+s.node('rescue','dark',['elder','rookie'],'入口の方から来た火に、くらがりが身をよじり、明かりの外へ退いた。新人の膝は震え、松明を差し出す手も定まらない。老人にもらった油で灯した火を、二人の足元へ近づける。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。',[
  O('home','新人の火を頼りに、三人で迷宮の入口へ戻る','gate')
 ]);
 s.node('gate','entry',['elder','rookie'],'入口の篝火が見えた。老人を支えたまま階段を上がれば町へ出られる。リネへの帰還報告は、灯番組合の詰所に着いてからだ。',[
@@ -58,7 +70,7 @@ const route=connectWorld(s,{
  dark:{kind:'dungeon',dungeon:'kagaribi',map:'kagaribi_f1',x:9,y:1,event:'q001_return'},
  branch:{kind:'dungeon',dungeon:'kagaribi',map:'kagaribi_f1',x:13,y:3,event:'q001_elder'},
  post:{kind:'town',location:'hikarigaeri_lamplighter_post'}
-},3);
+},4);
 route('entry_talk','dark',{depart:[see('rule','rookie'),see('gift','rookie')]});
 route('empty_follow','branch',{arrive:[see('position','elder'),set('partyTorch','low')]});
 route('old_support','dark',{companions:['elder'],arrive:[set('partyTorch','extinguished'),set('darkness','attacking')]});

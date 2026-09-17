@@ -22,12 +22,12 @@ export function validateContent(data){
     for(const key of ['left','right','arg','value'])if(key in value)expression(value[key],`${path}.${key}`,depth+1);
     if(value.args!==undefined){if(!Array.isArray(value.args))fail(path,'argsは配列です');else value.args.forEach(v=>expression(v,path,depth+1));}
     if(['and','or','add','sub','mul','div','mod','min','max','floor','ceil','round','abs','clamp'].includes(value.op)&&(!Array.isArray(value.args)||!value.args.length))fail(path,'argsが必要です');
-    if(value.op==='record_count'){if(!['battles','wins','escapes','losses','repels','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
+    if(value.op==='record_count'){if(!['battles','wins','escapes','losses','repels','interruptions','kills','encounters'].includes(value.metric))fail(path,'戦績項目不正');if(value.metric==='kills')reference(data.enemies,value.id,path);if(value.metric==='encounters')reference(data.encounters,value.id,path);if(value.sinceQuest)reference(data.quests,value.sinceQuest,path);}
     if(value.op==='object_state'&&!data.maps[value.map]?.objects.some(o=>o.id===value.object))fail(path,'object_stateの配置物がありません');
     if(value.op==='has_item')reference(data.items,value.item,path);
     if(value.op==='has_member'||value.op==='has_status')reference(data.actors,value.actor,path);
   };
-  const commands=(list,path,depth=0)=>{
+  const commands=(list,path,depth=0,inBattleEvent=false)=>{
     if(!Array.isArray(list)){fail(path,'commandsは配列です');return;}
     if(depth>32){fail(path,'入れ子が深すぎます');return;}
     list.forEach((c,i)=>{
@@ -35,9 +35,23 @@ export function validateContent(data){
       for(const key of ['condition','value','amount','count','text','target'])if(c[key]!==undefined)expression(c[key],at);
       if(['say','narrate'].includes(c.op)&&typeof c.text!=='string'&&!c.text?.format)fail(at,'本文が必要です');
       if(['call','jump'].includes(c.op))reference(data.scripts,c.script,at);
+      if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
+      if(inBattleEvent&&!['say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
         reference(data.encounters,c.encounter,at);
-        for(const key of ['on_win','on_lose','on_escape'])commands(c[key],`${at}.${key}`,depth+1);
+        if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
+        if(c.events!==undefined){
+          if(!Array.isArray(c.events)||!c.events.length)fail(at,'戦闘イベントの配列が必要です');
+          const ids=new Set();
+          for(const e of Array.isArray(c.events)?c.events:[]){
+            if(!isRecord(e)||typeof e.id!=='string'||!e.id||ids.has(e.id)){fail(at,'戦闘イベントID不正・重複');continue;}ids.add(e.id);
+            if(!Array.isArray(e.triggers)||!e.triggers.length||new Set(e.triggers).size!==e.triggers.length||e.triggers.some(t=>!['start','round_start','before_end'].includes(t)))fail(at,'戦闘イベント起動条件不正');
+            if(e.condition!==undefined)expression(e.condition,at);
+            commands(e.commands,`${at}.events.${e.id}`,depth+1,true);
+          }
+        }
+        if(c.events!==undefined||c.on_interrupt!==undefined)commands(c.on_interrupt,`${at}.on_interrupt`,depth+1);
+        for(const key of ['on_win','on_lose','on_escape'])commands(c[key],`${at}.${key}`,depth+1,inBattleEvent);
       }
       if(c.op.startsWith('story.')){
         const story=data.quests[c.quest]?.story;if(!story)fail(at,'物語定義がありません');
@@ -70,12 +84,12 @@ export function validateContent(data){
       if(c.op==='flag.set'){try{pathParts(`flags.${c.key}`);}catch(e){fail(at,e.message);}}
       if(c.op==='choice'){
         if(!Array.isArray(c.options)||!c.options.length){fail(at,'選択肢が必要です');return;}
-        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(option.storyAction&&!data.quests[option.storyAction.quest]?.story?.actions[option.storyAction.action])fail(at,'物語選択の参照不正');if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1);}
+        const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(option.storyAction&&!data.quests[option.storyAction.quest]?.story?.actions[option.storyAction.action])fail(at,'物語選択の参照不正');if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1,inBattleEvent);}
         if(!c.options.some(o=>o.condition===undefined&&o.visibleWhen===undefined))fail(at,'常に選べる選択肢を1つ以上設けてください');
       }
-      if(c.op==='if'){commands(c.then,`${at}.then`,depth+1);commands(c.else,`${at}.else`,depth+1);}
-      if(c.op==='switch'){for(const item of c.cases??[])commands(item.commands,at,depth+1);commands(c.default,at,depth+1);}
-      if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1);}}
+      if(c.op==='if'){commands(c.then,`${at}.then`,depth+1,inBattleEvent);commands(c.else,`${at}.else`,depth+1,inBattleEvent);}
+      if(c.op==='switch'){for(const item of c.cases??[])commands(item.commands,at,depth+1,inBattleEvent);commands(c.default,at,depth+1,inBattleEvent);}
+      if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1,inBattleEvent);}}
     });
   };
   errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));

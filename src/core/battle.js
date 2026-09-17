@@ -8,6 +8,7 @@ import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
 import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
+import {triggerBattleEvent} from './battle-events.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
@@ -15,16 +16,19 @@ export function startBattle(engine,id,continuations,options={}){
   engine.state.records.battles++;
   engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
+  Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
   if(engine.state.members.every(id=>engine.state.actors[id].hp<=0))endBattle(engine,'lose');
+  else triggerBattleEvent(engine,'start');
 }
 export function activeActor(engine){
   const s=engine.state,b=s.battle;if(!b)return null;
   return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&!b.acted.includes(id))??null;
 }
 export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),enemy.stats);
-function endBattle(engine,result){
+export function endBattle(engine,result,skipEvents=false){
   const s=engine.state,b=s.battle,continuation=b.continuations;
+  if(!skipEvents){b.pendingResult=result;if(triggerBattleEvent(engine,'before_end'))return;}
   recordResult(engine,result);
   dungeonBattleEnd(engine,b,result);
   s.presentation.music=b.musicBefore;s.battle=null;s.waiting=null;
@@ -33,13 +37,14 @@ function endBattle(engine,result){
     if(continuation.frame){pushBranch(engine,continuation.frame,continuation.index,[continuation.lose]);pump(engine);}
     return;
   }
-  engine.eventCue(result==='win'?'victory':'escape');
+  if(result!=='interrupted')engine.eventCue(result==='win'?'victory':'escape');
   if(result==='win'){
     const gold=b.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=b.enemies.reduce((n,e)=>n+e.rewards.xp,0);
     engine.award(gold,xp);engine.notify(`勝利しました。${gold}G・${xp}EXP。`);
   }else if(result==='repel')engine.notify('くらがりは火を恐れ、通路の奥へ逃げ去りました。携帯松明にくらがり除けの火が灯っています。');
+  else if(result==='interrupted')engine.notify('戦闘が終了した。');
   else engine.notify('戦闘から離脱しました。依頼の決着はついていません。');
-  if(continuation.frame)pushBranch(engine,continuation.frame,continuation.index,[continuation[result==='repel'?'escape':result]]);
+  if(continuation.frame)pushBranch(engine,continuation.frame,continuation.index,[result==='interrupted'?'on_interrupt':continuation[result==='repel'?'escape':result]]);
   pump(engine);
 }
 function effectsProblem(data,skill){return skillDefinitionErrors(data,skill).join(' / ');}
@@ -47,7 +52,7 @@ function effectsProblem(data,skill){return skillDefinitionErrors(data,skill).joi
 export function battleSkillPlan(engine,actorId,skillId,targetId){
   const s=engine.state,b=s.battle,skill=Object.hasOwn(engine.data.skills,skillId??'')?engine.data.skills[skillId]:null;
   const fail=reason=>({ok:false,reason});
-  if(!b||!s.members.includes(actorId)||!s.actors[actorId])return fail('戦闘中の隊員ではありません。');
+  if(!b||b.event||!s.members.includes(actorId)||!s.actors[actorId])return fail('戦闘の行動待ちではありません。');
   if(!skill)return fail('技能がありません。');
   const restriction=dungeonAbilityReason(engine.data,s,skillId,'battle.skill');if(restriction)return fail(restriction);
   const grant=permission(engine.data,s,actorId,skillId,'battle.skill');
@@ -145,9 +150,10 @@ function enemiesTurn(engine){
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   tickBuffs(b);b.acted=[];b.guards=[];b.round++;b.log=b.log.slice(-30);
+  triggerBattleEvent(engine,'round_start');
 }
 export function battleAction(engine,intent){
-  const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||!actorId)return false;
+  const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
   const actor=s.actors[actorId];
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
