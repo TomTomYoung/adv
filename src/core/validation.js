@@ -1,3 +1,4 @@
+import {validateWorld} from './world.js';
 import {voxelAt} from './voxels.js';
 import {validateDungeonArt} from './dungeon-art.js';
 import {validateQuestEvents} from './quest-events.js';
@@ -40,7 +41,8 @@ export function validateContent(data){
       }
       if(c.op.startsWith('story.')){
         const story=data.quests[c.quest]?.story;if(!story)fail(at,'物語定義がありません');
-        if(c.op==='story.action'&&!story?.actions[c.action])fail(at,'物語行動がありません');
+        if(['story.action','story.journey'].includes(c.op)&&!story?.actions[c.action])fail(at,'物語行動がありません');
+        if(c.op==='story.journey'&&!story?.actions[c.action]?.journey)fail(at,'移動行為の定義がありません');
         if(c.op==='story.scene'&&!story?.scenes[c.scene])fail(at,'物語場面がありません');
       }
       if(c.op.startsWith('quest.'))reference(data.quests,c.quest,at);
@@ -76,7 +78,7 @@ export function validateContent(data){
       if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1);}}
     });
   };
-  errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression));
+  errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');

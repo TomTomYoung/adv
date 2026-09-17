@@ -1,3 +1,4 @@
+import {buildWorld} from './build-world.mjs';
 import fs from 'node:fs/promises';
 import {buildDungeonArt} from './build-dungeon-art.mjs';
 import {applyQuestEvents} from './quest-event-source.mjs';
@@ -54,6 +55,7 @@ export async function buildDungeons(){
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
+  await buildWorld(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await buildDungeons();

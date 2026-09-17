@@ -13,7 +13,7 @@ export function projectQuestObjects(data){
   for(const event of questEvents(data)){
     if(event.trigger==='action')continue;
     const {title,points,role,dungeon,note,requirement,...object}=event;
-    for(const {map,...point} of points??[]){
+    for(const {map,dungeon:pointDungeon,...point} of points??[]){
       if(!data.maps[map])throw Error(`${event.quest}/${event.id}: 配置先マップがありません: ${map}`);
       if(data.maps[map].objects.some(o=>o.id===event.id))throw Error(`${map}: object ID重複: ${event.id}`);
       data.maps[map].objects.push(clone({...object,name:title,...point}));

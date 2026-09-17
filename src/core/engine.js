@@ -3,7 +3,8 @@ import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxel
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess} from './dungeons.js';
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
-import {storyEnding} from './story.js';
+import {storyEnding,arriveStoryJourney,resumeWorldStory} from './story.js';
+import {townRoot,townLocation,syncWorldStories} from './world.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,battleAction} from './battle.js';
@@ -17,7 +18,7 @@ export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 export class GameEngine {
   constructor(data, seed = 20260909) {
     this.data=data;this.feedback=freshFeedback();
-    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
+    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const [item,count] of Object.entries(this.state.inventory))if(data.items[item]?.slot)addGear(this.state,item,count);
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
@@ -102,14 +103,14 @@ export class GameEngine {
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
-    this.state.mode='dungeon';this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();
+    this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
   }
   returnTown(emergency=false,quiet=false){
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
-    this.state.mode='town';this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';
+    this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
   }
   defeat(){
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
@@ -119,7 +120,7 @@ export class GameEngine {
   move(direction){
     if(this.state.mode!=='dungeon'||this.state.waiting)return false;
     const loc=this.state.location,face=DIRECTIONS.indexOf(loc.facing);
-    if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];return true;}
+    if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];syncWorldStories(this);return true;}
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
     const map=this.map(),point={x,y,z:loc.z??0};
@@ -129,7 +130,7 @@ export class GameEngine {
   }
   finishMove(point){
     const loc=this.state.location,{x,y}=point,z=point.z??0;
-    const from={...loc};loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    const from={...loc};loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     stepDungeon(this,{from,to:{...loc}});
@@ -178,6 +179,9 @@ export class GameEngine {
     if(type==='choose')return chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='location.move')return this.moveLocation(intent.id);
+    if(type==='journey.arrive')return arriveStoryJourney(this);
+    if(type==='story.resume')return resumeWorldStory(this,intent.quest);
     if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
     if(type==='move')return this.move(intent.direction);
@@ -194,7 +198,7 @@ export class GameEngine {
       const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
-      const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;this.run(service.script);return true;
+      const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;const facility=Object.values(this.data.locations??{}).find(l=>l.services?.includes(service.id));if(facility){this.state.townLocation=facility.id;this.state.presentation.background=facility.background;syncWorldStories(this);}this.run(service.script);return true;
     }
     if(type==='job.change')return this.changeJob(intent.actor,intent.job);
     if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
@@ -207,6 +211,12 @@ export class GameEngine {
     if(type==='equip')return this.equip(intent.actor,intent.item);
     if(type==='item')return this.useItem(intent.item,intent.actor);
     return false;
+  }
+  moveLocation(id){
+    const s=this.state,here=townLocation(this.data,s),dest=this.data.locations?.[id];
+    if(s.mode!=='town'||s.waiting||s.battle||!here||!dest)return false;
+    if(dest.parent!==here.id&&here.parent!==id&&!(here.links??[]).includes(id))return false;
+    s.townLocation=id;s.presentation.background=dest.background;syncWorldStories(this);this.notify(dest.description);return true;
   }
   equip(actorId,itemId){
     const item=this.data.items[itemId],actor=this.state.actors[actorId];

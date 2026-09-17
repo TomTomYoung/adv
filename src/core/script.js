@@ -1,7 +1,7 @@
-import {initStory,enterStoryScene,applyStoryAction,storyCanAct} from './story.js';
+import {initStory,enterStoryScene,applyStoryAction,storyCanAct,beginStoryJourney} from './story.js';
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
-export const COMMANDS=new Set(['fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','quest.accept','quest.evidence','quest.complete','scene.background','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -38,6 +38,7 @@ export function pump(engine){
     switch(c.op){
       case 'story.init':initStory(engine,c.quest);break;
       case 'story.scene':enterStoryScene(engine,c.quest,c.scene);break;
+      case 'story.journey':beginStoryJourney(engine,c.quest,c.action);return;
       case 'story.action':applyStoryAction(engine,c.quest,c.action);break;
       case 'say':case 'narrate':{
         const text=String(v(c.text));state.waiting={type:'text',text,speaker:c.name??c.speaker??''};engine.log(text);break;

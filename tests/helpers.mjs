@@ -32,5 +32,5 @@ export function exploreSpot(engine,spot,options={}){
   if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
     if(dungeon.id==='region_1')for(let n=0;!engine.walkable(data.maps[spot.map],1,1)&&n<200;n++)assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'wait'}));
     assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
-  walk(engine,spot.x,spot.y,options);assert.ok(engine.dispatch({type:'interact'}));drain(engine);
+  walk(engine,spot.x,spot.y,options);if(options.interact!==false)assert.ok(engine.dispatch({type:'interact'}));drain(engine);
 }

@@ -1,12 +1,29 @@
 import assert from 'node:assert/strict';
-import {data,newGame,drain,fight} from './helpers.mjs';
+import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
 export function prepareQuest(id){
  const g=newGame(1907);g.award(0,data.system.xpBase*24*25);g.healAll();
  for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number&&q.number<=100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;
- assert.ok(g.accept(id));if(id==='q001')g.dispatch({type:'travel',dungeon:'kagaribi'});g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
+ assert.ok(g.accept(id));if(id==='q001')g.dispatch({type:'travel',dungeon:'kagaribi'});
+ const d=data.quests[id].story,point=d?.worldPlaces?.[d.scenes.entry.place];if(point?.kind==='dungeon')g.teleport(point.map,point.x,point.y);
+ g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
+}
+// Actual town choices and dungeon steps, shared by route search and campaigns.
+export function finishJourney(g){
+ if(!g.state.journey)return;
+ const j=g.state.journey,d=data.quests[j.quest].story,p=d.worldPlaces[d.actions[j.action].journey.to];
+ if(p.kind==='town'){
+  if(g.state.mode==='dungeon')assert.ok(g.dispatch({type:'retreat'}));
+  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
+  const route=[];let id=p.location;while(data.locations[id].parent){route.unshift(id);id=data.locations[id].parent;}
+  for(const id of route)assert.ok(g.dispatch({type:'location.move',id}));
+ }else{
+  if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==p.dungeon)assert.ok(g.dispatch({type:'retreat'}));
+  exploreSpot(g,p,{maintain:true,interact:false});
+ }
+ assert.ok(g.dispatch({type:'journey.arrive'}));drain(g);
 }
 export function routeTo(id,outcome){
  const g=prepareQuest(id),queue=[{state:structuredClone(g.state),path:[]}],seen=new Set();
@@ -17,7 +34,7 @@ export function routeTo(id,outcome){
   if(g.state.quests[id].stage==='completed'){if(g.state.quests[id].outcome===outcome)return entry.path;continue;}
   const options=commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options.filter(o=>o.id!=='pause'&&(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.condition===undefined||g.value(o.condition))&&(o.visibleWhen===undefined||g.value(o.visibleWhen)));
   for(const o of options){
-   g.state=structuredClone(entry.state);assert.ok(g.dispatch({type:'choose',id:o.id}));drain(g);if(g.state.battle)fight(g);
+   g.state=structuredClone(entry.state);assert.ok(g.dispatch({type:'choose',id:o.id}));drain(g);if(g.state.battle)fight(g);finishJourney(g);
    queue.push({state:structuredClone(g.state),path:[...entry.path,o.id]});
   }
  }

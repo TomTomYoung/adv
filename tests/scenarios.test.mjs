@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
+import {finishJourney} from './structure-routes.mjs';
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
 import {GameEngine} from '../src/core/engine.js';
@@ -18,7 +19,7 @@ function start(id,{rich=true,walk=true}={}){
  if(rich){g.award(0,data.system.xpBase*24*25);g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;g.healAll();}
  if(data.quests[id].number<=100)for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  assert.ok(g.dispatch({type:'accept',id}));
- if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true});else{g.run(visit(id));drain(g);}
+ if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true});else{const d=data.quests[id].story,p=d?.worldPlaces?.[d.scenes.entry.place];if(p?.kind==='dungeon')g.teleport(p.map,p.x,p.y);g.run(visit(id));drain(g);}
  return g;
 }
 function choose(g,id){assert.ok(g.dispatch({type:'choose',id}),`${id}: ${g.state.waiting?.text??g.state.flags.quest?.[g.state.trackedQuest]?.node}`);drain(g);}
@@ -59,7 +60,8 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
    continue;
   }
   // Defeat can leave a scene to be resumed at its map hub.
-  if(!g.state.waiting){g.run(visit(q.id));drain(g);}
+  if(g.state.journey)finishJourney(g);
+  if(!g.state.waiting){if(q.story?.worldPlaces)exploreSpot(g,q.locations.find(l=>l.role==='decision'),{heal:true});else{g.run(visit(q.id));drain(g);}}
   assert.equal(g.state.waiting?.type,'choice');
   const available=options(g).filter(o=>o.id!=='pause'&&enabled(g,o));
   assert.ok(available.length,`${q.id}: a live route at ${scene(g,q.id)}`);
@@ -177,12 +179,11 @@ test('poison defeats multiple individual enemies once; migrated dead enemies are
  const h=newGame();h.startBattle('wild_pair_1',{win:[],escape:[],lose:[]});h.state.battle.enemies[0].hp=0;
 
 });
-test('rope is spent only after winning the revised rescue route',()=>{
+test('q002 recovers the tags only after winning at the actual waterway site',()=>{
  for(const result of ['win','escape','lose']){
-  const g=newGame();g.award(0,data.system.xpBase*24*25);g.accept('q002');
-  (g.state.flags.legacyStoryRoutes??={}).q002=true;g.evidence('q002','clue_a','痕跡');g.evidence('q002','clue_b','証言');g.run('q002.visit');drain(g);
-  const before=g.state.inventory.rope;choose(g,'informed');assert.equal(g.state.inventory.rope,before);resolveBattle(g,result);
-  assert.equal(g.state.inventory.rope,before-(result==='win'?1:0));assert.equal(g.state.quests.q002.stage,result==='win'?'completed':'active');
+  const g=start('q002',{walk:false});choose(g,'tags');resolveBattle(g,result);
+  assert.equal(g.state.stories.q002.values.tagsAt,result==='win'?'party':'box');
+  assert.equal(g.state.quests.q002.stage,'active');g.load(g.save());
  }
 });
 test('party absence and survival are read from the live roster',()=>{

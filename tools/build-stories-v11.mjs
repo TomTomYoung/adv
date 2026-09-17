@@ -34,7 +34,7 @@ for(const file of game.files.quests){
   for(const n of s.nodes){
    const options=n.options.map(o=>{
     const effect=[{op:'story.action',quest:q.id,action:o.action},...(o.commands??[]),{op:'jump',script:sid(o.to.startsWith('@')?`end.${o.to.slice(1)}`:o.to)}];
-    const commands=o.combat?[{op:'battle.start',encounter:`guard_${q.region}`,on_win:effect,on_escape:[say('退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。')],on_lose:[say('現場から救援された。依頼を再開すると、未完了の作業からやり直せる。')]}]:effect;
+    const commands=q.story.actions[o.action].journey?[{op:'story.journey',quest:q.id,action:o.action}]:o.combat?[{op:'battle.start',encounter:`guard_${q.region}`,on_win:effect,on_escape:[say('退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。')],on_lose:[say('現場から救援された。依頼を再開すると、未完了の作業からやり直せる。')]}]:effect;
     return {id:o.id,text:o.text,storyAction:{quest:q.id,action:o.action},...(o.when?{condition:o.when}:{}),requirement:[o.requirement,...Object.entries(o.cost??{}).map(([k,n])=>`${{rope:'縄',torch:'松明',gold:'G'}[k]??k} ${n}消費`),...(o.combat?['戦闘・作業と消費は勝利時に確定']:[])].filter(Boolean).join(' ／ '),commands};
    });
    if(!s.noPauseScenes?.includes(n.id))options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
