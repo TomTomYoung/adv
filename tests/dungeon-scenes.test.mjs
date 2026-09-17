@@ -113,6 +113,7 @@ test('a revised quest event preserves the previous script and a saved choice can
   await write('authoring/quests/q001.events.json',source);await write('data/quests/q001.json',data.quests.q001);await write('data/game.json',{files:{quests:['data/quests/q001.json']}});
   await applyQuestEvents(dir);
   const q=JSON.parse(await fs.readFile(path.join(dir,'data/quests/q001.json')));assert.deepEqual(q.scripts['dungeon.scene.kagaribi.v2'],original);assert.ok(q.scripts['dungeon.scene.kagaribi.v3']);
+  for(const e of q.events)for(const p of e.points)p.dungeon=data.maps[p.map].dungeon;
   const upgraded={...data,quests:{...data.quests,q001:q},scripts:{...data.scripts,...q.scripts}};assert.deepEqual(validateContent(upgraded),[]);
   const resumed=new GameEngine(upgraded);resumed.load(saved);assert.ok(resumed.dispatch({type:'choose',id:'record'}));drain(resumed);assert.equal(resumed.state.flags.dungeonNotes.kagaribi,true);roundtrip(resumed);
  }finally{await fs.rm(dir,{recursive:true,force:true});}

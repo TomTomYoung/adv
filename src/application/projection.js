@@ -1,3 +1,4 @@
+import {projectWorld} from './world-projection.js';
 import {objectVisible} from '../core/quest-events.js';
 import {projectDungeonSurfaces} from './dungeon-surfaces.js';
 import {projectArt,projectQuestNotes,projectQuestLinks,projectDungeonEvents,projectEventArt} from './dungeon-projection.js';
@@ -41,7 +42,7 @@ export function projectGame(engine){
   const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:dark?.color??'#000000',opacity:dark?Math.max(0,1-light/dark.threshold)*dark.maxOpacity:0,shade:false}]:[];
   atmosphere.push(...Object.values(clone(s.presentation.layers??{})));
   return {
-    feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
+    ...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,level:s.level,xp:s.xp,nextXp:d.system.xpBase*s.level*(s.level+1),completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light,lightMax,lightLabel:fire?'携帯松明':'灯油',
     party,roster,jobs:jobCatalog(engine),statNames:clone(d.jobProfile?.statNames??{}),tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),dungeons:d.dungeons?Object.values(d.dungeons).sort((a,b)=>a.region-b.region||Object.keys(a.systems).length-Object.keys(b.systems).length).map(v=>({id:v.id,art:projectArt(d,v.art?.wall),name:v.name,description:v.description,preview:dungeonPreview(d,v),region:v.region,mapCount:v.maps.length,recommendedLevel:v.recommendedLevel,color:d.regions.find(r=>r.id===v.region)?.color??'#c6ae77'})):null,tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),
     inventory:Object.entries(s.inventory).filter(([,n])=>n>0).map(([id,count])=>({id,count,...clone(d.items[id]),allowedActors:d.items[id].slot?allowedEquipmentActors(engine,id):s.members.slice()})),shop:d.shops.goods.map(g=>({id:g.item,name:d.items[g.item].name,description:d.items[g.item].description,price:engine.price(g.price),basePrice:g.price,canBuy:s.gold>=engine.price(g.price)&&(s.inventory[g.item]??0)<d.system.maxStack})),

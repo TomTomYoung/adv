@@ -8,7 +8,7 @@ const button=(text,callback,className='',disabled=false)=>{const b=node('button'
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
-  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='quests';this.region=1;this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
+  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='location';this.region=1;this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
     this.ui.cancelFeedback?.();this.effects.capture();this.model=model;const focused=document.activeElement?.dataset.focus,selection=document.activeElement?.selectionStart;
@@ -16,15 +16,18 @@ export class GameView {
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
     brand.lastChild.append(node('h1','',model.title),node('p','',model.subtitle));
     const toolbar=node('div','toolbar');toolbar.append(button('手帳',()=>{this.tab='journal';this.render(model);}),button('記録',()=>this.ui.menu()),this.soundButton());header.append(brand,toolbar);this.root.append(header);
-    const status=node('div','status-strip');for(const text of [`${model.mode==='town'?'灯帰りの町':model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
+    const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
-    const allTabs=model.mode==='town'?[['quests','依頼掲示板'],['regions','迷宮へ'],['party','酒場・仲間'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','道具'],['party','隊の状態'],['journal','冒険手帳']];
-    if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'quests':'explore';
+    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),...(model.town?.party?[['party','酒場・仲間']]:[]),['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','道具'],['party','隊の状態'],['journal','冒険手帳']];
+    if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
     for(const [id,label] of allTabs){const b=button(label,()=>{this.tab=id;this.render(model);},id===this.tab?'active':'');b.setAttribute('aria-current',id===this.tab?'page':'false');tabs.append(b);}main.append(tabs);
+    if(model.town)this.townScene(main,model);
+    if(model.journey)this.journey(main,model);
     // Narrative and battles stay visible even if the player opens a utility tab.
     if(model.battle)this.battle(main,model);
     else if(model.dialog){if(model.dungeon)this.scene(main,model);this.dialog(main,model.dialog);}
+    else if(this.tab==='location')this.location(main,model);
     else if(this.tab==='explore')this.explore(main,model);
     else if(this.tab==='quests')this.quests(main,model);
     else if(this.tab==='regions')this.regions(main,model);
@@ -37,6 +40,26 @@ export class GameView {
     this.effects.present(model,this.ui.effectsMode?.()??'full');
     if(focused){const target=this.root.querySelector(`[data-focus="${focused}"]`);if(target){target.focus();if(selection!==undefined&&target.setSelectionRange)target.setSelectionRange(selection,selection);}}
   }
+  townScene(parent,m){
+    const t=m.town,scene=node('div','town-scene');scene.dataset.fx='scene';
+    const background=node('img','town-background');background.src=t.background;background.alt=t.name;scene.append(background);
+    for(const c of t.cast){const image=node('img','town-character');image.src=c.sprite;image.alt=c.name;image.style.left=`${c.x}%`;scene.append(image);}
+    const title=node('div','town-caption');title.append(node('span','eyebrow',t.breadcrumbs.map(l=>l.name).join(' / ')),node('h2','',t.name));scene.append(title);parent.append(scene);
+  }
+  location(parent,m){
+    if(!m.town)return;const t=m.town,section=node('section','panel-content location-content');section.append(node('p','location-description',t.description));
+    const choices=node('div','location-choices');
+    for(const l of t.links)choices.append(button(l.name,()=>this.act({type:'location.move',id:l.id}),'location-choice',t.busy));
+    for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
+    for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
+    if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
+    if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
+    if(t.shop)choices.append(button('品物を見せてもらう',()=>{this.tab='bag';this.render(m);}));
+    if(t.dungeons.length)choices.append(button('迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
+    if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
+    section.append(choices);parent.append(section);
+  }
+  journey(parent,m){const j=m.journey,section=node('section','journey-note');section.append(node('span','eyebrow',j.title),node('p','',`次の目的地：${j.destination}`));if(j.canArrive)section.append(button('目的地で続きを進める',()=>this.act({type:'journey.arrive'}),'primary'));else section.append(node('p','muted','移動と調査を終え、目的地に着いてから続きを進めます。'));parent.append(section);}
   quests(parent,m){
     const section=node('div','panel-content');section.append(heading('GUILD / REQUESTS','今日も、帰るために潜る。'));
     const controls=node('div','board-controls'),search=node('input','search');search.placeholder='依頼名・依頼人で探す';search.setAttribute('aria-label','依頼を検索');search.value=this.query;search.dataset.focus='quest-search';search.addEventListener('input',()=>{this.query=search.value;this.render(m);});
@@ -86,7 +109,7 @@ export class GameView {
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
       const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
-      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':'')),img=node('img');img.src=c.portrait;img.alt=c.name;img.width=896;img.height=1024;img.decoding='async';card.append(img,node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
+      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':''));if(!this.model?.town?.cast.some(person=>person.id===c.id)){const img=node('img');img.src=c.portrait;img.alt=c.name;img.width=896;img.height=1024;img.decoding='async';card.append(img);}card.append(node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
       section.append(cast);
     }
     if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.act({type:'advance'}),'primary continue'));}
@@ -125,12 +148,12 @@ export class GameView {
         }grid.append(card);
       }section.append(grid);
     }
-    if(town){section.append(heading('REST / RECOVERY','出発前の休息'));for(const service of m.services){const row=node('div','service');row.append(button(service.label,()=>this.act({type:'service',id:service.id})),node('p','muted',service.detail));section.append(row);}}
+    if(town){section.append(heading('REST / RECOVERY','出発前の休息'));for(const service of m.town?.services??m.services){const row=node('div','service');row.append(button(service.label,()=>this.act({type:'service',id:service.id})),node('p','muted',service.detail));section.append(row);}}
     parent.append(section);
   }
   bag(parent,m){const section=node('div','panel-content');section.append(heading('PROVISIONS','持ち物と旅支度'));const target=node('select');target.setAttribute('aria-label','道具・装備の対象');for(const a of m.party)target.append(new Option(`${a.name} (${a.class})`,a.id));if(!m.party.some(a=>a.id===this.bagActor))this.bagActor=m.party[0]?.id;target.value=this.bagActor;target.addEventListener('change',()=>{this.bagActor=target.value;this.render(m);});section.append(target);
     for(const item of m.inventory){const row=node('article','item-row'),body=node('div');body.append(node('h3','',`${item.name} ×${item.count}`),node('p','muted',item.description));row.append(body);if(item.field||item.slot)row.append(button(item.slot?'装備する':'使う',()=>this.act({type:item.slot?'equip':'item',item:item.id,actor:target.value}),'',Boolean(item.slot&&item.allowedActors&&!item.allowedActors.includes(target.value))));section.append(row);}
-    if(m.mode==='town'){section.append(heading('TRAVEL SHOP','買い足す'));for(const item of m.shop){const row=node('article','item-row'),body=node('div');body.append(node('h3','',item.name),node('p','muted',item.description));row.append(body,button(`${item.price} G`,()=>this.act({type:'buy',item:item.id}),'',!item.canBuy));section.append(row);}}parent.append(section);
+    if(m.mode==='town'&&m.town?.shop){section.append(heading('TRAVEL SHOP','買い足す'));for(const item of m.shop){const row=node('article','item-row'),body=node('div');body.append(node('h3','',item.name),node('p','muted',item.description));row.append(body,button(`${item.price} G`,()=>this.act({type:'buy',item:item.id}),'',!item.canBuy));section.append(row);}}parent.append(section);
   }
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
     const active=m.quests.filter(q=>q.stage==='active');if(active.length){section.append(node('h3','','受注中'));for(const q of active)section.append(button(`${q.tracked?'◆ ':''}${q.title} / ${q.evidenceTotal===0?'相談・調査を進める':`手掛かり ${q.evidenceCount}/${q.evidenceTotal??2}`}`,()=>this.act({type:'track',id:q.id}),'journal-track'));}
@@ -142,6 +165,6 @@ export class GameView {
     const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=node('div',`party-row ${a.hp<=0?'fallen':''}`),avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
     if(m.dungeon){const mapSection=node('section','side-section');mapSection.append(node('span','eyebrow','測量図'),node('p','muted',`${m.lightLabel??'灯油'} ${m.light}/${m.lightMax}${m.light===0?(m.dungeon.systems?.some(s=>s.kind==='fire_network')?'・台座の守りを確認してください':'・暗闇では遭遇が増えます'):''}`));const grid=node('div','minimap');grid.style.setProperty('--map-width',m.dungeon.width);grid.setAttribute('aria-label','探索済みの地図');for(const row of m.dungeon.cells)for(const cell of row){const obj=m.dungeon.objects.find(o=>o.x===cell.x&&o.y===cell.y),here=cell.x===m.dungeon.location.x&&cell.y===m.dungeon.location.y;const square=node('span',`map-cell ${cell.known?(cell.wall?'wall':'floor'):'unknown'} ${cell.known&&cell.water?'flooded':''} ${here?'current':''}`);if(here)square.textContent=({north:'↑',east:'→',south:'↓',west:'←'})[m.dungeon.location.facing];else if(cell.known&&obj)square.textContent=obj.glyph;if(cell.known&&cell.edges)for(const [side,closed] of Object.entries(cell.edges))if(closed)square.style[{north:'borderTop',east:'borderRight',south:'borderBottom',west:'borderLeft'}[side]]='2px solid #e4bd80';if(cell.known&&cell.waterDepth)square.dataset.depth=String(cell.waterDepth);if(cell.known&&cell.floor===false&&!cell.wall){square.classList.add('pit');if(!here&&!obj)square.textContent='○';}if(cell.known)square.title=`${cell.x},${cell.y}${m.dungeon.voxel?', 高さ '+m.dungeon.z+' / '+cell.waterLabel:''}${obj?' '+obj.name:''}`;grid.append(square);}mapSection.append(grid,node('p','map-legend','? 手掛かり　! 決着　▣ 補給　⇵ 階段　≈ 水没　門/弁 操作　砕 破壊壁'));parent.append(mapSection);}
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','追跡中の依頼'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief),node('p','',m.tracked.evidenceTotal===0?'現地で相談・調査。中断後も続きから再開できます。':`手掛かり ${m.tracked.evidenceCount} / ${m.tracked.evidenceTotal??2}`));for(const loc of m.tracked.locations){const floor=loc.map.endsWith('f1')?1:2;tracked.append(node('p','coordinates',`地下${floor}層 (${loc.x}, ${loc.y}) / ${loc.role==='decision'?(m.tracked.evidenceTotal===0?'相談・調査':'決着'):loc.role==='clue_a'?'痕跡':'記録・証言'}`));}if(m.mode==='town')tracked.append(button('この迷宮へ',()=>this.act({type:'travel',region:m.tracked.region}),'primary'));parent.append(tracked);}
-    else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','まず地下水道の依頼を受けてください。位置は追跡欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
+    else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置は追跡欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
   }
 }

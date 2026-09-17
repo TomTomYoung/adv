@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {describePlace,questPlaces} from './location-catalog.mjs';
 
 const json=value=>JSON.stringify(value);
 const code=value=>'`'+String(value)+'`';
@@ -9,7 +10,7 @@ const endingTitle=(q,id)=>`${q.id} 結末 ${id} — ${q.outcomes[id].label}`;
 
 // Fingerprint the distributed implementation, not intermediate authoring drafts.
 export function catalogContentHash(data){
-  return createHash('sha256').update(json({version:data.game.version,quests:data.quests,characters:data.characters})).digest('hex');
+  return createHash('sha256').update(json({version:data.game.version,quests:data.quests,characters:data.characters,locations:data.locations,dungeons:data.dungeons,maps:data.maps})).digest('hex');
 }
 
 export function questCatalog(data,date){
@@ -52,6 +53,11 @@ export function questCatalog(data,date){
           for(const [key,label] of [['on_win','勝利後'],['on_escape','逃走後'],['on_lose','敗北後']]){add(`［${label}］`);commands(q,c[key]??[],{inChoice:true});}
           add('［戦闘の継続ここまで］');break;
         case 'jump':add(`進行先: ${target(q,c.script)}。`);break;
+        case 'story.journey':{
+          const a=q.story.actions[c.action],place=q.story.worldPlaces[a.journey.to];
+          add(`出発: ${code(c.action)}。移動先: ${describePlace(data,place)}。`);condition('出発の条件',a.requires);
+          add(`この選択は出発処理だけを確定します。実際に目的地へ移動し、「目的地で続きを進める」を選んでから [${code(a.to)}](#${slug(sceneTitle(q,q.model.graph.find(n=>n.id===a.to)))}) へ進み、到着時の処理を確定します。`);break;
+        }
         case 'story.action':{
           const a=q.story.actions[c.action];if(!a)throw Error(`${q.id}: missing action ${c.action}`);
           add(`行為: ${code(c.action)}。`);condition('行為の前提条件',a.requires);
@@ -78,6 +84,7 @@ export function questCatalog(data,date){
     add(`## ${q.id} ${q.title}`);
     add(`依頼人: ${q.client}。地域: ${q.region}。${q.unlockHint}`);add(q.brief);
     add(`モデル: ${q.model.standard.version}。実装: [JSON](../data/quests/${q.id}.json)。場面 ${q.model.graph?.length??0}、結末 ${Object.keys(q.outcomes).length}。${q.story?`物語状態の改訂 ${q.story.revision??1}。`:''}`);
+    for(const line of questPlaces(data,q))add(line);
     add(`固定された過去: ${q.model.world.truth}`);
     const notes=q.model.world.authoringNotes;
     if(notes){add(`AI向け注釈: ${notes.notice}`);add(`${notes.factsHeading??'事実'}:`);for(const fact of notes.facts)add(fact);}
@@ -98,7 +105,10 @@ export function questCatalog(data,date){
     for(const node of q.model.graph){
         const unit=q.model.narrative.units.find(u=>u.id===node.id),script=q.scripts[unit?.script];
         if(!script)throw Error(`${q.id}: missing implemented scene ${node.id}`);
-        add(`### ${sceneTitle(q,node)}`);add(`実装場面: ${code(unit.script)}。`);commands(q,script.commands);
+        add(`### ${sceneTitle(q,node)}`);add(`実装場面: ${code(unit.script)}。`);
+        const place=q.story?.worldPlaces?.[q.story.scenes[node.id]?.place];
+        if(place)add(`場面の現在地: ${describePlace(data,place)}。`);
+        commands(q,script.commands);
     }
     for(const [id,o] of Object.entries(q.outcomes)){
       add(`### ${endingTitle(q,id)}`);add(o.text);add(`${o.gold}G / ${o.xp}EXP`);condition('結末の成立条件',o.requires);condition('物語の結末条件',q.story?.endings[id]);

@@ -1,4 +1,5 @@
 import {catalogContentHash} from './quest-catalog.mjs';
+import {locationCatalog,questPlaces} from './location-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -42,6 +43,8 @@ const data=await loadContent(read),snapshot=await read('doc/DATA_SNAPSHOT.json')
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
 const catalog=await fs.readFile(path.join(folder,'QUEST_CATALOG.md'),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
+check(await fs.readFile(path.join(folder,'LOCATION_CATALOG.md'),'utf8')===locationCatalog(data),'LOCATION_CATALOG: location references differ');
+for(const q of Object.values(data.quests))for(const line of questPlaces(data,q))check(catalog.includes(line),`QUEST_CATALOG: ${q.id} placement reference differs`);
 for(const [key,n] of Object.entries(snapshot.counts))check(n===count(data[key]),`DATA_SNAPSHOT: ${key} count differs`);
 const quests=Object.values(data.quests);
 check(snapshot.questOutcomes===quests.reduce((n,q)=>n+count(q.outcomes),0),'DATA_SNAPSHOT: endings differ');

@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-16。対象は作品版1.9.0です。q001と指定ダンジョンの変更を反映しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-16。対象は作品版1.10.0です。共通町ロケーションとq002の施設間移動を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -11,6 +11,10 @@
 [SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：実行可能な命令・式演算子、状態参照、会話の保存。
 
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
+
+[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq002の実移動、所在・保存・表示・次の展開。
+
+[LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町7か所のID・親子・機能・背景・参照場面。
 
 ## ダンジョン
 
