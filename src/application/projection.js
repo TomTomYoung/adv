@@ -34,7 +34,7 @@ export function projectGame(engine){
   if(dialog)dialog.fieldScene=projectEventArt(d,s);
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;
-    battle={background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
+    battle={event:s.battle.event?{id:s.battle.event.id}:null,background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectVisible(s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
@@ -42,8 +42,8 @@ export function projectGame(engine){
   const terrain=projectDungeonSurfaces(engine,systems);
   const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};
   const fire=systems.find(system=>system.kind==='fire_network'),light=fire?fire.portable.fuel:s.light,lightMax=fire?fire.portable.capacity:d.system.lightCapacity;
-  const dark=d.presentation?.ambient.darkness,shade=d.presentation?.ambient.shade;
-  const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:dark?.color??'#000000',opacity:dark?Math.max(0,1-light/dark.threshold)*dark.maxOpacity:0,shade:false}]:[];
+  const shade=d.presentation?.ambient.shade;
+  const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:'#000000',opacity:.65*(1-(terrain.lighting?.current??8)/8),shade:false,lighting:true}]:[];
   atmosphere.push(...Object.values(clone(s.presentation.layers??{})));
   return {
     ...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,

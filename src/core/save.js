@@ -9,6 +9,7 @@ import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
 import {isRecord,clone,evaluate} from './expression.js';
 import {commandsAt} from './script.js';
+import {battleDefinition} from './battle-events.js';
 import {freshRecords,snapshotRecords,recordsValid} from './records.js';
 function addScenarioState(save,data){
   const s=save.state;
@@ -187,7 +188,16 @@ export function validateSave(save,data){
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}
     }
-    if(s.waiting?.type!=='battle')fail('戦闘待機不正');
+    try{
+      const definition=battleDefinition(data,b),events=definition?.events??[];
+      if(!Array.isArray(b.firedEvents)||new Set(b.firedEvents).size!==b.firedEvents.length||b.firedEvents.some(id=>!events.some(e=>e.id===id)))fail('戦闘イベントの実行記録不正');
+      if(b.pendingResult!==null&&!['win','lose','escape','repel'].includes(b.pendingResult))fail('戦闘終了待ち不正');
+      if(b.event){
+        const a=b.event,event=events[a.index],frame=s.vm[a.depth],c=b.continuations;
+        if((a.phase==='before_end')!==(b.pendingResult!==null))fail('戦闘イベントの終了待ち不整合');
+        if(!event||event.id!==a.id||!b.firedEvents.includes(a.id)||!event.triggers.includes(a.phase)||!integer(a.depth,1,s.vm.length-1)||!frame||frame.script!==c.frame.script||JSON.stringify(frame.path)!==JSON.stringify([...c.frame.path,c.index,'events',a.index,'commands'])||!['text','choice'].includes(s.waiting?.type))fail('戦闘イベントの継続位置不正');
+      }else if(s.waiting?.type!=='battle'||b.pendingResult!==null)fail('戦闘待機不正');
+    }catch{fail('戦闘イベント状態不正');}
   }else if(s.waiting?.type==='battle')fail('戦闘がありません');
   if(s.vm.length&&!s.waiting)fail('待機位置がありません');
   errors.push(...validateDungeonState(data,s));

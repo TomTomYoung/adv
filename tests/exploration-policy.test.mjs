@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain,exploreSpot,goTownLocation} from './helpers.mjs';
+import {data,newGame,drain,fight,exploreSpot,goTownLocation} from './helpers.mjs';
 import {prepareQuest,finishJourney} from './structure-routes.mjs';
 import {projectGame} from '../src/application/projection.js';
 import {fireContext} from '../src/core/systems/fire-network.js';
@@ -35,7 +35,7 @@ test('q001 rescue returns through the entrance and physical post before the repo
  const loc=structuredClone(g.state.location);choose(g,'support');assert.deepEqual(g.state.location,loc);
  assert.equal(questState(g,'q001').values.elderAt,'transit');checkpoint(g);finishJourney(g);
  assert.equal(questState(g,'q001').scene,'outage');assert.equal(g.dispatch({type:'choose',id:'pause'}),false);
- choose(g,'call');assert.equal(g.dispatch({type:'choose',id:'pause'}),false);choose(g,'home');
+ fight(g);assert.equal(g.dispatch({type:'choose',id:'pause'}),false);choose(g,'home');
  assert.equal(questState(g,'q001').values.reported,false);assert.equal(g.state.mode,'dungeon');checkpoint(g);finishJourney(g);
  assert.equal(questState(g,'q001').scene,'gate');assert.equal(g.state.mode,'dungeon');
  choose(g,'report');assert.equal(questState(g,'q001').values.reported,false);checkpoint(g);finishJourney(g);

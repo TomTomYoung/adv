@@ -875,11 +875,12 @@
       },
       {
         "id": "outage",
-        "text": "曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。",
+        "text": "曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。老人を壁際へ支え、迫るくらがりに武器を構えた。",
+        "automatic": true,
         "options": [
           {
             "id": "call",
-            "text": "老人を壁際に支え、入口へ向かって声を上げる",
+            "text": "戦闘中に新人が火を掲げ、二人を救う",
             "to": "rescue",
             "action": "outage_call"
           }
@@ -887,7 +888,7 @@
       },
       {
         "id": "rescue",
-        "text": "揺れる火が、入口の方から来た。新人の膝は震え、松明を差し出す手も定まらない。「怖いです。今も。でも、二人とも、ここにいるから」。老人にもらった油で灯した火を前へ出す。くらがりが身をよじり、明かりの外へ退いた。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。",
+        "text": "入口の方から来た火に、くらがりが身をよじり、明かりの外へ退いた。新人の膝は震え、松明を差し出す手も定まらない。老人にもらった油で灯した火を、二人の足元へ近づける。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。",
         "options": [
           {
             "id": "home",
@@ -1187,32 +1188,73 @@
         },
         {
           "op": "say",
-          "text": "曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。"
+          "text": "曲がり角で、携行松明の炎が縮んだ。油はもう出ない。最後の赤い芯が暗くなると、往路で火の外にいたものが、一息で距離を詰めてきた。老人の腕が肩に食い込む。後ろの壁灯も消えている。老人を壁際へ支え、迫るくらがりに武器を構えた。"
         },
         {
-          "op": "choice",
-          "options": [
+          "op": "battle.start",
+          "id": "q001-F-kuragari",
+          "encounter": "kuragari_hunt",
+          "events": [
             {
-              "id": "call",
-              "text": "老人を壁際に支え、入口へ向かって声を上げる",
-              "storyAction": {
-                "quest": "q001",
-                "action": "outage_call"
+              "id": "q001-B-rookie",
+              "triggers": [
+                "round_start",
+                "before_end"
+              ],
+              "condition": {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "battle.round"
+                    },
+                    "right": 2
+                  },
+                  {
+                    "op": "in",
+                    "left": {
+                      "ref": "battle.pendingResult"
+                    },
+                    "right": [
+                      "win",
+                      "escape",
+                      "repel"
+                    ]
+                  }
+                ]
               },
-              "requirement": "",
               "commands": [
+                {
+                  "op": "say",
+                  "name": "新人灯番",
+                  "text": "怖いです。今も。でも、二人とも、ここにいるから。……その人を、離して！"
+                },
                 {
                   "op": "story.action",
                   "quest": "q001",
                   "action": "outage_call"
                 },
                 {
-                  "op": "jump",
-                  "script": "q001.v11.rescue"
+                  "op": "fire.portable.set",
+                  "fuel": 25,
+                  "effect": "ward"
+                },
+                {
+                  "op": "battle.end"
                 }
               ]
             }
-          ]
+          ],
+          "on_interrupt": [
+            {
+              "op": "jump",
+              "script": "q001.v11.rescue"
+            }
+          ],
+          "on_win": [],
+          "on_escape": [],
+          "on_lose": []
         }
       ]
     },
@@ -1225,31 +1267,8 @@
           "scene": "rescue"
         },
         {
-          "op": "if",
-          "condition": {
-            "op": "ne",
-            "left": {
-              "ref": "flags.worldSceneEffects.q001.rescue"
-            },
-            "right": true
-          },
-          "then": [
-            {
-              "op": "fire.portable.set",
-              "fuel": 25,
-              "effect": "ward"
-            },
-            {
-              "op": "set",
-              "target": "flags.worldSceneEffects.q001.rescue",
-              "value": true
-            }
-          ],
-          "else": []
-        },
-        {
           "op": "say",
-          "text": "揺れる火が、入口の方から来た。新人の膝は震え、松明を差し出す手も定まらない。「怖いです。今も。でも、二人とも、ここにいるから」。老人にもらった油で灯した火を前へ出す。くらがりが身をよじり、明かりの外へ退いた。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。"
+          "text": "入口の方から来た火に、くらがりが身をよじり、明かりの外へ退いた。新人の膝は震え、松明を差し出す手も定まらない。老人にもらった油で灯した火を、二人の足元へ近づける。老人は空の瓶を見て、新人の火を見た。「返しに来たか」。"
         },
         {
           "op": "choice",
@@ -2549,7 +2568,7 @@
         ]
       }
     },
-    "revision": 3,
+    "revision": 4,
     "worldPlaces": {
       "entry": {
         "kind": "dungeon",

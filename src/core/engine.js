@@ -7,7 +7,7 @@ import {storyEnding,arriveStoryJourney,resumeWorldStory} from './story.js';
 import {townRoot,townLocation,syncWorldStories} from './world.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
-import {startBattle,battleAction} from './battle.js';
+import {startBattle,endBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
@@ -171,6 +171,7 @@ export class GameEngine {
     return false;
   }
   interact(){if(this.state.mode!=='dungeon'||this.state.waiting)return false;if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
+  finishBattle(result,skipEvents=false){endBattle(this,result,skipEvents);}
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
     beginFeedback(this);const changed=this.perform(intent);

@@ -3,6 +3,7 @@ import {dungeonTile,dungeonBlock,dungeonWaterDepth} from '../core/dungeons.js';
 import {depthName} from '../core/voxels.js';
 import {faces} from '../core/systems/common.js';
 import {projectVoxels} from './voxel-projection.js';
+import {fieldLighting} from '../core/lighting.js';
 
 export function projectDungeonSurfaces(engine,systems){
   const {data,state}=engine,map=engine.map();if(!map)return {};
@@ -15,6 +16,8 @@ export function projectDungeonSurfaces(engine,systems){
   // A closed object door also hides the view in a cubic map; water and holes never become masonry.
   if(map.voxels)for(const row of terrain.cells)for(const cell of row)cell.opaque=cell.wall||map.objects.some(o=>o.x===cell.x&&o.y===cell.y&&(o.z??0)===(loc.z??0)&&objectBlocks(state,map,o));
   terrain.geometry=terrain.cells.map(row=>row.map(c=>c.opaque?'#':'.').join(''));
+  terrain.lighting=fieldLighting(data,state,terrain.geometry,terrain.boundaries??{});
+  for(const row of terrain.cells)for(const cell of row)cell.illumination=terrain.lighting.levels[cell.y][cell.x];
   const [dx,dy]=faces[loc.facing],ahead=terrain.cells[loc.y+dy]?.[loc.x+dx],here=terrain.cells[loc.y]?.[loc.x];
   const closedFace=Boolean(terrain.boundaries?.[`${loc.x},${loc.y}/${loc.facing}`]);
   const waterSystem=systems.find(s=>s.kind==='waterworks'),waterMarker=waterSystem?.markers.find(m=>m.kind==='water'&&m.x===loc.x+dx&&m.y===loc.y+dy);

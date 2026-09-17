@@ -1,5 +1,6 @@
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
+import {eventCatalog} from './event-catalog.mjs';
 import {locationCatalog,questPlaces} from './location-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
@@ -41,6 +42,7 @@ for(const file of [...current,...indexes,'README.md']){
  }
 }
 const data=await loadContent(read),snapshot=await read('doc/DATA_SNAPSHOT.json'),count=o=>Object.keys(o??{}).length;
+check(await fs.readFile(path.join(folder,'EVENT_CATALOG.md'),'utf8')===eventCatalog(data),'EVENT_CATALOG: generated inventory differs');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
 const catalog=await fs.readFile(path.join(folder,'QUEST_CATALOG.md'),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');

@@ -71,7 +71,9 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 作品定義は [data/game.json](data/game.json)、個別クエストは [data/quests](data/quests)、マップは [data/maps](data/maps) にあります。JSONだけで本文、分岐、報酬、戦闘、敵AI、計算式、道具、イベントを変更できます。正式な入力形式はJSONです。
 
-[view-preview.html](view-preview.html) は画面だけをデザインする独立ページです。8種類のサンプル画面を選べ、テーマをJSONへ書き出せます。ゲーム本番の「記録 → 画面テーマを読み込む」で適用します。より大きな構成変更も `src/view/` だけで行えます。
+[view-preview.html](view-preview.html) は画面だけをデザインする独立ページです。11種類のサンプル画面を選べ、テーマをJSONへ書き出せます。ゲーム本番の「記録 → 画面テーマを読み込む」で適用します。より大きな構成変更も `src/view/` だけで行えます。
+
+[フィールド・戦闘中イベント一覧](doc/EVENT_CATALOG.md) / [セルの明るさ](doc/FIELD_LIGHTING.md)
 
 [仕様・進捗・引き継ぎ](doc/README.md) / [JSON命令リファレンス](doc/SCRIPT_REFERENCE.md) / [ビュー契約](doc/VIEW_CONTRACT.md) / [200件の索引](doc/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
 
@@ -99,6 +101,6 @@ q001〜q010 の原稿は `authoring/stories-v11-*.mjs`、人物設定は `author
 
 全200件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 
-内容版1.10.0は旧セーブを移行しません。自動保存・スロット・ファイルの読込でエラーが出たら、最初から新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
+内容版1.12.0は旧セーブを移行しません。自動保存・スロット・ファイルの読込でエラーが出たら、最初から新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
 
 元のPhaser屋敷デモはGit履歴に保存されています。旧セーブ `phaserAdventureGameSave` は変更しませんが、新ゲームへは移行しません。
