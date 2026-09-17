@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,newGame,drain,fight} from './helpers.mjs';
-import {prepareQuest} from './structure-routes.mjs';
+import {prepareQuest,finishJourney} from './structure-routes.mjs';
 import {storyPlace} from '../src/core/story.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
 
-const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);if(g.state.battle)fight(g);}};
+const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);if(g.state.battle)fight(g);finishJourney(g);}};
 const story=(g,id)=>g.state.stories[id];
 
 test('q003 agreement requires a separate overnight verification after people reach safety',()=>{
- const g=prepareQuest('q003');choose(g,'warn','upstream','agree');
+ const g=prepareQuest('q003');choose(g,'warn','escort','return','upstream','agree');
  const v=story(g,'q003').values;assert.equal(v.passersAt,'high');assert.equal(v.agreement,true);assert.equal(v.tested,false);
  const before=g.save();assert.throws(()=>g.complete('q003','informed'));assert.equal(g.save(),before);
  choose(g,'verify');assert.equal(g.state.quests.q003.outcome,'informed');assert.equal(story(g,'q003').values.tested,true);

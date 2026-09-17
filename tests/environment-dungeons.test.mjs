@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain,walk} from './helpers.mjs';
+import {data,newGame,drain,walk,goTownLocation} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {dungeonActionPlan} from '../src/core/dungeons.js';
 import {validateSave} from '../src/core/save.js';
@@ -63,7 +63,7 @@ test('wall skill enforces job, level, living member, MP and dungeon, and both sk
   g.returnTown();assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'break_rock'}),false);g.dispatch({type:'travel',region:1});assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'break_rock'}),false);
 });
 test('wall tools are obtainable in town and can open every authored wall without changing quest objects',()=>{
-  const g=newGame();g.state.gold=1000;assert.ok(g.dispatch({type:'buy',item:'blasting_charge'}));assert.equal(g.state.inventory.blasting_charge,1);
+  const g=newGame();goTownLocation(g,'hikarigaeri_shop');g.state.gold=1000;assert.ok(g.dispatch({type:'buy',item:'blasting_charge'}));assert.equal(g.state.inventory.blasting_charge,1);goTownLocation(g,data.game.world.townRoot);
   g.give('blasting_charge',3);g.dispatch({type:'travel',region:2});const objects=JSON.stringify(data.maps.region_2_f1.objects);
   for(const wall of data.dungeons.region_2.systems.walls.walls){
     const map=data.maps[wall.map];const adjacent=[[wall.x-1,wall.y,'east'],[wall.x+1,wall.y,'west'],[wall.x,wall.y-1,'south'],[wall.x,wall.y+1,'north']].find(([x,y])=>map.tiles[y]?.[x]==='.');

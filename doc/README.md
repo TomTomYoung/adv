@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-16。対象は作品版1.10.0です。共通町ロケーションとq002の施設間移動を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-17。対象は作品版1.11.0です。q001〜q003の実移動と全200件の地の文の常体化を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -12,9 +12,9 @@
 
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
 
-[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq002の実移動、所在・保存・表示・次の展開。
+[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq001〜q003の実移動、所在・保存・表示・次の展開。
 
-[LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町7か所のID・親子・機能・背景・参照場面。
+[LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町10か所のID・親子・機能・背景・参照場面。
 
 ## ダンジョン
 
@@ -39,6 +39,8 @@
 [DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)：壁面・装置の素材、13件の現地調査、依頼と手帳への接続。
 
 ## シナリオと人物
+
+[EXPLORATION_AND_PROSE_1_11.md](EXPLORATION_AND_PROSE_1_11.md)：不要転送の除去、q001〜q003の到達待ち、全200件の常体化、残るq004以降。
 
 [QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・629結末の現行カタログ。q001〜q020は実装済みの本文・選択肢・応答・条件・結末を統合しています。作者向けのため真相を含みます。
 

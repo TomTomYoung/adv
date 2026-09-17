@@ -4,12 +4,12 @@
   "number": 1,
   "title": "帰らない灯番",
   "client": "灯番組合のリネ",
-  "brief": "篝火の迷宮の巡灯路から、当直の老灯番が戻りません。実地教育に同行した新人の帰還も確認してください。",
+  "brief": "篝火の迷宮の巡灯路から、当直の老灯番が戻らない。実地教育に同行した新人の帰還も確かめる。",
   "region": 1,
   "type": "authored_progression",
   "recommendedLevel": 1,
   "requires": null,
-  "unlockHint": "いつでも受注できます。",
+  "unlockHint": "いつでも受注できる。",
   "events": [
     {
       "id": "q001_decision",
@@ -219,7 +219,7 @@
           "completed"
         ]
       },
-      "requirement": "関連する依頼を受けると調査できます。",
+      "requirement": "関連する依頼を受けると調査できる。",
       "note": {
         "text": "入口の篝火と携行松明がくらがりを遠ざける。老灯番の捜索先は篝火の迷宮の巡灯路。消えた壁灯は油切れであり、点火だけでは戻らない。",
         "when": {
@@ -267,7 +267,7 @@
       ],
       "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。",
       "authoringNotes": {
-        "notice": "火と恐怖と所在を一貫して扱うための作者向け制約です。",
+        "notice": "火と恐怖と所在を一貫して扱うための作者向け制約だ。",
         "facts": [
           "灯番は原則一経路一人。本件のみ実地教育の新人が同行した。",
           "老人は正式な当直、新人は見習い。リネは同行を把握している。",
@@ -301,7 +301,7 @@
       }
     ],
     "conflict": {
-      "request": "篝火の迷宮の巡灯路から、当直の老灯番が戻りません。実地教育に同行した新人の帰還も確認してください。",
+      "request": "篝火の迷宮の巡灯路から、当直の老灯番が戻らない。実地教育に同行した新人の帰還も確かめる。",
       "progression": "火のルールを入口で聞く。油切れの壁松明を実地に確かめ、最後の灯の下から老人を介助する。帰路の消灯とくらがりの襲来に対して、新人が自ら戻る。救助後に巡灯路の修繕と二人の休養のどちらを先に引き受けるかを決める。"
     },
     "narrative": {
@@ -387,6 +387,23 @@
           }
         },
         {
+          "id": "gate",
+          "script": "q001.v11.gate",
+          "assertion": {
+            "title": "篝火の迷宮・入口の灯",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "elder"
+              },
+              {
+                "entity": "rookie"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
           "id": "post",
           "script": "q001.v11.post",
           "assertion": {
@@ -409,7 +426,7 @@
       ]
     },
     "audience": {
-      "initialHypothesis": "篝火の迷宮の巡灯路から、当直の老灯番が戻りません。実地教育に同行した新人の帰還も確認してください。",
+      "initialHypothesis": "篝火の迷宮の巡灯路から、当直の老灯番が戻らない。実地教育に同行した新人の帰還も確かめる。",
       "openQuestion": "帰らない灯番の問題は何から生じ、誰が費用を負うか"
     },
     "reveal": {
@@ -422,6 +439,7 @@
         "old",
         "outage",
         "rescue",
+        "gate",
         "post"
       ],
       "gate": null,
@@ -510,6 +528,23 @@
         }
       },
       {
+        "id": "gate",
+        "script": "q001.v11.gate",
+        "assertion": {
+          "title": "篝火の迷宮・入口の灯",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "elder"
+            },
+            {
+              "entity": "rookie"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
         "id": "post",
         "script": "q001.v11.post",
         "assertion": {
@@ -540,7 +575,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "party の所在または保持者",
         "writer": "story.action",
@@ -555,7 +591,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "elder の所在または保持者",
         "writer": "story.action",
@@ -570,7 +607,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "rookie の所在または保持者",
         "writer": "story.action",
@@ -585,7 +623,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "rine の所在または保持者",
         "writer": "story.action",
@@ -601,6 +640,7 @@
           "dark",
           "branch",
           "post",
+          "transit",
           "party",
           "elder",
           "rookie",
@@ -621,6 +661,7 @@
           "dark",
           "branch",
           "post",
+          "transit",
           "party",
           "elder",
           "rookie",
@@ -850,9 +891,21 @@
         "options": [
           {
             "id": "home",
-            "text": "新人の火を頼りに、三人で詰所へ帰る",
-            "to": "post",
+            "text": "新人の火を頼りに、三人で迷宮の入口へ戻る",
+            "to": "gate",
             "action": "rescue_home"
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": "入口の篝火が見えた。老人を支えたまま階段を上がれば町へ出られる。リネへの帰還報告は、灯番組合の詰所に着いてからだ。",
+        "options": [
+          {
+            "id": "report",
+            "text": "入口の階段から町へ出て、灯番詰所へ向かう",
+            "to": "post",
+            "action": "gate_report"
           }
         ]
       },
@@ -889,16 +942,32 @@
       "storyQuest": "q001",
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 2,
-          "y": 1,
-          "facing": "east"
-        },
-        {
           "op": "story.scene",
           "quest": "q001",
           "scene": "entry"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.entry"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "fire.portable.set",
+              "fuel": 25,
+              "effect": "ward"
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.entry",
+              "value": true
+            }
+          ],
+          "else": []
         },
         {
           "op": "say",
@@ -917,25 +986,9 @@
               "requirement": "",
               "commands": [
                 {
-                  "op": "story.action",
+                  "op": "story.journey",
                   "quest": "q001",
                   "action": "entry_talk"
-                },
-                {
-                  "op": "fire.portable.set",
-                  "fuel": 25,
-                  "effect": "ward"
-                },
-                {
-                  "op": "map.teleport",
-                  "map": "kagaribi_f1",
-                  "x": 9,
-                  "y": 1,
-                  "facing": "east"
-                },
-                {
-                  "op": "jump",
-                  "script": "q001.v11.dark"
                 }
               ]
             },
@@ -951,13 +1004,6 @@
     "q001.v11.dark": {
       "storyQuest": "q001",
       "commands": [
-        {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 9,
-          "y": 1,
-          "facing": "east"
-        },
         {
           "op": "story.scene",
           "quest": "q001",
@@ -1003,13 +1049,6 @@
       "storyQuest": "q001",
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 9,
-          "y": 1,
-          "facing": "east"
-        },
-        {
           "op": "story.scene",
           "quest": "q001",
           "scene": "empty"
@@ -1031,25 +1070,9 @@
               "requirement": "",
               "commands": [
                 {
-                  "op": "story.action",
+                  "op": "story.journey",
                   "quest": "q001",
                   "action": "empty_follow"
-                },
-                {
-                  "op": "fire.portable.set",
-                  "fuel": 8,
-                  "effect": "ward"
-                },
-                {
-                  "op": "map.teleport",
-                  "map": "kagaribi_f1",
-                  "x": 13,
-                  "y": 3,
-                  "facing": "east"
-                },
-                {
-                  "op": "jump",
-                  "script": "q001.v11.old"
                 }
               ]
             },
@@ -1066,16 +1089,32 @@
       "storyQuest": "q001",
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 13,
-          "y": 3,
-          "facing": "east"
-        },
-        {
           "op": "story.scene",
           "quest": "q001",
           "scene": "old"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.old"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "fire.portable.set",
+              "fuel": 8,
+              "effect": "ward"
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.old",
+              "value": true
+            }
+          ],
+          "else": []
         },
         {
           "op": "say",
@@ -1094,31 +1133,9 @@
               "requirement": "",
               "commands": [
                 {
-                  "op": "story.action",
+                  "op": "story.journey",
                   "quest": "q001",
                   "action": "old_support"
-                },
-                {
-                  "op": "object.state.set",
-                  "map": "kagaribi_f1",
-                  "object": "q001_last_lamp",
-                  "state": "extinguished"
-                },
-                {
-                  "op": "map.teleport",
-                  "map": "kagaribi_f1",
-                  "x": 9,
-                  "y": 1,
-                  "facing": "east"
-                },
-                {
-                  "op": "fire.portable.set",
-                  "fuel": 0,
-                  "effect": null
-                },
-                {
-                  "op": "jump",
-                  "script": "q001.v11.outage"
                 }
               ]
             },
@@ -1135,21 +1152,38 @@
       "storyQuest": "q001",
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 9,
-          "y": 1,
-          "facing": "east"
-        },
-        {
-          "op": "fire.portable.set",
-          "fuel": 0,
-          "effect": null
-        },
-        {
           "op": "story.scene",
           "quest": "q001",
           "scene": "outage"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.outage"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "object.state.set",
+              "map": "kagaribi_f1",
+              "object": "q001_last_lamp",
+              "state": "extinguished"
+            },
+            {
+              "op": "fire.portable.set",
+              "fuel": 0,
+              "effect": null
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.outage",
+              "value": true
+            }
+          ],
+          "else": []
         },
         {
           "op": "say",
@@ -1173,20 +1207,10 @@
                   "action": "outage_call"
                 },
                 {
-                  "op": "fire.portable.set",
-                  "fuel": 25,
-                  "effect": "ward"
-                },
-                {
                   "op": "jump",
                   "script": "q001.v11.rescue"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1196,21 +1220,32 @@
       "storyQuest": "q001",
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 9,
-          "y": 1,
-          "facing": "east"
-        },
-        {
-          "op": "fire.portable.set",
-          "fuel": 25,
-          "effect": "ward"
-        },
-        {
           "op": "story.scene",
           "quest": "q001",
           "scene": "rescue"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.rescue"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "fire.portable.set",
+              "fuel": 25,
+              "effect": "ward"
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.rescue",
+              "value": true
+            }
+          ],
+          "else": []
         },
         {
           "op": "say",
@@ -1221,7 +1256,7 @@
           "options": [
             {
               "id": "home",
-              "text": "新人の火を頼りに、三人で詰所へ帰る",
+              "text": "新人の火を頼りに、三人で迷宮の入口へ戻る",
               "storyAction": {
                 "quest": "q001",
                 "action": "rescue_home"
@@ -1229,16 +1264,44 @@
               "requirement": "",
               "commands": [
                 {
-                  "op": "story.action",
+                  "op": "story.journey",
                   "quest": "q001",
                   "action": "rescue_home"
-                },
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.gate": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "gate"
+        },
+        {
+          "op": "say",
+          "text": "入口の篝火が見えた。老人を支えたまま階段を上がれば町へ出られる。リネへの帰還報告は、灯番組合の詰所に着いてからだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "入口の階段から町へ出て、灯番詰所へ向かう",
+              "storyAction": {
+                "quest": "q001",
+                "action": "gate_report"
+              },
+              "requirement": "",
+              "commands": [
                 {
-                  "op": "town.return"
-                },
-                {
-                  "op": "jump",
-                  "script": "q001.v11.post"
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "gate_report"
                 }
               ]
             },
@@ -1254,9 +1317,6 @@
     "q001.v11.post": {
       "storyQuest": "q001",
       "commands": [
-        {
-          "op": "town.return"
-        },
         {
           "op": "story.scene",
           "quest": "q001",
@@ -1461,6 +1521,15 @@
                         {
                           "op": "jump",
                           "script": "q001.v11.rescue"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "gate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q001.v11.gate"
                         }
                       ]
                     },
@@ -1671,19 +1740,19 @@
   "legacyOutcomes": {
     "informed": {
       "label": "二人に油を分け、帰り道を一緒に点灯する",
-      "text": "灯番は新人を叱らず、油の配り方から教え直しました。夜番には必ず二瓶持つ規則が残ります。",
+      "text": "灯番は新人を叱らず、油の配り方から教え直した。夜番には必ず二瓶持つ規則が残る。",
       "gold": 57,
       "xp": 68
     },
     "contract": {
       "label": "老人だけの救出として始末書を出す",
-      "text": "道は通りましたが新人は名乗れず、灯番は自分の不始末として始末書を書きました。",
+      "text": "道は通ったが新人は名乗れず、灯番は自分の不始末として始末書を書いた。",
       "gold": 77,
       "xp": 47
     },
     "compromise": {
       "label": "二人の位置を救助隊へ知らせる",
-      "text": "夜明けに二人は帰還しました。あなたの地図が救助隊の足を早めました。",
+      "text": "夜明けに二人は帰還した。あなたの地図が救助隊の足を早めた。",
       "gold": 37,
       "xp": 51
     }
@@ -1695,7 +1764,8 @@
       "entry": "篝火の迷宮・入口の灯",
       "dark": "油の尽きた巡灯路",
       "branch": "支道の最後の壁灯",
-      "post": "灯番詰所"
+      "post": "灯番詰所",
+      "transit": "移動中（現在地はワールド状態）"
     },
     "connections": [
       [
@@ -1709,6 +1779,22 @@
       [
         "entry",
         "post"
+      ],
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "dark"
+      ],
+      [
+        "transit",
+        "branch"
+      ],
+      [
+        "transit",
+        "post"
       ]
     ],
     "registry": {
@@ -1719,7 +1805,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "party の所在または保持者"
       },
@@ -1730,7 +1817,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "elder の所在または保持者"
       },
@@ -1741,7 +1829,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "rookie の所在または保持者"
       },
@@ -1752,7 +1841,8 @@
           "entry",
           "dark",
           "branch",
-          "post"
+          "post",
+          "transit"
         ],
         "meaning": "rine の所在または保持者"
       },
@@ -1764,6 +1854,7 @@
           "dark",
           "branch",
           "post",
+          "transit",
           "party",
           "elder",
           "rookie",
@@ -1780,6 +1871,7 @@
           "dark",
           "branch",
           "post",
+          "transit",
           "party",
           "elder",
           "rookie",
@@ -2018,6 +2110,19 @@
         ],
         "requires": true
       },
+      "gate": {
+        "title": "篝火の迷宮・入口の灯",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "elder"
+          },
+          {
+            "entity": "rookie"
+          }
+        ],
+        "requires": true
+      },
       "post": {
         "title": "灯番詰所",
         "place": "post",
@@ -2044,6 +2149,25 @@
         "requires": true,
         "effects": [
           {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dark",
+          "companions": []
+        },
+        "depart": [
+          {
             "op": "observe",
             "observer": "party",
             "proposition": "rule",
@@ -2056,21 +2180,8 @@
             "proposition": "gift",
             "source": "rookie",
             "requires": true
-          },
-          {
-            "op": "move",
-            "entities": [
-              "party"
-            ],
-            "path": [
-              "entry",
-              "dark"
-            ],
-            "assistant": "party",
-            "carrier": "party"
           }
-        ],
-        "once": true
+        ]
       },
       "dark_inspect": {
         "from": [
@@ -2102,7 +2213,7 @@
               "party"
             ],
             "path": [
-              "dark",
+              "transit",
               "branch"
             ],
             "assistant": "party",
@@ -2121,7 +2232,12 @@
             "value": "low"
           }
         ],
-        "once": true
+        "once": true,
+        "journey": {
+          "to": "branch",
+          "companions": []
+        },
+        "depart": []
       },
       "old_support": {
         "from": [
@@ -2137,7 +2253,7 @@
               "elder"
             ],
             "path": [
-              "branch",
+              "transit",
               "dark"
             ],
             "assistant": "party",
@@ -2154,7 +2270,14 @@
             "value": "attacking"
           }
         ],
-        "once": true
+        "once": true,
+        "journey": {
+          "to": "dark",
+          "companions": [
+            "elder"
+          ]
+        },
+        "depart": []
       },
       "outage_call": {
         "from": [
@@ -2205,6 +2328,38 @@
         "from": [
           "rescue"
         ],
+        "to": "gate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder",
+              "rookie"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "elder",
+            "rookie"
+          ]
+        },
+        "depart": []
+      },
+      "gate_report": {
+        "from": [
+          "gate"
+        ],
         "to": "post",
         "requires": true,
         "effects": [
@@ -2216,8 +2371,7 @@
               "rookie"
             ],
             "path": [
-              "dark",
-              "entry",
+              "transit",
               "post"
             ],
             "assistant": "party",
@@ -2234,7 +2388,15 @@
             "value": true
           }
         ],
-        "once": true
+        "once": true,
+        "journey": {
+          "to": "post",
+          "companions": [
+            "elder",
+            "rookie"
+          ]
+        },
+        "depart": []
       },
       "post_repair": {
         "from": [
@@ -2387,6 +2549,36 @@
         ]
       }
     },
-    "revision": 2
+    "revision": 3,
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 2,
+        "y": 1,
+        "event": "q001_decision"
+      },
+      "dark": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 9,
+        "y": 1,
+        "event": "q001_return"
+      },
+      "branch": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 13,
+        "y": 3,
+        "event": "q001_elder"
+      },
+      "post": {
+        "kind": "town",
+        "location": "hikarigaeri_lamplighter_post"
+      }
+    }
   }
 }

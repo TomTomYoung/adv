@@ -7,7 +7,7 @@ import {projectGame} from '../src/application/projection.js';
 import {validateContent} from '../src/core/validation.js';
 import {GameAudio} from '../src/application/audio.js';
 
-const fxGame=()=>{const d=structuredClone(data);d.scripts.test_fx={commands:[{op:'effect.play',effect:'skew',target:'scene',delay:80},{op:'audio.se',asset:'se_trap',delay:80,volume:.4},{op:'screen.set',layer:'mist',color:'#453955',opacity:.3,shade:true},{op:'say',text:'保存できる演出の場面です。'}]};d.game.services.push({id:"test_fx",label:"演出",detail:"演出の検証",script:"test_fx"});const g=new GameEngine(d);drain(g);return g;};
+const fxGame=()=>{const d=structuredClone(data);d.scripts.test_fx={commands:[{op:'effect.play',effect:'skew',target:'scene',delay:80},{op:'audio.se',asset:'se_trap',delay:80,volume:.4},{op:'screen.set',layer:'mist',color:'#453955',opacity:.3,shade:true},{op:'say',text:'保存できる演出の場面です。'}]};d.game.services.push({id:"test_fx",label:"演出",detail:"演出の検証",script:"test_fx"});(d.locations[d.game.world.townRoot].services??=[]).push("test_fx");const g=new GameEngine(d);drain(g);return g;};
 test('JSON effects and SE share timing; only persistent screen layers survive a save',()=>{
  const g=fxGame();assert.deepEqual(validateContent(g.data),[]);g.dispatch({type:'service',id:'test_fx'});assert.equal(g.feedback.events.length,2);assert.equal(g.feedback.events[0].at,g.feedback.events[1].at);const vm=projectGame(g);vm.effects.skew.duration=999;assert.equal(g.data.effects.skew.duration,400);
  const before=g.save(),next=new GameEngine(g.data);next.load(before);assert.equal(next.save(),before);assert.equal(next.feedback.events.length,0);assert.deepEqual(next.state.presentation.layers.mist,{color:'#453955',opacity:.3,shade:true});assert.equal(projectGame(next).se,null);

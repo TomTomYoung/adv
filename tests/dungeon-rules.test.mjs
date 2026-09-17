@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
+import {finishJourney} from './structure-routes.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {restoreGame} from '../src/application/restore.js';
 import {projectGame} from '../src/application/projection.js';
@@ -12,7 +13,7 @@ import {wetAfterSkill,wetResistance} from '../src/core/wet.js';
 import {validateSave} from '../src/core/save.js';
 import {gearErrors} from '../src/core/equipment.js';
 const action=(g,system,action,target,extra={})=>g.dispatch({type:'dungeon.action',system,action,target,...extra});
-const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);}};
+const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);finishJourney(g);}};
 const enter=region=>{const g=newGame();g.dispatch({type:'travel',region});return g;};
 const tickAt=level=>data.dungeons.region_1.systems.water.phases.slice(0,data.dungeons.region_1.systems.water.phases.findIndex(p=>p.level===level)).reduce((n,p)=>n+p.duration,0);
 const setLevel=(g,level)=>{g.state.dungeons.active.systems.water.elapsed=tickAt(level);};
@@ -27,7 +28,7 @@ for(const ending of ['informed','compromise'])test(`q001 ${ending}: fire rules, 
  assert.equal(g.state.objects['kagaribi_f1/q001_last_lamp'],'extinguished');assert.equal(fireContext(data,g.state).run.portable.lit,false);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false);
  assert.equal(g.state.stories.q001.values.darkness,'attacking');choose(g,'call');roundtrip(g);
  const v=g.state.stories.q001.values;assert.equal(v.afraid,true);assert.equal(v.steppedForward,true);assert.equal(v.rookieAt,'dark');assert.equal(v.oldOil+v.newOil+v.oilUsed,2);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);
- choose(g,'home','pause');roundtrip(g);g.run(data.quests.q001.model.entryScript);drain(g);choose(g,ending==='informed'?'repair':'rest');roundtrip(g);assert.equal(g.state.quests.q001.outcome,ending);assert.equal(g.state.mode,'town');
+ choose(g,'home','report','pause');roundtrip(g);g.run(data.quests.q001.model.entryScript);drain(g);choose(g,ending==='informed'?'repair':'rest');roundtrip(g);assert.equal(g.state.quests.q001.outcome,ending);assert.equal(g.state.mode,'town');
  const gold=g.state.gold;g.run(data.quests.q001.model.entryScript);drain(g);assert.equal(g.state.gold,gold);
 });
 test('q001 oil-less wall cannot ignite by attempting to transfer flame and object states are individual',()=>{

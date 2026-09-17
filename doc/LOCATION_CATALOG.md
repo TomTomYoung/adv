@@ -8,7 +8,7 @@
 
 迷宮から帰った人々が灯を囲む広場。施設の戸口と、迷宮へ下りる道が見える。
 
-親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance)。追加の移動先: なし。
+親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance) / 地下水道上層・待避場 (hikarigaeri_waterwatch)。追加の移動先: なし。
 
 機能: 会話・調査。
 
@@ -30,7 +30,7 @@
 
 食卓の灯が揺れる。仲間を探し、宿で身体を休められる。
 
-親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
+親: 灯帰り・篝火広場 (hikarigaeri_square)。子: 宿屋裏の汚水槽 (hikarigaeri_tavern_cistern)。追加の移動先: なし。
 
 機能: 編成 / 宿屋で全回復 / 守衛ベルグを訪ねる。
 
@@ -40,7 +40,7 @@
 
 掲示板には迷宮で待つ人々からの依頼が並ぶ。
 
-親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
+親: 灯帰り・篝火広場 (hikarigaeri_square)。子: 灯番詰所 (hikarigaeri_lamplighter_post)。追加の移動先: なし。
 
 機能: 依頼掲示板。
 
@@ -81,3 +81,41 @@
 背景: [location_insurance](../assets/images/locations/insurance.webp)。
 
 参照場面: q002「骨の荷札」 / hearing。
+
+## 灯番詰所 (hikarigaeri_lamplighter_post)
+
+灯番組合の奥にある詰所。リネが巡灯の記録と帰還者の名前を確かめる。
+
+親: 灯番組合 (hikarigaeri_guild)。子: なし。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_guild](../assets/images/locations/guild.webp)。
+
+参照場面: q001「帰らない灯番」 / post。
+
+## 地下水道上層・待避場 (hikarigaeri_waterwatch)
+
+低い通路から上がった者が身を寄せる、町側の待避場。見張りが下り口と水位の報告を受け持つ。
+
+親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_square](../assets/images/locations/square.webp)。
+
+参照場面: q003「逆流する鐘」 / relay。
+
+参照場面: q003「逆流する鐘」 / evacuated。
+
+## 宿屋裏の汚水槽 (hikarigaeri_tavern_cistern)
+
+宿の裏手にある排水設備。使用済みの水を溜め、決めた時刻に共同排水路へ流している。
+
+親: 帰り火亭 (hikarigaeri_tavern)。子: なし。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_tavern](../assets/images/locations/tavern.webp)。
+
+参照場面: q003「逆流する鐘」 / reservoir。

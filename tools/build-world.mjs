@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {buildNarration} from './build-narration.mjs';
 import path from 'node:path';
 export async function buildWorld(root){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
@@ -16,6 +17,7 @@ export async function buildWorld(root){
     await write(file,q);
   }
   for(const file of game.files.maps){const map=await read(file);map.dungeon=owners[map.id];await write(file,map);}
-  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.10.0';game.files.databases.locations='data/locations.json';
+  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.11.0';game.files.databases.locations='data/locations.json';
   await write('data/locations.json',locations);await write('data/assets.json',assets);await write('data/game.json',game);
+  await buildNarration(root);
 }

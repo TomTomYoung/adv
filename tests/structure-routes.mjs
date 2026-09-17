@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
+import {data,newGame,drain,fight,exploreSpot,goTownLocation,leaveDungeonOnFoot} from './helpers.mjs';
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
 export function prepareQuest(id){
@@ -15,12 +15,9 @@ export function finishJourney(g){
  if(!g.state.journey)return;
  const j=g.state.journey,d=data.quests[j.quest].story,p=d.worldPlaces[d.actions[j.action].journey.to];
  if(p.kind==='town'){
-  if(g.state.mode==='dungeon')assert.ok(g.dispatch({type:'retreat'}));
-  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
-  const route=[];let id=p.location;while(data.locations[id].parent){route.unshift(id);id=data.locations[id].parent;}
-  for(const id of route)assert.ok(g.dispatch({type:'location.move',id}));
+  leaveDungeonOnFoot(g);goTownLocation(g,p.location);
  }else{
-  if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==p.dungeon)assert.ok(g.dispatch({type:'retreat'}));
+  if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==p.dungeon)leaveDungeonOnFoot(g);
   exploreSpot(g,p,{maintain:true,interact:false});
  }
  assert.ok(g.dispatch({type:'journey.arrive'}));drain(g);

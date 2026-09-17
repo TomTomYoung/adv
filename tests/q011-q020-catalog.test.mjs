@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import {structureHash} from './narration-helpers.mjs';
 import {createHash} from 'node:crypto';
 import {data,drain,fight} from './helpers.mjs';
 import {prepareQuest} from './structure-routes.mjs';
@@ -106,9 +107,10 @@ test('q020 fighting the two guards does not repair supports or settle the monito
  const s=state(g,'q020');assert.equal(s.guardsDefeated,true);assert.equal(s.exitOpen,true);assert.equal(s.entranceBraced,false);assert.equal(s.roleEnded,false);assert.equal(s.crownAt,'keeper');assert.equal(s.formerAt,'dangerTunnel');
 });
 
-test('all pre-catalog q011-q020 script arrays remain byte-equivalent',async()=>{
- const hashes=JSON.parse(await fs.readFile(new URL('fixtures/scripts-q011-q020-before-catalog-sha256.json',import.meta.url)));
- for(const [id,hash] of Object.entries(hashes))assert.equal(createHash('sha256').update(JSON.stringify(data.scripts[id])).digest('hex'),hash,id);
+test('pre-catalog q011-q020 command structure remains exact while narration changes to plain form',async()=>{
+ const old=JSON.parse(await fs.readFile(new URL('fixtures/scripts-q011-q020-before-catalog-sha256.json',import.meta.url)));
+ const before=JSON.parse(await fs.readFile(new URL('fixtures/pre-1.11-structure.json',import.meta.url)));
+ for(const id of Object.keys(old))assert.equal(structureHash(data.scripts[id]),before.scripts[id],id);
 });
 
 test('old choices and paused revisits complete with the old result and do not award twice',()=>{
