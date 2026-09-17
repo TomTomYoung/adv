@@ -1,4 +1,5 @@
-import {catalogContentHash} from './quest-catalog.mjs';
+import {catalogContentHash,questPages} from './quest-catalog.mjs';
+import {questPageBundle} from './quest-page.mjs';
 import {locationCatalog,questPlaces} from './location-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
@@ -44,7 +45,14 @@ check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content versio
 const catalog=await fs.readFile(path.join(folder,'QUEST_CATALOG.md'),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
 check(await fs.readFile(path.join(folder,'LOCATION_CATALOG.md'),'utf8')===locationCatalog(data),'LOCATION_CATALOG: location references differ');
-for(const q of Object.values(data.quests))for(const line of questPlaces(data,q))check(catalog.includes(line),`QUEST_CATALOG: ${q.id} placement reference differs`);
+for(const q of Object.values(data.quests)){
+ const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,file),'utf8'):catalog;
+ for(const line of questPlaces(data,q))check(source.includes(line),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);
+ if(file){
+  check(catalog.includes(`](${file})`),`QUEST_CATALOG: missing ${q.id} dedicated-page link`);
+  for(const [name,expected] of Object.entries(questPageBundle(data,q.id)))check(await fs.readFile(path.join(folder,name),'utf8')===expected,`${name}: implementation or map differs; review edits before npm run build:catalog`);
+ }
+}
 for(const [key,n] of Object.entries(snapshot.counts))check(n===count(data[key]),`DATA_SNAPSHOT: ${key} count differs`);
 const quests=Object.values(data.quests);
 check(snapshot.questOutcomes===quests.reduce((n,q)=>n+count(q.outcomes),0),'DATA_SNAPSHOT: endings differ');

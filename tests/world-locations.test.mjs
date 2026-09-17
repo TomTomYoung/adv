@@ -7,7 +7,8 @@ import {prepareQuest,finishJourney} from './structure-routes.mjs';
 import {projectGame} from '../src/application/projection.js';
 import {restoreGame} from '../src/application/restore.js';
 import {validateContent} from '../src/core/validation.js';
-import {catalogContentHash,questCatalog} from '../tools/quest-catalog.mjs';
+import {catalogContentHash,questCatalog,questPages} from '../tools/quest-catalog.mjs';
+import {questPageBundle} from '../tools/quest-page.mjs';
 import {describePlace,locationCatalog} from '../tools/location-catalog.mjs';
 
 const move=(g,id)=>assert.ok(g.dispatch({type:'location.move',id}));
@@ -89,7 +90,10 @@ test('world validation rejects missing IDs, wrong ownership, cycles, impossible 
 
 test('catalogs contain every real event placement, scene facility and journey destination',()=>{
  const catalog=questCatalog(data,'2026-09-16');
- for(const q of Object.values(data.quests))for(const e of q.events)for(const p of e.points)assert.ok(catalog.includes(describePlace(data,{kind:'dungeon',...p,event:e.id})));
+ for(const q of Object.values(data.quests)){
+  const source=questPages[q.id]?questPageBundle(data,q.id)[questPages[q.id]]:catalog;
+  for(const e of q.events)for(const p of e.points)assert.ok(source.includes(describePlace(data,{kind:'dungeon',...p,event:e.id})));
+ }
  for(const id of ['hikarigaeri_medical_specimens','hikarigaeri_insurance'])assert.ok(catalog.includes(id));
  assert.ok(catalog.includes('出発: `school_recover`'));assert.ok(locationCatalog(data).includes('q002「骨の荷札」 / hearing'));
  for(const change of [d=>d.locations.hikarigaeri_shop.name='変更',d=>d.maps.region_1_f1.name='変更',d=>d.quests.q002.events[0].points[0].x++]){const bad=structuredClone(data);change(bad);assert.notEqual(catalogContentHash(bad),catalogContentHash(data));}

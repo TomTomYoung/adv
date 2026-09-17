@@ -16,7 +16,7 @@ q001の選択・場面開始時の座標転送を除き、老人の捜索、介�
 
 全200クエストと共通シナリオの地の文・概要・結末・説明を生成時に常体化しました。引用台詞と話者付き台詞は維持しています。q004以降の物理移動を全て探索化したという意味ではありません。詳細は [探索と文体の改訂](EXPLORATION_AND_PROSE_1_11.md)、共通仕様は [WORLD_LOCATIONS.md](WORLD_LOCATIONS.md) です。
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md) は全200件のイベント配置とq001〜q003の実際の場所、q001〜q020の全文を掲載します。[LOCATION_CATALOG.md](LOCATION_CATALOG.md) は10施設を索引化します。新規3施設の背景は既存画像の再利用です。
+[QUEST_CATALOG.md](QUEST_CATALOG.md) と [q001専用ページ](QUEST_Q001.md) で全200件のイベント配置とq001〜q003の実際の場所、q001〜q020の全文を掲載します。q001は全マップJSON、座標付き配置図、町までの移動経路、8場面・7配置・2結末の一意IDを専用ページにまとめています。[LOCATION_CATALOG.md](LOCATION_CATALOG.md) は10施設を索引化します。新規3施設の背景は既存画像の再利用です。
 
 ## 保存・既存仕様
 
