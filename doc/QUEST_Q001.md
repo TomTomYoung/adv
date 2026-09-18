@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.13.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.14.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:9cb464193b1f2f2ee1e4aa668ac76133b41801591cf2395c546e7cbd389fe473 -->
+<!-- quest-page-source:7fc144aae7021e915af414fe6ae982ca30da733af101242924eaa5a36098d775 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -18,7 +18,7 @@
 
 ![篝火の迷宮・灯番の巡回路の座標とイベントID](quest-maps/q001-kagaribi_f1.svg)
 
-図の原点は左上の (0, 0)。座標は [kagaribi_f1.json](../data/maps/kagaribi_f1.json) と一致する。配置セルの足元、または隣のセルから配置セルへ向いた状態で調べられる。物語の到着判定もこの範囲を使う。
+図の原点は左上の (0, 0)。座標は [kagaribi_f1.json](../data/maps/kagaribi_f1.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは足元か正面から調べられる。
 
 図 A (1, 1)：`q001-P-kagaribi`。
 
@@ -51,7 +51,7 @@ flowchart TD
 
 受注は `hikarigaeri_guild` の依頼掲示板。出発時は `hikarigaeri_square` へ戻り、迷宮入口 `kagaribi_f1` (1, 1) へ入る。帰路は入口の `kagaribi.exit` を調べて広場へ戻り、組合、詰所の順に訪れる。詰所の到着操作で `q001-S-post` に進む。
 
-B1 (13, 7) の `kagaribi_f1.down` は `kagaribi_f2` (1, 1) に接続する。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../data/dungeons.json) を参照する。
+B1 (13, 7) の `connections/floor_1_2` は `kagaribi_f2` (1, 1) に接続する。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../data/dungeons.json) を参照する。
 
 ## 本編イベントの順序と実移動
 
@@ -729,16 +729,6 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       "script": "kagaribi.exit"
     },
     {
-      "id": "down",
-      "x": 13,
-      "y": 7,
-      "name": "未探索区画への階段",
-      "kind": "stairs",
-      "trigger": "interact",
-      "safe": true,
-      "script": "kagaribi_f1.down"
-    },
-    {
       "id": "history",
       "x": 3,
       "y": 1,
@@ -1139,22 +1129,50 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
     }
   },
   "townRoot": "hikarigaeri_square",
+  "connections": {
+    "use": "map_connections",
+    "links": [
+      {
+        "id": "floor_1_2",
+        "name": "未探索区画への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 7,
+          "facing": "west"
+        },
+        "b": {
+          "map": "kagaribi_f2",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      },
+      {
+        "id": "floor_2_3",
+        "name": "未探索区画への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_f2",
+          "x": 13,
+          "y": 7,
+          "facing": "west"
+        },
+        "b": {
+          "map": "kagaribi_f3",
+          "x": 1,
+          "y": 1,
+          "facing": "east"
+        }
+      }
+    ]
+  },
   "scripts": {
     "kagaribi.exit": {
       "commands": [
         {
           "op": "town.return"
-        }
-      ]
-    },
-    "kagaribi_f1.down": {
-      "commands": [
-        {
-          "op": "map.teleport",
-          "map": "kagaribi_f2",
-          "x": 1,
-          "y": 1,
-          "facing": "east"
         }
       ]
     }

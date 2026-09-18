@@ -54,7 +54,7 @@ test('returning to the waterway needs actual steps; items and witness follow the
  const g=prepareQuest('q002');choose(g,'school');finishJourney(g);choose(g,'recover');
  assert.equal(state(g).values.porterAt,'transit');assert.equal(state(g).values.boxAt,'water');
  g.load(g.save());const steps=g.state.steps;finishJourney(g);assert.ok(g.state.steps>steps);
- assert.equal(g.state.location.map,'region_1_f1');assert.equal(state(g).scene,'recovery');
+ assert.equal(g.state.location.map,data.quests.q002.story.worldPlaces.landing.map);assert.equal(state(g).scene,'recovery');
  choose(g,'lift');choose(g,'return');assert.equal(state(g).values.boxAt,'party');assert.equal(state(g).values.returned,false);
  finishJourney(g);assert.equal(state(g).values.boxAt,'curator');choose(g,'consent');
  assert.equal(state(g).values.tagsAt,'party');assert.equal(state(g).values.ledgerAt,'party');assert.equal(state(g).values.porterAt,'transit');

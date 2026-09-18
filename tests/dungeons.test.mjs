@@ -17,7 +17,7 @@ const roundtrip=g=>{assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[
 const mutable=()=>{const g=begin();g.data=structuredClone(g.data);return g;};
 
 test('13 independent dungeon definitions retain 10 regions and all 200 quests',()=>{
-  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,26);
+  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,33);
   const g=begin();assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).effect,'ward');assert.equal(flame(g).fuel,90);
   assert.ok(fireEnvironment(fireContext(data,g.state)).protected);assert.ok(g.state.discovered.kagaribi_f1.includes('13,3'));assert.ok(!g.state.discovered.kagaribi_f2?.includes('13,7'));
   assert.equal(projectGame(g).dungeons.find(d=>d.id==='kagaribi').name,'篝火の迷宮');roundtrip(g);
@@ -84,7 +84,7 @@ test('every floor and the deep seed can be reached using actual movement and sta
   g.dispatch({type:'travel',dungeon:'kagaribi'});assert.equal(fireContext(data,g.state).run.ember.effect,'deep');assert.equal(g.state.inventory.kagaribi_torch,1);
 });
 test('persistent fixtures survive re-entry; fresh expeditions do not duplicate items or leak effects',()=>{
-  const g=begin(true);place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');action(g,'collect','calm');const old=g.state.dungeons.active.run;g.returnTown();g.dispatch({type:'travel',region:1});assert.equal(fireContext(data,g.state),null);assert.deepEqual(dungeonEncounter(data,g.state),{rate:1,enemyScale:1});assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['waterworks','voxel_space']);assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'kuragari_ward'}),false);
+  const g=begin(true);place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');action(g,'collect','calm');const old=g.state.dungeons.active.run;g.returnTown();g.dispatch({type:'travel',region:1});assert.equal(fireContext(data,g.state),null);assert.deepEqual(dungeonEncounter(data,g.state),{rate:1,enemyScale:1});assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['compartment_water','map_connections']);assert.equal(g.dispatch({type:'job.action',actor:'ada',ability:'kuragari_ward'}),false);
   g.returnTown();g.dispatch({type:'travel',dungeon:'kagaribi'});assert.ok(g.state.dungeons.active.run>old);assert.equal(fireContext(data,g.state).persistent.fixtures.calm.effect,'calm');assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).fuel,90);roundtrip(g);
 });
 

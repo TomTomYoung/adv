@@ -1,0 +1,123 @@
+{
+  "id": "region_1_f1",
+  "region": 1,
+  "floor": 1,
+  "name": "灯守の地下水道・地下1層",
+  "tiles": [
+    "###################",
+    "#...#.....#.......#",
+    "###.#.#.###.###.#.#",
+    "#.....#.....#.....#",
+    "#.#####.###.#.###.#",
+    "#.....#...#.......#",
+    "#####.###.#.#.#.###",
+    "#...#...#...#.#.#.#",
+    "#.#.###.#####.#.#.#",
+    "#.#...#.......#...#",
+    "#...#############.#",
+    "#.#.#...#.......#.#",
+    "#.###.#.#.#.#####.#",
+    "#.....#...#.......#",
+    "###################"
+  ],
+  "entrance": {
+    "x": 1,
+    "y": 1,
+    "facing": "east"
+  },
+  "background": "corridor",
+  "music": "exploration",
+  "encounter": "roaming_1",
+  "encounterRate": 0.18,
+  "objects": [
+    {
+      "id": "exit",
+      "x": 1,
+      "y": 1,
+      "name": "地上への階段",
+      "kind": "exit",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_1_f1.exit"
+    },
+    {
+      "id": "stairs",
+      "x": 14,
+      "y": 11,
+      "name": "地下二層への階段",
+      "kind": "stairs",
+      "trigger": "interact",
+      "safe": true,
+      "script": "region_1_f1.stairs"
+    },
+    {
+      "id": "cache",
+      "x": 1,
+      "y": 4,
+      "name": "補給の箱",
+      "kind": "chest",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_1_f1.cache"
+    },
+    {
+      "id": "fountain",
+      "x": 9,
+      "y": 7,
+      "name": "休息の泉",
+      "kind": "fountain",
+      "trigger": "interact",
+      "once": true,
+      "safe": true,
+      "script": "region_1_f1.fountain"
+    },
+    {
+      "id": "trap",
+      "x": 1,
+      "y": 12,
+      "name": "崩れた石床",
+      "kind": "trap",
+      "trigger": "enter",
+      "once": true,
+      "script": "region_1_f1.trap"
+    },
+    {
+      "id": "door",
+      "x": 17,
+      "y": 7,
+      "name": "封鎖された小部屋",
+      "kind": "door",
+      "trigger": "interact",
+      "blocking": true,
+      "initialState": "locked",
+      "safe": true,
+      "script": "region_1_f1.door",
+      "condition": {
+        "op": "not",
+        "arg": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.region_1_f1_door_open"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "encounterPool": [
+    {
+      "encounter": "roaming_1",
+      "weight": 20
+    },
+    {
+      "encounter": "wild_waterwheel_beaver",
+      "weight": 40
+    },
+    {
+      "encounter": "wild_sluice_crocodile",
+      "weight": 40
+    }
+  ],
+  "dungeon": "region_1"
+}

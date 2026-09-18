@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "region_1",
   "name": "灯守の地下水道",
-  "description": "灯が消えた町の足元。水音と、まだ帰らない人の声。",
+  "description": "水密扉で仕切られた短い水路と、乾いた操作室・荷揚げ場をつなぐ地下水道。",
   "region": 1,
   "recommendedLevel": 1,
   "profile": "classic",
@@ -14,224 +14,254 @@
   },
   "maps": [
     "region_1_f1",
+    "region_1_canal_a",
+    "region_1_landing",
+    "region_1_canal_b",
+    "region_1_inspection",
     "region_1_f2",
-    "waterworks_shaft"
+    "region_1_canal_c",
+    "region_1_lower_landing",
+    "region_1_canal_d",
+    "region_1_gatehouse"
   ],
   "systems": {
     "water": {
-      "use": "waterworks",
-      "phases": [
+      "use": "compartment_water",
+      "zones": [
         {
-          "id": "dry",
-          "name": "干潮",
-          "level": 0,
-          "duration": 24
+          "map": "region_1_canal_a",
+          "control": "upper_gate",
+          "initiallyFlooded": true
         },
         {
-          "id": "rise_1",
-          "name": "増水1",
-          "level": 1,
-          "duration": 4
+          "map": "region_1_canal_b",
+          "control": "upper_valve",
+          "initiallyFlooded": true
         },
         {
-          "id": "rise_2",
-          "name": "増水2",
-          "level": 2,
-          "duration": 4
+          "map": "region_1_canal_c",
+          "control": "lower_gate",
+          "initiallyFlooded": true
         },
         {
-          "id": "rise_3",
-          "name": "増水3",
-          "level": 3,
-          "duration": 4
-        },
-        {
-          "id": "rise_4",
-          "name": "増水4",
-          "level": 4,
-          "duration": 4
-        },
-        {
-          "id": "rise_5",
-          "name": "増水5",
-          "level": 5,
-          "duration": 4
-        },
-        {
-          "id": "rise_6",
-          "name": "増水6",
-          "level": 6,
-          "duration": 4
-        },
-        {
-          "id": "rise_7",
-          "name": "増水7",
-          "level": 7,
-          "duration": 4
-        },
-        {
-          "id": "rise_8",
-          "name": "増水8",
-          "level": 8,
-          "duration": 4
-        },
-        {
-          "id": "rise_9",
-          "name": "増水9",
-          "level": 9,
-          "duration": 4
-        },
-        {
-          "id": "rise_10",
-          "name": "増水10",
-          "level": 10,
-          "duration": 4
-        },
-        {
-          "id": "fall_9",
-          "name": "減水9",
-          "level": 9,
-          "duration": 3
-        },
-        {
-          "id": "fall_8",
-          "name": "減水8",
-          "level": 8,
-          "duration": 3
-        },
-        {
-          "id": "fall_7",
-          "name": "減水7",
-          "level": 7,
-          "duration": 3
-        },
-        {
-          "id": "fall_6",
-          "name": "減水6",
-          "level": 6,
-          "duration": 3
-        },
-        {
-          "id": "fall_5",
-          "name": "減水5",
-          "level": 5,
-          "duration": 3
-        },
-        {
-          "id": "fall_4",
-          "name": "減水4",
-          "level": 4,
-          "duration": 3
-        },
-        {
-          "id": "fall_3",
-          "name": "減水3",
-          "level": 3,
-          "duration": 3
-        },
-        {
-          "id": "fall_2",
-          "name": "減水2",
-          "level": 2,
-          "duration": 3
-        },
-        {
-          "id": "fall_1",
-          "name": "減水1",
-          "level": 1,
-          "duration": 3
+          "map": "region_1_canal_d",
+          "control": "lower_valve",
+          "initiallyFlooded": true
         }
       ],
       "controls": [
         {
           "id": "upper_gate",
-          "name": "上層の水門",
-          "kind": "gate",
+          "name": "第一水路の給排水盤",
           "map": "region_1_f1",
           "x": 2,
-          "y": 1,
-          "initiallyOpen": true
+          "y": 1
+        },
+        {
+          "id": "upper_gate",
+          "name": "第一水路の給排水盤",
+          "map": "region_1_landing",
+          "x": 2,
+          "y": 1
         },
         {
           "id": "upper_valve",
-          "name": "上層水路のバルブ",
-          "kind": "valve",
-          "map": "region_1_f1",
+          "name": "排水支路の給排水盤",
+          "map": "region_1_landing",
+          "x": 8,
+          "y": 1
+        },
+        {
+          "id": "upper_valve",
+          "name": "排水支路の給排水盤",
+          "map": "region_1_inspection",
           "x": 2,
-          "y": 3,
-          "initiallyOpen": true
+          "y": 1
         },
         {
           "id": "lower_gate",
-          "name": "下層の水門",
-          "kind": "gate",
+          "name": "給金箱水路の給排水盤",
           "map": "region_1_f2",
+          "x": 8,
+          "y": 1
+        },
+        {
+          "id": "lower_gate",
+          "name": "給金箱水路の給排水盤",
+          "map": "region_1_lower_landing",
           "x": 2,
-          "y": 1,
-          "initiallyOpen": true
+          "y": 1
         },
         {
           "id": "lower_valve",
-          "name": "下層水路のバルブ",
-          "kind": "valve",
-          "map": "region_1_f2",
-          "x": 5,
-          "y": 2,
-          "initiallyOpen": true
-        }
-      ],
-      "floors": [
-        {
-          "map": "region_1_f1",
-          "controls": [
-            "upper_gate",
-            "upper_valve"
-          ]
+          "name": "避難水路の給排水盤",
+          "map": "region_1_lower_landing",
+          "x": 8,
+          "y": 1
         },
         {
-          "map": "region_1_f2",
-          "controls": [
-            "lower_gate",
-            "lower_valve"
-          ]
-        }
-      ],
-      "protectionItem": "diving_kit",
-      "encounters": [
-        {
-          "min": 1,
-          "encounter": "water_small"
-        },
-        {
-          "min": 4,
-          "encounter": "water_predator"
-        },
-        {
-          "min": 7,
-          "encounter": "water_giant"
+          "id": "lower_valve",
+          "name": "避難水路の給排水盤",
+          "map": "region_1_gatehouse",
+          "x": 2,
+          "y": 1
         }
       ]
     },
-    "space": {
-      "use": "voxel_space",
-      "maps": [
-        "waterworks_shaft"
-      ],
-      "portals": [
+    "connections": {
+      "use": "map_connections",
+      "links": [
         {
-          "id": "shaft_access",
-          "name": "貯水立坑へ向かう",
-          "at": {
+          "id": "upper_inlet",
+          "name": "第一水路の水密扉",
+          "kind": "watertight_door",
+          "a": {
             "map": "region_1_f1",
-            "x": 1,
+            "x": 9,
             "y": 1,
-            "z": 0
+            "side": "east"
           },
-          "destination": {
-            "map": "waterworks_shaft",
+          "b": {
+            "map": "region_1_canal_a",
             "x": 1,
             "y": 1,
-            "z": 0
+            "side": "west"
+          }
+        },
+        {
+          "id": "upper_landing",
+          "name": "荷揚げ場の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_canal_a",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_landing",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "branch_inlet",
+          "name": "排水支路の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_landing",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_canal_b",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "branch_outlet",
+          "name": "点検室の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_canal_b",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_inspection",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "dry_stair",
+          "name": "乾いた階段室",
+          "kind": "stairs",
+          "a": {
+            "map": "region_1_landing",
+            "x": 5,
+            "y": 3,
+            "facing": "north"
+          },
+          "b": {
+            "map": "region_1_f2",
+            "x": 1,
+            "y": 1,
+            "facing": "east"
+          }
+        },
+        {
+          "id": "lower_inlet",
+          "name": "給金箱水路の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_f2",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_canal_c",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "lower_landing",
+          "name": "待避場の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_canal_c",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_lower_landing",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "deep_inlet",
+          "name": "避難水路の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_lower_landing",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_canal_d",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "deep_outlet",
+          "name": "水門詰所の水密扉",
+          "kind": "watertight_door",
+          "a": {
+            "map": "region_1_canal_d",
+            "x": 9,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "region_1_gatehouse",
+            "x": 1,
+            "y": 1,
+            "side": "west"
           }
         }
       ]

@@ -1,4 +1,6 @@
 import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
+import {connectionMove} from './systems/map-connections.js';
+import {compartmentBlocked} from './systems/compartment-water.js';
 import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxelMap} from './voxels.js';
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess} from './dungeons.js';
 import {setPortableFire} from './systems/fire-network.js';
@@ -91,6 +93,7 @@ export class GameEngine {
   objectState(object){return this.state.objects[`${this.map().id}/${object.id}`]??object.initialState??'ready';}
   objectAt(x,y,z=this.state.location?.z??0){return this.map()?.objects.filter(o=>o.x===x&&o.y===y&&(o.z??0)===z)??[];}
   walkable(map,x,y,z=map?.id===this.state.location?.map?(this.state.location.z??0):0){
+    if(compartmentBlocked(this.data,this.state,map?.id))return false;
     if(map?.voxels){const terrain=voxelMapState(this.data,this.state,map);if(voxelOccupancyReason(map,terrain,{x,y,z},{waterAccess:dungeonWaterAccess(this.data,this.state)}))return false;return !map.objects.some(o=>o.x===x&&o.y===y&&(o.z??0)===z&&objectBlocks(this.state,map,o));}
     if(z!==0)return false;
     if(!map||y<0||y>=map.tiles.length||x<0||x>=map.tiles[0].length||dungeonTile(this.data,this.state,map,x,y)!=='.'||dungeonBlock(this.data,this.state,map,x,y))return false;
@@ -128,6 +131,8 @@ export class GameEngine {
     if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];syncWorldStories(this);return true;}
     if(!['forward','back'].includes(direction))return false;
     const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
+    const connection=connectionMove(this.data,this.state,DIRECTIONS[(face+(direction==='back'?2:0))%4]);
+    if(connection)return dungeonAction(this,connection);
     const map=this.map(),point={x,y,z:loc.z??0};
     if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point,{waterAccess:dungeonWaterAccess(this.data,this.state)})||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
     if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
@@ -176,7 +181,7 @@ export class GameEngine {
     }
     return false;
   }
-  interact(){if(this.state.mode!=='dungeon'||this.state.waiting)return false;if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
+  interact(){if(this.state.mode!=='dungeon'||this.state.waiting||this.state.battle)return false;const connection=connectionMove(this.data,this.state,this.state.location.facing)??connectionMove(this.data,this.state,null);if(connection)return dungeonAction(this,connection);if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
   finishBattle(result,skipEvents=false){endBattle(this,result,skipEvents);}
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){

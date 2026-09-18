@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain,walk,goTownLocation} from './helpers.mjs';
+import {data,newGame,drain,walk,goTownLocation} from './legacy-map-helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {dungeonActionPlan} from '../src/core/dungeons.js';
 import {validateSave} from '../src/core/save.js';

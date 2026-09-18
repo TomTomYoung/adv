@@ -1,0 +1,3242 @@
+{
+  "schemaVersion": 1,
+  "id": "q004",
+  "number": 4,
+  "title": "二枚目の通行証",
+  "client": "見習い冒険者のイナ",
+  "brief": "地下関所で姉が拘束された。姉とイナが持つ通行証には、同じ番号が記されている。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。",
+  "events": [
+    {
+      "id": "q004_clue_a",
+      "title": "二枚目の通行証：現場の痕跡",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q004.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q004"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    },
+    {
+      "id": "q004_clue_b",
+      "title": "二枚目の通行証：記録と証言",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 11,
+          "y": 4,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q004.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q004"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    },
+    {
+      "id": "q004_decision",
+      "title": "二枚目の通行証：決着の場",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 17,
+          "y": 3,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q004.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "x": 5,
+      "y": 3,
+      "object": "q004_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f1",
+      "x": 11,
+      "y": 4,
+      "object": "q004_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f1",
+      "x": 17,
+      "y": 3,
+      "object": "q004_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "gold": 57,
+      "xp": 68,
+      "label": "三人の名義を審査へ戻す",
+      "text": "通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。"
+    },
+    "contract": {
+      "gold": 77,
+      "xp": 47,
+      "label": "錠を破って姉を連れ出す",
+      "text": "姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。"
+    },
+    "compromise": {
+      "gold": 37,
+      "xp": 51,
+      "label": "罰金で留置を解く",
+      "text": "姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。"
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "world": {
+      "truth": "地下通行資格を持つのは姉だけだった。資格取得前のイナは姉の通行証を写し、姉妹は同じ番号の証を別々に使用した。イナが写しで入場した後、姉が原本を提示したため、同じ番号が同時に使われたと判定され、姉が拘束された。関所番もまた、住民登録上は死亡している兄の就業資格を使って勤務している。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "地下通行資格を持つのは姉だけだった。資格取得前のイナは姉の通行証を写し、姉妹は同じ番号の証を別々に使用した。イナが写しで入場した後、姉が原本を提示したため、同じ番号が同時に使われたと判定され、姉が拘束された。関所番もまた、住民登録上は死亡している兄の就業資格を使って勤務している。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。",
+      "authoringNotes": {
+        "notice": "以下の事実はq004を成立させる世界設定上の制約だ。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はない。ただし、生成・改稿時に矛盾させてはいけない。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "地下通行証は一つの資格と一人の名義に対応し、関所では番号ごとに入退場を記録する。同じ番号の人物が地下にいる間、その番号を使った二人目は通過できない。",
+          "イナの持つ証は姉の原本を写した複製だ。イナが先に通過したため、後から原本を提示した姉がその場で拘束された。",
+          "関所の通行記録、勤務簿、住民登録簿は別々に管理されている。そのため、関所番が死亡した兄の名義で勤務している事実は、勤務簿だけを見ても発覚しない。"
+        ]
+      }
+    },
+    "agents": [
+      {
+        "id": "ina",
+        "character": "ina",
+        "name": "イナ",
+        "goal": "関所に留置された姉を助ける",
+        "initialLocation": "outside"
+      },
+      {
+        "id": "sister",
+        "character": "sister",
+        "name": "イナの姉",
+        "goal": "妹を守り、自分も外へ戻る",
+        "initialLocation": "cell"
+      },
+      {
+        "id": "keeper",
+        "character": "passkeeper",
+        "name": "関所番",
+        "goal": "兄の名で続けた勤務を失いたくない",
+        "initialLocation": "desk"
+      },
+      {
+        "id": "reviewer",
+        "character": "reviewer",
+        "name": "名義審査官",
+        "goal": "本人と資格名義を照合する",
+        "initialLocation": "office"
+      }
+    ],
+    "conflict": {
+      "request": "地下関所で姉が拘束された。姉とイナが持つ通行証には、同じ番号が記されている。",
+      "progression": "二枚の通行証と入退場記録から姉の拘束理由を確かめる。番人の勤務名義を住民登録簿まで照合した場合だけ、三人の資格問題を同じ審査へ戻せる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q004.v11.entry",
+          "assertion": {
+            "title": "関所の外",
+            "place": "outside",
+            "cast": [
+              {
+                "entity": "ina"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "duplicate",
+          "script": "q004.v11.duplicate",
+          "assertion": {
+            "title": "公開窓口",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "ina"
+              },
+              {
+                "entity": "keeper"
+              },
+              {
+                "entity": "sister",
+                "mode": "remote",
+                "requires": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q004.values.windowOpen"
+                  },
+                  "right": true
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "consent",
+          "script": "q004.v11.consent",
+          "assertion": {
+            "title": "公開窓口",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "ina"
+              },
+              {
+                "entity": "keeper"
+              },
+              {
+                "entity": "sister",
+                "mode": "remote",
+                "requires": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q004.values.windowOpen"
+                  },
+                  "right": true
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "review",
+          "script": "q004.v11.review",
+          "assertion": {
+            "title": "公開窓口",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "ina"
+              },
+              {
+                "entity": "keeper"
+              },
+              {
+                "entity": "reviewer"
+              },
+              {
+                "entity": "sister",
+                "mode": "remote",
+                "requires": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q004.values.windowOpen"
+                  },
+                  "right": true
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地下関所で姉が拘束された。姉とイナが持つ通行証には、同じ番号が記されている。",
+      "openQuestion": "二枚目の通行証の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "地下通行資格を持つのは姉だけだった。資格取得前のイナは姉の通行証を写し、姉妹は同じ番号の証を別々に使用した。イナが写しで入場した後、姉が原本を提示したため、同じ番号が同時に使われたと判定され、姉が拘束された。関所番もまた、住民登録上は死亡している兄の就業資格を使って勤務している。",
+      "retroactiveTargets": [
+        "entry",
+        "duplicate",
+        "consent",
+        "review"
+      ],
+      "gate": null,
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q004.v11.entry",
+        "assertion": {
+          "title": "関所の外",
+          "place": "outside",
+          "cast": [
+            {
+              "entity": "ina"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "duplicate",
+        "script": "q004.v11.duplicate",
+        "assertion": {
+          "title": "公開窓口",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "ina"
+            },
+            {
+              "entity": "keeper"
+            },
+            {
+              "entity": "sister",
+              "mode": "remote",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q004.values.windowOpen"
+                },
+                "right": true
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "consent",
+        "script": "q004.v11.consent",
+        "assertion": {
+          "title": "公開窓口",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "ina"
+            },
+            {
+              "entity": "keeper"
+            },
+            {
+              "entity": "sister",
+              "mode": "remote",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q004.values.windowOpen"
+                },
+                "right": true
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "review",
+        "script": "q004.v11.review",
+        "assertion": {
+          "title": "公開窓口",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "ina"
+            },
+            {
+              "entity": "keeper"
+            },
+            {
+              "entity": "reviewer"
+            },
+            {
+              "entity": "sister",
+              "mode": "remote",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q004.values.windowOpen"
+                },
+                "right": true
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "stories.q004.values.partyAt",
+        "type": "enum",
+        "initial": "outside",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.inaAt",
+        "type": "enum",
+        "initial": "outside",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "ina の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.sisterAt",
+        "type": "enum",
+        "initial": "cell",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "sister の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.keeperAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "keeper の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.reviewerAt",
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "reviewer の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.originalAt",
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "copy",
+          "register"
+        ],
+        "meaning": "original の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.copyAt",
+        "type": "enum",
+        "initial": "ina",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "original",
+          "register"
+        ],
+        "meaning": "copy の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.registerAt",
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "original",
+          "copy"
+        ],
+        "meaning": "register の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.windowOpen",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "windowOpen",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.truthKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "truthKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.sistersConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sistersConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.keeperConsent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "keeperConsent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.filed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "filed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.released",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "released",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.copyInvalid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "copyInvalid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.numberRevoked",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "numberRevoked",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q004.values.provisional",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "provisional",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "progression": "二枚の通行証と入退場記録から姉の拘束理由を確かめる。番人の勤務名義を住民登録簿まで照合した場合だけ、三人の資格問題を同じ審査へ戻せる。",
+    "flowVersion": 3,
+    "entryScript": "q004.v11.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まったと聞いて、引き返してきました」。原本は番人に押収され、姉は留置室にいる。",
+        "options": [
+          {
+            "id": "window",
+            "text": "二枚の通行証と入退場記録を照合する",
+            "to": "duplicate",
+            "action": "entry_window"
+          },
+          {
+            "id": "force",
+            "text": "関所の錠を破って姉を連れ出す",
+            "to": "@contract",
+            "combat": true,
+            "action": "entry_force"
+          }
+        ]
+      },
+      {
+        "id": "duplicate",
+        "text": "入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。窓口には勤務簿があるが、住民登録簿は地上で別に管理されている。",
+        "options": [
+          {
+            "id": "fine",
+            "text": "複製を認め、罰金を納めて姉を引き取る",
+            "to": "@compromise",
+            "action": "duplicate_fine"
+          },
+          {
+            "id": "inspect",
+            "text": "番人の勤務名義を住民登録簿と照合する",
+            "to": "consent",
+            "action": "duplicate_inspect"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "text": "住民登録簿の死亡記録を伝えると、番人は兄の名で働いていると認めた。イナが姉を見た。「私たちのことも、この人のことも、全部話すの？」。申告すれば、姉妹の資格だけでなく番人の勤務も審査の対象になる。",
+        "options": [
+          {
+            "id": "file",
+            "text": "姉妹と番人へ審査の不利益を説明し、三人から申告への同意を取る",
+            "to": "review",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.truthKnown"
+              },
+              "right": true
+            },
+            "action": "consent_file"
+          },
+          {
+            "id": "fine",
+            "text": "姉妹の違反だけを処理し、罰金を納める",
+            "to": "@compromise",
+            "action": "consent_fine"
+          }
+        ]
+      },
+      {
+        "id": "review",
+        "text": "審査官は住民登録の記録を携えて地上から来た。窓口の通行記録、勤務簿、原本と写しを並べ、三人の申告を聞く。姉は自分の資格を使い、イナはその写しを使った。番人の勤務名義は亡兄のものだった。",
+        "options": [
+          {
+            "id": "issue",
+            "text": "通行記録、勤務簿、住民登録簿を審査官へ提出し、別々の仮証の発行と姉の釈放を見届ける",
+            "to": "@informed",
+            "action": "review_issue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
+  },
+  "scripts": {
+    "q004.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "通行証の擦れ方が違い、両方に同じ修正傷がある。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q004",
+          "key": "clue_a",
+          "text": "通行証の擦れ方が違い、両方に同じ修正傷がある。"
+        }
+      ]
+    },
+    "q004.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "見習い冒険者のイナ",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q004",
+          "key": "clue_b",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なる。"
+        }
+      ]
+    },
+    "q004.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "二枚目の通行証\n\n地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚ある。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "双方の事情を記録し臨時証を交渉する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "姉妹は一枚を共有しているが、関所の係も亡き兄の資格で働いている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "関所の番犬を退け姉を連れ出す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q004",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "罰金を肩代わりし事情は伏せる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "二枚目の通行証\n\n地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚ある。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q004.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q004.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉妹は一枚を共有しているが、関所の係も亡き兄の資格で働いている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q004.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "双方の事情を記録し臨時証を交渉する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q004.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "関所の番犬を退け姉を連れ出す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q004",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "罰金を肩代わりし事情は伏せる",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q004",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」見習い冒険者のイナは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q004.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q004.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q004.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q004.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q004.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q004.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q004.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q004.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "イナは姉の証を示し、係員は番号の重複を指摘した。双方の机が離れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sisters",
+              "text": "姉妹に別々の証が必要な理由を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.sisters"
+                }
+              ]
+            },
+            {
+              "id": "register",
+              "text": "係員の署名と勤務名簿を照合する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.keeper"
+                }
+              ]
+            },
+            {
+              "id": "rescue",
+              "text": "番犬を退け、姉を連れ出す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q004.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.sisters": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "sisters"
+        },
+        {
+          "op": "say",
+          "text": "姉妹は証の共有を認めた。「罰金で今日だけ通れるなら」。書類には臨時証の申請欄もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fine",
+              "text": "罰金20Gを肩代わりする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "臨時証を申請し、審査係の署名を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q004.application",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.keeper"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.keeper": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "keeper"
+        },
+        {
+          "op": "say",
+          "text": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なる。 係員は兄の名を借りていたと認め、本名で再試験を受けるなら姉妹にも正規の道を用意すると答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "apply",
+              "text": "姉妹と係員の三人分の申請を一緒に書く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.applications"
+                }
+              ]
+            },
+            {
+              "id": "fine",
+              "text": "資格の件を伏せ、姉の罰金20Gを払う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.applications": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q004.node",
+          "value": "applications"
+        },
+        {
+          "op": "say",
+          "text": "姉妹は臨時証、係員は再試験を希望した。一方だけを見逃す取引にはしないと三人が署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "submit",
+              "text": "三人の署名を窓口へ出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "申請を保留し、姉妹へ相談を戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.flow.sisters"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q004",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q004.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q004.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q004.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q004"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q004.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q004.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sisters",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.sisters"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "keeper",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.keeper"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "applications",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.flow.applications"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q004.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.entry": {
+      "storyQuest": "q004",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q004",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まったと聞いて、引き返してきました」。原本は番人に押収され、姉は留置室にいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "window",
+              "text": "二枚の通行証と入退場記録を照合する",
+              "storyAction": {
+                "quest": "q004",
+                "action": "entry_window"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "entry_window"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.duplicate"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "関所の錠を破って姉を連れ出す",
+              "storyAction": {
+                "quest": "q004",
+                "action": "entry_force"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q004",
+                      "action": "entry_force"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q004.v11.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.duplicate": {
+      "storyQuest": "q004",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q004",
+          "scene": "duplicate"
+        },
+        {
+          "op": "say",
+          "text": "入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。窓口には勤務簿があるが、住民登録簿は地上で別に管理されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fine",
+              "text": "複製を認め、罰金を納めて姉を引き取る",
+              "storyAction": {
+                "quest": "q004",
+                "action": "duplicate_fine"
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "duplicate_fine"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "inspect",
+              "text": "番人の勤務名義を住民登録簿と照合する",
+              "storyAction": {
+                "quest": "q004",
+                "action": "duplicate_inspect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "duplicate_inspect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.consent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.consent": {
+      "storyQuest": "q004",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q004",
+          "scene": "consent"
+        },
+        {
+          "op": "say",
+          "text": "住民登録簿の死亡記録を伝えると、番人は兄の名で働いていると認めた。イナが姉を見た。「私たちのことも、この人のことも、全部話すの？」。申告すれば、姉妹の資格だけでなく番人の勤務も審査の対象になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "file",
+              "text": "姉妹と番人へ審査の不利益を説明し、三人から申告への同意を取る",
+              "storyAction": {
+                "quest": "q004",
+                "action": "consent_file"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q004.values.truthKnown"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "consent_file"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.review"
+                }
+              ]
+            },
+            {
+              "id": "fine",
+              "text": "姉妹の違反だけを処理し、罰金を納める",
+              "storyAction": {
+                "quest": "q004",
+                "action": "consent_fine"
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "consent_fine"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.review": {
+      "storyQuest": "q004",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q004",
+          "scene": "review"
+        },
+        {
+          "op": "say",
+          "text": "審査官は住民登録の記録を携えて地上から来た。窓口の通行記録、勤務簿、原本と写しを並べ、三人の申告を聞く。姉は自分の資格を使い、イナはその写しを使った。番人の勤務名義は亡兄のものだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "issue",
+              "text": "通行記録、勤務簿、住民登録簿を審査官へ提出し、別々の仮証の発行と姉の釈放を見届ける",
+              "storyAction": {
+                "quest": "q004",
+                "action": "review_issue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "review_issue"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.window": {
+      "storyQuest": "q004",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q004",
+          "scene": "window"
+        },
+        {
+          "op": "say",
+          "text": "入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。窓口には勤務簿があるが、住民登録簿は地上で別に管理されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fine",
+              "text": "複製を認め、罰金を納めて姉を引き取る",
+              "storyAction": {
+                "quest": "q004",
+                "action": "duplicate_fine"
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "duplicate_fine"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "inspect",
+              "text": "番人の勤務名義を住民登録簿と照合する",
+              "storyAction": {
+                "quest": "q004",
+                "action": "duplicate_inspect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q004",
+                  "action": "duplicate_inspect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q004.v11.consent"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q004.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q004",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。"
+        }
+      ]
+    },
+    "q004.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q004",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。"
+        }
+      ]
+    },
+    "q004.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q004",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。"
+        }
+      ]
+    },
+    "q004.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q004"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q004.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q004.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q004.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q004"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q004.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "duplicate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.v11.duplicate"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.v11.consent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "review",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.v11.review"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "window",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q004.v11.window"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q004.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "三人の署名を窓口へ出す",
+      "text": "姉妹は別々の証を得た。係員には本名での再試験が課される。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "番犬を退け、姉を連れ出す",
+      "text": "姉は帰ったが通行証は失効した。妹は地上で働いて再発行料を貯める。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "罰金20Gを肩代わりする",
+      "text": "係員は何も聞かず姉を放した。翌月も二人は一枚の証を握っている。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "outside": "関所の外",
+      "desk": "公開窓口",
+      "cell": "留置室",
+      "office": "地上の審査窓口"
+    },
+    "connections": [
+      [
+        "outside",
+        "desk"
+      ],
+      [
+        "desk",
+        "cell"
+      ],
+      [
+        "outside",
+        "office"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "outside",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "inaAt": {
+        "type": "enum",
+        "initial": "outside",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "ina の所在または保持者"
+      },
+      "sisterAt": {
+        "type": "enum",
+        "initial": "cell",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "sister の所在または保持者"
+      },
+      "keeperAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "keeper の所在または保持者"
+      },
+      "reviewerAt": {
+        "type": "enum",
+        "initial": "office",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office"
+        ],
+        "meaning": "reviewer の所在または保持者"
+      },
+      "originalAt": {
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "copy",
+          "register"
+        ],
+        "meaning": "original の所在または保持者"
+      },
+      "copyAt": {
+        "type": "enum",
+        "initial": "ina",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "original",
+          "register"
+        ],
+        "meaning": "copy の所在または保持者"
+      },
+      "registerAt": {
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "outside",
+          "desk",
+          "cell",
+          "office",
+          "party",
+          "ina",
+          "sister",
+          "keeper",
+          "reviewer",
+          "original",
+          "copy"
+        ],
+        "meaning": "register の所在または保持者"
+      },
+      "windowOpen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "windowOpen"
+      },
+      "truthKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "truthKnown"
+      },
+      "sistersConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sistersConsent"
+      },
+      "keeperConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "keeperConsent"
+      },
+      "filed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "filed"
+      },
+      "released": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "released"
+      },
+      "copyInvalid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "copyInvalid"
+      },
+      "numberRevoked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "numberRevoked"
+      },
+      "provisional": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "provisional"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "ina": {
+        "holder": "inaAt",
+        "kind": "person",
+        "character": "ina"
+      },
+      "sister": {
+        "holder": "sisterAt",
+        "kind": "person",
+        "character": "sister"
+      },
+      "keeper": {
+        "holder": "keeperAt",
+        "kind": "person",
+        "character": "passkeeper"
+      },
+      "reviewer": {
+        "holder": "reviewerAt",
+        "kind": "person",
+        "character": "reviewer"
+      },
+      "original": {
+        "holder": "originalAt",
+        "kind": "item"
+      },
+      "copy": {
+        "holder": "copyAt",
+        "kind": "item"
+      },
+      "register": {
+        "holder": "registerAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "shared": {
+        "text": "イナが姉の写しで先に入場し、後から同じ番号の原本を提示した姉が拘束された"
+      },
+      "duty": {
+        "text": "勤務簿には関所番が申告した勤務名義がある"
+      },
+      "resident": {
+        "text": "別管理の住民登録簿では、その名義人は死亡している"
+      },
+      "brother": {
+        "text": "関所番は死んだ兄の名義を使っている"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "関所の外",
+        "place": "outside",
+        "cast": [
+          {
+            "entity": "ina"
+          }
+        ],
+        "requires": true
+      },
+      "duplicate": {
+        "title": "公開窓口",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "ina"
+          },
+          {
+            "entity": "keeper"
+          },
+          {
+            "entity": "sister",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.windowOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      },
+      "consent": {
+        "title": "公開窓口",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "ina"
+          },
+          {
+            "entity": "keeper"
+          },
+          {
+            "entity": "sister",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.windowOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      },
+      "review": {
+        "title": "公開窓口",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "ina"
+          },
+          {
+            "entity": "keeper"
+          },
+          {
+            "entity": "reviewer"
+          },
+          {
+            "entity": "sister",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.windowOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      },
+      "window": {
+        "title": "公開窓口",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "ina"
+          },
+          {
+            "entity": "keeper"
+          },
+          {
+            "entity": "sister",
+            "mode": "remote",
+            "requires": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.windowOpen"
+              },
+              "right": true
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_window": {
+        "from": [
+          "entry"
+        ],
+        "to": "duplicate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ina"
+            ],
+            "path": [
+              "outside",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "windowOpen",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "shared",
+            "source": "register",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "entry_force": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "outside",
+              "desk",
+              "cell"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sister"
+            ],
+            "path": [
+              "cell",
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "numberRevoked",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "duplicate_fine": {
+        "from": [
+          "duplicate",
+          "window"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "ina",
+            "to": "keeper"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "cell",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "original",
+            "from": "keeper",
+            "to": "sister"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ina"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "copyInvalid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": true
+      },
+      "duplicate_inspect": {
+        "from": [
+          "duplicate",
+          "window"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "duty",
+            "source": "keeper",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "desk",
+              "outside",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "resident",
+            "source": "reviewer",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "office",
+              "outside",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "brother",
+            "source": "keeper",
+            "requires": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "contains",
+                  "left": {
+                    "ref": "stories.q004.knowledge.party"
+                  },
+                  "right": "duty"
+                },
+                {
+                  "op": "contains",
+                  "left": {
+                    "ref": "stories.q004.knowledge.party"
+                  },
+                  "right": "resident"
+                }
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "key": "truthKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "consent_file": {
+        "from": [
+          "consent"
+        ],
+        "to": "review",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q004.values.truthKnown"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "sistersConsent",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "keeperConsent",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "desk",
+              "outside",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "filed",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "reviewer"
+            ],
+            "path": [
+              "office",
+              "outside",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "consent_fine": {
+        "from": [
+          "consent"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "ina",
+            "to": "keeper"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "cell",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "original",
+            "from": "keeper",
+            "to": "sister"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ina"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "copyInvalid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": true
+      },
+      "review_issue": {
+        "from": [
+          "review"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "ina",
+            "to": "reviewer"
+          },
+          {
+            "op": "transfer",
+            "entity": "original",
+            "from": "keeper",
+            "to": "reviewer"
+          },
+          {
+            "op": "set",
+            "key": "provisional",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "copyInvalid",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "cell",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ina",
+              "sister"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "window_fine": {
+        "from": [
+          "window"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "ina",
+            "to": "keeper"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "cell",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "original",
+            "from": "keeper",
+            "to": "sister"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "sister"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ina"
+            ],
+            "path": [
+              "desk",
+              "outside"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "copyInvalid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": true
+      },
+      "window_inspect": {
+        "from": [
+          "window"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "duty",
+            "source": "keeper",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "desk",
+              "outside",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "resident",
+            "source": "reviewer",
+            "requires": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "office",
+              "outside",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "brother",
+            "source": "keeper",
+            "requires": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "contains",
+                  "left": {
+                    "ref": "stories.q004.knowledge.party"
+                  },
+                  "right": "duty"
+                },
+                {
+                  "op": "contains",
+                  "left": {
+                    "ref": "stories.q004.knowledge.party"
+                  },
+                  "right": "resident"
+                }
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "key": "truthKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.released"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.provisional"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.filed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.sistersConsent"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.keeperConsent"
+            },
+            "right": true
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.released"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.numberRevoked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.sisterAt"
+            },
+            "right": "outside"
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.released"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.copyInvalid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q004.values.originalAt"
+            },
+            "right": "sister"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q004.values.provisional"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    }
+  }
+}

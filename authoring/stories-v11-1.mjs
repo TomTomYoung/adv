@@ -23,8 +23,8 @@ const rows=[q001,q002];
  s.end('contract',"通路を閉じて鐘を止める","鎖を切ると鐘は止まった。閉鎖した低い通路には水が流れ込み続ける。ソラは閉鎖札を外さず、機械の警報を失った水位線を見張った。",and(s.is('warned'),s.is('chainCut')));
  s.end('compromise',"高所の鐘と見張りの交代制","高所の鐘は人が鳴らす警報になった。水位の監視、伝令、鐘番の当番が引き受けられ、連絡試験を終えた。逆流そのものは残り、人手を絶やせない。",and(s.is('warned'),s.is('bellAt','high'),s.is('relay')));
  const route=connectWorld(s,{
-  alarm:{kind:'dungeon',dungeon:'region_1',map:'region_1_f1',x:15,y:5,event:'q003_decision'},
-  passage:{kind:'dungeon',dungeon:'region_1',map:'region_1_f1',x:17,y:3,event:'q003_passage'},
+  alarm:{kind:'dungeon',dungeon:'region_1',map:'region_1_landing',x:7,y:1,event:'q003_decision'},
+  passage:{kind:'dungeon',dungeon:'region_1',map:'region_1_inspection',x:5,y:1,event:'q003_passage'},
   high:{kind:'town',location:'hikarigaeri_waterwatch'},
   reservoir:{kind:'town',location:'hikarigaeri_tavern_cistern'}
  },2);

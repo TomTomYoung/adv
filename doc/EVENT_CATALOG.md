@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.13.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。
+作品版 1.14.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -48,69 +48,69 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### q002 骨の荷札
 
-`q002/q002_decision` 骨の荷札：地下水道の引き揚げ場：`region_1_f1` (11, 9)。起動 `interact` → `q002.v11.visit`。[定義](../data/quests/q002.json)。
+`q002/q002_decision` 骨の荷札：地下水道の引き揚げ場：`region_1_landing` (5, 1)。起動 `interact` → `q002.v11.visit`。[定義](../data/quests/q002.json)。
 
 ### q003 逆流する鐘
 
-`q003/q003_decision` 逆流する鐘：決着の場：`region_1_f1` (15, 5)。起動 `interact` → `q003.v11.visit`。[定義](../data/quests/q003.json)。
+`q003/q003_decision` 逆流する鐘：決着の場：`region_1_landing` (7, 1)。起動 `interact` → `q003.v11.visit`。[定義](../data/quests/q003.json)。
 
-`q003/q003_passage` 低い通路に残る通行人：`region_1_f1` (17, 3)。起動 `interact` → `q003.v11.visit`。[定義](../data/quests/q003.json)。
+`q003/q003_passage` 低い通路に残る通行人：`region_1_inspection` (5, 1)。起動 `interact` → `q003.v11.visit`。[定義](../data/quests/q003.json)。
 
 ### q004 二枚目の通行証
 
-`q004/q004_clue_a` 二枚目の通行証：現場の痕跡：`region_1_f1` (5, 3)。起動 `interact` → `q004.clue_a`。[定義](../data/quests/q004.json)。
+`q004/q004_clue_a` 二枚目の通行証：現場の痕跡：`region_1_f1` (5, 1)。起動 `interact` → `q004.clue_a`。[定義](../data/quests/q004.json)。
 
-`q004/q004_clue_b` 二枚目の通行証：記録と証言：`region_1_f1` (11, 4)。起動 `interact` → `q004.clue_b`。[定義](../data/quests/q004.json)。
+`q004/q004_clue_b` 二枚目の通行証：記録と証言：`region_1_landing` (3, 3)。起動 `interact` → `q004.clue_b`。[定義](../data/quests/q004.json)。
 
-`q004/q004_decision` 二枚目の通行証：決着の場：`region_1_f1` (17, 3)。起動 `interact` → `q004.v11.visit`。[定義](../data/quests/q004.json)。
+`q004/q004_decision` 二枚目の通行証：決着の場：`region_1_landing` (7, 3)。起動 `interact` → `q004.v11.visit`。[定義](../data/quests/q004.json)。
 
 ### q005 甘い排水
 
-`q005/q005_clue_a` 甘い排水：現場の痕跡：`region_1_f1` (4, 5)。起動 `interact` → `q005.clue_a`。[定義](../data/quests/q005.json)。
+`q005/q005_clue_a` 甘い排水：現場の痕跡：`region_1_canal_a` (4, 1)。起動 `interact` → `q005.clue_a`。[定義](../data/quests/q005.json)。
 
-`q005/q005_clue_b` 甘い排水：記録と証言：`region_1_f1` (7, 9)。起動 `interact` → `q005.clue_b`。[定義](../data/quests/q005.json)。
+`q005/q005_clue_b` 甘い排水：記録と証言：`region_1_canal_b` (4, 1)。起動 `interact` → `q005.clue_b`。[定義](../data/quests/q005.json)。
 
-`q005/q005_decision` 甘い排水：決着の場：`region_1_f1` (8, 13)。起動 `interact` → `q005.v11.visit`。[定義](../data/quests/q005.json)。
+`q005/q005_decision` 甘い排水：決着の場：`region_1_inspection` (7, 3)。起動 `interact` → `q005.v11.visit`。[定義](../data/quests/q005.json)。
 
 ### q006 沈んだ給金箱
 
-`q006/q006_clue_a` 沈んだ給金箱：現場の痕跡：`region_1_f2` (6, 2)。起動 `interact` → `q006.clue_a`。[定義](../data/quests/q006.json)。
+`q006/q006_clue_a` 沈んだ給金箱：現場の痕跡：`region_1_f2` (4, 3)。起動 `interact` → `q006.clue_a`。[定義](../data/quests/q006.json)。
 
-`q006/q006_clue_b` 沈んだ給金箱：記録と証言：`region_1_f2` (10, 5)。起動 `interact` → `q006.clue_b`。[定義](../data/quests/q006.json)。
+`q006/q006_clue_b` 沈んだ給金箱：記録と証言：`region_1_canal_c` (4, 1)。起動 `interact` → `q006.clue_b`。[定義](../data/quests/q006.json)。
 
-`q006/q006_decision` 沈んだ給金箱：決着の場：`region_1_f2` (10, 10)。起動 `interact` → `q006.v11.visit`。[定義](../data/quests/q006.json)。
+`q006/q006_decision` 沈んだ給金箱：決着の場：`region_1_canal_c` (7, 1)。起動 `interact` → `q006.v11.visit`。[定義](../data/quests/q006.json)。
 
 ### q007 声を返す壁
 
-`q007/q007_clue_a` 声を返す壁：現場の痕跡：`region_1_f2` (5, 3)。起動 `interact` → `q007.clue_a`。[定義](../data/quests/q007.json)。
+`q007/q007_clue_a` 声を返す壁：現場の痕跡：`region_1_canal_c` (5, 1)。起動 `interact` → `q007.clue_a`。[定義](../data/quests/q007.json)。
 
-`q007/q007_clue_b` 声を返す壁：記録と証言：`region_1_f2` (9, 6)。起動 `interact` → `q007.clue_b`。[定義](../data/quests/q007.json)。
+`q007/q007_clue_b` 声を返す壁：記録と証言：`region_1_lower_landing` (3, 3)。起動 `interact` → `q007.clue_b`。[定義](../data/quests/q007.json)。
 
-`q007/q007_decision` 声を返す壁：決着の場：`region_1_f2` (11, 9)。起動 `interact` → `q007.v11.visit`。[定義](../data/quests/q007.json)。
+`q007/q007_decision` 声を返す壁：決着の場：`region_1_lower_landing` (5, 3)。起動 `interact` → `q007.v11.visit`。[定義](../data/quests/q007.json)。
 
 ### q008 浮かばない棺
 
-`q008/q008_clue_a` 浮かばない棺：現場の痕跡：`region_1_f2` (7, 1)。起動 `interact` → `q008.clue_a`。[定義](../data/quests/q008.json)。
+`q008/q008_clue_a` 浮かばない棺：現場の痕跡：`region_1_f2` (6, 3)。起動 `interact` → `q008.clue_a`。[定義](../data/quests/q008.json)。
 
-`q008/q008_clue_b` 浮かばない棺：記録と証言：`region_1_f2` (11, 4)。起動 `interact` → `q008.clue_b`。[定義](../data/quests/q008.json)。
+`q008/q008_clue_b` 浮かばない棺：記録と証言：`region_1_lower_landing` (5, 1)。起動 `interact` → `q008.clue_b`。[定義](../data/quests/q008.json)。
 
-`q008/q008_decision` 浮かばない棺：決着の場：`region_1_f2` (9, 11)。起動 `interact` → `q008.v11.visit`。[定義](../data/quests/q008.json)。
+`q008/q008_decision` 浮かばない棺：決着の場：`region_1_lower_landing` (7, 3)。起動 `interact` → `q008.v11.visit`。[定義](../data/quests/q008.json)。
 
 ### q009 鼠の避難路
 
-`q009/q009_clue_a` 鼠の避難路：現場の痕跡：`region_1_f2` (3, 6)。起動 `interact` → `q009.clue_a`。[定義](../data/quests/q009.json)。
+`q009/q009_clue_a` 鼠の避難路：現場の痕跡：`region_1_lower_landing` (7, 1)。起動 `interact` → `q009.clue_a`。[定義](../data/quests/q009.json)。
 
-`q009/q009_clue_b` 鼠の避難路：記録と証言：`region_1_f2` (13, 2)。起動 `interact` → `q009.clue_b`。[定義](../data/quests/q009.json)。
+`q009/q009_clue_b` 鼠の避難路：記録と証言：`region_1_canal_d` (4, 1)。起動 `interact` → `q009.clue_b`。[定義](../data/quests/q009.json)。
 
-`q009/q009_decision` 鼠の避難路：決着の場：`region_1_f2` (13, 7)。起動 `interact` → `q009.v11.visit`。[定義](../data/quests/q009.json)。
+`q009/q009_decision` 鼠の避難路：決着の場：`region_1_gatehouse` (5, 1)。起動 `interact` → `q009.v11.visit`。[定義](../data/quests/q009.json)。
 
 ### q010 最後の水門番
 
-`q010/q010_clue_a` 最後の水門番：現場の痕跡：`region_1_f2` (3, 5)。起動 `interact` → `q010.clue_a`。[定義](../data/quests/q010.json)。
+`q010/q010_clue_a` 最後の水門番：現場の痕跡：`region_1_canal_d` (6, 1)。起動 `interact` → `q010.clue_a`。[定義](../data/quests/q010.json)。
 
-`q010/q010_clue_b` 最後の水門番：記録と証言：`region_1_f2` (8, 7)。起動 `interact` → `q010.clue_b`。[定義](../data/quests/q010.json)。
+`q010/q010_clue_b` 最後の水門番：記録と証言：`region_1_gatehouse` (3, 3)。起動 `interact` → `q010.clue_b`。[定義](../data/quests/q010.json)。
 
-`q010/q010_decision` 最後の水門番：決着の場：`region_1_f2` (15, 5)。起動 `interact` → `q010.v11.visit`。[定義](../data/quests/q010.json)。
+`q010/q010_decision` 最後の水門番：決着の場：`region_1_gatehouse` (7, 3)。起動 `interact` → `q010.v11.visit`。[定義](../data/quests/q010.json)。
 
 `q010/region_1` 排水された横道：`region_1_f1` (2, 1)。起動 `action` → `dungeon.scene.region_1.v1`。[定義](../data/quests/q010.json)。
 
@@ -1258,37 +1258,31 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ## マップ共通の配置一覧
 
-### region_1_f1 灯守の地下水道・地下1層
+### region_1_f1 灯守の地下水道・上層・入口操作室
 
 `region_1_f1/exit`：(1, 1) `exit`、起動 `interact` → `region_1_f1.exit`。[定義](../data/maps/region_1_f1.json)。
 
-`region_1_f1/stairs`：(14, 11) `stairs`、起動 `interact` → `region_1_f1.stairs`。[定義](../data/maps/region_1_f1.json)。
+`region_1_f1/cache`：(1, 3) `chest`、起動 `interact` → `region_1_f1.cache`。[定義](../data/maps/region_1_f1.json)。
 
-`region_1_f1/cache`：(1, 4) `chest`、起動 `interact` → `region_1_f1.cache`。[定義](../data/maps/region_1_f1.json)。
+`region_1_f1/fountain`：(5, 3) `fountain`、起動 `interact` → `region_1_f1.fountain`。[定義](../data/maps/region_1_f1.json)。
 
-`region_1_f1/fountain`：(9, 7) `fountain`、起動 `interact` → `region_1_f1.fountain`。[定義](../data/maps/region_1_f1.json)。
+`region_1_f1/trap`：(7, 3) `trap`、起動 `enter` → `region_1_f1.trap`。[定義](../data/maps/region_1_f1.json)。
 
-`region_1_f1/trap`：(1, 12) `trap`、起動 `enter` → `region_1_f1.trap`。[定義](../data/maps/region_1_f1.json)。
+`region_1_f1/door`：(9, 3) `door`、起動 `interact` → `region_1_f1.door`。[定義](../data/maps/region_1_f1.json)。
 
-`region_1_f1/door`：(17, 7) `door`、起動 `interact` → `region_1_f1.door`。[定義](../data/maps/region_1_f1.json)。
+### region_1_f2 灯守の地下水道・下層・操作室
 
-### region_1_f2 灯守の地下水道・地下2層
+`region_1_f2/cache`：(1, 3) `chest`、起動 `interact` → `region_1_f2.cache`。[定義](../data/maps/region_1_f2.json)。
 
-`region_1_f2/stairs`：(1, 1) `stairs`、起動 `interact` → `region_1_f2.stairs`。[定義](../data/maps/region_1_f2.json)。
+`region_1_f2/fountain`：(5, 3) `fountain`、起動 `interact` → `region_1_f2.fountain`。[定義](../data/maps/region_1_f2.json)。
 
-`region_1_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_1_f2.cache`。[定義](../data/maps/region_1_f2.json)。
+`region_1_f2/trap`：(7, 3) `trap`、起動 `enter` → `region_1_f2.trap`。[定義](../data/maps/region_1_f2.json)。
 
-`region_1_f2/fountain`：(3, 13) `fountain`、起動 `interact` → `region_1_f2.fountain`。[定義](../data/maps/region_1_f2.json)。
-
-`region_1_f2/trap`：(1, 12) `trap`、起動 `enter` → `region_1_f2.trap`。[定義](../data/maps/region_1_f2.json)。
-
-`region_1_f2/door`：(17, 13) `door`、起動 `interact` → `region_1_f2.door`。[定義](../data/maps/region_1_f2.json)。
+`region_1_f2/door`：(9, 3) `door`、起動 `interact` → `region_1_f2.door`。[定義](../data/maps/region_1_f2.json)。
 
 ### region_2_f1 塩哭きの廃坑・地下1層
 
 `region_2_f1/exit`：(1, 1) `exit`、起動 `interact` → `region_2_f1.exit`。[定義](../data/maps/region_2_f1.json)。
-
-`region_2_f1/stairs`：(13, 12) `stairs`、起動 `interact` → `region_2_f1.stairs`。[定義](../data/maps/region_2_f1.json)。
 
 `region_2_f1/cache`：(1, 4) `chest`、起動 `interact` → `region_2_f1.cache`。[定義](../data/maps/region_2_f1.json)。
 
@@ -1299,8 +1293,6 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_2_f1/door`：(11, 13) `door`、起動 `interact` → `region_2_f1.door`。[定義](../data/maps/region_2_f1.json)。
 
 ### region_2_f2 塩哭きの廃坑・地下2層
-
-`region_2_f2/stairs`：(1, 1) `stairs`、起動 `interact` → `region_2_f2.stairs`。[定義](../data/maps/region_2_f2.json)。
 
 `region_2_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_2_f2.cache`。[定義](../data/maps/region_2_f2.json)。
 
@@ -1314,8 +1306,6 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_3_f1/exit`：(1, 1) `exit`、起動 `interact` → `region_3_f1.exit`。[定義](../data/maps/region_3_f1.json)。
 
-`region_3_f1/stairs`：(14, 11) `stairs`、起動 `interact` → `region_3_f1.stairs`。[定義](../data/maps/region_3_f1.json)。
-
 `region_3_f1/cache`：(1, 4) `chest`、起動 `interact` → `region_3_f1.cache`。[定義](../data/maps/region_3_f1.json)。
 
 `region_3_f1/fountain`：(5, 11) `fountain`、起動 `interact` → `region_3_f1.fountain`。[定義](../data/maps/region_3_f1.json)。
@@ -1325,8 +1315,6 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_3_f1/door`：(17, 11) `door`、起動 `interact` → `region_3_f1.door`。[定義](../data/maps/region_3_f1.json)。
 
 ### region_3_f2 根喰みの地下庭園・地下2層
-
-`region_3_f2/stairs`：(1, 1) `stairs`、起動 `interact` → `region_3_f2.stairs`。[定義](../data/maps/region_3_f2.json)。
 
 `region_3_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_3_f2.cache`。[定義](../data/maps/region_3_f2.json)。
 
@@ -1522,19 +1510,11 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `kagaribi_f1/exit`：(1, 1) `exit`、起動 `interact` → `kagaribi.exit`。[定義](../data/maps/kagaribi_f1.json)。
 
-`kagaribi_f1/down`：(13, 7) `stairs`、起動 `interact` → `kagaribi_f1.down`。[定義](../data/maps/kagaribi_f1.json)。
-
 `kagaribi_f1/history`：(3, 1) `clue`、起動 `interact` → `kagaribi.history`。[定義](../data/maps/kagaribi_f1.json)。
 
 ### kagaribi_f2 篝火の迷宮・消えた灯の回廊
 
-`kagaribi_f2/up`：(1, 1) `stairs`、起動 `interact` → `kagaribi_f2.up`。[定義](../data/maps/kagaribi_f2.json)。
-
-`kagaribi_f2/down`：(13, 7) `stairs`、起動 `interact` → `kagaribi_f2.down`。[定義](../data/maps/kagaribi_f2.json)。
-
 ### kagaribi_f3 篝火の迷宮・深火の祭壇
-
-`kagaribi_f3/up`：(1, 1) `stairs`、起動 `interact` → `kagaribi_f3.up`。[定義](../data/maps/kagaribi_f3.json)。
 
 `kagaribi_f3/legend`：(7, 7) `clue`、起動 `interact` → `kagaribi.legend`。[定義](../data/maps/kagaribi_f3.json)。
 
@@ -1546,11 +1526,21 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `moving_village_f1/exit`：(1, 1) `exit`、起動 `interact` → `moving_village.exit`。[定義](../data/maps/moving_village_f1.json)。
 
-### waterworks_shaft 灯守の地下水道・貯水立坑
+### region_1_canal_a 灯守の地下水道・上層・第一水路
 
-`waterworks_shaft/exit`：(1, 1, 0) `stairs`、起動 `interact` → `voxel.shaft.exit.v1`。[定義](../data/maps/waterworks_shaft.json)。
+### region_1_landing 灯守の地下水道・上層・荷揚げ場
 
-`waterworks_shaft/inspection`：(6, 2, 1) `clue`、起動 `interact` → `voxel.shaft.inspection.v1`。[定義](../data/maps/waterworks_shaft.json)。
+### region_1_canal_b 灯守の地下水道・上層・排水支路
+
+### region_1_inspection 灯守の地下水道・上層・鐘と浮子の点検室
+
+### region_1_canal_c 灯守の地下水道・下層・給金箱の水路
+
+### region_1_lower_landing 灯守の地下水道・下層・棺の待避場
+
+### region_1_canal_d 灯守の地下水道・下層・避難水路
+
+### region_1_gatehouse 灯守の地下水道・下層・奥の水門詰所
 
 ## battle.startの定義位置
 
