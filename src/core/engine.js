@@ -199,7 +199,9 @@ export class GameEngine {
     if(type==='quest.travel'){
       const plan=questEntryPlan(this.data,this.state,intent.id);
       if(!plan.ok){this.notify(plan.reason);return false;}
-      return this.perform({type:'travel',dungeon:plan.place.dungeon});
+      const mapId=this.data.dungeons[plan.place.dungeon].entries.main.map,start=this.data.maps[mapId].entrance;
+      this.state.light=this.data.system.lightCapacity;
+      this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='travel'&&this.state.mode==='town'){
       const dungeon=intent.dungeon?this.data.dungeons?.[intent.dungeon]:null;
