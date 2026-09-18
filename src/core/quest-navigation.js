@@ -18,10 +18,15 @@ export function nextQuestPlace(data,state,id){
   return point?{kind:'dungeon',...clone(point),dungeon:data.maps[point.map]?.dungeon}:null;
 }
 
-export function dungeonEntryReason(data,state,id){
+function townDepartureReason(data,state,id){
   if(!data.dungeons[id])return '行き先の迷宮が見つからない。';
   if(state.waiting||state.battle)return '会話・戦闘を終えてから出発する。';
   if(state.mode!=='town')return '現在の迷宮から町へ戻ってから出発する。';
+  return '';
+}
+
+export function dungeonEntryReason(data,state,id){
+  const reason=townDepartureReason(data,state,id);if(reason)return reason;
   if(data.game.world&&!townLocation(data,state)?.dungeons?.includes(id)){
     const gates=Object.values(data.locations).filter(l=>l.dungeons?.includes(id));
     return gates.length?`${gates.map(l=>l.name).join('・')}から出発できる。`:'この場所からは出発できない。';
@@ -35,6 +40,7 @@ export function questEntryPlan(data,state,id){
   if(state.quests[id]?.stage!=='active')reason='受注中の依頼を選ぶ。';
   else if(!place)reason='次のイベントの場所が未定義。';
   else if(place.kind==='town')reason=`次のイベントは${data.locations[place.location]?.name??place.location}にある。`;
-  else reason=dungeonEntryReason(data,state,place.dungeon);
+  // The quest shortcut includes the trip to the entrance from any town facility.
+  else reason=townDepartureReason(data,state,place.dungeon);
   return {ok:!reason,reason,place};
 }

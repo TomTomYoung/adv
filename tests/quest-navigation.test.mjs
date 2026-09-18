@@ -10,13 +10,21 @@ import {GameView} from '../src/view/view.js';
 const quest=(g,id='q001')=>projectGame(g).quests.find(q=>q.id===id);
 const choose=(g,id)=>{assert.ok(g.dispatch({type:'choose',id}));drain(g);};
 
-test('the board names the real dungeon and explains the guild restriction; entry occurs only from the square',()=>{
- const g=newGame();goTownLocation(g,'hikarigaeri_guild');g.dispatch({type:'accept',id:'q001'});
- let q=quest(g);assert.equal(q.destination.name,'篝火の迷宮');assert.equal(q.tracked,true);assert.equal(q.canEnter,false);
- assert.match(q.entryReason,/篝火広場/);assert.equal(g.dispatch({type:'quest.travel',id:'q001'}),false);assert.equal(g.state.townLocation,'hikarigaeri_guild');
- goTownLocation(g,'hikarigaeri_square');q=quest(g);assert.equal(q.canEnter,true);
+test('accepting q001 on the guild board allows immediate travel to its named dungeon entrance',()=>{
+ const g=newGame();goTownLocation(g,'hikarigaeri_guild');assert.ok(g.dispatch({type:'accept',id:'q001'}));
+ const q=quest(g);assert.equal(q.destination.name,'篝火の迷宮');assert.equal(q.tracked,true);assert.equal(q.canEnter,true);assert.equal(q.entryReason,'');
+ g.state.light=1;
  assert.ok(g.dispatch({type:'quest.travel',id:'q001'}));assert.equal(g.state.location.map,'kagaribi_f1');assert.equal(g.state.location.x,1);
+ assert.equal(g.state.location.y,1);assert.equal(g.state.mode,'dungeon');assert.equal(g.state.townLocation,null);assert.equal(g.state.light,data.system.lightCapacity);
  assert.equal(g.state.stories.q001,undefined,'entry does not trigger the next event or teleport to its cell');
+});
+
+test('the quest entrance shortcut works from every town facility, including nested locations',()=>{
+ for(const id of Object.keys(data.locations)){
+  const g=newGame();g.accept('q001');goTownLocation(g,id);
+  assert.equal(quest(g).canEnter,true,id);assert.equal(quest(g).entryReason,'',id);
+  assert.ok(g.dispatch({type:'quest.travel',id:'q001'}),id);assert.equal(g.state.location.map,'kagaribi_f1',id);
+ }
 });
 
 test('q001 guidance follows journeys and paused scenes, then points to the town report rather than the initial dungeon',()=>{
@@ -34,7 +42,7 @@ test('a pending event in a different dungeon updates the label and dispatch targ
  d.quests.q001.story.worldPlaces.dark=p;
  const h=new GameEngine(d);h.load(g.save());const original=quest(h);
  assert.equal(original.entryDungeon,'kagaribi');choose(h,'talk');assert.equal(quest(h).entryDungeon,'region_2');
- h.returnTown();h.load(h.save());const q=quest(h);assert.equal(q.destination.name,d.dungeons.region_2.name);assert.ok(q.dungeonIds.includes('kagaribi')&&q.dungeonIds.includes('region_2'));
+ h.returnTown();goTownLocation(h,'hikarigaeri_guild');h.load(h.save());const q=quest(h);assert.equal(q.destination.name,d.dungeons.region_2.name);assert.ok(q.dungeonIds.includes('kagaribi')&&q.dungeonIds.includes('region_2'));assert.equal(q.canEnter,true);
  assert.ok(h.dispatch({type:'quest.travel',id:'q001',dungeon:original.entryDungeon}),'stale client destination is ignored');
  assert.equal(h.state.location.map,'region_2_f1');assert.equal(h.state.location.x,d.maps.region_2_f1.entrance.x);
  assert.notDeepEqual({x:h.state.location.x,y:h.state.location.y},{x:p.x,y:p.y});assert.equal(h.state.journey.quest,'q001');
@@ -83,14 +91,17 @@ test('board and journal expose one named entrance action, main quest controls, d
  globalThis.Option=class extends Element{constructor(text,value){super('option');this.textContent=text;this.value=value;}};
  try{
   const g=newGame();goTownLocation(g,'hikarigaeri_guild');g.accept('q001');g.accept('q002');
-  const intents=[],v=Object.assign(Object.create(GameView.prototype),{dungeonFilter:'kagaribi',query:'',filter:'open',act:i=>intents.push(i)}),root=new Element('div');
+  const intents=[],v=Object.assign(Object.create(GameView.prototype),{dungeonFilter:'kagaribi',query:'',filter:'open',act:i=>{intents.push(i);return g.dispatch(i);}}),root=new Element('div');
   let model=projectGame(g);v.quests(root,model);const buttons=root.queryAll('button');
   assert.equal(root.queryAll('article').length,1);assert.doesNotMatch(root.textContent,/灯守の地下水道.*開始地点|入口から現地調査へ向かう|この依頼を追う/);
-  const entrance=buttons.find(b=>b.textContent==='迷宮の入口へ向かう（篝火の迷宮）');assert.ok(entrance.disabled);assert.match(root.textContent,/篝火広場から出発/);
+  const entrance=buttons.find(b=>b.textContent==='迷宮の入口へ向かう（篝火の迷宮）');assert.equal(entrance.disabled,false);assert.doesNotMatch(root.textContent,/篝火広場から出発/);
+  entrance.click();assert.deepEqual(intents.pop(),{type:'quest.travel',id:'q001'});assert.equal(g.state.location.map,'kagaribi_f1');
+  g.returnTown();goTownLocation(g,'hikarigaeri_guild');
   buttons.find(b=>b.textContent==='メインクエストに設定').click();assert.deepEqual(intents.pop(),{type:'track',id:'q001'});
   buttons.find(b=>b.textContent==='灯帰り・篝火広場へ戻る').click();assert.deepEqual(intents.pop(),{type:'location.move',id:'hikarigaeri_square'});
   g.dispatch({type:'track',id:'q001'});goTownLocation(g,'hikarigaeri_square');model=projectGame(g);
   const location=new Element('div');v.location(location,model);location.queryAll('button').find(b=>b.textContent==='迷宮の入口へ向かう（篝火の迷宮）').click();assert.deepEqual(intents.pop(),{type:'quest.travel',id:'q001'});
+  g.returnTown();model=projectGame(g);
   const sidebar=new Element('aside');v.portrait=()=>new Element('img');v.sidebar(sidebar,model);
   assert.match(sidebar.textContent,/メインクエスト/);assert.equal(sidebar.queryAll('button').length,0);
   const journal=new Element('section');v.journal(journal,model);assert.equal(journal.queryAll('button').filter(b=>b.textContent==='メインクエストに設定').length,1);assert.match(journal.textContent,/次の目的地：篝火の迷宮/);
