@@ -1,6 +1,8 @@
 # 水面・床材・装置の描画修正
 
-更新日: 2026-09-14。対象: 作品版1.8.0、fix/dungeon-surfaces。PR #9をマージしたmaster db3db488を起点に確認しました。
+履歴資料。現行1.14.0の水路・操作画面は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) と [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md) を参照してください。以下の比較画像・469テストは当時の結果です。
+
+記録日: 2026-09-14。対象: 作品版1.8.0、fix/dungeon-surfaces。PR #9をマージしたmaster db3db488を起点に確認しました。
 
 ## 確認方法と制限
 

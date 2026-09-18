@@ -1,6 +1,6 @@
 # 複数ダンジョンと固有システムの設計
 
-更新日: 2026-09-14。作品版1.9.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
+更新日: 2026-09-18。作品版1.14.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
 
 ## 編集するデータ
 
@@ -10,7 +10,7 @@
 
 ## 共通部品
 
-`systems` のキーはダンジョン内の部品ID、`use` は `src/core/dungeons.js` に登録された実装名です。同じ部品を別のダンジョンへ設定値を変えて配置できます。現在は fire_network、waterworks、corrosion、breakable_walls、plant_garden、warp_network、skill_library、market_pacts、air_supply、power_grid、terrain_shift、vector_curse、suppression_zone、voxel_space の14種です。
+`systems` のキーはダンジョン内の部品ID、`use` は `src/core/dungeons.js` に登録された実装名です。同じ部品を別のダンジョンへ設定値を変えて配置できます。登録済み部品は16種です。通常データは fire_network、map_connections、compartment_water、corrosion、breakable_walls、plant_garden、warp_network、skill_library、market_pacts、air_supply、power_grid、terrain_shift、vector_curse、suppression_zone の14種を使用します。waterworks と voxel_space は退避した旧マップ用としてコードと試験を保持します。
 
 `enabled: false` は部品を無効にします。各部品の `validate`／`validateState` が定義とセーブを検査し、`plan` が対象・費用・条件を調べ、`act` が成立した操作を実行します。入口・退場・移動・戦闘・能力・技能・通行判定のフックを必要に応じて提供します。
 
@@ -22,7 +22,7 @@
 
 成長植物、開通、浮上、配線などの永続状態と、携帯燃料、貸出技能、空気、警戒、衰弱などの探索状態を部品ごとに定義します。詳細な保存期間は各固有システム仕様を参照してください。
 
-通常移動・ワープ・階段・退場と、地形が足元を塞ぐ場合の扱いも検証します。部品・保存構造を変える場合は内容版を更新します。1.9.0では旧内容版の移行を用意せず、読込エラー時に新規開始します。
+通常移動・ワープ・階段・退場と、地形が足元を塞ぐ場合の扱いも検証します。部品・保存構造を変える場合は内容版を更新します。1.14.0では旧内容版の移行を用意せず、読込エラー時に新規開始します。
 
 ## シナリオと表示
 
@@ -36,8 +36,8 @@ Coreの投影をApplicationがViewModelへ変換し、Viewは文字・画像・�
 
 現行JSONで表現できない規則を、未登録の `use` や任意JavaScriptの文字列として追加してはいけません。汎用ルールエンジンやフォーム編集は、実際の編集負担と必要性を確認してから検討する拡張です。
 
-## 立体区画への拡張
+## 退避した立体区画の保守
 
 voxel_spaceはmap.voxelsの層・六面・移動経路・装置を読みます。区域の水没度、面の開閉、掘削、設置を永続状態へ保存し、planで高さ・距離・経路・費用をまとめて検査します。Coreのvoxels.jsが形状・足場・水平連結区域と下部への水没操作、voxel-validation.jsが配置と保存検証、Applicationのvoxel-projection.jsが現在高の表示を担当します。
 
-編集元はauthoring/voxel-content.jsonです。新規の立体マップにはvoxel_spaceを一つだけ対応させます。従来のterrain_shiftなどの二次元パッチを立体マップへ併用する対応は今回の範囲外です。[定義例と制約](VOXEL_TERRAIN_AND_WATER.md)を参照してください。
+通常ロードには立体マップを含めません。保存原稿は `authoring/legacy/2026-09-18-map-layout`、旧編集元は `authoring/voxel-content.json` です。新規の立体マップにはvoxel_spaceを一つだけ対応させます。従来のterrain_shiftなどの二次元パッチを立体マップへ併用する対応は今回の範囲外です。[定義例と制約](VOXEL_TERRAIN_AND_WATER.md)を参照してください。
