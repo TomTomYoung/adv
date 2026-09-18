@@ -5,6 +5,7 @@ import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding,arriveStoryJourney,resumeWorldStory} from './story.js';
 import {townRoot,townLocation,syncWorldStories} from './world.js';
+import {questEntryPlan} from './quest-navigation.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,endBattle,battleAction} from './battle.js';
@@ -195,6 +196,11 @@ export class GameEngine {
     if(type==='retreat'&&this.state.mode==='dungeon'){this.returnTown(true);return true;}
     if(type==='accept'&&this.state.mode==='town')return this.accept(intent.id);
     if(type==='track'&&this.state.quests[intent.id]?.stage==='active'){this.state.trackedQuest=intent.id;return true;}
+    if(type==='quest.travel'){
+      const plan=questEntryPlan(this.data,this.state,intent.id);
+      if(!plan.ok){this.notify(plan.reason);return false;}
+      return this.perform({type:'travel',dungeon:plan.place.dungeon});
+    }
     if(type==='travel'&&this.state.mode==='town'){
       const dungeon=intent.dungeon?this.data.dungeons?.[intent.dungeon]:null;
       if(intent.dungeon&&!dungeon)return false;

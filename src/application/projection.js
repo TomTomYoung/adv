@@ -1,5 +1,7 @@
 import {townLocation} from '../core/world.js';
 import {projectWorld} from './world-projection.js';
+import {dungeonEntryReason} from '../core/quest-navigation.js';
+import {projectQuestNavigation} from './quest-navigation.js';
 import {objectVisible} from '../core/quest-events.js';
 import {projectDungeonSurfaces} from './dungeon-surfaces.js';
 import {projectArt,projectQuestNotes,projectQuestLinks,projectDungeonEvents,projectEventArt} from './dungeon-projection.js';
@@ -18,10 +20,9 @@ export function projectGame(engine){
   const roster=(d.game.tavern?.candidates??Object.keys(d.actors)).map(id=>{const active=s.members.includes(id),aliveAfterRemoval=s.members.some(other=>other!==id&&s.actors[other].hp>0);return {...jobActorView(id),active,canJoin:editable&&!active&&s.members.length<d.system.maxParty&&(s.actors[id].hp>0||s.members.some(other=>s.actors[other].hp>0)),canLeave:editable&&active&&s.members.length>1&&aliveAfterRemoval,swapCandidates:editable&&!active?s.members.filter(other=>s.actors[id].hp>0||s.members.some(remaining=>remaining!==other&&s.actors[remaining].hp>0)).map(other=>({id:other,name:d.actors[other].name})):[]};});
   const routeLocations=q=>q.model.flowVersion>=2&&!s.flags.legacyQuestRoutes?.[q.id]?q.locations.filter(l=>l.role==='decision'):q.locations;
   const fieldNotes=projectQuestNotes(d,s);
-  const entryDungeon=q=>q.story?.worldPlaces?.[q.story.scenes.entry.place]?.dungeon??d.maps[q.locations.find(l=>l.role==='decision')?.map]?.dungeon;
-  const canEnter=id=>s.mode==='town'&&!s.waiting&&!s.battle&&(!d.game.world||Boolean(townLocation(d,s)?.dungeons?.includes(id)));
+  const canEnter=id=>!dungeonEntryReason(d,s,id);
 
-  const quests=Object.values(d.quests).map(q=>({id:q.id,entryDungeon:entryDungeon(q),canEnter:canEnter(entryDungeon(q)),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
+  const quests=Object.values(d.quests).map(q=>({id:q.id,...projectQuestNavigation(d,s,q),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
   if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker};
   if(s.waiting?.type==='choice'){
