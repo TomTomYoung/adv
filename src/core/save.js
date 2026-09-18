@@ -133,6 +133,10 @@ export function validateSave(save,data){
     const l=s.location,m=data.maps[l?.map];
     try{if(!m||!integer(l?.z??0,-32,32)||(m.voxels?(!Number.isSafeInteger(l.z)||Boolean(voxelOccupancyReason(m,voxelMapState(data,s,m),l,{waterAccess:dungeonWaterAccess(data,s)}))):((l?.z??0)!==0||dungeonTile(data,s,m,l?.x,l?.y)!=='.'))||!['north','east','south','west'].includes(l?.facing))fail('位置不正');}catch{fail('位置または地形状態不正');}
   }else if(s.location!==null)fail('町の位置不正');
+  if(s.fieldEntry!==null){
+    const e=s.fieldEntry,m=data.maps[e?.map];
+    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')))fail('フィールド入場イベントの記録不正');
+  }
   if(data.game.world){
     if(s.mode==='town'?!data.locations?.[s.townLocation]:s.townLocation!==null)fail('町ロケーションの参照不正');
     errors.push(...journeyErrors(data,s));

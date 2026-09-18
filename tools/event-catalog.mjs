@@ -12,14 +12,15 @@ export function battleSites(data){
 export function eventCatalog(data){
  const out=[],add=s=>out.push(s,'');
  add('# フィールドイベント・戦闘中イベント一覧');
- add(`作品版 ${data.game.version}。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。`);
+ add(`作品版 ${data.game.version}。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。`);
  add('## 実装した処理');
- add('1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のinteract／step／actionと、出現条件・操作条件・状態・一度限りの記録で起動を制御する。');
+ add('1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のenter（セル進入）／auto（条件自動）／interact（調査）／action（個別操作）と、出現条件・操作条件・状態・一度限りの記録で起動を制御する。セル進入と物語の到着は正面ではなく足元の実座標で判定する。');
  add('2. フィールドの強制戦闘。`battle.start` が現在の命令位置を保存して指定encounterを開始する。勝利・敗北・逃走後はそれぞれ `on_win`・`on_lose`・`on_escape` へ進む。');
  add('3. 戦闘中のイベント。`events` の各IDを戦闘開始時 `start`、第2ラウンド以降の開始時 `round_start`、戦闘結果の確定前 `before_end` に判定する。条件成立した未実行イベントを定義順に1件ずつ実行し、各IDは1戦に1度だけ発火する。');
  add('4. 戦闘中の会話・選択中は戦闘操作を止める。イベントの末尾まで進めた場合は戦闘または保留中の通常終了処理を再開する。`battle.end` があれば強制終了し、`on_interrupt` からフィールドの会話へ戻れる。');
  add('5. 強制終了は `records.interruptions` に記録し、勝利・逃走・撃退回数や戦闘報酬を増やさない。すでに倒した敵の撃破数は保持する。戦闘イベントの実行済みID・現在の命令位置・保留結果を保存し、会話中でも重複せず再開する。');
  add('## 現行q001のイベント');
+ add('`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。');
  add('`q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。');
  add('`q001-B-rookie`：同じ位置。第1ラウンド終了後に新人が登場して発言。セリフを送ると `outage_call` で新品油1を消費し、くらがり除けの携帯松明を25歩分点灯。`battle.end` → `on_interrupt` → `q001.v11.rescue` で現地の救助会話へ移る。1ラウンドより早い勝利・逃走・撃退も確定前にこのイベントを通る。到着前の全滅は通常敗北で、救助は未成立のまま再挑戦できる。');
  add('## 登録済みの戦闘中イベント');
@@ -29,7 +30,7 @@ export function eventCatalog(data){
  add('IDはクエストIDと配置IDの組で一意。配置と起動条件の正本は各クエストのevents。表示・操作条件の詳細はリンク先JSONを参照する。');
  for(const q of Object.values(data.quests)){
   add(`### ${q.id} ${q.title}`);
-  for(const e of q.events??[])add(`${code(`${q.id}/${e.id}`)} ${e.title}：${e.points.map(p=>`${code(p.map)} (${p.x}, ${p.y}${p.z===undefined?'':`, ${p.z}`})`).join(' / ')}。起動 ${code(e.trigger)} → ${code(e.script)}。[定義](../data/quests/${q.id}.json)。`);
+  for(const e of q.events??[])add(`${code(`${q.id}/${e.id}`)} ${e.title}：${e.points.length?e.points.map(p=>`${code(p.map)} (${p.x}, ${p.y}${p.z===undefined?'':`, ${p.z}`})`).join(' / '):'セル指定なし'}。起動 ${code(e.trigger)} → ${code(e.script)}。[定義](../data/quests/${q.id}.json)。`);
  }
  add('## マップ共通の配置一覧');
  for(const map of Object.values(data.maps)){

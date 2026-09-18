@@ -27,7 +27,7 @@ HTMLの構成や絵の大きさまで変える場合は `view.js` と `style.css
 
 項目：town / 内容：場所ID・名称・背景URL・人物スプライトURLと配置・パンくず・親子の移動先・施設機能・再開できるシナリオ。
 
-項目：journey / 内容：進行中の移動の依頼名・目的地・到着操作の許可。情報取得や物品授受はCoreの到着操作で確定します。
+項目：journey / 内容：進行中の移動の依頼名・目的地・atDestination（実到着判定）。上部に専用UIは表示しません。情報取得や物品授受はCoreが実到着時に自動確定します。
 
 項目：gold/level/xp/completed/total/light / 内容：数値表示に必要な現在値
 
@@ -61,7 +61,7 @@ model.world.truth、未獲得の手掛かり本文、未選択の結末は公開
 
 type：location.move / フィールド：id。親・子・定義された接続先へ町内移動します。
 
-type：journey.arrive / フィールド：なし。実際の目的地で到着処理を確定します。
+到着はCoreのフィールドイベントで自動処理します。journey.arriveの操作は廃止しました。
 
 type：story.resume / フィールド：quest。現在の施設で中断した物語を再開します。
 

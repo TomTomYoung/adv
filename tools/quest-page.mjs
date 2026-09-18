@@ -157,7 +157,7 @@ export function questPageBundle(data,id){
     add(`### ${questEventId(q,'P',e.id)}`);
     add(`${e.title}。実行時イベントID：${code(e.id)}。スクリプト：${code(e.script)}。`);
     for(const p of e.points)add(`配置：${describePlace(data,{kind:'dungeon',dungeon:e.dungeon,...p,event:e.id})}。`);
-    add(`起動：${e.trigger==='action'?'操作メニューから現地調査':'現地で調べる'} (${code(e.trigger)})。${e.initialState?`初期状態：${code(e.initialState)}。`:''}`);
+    add(`起動：${({enter:'指定セルへの進入で自動開始',auto:'条件成立で自動開始',action:'操作メニューから現地調査',interact:'現地で調べる'})[e.trigger]} (${code(e.trigger)})。${e.initialState?`初期状態：${code(e.initialState)}。`:''}`);
     if(e.visibleWhen)add(`表示条件：${code(JSON.stringify(e.visibleWhen))}。`);
     if(e.condition)add(`操作条件：${code(JSON.stringify(e.condition))}。`);
     if(e.fire)add(`壁灯：${code(JSON.stringify(e.fire))}。`);

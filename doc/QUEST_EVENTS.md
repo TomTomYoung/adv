@@ -32,6 +32,10 @@ once は `state.events[map/object]` を参照します。状態は `state.object
 
 会話の表示条件と分岐は scripts 内の if／switch、選択肢の表示条件は visibleWhen、選択可否は condition と storyAction、要求表示は requirement、実行内容は commands に定義します。q001以外の既存命令列は、今回の改訂でも保持しています。
 
+## 条件成立で自動的に起動するイベント
+
+trigger が auto のイベントは condition と once: true を持ち、受注中かつ探索中に条件が成立すると自動実行します。points が空配列ならセル指定なし、座標を指定するとそのセルにいることも条件になります。会話・戦闘中は保留し、終了後に再判定します。マップ物体へは投影しません。詳細は[フィールド・戦闘イベント仕様](EVENT_SYSTEM.md)を参照してください。
+
 ## 操作パネルから起動するイベント
 
 trigger が action のイベントはマップオブジェクトを追加せず、points の足元・正面で操作パネルへ表示します。画面は `{type: quest.event, quest: qXXX, id: イベントID}` を送ります。Core は会話・戦闘・実行中の命令列、出現条件、有効条件、関連ダンジョン、地点と高さ、once を再検査してから script を実行します。

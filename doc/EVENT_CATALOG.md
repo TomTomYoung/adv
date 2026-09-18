@@ -1,10 +1,10 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.12.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。
+作品版 1.13.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
-1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のinteract／step／actionと、出現条件・操作条件・状態・一度限りの記録で起動を制御する。
+1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のenter（セル進入）／auto（条件自動）／interact（調査）／action（個別操作）と、出現条件・操作条件・状態・一度限りの記録で起動を制御する。セル進入と物語の到着は正面ではなく足元の実座標で判定する。
 
 2. フィールドの強制戦闘。`battle.start` が現在の命令位置を保存して指定encounterを開始する。勝利・敗北・逃走後はそれぞれ `on_win`・`on_lose`・`on_escape` へ進む。
 
@@ -15,6 +15,8 @@
 5. 強制終了は `records.interruptions` に記録し、勝利・逃走・撃退回数や戦闘報酬を増やさない。すでに倒した敵の撃破数は保持する。戦闘イベントの実行済みID・現在の命令位置・保留結果を保存し、会話中でも重複せず再開する。
 
 ## 現行q001のイベント
+
+`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。
 
 `q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。
 
@@ -30,11 +32,11 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### q001 帰らない灯番
 
-`q001/q001_decision` 入口で待つ新人：`kagaribi_f1` (2, 1)。起動 `interact` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
+`q001/q001_decision` 入口で待つ新人：`kagaribi_f1` (2, 1)。起動 `enter` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
 
-`q001/q001_return` 油切れの巡灯路：`kagaribi_f1` (9, 1)。起動 `interact` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
+`q001/q001_return` 油切れの巡灯路：`kagaribi_f1` (9, 1)。起動 `enter` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
 
-`q001/q001_elder` 最後の灯の下の老人：`kagaribi_f1` (13, 3)。起動 `interact` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
+`q001/q001_elder` 最後の灯の下の老人：`kagaribi_f1` (13, 3)。起動 `enter` → `q001.v11.visit`。[定義](../data/quests/q001.json)。
 
 `q001/q001_empty_west` 西の壁松明：`kagaribi_f1` (8, 1)。起動 `interact` → `q001.wall.q001_empty_west`。[定義](../data/quests/q001.json)。
 

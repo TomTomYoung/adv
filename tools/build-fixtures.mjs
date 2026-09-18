@@ -13,11 +13,11 @@ act({type:'location.move',id:'hikarigaeri_square'});act({type:'location.move',id
 act({type:'location.move',id:'hikarigaeri_square'});act({type:'travel',dungeon:'region_1'});fixtures.dungeon=projectGame(g);
 g.teleport('region_1_f1',11,9);g.run(data.quests.q002.model.entryScript);drain();
 for(const id of ['lift','school']){act({type:'choose',id});drain();}
-g.returnTown();act({type:'location.move',id:'hikarigaeri_medical'});act({type:'location.move',id:'hikarigaeri_medical_specimens'});act({type:'journey.arrive'});
+g.returnTown();act({type:'location.move',id:'hikarigaeri_medical'});act({type:'location.move',id:'hikarigaeri_medical_specimens'});
 fixtures.dialog=projectGame(g);drain();fixtures.choice=projectGame(g);
 for(const id of ['return','consent']){act({type:'choose',id});drain();}
 for(const id of ['hikarigaeri_medical','hikarigaeri_square','hikarigaeri_insurance'])act({type:'location.move',id});
-act({type:'journey.arrive'});fixtures.insurance=projectGame(g);drain();act({type:'choose',id:'file'});drain();fixtures.journal=projectGame(g);
+fixtures.insurance=projectGame(g);drain();act({type:'choose',id:'file'});drain();fixtures.journal=projectGame(g);
 fixtures.journal.ending={title:'道を次へ渡す者',text:'表示例。実際の終幕は百件の依頼を終えた後、あなたの選択によって記録される。'};
 for(const [key,encounter] of [['battle','guard_1'],['monsters','wild_pair_1']]){const h=new GameEngine(data);while(h.state.waiting?.type==='text')h.dispatch({type:'advance'});h.dispatch({type:'travel',dungeon:'region_1'});h.startBattle(encounter,{win:[],lose:[],escape:[]});fixtures[key]=projectGame(h);assert.ok(fixtures[key].battle);}
 for(const fixture of Object.values(fixtures)){fixture.quests=fixture.quests.slice(0,4);fixture.regions=fixture.regions.slice(0,3);}

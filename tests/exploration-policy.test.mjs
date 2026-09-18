@@ -18,7 +18,7 @@ test('q001 departures keep physical position; wrong-site interaction cannot skip
  assert.equal(g.dispatch({type:'journey.arrive'}),false);assert.ok(g.dispatch({type:'interact'}));
  assert.deepEqual(g.state.journey,journey);assert.equal(g.state.waiting,null);
  const destination=data.quests.q001.story.worldPlaces.dark;exploreSpot(g,destination,{maintain:true,interact:false});
- assert.ok(g.state.steps>steps);assert.ok(g.dispatch({type:'interact'}));drain(g);
+ assert.ok(g.state.steps>steps);assert.equal(g.state.waiting.type,'choice');drain(g);
  assert.equal(questState(g,'q001').scene,'dark');assert.equal(g.state.journey,null);checkpoint(g);
 });
 

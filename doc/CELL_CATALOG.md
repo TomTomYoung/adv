@@ -245,7 +245,7 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.12.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.13.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
 2D 25マップ、3D 1マップ、計26マップ。2Dの空は2886セル、密は3453セルです。
 
@@ -311,7 +311,7 @@ npm run check:docs
 
 `clue`：200定義。進入時0／調べる200、blocking指定0、safe指定195、once指定0。配置例：`q004_clue_a` region_1_f1 (5,3) ／ `q004_clue_b` region_1_f1 (11,4)。
 
-`decision`：205定義。進入時0／調べる205、blocking指定0、safe指定201、once指定0。配置例：`q002_decision` region_1_f1 (11,9) ／ `q003_decision` region_1_f1 (15,5)。
+`decision`：205定義。進入時3／調べる202、blocking指定0、safe指定201、once指定0。配置例：`q002_decision` region_1_f1 (11,9) ／ `q003_decision` region_1_f1 (15,5)。
 
 `door`：20定義。進入時0／調べる20、blocking指定20、safe指定20、once指定0。配置例：`door` region_1_f1 (17,7) ／ `door` region_1_f2 (17,13)。
 

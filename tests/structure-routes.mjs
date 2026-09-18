@@ -2,13 +2,14 @@ import assert from 'node:assert/strict';
 import {data,newGame,drain,fight,exploreSpot,goTownLocation,leaveDungeonOnFoot} from './helpers.mjs';
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
+import {processFieldEvents} from '../src/core/field-events.js';
 export function prepareQuest(id){
  const g=newGame(1907);g.award(0,data.system.xpBase*24*25);g.healAll();
  for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number&&q.number<=100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;
  assert.ok(g.accept(id));if(id==='q001')g.dispatch({type:'travel',dungeon:'kagaribi'});
  const d=data.quests[id].story,point=d?.worldPlaces?.[d.scenes.entry.place];if(point?.kind==='dungeon')g.teleport(point.map,point.x,point.y);
- g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
+ processFieldEvents(g);if(!g.state.waiting)g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
 }
 // Actual town choices and dungeon steps, shared by route search and campaigns.
 export function finishJourney(g){
@@ -18,9 +19,9 @@ export function finishJourney(g){
   leaveDungeonOnFoot(g);goTownLocation(g,p.location);
  }else{
   if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==p.dungeon)leaveDungeonOnFoot(g);
-  exploreSpot(g,p,{maintain:true,interact:false});
+  exploreSpot(g,p,{maintain:true,interact:false,settleDestination:false});
  }
- assert.ok(g.dispatch({type:'journey.arrive'}));drain(g);
+ assert.equal(g.state.journey,null,'arrival starts automatically');drain(g);
 }
 export function routeTo(id,outcome){
  const g=prepareQuest(id),queue=[{state:structuredClone(g.state),path:[]}],seen=new Set();

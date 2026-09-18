@@ -63,7 +63,7 @@ check(snapshot.typedStoryQuests===quests.filter(q=>q.story).length,'DATA_SNAPSHO
 check(snapshot.typedStoryScenesIncludingAliases===quests.reduce((n,q)=>n+count(q.story?.scenes),0),'DATA_SNAPSHOT: story aliases differ');
 check(snapshot.questEvents===questEvents(data).length,'DATA_SNAPSHOT: quest events differ');
 check(snapshot.questObservations===questEvents(data).filter(e=>e.note).length,'DATA_SNAPSHOT: quest observations differ');
-check(snapshot.questEventPlacements===questEvents(data).filter(e=>e.trigger!=='action').reduce((n,e)=>n+e.points.length,0),'DATA_SNAPSHOT: quest placements differ');
+check(snapshot.questEventPlacements===questEvents(data).filter(e=>!['action','auto'].includes(e.trigger)).reduce((n,e)=>n+e.points.length,0),'DATA_SNAPSHOT: quest placements differ');
 for(const [label,actual] of [['commands',[...COMMANDS]],['operators',[...EXPRESSION_OPS]],['migrationVersions',Object.keys(data.game.migrations)]])check(JSON.stringify(snapshot[label])===JSON.stringify(actual),`DATA_SNAPSHOT: ${label} differ`);
 const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
 check(JSON.stringify(files)===JSON.stringify(snapshot.files),'DATA_SNAPSHOT: manifest files differ');

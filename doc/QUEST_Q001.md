@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.12.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.13.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:a95cc00a48089d69e90be272ab68b47bf5fa4203edadebfcc1141f7d79f93b35 -->
+<!-- quest-page-source:9cb464193b1f2f2ee1e4aa668ac76133b41801591cf2395c546e7cbd389fe473 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -105,9 +105,11 @@ B1 (13, 7) の `kagaribi_f1.down` は `kagaribi_f2` (1, 1) に接続する。q00
 
 配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../data/dungeons.json)。
 
-起動：現地で調べる (`interact`)。
+起動：指定セルへの進入で自動開始 (`enter`)。
 
 表示条件：`{"op":"in","left":{"ref":"quests.q001.stage"},"right":["active","completed"]}`。
+
+操作条件：`{"op":"eq","left":{"ref":"quests.q001.stage"},"right":"active"}`。
 
 現在の物語状態に応じた場面を呼び出す共通入口。実際の場面の現在地条件を満たす必要がある。
 
@@ -117,9 +119,11 @@ B1 (13, 7) の `kagaribi_f1.down` は `kagaribi_f2` (1, 1) に接続する。q00
 
 配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../data/dungeons.json)。
 
-起動：現地で調べる (`interact`)。
+起動：指定セルへの進入で自動開始 (`enter`)。
 
 表示条件：`{"op":"in","left":{"ref":"quests.q001.stage"},"right":["active","completed"]}`。
+
+操作条件：`{"op":"eq","left":{"ref":"quests.q001.stage"},"right":"active"}`。
 
 現在の物語状態に応じた場面を呼び出す共通入口。実際の場面の現在地条件を満たす必要がある。
 
@@ -129,9 +133,11 @@ B1 (13, 7) の `kagaribi_f1.down` は `kagaribi_f2` (1, 1) に接続する。q00
 
 配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../data/dungeons.json)。
 
-起動：現地で調べる (`interact`)。
+起動：指定セルへの進入で自動開始 (`enter`)。
 
 表示条件：`{"op":"in","left":{"ref":"quests.q001.stage"},"right":["active","completed"]}`。
+
+操作条件：`{"op":"eq","left":{"ref":"quests.q001.stage"},"right":"active"}`。
 
 現在の物語状態に応じた場面を呼び出す共通入口。実際の場面の現在地条件を満たす必要がある。
 
@@ -841,7 +847,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       }
     ],
     "kind": "decision",
-    "trigger": "interact",
+    "trigger": "enter",
     "script": "q001.v11.visit",
     "visibleWhen": {
       "op": "in",
@@ -854,6 +860,13 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       ]
     },
     "role": "decision",
+    "condition": {
+      "op": "eq",
+      "left": {
+        "ref": "quests.q001.stage"
+      },
+      "right": "active"
+    },
     "dungeon": "kagaribi"
   },
   {
@@ -868,7 +881,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       }
     ],
     "kind": "decision",
-    "trigger": "interact",
+    "trigger": "enter",
     "script": "q001.v11.visit",
     "visibleWhen": {
       "op": "in",
@@ -879,6 +892,13 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
         "active",
         "completed"
       ]
+    },
+    "condition": {
+      "op": "eq",
+      "left": {
+        "ref": "quests.q001.stage"
+      },
+      "right": "active"
     },
     "dungeon": "kagaribi"
   },
@@ -894,7 +914,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       }
     ],
     "kind": "decision",
-    "trigger": "interact",
+    "trigger": "enter",
     "script": "q001.v11.visit",
     "visibleWhen": {
       "op": "in",
@@ -905,6 +925,13 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
         "active",
         "completed"
       ]
+    },
+    "condition": {
+      "op": "eq",
+      "left": {
+        "ref": "quests.q001.stage"
+      },
+      "right": "active"
     },
     "dungeon": "kagaribi"
   },

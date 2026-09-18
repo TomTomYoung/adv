@@ -1,6 +1,8 @@
 import {commandsAt,pushBranch,pump} from './script.js';
 import {clone} from './expression.js';
 
+export const BATTLE_EVENT_PHASES=['start','round_start','before_end'];
+
 export function battleDefinition(data,battle){
   const c=battle?.continuations;
   return c?.frame?commandsAt(data,c.frame)[c.index]:null;
