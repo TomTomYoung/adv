@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-17。対象は作品版1.12.0です。q001の強制戦闘・戦闘中の新人登場・救助会話への移行と、セル単位の照明を実装しました。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-18。対象は作品版1.12.0です。掲示板とメインクエスト案内を整理し、入口ボタンを次イベントのダンジョン名・行き先へ連動させました。q001の戦闘イベントとセル照明も実装済みです。[改訂概要](DUNGEON_REVISION_1_9.md)と[CURRENT_STATUS.md](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
