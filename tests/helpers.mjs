@@ -1,3 +1,4 @@
+import {commandDialog} from '../src/core/player-commands.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -6,7 +7,19 @@ import {GameEngine,DIRECTIONS} from '../src/core/engine.js';
 import {activeActor} from '../src/core/battle.js';
 export const data=await loadContent(file=>fs.readFile(path.resolve(import.meta.dirname,'..',file),'utf8').then(JSON.parse));
 export function newGame(seed=42){const engine=new GameEngine(data,seed);drain(engine);return engine;}
-export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='text'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
+export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='text'||engine.state.waiting?.type==='command'&&engine.state.waiting.command==='result'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
+// Select the same physical object a test intends to inspect when several
+// nearby objects now share the message window. Never choose story decisions.
+export function inspect(engine,objectId){
+  const object=engine.interactionObjects().find(o=>objectId===undefined||o.id===objectId);
+  assert.ok(engine.dispatch({type:'interact'}));
+  if(engine.state.waiting?.type!=='command'||engine.state.waiting.command==='result')return;
+  let dialog=commandDialog(engine);
+  const target=dialog.options.find(o=>o.target===`object:${object?.id}`);
+  if(target){assert.ok(engine.dispatch({type:'choose',id:target.id}));dialog=commandDialog(engine);}
+  const action=dialog?.options.find(o=>o.enabled&&(o.intent?.type==='field.object'&&o.intent.id===object?.id||!object&&o.intent?.type==='dungeon.action'&&o.intent.action==='cross'));
+  if(action)assert.ok(engine.dispatch({type:'choose',id:action.id}));
+}
 export function fight(engine){let fuel=800;while(engine.state.battle){assert.ok(--fuel,'battle must terminate');if(engine.state.waiting?.type==='text'){drain(engine);continue;}const id=activeActor(engine),actor=engine.state.actors[id],skills=engine.skills(id),alive=engine.state.members.filter(id=>engine.state.actors[id].hp>0),injured=alive.sort((a,b)=>engine.state.actors[a].hp/engine.stats(a).hp-engine.state.actors[b].hp/engine.stats(b).hp)[0];let skill='attack',target=engine.state.battle.enemies.find(e=>e.hp>0).instance;
     if(skills.includes('heal')&&actor.mp>=4&&engine.state.actors[injured].hp<engine.stats(injured).hp*.7){skill='heal';target=injured;}
     else if(skills.includes('fire')&&actor.mp>=4)skill='fire';
@@ -29,14 +42,14 @@ export function exploreSpot(engine,spot,options={}){
   if(engine.state.mode==='town'){goTownLocation(engine,data.game.world.townRoot);assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));}
   if(dungeon.systems.connections?.use==='map_connections'){
     navigateMaps(engine,spot.map,options);
-    walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)assert.ok(engine.dispatch({type:'interact'}));drain(engine);return;
+    walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)inspect(engine);drain(engine);return;
   }
   const drainFloor=()=>{if(engine.state.dungeons.active?.id==='region_1'&&!engine.map().voxels){const target=engine.state.location.map.endsWith('f1')?'upper_gate':'lower_gate';if(engine.state.dungeons.persistent.region_1.systems.water.controls[target])assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'close',target}));}};
   if(engine.state.location.x===1&&engine.state.location.y===1)drainFloor();
   if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
     if(dungeon.id==='region_1')for(let n=0;!engine.walkable(data.maps[spot.map],1,1)&&n<200;n++)assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'wait'}));
-    assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
-  walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)assert.ok(engine.dispatch({type:'interact'}));drain(engine);
+    inspect(engine);settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
+  walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)inspect(engine);drain(engine);
 }
 
 // Town navigation is deliberate; services and dungeon entrances do not relocate the party.
@@ -54,7 +67,7 @@ export function leaveDungeonOnFoot(g){
   exploreSpot(g,{map:entry.map,...data.maps[entry.map][entry.point]},{maintain:true,interact:false});
   const exit=g.map().objects.find(o=>o.type==='exit'||o.id==='exit');
   assert.ok(exit,'normal dungeon exit');
-  walk(g,exit.x,exit.y,{maintain:true});assert.ok(g.dispatch({type:'interact'}));drain(g);
+  walk(g,exit.x,exit.y,{maintain:true});inspect(g,exit.id);drain(g);
   assert.equal(g.state.mode,'town');
 }
 

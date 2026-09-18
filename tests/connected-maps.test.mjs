@@ -33,7 +33,8 @@ test('q002-q010 migration preserves scenario decisions, outcomes and scripts',as
 
 test('a sealed flooded map cannot be entered by moving, interacting, an action, teleport, diving gear or a forged save',()=>{
   const g=begin();walk(g,9,1);g.state.location.facing='east';const before=stable(g);
-  for(const run of [()=>g.dispatch({type:'move',direction:'forward'}),()=>g.dispatch({type:'interact'}),()=>act(g,'connections','cross','upper_inlet')]){assert.equal(run(),false);assert.deepEqual(stable(g),before);}
+  for(const run of [()=>g.dispatch({type:'move',direction:'forward'}),()=>act(g,'connections','cross','upper_inlet')]){assert.equal(run(),false);assert.deepEqual(stable(g),before);}
+  assert.ok(g.dispatch({type:'interact'}));const choice=projectGame(g).dialog.options.find(o=>o.text==='隣の区画へ進む');assert.equal(choice.enabled,false);assert.equal(g.dispatch({type:'choose',id:choice.id}),false);assert.deepEqual(stable(g),before);assert.ok(g.dispatch({type:'choose',id:'cancel'}));
   assert.throws(()=>g.teleport('region_1_canal_a',1,1),/移動できない/);assert.deepEqual(stable(g),before);
   g.give('diving_kit',1);const inventory=structuredClone(g.state.inventory);assert.equal(g.dispatch({type:'item',item:'diving_kit',actor:'ada'}),false);assert.deepEqual(g.state.inventory,inventory);
   const save=JSON.parse(g.save());save.state.location={map:'region_1_canal_a',x:1,y:1,facing:'east'};save.state.fieldEntry={...save.state.location,z:0,fired:[]};assert.ok(validateSave(save,data).length);roundtrip(g);

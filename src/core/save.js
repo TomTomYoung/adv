@@ -141,6 +141,8 @@ export function validateSave(save,data){
     if(s.mode==='town'?!data.locations?.[s.townLocation]:s.townLocation!==null)fail('町ロケーションの参照不正');
     errors.push(...journeyErrors(data,s));
   }
+  if(s.presentation.message!==undefined&&(!isRecord(s.presentation.message)||typeof s.presentation.message.text!=='string'||typeof s.presentation.message.speaker!=='string'))fail('メッセージ本文不正');
+  if(s.waiting?.type==='choice'&&((s.waiting.text!==undefined&&typeof s.waiting.text!=='string')||(s.waiting.speaker!==undefined&&typeof s.waiting.speaker!=='string')))fail('選択肢の本文不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
   if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');
@@ -176,8 +178,12 @@ export function validateSave(save,data){
   if(!integer(s.nextScope,1,1e9))fail('スクリプトスコープ不正');
   for(const frame of s.vm){try{if(!isRecord(frame)||!Array.isArray(frame.path)||!isRecord(frame.local)||!integer(frame.scope,1,s.nextScope-1)||typeof frame.branch!=='boolean'||frame.path.some(p=>typeof p!=='string'&&!Number.isInteger(p))||frame.path.some(p=>['__proto__','constructor','prototype'].includes(p)))throw Error();const commands=commandsAt(data,frame);if(!integer(frame.index,0,commands.length))throw Error();}catch{fail('スクリプト位置不正');}}
   if(s.waiting!==null){
-    if(!isRecord(s.waiting)||!['text','choice','battle'].includes(s.waiting.type))fail('待機状態不正');
+    if(!isRecord(s.waiting)||!['text','choice','battle','command'].includes(s.waiting.type))fail('待機状態不正');
     else if(s.waiting.type==='text'&&(!s.vm.length||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'))fail('会話不正');
+    else if(s.waiting.type==='command'){
+      const w=s.waiting;
+      if(s.vm.length||s.battle||!['interact','retreat','portable','environment','result'].includes(w.command)||(w.command!=='result'&&s.mode!=='dungeon')||(w.target!==undefined&&typeof w.target!=='string')||(w.command==='result'&&typeof w.text!=='string')||Object.keys(w).some(k=>!['type','command','target','text'].includes(k)))fail('コマンドの確認状態不正');
+    }
     else if(s.waiting.type==='choice'){try{const f=s.vm.at(-1),c=commandsAt(data,f)[s.waiting.index];if(c?.op!=='choice'||f.index!==s.waiting.index+1)fail('選択肢位置不正');}catch{fail('選択肢不正');}}
   }
   if(s.battle!==null){

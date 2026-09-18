@@ -39,7 +39,9 @@ HTMLの構成や絵の大きさまで変える場合は `view.js` と `style.css
 
 項目：dungeon / 内容：位置・方角、探索済みセル、描画用geometryと通行可否を持つcells、可視のイベント、画像URL
 
-項目：dialog / 内容：textなら本文と話者、choiceならid/本文/条件説明/enabled
+項目：dialog / 内容：textなら本文と話者、choiceなら判断対象の本文・話者とoptions（id/text/requirement/enabled）。本文と選択肢を同じメッセージウィンドウへ表示する。
+
+項目：commands / 内容：探索中のコマンドウィンドウ。title、movement[]、actions[]。各要素はlabel/intent/enabledを持つ。会話・選択・戦闘中は無効。
 
 項目：battle / 内容：手番、行動者、敵とHP/画像/guarded、使用可能な技能と道具、逃走可否、ログ
 
@@ -77,7 +79,9 @@ type：travel / フィールド：dungeon: ダンジョンID。旧region: 地域
 
 type：move / フィールド：direction: forward/back/left/right
 
-type：interact / retreat / フィールド：なし
+type：player.command / フィールド：id。interact（調べる）、retreat（帰還確認）、portable（携帯松明）、environment（待機・周囲への行動）。通常UIはこのコマンドから対象の説明と選択肢を開く。
+
+type：interact / retreat / フィールド：なし。既存の内部操作。interactは共通の調査入口、retreatは確定済みの帰還処理。通常UIの帰還確認にはplayer.commandを使う。
 
 type：service / フィールド：id: 施設操作ID
 
@@ -159,7 +163,7 @@ partyとrosterには、現在職、成長履歴、習得技能、探索特技、
 
 dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `{x,y,width,height}` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。
 
-dungeon.scenesは現在地または正面で調査できる場面のパネルです。各カードの操作はquest.event意図を返し、コアが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
+dungeon.scenesは現在地または正面の調査情報です。常設パネルとして描画しません。調査の入口はplayer.command/interactで、Coreが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
 quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
 
@@ -184,3 +188,11 @@ surfaceNoticeは正面の水深と通行可否、その対処の文章です。�
 `dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](FIELD_LIGHTING.md)を参照。
 
 `battle.event` がある間は戦闘画面の下へ `dialog` の会話・選択を表示し、戦闘操作ボタンは表示しない。会話を送るとゲーム側が戦闘再開または強制終了を判断する。`battle` が消えた後も `dialog` があればフィールドの会話として描画する。
+
+## メッセージとコマンド（2026-09-18）
+
+[確定仕様](MESSAGE_AND_COMMAND_WINDOWS.md)に従い、通常の探索画面から固有システムの操作パネルを除去した。systemのcards/actionsは描画情報・Coreの操作候補として保持するが、Viewが並べて直接実行する入口にはしない。足元・正面の対象を「調べる」で選び、説明と選択肢をdialogへ投影する。携帯松明と場所を問わない待機等はコマンドウィンドウから開く。
+
+選択肢は常にメッセージ本文の下に置く。Coreのwaiting.typeはシナリオのtext/choiceとコマンド由来のcommandを区別し、Applicationはどちらもdialog.type=text/choiceへ変換する。Viewとキーボードは共通のadvance/chooseを送る。選択肢がある間のadvanceは無効。帰還費用はCoreが確定時に計算し、別モーダルを使わない。
+
+シナリオのchoiceには直前に表示した解決済みの本文・話者を保持する。コマンド確認は種類と対象IDだけを保存し、選択候補・条件・費用を現在の状態から再構築する。結果文も同じウィンドウで表示する。確認・取消・結果文を閉じる操作に歩数・燃料・料金を課さない。

@@ -1,3 +1,4 @@
+import {playerCommands,commandDialog} from '../core/player-commands.js';
 import {townLocation} from '../core/world.js';
 import {projectWorld} from './world-projection.js';
 import {dungeonEntryReason} from '../core/quest-navigation.js';
@@ -26,8 +27,9 @@ export function projectGame(engine){
   let dialog=null;
   if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker};
   if(s.waiting?.type==='choice'){
-    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
+    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',text:s.waiting.text??'どうする？',speaker:s.waiting.speaker??'',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
   }
+  if(s.waiting?.type==='command'){const prompt=commandDialog(engine);dialog={...prompt,options:prompt.options?.map(({id,text,enabled,requirement})=>({id,text,enabled,requirement}))};}
   if(dialog){
     const qid=d.scripts[s.vm.at(-1)?.script]?.storyQuest,story=s.stories?.[qid],scene=d.quests[qid]?.story?.scenes[story?.scene];
     if(scene&&s.quests[qid].stage==='active')dialog.scene={title:scene.title,cast:scene.cast.filter(c=>c.when===undefined||engine.value(c.when)).map(c=>{const def=d.characters[d.quests[qid].story.entities[c.entity].character];return {id:def.id,name:def.name,role:def.role,portrait:d.assets.images[def.portrait],remote:c.mode==='remote'};})};
@@ -47,7 +49,7 @@ export function projectGame(engine){
   const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:'#000000',opacity:.65*(1-(terrain.lighting?.current??8)/8),shade:false,lighting:true}]:[];
   atmosphere.push(...Object.values(clone(s.presentation.layers??{})));
   return {
-    ...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
+    commands:playerCommands(engine),...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,level:s.level,xp:s.xp,nextXp:d.system.xpBase*s.level*(s.level+1),completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light,lightMax,lightLabel:fire?'携帯松明':'灯油',
     party,roster,jobs:jobCatalog(engine),statNames:clone(d.jobProfile?.statNames??{}),tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),dungeons:d.dungeons?Object.values(d.dungeons).sort((a,b)=>a.region-b.region||Object.keys(a.systems).length-Object.keys(b.systems).length).map(v=>({id:v.id,canEnter:canEnter(v.id),art:projectArt(d,v.art?.wall),name:v.name,description:v.description,preview:dungeonPreview(d,v),region:v.region,mapCount:v.maps.length,recommendedLevel:v.recommendedLevel,color:d.regions.find(r=>r.id===v.region)?.color??'#c6ae77'})):null,tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),
     inventory:Object.entries(s.inventory).filter(([,n])=>n>0).map(([id,count])=>({id,count,...clone(d.items[id]),allowedActors:d.items[id].slot?allowedEquipmentActors(engine,id):s.members.slice()})),shop:d.shops.goods.map(g=>({id:g.item,name:d.items[g.item].name,description:d.items[g.item].description,price:engine.price(g.price),basePrice:g.price,canBuy:s.mode==='town'&&!s.waiting&&!s.battle&&(!d.game.world||Boolean(townLocation(d,s)?.shop))&&s.gold>=engine.price(g.price)&&(s.inventory[g.item]??0)<d.system.maxStack})),
