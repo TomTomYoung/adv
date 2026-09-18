@@ -31,6 +31,8 @@ export function cellCatalogInventory(data){
   }
   out.push('### ダンジョン固有の状態・操作点','');
   const handlers={
+    map_connections(s){for(const l of s.links)line(`接続 ${code(l.id)} ${l.name}：${l.kind}、${point(l.a)} ↔ ${point(l.b)}。扉は壁面、階段は乾いた区画内の足場に配置。`);},
+    compartment_water(s){for(const z of s.zones)line(`密閉水路 ${code(z.map)}：初期${z.initiallyFlooded?'完全水没・進入禁止':'排水済み'}、給排水弁 ${code(z.control)}。セルごとの水壁は作らない。`);line(`乾いた操作盤：${locations(s.controls)}。`);},
     fire_network(s){
       line(`火台${s.fixtures.length}か所。${locations(s.fixtures)}。`);
       for(const [id,e] of Object.entries(s.effects))line(`火の効果 ${code(id)} ${e.name}：くらがり除け${e.repels?'あり':'なし'}、通常遭遇率×${e.encounterRate}、敵倍率×${e.enemyScale}、優先度${e.priority}。`);

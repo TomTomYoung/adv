@@ -13,15 +13,19 @@ import {skillLibrary} from './systems/skill-library.js';
 import {airSupply} from './systems/air-supply.js';
 import {marketPacts} from './systems/market-pacts.js';
 import {powerGrid} from './systems/power-grid.js';
+import {mapConnections} from './systems/map-connections.js';
+import {compartmentWater} from './systems/compartment-water.js';
+import {objectBlocks} from './quest-events.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
-export const DUNGEON_SYSTEMS={voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
+export const DUNGEON_SYSTEMS={map_connections:mapConnections,compartment_water:compartmentWater,voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
 export const freshDungeons=()=>({version:1,nextRun:1,active:null,persistent:{}});
 export const dungeonForMap=(data,map)=>Object.values(data.dungeons??{}).find(d=>d.maps.includes(map))??null;
 export function dungeonContexts(data,state){
   const active=state.dungeons?.active,definition=data.dungeons?.[active?.id];
   if(!definition||state.mode!=='dungeon'||!definition.maps.includes(state.location?.map))return [];
-  return Object.entries(definition.systems).filter(([,spec])=>spec.enabled!==false).map(([id,spec])=>({data,state,definition,id,spec,run:active.systems?.[id],persistent:state.dungeons.persistent?.[definition.id]?.systems?.[id]})).filter(ctx=>ctx.run&&ctx.persistent);
+  const canOccupy=(map,x,y)=>dungeonTile(data,state,map,x,y)==='.'&&!dungeonBlock(data,state,map,x,y)&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(state,map,o));
+  return Object.entries(definition.systems).filter(([,spec])=>spec.enabled!==false).map(([id,spec])=>({data,state,definition,id,spec,canOccupy,run:active.systems?.[id],persistent:state.dungeons.persistent?.[definition.id]?.systems?.[id]})).filter(ctx=>ctx.run&&ctx.persistent);
 }
 export function dungeonTile(data,state,map,x,y){
   let tile=map?.tiles[y]?.[x];

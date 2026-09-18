@@ -1,0 +1,2862 @@
+{
+  "schemaVersion": 1,
+  "id": "q009",
+  "number": 9,
+  "title": "鼠の避難路",
+  "client": "地下測量士のエダ",
+  "brief": "鼠が一斉に地下から地上へ逃げた。崩落の前触れか、別の原因があるのか確かめてください。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。",
+  "events": [
+    {
+      "id": "q009_clue_a",
+      "title": "鼠の避難路：現場の痕跡",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 3,
+          "y": 6,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q009.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q009"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    },
+    {
+      "id": "q009_clue_b",
+      "title": "鼠の避難路：記録と証言",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 13,
+          "y": 2,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q009.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyQuestRoutes.q009"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    },
+    {
+      "id": "q009_decision",
+      "title": "鼠の避難路：決着の場",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 13,
+          "y": 7,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q009.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 3,
+      "y": 6,
+      "object": "q009_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_1_f2",
+      "x": 13,
+      "y": 2,
+      "object": "q009_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_1_f2",
+      "x": 13,
+      "y": 7,
+      "object": "q009_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "gold": 57,
+      "xp": 68,
+      "label": "清掃範囲と鼠の入口を分ける",
+      "text": "旧図、支柱の測点、亀裂、地下水位を比較し、この区画に新しい変位がないことを確認した。石灰清掃が鼠を追い出した経路を突き止め、次回から清掃区画と時期を分け、穀倉の侵入口を塞いだ。この区画の崩落警戒は解除したが、他区画の安全までは断定していない。"
+    },
+    "contract": {
+      "gold": 77,
+      "xp": 47,
+      "label": "穀倉前の群れを追い払う",
+      "text": "外室の群れを追い払い、内扉の向こうの穀物を守った。鼠を一斉に追い出した清掃方法は変わらず、構造物の安全も調べていない。別の出口から群れが戻る可能性が残る。"
+    },
+    "compromise": {
+      "gold": 37,
+      "xp": 51,
+      "label": "穀物を共同倉庫へ移す",
+      "text": "受入れ係と数量を照合し、穀物を共同倉庫へ運び込んだ。共同の入出庫帳で、誰に配られたかが見えるようになった。穀物は当面守られたが、清掃方法、鼠の侵入口、崩落の有無は、実際に確認した範囲を超えて解決したことにはならない。"
+    }
+  },
+  "model": {
+    "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3",
+    "world": {
+      "truth": "清掃組合が石灰を使った清掃を広い区画で同時に行い、鼠は餌場と巣の臭いを失った。追い出された群れは地上の穀倉へ移動したが、穀倉番が内扉を閉めており、穀物のある室内へはまだ入っていない。鼠の移動と崩落は無関係である。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "清掃組合が石灰を使った清掃を広い区画で同時に行い、鼠は餌場と巣の臭いを失った。追い出された群れは地上の穀倉へ移動したが、穀倉番が内扉を閉めており、穀物のある室内へはまだ入っていない。鼠の移動と崩落は無関係である。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。",
+      "authoringNotes": {
+        "notice": "以下の事実はq009を成立させる世界設定上の制約だ。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はない。ただし、生成・改稿時に矛盾させてはいけない。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "この地域では、鼠が一斉に地上へ逃げる現象は、落石、空気の流れの変化、地下水の上昇に先行することがあり、崩落警戒の根拠の一つとされている。ただし、鼠の移動だけでは崩落を確定できない。",
+          "崩落の有無は、測量士が残した旧図、支柱の測点、亀裂、地下水位を比較して判断する。本件の区画には新しい変位がない。",
+          "石灰清掃を区画ごとに時期をずらせば、鼠を一方向へ一斉に追い出さず、罠と封鎖によって移動先を制御できる。穀倉の外室と穀物庫は内扉で分かれている。"
+        ]
+      }
+    },
+    "agents": [
+      {
+        "id": "eda",
+        "character": "eda",
+        "name": "エダ",
+        "goal": "鼠の異変と構造物の危険を切り分ける",
+        "initialLocation": "junction"
+      },
+      {
+        "id": "cleaners",
+        "character": "cleaners",
+        "name": "清掃係",
+        "goal": "担当区画を清潔に保つ",
+        "initialLocation": "work"
+      },
+      {
+        "id": "storekeeper",
+        "character": "storekeeper",
+        "name": "穀倉番",
+        "goal": "鼠から穀物を守る",
+        "initialLocation": "granary"
+      },
+      {
+        "id": "clerks",
+        "character": "clerks",
+        "name": "共同倉庫の受入れ係",
+        "goal": "搬入数と出庫先を公開して管理する",
+        "initialLocation": "store"
+      }
+    ],
+    "conflict": {
+      "request": "鼠が一斉に地下から地上へ逃げた。崩落の前触れか、別の原因があるのか確かめてください。",
+      "progression": "崩落の確認、清掃時期の分散、鼠の侵入口封鎖、穀物移送を独立した状態として扱う。作業順を変えても、実施済みの作業だけを結果へ引き継ぐ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q009.v11.entry",
+          "assertion": {
+            "title": "鼠の集まる分岐",
+            "place": "junction",
+            "cast": [
+              {
+                "entity": "eda"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "work",
+          "script": "q009.v11.work",
+          "assertion": {
+            "title": "清掃区画",
+            "place": "work",
+            "cast": [
+              {
+                "entity": "cleaners"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "granary",
+          "script": "q009.v11.granary",
+          "assertion": {
+            "title": "穀倉の外室",
+            "place": "granary",
+            "cast": [
+              {
+                "entity": "storekeeper"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鼠が一斉に地下から地上へ逃げた。崩落の前触れか、別の原因があるのか確かめてください。",
+      "openQuestion": "鼠の避難路の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "清掃組合が石灰を使った清掃を広い区画で同時に行い、鼠は餌場と巣の臭いを失った。追い出された群れは地上の穀倉へ移動したが、穀倉番が内扉を閉めており、穀物のある室内へはまだ入っていない。鼠の移動と崩落は無関係である。",
+      "retroactiveTargets": [
+        "entry",
+        "work",
+        "granary"
+      ],
+      "gate": null,
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q009.v11.entry",
+        "assertion": {
+          "title": "鼠の集まる分岐",
+          "place": "junction",
+          "cast": [
+            {
+              "entity": "eda"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "work",
+        "script": "q009.v11.work",
+        "assertion": {
+          "title": "清掃区画",
+          "place": "work",
+          "cast": [
+            {
+              "entity": "cleaners"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "granary",
+        "script": "q009.v11.granary",
+        "assertion": {
+          "title": "穀倉の外室",
+          "place": "granary",
+          "cast": [
+            {
+              "entity": "storekeeper"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "stories.q009.values.partyAt",
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.edaAt",
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "eda の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.cleanersAt",
+        "type": "enum",
+        "initial": "work",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "cleaners の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.storekeeperAt",
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "storekeeper の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.clerksAt",
+        "type": "enum",
+        "initial": "store",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "clerks の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.ratsAt",
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "rats の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.grainAt",
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "plans",
+          "pillars"
+        ],
+        "meaning": "grain の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.plansAt",
+        "type": "enum",
+        "initial": "eda",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "grain",
+          "pillars"
+        ],
+        "meaning": "plans の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.pillarsAt",
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "grain",
+          "plans"
+        ],
+        "meaning": "pillars の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.structureChecked",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "structureChecked",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.causeKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "causeKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.zones",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "zones",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.holes",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "holes",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.verified",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "verified",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.hunted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "hunted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q009.values.received",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "received",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "progression": "崩落の確認、清掃時期の分散、鼠の侵入口封鎖、穀物移送を独立した状態として扱う。作業順を変えても、実施済みの作業だけを結果へ引き継ぐ。",
+    "flowVersion": 3,
+    "entryScript": "q009.v11.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "エダは鼠の流れを見て「崩れる前触れか」と尋ねた。穀倉番からは、内扉を閉じて持ちこたえていると連絡が来ている。",
+        "options": [
+          {
+            "id": "trace",
+            "text": "旧図、支柱、亀裂、地下水位を比較し、石灰の跡を清掃区画へ追う",
+            "to": "work",
+            "action": "entry_trace"
+          },
+          {
+            "id": "hunt",
+            "text": "穀倉の外室で群れを追い払い、内扉を守る",
+            "to": "@contract",
+            "combat": true,
+            "action": "entry_hunt"
+          },
+          {
+            "id": "move",
+            "text": "穀倉へ行き、共同倉庫への避難搬送を手配する",
+            "to": "granary",
+            "action": "entry_move"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.zones"
+            },
+            "right": true
+          },
+          "yes": "清掃係は合意した区画表を保持している。すでに撒いた石灰は取り消せない。次回から清掃する区画と時期をずらし、鼠の移動先を罠と封鎖で制御する。",
+          "no": "清掃係は石灰の袋を見せた。「全部きれいにするように、と」。鼠を追い出した先は穀倉だった。"
+        },
+        "options": [
+          {
+            "id": "zones",
+            "text": "清掃係と次回以降の区画と時期を分ける合意をする",
+            "to": "work",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q009.values.zones"
+                },
+                "right": true
+              }
+            },
+            "action": "work_zones"
+          },
+          {
+            "id": "granary",
+            "text": "鼠の移動経路をたどり、穀倉の侵入口を確かめに行く",
+            "to": "granary",
+            "action": "work_granary"
+          }
+        ]
+      },
+      {
+        "id": "granary",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q009.values.holes"
+              },
+              "right": true
+            },
+            "yes": "外室への穴は塞いである。内扉は引き続き閉めている。",
+            "no": "鼠はまだ外室にいる。穀倉番は内扉を押さえ、穀物との間を守っている。"
+          },
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q009.values.zones"
+              },
+              "right": true
+            },
+            "yes": "次回からの清掃区画と時期の分散は合意済みだ。",
+            "no": "清掃範囲の合意はまだ取っていない。"
+          }
+        ],
+        "options": [
+          {
+            "id": "holes",
+            "text": "外室の鼠を別方向へ誘導してから侵入口を塞ぐ",
+            "to": "granary",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q009.values.holes"
+                },
+                "right": true
+              }
+            },
+            "action": "granary_holes"
+          },
+          {
+            "id": "work",
+            "text": "清掃係へ戻り、区画と時期の分け方を決める",
+            "to": "work",
+            "action": "granary_work"
+          },
+          {
+            "id": "verify",
+            "text": "構造確認、清掃の合意、侵入口の封鎖を照合する",
+            "to": "@informed",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q009.values.zones"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q009.values.holes"
+                  },
+                  "right": true
+                }
+              ]
+            },
+            "action": "granary_verify"
+          },
+          {
+            "id": "grain",
+            "text": "共同倉庫の受入れを確認し、穀物を運び込む",
+            "to": "@compromise",
+            "action": "granary_grain"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    }
+  },
+  "scripts": {
+    "q009.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままだ。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q009",
+          "key": "clue_a",
+          "text": "天井の亀裂は古く、足元の白い粉だけが新しいままだ。"
+        }
+      ]
+    },
+    "q009.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "地下測量士のエダ",
+          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中しています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q009",
+          "key": "clue_b",
+          "text": "鼠の足跡は出口全部でなく、穀物庫につながる一本へ集中している。"
+        }
+      ]
+    },
+    "q009.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鼠の避難路\n\n鼠が一斉に地上へ逃げた。崩落の前触れか確かめてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "群れの主を倒し巣を一掃する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q009",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "消毒区画を分け、穀物庫の穴を塞ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指している。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "避難を優先し、穀物を共同倉へ移す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鼠の避難路\n\n鼠が一斉に地上へ逃げた。崩落の前触れか確かめてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q009.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q009.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指している。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q009.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "群れの主を倒し巣を一掃する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q009",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "消毒区画を分け、穀物庫の穴を塞ぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q009.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "避難を優先し、穀物を共同倉へ移す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q009",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」地下測量士のエダは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q009.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q009.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q009.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q009.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q009.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q009.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q009.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q009.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q009.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "鼠が新しい石灰の線を避け、穀物庫へ列を作っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "鼠の列を追い、石灰の両側を見比べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "群れの主を倒して巣を一掃する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q009.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "grain",
+              "text": "穀物を共同倉へ移し、避難を優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.work": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q009.node",
+          "value": "work"
+        },
+        {
+          "op": "say",
+          "text": "新しい石灰消毒が地下の餌場を潰し、鼠は人の食糧庫を目指している。 消毒を一度に広げると逃げ場がなくなる。区画を分け、穀物庫の入口も閉じる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "zones",
+              "text": "作業員と消毒区画を分ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q009.zones"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q009.zones",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "holes",
+              "text": "穀物庫の小穴を補修する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q009.holes"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q009.holes",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.flow.work"
+                }
+              ]
+            },
+            {
+              "id": "check",
+              "text": "二つの施工を通しで点検する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q009.zones"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q009.holes"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「作業員と消毒区画を分ける」・先に「穀物庫の小穴を補修する」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "施工を打ち切り、穀物の移動へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q009.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q009",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q009.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q009.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q009.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q009"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q009.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q009.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.flow.work"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q009.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q009.v11.entry": {
+      "storyQuest": "q009",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q009",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "エダは鼠の流れを見て「崩れる前触れか」と尋ねた。穀倉番からは、内扉を閉じて持ちこたえていると連絡が来ている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trace",
+              "text": "旧図、支柱、亀裂、地下水位を比較し、石灰の跡を清掃区画へ追う",
+              "storyAction": {
+                "quest": "q009",
+                "action": "entry_trace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "entry_trace"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.work"
+                }
+              ]
+            },
+            {
+              "id": "hunt",
+              "text": "穀倉の外室で群れを追い払い、内扉を守る",
+              "storyAction": {
+                "quest": "q009",
+                "action": "entry_hunt"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_1",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q009",
+                      "action": "entry_hunt"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q009.v11.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "穀倉へ行き、共同倉庫への避難搬送を手配する",
+              "storyAction": {
+                "quest": "q009",
+                "action": "entry_move"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "entry_move"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.granary"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.v11.work": {
+      "storyQuest": "q009",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q009",
+          "scene": "work"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.zones"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "清掃係は合意した区画表を保持している。すでに撒いた石灰は取り消せない。次回から清掃する区画と時期をずらし、鼠の移動先を罠と封鎖で制御する。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "清掃係は石灰の袋を見せた。「全部きれいにするように、と」。鼠を追い出した先は穀倉だった。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "zones",
+              "text": "清掃係と次回以降の区画と時期を分ける合意をする",
+              "storyAction": {
+                "quest": "q009",
+                "action": "work_zones"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q009.values.zones"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "work_zones"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.work"
+                }
+              ]
+            },
+            {
+              "id": "granary",
+              "text": "鼠の移動経路をたどり、穀倉の侵入口を確かめに行く",
+              "storyAction": {
+                "quest": "q009",
+                "action": "work_granary"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "work_granary"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.granary"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.v11.granary": {
+      "storyQuest": "q009",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q009",
+          "scene": "granary"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.holes"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "外室への穴は塞いである。内扉は引き続き閉めている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "鼠はまだ外室にいる。穀倉番は内扉を押さえ、穀物との間を守っている。"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.zones"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "次回からの清掃区画と時期の分散は合意済みだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "清掃範囲の合意はまだ取っていない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "holes",
+              "text": "外室の鼠を別方向へ誘導してから侵入口を塞ぐ",
+              "storyAction": {
+                "quest": "q009",
+                "action": "granary_holes"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q009.values.holes"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "granary_holes"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.granary"
+                }
+              ]
+            },
+            {
+              "id": "work",
+              "text": "清掃係へ戻り、区画と時期の分け方を決める",
+              "storyAction": {
+                "quest": "q009",
+                "action": "granary_work"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "granary_work"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.work"
+                }
+              ]
+            },
+            {
+              "id": "verify",
+              "text": "構造確認、清掃の合意、侵入口の封鎖を照合する",
+              "storyAction": {
+                "quest": "q009",
+                "action": "granary_verify"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q009.values.zones"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q009.values.holes"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "清掃の区画分け・侵入口の封鎖",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "granary_verify"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "grain",
+              "text": "共同倉庫の受入れを確認し、穀物を運び込む",
+              "storyAction": {
+                "quest": "q009",
+                "action": "granary_grain"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q009",
+                  "action": "granary_grain"
+                },
+                {
+                  "op": "jump",
+                  "script": "q009.v11.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "pause",
+              "text": "ここで中断し、同じ場面から再開する",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q009.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q009",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "旧図、支柱の測点、亀裂、地下水位を比較し、この区画に新しい変位がないことを確認した。石灰清掃が鼠を追い出した経路を突き止め、次回から清掃区画と時期を分け、穀倉の侵入口を塞いだ。この区画の崩落警戒は解除したが、他区画の安全までは断定していない。"
+        }
+      ]
+    },
+    "q009.v11.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q009",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "外室の群れを追い払い、内扉の向こうの穀物を守った。鼠を一斉に追い出した清掃方法は変わらず、構造物の安全も調べていない。別の出口から群れが戻る可能性が残る。"
+        }
+      ]
+    },
+    "q009.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q009",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "text": "受入れ係と数量を照合し、穀物を共同倉庫へ運び込んだ。共同の入出庫帳で、誰に配られたかが見えるようになった。穀物は当面守られたが、清掃方法、鼠の侵入口、崩落の有無は、実際に確認した範囲を超えて解決したことにはならない。"
+        }
+      ]
+    },
+    "q009.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q009"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q009.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q009.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q009.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "旧図、支柱の測点、亀裂、地下水位を比較し、この区画に新しい変位がないことを確認した。石灰清掃が鼠を追い出した経路を突き止め、次回から清掃区画と時期を分け、穀倉の侵入口を塞いだ。この区画の崩落警戒は解除したが、他区画の安全までは断定していない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "外室の群れを追い払い、内扉の向こうの穀物を守った。鼠を一斉に追い出した清掃方法は変わらず、構造物の安全も調べていない。別の出口から群れが戻る可能性が残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "受入れ係と数量を照合し、穀物を共同倉庫へ運び込んだ。共同の入出庫帳で、誰に配られたかが見えるようになった。穀物は当面守られたが、清掃方法、鼠の侵入口、崩落の有無は、実際に確認した範囲を超えて解決したことにはならない。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q009"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q009.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.v11.work"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "granary",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q009.v11.granary"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q009.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "二つの施工を通しで点検する",
+      "text": "鼠は減り、崩落警報は解除された。測量士は匂いも記すようになる。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "群れの主を倒して巣を一掃する",
+      "text": "穀物庫は守られたが、消毒の続く地下では別の虫が増え始める。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "穀物を共同倉へ移し、避難を優先する",
+      "text": "無駄な避難と笑う人もいた。共同倉の帳簿は、備蓄の偏りを明らかにする。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "junction": "鼠の集まる分岐",
+      "work": "清掃区画",
+      "granary": "穀倉の外室",
+      "store": "共同倉庫"
+    },
+    "connections": [
+      [
+        "junction",
+        "work"
+      ],
+      [
+        "junction",
+        "granary"
+      ],
+      [
+        "granary",
+        "store"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "edaAt": {
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "eda の所在または保持者"
+      },
+      "cleanersAt": {
+        "type": "enum",
+        "initial": "work",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "cleaners の所在または保持者"
+      },
+      "storekeeperAt": {
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "storekeeper の所在または保持者"
+      },
+      "clerksAt": {
+        "type": "enum",
+        "initial": "store",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "clerks の所在または保持者"
+      },
+      "ratsAt": {
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store"
+        ],
+        "meaning": "rats の所在または保持者"
+      },
+      "grainAt": {
+        "type": "enum",
+        "initial": "granary",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "plans",
+          "pillars"
+        ],
+        "meaning": "grain の所在または保持者"
+      },
+      "plansAt": {
+        "type": "enum",
+        "initial": "eda",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "grain",
+          "pillars"
+        ],
+        "meaning": "plans の所在または保持者"
+      },
+      "pillarsAt": {
+        "type": "enum",
+        "initial": "junction",
+        "values": [
+          "junction",
+          "work",
+          "granary",
+          "store",
+          "party",
+          "eda",
+          "cleaners",
+          "storekeeper",
+          "clerks",
+          "rats",
+          "grain",
+          "plans"
+        ],
+        "meaning": "pillars の所在または保持者"
+      },
+      "structureChecked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "structureChecked"
+      },
+      "causeKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "causeKnown"
+      },
+      "zones": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "zones"
+      },
+      "holes": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "holes"
+      },
+      "verified": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "verified"
+      },
+      "hunted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "hunted"
+      },
+      "received": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "received"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "eda": {
+        "holder": "edaAt",
+        "kind": "person",
+        "character": "eda"
+      },
+      "cleaners": {
+        "holder": "cleanersAt",
+        "kind": "group",
+        "character": "cleaners"
+      },
+      "storekeeper": {
+        "holder": "storekeeperAt",
+        "kind": "person",
+        "character": "storekeeper"
+      },
+      "clerks": {
+        "holder": "clerksAt",
+        "kind": "group",
+        "character": "clerks"
+      },
+      "rats": {
+        "holder": "ratsAt",
+        "kind": "group"
+      },
+      "grain": {
+        "holder": "grainAt",
+        "kind": "item"
+      },
+      "plans": {
+        "holder": "plansAt",
+        "kind": "item"
+      },
+      "pillars": {
+        "holder": "pillarsAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "plans": {
+        "text": "旧図に残された測点と地下水位を確認した"
+      },
+      "structure": {
+        "text": "旧図・支柱の測点・亀裂・地下水位を比較し、この区画には新しい変位がないと確認した"
+      },
+      "cause": {
+        "text": "一斉に行った石灰清掃が餌場と巣の臭いを失わせ、鼠を穀倉へ追い出した"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "鼠の集まる分岐",
+        "place": "junction",
+        "cast": [
+          {
+            "entity": "eda"
+          }
+        ],
+        "requires": true
+      },
+      "work": {
+        "title": "清掃区画",
+        "place": "work",
+        "cast": [
+          {
+            "entity": "cleaners"
+          }
+        ],
+        "requires": true
+      },
+      "granary": {
+        "title": "穀倉の外室",
+        "place": "granary",
+        "cast": [
+          {
+            "entity": "storekeeper"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_trace": {
+        "from": [
+          "entry"
+        ],
+        "to": "work",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "plans",
+            "source": "plans",
+            "requires": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "structure",
+            "source": "pillars",
+            "requires": {
+              "op": "contains",
+              "left": {
+                "ref": "stories.q009.knowledge.party"
+              },
+              "right": "plans"
+            }
+          },
+          {
+            "op": "set",
+            "key": "structureChecked",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "junction",
+              "work"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "cause",
+            "source": "cleaners",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "causeKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_hunt": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "junction",
+              "granary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rats"
+            ],
+            "path": [
+              "granary",
+              "junction",
+              "work"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "hunted",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_move": {
+        "from": [
+          "entry"
+        ],
+        "to": "granary",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "junction",
+              "granary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "work_zones": {
+        "from": [
+          "work"
+        ],
+        "to": "work",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.zones"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "zones",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "work_granary": {
+        "from": [
+          "work"
+        ],
+        "to": "granary",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "work",
+              "junction",
+              "granary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false
+      },
+      "granary_holes": {
+        "from": [
+          "granary"
+        ],
+        "to": "granary",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.holes"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "rats"
+            ],
+            "path": [
+              "granary",
+              "junction",
+              "work"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "holes",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "granary_work": {
+        "from": [
+          "granary"
+        ],
+        "to": "work",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "granary",
+              "junction",
+              "work"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "cause",
+            "source": "cleaners",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "causeKnown",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "granary_verify": {
+        "from": [
+          "granary"
+        ],
+        "ending": "informed",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q009.values.zones"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q009.values.holes"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "granary",
+              "junction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "plans",
+            "source": "plans",
+            "requires": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "structure",
+            "source": "pillars",
+            "requires": {
+              "op": "contains",
+              "left": {
+                "ref": "stories.q009.knowledge.party"
+              },
+              "right": "plans"
+            }
+          },
+          {
+            "op": "set",
+            "key": "structureChecked",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "junction",
+              "work"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "cause",
+            "source": "cleaners",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "causeKnown",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "verified",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "granary_grain": {
+        "from": [
+          "granary"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "granary",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "clerks"
+            ],
+            "path": [
+              "store",
+              "granary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "grain",
+            "from": "granary",
+            "to": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "clerks"
+            ],
+            "path": [
+              "granary",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "grain",
+            "from": "party",
+            "to": "clerks"
+          },
+          {
+            "op": "set",
+            "key": "received",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.structureChecked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.causeKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.zones"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.holes"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.verified"
+            },
+            "right": true
+          }
+        ]
+      },
+      "contract": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q009.values.hunted"
+        },
+        "right": true
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.received"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q009.values.grainAt"
+            },
+            "right": "clerks"
+          }
+        ]
+      }
+    }
+  }
+}

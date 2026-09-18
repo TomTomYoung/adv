@@ -44,8 +44,8 @@ import {story,O,move,give,set,see,and} from './story-kit.mjs';
 
 s.resetScripts=true;s.story.revision=2;
 s.story.worldPlaces={
- landing:{kind:'dungeon',dungeon:'region_1',map:'region_1_f1',x:11,y:9,event:'q002_decision'},
- water:{kind:'dungeon',dungeon:'region_1',map:'region_1_f1',x:11,y:9,event:'q002_decision'},
+ landing:{kind:'dungeon',dungeon:'region_1',map:'region_1_landing',x:5,y:1,event:'q002_decision'},
+ water:{kind:'dungeon',dungeon:'region_1',map:'region_1_landing',x:5,y:1,event:'q002_decision'},
  school:{kind:'town',location:'hikarigaeri_medical_specimens'},
  office:{kind:'town',location:'hikarigaeri_insurance'}
 };

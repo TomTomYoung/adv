@@ -50,8 +50,8 @@ test('a pending event in a different dungeon updates the label and dispatch targ
 
 test('q002 next destination changes between the waterway and school without advancing or changing the saved story',()=>{
  const g=prepareQuest('q002');choose(g,'school');let q=quest(g,'q002');assert.equal(q.destination.location,'hikarigaeri_medical_specimens');assert.equal(q.entryDungeon,null);
- finishJourney(g);choose(g,'recover');const before=g.save();q=quest(g,'q002');assert.equal(q.entryDungeon,'region_1');assert.equal(q.destination.x,11);
- assert.equal(g.save(),before);q.destination.x=999;assert.equal(quest(g,'q002').destination.x,11);
+ finishJourney(g);choose(g,'recover');const before=g.save();q=quest(g,'q002');assert.equal(q.entryDungeon,'region_1');assert.equal(q.destination.x,data.quests.q002.story.worldPlaces.landing.x);
+ assert.equal(g.save(),before);q.destination.x=999;assert.equal(quest(g,'q002').destination.x,data.quests.q002.story.worldPlaces.landing.x);
 });
 
 test('quest-specific travel requires an active quest and blocks busy or dungeon states; main quest selection persists',()=>{

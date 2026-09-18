@@ -65,7 +65,8 @@ export function questMapSvg(data,q,map){
     out.push(`<circle cx="${x(g.x)}" cy="${y(g.y)}" r="17" fill="#076c79" stroke="#fff" stroke-width="2"/>`);
     text(x(g.x),y(g.y)+7,g.label,'text-anchor="middle" font-size="21" style="fill:white"');
   }
-  for(const o of map.objects.filter(o=>!o.quest&&o.id!=='exit')){
+  const stairs=Object.values(data.dungeons[map.dungeon].systems).filter(s=>s.use==='map_connections').flatMap(s=>s.links.filter(l=>l.kind==='stairs').flatMap(l=>[l.a,l.b].filter(p=>p.map===map.id).map(p=>({...p,kind:'stairs'}))));
+  for(const o of [...map.objects.filter(o=>!o.quest&&o.id!=='exit'),...stairs]){
     out.push(`<rect x="${x(o.x)-12}" y="${y(o.y)-12}" width="24" height="24" rx="3" fill="#bd7842"/>`);
     text(x(o.x),y(o.y)+6,o.kind==='stairs'?'↓':'i','text-anchor="middle" font-size="19" style="fill:white"');
   }
@@ -114,12 +115,12 @@ export function questPageBundle(data,id){
     const file=`quest-maps/${q.id}-${map.id}.svg`;
     files[file]=questMapSvg(data,q,map);
     add(`![${map.name}の座標とイベントID](${file})`);
-    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。配置セルの足元、または隣のセルから配置セルへ向いた状態で調べられる。物語の到着判定もこの範囲を使う。`);
+    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは足元か正面から調べられる。`);
     for(const g of mapGroups(q,map))add(`図 ${g.label} (${g.x}, ${g.y})：${g.ids.map(code).join(' / ')}。`);
   }
   const post=q.story.worldPlaces.post,postLocation=data.locations[post.location],guild=data.locations[postLocation.parent],square=data.locations[guild.parent],map=maps[0];
-  const exit=map.objects.find(o=>!o.quest&&o.kind==='exit'),down=map.objects.find(o=>!o.quest&&o.kind==='stairs');
-  const downTarget=data.scripts[down.script].commands.find(c=>c.op==='map.teleport');
+  const exit=map.objects.find(o=>!o.quest&&o.kind==='exit');
+  const link=data.dungeons[map.dungeon].systems.connections.links.find(l=>l.a.map===map.id),down={...link.a,script:`connections/${link.id}`},downTarget=link.b;
   add('## 町とマップの接続');
   add('```mermaid\nflowchart TD\n'+[
     `  square["${square.name} / ${square.id}"]`,
@@ -174,7 +175,7 @@ export function questPageBundle(data,id){
   add('### クエスト専用配置データ');add(`<details>\n<summary>q001.events 全配置と条件</summary>\n\n${block(q.events)}\n\n</details>`);
   add('### 町の接続ロケーション');add(block(Object.fromEntries([square,guild,postLocation].map(l=>[l.id,l]))));
   add('### 入口と階段の接続データ');
-  add(block({dungeonEntries:data.dungeons[map.dungeon].entries,townRoot:data.game.world.townRoot,scripts:Object.fromEntries([exit.script,down.script].map(id=>[id,data.scripts[id]])),fireFixtures:Object.values(data.dungeons[map.dungeon].systems).flatMap(s=>s.fixtures??[]).filter(f=>f.map===map.id)}));
+  add(block({dungeonEntries:data.dungeons[map.dungeon].entries,townRoot:data.game.world.townRoot,connections:data.dungeons[map.dungeon].systems.connections,scripts:{[exit.script]:data.scripts[exit.script]},fireFixtures:Object.values(data.dungeons[map.dungeon].systems).flatMap(s=>s.fixtures??[]).filter(f=>f.map===map.id)}));
   add('### 物語の場所と出発・到着行為');
   add(`<details>\n<summary>worldPlaces と5本の移動行為</summary>\n\n${block({worldPlaces:q.story.worldPlaces,actions:Object.fromEntries(Object.entries(q.story.actions).filter(([,a])=>a.journey))})}\n\n</details>`);
   add('## 編集元と再生成');

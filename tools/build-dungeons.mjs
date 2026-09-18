@@ -1,4 +1,5 @@
 import {buildWorld} from './build-world.mjs';
+import {buildConnectedMaps} from './build-connected-maps.mjs';
 import fs from 'node:fs/promises';
 import {buildDungeonArt} from './build-dungeon-art.mjs';
 import {applyQuestEvents} from './quest-event-source.mjs';
@@ -35,14 +36,15 @@ export async function buildDungeons(){
   const shop=await read('data/shops.json');
   for(const good of [...terrain.shopGoods,...extra.shopGoods]){const at=shop.goods.findIndex(g=>g.item===good.item);if(at<0)shop.goods.push(good);else shop.goods[at]=good;}
   await write('data/shops.json',shop);
-  for(const point of [...terrain.mapOpenings,...extra.mapOpenings]){
+  const connected=await read('authoring/connected-maps.json');
+  for(const point of [...terrain.mapOpenings,...extra.mapOpenings].filter(p=>!connected.maps[p.map])){
     const file=`data/maps/${point.map}.json`,map=await read(file);
     if(!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<1||point.y<1||point.x>=map.tiles[0].length-1||point.y>=map.tiles.length-1)throw Error('水路の座標が不正です');
     const row=Array.from(map.tiles[point.y]);row[point.x]='.';map.tiles[point.y]=row.join('');await write(file,map);
   }
-  for(const [id,cells] of Object.entries(extra.mapKnown)){const file=`data/maps/${id}.json`,map=await read(file);map.initiallyKnown=[...new Set([...(map.initiallyKnown??[]),...cells])];await write(file,map);}
-  for(const [id,map] of Object.entries(voxel.maps))await write(`data/maps/${id}.json`,map);
-  await write('data/scripts/voxel-space.json',{scripts:voxel.scripts});
+  for(const [id,cells] of Object.entries(extra.mapKnown)){if(connected.maps[id])continue;const file=`data/maps/${id}.json`,map=await read(file);map.initiallyKnown=[...new Set([...(map.initiallyKnown??[]),...cells])];await write(file,map);}
+  for(const [id,map] of Object.entries(voxel.maps))if(!connected.retiredMaps.includes(id))await write(`data/maps/${id}.json`,map);
+  if(!connected.retiredScriptFiles.includes('data/scripts/voxel-space.json'))await write('data/scripts/voxel-space.json',{scripts:voxel.scripts});
   await write('data/scripts/dungeon-systems.json',{scripts:extra.scripts});
   await write('data/scripts/kagaribi.json',{scripts:content.scripts});
   await buildDungeonArt(root,definitions);
@@ -53,6 +55,7 @@ export async function buildDungeons(){
   game.files.databases.dungeons='data/dungeons.json';
   game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps,...voxel.maps}).map(id=>`data/maps/${id}.json`)])];
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];
+  await buildConnectedMaps(root,definitions,game);
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
   await buildWorld(root);

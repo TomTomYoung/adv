@@ -3166,6 +3166,218 @@
                 "devices"
               ],
               "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "use": {
+                  "const": "map_connections"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "links": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "kind": {
+                        "enum": [
+                          "door",
+                          "watertight_door",
+                          "stairs"
+                        ]
+                      },
+                      "a": {
+                        "type": "object",
+                        "properties": {
+                          "map": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10000
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10000
+                          },
+                          "side": {
+                            "enum": [
+                              "north",
+                              "east",
+                              "south",
+                              "west"
+                            ]
+                          },
+                          "facing": {
+                            "enum": [
+                              "north",
+                              "east",
+                              "south",
+                              "west"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "map",
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "b": {
+                        "type": "object",
+                        "properties": {
+                          "map": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "x": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10000
+                          },
+                          "y": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10000
+                          },
+                          "side": {
+                            "enum": [
+                              "north",
+                              "east",
+                              "south",
+                              "west"
+                            ]
+                          },
+                          "facing": {
+                            "enum": [
+                              "north",
+                              "east",
+                              "south",
+                              "west"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "map",
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "kind",
+                      "a",
+                      "b"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "use",
+                "links"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "use": {
+                  "const": "compartment_water"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "zones": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "control": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "initiallyFlooded": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "control",
+                      "initiallyFlooded"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                },
+                "controls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10000
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10000
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "x",
+                      "y",
+                      "id",
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "use",
+                "zones",
+                "controls"
+              ],
+              "additionalProperties": false
             }
           ]
         }

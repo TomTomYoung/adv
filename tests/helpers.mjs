@@ -27,6 +27,10 @@ export function maintainParty(g){
 export function exploreSpot(engine,spot,options={}){
   const dungeon=Object.values(data.dungeons).find(d=>d.maps.includes(spot.map));
   if(engine.state.mode==='town'){goTownLocation(engine,data.game.world.townRoot);assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));}
+  if(dungeon.systems.connections?.use==='map_connections'){
+    navigateMaps(engine,spot.map,options);
+    walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)assert.ok(engine.dispatch({type:'interact'}));drain(engine);return;
+  }
   const drainFloor=()=>{if(engine.state.dungeons.active?.id==='region_1'&&!engine.map().voxels){const target=engine.state.location.map.endsWith('f1')?'upper_gate':'lower_gate';if(engine.state.dungeons.persistent.region_1.systems.water.controls[target])assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'close',target}));}};
   if(engine.state.location.x===1&&engine.state.location.y===1)drainFloor();
   if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
@@ -52,4 +56,21 @@ export function leaveDungeonOnFoot(g){
   assert.ok(exit,'normal dungeon exit');
   walk(g,exit.x,exit.y,{maintain:true});assert.ok(g.dispatch({type:'interact'}));drain(g);
   assert.equal(g.state.mode,'town');
+}
+
+export function navigateMaps(engine,target,options={}){
+  const d=engine.data.dungeons[engine.state.dungeons.active.id],links=d.systems.connections.links;
+  const route=new Map([[engine.state.location.map,null]]),queue=[engine.state.location.map];
+  for(let i=0;i<queue.length;i++)for(const link of links)for(const [from,to] of [[link.a,link.b],[link.b,link.a]])if(from.map===queue[i]&&!route.has(to.map)){route.set(to.map,{from,to,link});queue.push(to.map);}
+  assert.ok(route.has(target),`Connected route to ${target}`);
+  const edges=[];for(let next=route.get(target);next;next=route.get(next.from.map))edges.unshift(next);
+  for(const {from,to,link} of edges){
+    const water=d.systems.water,zone=water?.use==='compartment_water'&&water.zones.find(z=>z.map===to.map);
+    if(zone&&engine.state.dungeons.persistent[d.id].systems.water.controls[zone.control]){
+      const handle=water.controls.find(c=>c.id===zone.control&&c.map===from.map);assert.ok(handle,'reachable dry handle');walk(engine,handle.x,handle.y,{...options,settleDestination:true});
+      assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'close',target:handle.id}),engine.state.notice);
+    }
+    walk(engine,from.x,from.y,{...options,settleDestination:true});
+    assert.ok(engine.dispatch({type:'dungeon.action',system:'connections',action:'cross',target:link.id}),JSON.stringify({link:link.id,loc:engine.state.location,waiting:engine.state.waiting,notice:engine.state.notice,journey:engine.state.journey}));settle(engine);assert.equal(engine.state.location.map,to.map);
+  }
 }

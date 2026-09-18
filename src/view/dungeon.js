@@ -17,7 +17,7 @@ export function traceDungeonRay(d,ox,oy,dx,dy,max=16){
   let x=Math.floor(ox),y=Math.floor(oy),distance=0,side='north';
   const sx=dx<0?-1:1,sy=dy<0?-1:1,ax=dx===0?Infinity:Math.abs(1/dx),ay=dy===0?Infinity:Math.abs(1/dy);
   let tx=dx===0?Infinity:(sx>0?x+1-ox:ox-x)*ax,ty=dy===0?Infinity:(sy>0?y+1-oy:oy-y)*ay;
-  const hit=()=>({distance,x,y,side,u:fraction(side==='east'||side==='west'?oy+dy*distance:ox+dx*distance)});
+  const hit=()=>({distance,x,y,side,u:fraction(side==='east'||side==='west'?oy+dy*distance:ox+dx*distance),door:d.doors?.[`${x},${y}/${side}`]});
   if(d.geometry[y]?.[x]!=='.')return hit();
   while(distance<max){
     const east=sx>0?'east':'west',south=sy>0?'south':'north';
@@ -54,7 +54,7 @@ function floorColor(material,wx,wy,cell,distance){
 }
 export function visibleDungeonObjects(dungeon){
   const {x,y,facing}=dungeon.location,[dx,dy]={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]}[facing];
-  return dungeon.objects.filter(o=>!['water','vector','boundary'].includes(o.kind)&&(o.x===x&&o.y===y||o.x===x+dx&&o.y===y+dy&&!closed(dungeon,x,y,facing)));
+  return dungeon.objects.filter(o=>!['water','vector','boundary','map_connection'].includes(o.kind)&&(o.x===x&&o.y===y||o.x===x+dx&&o.y===y+dy&&!closed(dungeon,x,y,facing)));
 }
 export function paintDungeon(canvas,dungeon,battle){
   const ctx=canvas.getContext('2d');if(!ctx)return;canvas.width=WIDTH;canvas.height=HEIGHT;
@@ -77,7 +77,16 @@ export function paintDungeon(canvas,dungeon,battle){
     ctx.putImageData(pixels,0,0);
     for(const {column,hit} of rays){
       if(hit.empty)continue;const h=FOCAL/Math.max(.01,hit.distance),top=HEIGHT/2-h*(1-EYE);
-      if(drawable(wall)){const rect=dungeon.wall?artRect(wall,dungeon.wall):[18,45,50,76];ctx.drawImage(wall,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
+      if(hit.door){
+        // An actual opaque pressure door, including frame, ribs, lock and wheel.
+        // The water is behind this surface and never rendered as a vertical wall.
+        const u=hit.u,frame=u<.06||u>.94;
+        ctx.fillStyle=frame?'#283437':Math.abs(u-.5)<.012?'#172326':'#697c7d';ctx.fillRect(column,top,STRIDE,h);
+        ctx.fillStyle='#344548';for(const v of [.04,.24,.74,.94])ctx.fillRect(column,top+h*v,STRIDE,h*.025);
+        if(u>.33&&u<.63){ctx.fillStyle=hit.door.closed?'#c18b46':'#74b48e';ctx.fillRect(column,top+h*.46,STRIDE,h*.045);}
+        const wheel=Math.abs(u-.73);if(wheel<.10){const radius=Math.sqrt(.01-wheel*wheel);ctx.fillStyle='#d4dbce';ctx.fillRect(column,top+h*(.57-radius),STRIDE,h*radius*2);if(wheel<.065){const inner=Math.sqrt(.065**2-wheel**2);ctx.fillStyle='#425859';ctx.fillRect(column,top+h*(.57-inner),STRIDE,h*inner*2);}}
+      }
+      else if(drawable(wall)){const rect=dungeon.wall?artRect(wall,dungeon.wall):[18,45,50,76];ctx.drawImage(wall,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
       else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,STRIDE,h);}
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
       const level=dungeon.cells[hit.y]?.[hit.x]?.illumination??0;

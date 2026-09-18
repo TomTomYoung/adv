@@ -1,6 +1,6 @@
 # ダンジョン一覧
 
-更新日: 2026-09-16。対象: 作品版1.9.0。13ダンジョン・26マップ・200クエスト。q001と火・水没・装備個体の変更は[改訂概要](DUNGEON_REVISION_1_9.md)を参照してください。
+更新日: 2026-09-18。対象: 作品版1.14.0。13ダンジョン・33件の2Dマップ・200クエスト。区画接続と退避は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
 
 設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
@@ -12,11 +12,9 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    火台へ種火を配置し、火の種類に応じた範囲効果を利用します。携帯松明の燃料、くらがり、灯番に対応します。実装済み。設定: `authoring/dungeons/kagaribi.json`。詳細: [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)。[Notion](https://app.notion.com/p/3dac3c1966b38057b740df426b57da09)。
 
-2. 灯守の地下水道（`region_1`、従来2階層と貯水立坑の計3マップ）
+2. 灯守の地下水道（`region_1`、乾いた区画6件・水路4件）
 
-   入口から入れる貯水立坑を追加しました。高さ-1・0・1の立方体、共有する六面、水門・排水蓋・給水ポンプ、梯子・渡り縄・登攀誘導・掘削を配置しています。設定: `authoring/voxel-content.json`。詳細: [VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)。
-
-   フロア単位の水没度0〜10、水門・バルブ、潜水準備、濡れと魔法、水位別の魚型敵を扱います。実装済み。設定: `authoring/dungeons/region_1.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf)。
+   短い直線水路を水密扉で区切り、乾いた操作室の給排水盤で区画全体を排水します。水没区画への進入は禁止。上下階の階段は乾いた荷揚げ場と操作室の間だけに置きます。q002〜q010の人物・イベントを再配置しました。設定: `authoring/connected-maps.json` と `authoring/dungeons/region_1.json`。旧貯水立坑と潮汐式フロアは退避して保持しています。
 
 3. 塩哭きの廃坑（`region_2`、2階層）
 
@@ -140,19 +138,19 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 ## 配布データの構成
 
-篝火の迷宮 (kagaribi)：3マップ。部品：fires=fire_network。現地調査：灯を受け渡す準備 → q001。
+篝火の迷宮 (kagaribi)：3マップ。部品：fires=fire_network / connections=map_connections。現地調査：灯を受け渡す準備 → q001。
 
 巨獣上の移動集落 (moving_village)：1マップ。部品：terrain=terrain_shift。現地調査：暮らしを揺らす足場 → q194。
 
 祈りの届かない谷 (prayerless_valley)：1マップ。部品：boundary=suppression_zone。現地調査：境界の内側の祈り → q193。
 
-灯守の地下水道 (region_1)：3マップ。部品：water=waterworks / space=voxel_space。現地調査：排水された横道 → q010。
+灯守の地下水道 (region_1)：10マップ。部品：water=compartment_water / connections=map_connections。現地調査：排水された横道 → q010。
 
 帰還者の深淵 (region_10)：2マップ。部品：return_flow=vector_curse。現地調査：逆らった足取り → q100。
 
-塩哭きの廃坑 (region_2)：2マップ。部品：salt=corrosion / walls=breakable_walls。現地調査：塩壁の向こうの退路 → q011。
+塩哭きの廃坑 (region_2)：2マップ。部品：salt=corrosion / walls=breakable_walls / connections=map_connections。現地調査：塩壁の向こうの退路 → q011。
 
-根喰みの地下庭園 (region_3)：2マップ。部品：garden=plant_garden。現地調査：根が支える橋 → q030。
+根喰みの地下庭園 (region_3)：2マップ。部品：garden=plant_garden / connections=map_connections。現地調査：根が支える橋 → q030。
 
 鏡沈みの礼拝堂 (region_4)：2マップ。部品：mirrors=warp_network。現地調査：仮面を運ぶ鏡路 → q039。
 

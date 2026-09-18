@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame} from './helpers.mjs';
+import {data,newGame} from './legacy-map-helpers.mjs';
 import {projectGame} from '../src/application/projection.js';
 import {validateContent} from '../src/core/validation.js';
 import {traceDungeonRay,visibleDungeonObjects} from '../src/view/dungeon.js';

@@ -1,5 +1,7 @@
 # セル・地形状態・境界・配置物カタログ
 
+1.14.0では `map_connections` と `compartment_water` が通常の区画接続・水没を担当します。通常ロードに立体マップはありません。末尾の配置索引は現行データ、以下の立体・潮汐水位の説明は退避実装の保守資料です。現行仕様は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
+
 更新日: 2026-09-14。対象は作品版1.9.0です。現在のマップに存在する種類と、操作によって発生する状態を整理しています。2Dマップも継続して保守する対象です。
 
 地形データの文字種は `.`（空）と `#`（密）の二つです。水・足場・扉・植物・術の区域などは、地形に重ねる状態や配置物として定義されています。本書の分類名を、新しい `tile` の値としてJSONへ書き込むことはできません。
@@ -245,15 +247,15 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.13.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.14.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
-2D 25マップ、3D 1マップ、計26マップ。2Dの空は2886セル、密は3453セルです。
+2D 33マップ、3D 0マップ、計33マップ。2Dの空は2784セル、密は3447セルです。
 
 ### マップ別の基礎地形
 
-[region_1_f1](../data/maps/region_1_f1.json) 灯守の地下水道・地下1層：2D、空131・密154。
+[region_1_f1](../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、空21・密34。
 
-[region_1_f2](../data/maps/region_1_f2.json) 灯守の地下水道・地下2層：2D、空133・密152。
+[region_1_f2](../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、空21・密34。
 
 [region_2_f1](../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、空132・密153。
 
@@ -301,27 +303,41 @@ npm run check:docs
 
 [moving_village_f1](../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、空54・密63。
 
-[waterworks_shaft](../data/maps/waterworks_shaft.json) 灯守の地下水道・貯水立坑：3D、z=-1〜1、空30・密159。空の内訳は初期足場あり24・なし6。水深0/1/2/3の初期セル数は30/0/0/0。
+[region_1_canal_a](../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、空9・密24。
+
+[region_1_landing](../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、空21・密34。
+
+[region_1_canal_b](../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、空9・密24。
+
+[region_1_inspection](../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、空21・密34。
+
+[region_1_canal_c](../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、空9・密24。
+
+[region_1_lower_landing](../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、空21・密34。
+
+[region_1_canal_d](../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、空9・密24。
+
+[region_1_gatehouse](../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、空21・密34。
 
 ### セル上のイベント種別
 
-マップ固有とクエストから投影した map.objects は計523定義、8種、配置座標は521か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
+マップ固有とクエストから投影した map.objects は計511定義、8種、配置座標は509か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
 
-`chest`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`cache` region_1_f1 (1,4) ／ `cache` region_1_f2 (1,4)。
+`chest`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
 
-`clue`：200定義。進入時0／調べる200、blocking指定0、safe指定195、once指定0。配置例：`q004_clue_a` region_1_f1 (5,3) ／ `q004_clue_b` region_1_f1 (11,4)。
+`clue`：199定義。進入時0／調べる199、blocking指定0、safe指定194、once指定0。配置例：`q004_clue_a` region_1_f1 (5,1) ／ `q006_clue_a` region_1_f2 (4,3)。
 
-`decision`：205定義。進入時3／調べる202、blocking指定0、safe指定201、once指定0。配置例：`q002_decision` region_1_f1 (11,9) ／ `q003_decision` region_1_f1 (15,5)。
+`decision`：205定義。進入時3／調べる202、blocking指定0、safe指定201、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
 
-`door`：20定義。進入時0／調べる20、blocking指定20、safe指定20、once指定0。配置例：`door` region_1_f1 (17,7) ／ `door` region_1_f2 (17,13)。
+`door`：20定義。進入時0／調べる20、blocking指定20、safe指定20、once指定0。配置例：`door` region_1_f1 (9,3) ／ `door` region_1_f2 (9,3)。
 
 `exit`：13定義。進入時0／調べる13、blocking指定0、safe指定13、once指定0。配置例：`exit` region_1_f1 (1,1) ／ `exit` region_2_f1 (1,1)。
 
-`fountain`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`fountain` region_1_f1 (9,7) ／ `fountain` region_1_f2 (3,13)。
+`fountain`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`fountain` region_1_f1 (5,3) ／ `fountain` region_1_f2 (5,3)。
 
-`stairs`：25定義。進入時0／調べる25、blocking指定0、safe指定25、once指定0。配置例：`stairs` region_1_f1 (14,11) ／ `stairs` region_1_f2 (1,1)。
+`stairs`：14定義。進入時0／調べる14、blocking指定0、safe指定14、once指定0。配置例：`stairs` region_4_f1 (12,13) ／ `stairs` region_4_f2 (1,1)。
 
-`trap`：20定義。進入時20／調べる0、blocking指定0、safe指定0、once指定20。配置例：`trap` region_1_f1 (1,12) ／ `trap` region_1_f2 (1,12)。
+`trap`：20定義。進入時20／調べる0、blocking指定0、safe指定0、once指定20。配置例：`trap` region_1_f1 (7,3) ／ `trap` region_1_f2 (7,3)。
 
 ### ダンジョン固有の状態・操作点
 
@@ -344,6 +360,12 @@ npm run check:docs
 火の効果 `lure` 呼び寄せの火：くらがり除けあり、通常遭遇率×2、敵倍率×1.6、優先度30。
 
 火の効果 `deep` 深火の種火：くらがり除けあり、通常遭遇率×0、敵倍率×1、優先度40。
+
+部品 `connections` / `map_connections` 有効。
+
+接続 `floor_1_2` 未探索区画への階段：stairs、kagaribi_f1 (13,7) ↔ kagaribi_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_2_3` 未探索区画への階段：stairs、kagaribi_f2 (13,7) ↔ kagaribi_f3 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 巨獣上の移動集落 (moving_village)
 
@@ -385,17 +407,37 @@ npm run check:docs
 
 現地調査 `region_1` 排水された横道：関連q010、操作点region_1_f1 (2,1)。
 
-部品 `water` / `waterworks` 有効。
+部品 `water` / `compartment_water` 有効。
 
-フロア `region_1_f1`：通路全体が一律の水没度0〜10。制御：upper_gate・upper_valve。
+密閉水路 `region_1_canal_a`：初期完全水没・進入禁止、給排水弁 `upper_gate`。セルごとの水壁は作らない。
 
-フロア `region_1_f2`：通路全体が一律の水没度0〜10。制御：lower_gate・lower_valve。
+密閉水路 `region_1_canal_b`：初期完全水没・進入禁止、給排水弁 `upper_valve`。セルごとの水壁は作らない。
 
-周期：干潮 24刻／内部水位0 → 増水1 4刻／内部水位1 → 増水2 4刻／内部水位2 → 増水3 4刻／内部水位3 → 増水4 4刻／内部水位4 → 増水5 4刻／内部水位5 → 増水6 4刻／内部水位6 → 増水7 4刻／内部水位7 → 増水8 4刻／内部水位8 → 増水9 4刻／内部水位9 → 増水10 4刻／内部水位10 → 減水9 3刻／内部水位9 → 減水8 3刻／内部水位8 → 減水7 3刻／内部水位7 → 減水6 3刻／内部水位6 → 減水5 3刻／内部水位5 → 減水4 3刻／内部水位4 → 減水3 3刻／内部水位3 → 減水2 3刻／内部水位2 → 減水1 3刻／内部水位1。制御点4か所：`upper_gate` region_1_f1 (2,1) ／ `upper_valve` region_1_f1 (2,3) ／ `lower_gate` region_1_f2 (2,1) ／ `lower_valve` region_1_f2 (5,2)。
+密閉水路 `region_1_canal_c`：初期完全水没・進入禁止、給排水弁 `lower_gate`。セルごとの水壁は作らない。
 
-部品 `space` / `voxel_space` 有効。
+密閉水路 `region_1_canal_d`：初期完全水没・進入禁止、給排水弁 `lower_valve`。セルごとの水壁は作らない。
 
-立体対象：[waterworks_shaft](../data/maps/waterworks_shaft.json)。入口1か所：region_1_f1 (1,1,0) → waterworks_shaft (1,1,0)。六面と経路は次の立体配置索引を参照してください。
+乾いた操作盤：`upper_gate` region_1_f1 (2,1) ／ `upper_gate` region_1_landing (2,1) ／ `upper_valve` region_1_landing (8,1) ／ `upper_valve` region_1_inspection (2,1) ／ `lower_gate` region_1_f2 (8,1) ／ `lower_gate` region_1_lower_landing (2,1) ／ `lower_valve` region_1_lower_landing (8,1) ／ `lower_valve` region_1_gatehouse (2,1)。
+
+部品 `connections` / `map_connections` 有効。
+
+接続 `upper_inlet` 第一水路の水密扉：watertight_door、region_1_f1 (9,1) ↔ region_1_canal_a (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `upper_landing` 荷揚げ場の水密扉：watertight_door、region_1_canal_a (9,1) ↔ region_1_landing (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `branch_inlet` 排水支路の水密扉：watertight_door、region_1_landing (9,1) ↔ region_1_canal_b (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `branch_outlet` 点検室の水密扉：watertight_door、region_1_canal_b (9,1) ↔ region_1_inspection (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `dry_stair` 乾いた階段室：stairs、region_1_landing (5,3) ↔ region_1_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `lower_inlet` 給金箱水路の水密扉：watertight_door、region_1_f2 (9,1) ↔ region_1_canal_c (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `lower_landing` 待避場の水密扉：watertight_door、region_1_canal_c (9,1) ↔ region_1_lower_landing (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `deep_inlet` 避難水路の水密扉：watertight_door、region_1_lower_landing (9,1) ↔ region_1_canal_d (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `deep_outlet` 水門詰所の水密扉：watertight_door、region_1_canal_d (9,1) ↔ region_1_gatehouse (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 帰還者の深淵 (region_10)
 
@@ -420,6 +462,10 @@ npm run check:docs
 部品 `walls` / `breakable_walls` 有効。
 
 破壊壁4セル：`upper_entry` region_2_f1 (6,1) ／ `upper_crossing` region_2_f1 (3,6) ／ `lower_entry` region_2_f2 (6,1) ／ `lower_crossing` region_2_f2 (10,9)。
+
+部品 `connections` / `map_connections` 有効。
+
+接続 `floor_1_2` 地下二層への階段：stairs、region_2_f1 (13,12) ↔ region_2_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 根喰みの地下庭園 (region_3)
 
@@ -454,6 +500,10 @@ npm run check:docs
 植床 `barrier_2` のbarrier：region_3_f2 (2,3)を#。
 
 植床 `vine_2` のvine：region_3_f1 (1,1)へ移送。
+
+部品 `connections` / `map_connections` 有効。
+
+接続 `floor_1_2` 地下二層への階段：stairs、region_3_f1 (14,11) ↔ region_3_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 鏡沈みの礼拝堂 (region_4)
 
@@ -564,35 +614,5 @@ npm run check:docs
 操作点：`orrery_1` region_9_f1 (1,2) ／ `orrery_2` region_9_f2 (1,2)。固定退避点：`refuge_1` region_9_f1 (1,1) ／ `refuge_2` region_9_f2 (1,1)。
 
 ### 立体の共有面・経路・装置
-
-[waterworks_shaft](../data/maps/waterworks_shaft.json)：面8、経路3、装置2。
-
-面 `basin_gate` 貯水室の入口水門：(3,2,0)/east。開閉可、初期閉、操作(3,2,0)。閉：人物不可・水不可・支持なし。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `basin_side` 貯水室の隔壁：(3,3,0)/east。固定閉（反対の状態は操作で使用しません）。閉：人物不可・水不可・支持なし。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `transfer_gate` 二室をつなぐ水門：(4,2,0)/east。開閉可、初期閉、操作(3,2,0)。閉：人物不可・水不可・支持なし。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `transfer_wall` 二室の隔壁：(4,3,0)/east。固定閉（反対の状態は操作で使用しません）。閉：人物不可・水不可・支持なし。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `drain_hatch` 底の排水蓋：(4,3,0)/down。開閉可、初期閉、操作(3,2,0)。閉：人物不可・水不可・支持あり。開：人物不可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `bridge_3` 橋の床板：(3,2,1)/down。固定閉（反対の状態は操作で使用しません）。閉：人物不可・水不可・支持あり。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `bridge_4` 橋の床板：(4,2,1)/down。固定閉（反対の状態は操作で使用しません）。閉：人物不可・水不可・支持あり。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-面 `bridge_5` 橋の床板：(5,2,1)/down。固定閉（反対の状態は操作で使用しません）。閉：人物不可・水不可・支持あり。開：人物可・水可・支持なし。人物・水の各値は両方向共通です。
-
-経路 `fixed_ladder` 点検橋への梯子：ladder、往復可。(2,2,0) → (2,2,1) → (3,2,1)。利用fixed。
-
-経路 `rope_route` 南の足場への渡り縄：rope、往復可。(3,4,0) → (3,4,1) → (4,4,1) → (5,4,1) → (6,4,1)。利用install／rope×1。
-
-経路 `guided_climb` 貯水室を越える登攀経路：rope、往復可。(3,3,0) → (3,3,1) → (4,3,1) → (5,3,1) → (6,3,1)。利用skill／climb_route。
-
-装置 `hand_pump` 手押し給水ポンプ：pump、操作(3,2,0)、対象(4,2,0)。区域の水没度を2段階上げる操作。
-
-装置 `excavate_drain` 貯水室南側の岩壁：dig、操作(3,4,0)、対象(4,4,0)。材料blasting_charge×1または技能break_rock。
-
-経路kindとして対応済みで、このマップに配置のないもの：stairs・vine・bridge。橋の床板という共有面は、bridge経路の配置数に加算しません。
 
 <!-- /generated:cell-inventory -->

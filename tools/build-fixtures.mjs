@@ -11,7 +11,7 @@ act({type:'location.move',id:'hikarigaeri_guild'});act({type:'accept',id:'q001'}
 act({type:'location.move',id:'hikarigaeri_square'});act({type:'location.move',id:'hikarigaeri_shop'});fixtures.shop=projectGame(g);
 act({type:'location.move',id:'hikarigaeri_square'});act({type:'location.move',id:'hikarigaeri_tavern'});act({type:'party',action:'join',actor:'toma'});fixtures.tavern=projectGame(g);
 act({type:'location.move',id:'hikarigaeri_square'});act({type:'travel',dungeon:'region_1'});fixtures.dungeon=projectGame(g);
-g.teleport('region_1_f1',11,9);g.run(data.quests.q002.model.entryScript);drain();
+g.teleport(data.quests.q002.story.worldPlaces.landing.map,data.quests.q002.story.worldPlaces.landing.x,data.quests.q002.story.worldPlaces.landing.y);g.run(data.quests.q002.model.entryScript);drain();
 for(const id of ['lift','school']){act({type:'choose',id});drain();}
 g.returnTown();act({type:'location.move',id:'hikarigaeri_medical'});act({type:'location.move',id:'hikarigaeri_medical_specimens'});
 fixtures.dialog=projectGame(g);drain();fixtures.choice=projectGame(g);
