@@ -3,7 +3,7 @@ import {storyPlace} from '../core/story.js';
 export function projectWorld(engine,dialog){
   const {data:d,state:s}=engine,location=townLocation(d,s),busy=Boolean(s.waiting||s.battle),j=s.journey;
   let journey=null;
-  if(j){const q=d.quests[j.quest],a=q.story.actions[j.action],place=q.story.worldPlaces[a.journey.to];journey={quest:j.quest,title:q.title,destination:worldPlaceName(d,place),place:{...place},canArrive:!busy&&atWorldPlace(s,place)};}
+  if(j){const q=d.quests[j.quest],a=q.story.actions[j.action],place=q.story.worldPlaces[a.journey.to];journey={quest:j.quest,title:q.title,destination:worldPlaceName(d,place),place:{...place},atDestination:atWorldPlace(s,place,{exact:true})};}
   if(!location)return {town:null,journey};
   const links=Object.values(d.locations).filter(l=>l.parent===location.id||(location.links??[]).includes(l.id)).map(l=>({id:l.id,name:l.name}));
   const breadcrumbs=[];let l=location;while(l){breadcrumbs.unshift({id:l.id,name:l.name});l=d.locations[l.parent];}

@@ -2002,7 +2002,6 @@
           },
           "points": {
             "type": "array",
-            "minItems": 1,
             "items": {
               "type": "object",
               "properties": {
@@ -2049,6 +2048,7 @@
           "trigger": {
             "enum": [
               "enter",
+              "auto",
               "interact",
               "action"
             ]
@@ -2109,7 +2109,36 @@
           "trigger",
           "script"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "trigger": {
+                  "const": "auto"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "condition",
+                "once"
+              ],
+              "properties": {
+                "once": {
+                  "const": true
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "points": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scripts": {

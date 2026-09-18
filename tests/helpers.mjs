@@ -18,7 +18,7 @@ export function pathTo(engine,x,y){const loc=engine.state.location,map=engine.ma
   for(let i=0;i<queue.length;i++){const [cx,cy]=queue[i];if(cx===x&&cy===y){found=true;break;}for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const key=`${cx+dx},${cy+dy}`;if(engine.walkable(map,cx+dx,cy+dy)&&!seen.has(key)){seen.set(key,[cx,cy]);queue.push([cx+dx,cy+dy]);}}}
   assert.ok(found,`Path to ${x},${y}`);const steps=[];let p=[x,y];while(p){steps.push(p);p=seen.get(p.join(','));}return steps.reverse().slice(1);
 }
-export function walk(engine,x,y,{heal=false,maintain=false}={}){for(const [nx,ny] of pathTo(engine,x,y)){if(maintain)maintainParty(engine);const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y,wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));assert.ok(engine.dispatch({type:'move',direction:'forward'}));if(heal)engine.healAll();settle(engine);assert.equal(engine.state.mode,'dungeon','party survived route');}}
+export function walk(engine,x,y,{heal=false,maintain=false,settleDestination=true}={}){for(const [nx,ny] of pathTo(engine,x,y)){if(maintain)maintainParty(engine);const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y,wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));assert.ok(engine.dispatch({type:'move',direction:'forward'}));if(heal)engine.healAll();if(!settleDestination&&nx===x&&ny===y)drain(engine);else settle(engine);assert.equal(engine.state.mode,'dungeon','party survived route');}}
 export function maintainParty(g){
   for(const id of g.state.members){const actor=g.state.actors[id];if(actor.statuses.includes('poison')&&g.state.inventory.antidote>0){g.dispatch({type:'item',item:'antidote',actor:id});drain(g);}if(actor.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0){g.dispatch({type:'item',item:'potion',actor:id});drain(g);}}
   const needsFood=g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.55)||g.state.actors.sera.mp<4;
@@ -32,7 +32,7 @@ export function exploreSpot(engine,spot,options={}){
   if(engine.state.location.map!==spot.map){const stairs=engine.map().objects.find(o=>o.id==='stairs');walk(engine,stairs.x,stairs.y,options);
     if(dungeon.id==='region_1')for(let n=0;!engine.walkable(data.maps[spot.map],1,1)&&n<200;n++)assert.ok(engine.dispatch({type:'dungeon.action',system:'water',action:'wait'}));
     assert.ok(engine.dispatch({type:'interact'}));settle(engine);assert.equal(engine.state.location.map,spot.map);drainFloor();}
-  walk(engine,spot.x,spot.y,options);if(options.interact!==false)assert.ok(engine.dispatch({type:'interact'}));drain(engine);
+  walk(engine,spot.x,spot.y,options);if(options.interact!==false&&!engine.state.waiting&&!engine.state.battle)assert.ok(engine.dispatch({type:'interact'}));drain(engine);
 }
 
 // Town navigation is deliberate; services and dungeon entrances do not relocate the party.

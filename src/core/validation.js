@@ -1,4 +1,5 @@
 import {validateWorld} from './world.js';
+import {BATTLE_EVENT_PHASES} from './battle-events.js';
 import {voxelAt} from './voxels.js';
 import {validateDungeonArt} from './dungeon-art.js';
 import {validateQuestEvents} from './quest-events.js';
@@ -45,7 +46,7 @@ export function validateContent(data){
           const ids=new Set();
           for(const e of Array.isArray(c.events)?c.events:[]){
             if(!isRecord(e)||typeof e.id!=='string'||!e.id||ids.has(e.id)){fail(at,'戦闘イベントID不正・重複');continue;}ids.add(e.id);
-            if(!Array.isArray(e.triggers)||!e.triggers.length||new Set(e.triggers).size!==e.triggers.length||e.triggers.some(t=>!['start','round_start','before_end'].includes(t)))fail(at,'戦闘イベント起動条件不正');
+            if(!Array.isArray(e.triggers)||!e.triggers.length||new Set(e.triggers).size!==e.triggers.length||e.triggers.some(t=>!BATTLE_EVENT_PHASES.includes(t)))fail(at,'戦闘イベント起動条件不正');
             if(e.condition!==undefined)expression(e.condition,at);
             commands(e.commands,`${at}.events.${e.id}`,depth+1,true);
           }

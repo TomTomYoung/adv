@@ -35,9 +35,9 @@ test('q002 departure persists without school knowledge; only actual arrival comm
  assert.equal(state(g).knowledge.party.includes('number'),true);assert.equal(state(g).knowledge.party.includes('loan'),false);
  const before=structuredClone(state(g));assert.equal(g.dispatch({type:'journey.arrive'}),false);assert.deepEqual(state(g),before);
  const saved=g.save();g.load(saved);assert.equal(g.save(),saved);
- g.dispatch({type:'retreat'});move(g,'hikarigaeri_medical');assert.equal(projectGame(g).journey.canArrive,false);
- move(g,'hikarigaeri_medical_specimens');assert.equal(projectGame(g).journey.canArrive,true);
- assert.ok(g.dispatch({type:'journey.arrive'}));drain(g);assert.equal(g.state.journey,null);assert.equal(state(g).values.partyAt,'school');assert.ok(state(g).knowledge.party.includes('loan'));
+ g.dispatch({type:'retreat'});move(g,'hikarigaeri_medical');assert.equal(projectGame(g).journey.atDestination,false);
+ move(g,'hikarigaeri_medical_specimens');assert.equal(projectGame(g).journey,null);assert.equal(g.state.waiting.type,'text');
+ drain(g);assert.equal(g.state.journey,null);assert.equal(state(g).values.partyAt,'school');assert.ok(state(g).knowledge.party.includes('loan'));
  assert.equal(g.dispatch({type:'journey.arrive'}),false);g.load(g.save());
  const ids=projectGame(g).town.cast.map(c=>c.id);assert.ok(ids.includes('curator'));assert.ok(ids.includes('porter'));
 });

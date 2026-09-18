@@ -3,9 +3,10 @@ import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxel
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess} from './dungeons.js';
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
-import {storyEnding,arriveStoryJourney,resumeWorldStory} from './story.js';
+import {storyEnding,resumeWorldStory} from './story.js';
 import {townRoot,townLocation,syncWorldStories} from './world.js';
 import {questEntryPlan} from './quest-navigation.js';
+import {processFieldEvents,recordFieldEntry} from './field-events.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,endBattle,battleAction} from './battle.js';
@@ -26,6 +27,7 @@ export class GameEngine {
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
     this.state.nextScope=1;
+    this.state.fieldEntry=null;
     this.run(data.game.startScript);
   }
   cue(id,targets){playCue(this,id,targets);}
@@ -106,12 +108,14 @@ export class GameEngine {
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
     this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
+    recordFieldEntry(this.state);
   }
   returnTown(emergency=false,quiet=false){
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
     this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
+    this.state.fieldEntry=null;
   }
   defeat(){
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
@@ -135,10 +139,11 @@ export class GameEngine {
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     stepDungeon(this,{from,to:{...loc}});
+    if(this.state.mode==='dungeon'&&this.state.location===loc)recordFieldEntry(this.state);
     if(this.state.waiting||this.state.battle)return true;
     if(this.state.mode!=='dungeon'||loc.map!==from.map||loc.x!==x||loc.y!==y||(loc.z??0)!==z)return true;
+    if(processFieldEvents(this))return true;
     if(dungeonDanger(this))return true;
-    if(this.trigger('enter'))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
     if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0))*this.partyEffect('encounterRate')*environment.rate)){
       let encounter=map.encounter;
@@ -176,7 +181,7 @@ export class GameEngine {
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
     beginFeedback(this);const changed=this.perform(intent);
-    if(changed){if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
+    if(changed){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
     return changed;
   }
   perform(intent){
@@ -187,7 +192,6 @@ export class GameEngine {
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
     if(type==='location.move')return this.moveLocation(intent.id);
-    if(type==='journey.arrive')return arriveStoryJourney(this);
     if(type==='story.resume')return resumeWorldStory(this,intent.quest);
     if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);

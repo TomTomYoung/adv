@@ -3,10 +3,10 @@ import {closeTo} from './systems/common.js';
 
 export const townRoot=data=>data.game.world?.townRoot;
 export const townLocation=(data,state)=>data.locations?.[state.townLocation];
-export function atWorldPlace(state,place){
+export function atWorldPlace(state,place,{exact=false}={}){
   if(!place)return true;
   if(place.kind==='town')return state.mode==='town'&&state.townLocation===place.location;
-  return state.mode==='dungeon'&&closeTo(state,place);
+  return state.mode==='dungeon'&&closeTo(state,place)&&(!exact||state.location.x===place.x&&state.location.y===place.y);
 }
 // Between conversations the party follows the actual world position. NPCs stay
 // where they were left; declared journey companions travel with the party.

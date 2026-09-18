@@ -14,8 +14,9 @@ export function projectQuestNavigation(data,state,q){
       const dungeon=data.dungeons[place.dungeon],map=data.maps[place.map];
       destination={...place,name:dungeon.name,mapName:map.name,floor:map.floor,label:`${dungeon.name} / ${map.name} (${place.x}, ${place.y}${place.z===undefined?'':`, 高さ${place.z}`})`};
     }
-    destination.atPlace=atWorldPlace(state,place);
-    destination.hint=destination.atPlace?'この場所で続きを進める。':place.kind==='town'?'町の施設を移動して、この場所へ向かう。':state.location?.map===place.map?'地図を確認し、イベント地点まで歩いて調べる。':state.mode==='town'?'迷宮の入口に入り、イベント地点まで探索する。':'入口や階段を使い、イベントのあるマップへ向かう。';
+    const automatic=state.journey?.quest===q.id||q.events?.some(e=>e.id===place.event&&e.trigger==='enter');
+    destination.atPlace=atWorldPlace(state,place,{exact:Boolean(automatic)});
+    destination.hint=destination.atPlace?(automatic?'このセルへの進入でイベントが始まる。':place.kind==='town'?'この施設で話を聞く。':'足元・正面を調べる。'):place.kind==='town'?'町の施設を移動して、この場所へ向かう。':state.location?.map===place.map?(automatic?'指定セルを踏むとイベントが始まる。':'地図を確認し、イベント地点まで歩いて調べる。'):state.mode==='town'?'迷宮の入口に入り、イベント地点まで探索する。':'入口や階段を使い、イベントのあるマップへ向かう。';
   }
   return {destination,dungeonIds,dungeonNames:dungeonIds.map(id=>data.dungeons[id].name),entryDungeon:place?.kind==='dungeon'?place.dungeon:null,canEnter:plan.ok,entryReason:plan.reason};
 }

@@ -64,7 +64,7 @@ export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=fals
   const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id];
   if(a?.journey){
     if(arrive){
-      if(state.journey?.quest!==id||state.journey.action!==actionId||!atWorldPlace(state,d.worldPlaces[a.journey.to]))throw Error('目的地へ到達してから続きを進めてください');
+      if(state.journey?.quest!==id||state.journey.action!==actionId||!atWorldPlace(state,d.worldPlaces[a.journey.to],{exact:true}))throw Error('目的地のセル・施設へ到達する必要がある。');
       current=clone(current);current.scene=state.journey.from;
     }else if(!depart||state.journey)throw Error('移動中の行為を完了してください');
   }
@@ -195,7 +195,7 @@ export function beginStoryJourney(engine,id,action){
   const p=storyActionPlan(engine.data,engine.state,id,action,{depart:true});
   engine.state.stories[id]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=p.journey;
   engine.state.vm=[];engine.state.waiting=null;
-  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ向かう。到着後に続きを進められる。`);
+  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ向かう。`);
 }
 export function arriveStoryJourney(engine){
   const j=engine.state.journey;if(!j)return false;

@@ -151,7 +151,7 @@ battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行し�
 
 ## マップイベント
 
-マップのobjectsにid/x/y/name/kind/trigger/scriptを記します。triggerはenter（移動成功時）またはinteract（足元と正面を調べる時）。condition、once、safe、blocking、initialStateを指定できます。blockする物はopen状態で通行可能になります。
+マップのobjectsにid/x/y/name/kind/trigger/scriptを記します。triggerはenter（指定セルへ進入すると自動開始）またはinteract（足元と正面を調べる時）。クエスト定義にはauto（条件成立時の自動開始）とaction（個別操作）もあります。[フィールド・戦闘イベント仕様](EVENT_SYSTEM.md)に発火順、保存、反復条件を記載しています。condition、once、safe、blocking、initialStateを指定できます。blockする物はopen状態で通行可能になります。
 
 各オブジェクトの実行回数は `events[mapId + "/" + objectId]`、状態は `objects[mapId + "/" + objectId]` に保存されます。これらのopaqueキーをrefのドット記法へ混ぜません。表示条件には別のflags、イベント済み判定にはevent_doneを使います。onceイベントは待機を開始する前に消化済みに記録し、保存・再開時は残りのcommandsを続けます。
 

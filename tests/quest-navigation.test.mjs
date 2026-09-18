@@ -77,6 +77,8 @@ test('legacy clue routing advances only past collected clues while current route
 class Element {
  constructor(tag){this.tagName=tag;this.children=[];this.dataset={};this.style={setProperty(){}};this.listeners={};}
  append(...items){this.children.push(...items);}
+ replaceChildren(...items){this.children=[];this.append(...items);}
+ get lastChild(){return this.children.at(-1);}
  setAttribute(k,v){this[k]=v;}
  addEventListener(k,f){this.listeners[k]=f;}
  get textContent(){return (this.text??'')+this.children.map(c=>c.textContent??String(c)).join('');}
@@ -106,4 +108,20 @@ test('board and journal expose one named entrance action, main quest controls, d
   assert.match(sidebar.textContent,/メインクエスト/);assert.equal(sidebar.queryAll('button').length,0);
   const journal=new Element('section');v.journal(journal,model);assert.equal(journal.queryAll('button').filter(b=>b.textContent==='メインクエストに設定').length,1);assert.match(journal.textContent,/次の目的地：篝火の迷宮/);
  }finally{globalThis.document=previous.document;globalThis.Option=previous.Option;}
+});
+
+
+test('the rendered exploration page has no journey banner or arrival button while walking to an event',()=>{
+ const previous=globalThis.document;globalThis.document={createElement:tag=>new Element(tag)};
+ try{
+  const g=prepareQuest('q001');choose(g,'talk');const model=projectGame(g);assert.ok(model.journey);
+  const root=new Element('div'),v=Object.assign(Object.create(GameView.prototype),{
+   root,tab:'explore',effects:{capture(){},present(){}},ui:{soundEnabled:()=>false},
+   scene(parent){parent.append(new Element('canvas'));},explore(parent,m){this.scene(parent,m);},sidebar(){},act(){}
+  });
+  v.render(model);
+  assert.equal(root.queryAll('canvas').length,1);
+  assert.doesNotMatch(root.textContent,/目的地で続きを進める|移動と調査を終え/);
+  assert.equal(root.queryAll('section').filter(e=>e.className==='journey-note').length,0);
+ }finally{globalThis.document=previous;}
 });

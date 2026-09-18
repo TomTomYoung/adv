@@ -23,7 +23,6 @@ export class GameView {
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
     for(const [id,label] of allTabs){const b=button(label,()=>{this.tab=id;this.render(model);},id===this.tab?'active':'');b.setAttribute('aria-current',id===this.tab?'page':'false');tabs.append(b);}main.append(tabs);
     if(model.town)this.townScene(main,model);
-    if(model.journey)this.journey(main,model);
     // Narrative and battles stay visible even if the player opens a utility tab.
     if(model.battle)this.battle(main,model);
     else if(model.dialog){if(model.dungeon)this.scene(main,model);this.dialog(main,model.dialog);}
@@ -60,7 +59,6 @@ export class GameView {
     if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
     section.append(choices);parent.append(section);
   }
-  journey(parent,m){const j=m.journey,section=node('section','journey-note');section.append(node('span','eyebrow',j.title),node('p','',`次の目的地：${j.destination}`));if(j.canArrive)section.append(button('目的地で続きを進める',()=>this.act({type:'journey.arrive'}),'primary'));else section.append(node('p','muted','移動と調査を終え、目的地に着いてから続きを進めます。'));parent.append(section);}
   questEntrance(parent,q){
     if(q.destination?.kind!=='dungeon')return;
     parent.append(button(`迷宮の入口へ向かう（${q.destination.name}）`,()=>this.act({type:'quest.travel',id:q.id}),'',!q.canEnter));
