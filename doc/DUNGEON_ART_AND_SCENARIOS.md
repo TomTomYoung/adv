@@ -18,7 +18,7 @@
 
 ## 編集と互換性
 
-素材の正本は authoring/dungeon-art.json、調査を含むクエストイベントの正本は authoring/quests/qXXX.events.json です。対応するクエストJSONへ集約し、ダンジョンからクエストへの逆参照は行いません。編集後は npm run build:dungeons を実行します。[イベントの仕様](QUEST_EVENTS.md)を参照してください。
+素材の正本は authoring/dungeon-art.json、調査を含むクエストイベントの正本は authoring/quests/qXXX.events.json です。対応するクエストJSONへ集約し、ダンジョンからクエストへの逆参照は行いません。編集後は npm run build:dungeons を実行します。[イベントの仕様](scenarios/QUEST_EVENTS.md)を参照してください。
 
 現地調査は dungeon.scene.* の独立したIDを使います。会話構造の改稿はrevisionを更新します。1.9.0は旧内容版セーブを移行せず、q001の旧場面を削除しました。同版の調査中の保存・再開には通常の会話機構を使用します。
 

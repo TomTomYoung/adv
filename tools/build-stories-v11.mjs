@@ -1,3 +1,4 @@
+import {docPath,relocateDoc} from './doc-layout.mjs';
 import {applyQuestEvents} from './quest-event-source.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -60,5 +61,6 @@ for(const c of characters)doc.push('',`### ${c.name} (${c.id})`,'',`![${c.name}]
 doc.push('','## 歴史上・物語内で言及される人物','','| 人物 | 関係 | 扱い |','|---|---|---|','| ミレの夫 | q007、弟の兄 | 故人。声の主ではない。生存 NPC の所在を持たせない。 |','| 関所番の兄 | q004 | 故人。関所番が使う資格の名義人。 |','| 棺の故人 | q008 | 遺体を物品 body として棺の内室に保持。生存 NPC として表示しない。 |','','## 既存の探索隊員','','| ID | 名前 | 役割 |','|---|---|---|');
 for(const [id,c] of Object.entries(await read('data/actors.json')))doc.push(`| ${id} | ${c.name} | ${c.bio??c.role??c.class} |`);
 doc.push('','## q011〜q200 の依頼人索引','','原文の依頼人表記を列挙する。同名だけで同一人物とは確定せず、各クエスト内で言及される関係者も今後の人物化対象とする。この範囲の新規肖像と所在モデルは未実装。','','| 依頼 | 依頼人（既存表記） |','|---|---|');for(const q of quests.filter(q=>q.number>10))doc.push(`| [${q.id} ${q.title}](QUEST_CATALOG.md#${q.id}-${q.title}) | ${q.client} |`);
-await fs.writeFile(path.join(root,'doc/CHARACTERS.md'),doc.join('\n')+'\n');
+await fs.mkdir(path.join(root,'doc/scenarios'),{recursive:true});
+await fs.writeFile(path.join(root,'doc',docPath('CHARACTERS.md')),relocateDoc(doc.join('\n')+'\n','CHARACTERS.md'));
 console.log(`v1.1: ${drafts.length} stories, ${drafts.reduce((n,s)=>n+s.nodes.length,0)} scenes, ${characters.length} NPC identities; authored revisions generated`);

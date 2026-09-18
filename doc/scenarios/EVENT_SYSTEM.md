@@ -1,6 +1,6 @@
 # フィールド・戦闘イベント仕様
 
-更新日: 2026-09-18。作品版1.13.0。配置・条件・命令はJSONで宣言し、Coreが発火と進行を管理する。Viewは本文・選択肢・戦闘を表示する。[登録一覧](EVENT_CATALOG.md)、[クエスト配置](QUEST_EVENTS.md)、[命令仕様](SCRIPT_REFERENCE.md)も参照する。
+更新日: 2026-09-18。作品版1.14.0。配置・条件・命令はJSONで宣言し、Coreが発火と進行を管理する。Viewは本文・選択肢・戦闘を表示する。[登録一覧](EVENT_CATALOG.md)、[クエスト配置](QUEST_EVENTS.md)、[命令仕様](SCRIPT_REFERENCE.md)も参照する。
 
 ## フィールドイベント
 
@@ -79,4 +79,4 @@
 
 作品版は1.13.0。1.12.0以前のセーブを新しい発火契約へ移行せず、既存方針どおり新規開始する。同版の会話中・戦闘中・探索中の保存は継続する。
 
-画面上の区分とコマンド由来の確認・保存は [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md) を参照する。
+画面上の区分とコマンド由来の確認・保存は [MESSAGE_AND_COMMAND_WINDOWS.md](../MESSAGE_AND_COMMAND_WINDOWS.md) を参照する。

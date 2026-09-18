@@ -1,3 +1,4 @@
+import {docPath,relocateDoc,currentMarkdown,scenarioDocs} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
 import {eventCatalog} from './event-catalog.mjs';
@@ -12,7 +13,10 @@ import {EXPRESSION_OPS} from '../src/core/expression.js';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
 const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
-const current=(await fs.readdir(folder)).filter(f=>f.endsWith('.md')).map(f=>'doc/'+f);
+const current=(await currentMarkdown(folder)).map(f=>'doc/'+f);
+for(const name of scenarioDocs){
+ check(!current.includes('doc/'+name),`doc/${name}: obsolete output; use doc/${docPath(name)}`);
+}
 const manifests=[];
 for(const entry of await fs.readdir(path.join(folder,'legacy'),{withFileTypes:true}))if(entry.isDirectory())manifests.push(`doc/legacy/${entry.name}/manifest.json`);
 let archived=0;
@@ -42,17 +46,17 @@ for(const file of [...current,...indexes,'README.md']){
  }
 }
 const data=await loadContent(read),snapshot=await read('doc/DATA_SNAPSHOT.json'),count=o=>Object.keys(o??{}).length;
-check(await fs.readFile(path.join(folder,'EVENT_CATALOG.md'),'utf8')===eventCatalog(data),'EVENT_CATALOG: generated inventory differs');
+check(await fs.readFile(path.join(folder,docPath('EVENT_CATALOG.md')),'utf8')===relocateDoc(eventCatalog(data),'EVENT_CATALOG.md'),'EVENT_CATALOG: generated inventory differs');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
-const catalog=await fs.readFile(path.join(folder,'QUEST_CATALOG.md'),'utf8');
+const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
-check(await fs.readFile(path.join(folder,'LOCATION_CATALOG.md'),'utf8')===locationCatalog(data),'LOCATION_CATALOG: location references differ');
+check(await fs.readFile(path.join(folder,'LOCATION_CATALOG.md'),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
 for(const q of Object.values(data.quests)){
- const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,file),'utf8'):catalog;
- for(const line of questPlaces(data,q))check(source.includes(line),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);
+ const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,docPath(file)),'utf8'):catalog;
+ for(const line of questPlaces(data,q))check(source.includes(relocateDoc(line,file??'QUEST_CATALOG.md')),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);
  if(file){
   check(catalog.includes(`](${file})`),`QUEST_CATALOG: missing ${q.id} dedicated-page link`);
-  for(const [name,expected] of Object.entries(questPageBundle(data,q.id)))check(await fs.readFile(path.join(folder,name),'utf8')===expected,`${name}: implementation or map differs; review edits before npm run build:catalog`);
+  for(const [name,expected] of Object.entries(questPageBundle(data,q.id)))check(await fs.readFile(path.join(folder,docPath(name)),'utf8')===relocateDoc(expected,name),`${name}: implementation or map differs; review edits before npm run build:catalog`);
  }
 }
 for(const [key,n] of Object.entries(snapshot.counts))check(n===count(data[key]),`DATA_SNAPSHOT: ${key} count differs`);
@@ -70,5 +74,10 @@ check(JSON.stringify(files)===JSON.stringify(snapshot.files),'DATA_SNAPSHOT: man
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}
 check(snapshot.contentSha256===digest.digest('hex'),'DATA_SNAPSHOT: content changed; run npm run build:docs');
 for(const key of ['images','audio'])check(snapshot.assets[key]===count(data.assets[key]),`DATA_SNAPSHOT: ${key} asset count differs`);
-const index=await fs.readFile(path.join(folder,'README.md'),'utf8');for(const file of current)if(!file.endsWith('/README.md'))check(index.includes(`](${path.basename(file)})`),`doc/README.md: missing ${file}`);
+for(const file of current){
+ if(file==='doc/README.md')continue;
+ const indexFile=path.posix.join(path.posix.dirname(file.endsWith('/README.md')?path.posix.dirname(file):file),'README.md');
+ const index=await fs.readFile(path.join(root,indexFile),'utf8');
+ check(index.includes(`](${path.posix.relative(path.posix.dirname(indexFile),file)})`),`${indexFile}: missing ${file}`);
+}
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`DOCS OK: ${current.length} current Markdown files, ${links} local links, ${archived} original archives, data snapshot matches`);

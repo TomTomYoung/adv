@@ -7,7 +7,7 @@ const slug=text=>text.toLowerCase().replace(/[^\p{L}\p{N}\p{M}\s_-]/gu,'').trim(
 const detailed=q=>q.number<=20;
 const sceneTitle=(q,node)=>`${q.id} / ${node.id}${q.story?.scenes[node.id]?.title?' — '+q.story.scenes[node.id].title:''}`;
 const endingTitle=(q,id)=>`${q.id} 結末 ${id} — ${q.outcomes[id].label}`;
-export const questPages={q001:'QUEST_Q001.md'};
+export const questPages={q001:'QUEST_Q001.md',q002:'QUEST_Q002.md'};
 export const questEventId=(q,kind,key)=>`${q.id}-${kind}-${kind==='P'?key.replace(new RegExp(`^${q.id}_`),''):key}`;
 
 // Fingerprint the distributed implementation, not intermediate authoring drafts.
@@ -19,7 +19,7 @@ export function questCatalog(data,date,{questId}={}){
   const quests=Object.values(data.quests).filter(q=>!questId||q.id===questId).sort((a,b)=>a.number-b.number);
   const out=questId?[]:['# シナリオ一覧','',`全 ${quests.length} 本・${quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0)} 結末。作品版 ${data.game.version}。更新日: ${date}。`,'',
     `<!-- quest-catalog-source:${catalogContentHash(data)} -->`,'',
-    'q001の全文・マップデータ・イベント配置は[専用ページ](QUEST_Q001.md)に掲載します。q002〜q020の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は従来の概要・進行一覧・結末を掲載します。作者向けのため真相と結末を含みます。','',
+    'q001の[専用ページ](QUEST_Q001.md)とq002の[専用ページ](QUEST_Q002.md)に全文・マップデータ・イベント配置を掲載します。q003〜q020の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は従来の概要・進行一覧・結末を掲載します。作者向けのため真相と結末を含みます。','',
     'q001〜q010はモデルv1.1と状態モデルadv-story-state/1、q011〜q020はモデルv1.0のcatalog1改稿です。過去の命令列や別名を現行場面として重複掲載しません。条件はJSON式をそのまま記載し、選択の表示条件と成立条件、行為の条件、結末の条件を区別します。','',
     '物語行為の詳細な所在・介助・費用・不変条件は各実装JSONのstoryを参照してください。「行為」は成立時に一括確定します。中断は場面を保持し、戦闘後の作業と支払いは勝利した場合だけ確定します。','',
     '[人物一覧](CHARACTERS.md) ／ [状態モデル](SCENARIO_MODEL_V11.md) ／ [シナリオ設計と編集手順](SCENARIO_DESIGN.md)','',
@@ -60,7 +60,7 @@ export function questCatalog(data,date,{questId}={}){
         case 'story.journey':{
           const a=q.story.actions[c.action],place=q.story.worldPlaces[a.journey.to];
           add(`出発: ${code(c.action)}。移動先: ${describePlace(data,place)}。`);condition('出発の条件',a.requires);
-          add(`この選択は出発処理だけを確定します。実際に目的地へ移動し、「目的地で続きを進める」を選んでから [${code(a.to)}](#${slug(sceneTitle(q,q.model.graph.find(n=>n.id===a.to)))}) へ進み、到着時の処理を確定します。`);break;
+          add(`この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [${code(a.to)}](#${slug(sceneTitle(q,q.model.graph.find(n=>n.id===a.to)))}) へ進み、到着時の処理を確定します。`);break;
         }
         case 'story.action':{
           const a=q.story.actions[c.action];if(!a)throw Error(`${q.id}: missing action ${c.action}`);

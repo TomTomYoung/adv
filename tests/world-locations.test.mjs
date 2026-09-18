@@ -94,8 +94,9 @@ test('catalogs contain every real event placement, scene facility and journey de
   const source=questPages[q.id]?questPageBundle(data,q.id)[questPages[q.id]]:catalog;
   for(const e of q.events)for(const p of e.points)assert.ok(source.includes(describePlace(data,{kind:'dungeon',...p,event:e.id})));
  }
- for(const id of ['hikarigaeri_medical_specimens','hikarigaeri_insurance'])assert.ok(catalog.includes(id));
- assert.ok(catalog.includes('出発: `school_recover`'));assert.ok(locationCatalog(data).includes('q002「骨の荷札」 / hearing'));
+ const q002=questPageBundle(data,'q002')[questPages.q002];
+ for(const id of ['hikarigaeri_medical_specimens','hikarigaeri_insurance'])assert.ok(q002.includes(id));
+ assert.ok(q002.includes('出発: `school_recover`'));assert.ok(locationCatalog(data).includes('q002「骨の荷札」 / hearing'));
  for(const change of [d=>d.locations.hikarigaeri_shop.name='変更',d=>d.maps.region_1_f1.name='変更',d=>d.quests.q002.events[0].points[0].x++]){const bad=structuredClone(data);change(bad);assert.notEqual(catalogContentHash(bad),catalogContentHash(data));}
 });
 

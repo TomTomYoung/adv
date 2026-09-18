@@ -1,151 +1,33 @@
 # doc 全ファイル照合記録
 
-照合日: 2026-09-14。元のdoc直下31ファイルを、実装head f8bf8a6fbf4c9bba6f126e06b135ea781744586b、配布JSON、原稿、生成器と照合しました。GitHubのmasterはcf2920f6（1.7.0）、素材・現地調査はPR #8の追加です。この監査はPR #8のマージ前に行った履歴です。PR #8は後にマージされ、現在の版と作業ブランチは[CURRENT_STATUS.md](CURRENT_STATUS.md)へ記載します。
+確認日: 2026-09-18。対象はPR #25反映後のmaster `16da1ddc2b82b9b9bb503083295a97609a2ad557`、作品版1.14.0。配布JSON、正本、Core・Application・View、文書生成器を参照しました。古い版番号へ最新の日付だけを追加する方式をやめ、本文の現在の仕様・実装済み範囲を更新しました。
 
-## 整理結果
+## 現行仕様と履歴
 
-現行25ファイルを更新・照合し、旧設計・旧実装記録・旧版の測定結果6ファイルをlegacy/2026-09-14へ移しました。現行文書へ統合した4ファイルも更新前のコピーを保存しています。保存原文の書換えは行わず、日付・元の場所・理由・SHA-256を[移動記録](legacy/2026-09-14/manifest.json)に記載しました。
+[CURRENT_STATUS.md](CURRENT_STATUS.md)、[SPEC.md](SPEC.md)、[HANDOFF.md](HANDOFF.md)、[PROGRESS.md](PROGRESS.md)、[README.md](README.md)を現行の入口へ整理しました。PR #25は未送信ではなくマージ済みです。内容版1.14.0、10町施設・33件の2Dマップ・200クエスト・629結末、q001改訂4、51命令・31演算子へ照合しました。
 
-## ファイルごとの扱い
+旧HANDOFF・PROGRESS・本監査の版別追記は[2026-09-18の保存原文](legacy/2026-09-18/README.md)へコピーし、SHA-256と元コミットをmanifestへ記録しました。従来の2026-09-14保存原文も書き換えていません。
 
-### BALANCE_PLAN.md
+## シナリオ・クエストの整理
 
-[BALANCE_PLAN.md](BALANCE_PLAN.md)：現行の測定条件・コマンド・固有環境の追加測定範囲を整理。旧版の実測値は履歴へ参照。 更新前の全文は[保存原文](legacy/2026-09-14/BALANCE_PLAN.md)に保持。
+[scenarios/README.md](scenarios/README.md)を追加し、カタログ、q001・q002専用ページ、シナリオ設計、状態モデル、探索と常体化、人物、クエストイベント、イベント仕様・一覧、命令リファレンス、配置図をまとめました。data/とauthoring/のゲーム用ファイルは移動していません。
 
-### BALANCE_RESULTS.json
+[QUEST_Q002.md](scenarios/QUEST_Q002.md)は現在の骨の荷札を配布JSONから生成します。8場面・3結末、1配置、選択肢内の強制戦闘を含む13個の文書ID、3マップ、6本の移動行為、標本室・審査所、証拠・同意・代償を掲載します。本文をカタログと重複管理せず、カタログからリンクします。q001の町から出発する説明と、両専用ページ・カタログの到着説明も現在の自動進行へ修正しました。
 
-[保存原文](legacy/2026-09-14/BALANCE_RESULTS.json)へ移動。version 1.3.0の1200戦の測定値です。現行1.7.0の環境効果を検証した結果へ書き換えることはできません。
+[QUEST_EVENTS.md](scenarios/QUEST_EVENTS.md)は413定義、402物体配置、13操作調査、共通109物体へ更新しました。[SCENARIO_DESIGN.md](scenarios/SCENARIO_DESIGN.md)と[SCENARIO_MODEL_V11.md](scenarios/SCENARIO_MODEL_V11.md)はq002の独立原稿、q001改訂4、実座標同期と移動途中の保存を修正しました。モデルv1.1と作品版1.14.0は別の版です。
 
-### CHARACTERS.md
+## 探索・水・UI
 
-[CHARACTERS.md](CHARACTERS.md)：36人物とgenerated WebP画像、依頼人索引を照合。正しい内容を保持して書式を統一。
+[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)のq002を旧地下水道 (11, 9) から現在の荷揚げ場 (5, 1) へ修正し、町施設からの直接出発と実到着を記述しました。[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)、[MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md)、[VIEW_CONTRACT.md](VIEW_CONTRACT.md)、[EVENT_SYSTEM.md](scenarios/EVENT_SYSTEM.md)を照合し、廃止した常設操作パネル・到着ボタン・帰還モーダルを現在の操作として案内しません。
 
-### COMPANION_CATALOG.md
+[CELL_CATALOG.md](CELL_CATALOG.md)、[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)、[WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)、[VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)は現行の区画給排水と退避3D・潮汐の範囲を分離しました。[DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)は登録16部品と通常使用14部品を区別しました。旧3Dを削除・再導入していません。
 
-[COMPANION_CATALOG.md](COMPANION_CATALOG.md)：現在の初期職・成長・技能をエンジンから生成。仲間10人と最大5人編成を明記。
+[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)、[DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md)、[KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)、[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)、[FIELD_LIGHTING.md](FIELD_LIGHTING.md)の現行範囲・参照を確認しました。[DUNGEON_REVISION_1_9.md](DUNGEON_REVISION_1_9.md)と[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)の画像・数値は当時の履歴と明示しました。
 
-### CURRENT_STATUS.md
+## 一覧・素材・検証
 
-[CURRENT_STATUS.md](CURRENT_STATUS.md)：master cf2920f6とPR #8の実装head f8bf8a6fを区別し、1.3.1/master・PR #3未マージという旧状況を置換。 更新前の全文は[保存原文](legacy/2026-09-14/CURRENT_STATUS.md)に保持。
+[JOB_SYSTEM.md](JOB_SYSTEM.md)、[COMPANION_CATALOG.md](COMPANION_CATALOG.md)、[MONSTER_CATALOG.md](MONSTER_CATALOG.md)、[BALANCE_PLAN.md](BALANCE_PLAN.md)、[SE_CATALOG.md](SE_CATALOG.md)、[EFFECT_CATALOG.md](EFFECT_CATALOG.md)を現在の定義へ照合しました。敵は59、遭遇82、30職、仲間10、NPC36、SE28、効果24。旧バランス計測は再測定した扱いにしていません。
 
-### DUNGEON_ART_AND_SCENARIOS.md
+[DATA_SNAPSHOT.json](DATA_SNAPSHOT.json)、[LOCATION_CATALOG.md](LOCATION_CATALOG.md)、[EVENT_CATALOG.md](scenarios/EVENT_CATALOG.md)と各文書の生成部分を更新しました。文書検査はサブフォルダを含むMarkdown・見出し・画像参照・フォルダ索引、保存原文のハッシュ、配布データの指紋、専用ページ・SVGを照合します。生成器は `tools/doc-layout.mjs` の配置を共通利用します。
 
-[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)：13件の観察条件・対応依頼をauthoring/dungeon-scenes.jsonと照合。素材参照と旧会話保持を確認し、正しい本文を維持。
-
-### DUNGEON_CATALOG.md
-
-[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13件の固有設定、深淵の確定済み係数、25マップ、現地調査との接続を更新。
-
-### DUNGEON_SYSTEMS_1_7.md
-
-[DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md)：masterへの反映状況と素材・現地調査への参照、検証範囲を更新。
-
-### DUNGEON_SYSTEM_DESIGN.md
-
-[DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)：提案中心の本文を登録部品・状態・検証・JSON生成の現行設計へ統合。
-
-### EFFECT_CATALOG.md
-
-[EFFECT_CATALOG.md](EFFECT_CATALOG.md)：24種の表示効果と素材・表示契約を照合し、古いテスト件数を共通記録へ集約。
-
-### HANDOFF.md
-
-[HANDOFF.md](HANDOFF.md)：原稿の正本・生成手順・互換性の約束を更新。実装済みの提案を未実装項目から除外。 更新前の全文は[保存原文](legacy/2026-09-14/HANDOFF.md)に保持。
-
-### JOB_BALANCE_RESULTS.json
-
-[保存原文](legacy/2026-09-14/JOB_BALANCE_RESULTS.json)へ移動。version 1.3.0の職業差し替え360戦の測定値です。現行版で再計測した結果とは区別して保存します。
-
-### JOB_IMPLEMENTATION.md
-
-[保存原文](legacy/2026-09-14/JOB_IMPLEMENTATION.md)へ移動。1.3.0導入時の職業実装・限定的なブラウザ試験の記録です。現行操作と保存仕様はJOB_SYSTEM.mdへ集約しました。
-
-### JOB_SYSTEM.md
-
-[JOB_SYSTEM.md](JOB_SYSTEM.md)：30職と10探索特技を実データから生成。腐食・環境補正・バフの適用順と旧計測の扱いを修正。
-
-### JSON_SCRIPT_SPEC.md
-
-[保存原文](legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ移動。2026-09-09のPhaser前提の将来設計です。現行48命令と保存形式はSCRIPT_REFERENCE.md・SPEC.mdへ集約しました。
-
-### KAGARIBI_DUNGEON.md
-
-[KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)：導入時の1.5.0と現在版を区別し、共通検証記録とq001の現地調査へ接続。
-
-### MONSTER_CATALOG.md
-
-[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：20種の発想・個別画像を保持し、旧種を含む55定義の実数値・画像・出現先を生成。
-
-### PROGRESS.md
-
-[PROGRESS.md](PROGRESS.md)：428テストの対象とブラウザ未確認・追加100本の調整範囲を整理。 更新前の全文は[保存原文](legacy/2026-09-14/PROGRESS.md)に保持。
-
-### QUEST_CATALOG.md
-
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：200本・630結末と原稿本文を照合。本文を保持し、作品版・更新日・文書書式を更新。
-
-### README.md
-
-[README.md](README.md)：現行文書と履歴の入口を再編し、各仕様・カタログ・検証記録への参照を更新。
-
-### SCENARIOS_Q001_Q010_V11.md
-
-当時はSCENARIOS_Q001_Q010_V11.mdの本文・選択肢を保持し、作品版と書式を更新しました。2026-09-16に[カタログ](QUEST_CATALOG.md#q001-帰らない灯番)へ統合し、別文書を廃止しました。
-
-### SCENARIOS_Q011_Q020.md
-
-当時はSCENARIOS_Q011_Q020.mdの本文・選択肢を保持し、書式を統一しました。2026-09-16に[カタログ](QUEST_CATALOG.md#q011-塩の花嫁)へ統合し、別文書を廃止しました。
-
-### SCENARIO_DESIGN.md
-
-[SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：q001〜q010のv1.1、q011〜q020のcatalog1、残りの個別進行と旧経路を区別。
-
-### SCENARIO_IMPLEMENTATION.md
-
-[保存原文](legacy/2026-09-14/SCENARIO_IMPLEMENTATION.md)へ移動。1.3.2導入時の変更・313件の検証記録です。現在の経路はSCENARIO_DESIGN.md、検証状況はPROGRESS.mdへ集約しました。
-
-### SCENARIO_MODEL_V11.md
-
-[SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：作品版・旧保存の移行・q004/q008の互換性・採用中の36人WebP肖像・再生成手順を更新。
-
-### SCENARIO_V11_IMPLEMENTATION.md
-
-[保存原文](legacy/2026-09-14/SCENARIO_V11_IMPLEMENTATION.md)へ移動。1.4.0導入時の検証記録です。その後のカタログ改稿・素材更新を含む現行仕様はSCENARIO_MODEL_V11.mdに記載します。
-
-### SCRIPT_REFERENCE.md
-
-[SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：COMMANDSとEXPRESSION_OPSへ照合。storyの3命令と戦績repelsを含む48命令・30演算子へ更新。
-
-### SE_CATALOG.md
-
-[SE_CATALOG.md](SE_CATALOG.md)：28種のSE定義と実音源参照を照合し、更新日・書式を統一。
-
-### SPEC.md
-
-[SPEC.md](SPEC.md)：作品版1.7.0の探索・隊編成・職業・シナリオ・保存・素材を現行コードに統合。
-
-### VIEW_CONTRACT.md
-
-[VIEW_CONTRACT.md](VIEW_CONTRACT.md)：版ごとの追記を現在のViewModelへ統合。職業・動的地形・素材rect・現地調査・手帳の投影と操作意図を記載。
-
-### WATERWAYS_SALT_MINE.md
-
-[WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)：旧11ダンジョン・23マップの件数を更新し、水位・腐食・破壊壁とq010/q011の調査を対応。
-
-## 保守用に追加したもの
-
-[DATA_SNAPSHOT.json](DATA_SNAPSHOT.json)はgame manifestが列挙するJSONを集計します。ID数、結末数、場面数、命令・演算子・移行版・素材数と入力ファイルのハッシュを記録します。場面はmodel.graphの573件で、story.scenesの互換名を含む49件を重複加算しません。
-
-`npm run build:docs` はデータ一覧とメタデータを更新します。職業・仲間・敵・ダンジョン・命令の生成部分を更新し、作者が書いたシナリオ本文は書き換えません。build:scenarios / build:jobs / build:characters / build:dungeonsも最後に文書を更新します。
-
-`npm run check:docs` は現行文書と履歴索引のローカルリンク、元の文書のハッシュ、現在のデータと集計の一致を検査します。保存した旧本文の相対リンクは当時のdoc直下を基準とするため、現行リンクへの自動書換えの対象にしません。
-
-## 検証結果
-
-2026-09-14に `npm run check` を再実行し、428テスト成功、失敗0、skip 0でした。データ・素材参照と構文・import・View分離の検査も成功しています。
-
-`npm run check:docs` で現行26 Markdown、履歴索引、ルートREADMEのローカルリンクと見出し参照、10原文のSHA-256、配布データ集計の一致を確認しました。保存原文は移動前のGit blobとも全10件一致しています。
-
-`npm run build:docs` を繰り返してdoc以下40ファイルのハッシュが一致しました。独立した作業コピーで `npm run build:scenarios` を実行し、現行Markdown全文、authoring、src、assetsが一致しました。data/items.jsonの発破薬キーの位置だけが末尾へ変わり、全JSON値は一致しています。入力をバイト列で記録するDATA_SNAPSHOTのハッシュにはこの順序差が現れます。
-
-ルートREADMEの移動文書への2参照も現行文書へ修正しました。ゲーム用JSON・原稿・画像・ゲーム処理の変更はありません。旧結果を現行版の実測値へ書き換えておらず、ブラウザの操作確認と長期探索の追加測定は引き続き未実施です。
+実行結果と実画面の確認範囲は [PROGRESS.md](PROGRESS.md) に記録します。

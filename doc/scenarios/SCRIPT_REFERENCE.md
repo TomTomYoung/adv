@@ -1,6 +1,6 @@
 # JSON DSL 実装リファレンス
 
-更新日: 2026-09-14。作品版1.8.0の48命令・30式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
+更新日: 2026-09-18。作品版1.14.0の51命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
 JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
@@ -167,11 +167,11 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 ## 保存互換性
 
-1.9.0では旧内容版の記録を移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+1.14.0では旧内容版の記録を移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
 
 ## 1.3.1の戦績と場面継続
 
-`record_count` は `metric` に battles / wins / escapes / losses / repels / kills / encounters を取り、killsには敵ID、encountersには遭遇IDを `id` として指定します。任意の `sinceQuest` は受注時との差分です。例：
+`record_count` は `metric` に battles / wins / escapes / losses / repels / interruptions / kills / encounters を取り、killsには敵ID、encountersには遭遇IDを `id` として指定します。任意の `sinceQuest` は受注時との差分です。例：
 
 ```json
 {"op":"gte","left":{"op":"record_count","metric":"kills","id":"moor_wolf","sinceQuest":"q121"},"right":1}
@@ -183,7 +183,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 追加依頼の現在場面は `flags.quest.<id>.node`、固有の選択・発言・行動履歴も同じ名前空間へ保存します。`quests.<id>.stage/outcome` と同じ意味のフラグは作りません。反復はjump、完了済み再訪は結果の表示だけにします。outcomesの任意requiresはquest.complete時にも検査します。
 
-他依頼の旧命令列は一部残っていますが、旧内容版の読込には使用しません。q001は改訂2の命令列へ置き換えました。
+他依頼の旧命令列は一部残っていますが、旧内容版の読込には使用しません。q001は改訂4の命令列へ置き換えました。
 
 ## 1.1.0の戦闘データ拡張
 
@@ -195,7 +195,7 @@ effects.typeにはdamage / heal / guard / status / cleanseに加え、drain_mp�
 
 map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"wild_waterwheel_beaver","weight":40}]` のように正の重みを与えます。省略時は従来のencounterだけを使用します。
 
-1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。
+1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](../EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。
 
 ## 1.4.0 物語状態の専用命令
 
@@ -217,7 +217,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 `dungeon.action` と `quest.event` は画面から送る操作意図です。48命令のJSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は authoring/quests/qXXX.events.json に既存のif・narrate・choice・setで記述し、同じクエストJSONへ集約します。
 
-観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
+観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](../DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
 
 <!-- generated:commands -->
 
@@ -234,3 +234,9 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 `{"op":"object_state","map":"kagaribi_f1","object":"q001_last_lamp","default":"low"}` は `state.objects` の現在値を読み、未保存の場合だけdefaultを返します。
 
 `{"op":"fire.portable.set","fuel":0,"effect":null}` は現在の火部品の携行火を変更します。点火時は登録済みeffectと容量内のfuelが必要です。q001の場面の消灯・救助と実際の火を接続します。別ダンジョンで架空の火状態を追加しません。
+
+## 実移動待ちと共通メッセージ
+
+`story.journey` は quest と action を受け取り、定義された移動行為の出発だけを確定します。`state.journey` へ依頼・行為・出発場面を保存し、会話を閉じます。Coreが目的セルまたは町施設への実到着を検出すると、到着効果を確定して次場面を自動開始します。正面のセルは到着扱いにしません。詳細は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md) を参照してください。
+
+シナリオのchoiceは直前に表示した本文・話者を保持し、同じメッセージウィンドウに選択肢を表示します。調べる・仕掛け・帰還の確認は `waiting.type=command` ですが、実行スクリプトの命令ではありません。Coreのプレイヤーコマンドから開き、表示時・選択時に対象と条件を再判定します。[共通ウィンドウ仕様](../MESSAGE_AND_COMMAND_WINDOWS.md)に保存と操作の区分を記載しています。

@@ -4,7 +4,7 @@
 
 外見・服装・小道具は今回の美術設定であり、元のシナリオから確定した外見ではない。NPC は戦闘隊員へ自動加入しない。
 
-[画像生成プロンプト（英語・日本語）](../assets/source/characters/imagegen-prompts.json) ／ [画像とハッシュの一覧](../assets/source/characters/imagegen-manifest.json)
+[画像生成プロンプト（英語・日本語）](../../assets/source/characters/imagegen-prompts.json) ／ [画像とハッシュの一覧](../../assets/source/characters/imagegen-manifest.json)
 
 ## q001〜q010 の実装済み人物
 
@@ -82,291 +82,291 @@ ID：pumpcrew / 名前・役割：排水隊／閉門を延期する交代班 / �
 
 ### リネ (rine)
 
-![リネ](../assets/images/characters/generated/rine.webp)
+![リネ](../../assets/images/characters/generated/rine.webp)
 
 q001とq010は同一人物。依頼受付・救助名簿・報告を担当する。
 
-[旧AIPaint PNG](../assets/images/characters/rine.png) ／ [AIPaint 編集原稿](../assets/source/characters/rine.paint.json) ／ [描画コマンド](../assets/source/characters/rine.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/rine.png) ／ [AIPaint 編集原稿](../../assets/source/characters/rine.paint.json) ／ [描画コマンド](../../assets/source/characters/rine.commands.json)
 
 ### 老灯番 (elder)
 
-![老灯番](../assets/images/characters/generated/elder.webp)
+![老灯番](../../assets/images/characters/generated/elder.webp)
 
 本名は未設定。新人へ油を渡し、最後の壁灯の下で救助を待つ。
 
-[旧AIPaint PNG](../assets/images/characters/elder.png) ／ [AIPaint 編集原稿](../assets/source/characters/elder.paint.json) ／ [描画コマンド](../assets/source/characters/elder.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/elder.png) ／ [AIPaint 編集原稿](../../assets/source/characters/elder.paint.json) ／ [描画コマンド](../../assets/source/characters/elder.commands.json)
 
 ### 新人灯番 (rookie)
 
-![新人灯番](../assets/images/characters/generated/rookie.webp)
+![新人灯番](../../assets/images/characters/generated/rookie.webp)
 
 本名は未設定。老人から受け取った油を保持する。
 
-[旧AIPaint PNG](../assets/images/characters/rookie.png) ／ [AIPaint 編集原稿](../assets/source/characters/rookie.paint.json) ／ [描画コマンド](../assets/source/characters/rookie.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/rookie.png) ／ [AIPaint 編集原稿](../../assets/source/characters/rookie.paint.json) ／ [描画コマンド](../../assets/source/characters/rookie.commands.json)
 
 ### 灯番救助隊 (rescuers)
 
-![灯番救助隊](../assets/images/characters/generated/rescuers.webp)
+![灯番救助隊](../../assets/images/characters/generated/rescuers.webp)
 
 集団実体。人数や隊員名は固定せず、代表像を表示する。
 
-[旧AIPaint PNG](../assets/images/characters/rescuers.png) ／ [AIPaint 編集原稿](../assets/source/characters/rescuers.paint.json) ／ [描画コマンド](../assets/source/characters/rescuers.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/rescuers.png) ／ [AIPaint 編集原稿](../../assets/source/characters/rescuers.paint.json) ／ [描画コマンド](../../assets/source/characters/rescuers.commands.json)
 
 ### ベルト (belt)
 
-![ベルト](../assets/images/characters/generated/belt.webp)
+![ベルト](../../assets/images/characters/generated/belt.webp)
 
 生存する保険加入者を失踪者として届け出た一味から、標本を遺体に見せる仕事を受けた。骨箱を地下水路へ落とし、荷札だけを回収したがっている。
 
-[旧AIPaint PNG](../assets/images/characters/belt.png) ／ [AIPaint 編集原稿](../assets/source/characters/belt.paint.json) ／ [描画コマンド](../assets/source/characters/belt.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/belt.png) ／ [AIPaint 編集原稿](../../assets/source/characters/belt.paint.json) ／ [描画コマンド](../../assets/source/characters/belt.commands.json)
 
 ### 運搬人 (porter)
 
-![運搬人](../assets/images/characters/generated/porter.webp)
+![運搬人](../../assets/images/characters/generated/porter.webp)
 
 保険加入者本人ではなく、ベルトの依頼で箱を運んだ証人。一味の偽装を知っているが、仕事を失うことを恐れている。証言には本人の同意が必要。
 
-[旧AIPaint PNG](../assets/images/characters/porter.png) ／ [AIPaint 編集原稿](../assets/source/characters/porter.paint.json) ／ [描画コマンド](../assets/source/characters/porter.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/porter.png) ／ [AIPaint 編集原稿](../../assets/source/characters/porter.paint.json) ／ [描画コマンド](../../assets/source/characters/porter.commands.json)
 
 ### 標本係 (curator)
 
-![標本係](../assets/images/characters/generated/curator.webp)
+![標本係](../../assets/images/characters/generated/curator.webp)
 
 番号照合と回収を手伝う。
 
-[旧AIPaint PNG](../assets/images/characters/curator.png) ／ [AIPaint 編集原稿](../assets/source/characters/curator.paint.json) ／ [描画コマンド](../assets/source/characters/curator.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/curator.png) ／ [AIPaint 編集原稿](../../assets/source/characters/curator.paint.json) ／ [描画コマンド](../../assets/source/characters/curator.commands.json)
 
 ### 保険審査員 (examiner)
 
-![保険審査員](../assets/images/characters/generated/examiner.webp)
+![保険審査員](../../assets/images/characters/generated/examiner.webp)
 
 審査所で失踪届と保険請求書を管理する。医学校の台帳、書き換えられた荷札、運搬人の証言を照合して不正を立証する。
 
-[旧AIPaint PNG](../assets/images/characters/examiner.png) ／ [AIPaint 編集原稿](../assets/source/characters/examiner.paint.json) ／ [描画コマンド](../assets/source/characters/examiner.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/examiner.png) ／ [AIPaint 編集原稿](../../assets/source/characters/examiner.paint.json) ／ [描画コマンド](../../assets/source/characters/examiner.commands.json)
 
 ### ソラ (sora)
 
-![ソラ](../assets/images/characters/generated/sora.webp)
+![ソラ](../../assets/images/characters/generated/sora.webp)
 
 鐘の機構を見張り、運用試験を担当する。
 
-[旧AIPaint PNG](../assets/images/characters/sora.png) ／ [AIPaint 編集原稿](../assets/source/characters/sora.paint.json) ／ [描画コマンド](../assets/source/characters/sora.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/sora.png) ／ [AIPaint 編集原稿](../../assets/source/characters/sora.paint.json) ／ [描画コマンド](../../assets/source/characters/sora.commands.json)
 
 ### 通行人たち (passers)
 
-![通行人たち](../assets/images/characters/generated/passers.webp)
+![通行人たち](../../assets/images/characters/generated/passers.webp)
 
 集団実体。鐘を止める前に高所へ誘導する。
 
-[旧AIPaint PNG](../assets/images/characters/passers.png) ／ [AIPaint 編集原稿](../assets/source/characters/passers.paint.json) ／ [描画コマンド](../assets/source/characters/passers.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/passers.png) ／ [AIPaint 編集原稿](../../assets/source/characters/passers.paint.json) ／ [描画コマンド](../../assets/source/characters/passers.commands.json)
 
 ### 宿屋の主人 (innkeeper)
 
-![宿屋の主人](../assets/images/characters/generated/innkeeper.webp)
+![宿屋の主人](../../assets/images/characters/generated/innkeeper.webp)
 
 浴場・洗濯場・食堂の拡張で増えた使用済みの水を夜にまとめて排出していた。使用量の削減と排水時刻の分散を交渉する当事者。
 
-[旧AIPaint PNG](../assets/images/characters/innkeeper.png) ／ [AIPaint 編集原稿](../assets/source/characters/innkeeper.paint.json) ／ [描画コマンド](../assets/source/characters/innkeeper.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/innkeeper.png) ／ [AIPaint 編集原稿](../../assets/source/characters/innkeeper.paint.json) ／ [描画コマンド](../../assets/source/characters/innkeeper.commands.json)
 
 ### 水売り (seller)
 
-![水売り](../assets/images/characters/generated/seller.webp)
+![水売り](../../assets/images/characters/generated/seller.webp)
 
 宿へ届ける水の量が減れば収入も減る。
 
-[旧AIPaint PNG](../assets/images/characters/seller.png) ／ [AIPaint 編集原稿](../assets/source/characters/seller.paint.json) ／ [描画コマンド](../assets/source/characters/seller.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/seller.png) ／ [AIPaint 編集原稿](../../assets/source/characters/seller.paint.json) ／ [描画コマンド](../../assets/source/characters/seller.commands.json)
 
 ### 水位見張り当番 (waterwatch)
 
-![水位見張り当番](../assets/images/characters/generated/waterwatch.webp)
+![水位見張り当番](../../assets/images/characters/generated/waterwatch.webp)
 
 人手で鳴らす警報に必要な交代制の集団。
 
-[旧AIPaint PNG](../assets/images/characters/waterwatch.png) ／ [AIPaint 編集原稿](../assets/source/characters/waterwatch.paint.json) ／ [描画コマンド](../assets/source/characters/waterwatch.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/waterwatch.png) ／ [AIPaint 編集原稿](../../assets/source/characters/waterwatch.paint.json) ／ [描画コマンド](../../assets/source/characters/waterwatch.commands.json)
 
 ### イナ (ina)
 
-![イナ](../assets/images/characters/generated/ina.webp)
+![イナ](../../assets/images/characters/generated/ina.webp)
 
 写しを持つ妹。姉の原本と同じ資格番号を使った。
 
-[旧AIPaint PNG](../assets/images/characters/ina.png) ／ [AIPaint 編集原稿](../assets/source/characters/ina.paint.json) ／ [描画コマンド](../assets/source/characters/ina.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/ina.png) ／ [AIPaint 編集原稿](../../assets/source/characters/ina.paint.json) ／ [描画コマンド](../../assets/source/characters/ina.commands.json)
 
 ### イナの姉 (sister)
 
-![イナの姉](../assets/images/characters/generated/sister.webp)
+![イナの姉](../../assets/images/characters/generated/sister.webp)
 
 原本の資格者。本名は未設定。
 
-[旧AIPaint PNG](../assets/images/characters/sister.png) ／ [AIPaint 編集原稿](../assets/source/characters/sister.paint.json) ／ [描画コマンド](../assets/source/characters/sister.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/sister.png) ／ [AIPaint 編集原稿](../../assets/source/characters/sister.paint.json) ／ [描画コマンド](../../assets/source/characters/sister.commands.json)
 
 ### 関所番 (passkeeper)
 
-![関所番](../assets/images/characters/generated/passkeeper.webp)
+![関所番](../../assets/images/characters/generated/passkeeper.webp)
 
 水門番とは別人。死んだ兄は歴史上の人物で、生存NPCではない。
 
-[旧AIPaint PNG](../assets/images/characters/passkeeper.png) ／ [AIPaint 編集原稿](../assets/source/characters/passkeeper.paint.json) ／ [描画コマンド](../assets/source/characters/passkeeper.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/passkeeper.png) ／ [AIPaint 編集原稿](../../assets/source/characters/passkeeper.paint.json) ／ [描画コマンド](../../assets/source/characters/passkeeper.commands.json)
 
 ### 名義審査官 (reviewer)
 
-![名義審査官](../assets/images/characters/generated/reviewer.webp)
+![名義審査官](../../assets/images/characters/generated/reviewer.webp)
 
 現場へ赴き申告を確認し、姉妹の仮証を発行する。
 
-[旧AIPaint PNG](../assets/images/characters/reviewer.png) ／ [AIPaint 編集原稿](../assets/source/characters/reviewer.paint.json) ／ [描画コマンド](../assets/source/characters/reviewer.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/reviewer.png) ／ [AIPaint 編集原稿](../../assets/source/characters/reviewer.paint.json) ／ [描画コマンド](../../assets/source/characters/reviewer.commands.json)
 
 ### トト (toto)
 
-![トト](../assets/images/characters/generated/toto.webp)
+![トト](../../assets/images/characters/generated/toto.webp)
 
 冷水試験の後に初めて、安全に食用へ回せるなら菌床を残したいと申し出る。分離槽の維持や、網を使う場合の清掃当番を引き受ける。
 
-[旧AIPaint PNG](../assets/images/characters/toto.png) ／ [AIPaint 編集原稿](../assets/source/characters/toto.paint.json) ／ [描画コマンド](../assets/source/characters/toto.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/toto.png) ／ [AIPaint 編集原稿](../../assets/source/characters/toto.paint.json) ／ [描画コマンド](../../assets/source/characters/toto.commands.json)
 
 ### ガロ (garo)
 
-![ガロ](../assets/images/characters/generated/garo.webp)
+![ガロ](../../assets/images/characters/generated/garo.webp)
 
 工事費を使い切り、自ら石入りの箱を沈めて盗難に見せかけた。職人たちに第三者の捜索を求められて依頼する。一部払いには自分の荷車と予備工具を売る。
 
-[旧AIPaint PNG](../assets/images/characters/garo.png) ／ [AIPaint 編集原稿](../assets/source/characters/garo.paint.json) ／ [描画コマンド](../assets/source/characters/garo.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/garo.png) ／ [AIPaint 編集原稿](../../assets/source/characters/garo.paint.json) ／ [描画コマンド](../../assets/source/characters/garo.commands.json)
 
 ### 工事の職人たち (workers)
 
-![工事の職人たち](../assets/images/characters/generated/workers.webp)
+![工事の職人たち](../../assets/images/characters/generated/workers.webp)
 
 証拠を引き受けた場合は自分たちで交渉する。
 
-[旧AIPaint PNG](../assets/images/characters/workers.png) ／ [AIPaint 編集原稿](../assets/source/characters/workers.paint.json) ／ [描画コマンド](../assets/source/characters/workers.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/workers.png) ／ [AIPaint 編集原稿](../../assets/source/characters/workers.paint.json) ／ [描画コマンド](../../assets/source/characters/workers.commands.json)
 
 ### 疑われた荷役人 (accused)
 
-![疑われた荷役人](../assets/images/characters/generated/accused.webp)
+![疑われた荷役人](../../assets/images/characters/generated/accused.webp)
 
 空の箱を最後に運んだが、盗んでも沈めてもいない。集団とは別の実体として所在を管理する。
 
-[旧AIPaint PNG](../assets/images/characters/accused.png) ／ [AIPaint 編集原稿](../assets/source/characters/accused.paint.json) ／ [描画コマンド](../assets/source/characters/accused.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/accused.png) ／ [AIPaint 編集原稿](../../assets/source/characters/accused.paint.json) ／ [描画コマンド](../../assets/source/characters/accused.commands.json)
 
 ### ミレ (mire)
 
-![ミレ](../assets/images/characters/generated/mire.webp)
+![ミレ](../../assets/images/characters/generated/mire.webp)
 
 夫は故人。弟との面会や伝声口の封鎖を本人が選ぶ。
 
-[旧AIPaint PNG](../assets/images/characters/mire.png) ／ [AIPaint 編集原稿](../assets/source/characters/mire.paint.json) ／ [描画コマンド](../assets/source/characters/mire.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/mire.png) ／ [AIPaint 編集原稿](../../assets/source/characters/mire.paint.json) ／ [描画コマンド](../../assets/source/characters/mire.commands.json)
 
 ### ミレの夫の弟 (brother)
 
-![ミレの夫の弟](../assets/images/characters/generated/brother.webp)
+![ミレの夫の弟](../../assets/images/characters/generated/brother.webp)
 
 遺品から見つけた兄の未配達の手紙の原本を保持する。似た声を兄の話し方へ寄せ、伝声管を通して読んでいた。
 
-[旧AIPaint PNG](../assets/images/characters/brother.png) ／ [AIPaint 編集原稿](../assets/source/characters/brother.paint.json) ／ [描画コマンド](../assets/source/characters/brother.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/brother.png) ／ [AIPaint 編集原稿](../../assets/source/characters/brother.paint.json) ／ [描画コマンド](../../assets/source/characters/brother.commands.json)
 
 ### ヨル (yoru)
 
-![ヨル](../assets/images/characters/generated/yoru.webp)
+![ヨル](../../assets/images/characters/generated/yoru.webp)
 
 遺体を納める内室と別の外底に食料を隠した。
 
-[旧AIPaint PNG](../assets/images/characters/yoru.png) ／ [AIPaint 編集原稿](../assets/source/characters/yoru.paint.json) ／ [描画コマンド](../assets/source/characters/yoru.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/yoru.png) ／ [AIPaint 編集原稿](../../assets/source/characters/yoru.paint.json) ／ [描画コマンド](../../assets/source/characters/yoru.commands.json)
 
 ### 棺の遺族 (family)
 
-![棺の遺族](../assets/images/characters/generated/family.webp)
+![棺の遺族](../../assets/images/characters/generated/family.webp)
 
 外底の検査と葬儀の延期には了承を得る。
 
-[旧AIPaint PNG](../assets/images/characters/family.png) ／ [AIPaint 編集原稿](../assets/source/characters/family.paint.json) ／ [描画コマンド](../assets/source/characters/family.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/family.png) ／ [AIPaint 編集原稿](../../assets/source/characters/family.paint.json) ／ [描画コマンド](../../assets/source/characters/family.commands.json)
 
 ### 棺の担ぎ手 (bearers)
 
-![棺の担ぎ手](../assets/images/characters/generated/bearers.webp)
+![棺の担ぎ手](../../assets/images/characters/generated/bearers.webp)
 
 棺の移動経路を家族や食料と分けて管理する。
 
-[旧AIPaint PNG](../assets/images/characters/bearers.png) ／ [AIPaint 編集原稿](../assets/source/characters/bearers.paint.json) ／ [描画コマンド](../assets/source/characters/bearers.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/bearers.png) ／ [AIPaint 編集原稿](../../assets/source/characters/bearers.paint.json) ／ [描画コマンド](../../assets/source/characters/bearers.commands.json)
 
 ### 下流の受取人 (recipient)
 
-![下流の受取人](../assets/images/characters/generated/recipient.webp)
+![下流の受取人](../../assets/images/characters/generated/recipient.webp)
 
 下流の葬送桟橋で待つ。棺が届いた場合は外底だけを外し、遺体を封じた内室を水葬経路へ戻す。岸や窓口へは案内に従って移動する。
 
-[旧AIPaint PNG](../assets/images/characters/recipient.png) ／ [AIPaint 編集原稿](../assets/source/characters/recipient.paint.json) ／ [描画コマンド](../assets/source/characters/recipient.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/recipient.png) ／ [AIPaint 編集原稿](../../assets/source/characters/recipient.paint.json) ／ [描画コマンド](../../assets/source/characters/recipient.commands.json)
 
 ### 輸送検査官 (inspector)
 
-![輸送検査官](../assets/images/characters/generated/inspector.webp)
+![輸送検査官](../../assets/images/characters/generated/inspector.webp)
 
 臨時許可を審査する。恒久的な制度変更はここでは決定しない。
 
-[旧AIPaint PNG](../assets/images/characters/inspector.png) ／ [AIPaint 編集原稿](../assets/source/characters/inspector.paint.json) ／ [描画コマンド](../assets/source/characters/inspector.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/inspector.png) ／ [AIPaint 編集原稿](../../assets/source/characters/inspector.paint.json) ／ [描画コマンド](../../assets/source/characters/inspector.commands.json)
 
 ### エダ (eda)
 
-![エダ](../assets/images/characters/generated/eda.webp)
+![エダ](../../assets/images/characters/generated/eda.webp)
 
 旧図、支柱の測点、亀裂、地下水位を比較する。この区画に新しい変位がないことを、他区画の安全と混同しない。
 
-[旧AIPaint PNG](../assets/images/characters/eda.png) ／ [AIPaint 編集原稿](../assets/source/characters/eda.paint.json) ／ [描画コマンド](../assets/source/characters/eda.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/eda.png) ／ [AIPaint 編集原稿](../../assets/source/characters/eda.paint.json) ／ [描画コマンド](../../assets/source/characters/eda.commands.json)
 
 ### 清掃係 (cleaners)
 
-![清掃係](../assets/images/characters/generated/cleaners.webp)
+![清掃係](../../assets/images/characters/generated/cleaners.webp)
 
 合意した区画表は保存する。散布済みの薬は元に戻らない。
 
-[旧AIPaint PNG](../assets/images/characters/cleaners.png) ／ [AIPaint 編集原稿](../assets/source/characters/cleaners.paint.json) ／ [描画コマンド](../assets/source/characters/cleaners.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/cleaners.png) ／ [AIPaint 編集原稿](../../assets/source/characters/cleaners.paint.json) ／ [描画コマンド](../../assets/source/characters/cleaners.commands.json)
 
 ### 穀倉番 (storekeeper)
 
-![穀倉番](../assets/images/characters/generated/storekeeper.webp)
+![穀倉番](../../assets/images/characters/generated/storekeeper.webp)
 
 内扉を閉め、穀物への侵入を防いでいる。
 
-[旧AIPaint PNG](../assets/images/characters/storekeeper.png) ／ [AIPaint 編集原稿](../assets/source/characters/storekeeper.paint.json) ／ [描画コマンド](../assets/source/characters/storekeeper.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/storekeeper.png) ／ [AIPaint 編集原稿](../../assets/source/characters/storekeeper.paint.json) ／ [描画コマンド](../../assets/source/characters/storekeeper.commands.json)
 
 ### 共同倉庫の受入れ係 (clerks)
 
-![共同倉庫の受入れ係](../assets/images/characters/generated/clerks.webp)
+![共同倉庫の受入れ係](../../assets/images/characters/generated/clerks.webp)
 
 穀物を受け取った事実を記録する集団。
 
-[旧AIPaint PNG](../assets/images/characters/clerks.png) ／ [AIPaint 編集原稿](../assets/source/characters/clerks.paint.json) ／ [描画コマンド](../assets/source/characters/clerks.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/clerks.png) ／ [AIPaint 編集原稿](../../assets/source/characters/clerks.paint.json) ／ [描画コマンド](../../assets/source/characters/clerks.commands.json)
 
 ### 水門番 (gatekeeper)
 
-![水門番](../assets/images/characters/generated/gatekeeper.webp)
+![水門番](../../assets/images/characters/generated/gatekeeper.webp)
 
 関所番とは別人。安全側の操作室から閉門し、操作梯子で地上へ脱出できる。旧工事用の縦坑は上下両端の検査が済むまで避難路に使えない。未承認工事と閉門を遅らせた理由を証言できる。
 
-[旧AIPaint PNG](../assets/images/characters/gatekeeper.png) ／ [AIPaint 編集原稿](../assets/source/characters/gatekeeper.paint.json) ／ [描画コマンド](../assets/source/characters/gatekeeper.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/gatekeeper.png) ／ [AIPaint 編集原稿](../../assets/source/characters/gatekeeper.paint.json) ／ [描画コマンド](../../assets/source/characters/gatekeeper.commands.json)
 
 ### 手前の住民三人 (nearpeople)
 
-![手前の住民三人](../assets/images/characters/generated/nearpeople.webp)
+![手前の住民三人](../../assets/images/characters/generated/nearpeople.webp)
 
 人数三人を固定。地上到着前に救出済みにしない。
 
-[旧AIPaint PNG](../assets/images/characters/nearpeople.png) ／ [AIPaint 編集原稿](../assets/source/characters/nearpeople.paint.json) ／ [描画コマンド](../assets/source/characters/nearpeople.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/nearpeople.png) ／ [AIPaint 編集原稿](../../assets/source/characters/nearpeople.paint.json) ／ [描画コマンド](../../assets/source/characters/nearpeople.commands.json)
 
 ### 奥の住民二人 (deeppeople)
 
-![奥の住民二人](../assets/images/characters/generated/deeppeople.webp)
+![奥の住民二人](../../assets/images/characters/generated/deeppeople.webp)
 
 人数二人を固定。渡りには救助縄が必要。
 
-[旧AIPaint PNG](../assets/images/characters/deeppeople.png) ／ [AIPaint 編集原稿](../assets/source/characters/deeppeople.paint.json) ／ [描画コマンド](../assets/source/characters/deeppeople.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/deeppeople.png) ／ [AIPaint 編集原稿](../../assets/source/characters/deeppeople.paint.json) ／ [描画コマンド](../../assets/source/characters/deeppeople.commands.json)
 
 ### 排水隊 (pumpcrew)
 
-![排水隊](../assets/images/characters/generated/pumpcrew.webp)
+![排水隊](../../assets/images/characters/generated/pumpcrew.webp)
 
 連絡だけで引継ぎ済みとせず、操作室への到着を確認する。
 
-[旧AIPaint PNG](../assets/images/characters/pumpcrew.png) ／ [AIPaint 編集原稿](../assets/source/characters/pumpcrew.paint.json) ／ [描画コマンド](../assets/source/characters/pumpcrew.commands.json)
+[旧AIPaint PNG](../../assets/images/characters/pumpcrew.png) ／ [AIPaint 編集原稿](../../assets/source/characters/pumpcrew.paint.json) ／ [描画コマンド](../../assets/source/characters/pumpcrew.commands.json)
 
 ## 歴史上・物語内で言及される人物
 
