@@ -2,6 +2,8 @@
 
 更新日: 2026-09-16。作品版1.10.0の町ロケーション・q002の実移動・q001・火・水没・装備個体を含む実装を対象とします。反映状態は[CURRENT_STATUS.md](CURRENT_STATUS.md)を参照してください。
 
+プレイヤーコマンドとメッセージ内の選択肢の区分は [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md) を正本とする。移動・調べる・帰還はコマンドウィンドウ、会話・調査・仕掛けの説明と選択肢は共通のメッセージウィンドウで扱う。
+
 ## 実行と構成
 
 HTTPで配信する静的ブラウザRPGADVです。ゲーム実行時に外部CDN・APIキー・サーバー側処理は不要です。開発・検証のNode.js要件は22以上。`npm run serve` はPythonのHTTPサーバーを使います。

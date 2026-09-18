@@ -49,19 +49,19 @@ function help(){modal('遊び方');for(const paragraph of [
  '7. 行動後に自動保存。「記録」で3枠への手動保存とファイル入出力ができます。ブラウザのデータ削除に備え、長い旅はファイルにも保存してください。',
  '8. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。依頼によって結末の数と条件が異なります。'
 ])dialog.append(make('p',paragraph));closeButton();}
-function retreat(){modal('帰還印を使いますか');dialog.append(make('p',`救援費は${Math.ceil(engine.state.gold*data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}Gです。受注中の依頼と手掛かりはそのまま残ります。`),btn('帰還する',()=>{dialog.close();dispatch({type:'retreat'});}));closeButton();}
+
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   data=await loadContent();sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);
   const autosave=storageRead('auto');if(autosave!==null){const result=restoreGame(data,autosave);engine=result.engine;if(result.restarted){storageWrite('auto',engine.save());status(result.message);}}
-  view=new GameView(root,dispatch,{menu,help,retreat,status,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound});render();
+  view=new GameView(root,dispatch,{menu,help,status,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound});render();
   document.addEventListener('keydown',event=>{
     if(dialog.open||event.ctrlKey||event.metaKey||event.altKey||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;
     if(event.key==='Escape'){event.preventDefault();menu();return;}
-    if(engine.state.waiting?.type==='text'&&['Enter',' '].includes(event.key)&&document.activeElement?.tagName!=='BUTTON'){event.preventDefault();dispatch({type:'advance'});return;}
-    if(engine.state.waiting?.type==='choice'&&/^[1-9]$/.test(event.key)){const o=lastModel.dialog.options[Number(event.key)-1];if(o?.enabled){event.preventDefault();dispatch({type:'choose',id:o.id});}return;}
+    if(lastModel.dialog?.type==='text'&&['Enter',' '].includes(event.key)&&document.activeElement?.tagName!=='BUTTON'){event.preventDefault();dispatch({type:'advance'});return;}
+    if(lastModel.dialog?.type==='choice'&&/^[1-9]$/.test(event.key)){const o=lastModel.dialog.options[Number(event.key)-1];if(o?.enabled){event.preventDefault();dispatch({type:'choose',id:o.id});}return;}
     if(engine.state.waiting||view.tab!=='explore')return;
     const movement={w:'forward',ArrowUp:'forward',s:'back',ArrowDown:'back',a:'left',ArrowLeft:'left',d:'right',ArrowRight:'right'}[event.key];
-    if(movement){event.preventDefault();dispatch({type:'move',direction:movement});}else if(event.key.toLowerCase()==='e'){event.preventDefault();dispatch({type:'interact'});}
+    if(movement){event.preventDefault();dispatch({type:'move',direction:movement});}else if(event.key.toLowerCase()==='e'){event.preventDefault();dispatch({type:'player.command',id:'interact'});}
   });
 }catch(error){root.replaceChildren();const message=make('div',`起動できませんでした。\n${error.message}\n\nHTTPサーバーまたはGitHub Pagesで開き、data/以下のファイルが揃っているか確認してください。`);message.className='fatal';message.setAttribute('role','alert');root.append(message);}

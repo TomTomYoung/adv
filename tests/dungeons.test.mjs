@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {data,newGame,drain,pathTo} from './helpers.mjs';
+import {inspect,data,newGame,drain,pathTo} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {fireContext,fireEnvironment} from '../src/core/systems/fire-network.js';
 import {dungeonActionPlan,dungeonEncounter} from '../src/core/dungeons.js';
@@ -79,7 +79,7 @@ test('normal encounter strength is calculated from active fires and survives bat
 test('every floor and the deep seed can be reached using actual movement and stairs',()=>{
   const g=begin(true);g.state.inventory.torch=99;
   const walk=(x,y)=>{for(const [nx,ny] of pathTo(g,x,y)){const l=g.state.location,wanted=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==wanted)g.dispatch({type:'move',direction:'right'});if(flame(g).fuel<30)action(g,'refuel');assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.battle,null);}};
-  for(const next of ['kagaribi_f2','kagaribi_f3']){walk(13,7);assert.ok(g.dispatch({type:'interact'}));drain(g);assert.equal(g.state.location.map,next);roundtrip(g);}
+  for(const next of ['kagaribi_f2','kagaribi_f3']){walk(13,7);inspect(g);drain(g);assert.equal(g.state.location.map,next);roundtrip(g);}
   walk(7,7);assert.ok(action(g,'collect','origin'));assert.equal(fireContext(g.data,g.state).run.ember.effect,'deep');g.returnTown();assert.equal(g.state.inventory.kagaribi_ember,1);assert.equal(g.state.inventory.kagaribi_torch,0);roundtrip(g);
   g.dispatch({type:'travel',dungeon:'kagaribi'});assert.equal(fireContext(data,g.state).run.ember.effect,'deep');assert.equal(g.state.inventory.kagaribi_torch,1);
 });

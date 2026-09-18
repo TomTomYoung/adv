@@ -1,3 +1,4 @@
+import {openPlayerCommand,advanceCommand,chooseCommand} from './player-commands.js';
 import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
 import {connectionMove} from './systems/map-connections.js';
 import {compartmentBlocked} from './systems/compartment-water.js';
@@ -116,7 +117,7 @@ export class GameEngine {
   returnTown(emergency=false,quiet=false){
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
-    if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出しました。救援費 ${cost}G。依頼と手掛かりは維持されます。`);}
+    if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出した。救援費 ${cost}G。依頼と手掛かりは維持される。`);}
     this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
     this.state.fieldEntry=null;
   }
@@ -158,18 +159,20 @@ export class GameEngine {
     }
     return true;
   }
-  trigger(kind){
-    const loc=this.state.location;if(!loc)return false;
+  interactionObjects(){return this.triggerCandidates('interact');}
+  triggerCandidates(kind){
+    const loc=this.state.location;if(!loc)return [];
     const [dx,dy]=DELTAS[DIRECTIONS.indexOf(loc.facing)];
     const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
-    for(const object of [...blockers,...at,...ahead.filter(o=>!blockers.includes(o))]){
-      if(!objectVisible(this.state,this.map(),object))continue;
-      if(object.trigger!==kind)continue;
+    return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));
+  }
+  trigger(kind,id){
+    const loc=this.state.location;
+    for(const object of this.triggerCandidates(kind)){
+      if(id!==undefined&&object.id!==id)continue;
       const key=`${loc.map}/${object.id}`;
-      if(object.once&&this.state.events[key])continue;
-      if(object.condition!==undefined&&!this.value(object.condition))continue;
       this.state.events[key]=(this.state.events[key]??0)+1;
       this.cue(this.data.presentation?.bindings.objects[object.kind]);
       const quest=this.data.quests[object.quest];
@@ -181,19 +184,19 @@ export class GameEngine {
     }
     return false;
   }
-  interact(){if(this.state.mode!=='dungeon'||this.state.waiting||this.state.battle)return false;const connection=connectionMove(this.data,this.state,this.state.location.facing)??connectionMove(this.data,this.state,null);if(connection)return dungeonAction(this,connection);if(!this.trigger('interact'))this.notify('足元と正面を調べました。今は新しい発見はありません。');return true;}
+  interact(){return openPlayerCommand(this,'interact');}
   finishBattle(result,skipEvents=false){endBattle(this,result,skipEvents);}
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
-    beginFeedback(this);const changed=this.perform(intent);
-    if(changed){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
+    beginFeedback(this);const commandPrompt=this.state.waiting?.type==='command';const changed=this.perform(intent);
+    if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
     return changed;
   }
   perform(intent){
     const type=intent?.type;if(typeof type!=='string')return false;
     this.state.notice='';
-    if(type==='advance')return advanceScript(this);
-    if(type==='choose')return chooseOption(this,intent.id);
+    if(type==='advance')return this.state.waiting?.type==='command'?advanceCommand(this):advanceScript(this);
+    if(type==='choose')return this.state.waiting?.type==='command'?chooseCommand(this,intent.id):chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
     if(type==='location.move')return this.moveLocation(intent.id);
@@ -201,6 +204,7 @@ export class GameEngine {
     if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
     if(type==='move')return this.move(intent.direction);
+    if(type==='player.command')return openPlayerCommand(this,intent.id);
     if(type==='interact')return this.interact();
     if(type==='retreat'&&this.state.mode==='dungeon'){this.returnTown(true);return true;}
     if(type==='accept'&&this.state.mode==='town')return this.accept(intent.id);

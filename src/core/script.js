@@ -14,6 +14,7 @@ export function pushBranch(engine,frame,index,path){
 }
 export function runScript(engine,id,args={}){
   if(!engine.data.scripts[id])throw new Error(`不明なスクリプト: ${id}`);
+  if(!engine.state.vm.length)delete engine.state.presentation.message;
   engine.state.vm.push({script:id,path:[],index:0,scope:engine.state.nextScope++,branch:false,local:{args:clone(args)}});pump(engine);
 }
 export function advanceScript(engine){
@@ -26,7 +27,7 @@ export function chooseOption(engine,id){
   const optionIndex=command.options.findIndex(o=>o.id===id),option=command.options[optionIndex];
   if(!option||(option.visibleWhen!==undefined&&!engine.value(option.visibleWhen))||(option.condition!==undefined&&!engine.value(option.condition)))return false;
   if(option.storyAction&&!storyCanAct(engine,option.storyAction.quest,option.storyAction.action))return false;
-  engine.state.waiting=null;engine.log(`選択：${option.text}`);pushBranch(engine,frame,wait.index,['options',optionIndex,'commands']);pump(engine);return true;
+  engine.state.waiting=null;delete engine.state.presentation.message;engine.log(`選択：${option.text}`);pushBranch(engine,frame,wait.index,['options',optionIndex,'commands']);pump(engine);return true;
 }
 export function pump(engine){
   const state=engine.state;
@@ -43,9 +44,9 @@ export function pump(engine){
       case 'story.journey':beginStoryJourney(engine,c.quest,c.action);return;
       case 'story.action':applyStoryAction(engine,c.quest,c.action);break;
       case 'say':case 'narrate':{
-        const text=String(v(c.text));state.waiting={type:'text',text,speaker:c.name??c.speaker??''};engine.log(text);break;
+        const text=String(v(c.text));state.waiting={type:'text',text,speaker:c.name??c.speaker??''};state.presentation.message={text,speaker:state.waiting.speaker};engine.log(text);break;
       }
-      case 'choice':state.waiting={type:'choice',index};break;
+      case 'choice':state.waiting={type:'choice',index,...state.presentation.message};break;
       case 'if':branch(v(c.condition)?['then']:['else']);break;
       case 'switch':{const ci=c.cases.findIndex(x=>x.equals===v(c.value));branch(ci>=0?['cases',ci,'commands']:['default']);break;}
       case 'call':{

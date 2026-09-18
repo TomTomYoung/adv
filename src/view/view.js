@@ -1,5 +1,4 @@
 import {appendDungeonArt} from './dungeon-art.js';
-import {dungeonSystems} from './dungeon-systems.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
@@ -25,7 +24,7 @@ export class GameView {
     if(model.town)this.townScene(main,model);
     // Narrative and battles stay visible even if the player opens a utility tab.
     if(model.battle)this.battle(main,model);
-    else if(model.dialog){if(model.dungeon)this.scene(main,model);this.dialog(main,model.dialog);}
+    else if(model.dialog){if(model.dungeon)this.scene(main,model);this.dialog(main,model.dialog);if(model.commands)this.commandWindow(main,model.commands);}
     else if(this.tab==='location')this.location(main,model);
     else if(this.tab==='explore')this.explore(main,model);
     else if(this.tab==='quests')this.quests(main,model);
@@ -34,7 +33,7 @@ export class GameView {
     else if(this.tab==='bag')this.bag(main,model);
     else this.journal(main,model);
     this.sidebar(side,model);
-    if(model.notice){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
+    if(model.notice&&model.notice!==model.dialog?.text){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
     const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?'W/S 前後移動 · A/D 向き変更 · E 調べる · Enter 続き':'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
     this.effects.present(model,this.ui.effectsMode?.()??'full');
     if(focused){const target=this.root.querySelector(`[data-focus="${focused}"]`);if(target){target.focus();if(selection!==undefined&&target.setSelectionRange)target.setSelectionRange(selection,selection);}}
@@ -47,7 +46,7 @@ export class GameView {
   }
   location(parent,m){
     if(!m.town)return;const t=m.town,section=node('section','panel-content location-content');section.append(node('p','location-description',t.description));
-    const choices=node('div','location-choices');
+    const choices=node('div','location-choices command-window');choices.setAttribute('aria-label','プレイヤーコマンド');
     for(const l of t.links)choices.append(button(l.name,()=>this.act({type:'location.move',id:l.id}),'location-choice',t.busy));
     for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
     for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
@@ -116,15 +115,21 @@ export class GameView {
   explore(parent,m){
     this.scene(parent,m);const section=node('div','panel-content exploration-content');
     section.append(node('p','location-text',m.dungeon.here.length?m.dungeon.here.map(o=>o.name).join(' / '):'灯の届く通路が続いている。足元と正面に注意して進む。'));
-    if(m.dungeon.surfaceNotice){const info=node('div','surface-notice');info.append(node('p','',m.dungeon.surfaceNotice.text));const a=m.dungeon.surfaceNotice.action;if(a)info.append(button(a.label,()=>this.act(a.intent),'',!a.enabled));section.append(info);}
-    const controls=node('div','explore-controls'),movement=node('div','movement-pad');
-    for(const [label,direction,cl] of [['前へ','forward','forward'],['左を向く','left','left'],['後ろへ','back','back'],['右を向く','right','right']])movement.append(button(label,()=>this.act({type:'move',direction}),cl));
-    const actions=node('div','explore-actions');actions.append(button('足元・正面を調べる',()=>this.act({type:'interact'}),'primary'),button('帰還印で町へ戻る',()=>this.ui.retreat()),node('small','muted','帰還印：所持金の8%。入口の階段からは無料で帰れます。'));controls.append(movement,actions);section.append(controls);
+    if(m.dungeon.surfaceNotice){const info=node('div','surface-notice');info.append(node('p','',m.dungeon.surfaceNotice.text));section.append(info);}
+    this.commandWindow(section,m.commands);
     if(m.dungeon.currentCube){const c=m.dungeon.currentCube;section.append(node('p','voxel-current',`高さ ${m.dungeon.z} ／ ${c.waterLabel}`));section.append(node('p','muted',c.neighbors.map(n=>`${{north:'北',east:'東',south:'南',west:'西',up:'上',down:'下'}[n.side]}：${n.kind}${!n.passage?'・境界壁':''}${n.support?'・支持面':''}`).join(' ／ ')));}
-    dungeonSystems(section,[...m.dungeon.systems,...(m.dungeon.scenes??[])],intent=>this.act(intent));
     const log=node('div','travel-log');log.append(node('span','eyebrow','直近の記録'));for(const line of m.log.slice(-3))log.append(node('p','',line));section.append(log);parent.append(section);
   }
-  dialog(parent,d){const section=node('section','story-window');section.setAttribute('aria-label','物語と選択肢');if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
+  commandWindow(parent,commands){
+    if(!commands)return;
+    const window=node('section','command-window explore-controls');window.setAttribute('aria-label',commands.title);
+    const movement=node('div','movement-pad');
+    for(const c of commands.movement)movement.append(button(c.label,()=>this.act(c.intent),c.direction,!c.enabled));
+    const actions=node('div','explore-actions');
+    for(const c of commands.actions)actions.append(button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled));
+    window.append(movement,actions);parent.append(window);
+  }
+  dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
       const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
@@ -132,7 +137,7 @@ export class GameView {
       section.append(cast);
     }
     if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.act({type:'advance'}),'primary continue'));}
-    else{section.append(node('span','eyebrow','あなたの判断'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
+    else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
   }
   battle(parent,m){
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
