@@ -1,19 +1,20 @@
 /* Alternative layout. Every rule is scoped to the scene view or its system UI. */
 #app[data-view="scene"]{padding:12px;max-width:var(--content-width)}
 .scene-stage{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;height:calc(100dvh - 24px);min-height:340px;max-height:1000px;background:var(--background);border:1px solid var(--border);--scene-hud-height:150px;--scene-dock-height:240px;--scene-play-height:260px}
-.scene-world{position:absolute;inset:0;z-index:0;overflow:hidden}
+.scene-world{position:absolute;inset:0;z-index:0;overflow:hidden;--dungeon-marker-y:.49}
 .scene-world>.town-scene,.scene-world>.dungeon-scene{position:absolute;inset:0;height:100%;max-height:none;aspect-ratio:auto}
 .scene-world .town-background{object-fit:cover}
 .scene-world .town-caption,.scene-world .scene-location{display:none}
-.scene-world .town-character{bottom:calc(var(--scene-dock-height) - 60px);height:calc(var(--scene-play-height) + 100px);max-height:75%;max-width:58%}
 .scene-world .compass{top:var(--scene-hud-height);right:18px}
 .scene-world .enemy-line{top:var(--scene-hud-height);bottom:var(--scene-dock-height);left:12px;right:12px;gap:12px;align-items:center;justify-content:center}
 .scene-world .enemy{width:220px;min-width:0;max-height:100%;padding:6px;overflow:auto;scrollbar-width:thin}
 .scene-world .enemy img{height:clamp(45px,calc(var(--scene-play-height) * .6),170px);width:auto;max-width:100%}
-.scene-cast{position:absolute;top:var(--scene-hud-height);bottom:var(--scene-dock-height);left:15%;right:15%;display:flex;justify-content:center;align-items:end;margin:0;overflow:hidden;z-index:4;pointer-events:none}
-.scene-cast .story-person{margin:0;max-width:40%;height:100%;display:flex;flex-direction:column;justify-content:end}
-.scene-cast .story-person img{width:auto;height:calc(100% - 28px);max-height:230px;max-width:100%;object-fit:contain;object-position:bottom}
-.scene-cast figcaption{background:var(--surface);padding:2px 8px;font-size:12px;color:var(--ink)}
+.scene-cast{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.scene-actor{position:absolute;margin:0;height:calc(78% * var(--cast-scale,1));aspect-ratio:7/8;transform:translateX(-50%)}
+.scene-actor img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 8px #0006)}
+.scene-actor.remote{opacity:.7}.scene-actor figcaption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.scene-cards{position:absolute;top:var(--scene-hud-height);bottom:var(--scene-dock-height);left:5%;right:5%;z-index:4;overflow:auto;margin:0;pointer-events:none;align-content:end}
+.scene-cards .story-person{width:140px}.scene-cards .story-person img{max-height:180px}.scene-cards .speaking{outline:2px solid var(--accent)}
 .scene-hud{position:relative;z-index:10;flex:0 0 auto;padding:12px 16px;pointer-events:none}
 .scene-hud button,.scene-hud details{pointer-events:auto}
 .scene-header{display:flex;align-items:start;justify-content:space-between;gap:14px}
@@ -32,21 +33,29 @@
 .scene-member-status{color:var(--danger);font-size:11px;overflow-wrap:anywhere}
 .scene-minimap{position:absolute;right:16px;top:calc(100% + 8px);width:180px;pointer-events:none}
 .scene-minimap .side-section{padding:7px;margin:0}.scene-minimap .side-section>.eyebrow,.scene-minimap .map-legend{display:none}.scene-minimap .muted{font-size:11px;margin:0 0 5px}.scene-minimap .map-cell{font-size:11px}
-.scene-dock{position:relative;z-index:10;flex:0 1 auto;min-height:0;max-height:48%;margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,35%);gap:12px;padding:12px 16px;pointer-events:none}
+.scene-dock{position:relative;z-index:10;flex:0 0 44%;height:44%;min-height:0;margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,35%);gap:12px;padding:12px 16px;pointer-events:none}
 .scene-dock>*{pointer-events:auto;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
 .scene-dock>.scene-description,.scene-dock>.scene-message{background:color-mix(in srgb,var(--surface) 65%,transparent)}
-.scene-description{margin:0;padding:15px 18px;white-space:pre-line;font-family:var(--story-font);font-size:var(--text-size)}
+.scene-description{margin:0;display:flex;flex-direction:column;padding:0;font-family:var(--story-font);font-size:var(--text-size)}
 .scene-dock .command-window{display:flex;flex-direction:column;gap:10px;align-items:stretch;margin:0;padding:10px}
 .scene-dock .movement-pad{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
 .scene-dock .movement-pad button{min-width:0;min-height:40px;padding:6px 3px}
 .scene-dock .explore-actions{max-width:none;gap:5px}.scene-dock .explore-actions button{padding:7px}
-.scene-dock .scene-town-commands{display:flex;gap:6px}.scene-town-commands button{padding:8px 10px;min-height:40px;font-size:14px}
+.scene-dock .scene-town-commands{display:flex;flex-direction:column;gap:6px}.scene-dock .scene-town-commands button,.scene-dock .command-window>*{flex-shrink:0}.scene-town-commands button{padding:8px 10px;min-height:40px;font-size:14px}
 .scene-dock:has(.message-window),.scene-dock:has(.battle-panel){grid-template-columns:minmax(0,1fr)}
-.scene-message{padding:14px 20px;max-height:100%;scrollbar-gutter:stable}
-.scene-message .story-text{margin:7px 0 12px;line-height:1.85;overflow-wrap:anywhere}
-.scene-message .choices{gap:7px;margin:10px 0 0}.scene-message .choice{padding:9px 12px}.scene-message .continue{padding:7px 14px}
-.scene-message .story-place{font-size:12px;margin-bottom:3px}.scene-message .scene-art{max-height:65px;max-width:100px}
-.scene-paging{display:flex;align-items:center;gap:12px;font-size:12px;margin-top:8px}.scene-paging button{font-size:12px;padding:5px 10px}
+.scene-message::after{display:none}
+.scene-dock>.scene-message{display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr) minmax(220px,35%);gap:12px;padding:0;border:0;background:transparent;overflow:hidden}
+.scene-message-body{display:flex;flex-direction:column;min-height:0;min-width:0;padding:14px 18px;overflow:hidden}
+.scene-message .scene-message-body{background:color-mix(in srgb,var(--surface) 65%,transparent);border:1px solid var(--border);border-radius:var(--radius)}
+.scene-description>.scene-message-body{flex:1}
+.scene-text-viewport{flex:1;min-height:0;min-width:0;overflow:hidden}
+.scene-message-body .story-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:var(--text-size);line-height:1.85}
+.scene-message-body>.eyebrow,.scene-message-body>.story-place{flex-shrink:0;margin:0 0 6px}
+.scene-message-actions{min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.scene-message .choices{gap:7px;margin:0;padding:0;border:0}.scene-message .choice{padding:9px 12px;flex-shrink:0}.scene-message .continue{padding:7px 14px;width:100%;min-width:0}
+.scene-message .story-place{font-size:12px}
+.scene-paging{display:flex;align-items:center;gap:12px;font-size:12px;margin-top:8px;flex-shrink:0;min-height:32px}.scene-paging button{font-size:12px;padding:5px 10px}.scene-page-count{white-space:nowrap}
+.scene-paging[hidden]{display:flex!important;visibility:hidden;pointer-events:none}
 .scene-dock .battle-panel{padding:12px 16px}.scene-dock .battle-panel h2{font-size:20px}.scene-dock .battle-actions{margin:10px 0;gap:6px}.scene-dock .battle-actions button{padding:7px 10px}.scene-dock .battle-log{font-size:12px}
 .scene-notice{position:absolute;top:100%;left:16px;max-width:calc(100% - 230px);background:var(--surface);border:1px solid var(--accent);padding:5px 10px;font-size:12px;max-height:65px;overflow:auto;pointer-events:auto}
 .scene-overlay{position:absolute;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:#06101188}
@@ -61,11 +70,11 @@
 @media(max-width:760px){
   .scene-hud{padding:9px}.scene-header{flex-direction:column;gap:7px}.scene-place{max-width:100%;padding:3px 7px}.scene-title{font-size:17px}.scene-place .eyebrow{display:none}.scene-toolbar{justify-content:start}.scene-toolbar button{padding:5px 8px;font-size:12px}
   .scene-status{margin-top:5px}.scene-party{margin-top:5px}.scene-member{padding:3px;grid-template-columns:minmax(0,1fr);font-size:11px}.scene-member-portrait{display:none}.scene-member-values{font-size:11px}
-  .scene-minimap{display:none}.scene-dock{padding:9px;gap:7px;max-height:50%;grid-template-columns:minmax(0,1fr)}
-  .scene-dock .command-window{flex-direction:row;align-items:start}.scene-dock .movement-pad{flex:0 0 125px}.scene-dock .explore-actions{flex:1}.scene-dock .scene-town-commands{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-  .scene-dock .scene-description{max-height:70px;padding:8px 12px}.scene-message{padding:10px 12px}.scene-message .story-text{font-size:var(--text-size)}
+  .scene-minimap{display:none}.scene-dock{padding:9px;gap:7px;grid-template-columns:minmax(0,1fr) minmax(130px,38%)}
+  .scene-dock .command-window{flex-direction:column;align-items:stretch}.scene-dock .movement-pad{flex:none}.scene-dock .explore-actions{flex:none}.scene-dock .scene-town-commands{display:flex}
+  .scene-dock>.scene-message{grid-template-columns:minmax(0,1fr) minmax(130px,38%);gap:7px}.scene-message-body{padding:10px}.scene-message-actions{padding:6px}.scene-message .choice{padding:8px}.scene-paging{gap:4px;flex-wrap:wrap}.scene-actor{height:calc(70% * var(--cast-scale,1));max-width:95%}.scene-actor img{object-position:center top}
   .scene-world .enemy-line{gap:4px;left:6px;right:6px}.scene-world .enemy{padding:3px}.scene-world .enemy-name,.scene-world .enemy-hp{font-size:11px}.scene-overlay{padding:9px}.scene-window-header{padding:8px 12px}.scene-window-body .panel-content{padding:12px}.scene-window-body .region-list,.scene-window-body .roster-grid{grid-template-columns:minmax(0,1fr)}
-  .scene-notice{left:9px;max-width:calc(100% - 18px);max-height:45px}.scene-cast{left:8%;right:8%}
+  .scene-notice{left:9px;max-width:calc(100% - 18px);max-height:45px}
 }
-@media(max-height:550px){.scene-party,.scene-objective,.scene-minimap{display:none}.scene-hud{padding:6px 9px}.scene-title{font-size:16px}.scene-dock{max-height:55%;padding:6px 9px}.scene-status{display:none}.scene-header{flex-direction:row}.scene-toolbar button{padding:4px 7px}.scene-place .eyebrow{display:none}}
+@media(max-height:550px){.scene-party,.scene-objective,.scene-minimap{display:none}.scene-hud{padding:6px 9px}.scene-title{font-size:16px}.scene-dock{flex-basis:48%;height:48%;padding:6px 9px}.scene-status{display:none}.scene-header{flex-direction:row}.scene-toolbar button{padding:4px 7px}.scene-place .eyebrow{display:none}}
 @media(pointer:coarse){.scene-stage button{min-height:44px}}

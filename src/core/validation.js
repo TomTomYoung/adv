@@ -1,3 +1,4 @@
+import {castValid} from './cast.js';
 import {validateWorld} from './world.js';
 import {BATTLE_EVENT_PHASES} from './battle-events.js';
 import {voxelAt} from './voxels.js';
@@ -37,7 +38,7 @@ export function validateContent(data){
       if(['say','narrate'].includes(c.op)&&typeof c.text!=='string'&&!c.text?.format)fail(at,'本文が必要です');
       if(['call','jump'].includes(c.op))reference(data.scripts,c.script,at);
       if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
-      if(inBattleEvent&&!['say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
+      if(inBattleEvent&&!['say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
         reference(data.encounters,c.encounter,at);
         if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
@@ -70,6 +71,8 @@ export function validateContent(data){
       }
       if(c.op==='fire.portable.set'&&(!Number.isInteger(c.fuel)||c.fuel<0||c.fuel>100000||c.fuel>0&&!Object.values(data.dungeons??{}).some(d=>Object.values(d.systems).some(s=>s.use==='fire_network'&&s.effects[c.effect]))))fail(at,'携行松明の効果・燃料が不正です');
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
+      if(['say','narrate'].includes(c.op)&&c.character!==undefined)reference(data.characters,c.character,at);
+      if(c.op==='scene.cast'&&!castValid({mode:c.mode??'stage',cast:c.cast},data))fail(at,'人物演出の配置・参照不正');
       if(c.op==='scene.background')reference(data.assets.images,c.asset,at);
       if(c.op==='audio.bgm')reference(data.assets.audio,c.asset,at);
       if(c.op==='audio.se'){reference(data.assets.audio,c.asset,at);if(c.volume!==undefined&&(!Number.isFinite(c.volume)||c.volume<0||c.volume>1))fail(at,'音量は0〜1です');}

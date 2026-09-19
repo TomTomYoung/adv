@@ -184,7 +184,7 @@ export class GameView {
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
     const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event]);
     if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleTurn=turn;}
-    this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,{...m.dialog,scene:null});return;}
+    this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,m.dialog);return;}
     const section=node('div','battle-panel');section.append(heading(`BATTLE / TURN ${m.battle.round}`,`${m.battle.actorName} の行動`),node('p','muted',this.ui.keyHint?.()??'矢印で選択・Enterで決定。対象選択中はEscで行動一覧へ戻ります。'));
     const chooseAction=(action,id,target,name,focus)=>{
       const intent={type:'battle',action,[action]:id};

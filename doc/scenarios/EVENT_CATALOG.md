@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.14.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../FIELD_LIGHTING.md)。
+作品版 1.15.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -24,7 +24,7 @@
 
 ## 登録済みの戦闘中イベント
 
-`q001-B-rookie`：`q001.v11.outage` / `commands.3`。判定 `round_start` / `before_end`。条件 `{"op":"or","args":[{"op":"gte","left":{"ref":"battle.round"},"right":2},{"op":"in","left":{"ref":"battle.pendingResult"},"right":["win","escape","repel"]}]}`。命令 `say` → `story.action` → `fire.portable.set` → `battle.end`。
+`q001-B-rookie`：`q001.v11.outage` / `commands.3`。判定 `round_start` / `before_end`。条件 `{"op":"or","args":[{"op":"gte","left":{"ref":"battle.round"},"right":2},{"op":"in","left":{"ref":"battle.pendingResult"},"right":["win","escape","repel"]}]}`。命令 `scene.cast` → `say` → `story.action` → `fire.portable.set` → `battle.end`。
 
 ## フィールドのクエスト配置一覧
 

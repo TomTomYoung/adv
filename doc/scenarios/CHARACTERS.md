@@ -6,6 +6,12 @@
 
 [画像生成プロンプト（英語・日本語）](../../assets/source/characters/imagegen-prompts.json) ／ [画像とハッシュの一覧](../../assets/source/characters/imagegen-manifest.json)
 
+## 会話用の透過立ち絵（1.15.0）
+
+ルーキー・老灯番・リネにsprite_rookie・sprite_elder・sprite_rineを追加しました。元のgenerated肖像はカード用に保持します。立ち絵は元画像を参照して画像生成で透過版を作成し、WebPへ変換したものです。[画像とハッシュ](../../assets/source/characters/dialogue-sprites-manifest.json)と[使用プロンプト](../../assets/source/characters/dialogue-sprites-prompts.json)を記録しています。
+
+q001の帰還報告では二人を左、リネを右に配置し、発話者を手前へ出します。[人物演出の仕様](../ui/CHARACTER_STAGING.md)を参照してください。
+
 ## q001〜q010 の実装済み人物
 
 ID：rine / 名前・役割：リネ／灯番組合の連絡係 / 登場：q001, q010 / 動機：帰還者を名前で数え、取り残しを防ぐ

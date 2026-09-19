@@ -1,3 +1,4 @@
+import {castValid} from './cast.js';
 import {gearErrors} from './equipment.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
 import {scaledEnemy} from './enemy.js';
@@ -143,6 +144,8 @@ export function validateSave(save,data){
   }
   if(s.presentation.message!==undefined&&(!isRecord(s.presentation.message)||typeof s.presentation.message.text!=='string'||typeof s.presentation.message.speaker!=='string'))fail('メッセージ本文不正');
   if(s.waiting?.type==='choice'&&((s.waiting.text!==undefined&&typeof s.waiting.text!=='string')||(s.waiting.speaker!==undefined&&typeof s.waiting.speaker!=='string')))fail('選択肢の本文不正');
+  if(s.presentation.cast!==undefined&&!castValid(s.presentation.cast,data))fail('人物演出不正');
+  for(const message of [s.presentation.message,s.waiting])if(message?.speakerId!==undefined&&(typeof message.speakerId!=='string'||!Object.hasOwn(data.characters,message.speakerId)))fail('発話人物不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
   if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');

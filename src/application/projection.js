@@ -1,3 +1,4 @@
+import {projectCast} from './cast-projection.js';
 import {playerCommands,commandDialog} from '../core/player-commands.js';
 import {townLocation} from '../core/world.js';
 import {projectWorld} from './world-projection.js';
@@ -25,9 +26,9 @@ export function projectGame(engine){
 
   const quests=Object.values(d.quests).map(q=>({id:q.id,...projectQuestNavigation(d,s,q),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
-  if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker};
+  if(s.waiting?.type==='text')dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker,...(s.waiting.speakerId?{speakerId:s.waiting.speakerId}:{})};
   if(s.waiting?.type==='choice'){
-    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',text:s.waiting.text??'どうする？',speaker:s.waiting.speaker??'',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
+    const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',text:s.waiting.text??'どうする？',speaker:s.waiting.speaker??'',...(s.waiting.speakerId?{speakerId:s.waiting.speakerId}:{}),options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
   }
   if(s.waiting?.type==='choice'&&!s.battle&&s.vm.every(f=>f.index>=commandsAt(d,f).length)){
     const command=commandsAt(d,s.vm.at(-1))[s.waiting.index];
@@ -35,10 +36,7 @@ export function projectGame(engine){
     if(cancel)dialog.cancelId=cancel.id;
   }
   if(s.waiting?.type==='command'){const prompt=commandDialog(engine);dialog={...prompt,options:prompt.options?.map(({id,text,enabled,requirement})=>({id,text,enabled,requirement}))};if(prompt.type==='choice')dialog.cancelId='cancel';else dialog.cancelAdvance=true;}
-  if(dialog){
-    const qid=d.scripts[s.vm.at(-1)?.script]?.storyQuest,story=s.stories?.[qid],scene=d.quests[qid]?.story?.scenes[story?.scene];
-    if(scene&&s.quests[qid].stage==='active')dialog.scene={title:scene.title,cast:scene.cast.filter(c=>c.when===undefined||engine.value(c.when)).map(c=>{const def=d.characters[d.quests[qid].story.entities[c.entity].character];return {id:def.id,name:def.name,role:def.role,portrait:d.assets.images[def.portrait],remote:c.mode==='remote'};})};
-  }
+  if(dialog){const scene=projectCast(engine,dialog);if(scene)dialog.scene=scene;}
   if(dialog)dialog.fieldScene=projectEventArt(d,s);
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;

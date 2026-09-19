@@ -1,6 +1,6 @@
 # JSON DSL 実装リファレンス
 
-更新日: 2026-09-18。作品版1.14.0の51命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
+更新日: 2026-09-19。作品版1.15.0の53命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
 JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
@@ -167,7 +167,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 ## 保存互換性
 
-1.14.0では旧内容版の記録を移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+旧内容版の記録は移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
 
 ## 1.3.1の戦績と場面継続
 
@@ -223,7 +223,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実装との照合用一覧
 
-51命令：`story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+53命令：`story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `scene.cast` / `scene.cast.clear` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
 
 31式演算子：`object_state` / `record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
 
@@ -240,3 +240,11 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 `story.journey` は quest と action を受け取り、定義された移動行為の出発だけを確定します。`state.journey` へ依頼・行為・出発場面を保存し、会話を閉じます。Coreが目的セルまたは町施設への実到着を検出すると、到着効果を確定して次場面を自動開始します。正面のセルは到着扱いにしません。詳細は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md) を参照してください。
 
 シナリオのchoiceは直前に表示した本文・話者を保持し、同じメッセージウィンドウに選択肢を表示します。調べる・仕掛け・帰還の確認は `waiting.type=command` ですが、実行スクリプトの命令ではありません。Coreのプレイヤーコマンドから開き、表示時・選択時に対象と条件を再判定します。[共通ウィンドウ仕様](../ui/MESSAGE_AND_COMMAND_WINDOWS.md)に保存と操作の区分を記載しています。
+
+## 人物演出（1.15.0）
+
+scene.castはmode（stage/cards）とcast配列を受け取り、表示人物を置き換えます。castの各要素はcharacterと任意のdisplayです。displayでpositionまたはx、y、scale、flip、layer、assetを指定します。空配列で全員退場し、scene.cast.clearで上書きを解除します。最大8人、重複IDは不可です。戦闘中イベントでも使えます。
+
+say/narrateは任意のcharacter IDを受け取ります。say.characterで話者を指定すると、人物名を表示し、その人物を配置位置のまま手前へ出します。name/speakerで表示名だけを変えることもできます。character付きsayの口調は地の文の常体変換の対象にしません。
+
+story.scenesのcastには同じdisplayを記述でき、castModeで表示形式を指定できます。JSON例と保存・解除の寿命は[人物演出仕様](../ui/CHARACTER_STAGING.md)。

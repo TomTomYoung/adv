@@ -2,7 +2,7 @@
 
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。
 
-作品版1.14.0。町10か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
+作品版1.15.0。町10か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
 
 ## 遊ぶ
 
@@ -87,6 +87,6 @@ q001の原稿は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`
 
 全200件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 
-内容版1.14.0は旧セーブを移行しません。自動保存・スロット・ファイルの読込でエラーが出たら、最初から新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
+内容版1.15.0は旧セーブを移行しません。自動保存・スロット・ファイルの読込でエラーが出たら、最初から新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
 
 元のPhaser屋敷デモはGit履歴に保存されています。旧セーブ `phaserAdventureGameSave` は変更しませんが、新ゲームへは移行しません。

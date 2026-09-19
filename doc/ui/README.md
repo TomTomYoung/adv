@@ -10,6 +10,8 @@
 
 [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md)：本文と選択肢を統合するメッセージ、探索で行為を選ぶコマンド。
 
+[CHARACTER_STAGING.md](CHARACTER_STAGING.md)：固定高さ・実寸ページ送り・右側のスクロールと、人物の配置・左右反転・発話者・カード表示。
+
 [IN_SCENE_VIEW.md](IN_SCENE_VIEW.md)：背景内表示と従来表示、画面内ウィンドウ、長文、狭い画面の検証。
 
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材と表示の責務。

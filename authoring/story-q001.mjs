@@ -30,7 +30,8 @@ s.sceneFlow={outage:[{
  events:[{id:'q001-B-rookie',triggers:['round_start','before_end'],
   condition:or({op:'gte',left:ref('battle.round'),right:2},{op:'in',left:ref('battle.pendingResult'),right:['win','escape','repel']}),
   commands:[
-   {op:'say',name:'新人灯番',text:'怖いです。今も。でも、二人とも、ここにいるから。……その人を、離して！'},
+   {op:'scene.cast',cast:[{character:'elder',display:{position:'left'}},{character:'rookie',display:{position:'right',flip:true}}]},
+   {op:'say',character:'rookie',text:'怖いです。今も。でも、二人とも、ここにいるから。……その人を、離して！'},
    {op:'story.action',quest:'q001',action:'outage_call'},
    portable(25),{op:'battle.end'}
   ]}],
@@ -76,4 +77,37 @@ route('empty_follow','branch',{arrive:[see('position','elder'),set('partyTorch',
 route('old_support','dark',{companions:['elder'],arrive:[set('partyTorch','extinguished'),set('darkness','attacking')]});
 route('rescue_home','entry',{companions:['elder','rookie']});
 route('gate_report','post',{companions:['elder','rookie'],arrive:[set('reported'),set('routeClosed')]});
+// Blocking and speaking belong to the authored scene, never to the UI's heuristics.
+const blocking={
+ entry:{rookie:{position:'center'}},old:{elder:{position:'left'}},outage:{elder:{position:'left'}},
+ rescue:{elder:{x:30,layer:1},rookie:{x:67,flip:true,layer:2}},
+ gate:{elder:{x:30,layer:1},rookie:{x:67,flip:true,layer:2}},
+ post:{elder:{x:23,layer:1},rookie:{x:40,flip:true,layer:2},rine:{x:76,layer:3}}
+};
+for(const [id,positions] of Object.entries(blocking))for(const c of s.story.scenes[id].cast)c.display=positions[c.entity];
+s.sceneDialogue={
+ entry:[
+  {op:'narrate',text:'入口の篝火の下で、新人が松明を両手で握っていた。'},
+  {op:'say',character:'rookie',text:'壁の松明か、くらがり除けの火を持っていれば、あれは寄れません。でも、巡灯路の火が消えて……あの人が、自分の油を僕にくれたんです。'},
+  {op:'narrate',text:'奥で石をこする音がする。新人は一歩を出そうとし、足を引いた。'},
+  {op:'say',character:'rookie',text:'戻らなきゃいけないのに、怖くて。'}
+ ],
+ old:[
+  {op:'narrate',text:'老人は小さく燃える壁松明の真下にいた。油受けの底が見える。'},
+  {op:'say',character:'elder',text:'あの子は入口まで行けたか。'},
+  {op:'narrate',text:'頷くと、空の油瓶を伏せた。'},
+  {op:'say',character:'elder',text:'あれは新人に持たせた。わしは、ここの火が消えるまでに誰か来てくれればと思ってな。'},
+  {op:'narrate',text:'老人の足は腫れ、立つには肩が要る。携行松明にも油は残り少ない。'}
+ ],
+ rescue:[
+  {op:'narrate',text:'入口の方から来た火に、くらがりが身をよじり、明かりの外へ退いた。新人の膝は震え、松明を差し出す手も定まらない。老人にもらった油で灯した火を、二人の足元へ近づける。老人は空の瓶を見て、新人の火を見た。'},
+  {op:'say',character:'elder',text:'返しに来たか。'}
+ ],
+ post:[
+  {op:'narrate',text:'リネは二人の名前に帰還の印を付け、油切れの巡灯路を閉鎖した。新人はまだ火のそばを離れられない。'},
+  {op:'say',character:'elder',text:'今夜、戻ってきた。それはもう済んだ仕事だ。'},
+  {op:'narrate',text:'リネが空になった油瓶を並べる。'},
+  {op:'say',character:'rine',text:'次の仕事は、こちらで選び直せます。'}
+ ]
+};
 export default s.done();

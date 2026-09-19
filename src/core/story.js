@@ -1,3 +1,4 @@
+import {placementValid} from './cast.js';
 import {atWorldPlace,worldPlaceName,worldStoryPlace} from './world.js';
 import {clone,evaluate,isRecord} from './expression.js';
 
@@ -58,7 +59,7 @@ export function initStory(engine,id){
 export function enterStoryScene(engine,id,scene){
   const d=definition(engine.data,id),s=engine.state.stories?.[id];if(!s)throw Error('物語が初期化されていません');
   if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
-  assertScene(d,s,engine.state,id,scene);s.scene=scene;
+  assertScene(d,s,engine.state,id,scene);s.scene=scene;delete engine.state.presentation.cast;
 }
 export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false}={}){
   const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id];
@@ -179,7 +180,8 @@ export function validateStories(data,expression=()=>{}){
       }
       for(const [key,n] of Object.entries(d.scenes)){
         if(!d.places[n.place])throw Error(`${key}: 場所不正`);guard(n.requires,`${key}.requires`);
-        for(const cast of n.cast??[]){if(!d.entities[cast.entity]?.character||cast.mode==='remote'&&!cast.requires)throw Error(`${key}: 表示人物の参照不正`);guard(cast.when,`${key}.cast.when`);guard(cast.requires,`${key}.cast.requires`);}
+        if(n.castMode!==undefined&&!['stage','cards'].includes(n.castMode))throw Error(`${key}: 人物表示形式不正`);
+        for(const cast of n.cast??[]){if(!placementValid(cast.display,data))throw Error(`${key}: 人物配置不正`);if(!d.entities[cast.entity]?.character||cast.mode==='remote'&&!cast.requires)throw Error(`${key}: 表示人物の参照不正`);guard(cast.when,`${key}.cast.when`);guard(cast.requires,`${key}.cast.requires`);}
       }
       for(const end of Object.keys(q.outcomes)){if(!own(d.endings,end))throw Error(`${end}: 終了条件がありません`);guard(d.endings[end],`endings.${end}`);}
       for(const inv of d.invariants??[])guard(inv.condition,`invariants.${inv.id}`);
@@ -187,7 +189,7 @@ export function validateStories(data,expression=()=>{}){
       errors.push(...storyStateErrors(d,initial,{stories:{[id]:initial}},id));
     }catch(e){errors.push(`${id}: ${e.message}`);}
   }
-  for(const [id,c] of Object.entries(data.characters??{}))if(!c.name||c.portrait&&!data.assets.images[c.portrait])errors.push(`${id}: 人物名・肖像参照不正`);
+  for(const [id,c] of Object.entries(data.characters??{}))if(!c.name||c.portrait&&!data.assets.images[c.portrait]||c.sprite&&!data.assets.images[c.sprite])errors.push(`${id}: 人物名・肖像参照不正`);
   return errors;
 }
 
