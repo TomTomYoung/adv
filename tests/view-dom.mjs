@@ -2,6 +2,7 @@
 const dataName=name=>name.slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase());
 function matches(e,selector){
   let s=selector.trim();
+  const parts=s.split(/\s+(?![^\[]*\])/);if(parts.length>1){const last=parts.pop();return matches(e,last)&&Boolean(e.parentElement?.closest(parts.join(' ')));}
   if(s.includes(':not(:disabled)')){if(e.disabled)return false;s=s.replace(':not(:disabled)','');}
   if(s.includes(':disabled')){if(!e.disabled)return false;s=s.replace(':disabled','');}
   for(const [,name,,value] of s.matchAll(/\[([^=\]]+)(=(?:"([^"]*)"|'([^']*)'|([^\]]*)))?\]/g)){
@@ -18,25 +19,29 @@ export function installDOM(){
   const original=Object.fromEntries(keys.map(k=>[k,globalThis[k]]));
   let doc;
   class Element{
-    constructor(tag){this.tagName=tag.toUpperCase();this.children=[];this.dataset={};this.attrs={};this.listeners={};this.scrollTop=0;this.style={setProperty(k,v){this[k]=v;},removeProperty(k){delete this[k];}};this.className='';this.value='';
+    constructor(tag){this.tagName=tag.toUpperCase();this.children=[];this.dataset={};this.attrs={};this.listeners={};this.scrollTop=0;this.style={setProperty(k,v){this[k]=v;},removeProperty(k){delete this[k];}};this.className='';
       this.classList={contains:name=>this.className.split(' ').includes(name),add:(...names)=>{this.className=[...new Set([...this.className.split(' '),...names])].join(' ').trim();},toggle:(name,on)=>{const active=on??!this.classList.contains(name);this.className=this.className.split(' ').filter(c=>c!==name).join(' ');if(active)this.classList.add(name);return active;}};
     }
     get parentElement(){return this.parentNode??null;}get firstElementChild(){return this.children[0]??null;}get lastElementChild(){return this.children.at(-1)??null;}
+    get options(){return this.children.filter(c=>c.tagName==='OPTION');}
+    get value(){return this._value??(this.tagName==='SELECT'?this.options[0]?.value??'':'');}set value(v){this._value=String(v);}
     get lastChild(){return this.lastElementChild;}get firstChild(){return this.firstElementChild;}
     get isConnected(){return this===doc.body||Boolean(this.parentElement?.isConnected);}
     append(...nodes){for(const node of nodes){node.remove();node.parentNode=this;this.children.push(node);}}
+    insertBefore(node,before){node.remove();const i=this.children.indexOf(before);node.parentNode=this;this.children.splice(i<0?this.children.length:i,0,node);}
+    showModal(){this.open=true;}close(){this.open=false;this.dispatchEvent({type:'close'});}
     replaceChildren(...nodes){for(const c of [...this.children])c.remove();this.ownText='';this.append(...nodes);}
     remove(){if(this.parentNode)this.parentNode.children=this.parentNode.children.filter(c=>c!==this);this.parentNode=null;}
     set textContent(v){this.replaceChildren();this.ownText=String(v);}get textContent(){return (this.ownText??'')+this.children.map(c=>c.textContent).join('');}
     setAttribute(k,v){this.attrs[k]=String(v);if(k==='id')this.id=String(v);if(k==='class')this.className=String(v);if(k.startsWith('data-'))this.dataset[dataName(k)]=String(v);}
     getAttribute(k){if(k.startsWith('data-'))return this.dataset[dataName(k)]??null;if(k==='id')return this.id??null;if(k==='class')return this.className;if(k==='hidden')return this.hidden?'':null;if(k==='href')return this.href??null;return this.attrs[k]??null;}
     addEventListener(type,listener){(this.listeners[type]??=[]).push(listener);}
-    dispatchEvent(event){event.target=this;for(const fn of this.listeners[event.type]??[])fn(event);}
-    click(){if(!this.disabled&&!this.closest('[inert]'))this.dispatchEvent({type:'click'});}
+    dispatchEvent(event){if(!event.target)Object.defineProperty(event,'target',{value:this,configurable:true});for(const fn of this.listeners[event.type]??[])fn(event);if(event.bubbles)this.parentElement?.dispatchEvent(event);return !event.defaultPrevented;}
+    click(){if(!this.disabled&&!this.closest('[inert]'))this.dispatchEvent({type:'click',bubbles:true,preventDefault(){this.defaultPrevented=true;}});}
     set inert(v){this.attrs.inert=v?'':undefined;if(!v)delete this.attrs.inert;}get inert(){return this.attrs.inert!==undefined;}
     querySelectorAll(selector){const results=[];const selectors=selector.split(',');const walk=e=>{for(const c of e.children){if(selectors.some(s=>matches(c,s)))results.push(c);walk(c);}};walk(this);return results;}
     querySelector(s){return this.querySelectorAll(s)[0]??null;}
-    closest(s){let e=this;while(e){if(matches(e,s))return e;e=e.parentElement;}return null;}
+    closest(s){let e=this;while(e){if(s.split(',').some(selector=>matches(e,selector)))return e;e=e.parentElement;}return null;}
     contains(e){return e===this||this.children.some(c=>c.contains(e));}
     focus(){doc.activeElement=this;}setSelectionRange(start,end){this.selectionStart=start;this.selectionEnd=end;}
     getClientRects(){return this.closest('[hidden]')?[]:[this.getBoundingClientRect()];}

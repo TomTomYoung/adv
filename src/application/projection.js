@@ -29,7 +29,12 @@ export function projectGame(engine){
   if(s.waiting?.type==='choice'){
     const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',text:s.waiting.text??'どうする？',speaker:s.waiting.speaker??'',options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
   }
-  if(s.waiting?.type==='command'){const prompt=commandDialog(engine);dialog={...prompt,options:prompt.options?.map(({id,text,enabled,requirement})=>({id,text,enabled,requirement}))};}
+  if(s.waiting?.type==='choice'&&!s.battle&&s.vm.every(f=>f.index>=commandsAt(d,f).length)){
+    const command=commandsAt(d,s.vm.at(-1))[s.waiting.index];
+    const cancel=command.options.find(o=>['pause','leave'].includes(o.id)&&o.commands.length===0&&!o.storyAction&&dialog.options.some(v=>v.id===o.id&&v.enabled));
+    if(cancel)dialog.cancelId=cancel.id;
+  }
+  if(s.waiting?.type==='command'){const prompt=commandDialog(engine);dialog={...prompt,options:prompt.options?.map(({id,text,enabled,requirement})=>({id,text,enabled,requirement}))};if(prompt.type==='choice')dialog.cancelId='cancel';else dialog.cancelAdvance=true;}
   if(dialog){
     const qid=d.scripts[s.vm.at(-1)?.script]?.storyQuest,story=s.stories?.[qid],scene=d.quests[qid]?.story?.scenes[story?.scene];
     if(scene&&s.quests[qid].stage==='active')dialog.scene={title:scene.title,cast:scene.cast.filter(c=>c.when===undefined||engine.value(c.when)).map(c=>{const def=d.characters[d.quests[qid].story.entities[c.entity].character];return {id:def.id,name:def.name,role:def.role,portrait:d.assets.images[def.portrait],remote:c.mode==='remote'};})};
@@ -37,7 +42,7 @@ export function projectGame(engine){
   if(dialog)dialog.fieldScene=projectEventArt(d,s);
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;
-    battle={event:s.battle.event?{id:s.battle.event.id}:null,background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
+    battle={event:s.battle.event?{id:s.battle.event.id}:null,background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,target:d.skills[d.items[id].battleSkill]?.target??'ally',enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectVisible(s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));

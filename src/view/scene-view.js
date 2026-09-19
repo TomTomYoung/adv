@@ -1,25 +1,22 @@
 import {GameView} from './view.js';
 import {messagePages} from './message-pages.js';
+import {captureFocus} from './focus.js';
 const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,fn,className='')=>{const e=make('button',className,text);e.type='button';e.addEventListener('click',fn);return e;};
 const panelNames={bag:'道具・旅支度',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
 const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], summary';
 
 export class SceneView extends GameView{
-  constructor(...args){super(...args);this.messageKey=null;this.page=0;this.pages=[''];this.sceneKey=null;this.returnFocus='journal';}
+  constructor(...args){super(...args);this.messageKey=null;this.page=0;this.pages=[''];this.sceneKey=null;}
   destroy(){this.resizeObserver?.disconnect();super.destroy();}
   blocksGameInput(){return Boolean(this.root.querySelector('.scene-window'));}
   canChoose(){return this.page===this.pages.length-1;}
   advanceText(){if(!this.canChoose()){this.page++;this.render(this.model);}else super.advanceText();}
-  openPanel(tab){this.returnFocus=tab;this.tab=tab;this.render(this.model);}
-  closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);this.root.querySelector(`[data-panel="${this.returnFocus}"]`)?.focus();}
+  openPanel(tab){this.tab=tab;this.render(this.model);}
+  closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   handleKey(event){
     const panel=this.root.querySelector('.scene-window');
-    if(!panel){
-      if(!this.canChoose()&&['Enter',' '].includes(event.key)&&!['BUTTON','INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)&&!document.activeElement?.isContentEditable){event.preventDefault();this.advanceText();return true;}
-      return false;
-    }
-    if(event.key==='Escape'){event.preventDefault();this.closePanel();return true;}
+    if(!panel)return false;
     if(event.key==='Tab'){
       const nodes=[...panel.querySelectorAll(focusable)].filter(e=>e.getClientRects().length);
       const first=nodes[0],last=nodes.at(-1),current=document.activeElement;
@@ -44,8 +41,7 @@ export class SceneView extends GameView{
     if(!this.canChoose())window.querySelector('.continue').textContent='次のページ　›';
   }
   render(model){
-    const focused=document.activeElement,focusKey=focused?.dataset.focus;
-    const selection=focused?.selectionStart,oldPanel=this.root.querySelector('.scene-window-body');
+    const snapshot=captureFocus(this.root),oldPanel=this.root.querySelector('.scene-window-body');
     const scrollTop=oldPanel?.scrollTop??0,hadPanel=Boolean(oldPanel),oldTab=this.model?this.renderedTab:null;
     const key=JSON.stringify([model.mode,model.town?.id,model.dungeon?.location,model.dialog,model.battle?.event]);
     if(this.sceneKey!==null&&this.sceneKey!==key)this.tab=model.mode==='town'?'location':'explore';
@@ -94,9 +90,6 @@ export class SceneView extends GameView{
       const body=make('div','scene-window-body');panel.append(head,body);overlay.append(panel);stage.append(overlay);
       if(this.tab==='map')this.mapPanel(body,model);else super[this.tab](body,model);
       if(hadPanel&&oldTab===this.tab)body.scrollTop=scrollTop;
-      const restore=focusKey?[...body.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===focusKey):null;
-      if(restore){restore.focus();if(selection!==undefined&&restore.setSelectionRange)restore.setSelectionRange(selection,selection);}
-      else close.focus();
     }
     this.resizeObserver?.disconnect();
     const measure=()=>{
@@ -107,6 +100,7 @@ export class SceneView extends GameView{
     };
     if(globalThis.ResizeObserver){this.resizeObserver=new ResizeObserver(measure);for(const node of [hud,dock,stage])this.resizeObserver.observe(node);}measure();
     this.effects.present(model,this.ui.effectsMode?.()??'full');
+    this.finishInput(snapshot);
     this.ui.layoutChanged?.();
   }
   compactParty(parent,m){

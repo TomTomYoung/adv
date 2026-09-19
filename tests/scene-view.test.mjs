@@ -47,9 +47,9 @@ test('switching layouts and opening every utility window preserves the exact sav
 test('utility windows block movement, inspection and dialogue hotkeys, Escape restores the scene',()=>{
   const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(g);
   try{c.view.openPanel('bag');const saved=g.save();assert.ok(c.root.querySelector('.scene-world').inert);
-    for(const key of ['w','ArrowUp','a','s','d','e','Enter',' ','1','9'])c.key(key);
+    for(const key of ['w','ArrowUp','a','s','d','e','1','9'])c.key(key);
     assert.equal(g.save(),saved);assert.deepEqual(c.intents,[]);
-    c.key('Escape');assert.equal(c.view.blocksGameInput(),false);assert.equal(c.view.tab,'explore');assert.equal(c.document.activeElement.dataset.panel,'bag');
+    c.key('Escape');assert.equal(c.view.blocksGameInput(),false);assert.equal(c.view.tab,'explore');assert.ok(c.root.querySelector('.explore-controls').contains(c.document.activeElement));
     c.key('d');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});
   }finally{c.cleanup();}
 });

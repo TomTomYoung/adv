@@ -1,10 +1,12 @@
 # adv ドキュメント
 
-更新日: 2026-09-19。対象はPR #26反映済みの作品版1.14.0と、背景内ビューの追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-19。対象はPR #27反映済みの作品版1.14.0と、共通キー操作の追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
 [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md)：プレイヤーコマンドの定義、メッセージ内の選択肢、調査・仕掛け・帰還の共通操作。
+
+[KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：決定・キャンセル・十字キー、対象選択、装備・記録、広場・探索へ戻る順序。
 
 ## ゲームと実装
 

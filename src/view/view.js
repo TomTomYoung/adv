@@ -2,6 +2,7 @@ import {appendDungeonArt} from './dungeon-art.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
+import {buttons,captureFocus,prepareControls,restoreFocus,closeDetails,focusButton} from './focus.js';
 const node=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,callback,className='',disabled=false)=>{const b=node('button',className,text);b.type='button';b.disabled=disabled;b.addEventListener('click',callback);return b;};
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
@@ -11,9 +12,36 @@ export class GameView {
   destroy(){this.effects.destroy();}
   advanceText(){this.act({type:'advance'});}
   blocksGameInput(){return false;}
+  inputScope(){
+    const panel=this.root.querySelector('.scene-window');
+    if(panel)return panel.querySelector('.button-picker')??panel;
+    return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
+  }
+  finishInput(snapshot){
+    prepareControls(this.root);
+    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.pendingBattleAction]);
+    const same=key===this.inputKey;this.inputKey=key;
+    if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
+    if(this.ui.modalOpen?.())return;
+    const scope=this.inputScope(),selected=this.pendingBattleAction?.target==='enemy'?this.selectedTarget:this.selectedAlly;
+    const preferred=scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
+    restoreFocus(scope,same?snapshot:null,preferred??(same?null:buttons(scope.querySelector('.scene-window-body')??(!['location','explore'].includes(this.tab)?scope.querySelector('.panel-content'):null)??scope)[0]));
+  }
+  closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
+  cancel(){
+    if(closeDetails(this.inputScope()))return;
+    const base=this.model.mode==='town'?'location':'explore';
+    if(this.tab!==base){this.closePanel();return;}
+    if(this.pendingBattleAction){const key=this.pendingBattleAction.focus;this.pendingBattleAction=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
+    const d=this.model.dialog;
+    if(d?.cancelAdvance){this.act({type:'advance'});return;}
+    if(d?.cancelId&&d.options?.some(o=>o.id===d.cancelId&&o.enabled)){this.act({type:'choose',id:d.cancelId});return;}
+    if(!this.model.busy&&this.model.town?.parent)this.act({type:'location.move',id:this.model.town.parent.id});
+    else focusButton(buttons(this.inputScope())[0]);
+  }
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
-    this.ui.cancelFeedback?.();this.effects.capture();this.model=model;const focused=document.activeElement?.dataset.focus,selection=document.activeElement?.selectionStart;
+    const snapshot=captureFocus(this.root);this.ui.cancelFeedback?.();this.effects.capture();this.model=model;
     this.root.replaceChildren();
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
     brand.lastChild.append(node('h1','',model.title),node('p','',model.subtitle));
@@ -37,9 +65,9 @@ export class GameView {
     else this.journal(main,model);
     this.sidebar(side,model);
     if(model.notice&&model.notice!==model.dialog?.text){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
-    const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?'W/S 前後移動 · A/D 向き変更 · E 調べる · Enter 続き':'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
+    const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?'矢印 選択 · Enter 決定 · Esc 戻る · WASD 移動 · E 調べる':'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
     this.effects.present(model,this.ui.effectsMode?.()??'full');
-    if(focused){const target=this.root.querySelector(`[data-focus="${focused}"]`);if(target){target.focus();if(selection!==undefined&&target.setSelectionRange)target.setSelectionRange(selection,selection);}}
+    this.finishInput(snapshot);
   }
   townScene(parent,m){
     const t=m.town,scene=node('div','town-scene');scene.dataset.fx='scene';
@@ -83,7 +111,7 @@ export class GameView {
     const filter=node('select');filter.setAttribute('aria-label','依頼の状態');for(const [v,t] of [['open','未完了'],['active','受注中'],['completed','完了'],['all','すべて']])filter.append(new Option(t,v));filter.value=this.filter;filter.addEventListener('change',()=>{this.filter=filter.value;this.render(m);});controls.append(search,select,filter);section.append(controls);
     const list=node('div','quest-list');const qs=m.quests.filter(q=>(this.dungeonFilter==='all'||q.dungeonIds?.includes(this.dungeonFilter))&&(!this.query||`${q.title}${q.client}${q.brief}`.includes(this.query))&&(this.filter==='all'||this.filter==='open'&&q.stage!=='completed'||q.stage===this.filter));
     if(!qs.length)list.append(node('p','empty','条件に合う依頼はない。迷宮や状態を変更できる。'));
-    for(const q of qs){const card=node('article',`quest-card ${q.tracked?'tracked':''}`),num=node('span','quest-number',String(q.number).padStart(3,'0')),body=node('div','quest-body');
+    for(const q of qs){const card=node('article',`quest-card ${q.tracked?'tracked':''}`);card.dataset.controlGroup=`quest:${q.id}`;const num=node('span','quest-number',String(q.number).padStart(3,'0')),body=node('div','quest-body');
       const title=node('div','quest-title');title.append(node('h3','',q.title),node('span','badge',q.stage==='completed'?'完了':q.stage==='active'?'受注中':q.unlocked?`推奨 Lv.${q.recommendedLevel}`:'解放待ち'));body.append(title,node('p','quest-client',q.client),node('p','quest-brief',q.brief));
       this.questDestination(body,q);
       if(q.stage==='completed')body.append(node('p','muted',`関連する迷宮：${(q.dungeonNames??[]).join('・')}`));
@@ -101,7 +129,7 @@ export class GameView {
     const section=node('div','panel-content');section.append(heading('DESCENT / DUNGEONS','潜る場所を選ぶ'));
     const list=node('div','region-list'),destinations=m.dungeons??m.regions;
     destinations.forEach((r,index)=>{
-      const item=node('article','region-card');item.style.setProperty('--region-color',r.color);appendDungeonArt(item,r.art,r.name,'dungeon-art destination-art');
+      const item=node('article','region-card');item.dataset.controlGroup=`region:${r.id}`;item.style.setProperty('--region-color',r.color);appendDungeonArt(item,r.art,r.name,'dungeon-art destination-art');
       const detail=m.dungeons?`${r.mapCount}マップ`: `${m.quests.filter(q=>q.region===r.id&&q.stage==='completed').length}件完了`;
       item.append(node('span','eyebrow',`${String(index+1).padStart(2,'0')} / 推奨 Lv.${r.recommendedLevel} / ${detail}`),node('h3','',r.name),node('p','',r.description),...(r.preview??[]).map(text=>node('p','muted',text)),button('迷宮に入る',()=>this.act(m.dungeons?{type:'travel',dungeon:r.id}:{type:'travel',region:r.id}),'primary',r.canEnter===false));
       list.append(item);
@@ -140,14 +168,41 @@ export class GameView {
       section.append(cast);
     }
     if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.advanceText(),'primary continue'));}
-    else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
+    else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.dataset.focus=`choice:${o.id}`;b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
   }
   battle(parent,m){
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
-    this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,{...m.dialog,scene:null});return;}const section=node('div','battle-panel');section.append(heading(`BATTLE / TURN ${m.battle.round}`,`${m.battle.actorName} の行動`),node('p','muted','敵の絵を選んで攻撃先を変更できます。回復の対象は下で選べます。'));
-    const select=node('select');select.setAttribute('aria-label','回復・道具の対象');for(const a of m.party.filter(a=>a.hp>0))select.append(new Option(`${a.name}　HP ${a.hp}/${a.maxHp}`,a.id));select.value=this.selectedAlly;select.addEventListener('change',()=>{this.selectedAlly=select.value;this.render(m);});section.append(select);
-    const skills=node('div','battle-actions');for(const s of m.battle.skills){const target=s.target==='ally'?this.selectedAlly:s.target==='enemy'?this.selectedTarget:m.battle.actorId,available=s.availability?.[target]??{enabled:s.enabled,reason:s.reason};const b=button(`${s.name}${s.cost?' '+s.cost:s.mp?' MP'+s.mp:''}`,()=>this.act({type:'battle',action:'skill',skill:s.id,target}),'',!available.enabled);b.title=available.reason||s.description||s.name;skills.append(b);} for(const item of m.battle.items)skills.append(button(`${item.name} ×${item.count}`,()=>this.act({type:'battle',action:'item',item:item.id,target:this.selectedAlly}),'',item.enabled===false));skills.append(button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape));section.append(skills);const selected=m.battle.enemies.find(e=>e.id===this.selectedTarget);if(selected?.analysis){const analysis=selected.analysis;section.append(node('p','analysis-result',`${selected.name} 解析：攻${analysis.stats.str} 防${analysis.stats.vit} 速${analysis.stats.agi} 知${analysis.stats.int} MP${analysis.mp}/${analysis.stats.mp} ／ 耐性倍率 ${Object.entries(analysis.resist).map(([key,n])=>key+' ×'+n).join(' / ')||'すべて ×1'}`));}const unavailable=m.battle.skills.map(s=>{const target=s.target==='ally'?this.selectedAlly:s.target==='enemy'?this.selectedTarget:m.battle.actorId,a=s.availability?.[target];return a&&!a.enabled?`${s.name}：${a.reason}`:null;}).filter(Boolean);if(unavailable.length)section.append(node('p','muted',unavailable.join(' ／ ')));
+    const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event]);
+    if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleTurn=turn;}
+    this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,{...m.dialog,scene:null});return;}
+    const section=node('div','battle-panel');section.append(heading(`BATTLE / TURN ${m.battle.round}`,`${m.battle.actorName} の行動`),node('p','muted','矢印で選択・Enterで決定。対象選択中はEscで行動一覧へ戻ります。'));
+    const chooseAction=(action,id,target,name,focus)=>{
+      const intent={type:'battle',action,[action]:id};
+      if(!['enemy','ally'].includes(target)){this.act({...intent,target:m.battle.actorId});return;}
+      this.pendingBattleAction={intent,target,name,focus};this.render(m);
+    };
+    const pending=this.pendingBattleAction;
+    if(pending){
+      section.append(node('h3','',`${pending.name}の対象`));const targets=node('div','battle-targets');
+      const skill=pending.intent.action==='skill'?m.battle.skills.find(s=>s.id===pending.intent.skill):null;
+      for(const target of (pending.target==='enemy'?m.battle.enemies:m.party).filter(t=>t.hp>0)){
+        const available=skill?.availability?.[target.id]??{enabled:true};
+        const b=button(`${target.name}　HP ${target.hp}/${target.maxHp}`,()=>{
+          if(pending.target==='enemy')this.selectedTarget=target.id;else this.selectedAlly=target.id;
+          this.pendingBattleAction=null;this.act({...pending.intent,target:target.id});
+        },'battle-target',!available.enabled);b.dataset.focus=`target:${target.id}`;b.title=available.reason??'';targets.append(b);
+      }
+      targets.append(button('行動へ戻る',()=>this.cancel()));section.append(targets);
+    }else{
+      const skills=node('div','battle-actions');
+      for(const s of m.battle.skills){const focus=`skill:${s.id}`,b=button(`${s.name}${s.cost?' '+s.cost:s.mp?' MP'+s.mp:''}`,()=>chooseAction('skill',s.id,s.target,s.name,focus),'',!s.enabled);b.dataset.focus=focus;b.title=s.reason||s.description||s.name;skills.append(b);}
+      for(const item of m.battle.items){const focus=`battle-item:${item.id}`,b=button(`${item.name} ×${item.count}`,()=>chooseAction('item',item.id,item.target??'ally',item.name,focus),'',item.enabled===false);b.dataset.focus=focus;skills.append(b);}
+      skills.append(button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape));section.append(skills);
+    }
+    const selected=m.battle.enemies.find(e=>e.id===this.selectedTarget);
+    if(selected?.analysis){const a=selected.analysis;section.append(node('p','analysis-result',`${selected.name} 解析：攻${a.stats.str} 防${a.stats.vit} 速${a.stats.agi} 知${a.stats.int} MP${a.mp}/${a.stats.mp} ／ 耐性倍率 ${Object.entries(a.resist).map(([key,n])=>key+' ×'+n).join(' / ')||'すべて ×1'}`));}
+    const unavailable=m.battle.skills.filter(s=>!s.enabled).map(s=>`${s.name}：${s.reason}`);if(unavailable.length)section.append(node('p','muted',unavailable.join(' ／ ')));
     for(const system of m.dungeon?.systems??[])if(system.summary)section.append(node('p','muted',system.summary));
     const log=node('div','battle-log');log.setAttribute('aria-live','polite');for(const line of m.battle.log.slice(-6))log.append(node('p','',line));section.append(log);parent.append(section);
   }
@@ -162,7 +217,7 @@ export class GameView {
       if(town)section.append(node('h3','roster-heading',active?'出発する仲間':'酒場で待つ仲間'));
       const grid=node('div','roster-grid');
       for(const a of roster.filter(a=>!town||(a.active??true)===active)){
-        const card=node('article','companion-card'),head=node('div','companion-head'),body=node('div');body.append(node('span','eyebrow',a.class),node('h3','',a.name),node('p','',a.role));head.append(this.portrait(a),body);card.append(head,node('p','companion-bio',a.bio??''),node('p','muted',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'),node('p','muted',`攻 ${a.stats.str}　防 ${a.stats.vit}　速 ${a.stats.agi}　知 ${a.stats.int}`));
+        const card=node('article','companion-card');card.dataset.controlGroup=`actor:${a.id}`;const head=node('div','companion-head'),body=node('div');body.append(node('span','eyebrow',a.class),node('h3','',a.name),node('p','',a.role));head.append(this.portrait(a),body);card.append(head,node('p','companion-bio',a.bio??''),node('p','muted',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'),node('p','muted',`攻 ${a.stats.str}　防 ${a.stats.vit}　速 ${a.stats.agi}　知 ${a.stats.int}`));
         if(buffLabels(a).length)card.append(node('p','buff-summary',buffLabels(a).join(' / ')));
         if(a.statuses.length)card.append(node('p','requirement',a.statuses.join('・')));
         const skillList=node('div','skill-list');for(const skill of a.skills??[]){const label=node('span','badge',`${skill.name}${skill.mp?' MP'+skill.mp:''}`);label.title=skill.description??skill.name;skillList.append(label);}card.append(skillList);
@@ -179,8 +234,8 @@ export class GameView {
     parent.append(section);
   }
   bag(parent,m){const section=node('div','panel-content');section.append(heading('PROVISIONS','持ち物と旅支度'));const target=node('select');target.setAttribute('aria-label','道具・装備の対象');for(const a of m.party)target.append(new Option(`${a.name} (${a.class})`,a.id));if(!m.party.some(a=>a.id===this.bagActor))this.bagActor=m.party[0]?.id;target.value=this.bagActor;target.addEventListener('change',()=>{this.bagActor=target.value;this.render(m);});section.append(target);
-    for(const item of m.inventory){const row=node('article','item-row'),body=node('div');body.append(node('h3','',`${item.name} ×${item.count}`),node('p','muted',item.description));row.append(body);if(item.field||item.slot)row.append(button(item.slot?'装備する':'使う',()=>this.act({type:item.slot?'equip':'item',item:item.id,actor:target.value}),'',Boolean(item.slot&&item.allowedActors&&!item.allowedActors.includes(target.value))));section.append(row);}
-    if(m.mode==='town'&&m.town?.shop){section.append(heading('TRAVEL SHOP','買い足す'));for(const item of m.shop){const row=node('article','item-row'),body=node('div');body.append(node('h3','',item.name),node('p','muted',item.description));row.append(body,button(`${item.price} G`,()=>this.act({type:'buy',item:item.id}),'',!item.canBuy));section.append(row);}}parent.append(section);
+    for(const item of m.inventory){const row=node('article','item-row');row.dataset.controlGroup=`item:${item.id}`;const body=node('div');body.append(node('h3','',`${item.name} ×${item.count}`),node('p','muted',item.description));row.append(body);if(item.field||item.slot)row.append(button(item.slot?'装備する':'使う',()=>this.act({type:item.slot?'equip':'item',item:item.id,actor:target.value}),'',Boolean(item.slot&&item.allowedActors&&!item.allowedActors.includes(target.value))));section.append(row);}
+    if(m.mode==='town'&&m.town?.shop){section.append(heading('TRAVEL SHOP','買い足す'));for(const item of m.shop){const row=node('article','item-row');row.dataset.controlGroup=`shop:${item.id}`;const body=node('div');body.append(node('h3','',item.name),node('p','muted',item.description));row.append(body,button(`${item.price} G`,()=>this.act({type:'buy',item:item.id}),'',!item.canBuy));section.append(row);}}parent.append(section);
   }
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
     const active=m.quests.filter(q=>q.stage==='active');if(active.length){section.append(node('h3','','受注中'));for(const q of active){const entry=node('article','journal-entry');entry.append(node('h3','',q.title));this.questDestination(entry,q);this.mainQuestControl(entry,q,m);this.questEntrance(entry,q);section.append(entry);}}

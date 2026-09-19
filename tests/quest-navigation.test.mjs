@@ -6,6 +6,7 @@ import {GameEngine} from '../src/core/engine.js';
 import {projectGame} from '../src/application/projection.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {GameView} from '../src/view/view.js';
+import {installDOM} from './view-dom.mjs';
 
 const quest=(g,id='q001')=>projectGame(g).quests.find(q=>q.id===id);
 const choose=(g,id)=>{assert.ok(g.dispatch({type:'choose',id}));drain(g);};
@@ -112,16 +113,12 @@ test('board and journal expose one named entrance action, main quest controls, d
 
 
 test('the rendered exploration page has no journey banner or arrival button while walking to an event',()=>{
- const previous=globalThis.document;globalThis.document={createElement:tag=>new Element(tag)};
+ const dom=installDOM();let v;
  try{
   const g=prepareQuest('q001');choose(g,'talk');const model=projectGame(g);assert.ok(model.journey);
-  const root=new Element('div'),v=Object.assign(Object.create(GameView.prototype),{
-   root,tab:'explore',effects:{capture(){},present(){}},ui:{soundEnabled:()=>false},
-   scene(parent){parent.append(new Element('canvas'));},explore(parent,m){this.scene(parent,m);},sidebar(){},act(){}
-  });
-  v.render(model);
-  assert.equal(root.queryAll('canvas').length,1);
-  assert.doesNotMatch(root.textContent,/目的地で続きを進める|移動と調査を終え/);
-  assert.equal(root.queryAll('section').filter(e=>e.className==='journey-note').length,0);
- }finally{globalThis.document=previous;}
+  v=new GameView(dom.root,()=>{},{soundEnabled:()=>false,effectsMode:()=> 'off'});v.tab='explore';v.render(model);
+  assert.equal(dom.root.querySelectorAll('canvas').length,1);
+  assert.doesNotMatch(dom.root.textContent,/目的地で続きを進める|移動と調査を終え/);
+  assert.equal(dom.root.querySelectorAll('.journey-note').length,0);
+ }finally{v?.destroy();dom.restore();}
 });
