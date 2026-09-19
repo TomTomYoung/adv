@@ -79,4 +79,4 @@
 
 作品版は1.13.0。1.12.0以前のセーブを新しい発火契約へ移行せず、既存方針どおり新規開始する。同版の会話中・戦闘中・探索中の保存は継続する。
 
-画面上の区分とコマンド由来の確認・保存は [MESSAGE_AND_COMMAND_WINDOWS.md](../MESSAGE_AND_COMMAND_WINDOWS.md) を参照する。
+画面上の区分とコマンド由来の確認・保存は [MESSAGE_AND_COMMAND_WINDOWS.md](../ui/MESSAGE_AND_COMMAND_WINDOWS.md) を参照する。

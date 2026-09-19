@@ -195,7 +195,7 @@ effects.typeにはdamage / heal / guard / status / cleanseに加え、drain_mp�
 
 map.encounterPoolは省略可能です。指定する場合は `[{"encounter":"wild_waterwheel_beaver","weight":40}]` のように正の重みを与えます。省略時は従来のencounterだけを使用します。
 
-1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](../EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。
+1.2.0の演出のJSON例・対象・数値範囲・合成方法は[EFFECT_CATALOG](../ui/EFFECT_CATALOG.md)に記載しています。audio.seは一時イベントとなり、旧セーブ内のpresentation.seは再生しません。
 
 ## 1.4.0 物語状態の専用命令
 
@@ -239,4 +239,4 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 `story.journey` は quest と action を受け取り、定義された移動行為の出発だけを確定します。`state.journey` へ依頼・行為・出発場面を保存し、会話を閉じます。Coreが目的セルまたは町施設への実到着を検出すると、到着効果を確定して次場面を自動開始します。正面のセルは到着扱いにしません。詳細は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md) を参照してください。
 
-シナリオのchoiceは直前に表示した本文・話者を保持し、同じメッセージウィンドウに選択肢を表示します。調べる・仕掛け・帰還の確認は `waiting.type=command` ですが、実行スクリプトの命令ではありません。Coreのプレイヤーコマンドから開き、表示時・選択時に対象と条件を再判定します。[共通ウィンドウ仕様](../MESSAGE_AND_COMMAND_WINDOWS.md)に保存と操作の区分を記載しています。
+シナリオのchoiceは直前に表示した本文・話者を保持し、同じメッセージウィンドウに選択肢を表示します。調べる・仕掛け・帰還の確認は `waiting.type=command` ですが、実行スクリプトの命令ではありません。Coreのプレイヤーコマンドから開き、表示時・選択時に対象と条件を再判定します。[共通ウィンドウ仕様](../ui/MESSAGE_AND_COMMAND_WINDOWS.md)に保存と操作の区分を記載しています。

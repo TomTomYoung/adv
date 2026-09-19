@@ -1,22 +1,20 @@
 # adv ドキュメント
 
-更新日: 2026-09-19。対象はPR #27反映済みの作品版1.14.0と、共通キー操作の追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-19。対象はPR #28反映済みの作品版1.14.0と、UI文書整理・キー設定の追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
-[MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md)：プレイヤーコマンドの定義、メッセージ内の選択肢、調査・仕掛け・帰還の共通操作。
+## UIと操作
 
-[KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：決定・キャンセル・十字キー、対象選択、装備・記録、広場・探索へ戻る順序。
+[ui/README.md](ui/README.md)：UIの根本方針と現状、画面構成、共通キー操作、キー設定、表示契約、効果と音声の入口。
+
+[UIの根本方針と現状](ui/PHILOSOPHY_AND_STATUS.md)：通常の冒険を少数の共通操作で進め、管理画面から元の場面へ戻るための設計基準と、実装済み・未対応の範囲。
 
 ## ゲームと実装
 
 [SPEC.md](SPEC.md)：探索・戦闘・隊編成・職業・シナリオ・保存の現行仕様。
 
 [SCRIPT_REFERENCE.md](scenarios/SCRIPT_REFERENCE.md)：実行可能な命令・式演算子、状態参照、会話の保存。
-
-[VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
-
-[IN_SCENE_VIEW.md](IN_SCENE_VIEW.md)：背景内表示／従来表示の切り替え、一覧ウィンドウ、入力遮断、長文ページ送り、表示検証。
 
 [WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq001〜q003の実移動、所在・保存・表示・次の展開。
 
@@ -31,8 +29,6 @@
 [CELL_CATALOG.md](CELL_CATALOG.md)：現在の空・密、足場、水深、地形変化、境界、移動手段、環境効果、イベント種別の仕様と自動集計した配置索引。
 
 [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：2Dの四辺・3Dの六面、壁セルと境界壁、方向別の進入・退出、現行実装と拡張仕様、2Dの保持方針。
-
-[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)：水の壁・床材・装置の向きを修正した記録と描画比較。
 
 [VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)：立方体・六面の境界・区域の水没・梯子と上下移動の仕様。
 
@@ -77,8 +73,6 @@ q001・q002の改稿全文は各専用ページ、q003〜q020は[カタログ](s
 [MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵59定義、発想と戦闘画像、現行データへの参照。
 
 [BALANCE_PLAN.md](BALANCE_PLAN.md)：現在の調整対象と検証条件、旧版の計測記録の位置。
-
-[SE_CATALOG.md](SE_CATALOG.md) ／ [EFFECT_CATALOG.md](EFFECT_CATALOG.md)：SE28種と表示効果24種の定義・素材・表示契約。
 
 ## 文書の保守と履歴
 

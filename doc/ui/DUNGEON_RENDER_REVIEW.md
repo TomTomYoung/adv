@@ -1,6 +1,6 @@
 # 水面・床材・装置の描画修正
 
-履歴資料。現行1.14.0の水路・操作画面は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) と [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md) を参照してください。以下の比較画像・469テストは当時の結果です。
+履歴資料。現行1.14.0の水路・操作画面は [CONNECTED_2D_MAPS.md](../CONNECTED_2D_MAPS.md) と [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md) を参照してください。以下の比較画像・469テストは当時の結果です。
 
 記録日: 2026-09-14。対象: 作品版1.8.0、fix/dungeon-surfaces。PR #9をマージしたmaster db3db488を起点に確認しました。
 
@@ -10,7 +10,7 @@ Computer Useとしてブラウザ操作を開始しましたが、ローカル�
 
 その後はゲームのCoreへ通常の移動・待機・水門操作を送り、投影データと実際のCanvas描画関数を照合しました。以下の画像はブラウザのスクリーンショットではなく、描画関数の出力です。
 
-![左が修正前、右が修正後。干潮、浅水、完全水没の順に比較](images/dungeon-surfaces.webp)
+![左が修正前、右が修正後。干潮、浅水、完全水没の順に比較](../images/dungeon-surfaces.webp)
 
 比較位置はregion_1_f1の(3,1)、南向きです。探索時刻0、12、18で描画しています。上段のdryは周期区画が干潮であることを示し、横の常設水路には水があります。左は修正前、右は今回の実装です。
 
@@ -36,6 +36,6 @@ src/application/dungeon-surfaces.jsが表示情報、src/view/dungeon.jsが描�
 
 ## 検証
 
-追加11テストで、浅水の通行、完全水没の移動拒否と視界、表示された待機操作後の通行回復、バルブ排水、床材参照、装置の向き、壁と角の遮蔽、沈没城の既存通行許可を確認しました。npm run checkは全469テスト成功、失敗・skipとも0でした。全体の結果は[PROGRESS.md](PROGRESS.md)へ記録します。
+追加11テストで、浅水の通行、完全水没の移動拒否と視界、表示された待機操作後の通行回復、バルブ排水、床材参照、装置の向き、壁と角の遮蔽、沈没城の既存通行許可を確認しました。npm run checkは全469テスト成功、失敗・skipとも0でした。全体の結果は[PROGRESS.md](../PROGRESS.md)へ記録します。
 
 ブラウザの実画面確認は、上記のURL制限により未実施です。Canvasの比較画像と自動テストの成功だけをもって、ブラウザでの操作確認済みとは扱いません。

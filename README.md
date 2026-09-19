@@ -18,7 +18,7 @@ GitHub Pagesでは、このリポジトリの `master` のルートを配信で�
 
 最初は掲示板で「帰らない灯番」を受注し、その場で「迷宮の入口へ向かう（篝火の迷宮）」を押します。広場へ戻る必要はありません。矢印でコマンドを選び、Enterで決定します。W/Sの前後移動とA/Dの方向転換も使えます。新人・老人のイベントは指定セルを踏むと自動開始し、Eで壁灯などの足元・正面を調べます。会話・選択肢・戦闘もEnterと矢印で進められます。メインクエストと手帳に次の目的地が出ます。
 
-初期表示は背景内ビューです。「記録 → 画面配置」で従来表示へ切り替えられます。道具・隊・手帳は背景内に開き、Escapeまたは「閉じる」で戻ります。長文の「次のページ」は表示だけを送り、最後の「続きを読む」で物語を進めます。装備対象・転職先・記録画面の設定も矢印とEnterで選び、Escapeで一段戻れます。キャンセルを重ねると町では広場、ダンジョンでは探索画面へ戻ります。[表示仕様](doc/IN_SCENE_VIEW.md)、[キー操作](doc/KEYBOARD_CONTROLS.md)。
+初期表示は背景内ビューです。「記録 → 画面配置」で従来表示へ切り替えられます。道具・隊・手帳は背景内に開き、Escapeまたは「閉じる」で戻ります。長文の「次のページ」は表示だけを送り、最後の「続きを読む」で物語を進めます。装備対象・転職先・記録画面の設定も共通の選択・決定・キャンセルで操作できます。「記録 → キー設定」で主キー・副キーを変更し、適用・破棄・初期値復帰ができます。キャンセルを重ねると町では広場、ダンジョンでは探索画面へ戻ります。[表示仕様](doc/ui/IN_SCENE_VIEW.md)、[キー操作](doc/ui/KEYBOARD_CONTROLS.md)。
 
 音は初期設定ではオフです。右上の「音：切」を押し、「音：再生中」を確認してください。「記録」で音量を調整できます。「音：再生待ち」「音：再試行」の場合はボタンをもう一度押します。音の設定は次回にも保存されます。
 
@@ -61,11 +61,11 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 [フィールド・戦闘中イベント一覧](doc/scenarios/EVENT_CATALOG.md) / [セルの明るさ](doc/FIELD_LIGHTING.md)
 
-[仕様・進捗・引き継ぎ](doc/README.md) / [JSON命令リファレンス](doc/scenarios/SCRIPT_REFERENCE.md) / [ビュー契約](doc/VIEW_CONTRACT.md) / [200件の索引](doc/scenarios/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
+[仕様・進捗・引き継ぎ](doc/README.md) / [UIの根本方針と現状](doc/ui/PHILOSOPHY_AND_STATUS.md) / [JSON命令リファレンス](doc/scenarios/SCRIPT_REFERENCE.md) / [ビュー契約](doc/ui/VIEW_CONTRACT.md) / [200件の索引](doc/scenarios/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
 
 [魔物一覧・画像](doc/MONSTER_CATALOG.md) / [戦闘バランス計画・実測](doc/BALANCE_PLAN.md) / [仲間一覧・肖像](doc/COMPANION_CATALOG.md)
 
-[SE一覧・音源](doc/SE_CATALOG.md) / [戦闘・フィールド演出一覧](doc/EFFECT_CATALOG.md)
+[SE一覧・音源](doc/ui/SE_CATALOG.md) / [戦闘・フィールド演出一覧](doc/ui/EFFECT_CATALOG.md)
 
 「記録」でSE音量と演出の通常・軽減・オフを選べます。ビュー用プレビューでは効果を再生し、SEを個別に試聴できます。演出とSEの原稿は `authoring/presentation.json`、素材の再作成は `node tools/assets/generate-effects.mjs`、定義の更新は `node tools/build-presentation.mjs` です。
 

@@ -28,7 +28,7 @@
 
 ## 表示契約
 
-dungeon.wall と各装置の art は画像URLと正規化した切り出し矩形のみを持ちます。dungeon.scenes に現地調査情報、dungeon.systems に仕掛けの情報を保持します。常設パネルは描画せず、「調べる」で説明と選択肢を共通メッセージウィンドウに表示します。[ウィンドウ仕様](MESSAGE_AND_COMMAND_WINDOWS.md)を参照してください。quest.fieldLinks が調査先、quest.fieldNotes と fieldNotes が記録済みの観察、dialog.fieldScene が調査中の画像・見出しを供給します。画像取得に失敗した際は通路の単色表示と従来の文字記号で操作を継続できます。
+dungeon.wall と各装置の art は画像URLと正規化した切り出し矩形のみを持ちます。dungeon.scenes に現地調査情報、dungeon.systems に仕掛けの情報を保持します。常設パネルは描画せず、「調べる」で説明と選択肢を共通メッセージウィンドウに表示します。[ウィンドウ仕様](ui/MESSAGE_AND_COMMAND_WINDOWS.md)を参照してください。quest.fieldLinks が調査先、quest.fieldNotes と fieldNotes が記録済みの観察、dialog.fieldScene が調査中の画像・見出しを供給します。画像取得に失敗した際は通路の単色表示と従来の文字記号で操作を継続できます。
 
 ## 検証
 
@@ -36,7 +36,7 @@ dungeon.wall と各装置の art は画像URLと正規化した切り出し矩�
 
 ## 床材の割り当て
 
-1.8.0の描画修正で床材の参照を追加しました。authoring/dungeon-art.jsonのfloorを全体の既定値とし、entriesごとのfloorで上書きできます。art.floorは既存の画像IDと正規化した切り出し矩形です。現在は壁アトラスの石材部分を使います。旧素材のファイルは変更していません。水面のマーカーには装置画像を付けず、水深に応じて床へ色と波を重ねます。詳細は[DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)を参照してください。
+1.8.0の描画修正で床材の参照を追加しました。authoring/dungeon-art.jsonのfloorを全体の既定値とし、entriesごとのfloorで上書きできます。art.floorは既存の画像IDと正規化した切り出し矩形です。現在は壁アトラスの石材部分を使います。旧素材のファイルは変更していません。水面のマーカーには装置画像を付けず、水深に応じて床へ色と波を重ねます。詳細は[DUNGEON_RENDER_REVIEW.md](ui/DUNGEON_RENDER_REVIEW.md)を参照してください。
 
 <!-- generated:quest-observations -->
 
