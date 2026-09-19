@@ -2,7 +2,8 @@
 export function motionFrames(frames){return frames.map(f=>({offset:f.at,transform:`translate(${f.x??0}px,${f.y??0}px) rotate(${f.rotate??0}deg) skew(${f.skewX??0}deg,${f.skewY??0}deg) scale(${f.scaleX??1},${f.scaleY??1})`,opacity:f.opacity??1}));}
 export function spriteFrames(track){return [...Array.from({length:track.frames},(_,i)=>({offset:i/track.frames,backgroundPosition:`${-(i%track.columns)*track.cell}px ${-Math.floor(i/track.columns)*track.cell}px`,opacity:1})),{offset:1,backgroundPosition:`${-((track.frames-1)%track.columns)*track.cell}px ${-Math.floor((track.frames-1)/track.columns)*track.cell}px`,opacity:0}];}
 export class EffectsRenderer {
-  constructor(root){this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.media?.addEventListener('change',()=>this.stop());}
+  constructor(root){this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.mediaChange=()=>this.stop();this.media?.addEventListener('change',this.mediaChange);}
+  destroy(){this.stop();this.media?.removeEventListener('change',this.mediaChange);}
   stop(){for(const timer of this.timers)clearTimeout(timer);this.timers.clear();for(const a of this.animations)a.cancel();this.animations.clear();for(const f of this.cleanups)f();this.cleanups.clear();}
   capture(){this.stop();this.cache.clear();for(const element of this.root.querySelectorAll('[data-fx]')){const rect=element.getBoundingClientRect();this.cache.set(element.dataset.fx,{rect,image:element.tagName==='IMG'?element.src:null});}}
   anchor(target){
@@ -14,7 +15,13 @@ export class EffectsRenderer {
     const rect=scene.getBoundingClientRect();if(target.image)return {rect:{left:rect.left+rect.width/2-80,top:rect.top+rect.height/2-80,width:160,height:160},image:target.image};
     return {element:scene,rect};
   }
-  layer(rect,className=''){const e=document.createElement('div');e.className=`fx-overlay ${className}`;e.setAttribute('aria-hidden','true');Object.assign(e.style,{left:`${rect.left}px`,top:`${rect.top}px`,width:`${rect.width}px`,height:`${rect.height}px`});document.body.append(e);const clean=()=>e.remove();this.cleanups.add(clean);return {element:e,clean:()=>{clean();this.cleanups.delete(clean);}};}
+  layer(rect,className=''){
+    const e=document.createElement('div');e.className=`fx-overlay ${className}`;e.setAttribute('aria-hidden','true');
+    const stage=this.root.querySelector('.scene-stage'),origin=stage?.getBoundingClientRect()??{left:0,top:0};
+    Object.assign(e.style,{left:`${rect.left-origin.left}px`,top:`${rect.top-origin.top}px`,width:`${rect.width}px`,height:`${rect.height}px`});
+    if(stage){e.style.position='absolute';stage.append(e);}else document.body.append(e);
+    const clean=()=>e.remove();this.cleanups.add(clean);return {element:e,clean:()=>{clean();this.cleanups.delete(clean);}};
+  }
   animate(element,frames,duration,clean=()=>{},easing='linear'){
     if(!element?.animate){clean();return;}
     const a=element.animate(frames,{duration,iterations:1,easing,fill:'none'});this.animations.add(a);a.finished.catch(()=>{}).finally(()=>{this.animations.delete(a);clean();});

@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-18。対象はPR #25反映後の作品版1.14.0です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-19。対象はPR #26反映済みの作品版1.14.0と、背景内ビューの追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -13,6 +13,8 @@
 [SCRIPT_REFERENCE.md](scenarios/SCRIPT_REFERENCE.md)：実行可能な命令・式演算子、状態参照、会話の保存。
 
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材・会話・効果の表示責務。
+
+[IN_SCENE_VIEW.md](IN_SCENE_VIEW.md)：背景内表示／従来表示の切り替え、一覧ウィンドウ、入力遮断、長文ページ送り、表示検証。
 
 [WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq001〜q003の実移動、所在・保存・表示・次の展開。
 
