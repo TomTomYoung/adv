@@ -97,7 +97,7 @@ export function paintDungeon(canvas,dungeon,battle){
       const ahead=visibleDungeonObjects(dungeon);
       const object=ahead.find(o=>o.art)??ahead[0];if(object){const sprite=object.art?texture(object.art.url,draw):null;
         if(drawable(sprite))ctx.drawImage(sprite,...artRect(sprite,object.art),WIDTH/2-55,HEIGHT*.47,110,110);
-        else{ctx.textAlign='center';ctx.font='bold 38px serif';ctx.fillStyle='#edc989';ctx.fillText(object.glyph,WIDTH/2,HEIGHT*.66);}}
+        else{ctx.textAlign='center';ctx.font='bold 38px serif';ctx.fillStyle='#edc989';ctx.fillText(object.glyph,WIDTH/2,HEIGHT*.61);}}
     }
   };draw();
 }
