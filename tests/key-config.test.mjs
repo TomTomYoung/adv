@@ -32,16 +32,30 @@ test('physical keys, main/sub keys and fixed Escape resolve consistently; modifi
   assert.equal(eventCode(event('w')),'KeyW');
   for(const extra of [{shiftKey:true},{ctrlKey:true},{altKey:true},{metaKey:true},{isComposing:true}])assert.equal(keyAction(event('z',extra),custom()),null);
   assert.match(inputHint(custom()),/Z 決定.*I K J L 選択.*X \/ Esc 戻る/);
+  assert.match(inputHint(custom(),true),/Z 調べる.*I K J L 移動・方向転換.*X \/ Esc 戻る/);
 });
 
 function gameSetup(layout,engine=newGame()){
   const dom=installDOM(),intents=[],bindings=custom();let view;
   const dispatch=intent=>{intents.push(intent);const result=engine.dispatch(intent);view.render(projectGame(engine));return result;};
-  view=replaceView(null,layout,dom.root,dispatch,{status(){},menu(){},help(){},sound(){},soundEnabled:()=>false,effectsMode:()=> 'off',keyHint:()=>inputHint(bindings)});view.render(projectGame(engine));
+  view=replaceView(null,layout,dom.root,dispatch,{status(){},menu(){},help(){},sound(){},soundEnabled:()=>false,effectsMode:()=> 'off',keyHint:exploring=>inputHint(bindings,exploring)});view.render(projectGame(engine));
   const key=(key,extra={})=>{const e=event(key,extra);handleGameKey(e,{view,model:view.model,dispatch,bindings});return e;};
   return {...dom,view,engine,bindings,intents,key,cleanup(){view.destroy();dom.restore();}};
 }
 for(const layout of ['scene','classic']){
+  test(`${layout}: remapped shared keys move and inspect in a dungeon, select in a prompt, and resume after cancel`,()=>{
+    const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=gameSetup(layout,g);
+    try{
+      assert.match(c.root.querySelector('.exploration-hint').textContent,/Z 調べる.*I K J L 移動・方向転換/);
+      for(const [key,direction] of [['l','right'],['j','left'],['k','back'],['i','forward']]){c.key(key);assert.deepEqual(c.intents.at(-1),{type:'move',direction});}
+      c.key('k');
+      const count=c.intents.length;for(const key of ['ArrowUp','Enter',' '])c.key(key);assert.equal(c.intents.length,count);
+      c.root.querySelector('.back').focus();c.key('z');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
+      assert.equal(c.document.activeElement,c.root.querySelector('.choices button:not(:disabled)'));const save=g.save();c.key('k');assert.equal(g.save(),save);c.key('x');assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      const idle=g.save();c.view.tab='bag';c.view.render(projectGame(g));c.key('k');assert.equal(g.save(),idle);c.key('x');
+      c.key('l');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});
+    }finally{c.cleanup();}
+  });
   test(`${layout}: remapped confirm/navigation advance dialogue and choose, while unbound Enter/Space stay inert`,()=>{
     const d=structuredClone(data);d.scripts.keys={commands:[{op:'say',text:'どうする？'},{op:'choice',options:[{id:'a',text:'一つ目',commands:[]},{id:'b',text:'二つ目',commands:[{op:'say',text:'二つ目を選んだ。'}]}]}]};const g=new GameEngine(d);drain(g);g.run('keys');const c=gameSetup(layout,g);
     try{for(const k of ['Enter',' '])assert.equal(c.key(k).defaultPrevented,true);assert.equal(c.intents.length,0);c.key('z');while(c.view.canChoose?.()===false)c.key('z');c.key('k');assert.equal(c.document.activeElement.dataset.focus,'choice:b');c.key('z');assert.equal(c.view.model.dialog.text,'二つ目を選んだ。');}finally{c.cleanup();}

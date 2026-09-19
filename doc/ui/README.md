@@ -4,7 +4,7 @@
 
 最初に[根本方針と現状](PHILOSOPHY_AND_STATUS.md)を読み、変更がプレイヤーの行為と共通操作に沿うか確認してください。
 
-[KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：決定・キャンセル・方向選択、フォーカスの引き継ぎ、広場・探索へ戻る順序。
+[KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：探索の直接移動と調査、選択画面の決定・キャンセル・方向選択、フォーカスの引き継ぎ、広場・探索へ戻る順序。
 
 [KEY_CONFIG.md](KEY_CONFIG.md)：キー割り当ての変更、重複検査、適用と取消、保存と初期化。
 

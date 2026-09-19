@@ -8,6 +8,7 @@ export function openKeyConfig({dialog,controls,config,onApply,parent}){
   const render=()=>{
     controls.open('キー設定',parent);
     const status=element('p',message);status.className='key-config-status';status.setAttribute('role','status');dialog.append(status);
+    dialog.append(element('p','ダンジョンの探索中は、上下で前進・後退、左右で方向転換、決定で調べる。会話・選択肢・管理画面では、方向キーで項目を選び、決定で進む。'));
     const content=element('div');content.className='key-config';let group;
     for(const action of KEY_ACTIONS){
       if(group!==action.group){group=action.group;content.append(element('h3',group));}

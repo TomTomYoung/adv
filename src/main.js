@@ -11,6 +11,7 @@ import {GameAudio} from './application/audio.js';
 import {applyTheme,THEME_DEFAULT} from './view/theme.js';
 const root=document.querySelector('#app'),dialog=document.querySelector('#system-dialog'),statusElement=document.querySelector('#system-status');
 const systemControls=new SystemControls(dialog,()=>view?.inputScope(),()=>settings.keyBindings.bindings);
+dialog.addEventListener('close',()=>view?.resumeExploration());
 const PREFIX='lantern-archive:v1:';
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const btn=(text,fn)=>{const b=make('button',text);b.type='button';b.addEventListener('click',fn);return b;};
@@ -59,7 +60,7 @@ function keyConfig(){openKeyConfig({dialog,controls:systemControls,config:settin
 }});}
 function help(){modal('遊び方');for(const paragraph of [
  '1. 町の依頼掲示板で受注します。複数受注でき、メインクエストを切り替えられます。最初の依頼「帰らない灯番」は篝火の迷宮で進めます。',
- `2. ${inputHint(settings.keyBindings.bindings)}。町では広場まで、ダンジョンでは管理画面を閉じて探索へ戻れます。キーは「記録 → キー設定」で変更できます。`,
+ `2. ダンジョン探索中：${inputHint(settings.keyBindings.bindings,true)}。上下は前進・後退、左右は方向転換です。会話・選択肢・町・管理画面：${inputHint(settings.keyBindings.bindings)}。キャンセルを重ねると町では広場、ダンジョンでは探索へ戻れます。キーは「記録 → キー設定」で変更できます。`,
  '3. 強制イベントは指定セルを踏むと自動的に始まります。壁松明などの任意調査は「調べる」で行います。人物の応答と選んだ行為が次の場面を決めます。一部の作業には縄や戦闘が必要です。結末はやり直せません。別の記録で比較できます。',
  `4. 素早い味方から1人ずつ行動し、その後に敵が動きます。行動を決めてから敵・仲間を選び、${bindingLabel(settings.keyBindings.bindings,'confirm')}で対象を決定します。対象選択はキャンセルで戻れます。毒は移動・ターン終了時にダメージ。防御は敵の行動終了まで有効です。`,
  '5. 旅支度で補給・装備、酒場で10人から最大5人を編成し、宿・無料施療所を利用。待機中もHP・MP・装備は残ります。入口から無料帰還、帰還印は原則所持金8%（同行する生存巡礼者で半額）、全滅時は15%を失います。依頼と手掛かりは残ります。',
@@ -68,7 +69,7 @@ function help(){modal('遊び方');for(const paragraph of [
  '8. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。依頼によって結末の数と条件が異なります。'
 ])dialog.append(make('p',paragraph));closeButton();}
 
-const viewUi={menu,help,status,keyHint:()=>inputHint(settings.keyBindings.bindings),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
+const viewUi={menu,help,status,keyHint:exploring=>inputHint(settings.keyBindings.bindings,exploring),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);const keys=readKeyConfig(parsed.keyBindings);settings.keyBindings=keys.config;if(keys.recovered)status('保存済みのキー設定が不正なため、初期値へ戻しました。');settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   if(savedSettings){try{settings.viewLayout=normalizeLayout(JSON.parse(savedSettings).viewLayout);}catch{settings.viewLayout='scene';}}

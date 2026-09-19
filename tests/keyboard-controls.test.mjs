@@ -18,7 +18,7 @@ function setup(layout,g=newGame()){
   const selectButton=predicate=>{for(let n=0;n<500;n++){if(predicate(dom.document.activeElement))return;key('ArrowDown');}assert.fail('button unreachable with arrow keys');};
   return {...dom,g,intents,view,key,panel,selectButton,cleanup(){view.destroy();dom.restore();}};
 }
-function story(commands){const d=structuredClone(data);d.scripts.keyboard_test={commands};const g=new GameEngine(d);drain(g);g.run('keyboard_test');return g;}
+function story(commands,dungeon=false){const d=structuredClone(data);d.scripts.keyboard_test={commands};const g=new GameEngine(d);drain(g);if(dungeon)g.dispatch({type:'travel',dungeon:'kagaribi'});g.run('keyboard_test');return g;}
 function battle(){const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});return g;}
 for(const layout of ['scene','classic']){
   test(`${layout}: Enter advances text and focuses the first enabled choice; arrows and Enter choose once`,()=>{
@@ -44,12 +44,53 @@ for(const layout of ['scene','classic']){
       const count=c.intents.length;for(let i=0;i<5;i++)c.key('Escape');assert.equal(c.intents.length,count);
     }finally{c.cleanup();}
   });
-  test(`${layout}: exploration commands retain focus after action; management cancels without travel cost`,()=>{
+  test(`${layout}: dungeon arrows move directly; management cancels back to inspection without travel cost`,()=>{
     const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g);
     try{
-      c.selectButton(b=>b.classList.contains('right'));c.key('Enter');assert.equal(c.intents.at(-1).direction,'right');assert.ok(c.document.activeElement.classList.contains('right'));
+      assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      for(const [key,direction] of [['ArrowRight','right'],['ArrowLeft','left'],['ArrowDown','back'],['ArrowUp','forward']]){
+        const count=c.intents.length;assert.ok(c.key(key).defaultPrevented);assert.equal(c.intents.length,count+1);assert.deepEqual(c.intents.at(-1),{type:'move',direction});assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      }
       const save=g.save();c.panel('bag');c.key('Enter');c.key('ArrowDown');c.key('Escape');c.key('Escape');
-      for(let i=0;i<5;i++)c.key('Escape');assert.equal(c.view.tab,'explore');assert.ok(g.save()===save);assert.ok(c.root.querySelector('.explore-controls').contains(c.document.activeElement));
+      for(let i=0;i<5;i++)c.key('Escape');assert.equal(c.view.tab,'explore');assert.ok(g.save()===save);assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      c.key('ArrowRight');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: idle confirm always inspects despite stale command focus, and choices suspend movement`,()=>{
+    const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g);
+    try{
+      for(const selector of ['.back','[data-focus="command:retreat"]','[data-focus="command:portable"]']){
+        c.root.querySelector(selector).focus();const before=c.intents.length;c.key('Enter');assert.equal(c.intents.length,before+1);assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
+        assert.equal(c.document.activeElement,c.root.querySelector('.choices button:not(:disabled)'));
+        const save=g.save(),count=c.intents.length;c.key('Enter',{repeat:true});c.key('ArrowDown');c.key('w');assert.equal(c.intents.length,count);assert.equal(g.save(),save);
+        c.key('Escape');assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      }
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: dungeon narrative focuses its first enabled choice and resumes direct controls when finished`,()=>{
+    const g=story([{op:'say',text:'分かれ道に着いた。'},{op:'choice',options:[{id:'locked',text:'不可',condition:false,commands:[]},{id:'first',text:'先頭',commands:[]},{id:'leave',text:'探索へ戻る',commands:[]}]}],true),c=setup(layout,g);
+    try{
+      const count=c.intents.length;c.key('ArrowRight');assert.equal(c.intents.length,count);assert.ok(c.document.activeElement.classList.contains('continue'));
+      c.key('Enter');while(c.view.canChoose?.()===false)c.key('Enter');assert.equal(c.document.activeElement.dataset.focus,'choice:first');
+      const location=structuredClone(g.state.location),steps=g.state.steps;c.key('ArrowDown');assert.equal(c.document.activeElement.dataset.focus,'choice:leave');assert.deepEqual(g.state.location,location);assert.equal(g.state.steps,steps);
+      c.key('Enter');assert.equal(c.view.model.dialog,null);assert.equal(c.document.activeElement.dataset.focus,'command:interact');
+      c.key('ArrowRight');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});c.key('Enter');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: explicit Tab traversal can open management, and cancel or direction restores direct exploration`,()=>{
+    const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g);
+    try{
+      assert.ok(!c.key('Tab').defaultPrevented);named(c.root,'道具').focus();c.key('Enter');assert.equal(c.view.tab,'bag');assert.equal(c.intents.length,0);
+      c.key('Escape');assert.equal(c.view.tab,'explore');c.key('Tab');c.root.querySelector('.back').focus();c.key('ArrowRight');c.key('Enter');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: closing record restores dungeon controls even when its opener was reached with Tab`,()=>{
+    const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g),dialog=c.document.createElement('dialog');c.document.body.append(dialog);
+    const controls=new SystemControls(dialog,()=>c.view.inputScope());dialog.addEventListener('close',()=>c.view.resumeExploration());
+    try{
+      c.key('Tab');named(c.root,'記録').focus();controls.open('記録');const option=c.document.createElement('button');option.textContent='設定';dialog.append(option);controls.finish();
+      const save=g.save();controls.handleKey({key:'ArrowDown',preventDefault(){}});assert.equal(g.save(),save);
+      controls.handleKey({key:'Escape',preventDefault(){}});assert.equal(c.document.activeElement.dataset.focus,'command:interact');c.key('Enter');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
     }finally{c.cleanup();}
   });
   test(`${layout}: battle target cancellation costs nothing, second enemy selection and next turn use keys`,()=>{

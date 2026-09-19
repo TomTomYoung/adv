@@ -1,16 +1,16 @@
 // Logical actions and browser-local input settings; no game state or intents.
 export const KEY_ACTIONS=Object.freeze([
-  {id:'confirm',name:'決定',group:'共通操作',required:true,keys:['Enter','Space']},
+  {id:'confirm',name:'決定／探索では調べる',group:'共通操作',required:true,keys:['Enter','Space']},
   {id:'cancel',name:'キャンセル',group:'共通操作',required:true,keys:['Escape',null]},
-  {id:'up',name:'上の項目',group:'共通操作',required:true,keys:['ArrowUp',null]},
-  {id:'down',name:'下の項目',group:'共通操作',required:true,keys:['ArrowDown',null]},
-  {id:'left',name:'左の項目',group:'共通操作',required:true,keys:['ArrowLeft',null]},
-  {id:'right',name:'右の項目',group:'共通操作',required:true,keys:['ArrowRight',null]},
-  {id:'forward',name:'前進',group:'探索の直接操作',keys:['KeyW',null]},
-  {id:'backward',name:'後退',group:'探索の直接操作',keys:['KeyS',null]},
-  {id:'turnLeft',name:'左へ向く',group:'探索の直接操作',keys:['KeyA',null]},
-  {id:'turnRight',name:'右へ向く',group:'探索の直接操作',keys:['KeyD',null]},
-  {id:'inspect',name:'調べる',group:'探索の直接操作',keys:['KeyE',null]}
+  {id:'up',name:'上／探索では前進',group:'共通操作',required:true,keys:['ArrowUp',null]},
+  {id:'down',name:'下／探索では後退',group:'共通操作',required:true,keys:['ArrowDown',null]},
+  {id:'left',name:'左／探索では左を向く',group:'共通操作',required:true,keys:['ArrowLeft',null]},
+  {id:'right',name:'右／探索では右を向く',group:'共通操作',required:true,keys:['ArrowRight',null]},
+  {id:'forward',name:'前進',group:'探索の補助キー',keys:['KeyW',null]},
+  {id:'backward',name:'後退',group:'探索の補助キー',keys:['KeyS',null]},
+  {id:'turnLeft',name:'左へ向く',group:'探索の補助キー',keys:['KeyA',null]},
+  {id:'turnRight',name:'右へ向く',group:'探索の補助キー',keys:['KeyD',null]},
+  {id:'inspect',name:'調べる',group:'探索の補助キー',keys:['KeyE',null]}
 ].map(a=>Object.freeze({...a,keys:Object.freeze(a.keys)})));
 export const DEFAULT_BINDINGS=Object.freeze(Object.fromEntries(KEY_ACTIONS.map(a=>[a.id,a.keys])));
 export const NAVIGATION_KEYS=Object.freeze({up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'});
@@ -58,4 +58,4 @@ export function keyAction(event,bindings=DEFAULT_BINDINGS){
   return KEY_ACTIONS.find(a=>bindings[a.id]?.includes(code))?.id??null;
 }
 export const bindingLabel=(bindings,id)=>bindings[id].filter(Boolean).map(keyLabel).join(' / ');
-export const inputHint=(bindings=DEFAULT_BINDINGS)=>`${bindingLabel(bindings,'confirm')} 決定 · ${['up','down','left','right'].map(id=>bindingLabel(bindings,id)).join(' ')} 選択 · ${bindingLabel(bindings,'cancel')}${bindings.cancel.includes('Escape')?'':' / Esc'} 戻る`;
+export const inputHint=(bindings=DEFAULT_BINDINGS,exploring=false)=>`${bindingLabel(bindings,'confirm')} ${exploring?'調べる':'決定'} · ${['up','down','left','right'].map(id=>bindingLabel(bindings,id)).join(' ')} ${exploring?'移動・方向転換':'選択'} · ${bindingLabel(bindings,'cancel')}${bindings.cancel.includes('Escape')?'':' / Esc'} 戻る`;
