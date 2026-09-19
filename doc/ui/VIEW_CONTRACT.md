@@ -8,11 +8,11 @@
 
 `view-layout.js` が背景内表示と従来表示を切り替えます。`SceneView` は `GameView` の会話・戦闘・道具・隊・掲示板などの描画部品を再利用し、配置と画面内ウィンドウを追加します。`keyboard.js` はウィンドウ中の入力を先に処理し、残りを共通の意図へ変換します。ページ送りも表示専用で、最後のページだけadvanceを送ります。[背景内ビュー仕様](IN_SCENE_VIEW.md)を参照してください。
 
-`focus.js` がボタンのフォーカスと候補一覧を、`system-controls.js` が記録・ヘルプの決定と戻りを扱います。未確定の戦闘対象・開いた詳細はView状態であり、セーブに含めません。通常の矢印は有効なボタン間を移動します。[キー操作仕様](KEYBOARD_CONTROLS.md)。
+`focus.js` がボタンのフォーカスと候補一覧を、`system-controls.js` が記録・ヘルプの決定と戻りを扱います。未確定の戦闘対象・開いた詳細はView状態であり、セーブに含めません。ダンジョン探索中の共通方向入力は既存のmove intent、決定はplayer.commandのinteractです。`GameView.explorationInput()`で会話・戦闘・管理画面・候補一覧がない探索状態を判別し、両ビューで共有します。それ以外は有効なボタン間を移動します。[キー操作仕様](KEYBOARD_CONTROLS.md)。
 
 `src/view/` から `src/core/` や `src/application/` をimportしないことを静的検査します。ビューはsave/load、乱数、報酬、命令の実行を持ちません。ビューの取替えでゲームの判定を変えないことが目標です。
 
-`key-bindings.js` は物理キーを決定・取消・方向・探索操作へ変換します。`key-config.js` の下書きはUI内に保持し、main.jsが保存に成功した後に両入力経路へ反映します。設定はViewModelやゲームのセーブには含めません。現在のキーに合わせた操作案内はui.keyHintから受け取ります。[キー設定](KEY_CONFIG.md)。
+`key-bindings.js` は物理キーを決定・取消・方向・探索操作へ変換します。`key-config.js` の下書きはUI内に保持し、main.jsが保存に成功した後に両入力経路へ反映します。設定はViewModelやゲームのセーブには含めません。現在のキーに合わせた操作案内はui.keyHint(exploring)から受け取ります。探索では「調べる・移動」、選択画面では「決定・選択」を表示します。[キー設定](KEY_CONFIG.md)。
 
 ## デザイン作業
 

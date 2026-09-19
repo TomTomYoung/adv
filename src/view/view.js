@@ -3,6 +3,7 @@ import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
 import {buttons,captureFocus,prepareControls,restoreFocus,closeDetails,focusButton} from './focus.js';
+import {inputHint} from './key-bindings.js';
 const node=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,callback,className='',disabled=false)=>{const b=node('button',className,text);b.type='button';b.disabled=disabled;b.addEventListener('click',callback);return b;};
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
@@ -12,17 +13,23 @@ export class GameView {
   destroy(){this.effects.destroy();}
   advanceText(){this.act({type:'advance'});}
   blocksGameInput(){return false;}
+  explorationInput(){return this.model?.mode==='dungeon'&&!this.model.busy&&!this.model.dialog&&!this.model.battle&&this.tab==='explore'&&!this.blocksGameInput()&&!this.root.querySelector('.button-picker');}
+  explorationDefault(){return this.root.querySelector('[data-focus="command:interact"]:not(:disabled)');}
+  resumeExploration(){this.tabNavigation=false;if(!this.explorationInput())return false;focusButton(this.explorationDefault());return true;}
+  keyHint(){const exploring=this.explorationInput();return this.ui.keyHint?.(exploring)??inputHint(undefined,exploring);}
   inputScope(){
     const panel=this.root.querySelector('.scene-window');
     if(panel)return panel.querySelector('.button-picker')??panel;
     return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
   }
   finishInput(snapshot){
+    this.tabNavigation=false;
     prepareControls(this.root);
     const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.pendingBattleAction]);
     const same=key===this.inputKey;this.inputKey=key;
     if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
     if(this.ui.modalOpen?.())return;
+    if(this.resumeExploration())return;
     const scope=this.inputScope(),selected=this.pendingBattleAction?.target==='enemy'?this.selectedTarget:this.selectedAlly;
     const preferred=scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
     restoreFocus(scope,same?snapshot:null,preferred??(same?null:buttons(scope.querySelector('.scene-window-body')??(!['location','explore'].includes(this.tab)?scope.querySelector('.panel-content'):null)??scope)[0]));
@@ -37,7 +44,7 @@ export class GameView {
     if(d?.cancelAdvance){this.act({type:'advance'});return;}
     if(d?.cancelId&&d.options?.some(o=>o.id===d.cancelId&&o.enabled)){this.act({type:'choose',id:d.cancelId});return;}
     if(!this.model.busy&&this.model.town?.parent)this.act({type:'location.move',id:this.model.town.parent.id});
-    else focusButton(buttons(this.inputScope())[0]);
+    else if(!this.resumeExploration())focusButton(buttons(this.inputScope())[0]);
   }
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
@@ -65,7 +72,7 @@ export class GameView {
     else this.journal(main,model);
     this.sidebar(side,model);
     if(model.notice&&model.notice!==model.dialog?.text){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
-    const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?(this.ui.keyHint?.()??'矢印 選択 · Enter 決定 · Esc 戻る · WASD 移動 · E 調べる'):'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
+    const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?this.keyHint():'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
     this.effects.present(model,this.ui.effectsMode?.()??'full');
     this.finishInput(snapshot);
   }
@@ -157,8 +164,10 @@ export class GameView {
     const movement=node('div','movement-pad');
     for(const c of commands.movement)movement.append(button(c.label,()=>this.act(c.intent),c.direction,!c.enabled));
     const actions=node('div','explore-actions');
-    for(const c of commands.actions)actions.append(button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled));
-    window.append(movement,actions);parent.append(window);
+    for(const c of commands.actions){const b=button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled);b.dataset.focus=`command:${c.id}`;actions.append(b);}
+    window.append(movement,actions);
+    if(this.explorationInput())window.append(node('p','muted exploration-hint',this.keyHint()));
+    parent.append(window);
   }
   dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
