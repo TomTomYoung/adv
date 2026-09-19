@@ -1,4 +1,4 @@
-import {docPath,relocateDoc,currentMarkdown,scenarioDocs} from './doc-layout.mjs';
+import {docPath,relocateDoc,currentMarkdown,scenarioDocs,uiDocs} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
 import {eventCatalog} from './event-catalog.mjs';
@@ -14,7 +14,7 @@ const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
 const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
 const current=(await currentMarkdown(folder)).map(f=>'doc/'+f);
-for(const name of scenarioDocs){
+for(const name of [...scenarioDocs,...uiDocs]){
  check(!current.includes('doc/'+name),`doc/${name}: obsolete output; use doc/${docPath(name)}`);
 }
 const manifests=[];

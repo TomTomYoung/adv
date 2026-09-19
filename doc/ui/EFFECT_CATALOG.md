@@ -74,21 +74,21 @@ OSの動きを減らす設定と、ゲームの演出設定に対応します。
 
 全8種、各8コマ、1コマ128×128、シート1024×128の透過PNGです。左から右へ560msで再生します。AIPaintの図形命令で発生・広がり・消散を描き分けています。
 
-アニメーション：斬撃の弧 / コマ一覧：<img src="../assets/effects/fx_slash_arc.png" width="512" alt="slash_arcの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_slash_arc.paint.commands.json)
+アニメーション：斬撃の弧 / コマ一覧：<img src="../../assets/effects/fx_slash_arc.png" width="512" alt="slash_arcの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_slash_arc.paint.commands.json)
 
-アニメーション：打撃の火花 / コマ一覧：<img src="../assets/effects/fx_impact_burst.png" width="512" alt="impact_burstの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_impact_burst.paint.commands.json)
+アニメーション：打撃の火花 / コマ一覧：<img src="../../assets/effects/fx_impact_burst.png" width="512" alt="impact_burstの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_impact_burst.paint.commands.json)
 
-アニメーション：炎の噴出 / コマ一覧：<img src="../assets/effects/fx_fire_burst.png" width="512" alt="fire_burstの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_fire_burst.paint.commands.json)
+アニメーション：炎の噴出 / コマ一覧：<img src="../../assets/effects/fx_fire_burst.png" width="512" alt="fire_burstの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_fire_burst.paint.commands.json)
 
-アニメーション：氷片の飛散 / コマ一覧：<img src="../assets/effects/fx_ice_shards.png" width="512" alt="ice_shardsの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_ice_shards.paint.commands.json)
+アニメーション：氷片の飛散 / コマ一覧：<img src="../../assets/effects/fx_ice_shards.png" width="512" alt="ice_shardsの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_ice_shards.paint.commands.json)
 
-アニメーション：枝分かれする雷 / コマ一覧：<img src="../assets/effects/fx_lightning_arc.png" width="512" alt="lightning_arcの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_lightning_arc.paint.commands.json)
+アニメーション：枝分かれする雷 / コマ一覧：<img src="../../assets/effects/fx_lightning_arc.png" width="512" alt="lightning_arcの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_lightning_arc.paint.commands.json)
 
-アニメーション：治療の輪 / コマ一覧：<img src="../assets/effects/fx_healing_ring.png" width="512" alt="healing_ringの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_healing_ring.paint.commands.json)
+アニメーション：治療の輪 / コマ一覧：<img src="../../assets/effects/fx_healing_ring.png" width="512" alt="healing_ringの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_healing_ring.paint.commands.json)
 
-アニメーション：毒の雲 / コマ一覧：<img src="../assets/effects/fx_poison_cloud.png" width="512" alt="poison_cloudの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_poison_cloud.paint.commands.json)
+アニメーション：毒の雲 / コマ一覧：<img src="../../assets/effects/fx_poison_cloud.png" width="512" alt="poison_cloudの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_poison_cloud.paint.commands.json)
 
-アニメーション：魔力の軌道 / コマ一覧：<img src="../assets/effects/fx_mana_orbit.png" width="512" alt="mana_orbitの8コマ"> / AIPaint命令：[命令JSON](../assets/source/effects/fx_mana_orbit.paint.commands.json)
+アニメーション：魔力の軌道 / コマ一覧：<img src="../../assets/effects/fx_mana_orbit.png" width="512" alt="mana_orbitの8コマ"> / AIPaint命令：[命令JSON](../../assets/source/effects/fx_mana_orbit.paint.commands.json)
 
 ## 技能と演出・SEの対応
 
@@ -217,10 +217,10 @@ motionのキーはx/y（±200px）、rotate（±360度）、skewX/skewY（±40�
 
 ## 表示だけを調整する
 
-[ビュー用プレビュー](../view-preview.html)で表示例と効果・対象を選び、「演出を再生」を押します。「新種の二体戦」なら切断・振動を敵の画像で確認できます。SEの選択と試聴も同じページにあります。画像配置・クリップ・再生方法の変更はsrc/view/effects.jsとstyle.cssで行い、ゲームの判定は変更しません。
+[ビュー用プレビュー](../../view-preview.html)で表示例と効果・対象を選び、「演出を再生」を押します。「新種の二体戦」なら切断・振動を敵の画像で確認できます。SEの選択と試聴も同じページにあります。画像配置・クリップ・再生方法の変更はsrc/view/effects.jsとstyle.cssで行い、ゲームの判定は変更しません。
 
 ## 検証結果と範囲
 
-現行の全469テストに表示効果の検証を含みます。演出の有無で同じ入力・seedから同じ保存状態になること、持続レイヤー、予約取消し、SE重複防止、不正な定義の拒否を検査しています。最新の全体検証は[PROGRESS.md](PROGRESS.md)を参照してください。
+現行の全469テストに表示効果の検証を含みます。演出の有無で同じ入力・seedから同じ保存状態になること、持続レイヤー、予約取消し、SE重複防止、不正な定義の拒否を検査しています。最新の全体検証は[PROGRESS.md](../PROGRESS.md)を参照してください。
 
 全8シートをデコードし、透過と64コマの非空・差異を検査しました。SE全28種はOGGをデコードして音量・有限値を測定しました。実ブラウザ上の動き、端末での聴感、OSの動き軽減との連携は未検証です。

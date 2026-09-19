@@ -197,7 +197,7 @@ Aから隣接Bへ移動するときは、Aの退出側の許可、Aの進入側�
 
 Viewへ渡す `blocked` は通行不可、`opaque` は視線を遮る描画、`wall` は壁セル、`floor` は床・足場、`waterDepth` は水深です。すべてを一つの「壁」へまとめません。現行3Dの横四面は `edges` / `boundaries` に投影し、閉じた面を描画します。六面の通行可否と現在のzの断面表示は別の情報です。
 
-素材画像はダンジョンの `art.floor` / `art.wall` などから取得します。床材を貼っても足場は生まれず、通行不可の水を壁画像へ変換しません。詳細は[表示契約](VIEW_CONTRACT.md)と[描画修正記録](DUNGEON_RENDER_REVIEW.md)を参照してください。
+素材画像はダンジョンの `art.floor` / `art.wall` などから取得します。床材を貼っても足場は生まれず、通行不可の水を壁画像へ変換しません。詳細は[表示契約](ui/VIEW_CONTRACT.md)と[描画修正記録](ui/DUNGEON_RENDER_REVIEW.md)を参照してください。
 
 ## 7. 2Dを保持するための互換性
 

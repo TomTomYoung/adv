@@ -1,6 +1,6 @@
 # ビューと表示データの契約
 
-更新日: 2026-09-19。作品版1.14.0、背景内ビューと共通キー操作を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
+更新日: 2026-09-19。作品版1.14.0、背景内ビュー・共通キー操作・キー設定を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
 
 ## 境界
 
@@ -11,6 +11,8 @@
 `focus.js` がボタンのフォーカスと候補一覧を、`system-controls.js` が記録・ヘルプの決定と戻りを扱います。未確定の戦闘対象・開いた詳細はView状態であり、セーブに含めません。通常の矢印は有効なボタン間を移動します。[キー操作仕様](KEYBOARD_CONTROLS.md)。
 
 `src/view/` から `src/core/` や `src/application/` をimportしないことを静的検査します。ビューはsave/load、乱数、報酬、命令の実行を持ちません。ビューの取替えでゲームの判定を変えないことが目標です。
+
+`key-bindings.js` は物理キーを決定・取消・方向・探索操作へ変換します。`key-config.js` の下書きはUI内に保持し、main.jsが保存に成功した後に両入力経路へ反映します。設定はViewModelやゲームのセーブには含めません。現在のキーに合わせた操作案内はui.keyHintから受け取ります。[キー設定](KEY_CONFIG.md)。
 
 ## デザイン作業
 
@@ -169,7 +171,7 @@ dungeons[].art、dungeon.wall、各固有システム・カード・マーカー
 
 dungeon.scenesは現在地または正面の調査情報です。常設パネルとして描画しません。調査の入口はplayer.command/interactで、Coreが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
-quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
+quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](../DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
 
 ## 立方体の断面と六面
 
@@ -189,7 +191,7 @@ surfaceNoticeは正面の水深と通行可否、その対処の文章です。�
 
 ## 1.12.0の照明と戦闘中会話
 
-`dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](FIELD_LIGHTING.md)を参照。
+`dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](../FIELD_LIGHTING.md)を参照。
 
 `battle.event` がある間は戦闘画面の下へ `dialog` の会話・選択を表示し、戦闘操作ボタンは表示しない。会話を送るとゲーム側が戦闘再開または強制終了を判断する。`battle` が消えた後も `dialog` があればフィールドの会話として描画する。
 

@@ -7,15 +7,22 @@ export const scenarioDocs = new Set([
   'SCENARIO_DESIGN.md', 'SCENARIO_MODEL_V11.md', 'EXPLORATION_AND_PROSE_1_11.md',
   'EVENT_SYSTEM.md', 'EVENT_CATALOG.md', 'SCRIPT_REFERENCE.md', 'CHARACTERS.md'
 ]);
-export const docPath = name => scenarioDocs.has(name) || name.startsWith('quest-maps/') ? `scenarios/${name}` : name;
+export const uiDocs = new Set([
+  'PHILOSOPHY_AND_STATUS.md', 'VIEW_CONTRACT.md', 'IN_SCENE_VIEW.md',
+  'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md', 'MESSAGE_AND_COMMAND_WINDOWS.md',
+  'DUNGEON_RENDER_REVIEW.md', 'SE_CATALOG.md', 'EFFECT_CATALOG.md'
+]);
+export const docPath = name => scenarioDocs.has(name) || name.startsWith('quest-maps/') ? `scenarios/${name}` : uiDocs.has(name) ? `ui/${name}` : name;
 
 export function relocateDoc(source, name) {
   const from = path.posix.dirname(docPath(name));
-  return source.replace(/(```[^\n]*\n[\s\S]*?```)|\]\(([^\s)]+)\)/g, (match, block, target) => {
+  return source.replace(/(```[^\n]*\n[\s\S]*?```)|\]\(([^\s)]+)\)|\b(src|href)=(["'])(.*?)\4/g, (match, block, markdownTarget, attribute, quote, htmlTarget) => {
+    const target=markdownTarget??htmlTarget;
     if (block || /^(?:#|[a-z][a-z\d+.-]*:|\/\/)/i.test(target)) return match;
     const [, file, suffix] = target.match(/^([^?#]*)(.*)$/);
     const resolved = docPath(path.posix.normalize(file));
-    return `](${path.posix.relative(from, resolved)}${suffix})`;
+    const relative=`${path.posix.relative(from, resolved)}${suffix}`;
+    return attribute?`${attribute}=${quote}${relative}${quote}`:`](${relative})`;
   });
 }
 

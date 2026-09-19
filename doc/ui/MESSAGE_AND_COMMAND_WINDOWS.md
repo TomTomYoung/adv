@@ -44,4 +44,4 @@ Applicationは共通のメッセージ表示データと、コマンドウィン
 
 共通コマンド・対象選択・帰還確認は `src/core/player-commands.js`。既存の各仕掛けが返す近傍対象とplanの判定を再利用する。複数対象は名前を選んでから操作へ進む。単独の配置物・クエスト調査は既存のシナリオ本文へ直接入る。
 
-シナリオ本文の保持は `src/core/script.js`、待機状態の保存検査は `src/core/save.js`、表示データは `src/application/projection.js`、両ウィンドウの描画は `src/view/view.js`、キーボードは `src/main.js`。詳細な表示契約は [VIEW_CONTRACT.md](VIEW_CONTRACT.md) を参照する。
+シナリオ本文の保持は `src/core/script.js`、待機状態の保存検査は `src/core/save.js`、表示データは `src/application/projection.js`、両ウィンドウの描画は `src/view/view.js`、入力の意味と割り当ては `src/view/key-bindings.js`、通常画面への振り分けは `src/view/keyboard.js`、記録画面への振り分けは `src/view/system-controls.js`。詳細な表示契約は [VIEW_CONTRACT.md](VIEW_CONTRACT.md) を参照する。

@@ -32,4 +32,4 @@
 
 配置図は `quest-maps/`。専用ページから各図と配布マップJSONへリンクします。`npm run build:catalog` がカタログ・専用ページ・図を生成し、`npm run check:docs` が内容・配置・ローカルリンクを照合します。改稿時は原稿と配布JSONを同期してから生成してください。
 
-町の共通仕様は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md)、2D区画は [CONNECTED_2D_MAPS.md](../CONNECTED_2D_MAPS.md)、UIは [MESSAGE_AND_COMMAND_WINDOWS.md](../MESSAGE_AND_COMMAND_WINDOWS.md)、作業の引き継ぎは [HANDOFF.md](../HANDOFF.md) を参照してください。
+町の共通仕様は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md)、2D区画は [CONNECTED_2D_MAPS.md](../CONNECTED_2D_MAPS.md)、UIは [MESSAGE_AND_COMMAND_WINDOWS.md](../ui/MESSAGE_AND_COMMAND_WINDOWS.md)、作業の引き継ぎは [HANDOFF.md](../HANDOFF.md) を参照してください。
