@@ -36,7 +36,9 @@ export function questCatalog(data,date,{questId}={}){
   function commands(q,list,{inChoice=false}={}){
     for(const c of list){
       switch(c.op){
-        case 'say':case 'narrate':add(c.text);break;
+        case 'say':case 'narrate':add((c.character?`${data.characters[c.character].name}：`:c.name||c.speaker?`${c.name??c.speaker}：`:'')+c.text);break;
+        case 'scene.cast':add(`人物演出（${c.mode??'stage'}）: ${code(json(c.cast))}。`);break;
+        case 'scene.cast.clear':add('人物演出の上書きを解除し、場面の配置へ戻す。');break;
         case 'choice':
           for(const o of c.options){
             add(`選択 ${code(o.id)}: ${o.text}`);
@@ -71,7 +73,7 @@ export function questCatalog(data,date,{questId}={}){
           const scene=q.story.scenes[c.scene];condition('場面の成立条件',scene.requires);
           const name=c=>data.characters[q.story.entities[c.entity]?.character]?.name??c.entity;
           if(scene.cast?.length)add(`登場: ${scene.cast.map(c=>name(c)+(c.mode==='remote'?'（遠隔会話）':'')).join('・')}。`);
-          for(const c of scene.cast??[])condition(`${name(c)}の会話条件`,c.requires);break;
+          for(const c of scene.cast??[]){condition(`${name(c)}の会話条件`,c.requires);if(c.display)add(`${name(c)}の配置: ${code(json(c.display))}。`);}break;
         }
         case 'set':if(inChoice)add(`状態更新: ${code(c.target)} = ${code(json(c.value))}。`);break;
         case 'item.take':add(`消費: ${code(c.item)} × ${c.count}。`);break;

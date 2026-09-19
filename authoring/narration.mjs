@@ -54,6 +54,6 @@ export function editNarration(value,key=''){
  if(typeof value==='string')return proseKeys.has(key)?plainNarration(value):value;
  if(Array.isArray(value))return value.map(v=>editNarration(v,key));
  if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>
-  [k,value.op==='say'&&(value.name||value.speaker)&&k==='text'?v:editNarration(v,k)]));
+  [k,value.op==='say'&&(value.name||value.speaker||value.character)&&k==='text'?v:editNarration(v,k)]));
  return value;
 }

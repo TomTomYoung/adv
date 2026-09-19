@@ -702,6 +702,95 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "scene.cast"
+            },
+            "mode": {
+              "enum": [
+                "stage",
+                "cards"
+              ]
+            },
+            "cast": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "character": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "display": {
+                    "type": "object",
+                    "properties": {
+                      "position": {
+                        "enum": [
+                          "left",
+                          "center",
+                          "right"
+                        ]
+                      },
+                      "x": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": -25,
+                        "maximum": 50
+                      },
+                      "scale": {
+                        "type": "number",
+                        "minimum": 0.5,
+                        "maximum": 1.5
+                      },
+                      "flip": {
+                        "type": "boolean"
+                      },
+                      "layer": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 99
+                      },
+                      "asset": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "character"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "op",
+            "cast"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "scene.cast.clear"
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "fire.portable.set"
             },
             "fuel": {
@@ -819,6 +908,10 @@
             },
             "speaker": {
               "type": "string"
+            },
+            "character": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -841,6 +934,10 @@
             },
             "speaker": {
               "type": "string"
+            },
+            "character": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -2480,6 +2577,12 @@
               "requires": {
                 "$ref": "#/$defs/value"
               },
+              "castMode": {
+                "enum": [
+                  "stage",
+                  "cards"
+                ]
+              },
               "cast": {
                 "type": "array",
                 "items": {
@@ -2500,6 +2603,47 @@
                     },
                     "requires": {
                       "$ref": "#/$defs/value"
+                    },
+                    "display": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "enum": [
+                            "left",
+                            "center",
+                            "right"
+                          ]
+                        },
+                        "x": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "y": {
+                          "type": "number",
+                          "minimum": -25,
+                          "maximum": 50
+                        },
+                        "scale": {
+                          "type": "number",
+                          "minimum": 0.5,
+                          "maximum": 1.5
+                        },
+                        "flip": {
+                          "type": "boolean"
+                        },
+                        "layer": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 99
+                        },
+                        "asset": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
                     }
                   },
                   "required": [

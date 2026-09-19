@@ -1,6 +1,6 @@
 # ビューと表示データの契約
 
-更新日: 2026-09-19。作品版1.14.0、背景内ビュー・共通キー操作・キー設定を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
+更新日: 2026-09-19。作品版1.15.0、背景内ビュー・固定領域・人物演出・共通キー操作・キー設定を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
 
 ## 境界
 
@@ -145,7 +145,7 @@ quests/trackedのlocationsとevidenceTotalは、現在使用している経路�
 
 ## 会話人物
 
-`dialog.scene` は省略可能で、`title` と `cast` を持つ。cast の要素は `{id, name, role, portrait, remote}`。この場面で表示する人物だけを Application が投影する。View は元の entities、knowledge、作者向け truth を読まない。`remote` は伝声管・面会窓越しの人物で、同席を意味しない。完了後の結果文では最後の場面の人物像を残さない。
+`dialog.scene` は省略可能で、`title`・`mode`（stage/cards）・`speakerId`・`cast`を持つ。castの要素は `{id, name, role, portrait, sprite, remote, display}`。displayには位置・拡大率・左右反転・重なり順が入る。この場面で表示する人物だけを Application が投影する。View は元の entities、knowledge、作者向け truth を読まない。`remote` は伝声管・面会窓越しの人物で、同席を意味しない。完了後の結果文では最後の場面の人物像を残さない。
 
 ## 探索先と篝火
 
@@ -199,6 +199,12 @@ surfaceNoticeは正面の水深と通行可否、その対処の文章です。�
 
 [確定仕様](MESSAGE_AND_COMMAND_WINDOWS.md)に従い、通常の探索画面から固有システムの操作パネルを除去した。systemのcards/actionsは描画情報・Coreの操作候補として保持するが、Viewが並べて直接実行する入口にはしない。足元・正面の対象を「調べる」で選び、説明と選択肢をdialogへ投影する。携帯松明と場所を問わない待機等はコマンドウィンドウから開く。
 
-選択肢は常にメッセージ本文の下に置く。Coreのwaiting.typeはシナリオのtext/choiceとコマンド由来のcommandを区別し、Applicationはどちらもdialog.type=text/choiceへ変換する。Viewとキーボードは共通のadvance/chooseを送る。選択肢がある間のadvanceは無効。帰還費用はCoreが確定時に計算し、別モーダルを使わない。
+選択肢は同じメッセージウィンドウに置く。背景内ビューでは本文の右、従来ビューでは本文の下に表示する。Coreのwaiting.typeはシナリオのtext/choiceとコマンド由来のcommandを区別し、Applicationはどちらもdialog.type=text/choiceへ変換する。Viewとキーボードは共通のadvance/chooseを送る。選択肢がある間のadvanceは無効。帰還費用はCoreが確定時に計算し、別モーダルを使わない。
 
 シナリオのchoiceには直前に表示した解決済みの本文・話者を保持する。コマンド確認は種類と対象IDだけを保存し、選択候補・条件・費用を現在の状態から再構築する。結果文も同じウィンドウで表示する。確認・取消・結果文を閉じる操作に歩数・燃料・料金を課さない。
+
+## 固定領域と保存される演出
+
+SceneViewは左の本文を実寸でページ分割し、右の選択肢だけを内部スクロールします。ページ位置はViewだけが持ち、advance/chooseを代行しません。画面やフォントが変わると本文位置を保って再分割します。
+
+scene.castの指定はCoreのpresentation.castへ保存し、Applicationが画像URL・人物名・発話者IDへ投影します。Viewが任意の人物の所在を決めたりシナリオ原本を読むことはありません。演出フィールドの詳細は[CHARACTER_STAGING.md](CHARACTER_STAGING.md)。

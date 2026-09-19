@@ -7,7 +7,7 @@ export async function buildWorld(root){
   const game=await read('data/game.json'),locations=await read('authoring/locations.json'),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
   const owners={};for(const d of Object.values(dungeons))for(const map of d.maps){if(owners[map])throw Error(`Duplicate dungeon owner: ${map}`);owners[map]=d.id;}
   for(const l of Object.values(locations))assets.images[l.background]=`assets/images/locations/${l.background.slice(9)}.webp`;
-  for(const id of ['curator','porter','examiner'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;
+  for(const id of ['curator','porter','examiner','elder','rookie','rine'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;
   for(const file of game.files.quests){
     const q=await read(file);
     for(const e of q.events){
@@ -17,7 +17,7 @@ export async function buildWorld(root){
     await write(file,q);
   }
   for(const file of game.files.maps){const map=await read(file);map.dungeon=owners[map.id];await write(file,map);}
-  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.14.0';game.files.databases.locations='data/locations.json';
+  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.15.0';game.files.databases.locations='data/locations.json';
   await write('data/locations.json',locations);await write('data/assets.json',assets);await write('data/game.json',game);
   await buildNarration(root);
 }

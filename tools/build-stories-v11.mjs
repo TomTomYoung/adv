@@ -39,7 +39,7 @@ for(const file of game.files.quests){
     return {id:o.id,text:o.text,storyAction:{quest:q.id,action:o.action},...(o.when?{condition:o.when}:{}),requirement:[o.requirement,...Object.entries(o.cost??{}).map(([k,n])=>`${{rope:'縄',torch:'松明',gold:'G'}[k]??k} ${n}消費`),...(o.combat?['戦闘・作業と消費は勝利時に確定']:[])].filter(Boolean).join(' ／ '),commands};
    });
    if(!s.noPauseScenes?.includes(n.id))options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
-   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...(s.sceneCommands?.[n.id]??[]),...render(n.text),...(s.sceneFlow?.[n.id]??[{op:'choice',options}])]};
+   q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...(s.sceneCommands?.[n.id]??[]),...(s.sceneDialogue?.[n.id]??render(n.text)),...(s.sceneFlow?.[n.id]??[{op:'choice',options}])]};
   }
   for(const [alias,canonical] of Object.entries(s.sceneAliases??{})){
    q.scripts[sid(alias)]=structuredClone(q.scripts[sid(canonical)]);
