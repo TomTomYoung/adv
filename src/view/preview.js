@@ -1,10 +1,13 @@
-import {GameView} from './view.js';
+import {replaceView,VIEW_LAYOUTS} from './view-layout.js';
 import {THEME_DEFAULT,applyTheme} from './theme.js';
 const select=document.querySelector('#fixture'),fields=document.querySelector('#theme-fields'),status=document.querySelector('#preview-status');
 let theme={...THEME_DEFAULT};
 const response=await fetch('data/view-fixtures.json');if(!response.ok)throw new Error('表示例を読み込めません');const fixtures=await response.json();
 const show=text=>{status.textContent=text;};
-const view=new GameView(document.querySelector('#app'),intent=>{show(`表示側が送る操作: ${JSON.stringify(intent)}`);return true;},{status:show,menu:()=>show('本番では記録メニューを表示します。'),help:()=>show('この画面は表示のみのプレビューです。'),sound:()=>show('音声再生は本番画面で確認できます。'),soundEnabled:()=>false});
+const dispatch=intent=>{show(`表示側が送る操作: ${JSON.stringify(intent)}`);return true;};
+const ui={status:show,menu:()=>show('本番では記録メニューを表示します。'),help:()=>show('この画面は表示のみのプレビューです。'),sound:()=>show('音声再生は本番画面で確認できます。'),soundEnabled:()=>false};
+let view=replaceView(null,'scene',document.querySelector('#app'),dispatch,ui);
+const layoutLabel=document.createElement('label');layoutLabel.textContent='画面配置';const layout=document.createElement('select');layout.setAttribute('aria-label','画面配置');for(const [id,name] of Object.entries(VIEW_LAYOUTS))layout.append(new Option(name,id));layout.addEventListener('change',()=>{view=replaceView(view,layout.value,document.querySelector('#app'),dispatch,ui);render();});layoutLabel.append(layout);fields.append(layoutLabel);
 function render(){view.tab=select.value==='tavern'?'party':select.value==='guild'?'quests':select.value==='journal'?'journal':'explore';view.render(structuredClone(fixtures[select.value]));}
 for(const [key,label] of Object.entries({background:'背景',surface:'面',raised:'ボタン',ink:'本文',muted:'補助',accent:'強調',border:'枠線'})){
   const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('input');input.type='color';input.value=theme[key];input.addEventListener('input',()=>{theme[key]=input.value;applyTheme(theme);});wrap.append(input);fields.append(wrap);

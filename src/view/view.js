@@ -8,6 +8,9 @@ const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(no
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
   constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
+  destroy(){this.effects.destroy();}
+  advanceText(){this.act({type:'advance'});}
+  blocksGameInput(){return false;}
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
     this.ui.cancelFeedback?.();this.effects.capture();this.model=model;const focused=document.activeElement?.dataset.focus,selection=document.activeElement?.selectionStart;
@@ -136,7 +139,7 @@ export class GameView {
       for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':''));if(!this.model?.town?.cast.some(person=>person.id===c.id)){const img=node('img');img.src=c.portrait;img.alt=c.name;img.width=896;img.height=1024;img.decoding='async';card.append(img);}card.append(node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
       section.append(cast);
     }
-    if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.act({type:'advance'}),'primary continue'));}
+    if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.advanceText(),'primary continue'));}
     else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
   }
   battle(parent,m){
