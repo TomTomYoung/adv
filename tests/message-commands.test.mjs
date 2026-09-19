@@ -6,6 +6,7 @@ import {projectGame} from '../src/application/projection.js';
 import {commandDialog,commandTargets} from '../src/core/player-commands.js';
 import {validateSave} from '../src/core/save.js';
 import {GameView} from '../src/view/view.js';
+import {installDOM} from './view-dom.mjs';
 
 const start=(dungeon='region_1')=>{const g=newGame();g.random=()=>.999999;assert.ok(g.dispatch({type:'travel',dungeon}));return g;};
 const open=(g,id='interact')=>assert.ok(g.dispatch({type:'player.command',id}));
@@ -65,20 +66,12 @@ test('scenario choices retain resolved text and speaker across save, hide secret
  assert.equal(g.dispatch({type:'advance'}),false);assert.equal(g.dispatch({type:'choose',id:'locked'}),false);assert.equal(g.dispatch({type:'choose',id:'secret'}),false);pick(g,'閉じる');assert.equal(projectGame(g).dialog.text,'弁を閉じた。');
 });
 
-class Element{
- constructor(tag){this.tagName=tag;this.children=[];this.style={setProperty(){}};this.listeners={};}
- append(...children){this.children.push(...children);}setAttribute(k,v){this[k]=v;}addEventListener(k,f){this.listeners[k]=f;}
- set textContent(v){this.text=String(v);}get textContent(){return (this.text??'')+this.children.map(c=>c.textContent??'').join('');}
- all(test){return this.children.flatMap(c=>[...(test(c)?[c]:[]),...c.all(test)]);}
- click(){if(!this.disabled)this.listeners.click?.();}
-}
-
 test('rendered exploration has one command window and choices are inside the message window with their text',()=>{
- const original=globalThis.document;globalThis.document={createElement:tag=>new Element(tag)};
+ const dom=installDOM();
  try{
-  const g=start();g.teleport('region_1_f1',2,1,'east');const intents=[],view=Object.assign(Object.create(GameView.prototype),{act:i=>{intents.push(i);g.dispatch(i);},scene(){}}),root=new Element('div');
-  view.explore(root,projectGame(g));assert.equal(root.all(e=>e['aria-label']==='プレイヤーコマンド').length,1);assert.equal(root.all(e=>['水路の給排水','区画の出入口','依頼と現地の調査'].includes(e['aria-label'])).length,0);
-  root.all(e=>e.tagName==='button'&&e.textContent==='足元・正面を調べる')[0].click();assert.deepEqual(intents.at(-1),{type:'player.command',id:'interact'});
-  const message=new Element('div');view.dialog(message,projectGame(g).dialog);const window=message.children[0];assert.equal(window['aria-label'],'メッセージウィンドウ');assert.match(window.textContent,/完全水没/);assert.ok(window.all(e=>e.tagName==='button'&&e.textContent==='給水を止めて排水').length);assert.ok(!window.all(e=>e.textContent==='続きを読む　›').length);
- }finally{globalThis.document=original;}
+  const g=start();g.teleport('region_1_f1',2,1,'east');const intents=[],view=Object.assign(Object.create(GameView.prototype),{act:i=>{intents.push(i);g.dispatch(i);},scene(){}}),root=dom.root;
+  view.explore(root,projectGame(g));assert.equal(root.querySelectorAll('[aria-label="プレイヤーコマンド"]').length,1);assert.equal([...root.querySelectorAll('[aria-label]')].filter(e=>['水路の給排水','区画の出入口','依頼と現地の調査'].includes(e.getAttribute('aria-label'))).length,0);
+  [...root.querySelectorAll('button')].find(e=>e.textContent==='足元・正面を調べる').click();assert.deepEqual(intents.at(-1),{type:'player.command',id:'interact'});
+  const message=dom.document.createElement('div');view.dialog(message,projectGame(g).dialog);const window=message.children[0];assert.equal(window.getAttribute('aria-label'),'メッセージウィンドウ');assert.match(window.textContent,/完全水没/);assert.ok([...window.querySelectorAll('button')].some(e=>e.textContent==='給水を止めて排水'));assert.ok(!window.querySelector('.continue'));
+ }finally{dom.restore();}
 });
