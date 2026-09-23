@@ -82,6 +82,18 @@ button.primary:focus{outline-color:var(--background)}
 .button-picker button{text-align:left;flex-shrink:0}
 .button-picker [aria-pressed=true]{border-color:var(--accent)}
 .battle-targets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+/* Shared battle menus: one hierarchy on the left, messages on the right. */
+.battle-panel{display:grid;grid-template-columns:minmax(220px,32%) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:12px;height:240px;padding:12px 16px;min-height:0;min-width:0;overflow:hidden}
+.battle-commands,.battle-panel>.battle-log{min-width:0;min-height:0;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+.battle-commands{display:flex;flex-direction:column;padding:10px;overflow:hidden}
+.battle-panel .battle-actor{flex-shrink:0;font-size:20px;line-height:1.4;margin:0 0 8px;overflow-wrap:anywhere}
+.battle-menu-title{flex-shrink:0;font-size:14px;line-height:1.5;margin:0 0 6px;overflow-wrap:anywhere;color:var(--muted)}
+.battle-commands>.battle-actions,.battle-commands>.battle-targets{flex:1;min-height:0;display:flex;flex-direction:column;flex-wrap:nowrap;gap:6px;margin:0;padding:4px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin}
+.battle-commands button{flex-shrink:0;min-width:0;text-align:left;padding:7px 10px;font-size:14px;overflow-wrap:anywhere}
+.battle-commands button:focus-visible{outline-offset:1px}
+.battle-panel>.battle-log{padding:12px 16px;font-size:var(--text-size);line-height:1.8;color:var(--ink);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;overflow-wrap:anywhere}
+.battle-log p{margin:0 0 7px}
+@media(max-width:760px){.battle-panel{grid-template-columns:minmax(110px,42%) minmax(0,1fr);gap:7px;padding:9px}.battle-commands{padding:6px}.battle-panel .battle-actor{font-size:16px;margin-bottom:6px}.battle-menu-title{font-size:12px}.battle-commands button{padding:7px 5px}.battle-panel>.battle-log{padding:8px}}
 summary:has(button){list-style:none}summary>button{width:100%;text-align:left}
 
 .key-config-status{position:sticky;top:0;z-index:1;background:var(--surface);border-left:3px solid var(--accent);padding:8px 12px;min-height:3em}
