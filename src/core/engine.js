@@ -10,6 +10,7 @@ import {storyEnding,resumeWorldStory} from './story.js';
 import {townRoot,townLocation,syncWorldStories} from './world.js';
 import {questEntryPlan} from './quest-navigation.js';
 import {processFieldEvents,recordFieldEntry} from './field-events.js';
+import {freshFieldReactions,signalFieldChange} from './field-signals.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,endBattle,battleAction} from './battle.js';
@@ -31,6 +32,7 @@ export class GameEngine {
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
     this.state.nextScope=1;
     this.state.fieldEntry=null;
+    this.state.fieldReactions=freshFieldReactions();
     this.run(data.game.startScript);
   }
   cue(id,targets){playCue(this,id,targets);}
@@ -113,6 +115,7 @@ export class GameEngine {
     this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
     recordFieldEntry(this.state);
+    signalFieldChange(this.data,this.state,'enter');
   }
   returnTown(emergency=false,quiet=false){
     leaveDungeon(this);
@@ -120,6 +123,7 @@ export class GameEngine {
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出した。救援費 ${cost}G。依頼と手掛かりは維持される。`);}
     this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
     this.state.fieldEntry=null;
+    this.state.fieldReactions=freshFieldReactions();
   }
   defeat(){
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
@@ -144,8 +148,9 @@ export class GameEngine {
     const from={...loc};loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
+    recordFieldEntry(this.state);
     stepDungeon(this,{from,to:{...loc}});
-    if(this.state.mode==='dungeon'&&this.state.location===loc)recordFieldEntry(this.state);
+    if(this.state.mode==='dungeon'&&this.state.location===loc)signalFieldChange(this.data,this.state,'enter','move','light');
     if(this.state.waiting||this.state.battle)return true;
     if(this.state.mode!=='dungeon'||loc.map!==from.map||loc.x!==x||loc.y!==y||(loc.z??0)!==z)return true;
     if(processFieldEvents(this))return true;

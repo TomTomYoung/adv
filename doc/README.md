@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-更新日: 2026-09-19。対象はPR #28反映済みの作品版1.14.0と、UI文書整理・キー設定の追加です。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
+更新日: 2026-09-23。対象は作品版1.17.0。セルレイヤー分離に続き、条件付きフィールドイベントとくらがり襲撃の共通化を追加しました。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
@@ -20,7 +20,9 @@
 
 [LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町10か所のID・親子・機能・背景・参照場面。
 
-[EVENT_CATALOG.md](scenarios/EVENT_CATALOG.md)：実装したフィールド・戦闘中イベント、全配置と強制戦闘の定義位置。
+[EVENT_SYSTEM.md](scenarios/EVENT_SYSTEM.md)：セル進入、旅程到着、条件付きイベントの購読・再発・保存、戦闘中の継続。
+
+[EVENT_CATALOG.md](scenarios/EVENT_CATALOG.md)：実装したフィールド・戦闘中イベント、全配置と強制戦闘の定義位置、専用処理を維持する理由。
 
 [FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離による0〜8のセル照度、遮蔽、歩行画面とミニマップの表示。
 

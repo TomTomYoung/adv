@@ -702,6 +702,126 @@
   "additionalProperties": {
     "type": "object",
     "properties": {
+      "fieldEvents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "watch": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "enter",
+                  "move",
+                  "light",
+                  "object",
+                  "state"
+                ]
+              }
+            },
+            "repeat": {
+              "enum": [
+                "once",
+                "entry",
+                "change"
+              ]
+            },
+            "condition": {
+              "$ref": "#/$defs/value"
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "map": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "z": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "map",
+                  "x",
+                  "y"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "action": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "const": "battle"
+                    },
+                    "encounter": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "encounter"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "const": "script"
+                    },
+                    "script": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "script"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "watch",
+            "repeat",
+            "condition",
+            "action"
+          ],
+          "additionalProperties": false
+        }
+      },
       "art": {
         "type": "object",
         "properties": {

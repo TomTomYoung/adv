@@ -1,4 +1,5 @@
 import {cellEntryId} from './cell-layers.js';
+import {validateFieldReactions} from './field-signals.js';
 import {castValid} from './cast.js';
 import {gearErrors} from './equipment.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
@@ -129,6 +130,7 @@ export function validateSave(save,data){
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
   if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
+  if(data.game.fieldEventVersion===1)errors.push(...validateFieldReactions(data,s));
   if(!['town','dungeon'].includes(s.mode))fail('モード不正');
   for(const [key,min,max] of [['gold',0,1e9],['xp',0,1e9],['level',1,data.system.maxLevel],['steps',0,1e9],['light',0,data.system.lightCapacity],['rng',1,4294967295]])if(!integer(s[key],min,max))fail(`${key}不正`);
   if(s.mode==='dungeon'){
