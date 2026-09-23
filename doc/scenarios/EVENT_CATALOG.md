@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.17.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../FIELD_LIGHTING.md)。
+作品版 1.18.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -58,11 +58,11 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `q001/q001_elder` 最後の灯の下の老人：`kagaribi_f1` (13, 3)。起動 `enter` → `q001.v11.visit`。[定義](../../data/quests/q001.json)。
 
-`q001/q001_empty_west` 西の壁松明：`kagaribi_f1` (8, 1)。起動 `interact` → `q001.wall.q001_empty_west`。[定義](../../data/quests/q001.json)。
+`q001/q001_empty_west` 西の壁松明：`kagaribi_f1` (8, 1) north面。起動 `interact` → `q001.wall.q001_empty_west`。[定義](../../data/quests/q001.json)。
 
-`q001/q001_empty_east` 東の壁松明：`kagaribi_f1` (11, 1)。起動 `interact` → `q001.wall.q001_empty_east`。[定義](../../data/quests/q001.json)。
+`q001/q001_empty_east` 東の壁松明：`kagaribi_f1` (11, 1) north面。起動 `interact` → `q001.wall.q001_empty_east`。[定義](../../data/quests/q001.json)。
 
-`q001/q001_last_lamp` 老人を守る最後の壁松明：`kagaribi_f1` (13, 3)。起動 `interact` → `q001.wall.q001_last_lamp`。[定義](../../data/quests/q001.json)。
+`q001/q001_last_lamp` 老人を守る最後の壁松明：`kagaribi_f1` (13, 3) east面。起動 `interact` → `q001.wall.q001_last_lamp`。[定義](../../data/quests/q001.json)。
 
 `q001/kagaribi` 灯を受け渡す準備：`kagaribi_f1` (1, 1)。起動 `action` → `dungeon.scene.kagaribi.v2`。[定義](../../data/quests/q001.json)。
 

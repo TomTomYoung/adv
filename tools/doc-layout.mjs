@@ -9,7 +9,7 @@ export const scenarioDocs = new Set([
 ]);
 export const uiDocs = new Set([
   'PHILOSOPHY_AND_STATUS.md', 'VIEW_CONTRACT.md', 'IN_SCENE_VIEW.md',
-  'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md', 'MESSAGE_AND_COMMAND_WINDOWS.md',
+  'INSPECTION.md', 'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md', 'MESSAGE_AND_COMMAND_WINDOWS.md',
   'CHARACTER_STAGING.md', 'DUNGEON_RENDER_REVIEW.md', 'SE_CATALOG.md', 'EFFECT_CATALOG.md'
 ]);
 export const docPath = name => scenarioDocs.has(name) || name.startsWith('quest-maps/') ? `scenarios/${name}` : uiDocs.has(name) ? `ui/${name}` : name;

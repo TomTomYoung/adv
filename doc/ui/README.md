@@ -6,6 +6,8 @@
 
 [KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：探索の直接移動と調査、選択画面の決定・キャンセル・方向選択、フォーカスの引き継ぎ、広場・探索へ戻る順序。
 
+[INSPECTION.md](INSPECTION.md)：便利調べる・任意調べる、消費時の選択、既読の判定、エッジ上のたいまつ。
+
 [KEY_CONFIG.md](KEY_CONFIG.md)：キー割り当ての変更、重複検査、適用と取消、保存と初期化。
 
 [MESSAGE_AND_COMMAND_WINDOWS.md](MESSAGE_AND_COMMAND_WINDOWS.md)：本文と選択肢を統合するメッセージ、探索で行為を選ぶコマンド。

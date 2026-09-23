@@ -56,6 +56,7 @@ export function validateQuestEvents(data,expression){
       if(!Array.isArray(event.points)||(!event.points.length&&event.trigger!=='auto'))fail(id,'配置・調査地点が必要です');
       else for(const p of event.points){
         const map=data.maps[p?.map];
+        if(p?.edge!==undefined&&(!['north','east','south','west'].includes(p.edge)||!['interact','action'].includes(event.trigger)||event.blocking))fail(id,'エッジ配置の方向・起動方法・blockingが不正です');
         if(!dungeon||!map||!dungeon.maps.includes(p.map)||!Number.isSafeInteger(p.x)||!Number.isSafeInteger(p.y)||!Number.isSafeInteger(p.z??0)||(map.voxels?voxelAt(map,null,p)!=='.':(p.z??0)!==0||!validPoint(data,dungeon,p)))fail(id,'配置・調査地点が不正です');
         const key=`${p?.map}/${event.id}`;
         if(!['action','auto'].includes(event.trigger)){

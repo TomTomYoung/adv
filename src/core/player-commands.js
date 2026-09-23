@@ -1,16 +1,21 @@
-import {dungeonViews,dungeonAction} from './dungeons.js';
-import {questEvents,questEventPlan,openQuestEvent} from './quest-events.js';
+import {dungeonViews,dungeonAction,dungeonCell} from './dungeons.js';
+import {questEvents,questEventPlan,openQuestEvent,eventVisible} from './quest-events.js';
 import {processFieldEvents} from './field-events.js';
+import {closeTo,faces} from './systems/common.js';
+import {connectionSurfaces} from './systems/map-connections.js';
+import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection} from './inspection.js';
 
 const key=value=>JSON.stringify(value);
 const idleState=state=>({...state,waiting:null});
 const flameText=t=>`${t.effect}。${t.lit?(t.fuel===null?'火は消耗しない。':`燃料は残り${t.fuel}歩。`):'火は消えている。'}`;
+const receiptKey=(state,id)=>`${state.location.map}/${id}`;
 
-// These are nearby domain targets, not permanent UI panels. Plans are evaluated
-// against the current state every time the prompt is displayed or confirmed.
 export function commandTargets(engine,command='interact'){
-  const {data}=engine,state=idleState(engine.state),targets=[];
-  const add=(id,name,text,actions)=>targets.push({id,name,text,actions});
+  const {data}=engine,state=idleState(engine.state),targets=[],manual=command==='inspect',inspection=manual||command==='interact';
+  const add=(id,name,text,actions,extra={})=>{
+    const signature=extra.signature??inspectionSignature([name,text,actions.map(a=>[a.label,a.enabled,a.reason])]);
+    targets.push({id,name,text,actions,signature,record:receiptKey(state,id),...extra});
+  };
   for(const system of dungeonViews(data,state)){
     if(command==='portable'){
       if(system.portable)add(`portable:${system.id}`,system.portable.name,flameText(system.portable),system.portable.actions);
@@ -25,67 +30,104 @@ export function commandTargets(engine,command='interact'){
     for(const t of system.controls??[])add(key([system.id,t.id]),t.name,t.open?'弁が開いている。':'弁が閉じている。',t.actions);
     for(const t of system.walls??[])add(key([system.id,t.id]),t.name,t.broken?'壁は崩れ、通路が開いている。':'壁に亀裂がある。',t.broken?[]:t.actions);
   }
-  if(command!=='interact')return targets;
+  if(!inspection)return targets;
   for(const event of questEvents(data)){
+    if(event.trigger!=='action'||!eventVisible(state,event)||!event.points.some(p=>closeTo(state,p))||event.dungeon&&event.dungeon!==state.dungeons?.active?.id)continue;
     const plan=questEventPlan(data,state,event.quest,event.id);
-    if(plan.ok)add(`quest:${event.quest}:${event.id}`,event.title,`関連依頼：${data.quests[event.quest].title}`,[{label:'調査する',enabled:true,intent:{type:'quest.event',quest:event.quest,id:event.id}}]);
+    // Unaccepted quest requirements must not reveal private scene information.
+    if(!plan.ok&&state.quests[event.quest]?.stage==='available')continue;
+    const info=inspectScript(engine,event.script),done=event.once&&state.events[`quest/${event.quest}/${event.id}`];
+    add(`quest:${event.quest}:${event.id}`,event.title,`関連依頼：${data.quests[event.quest].title}${done?'。調査済み。':''}`,[{label:'調査する',enabled:plan.ok,reason:plan.reason??'',consumes:info.consumes,meaningful:info.effect,intent:{type:'quest.event',quest:event.quest,id:event.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([plan.ok,plan.reason,done]),script:done?null:event.script,args:{}});
   }
-  for(const object of engine.interactionObjects())add(`object:${object.id}`,object.name,object.name,[{label:'調べる',enabled:true,intent:{type:'field.object',id:object.id}}]);
-  return targets;
+  for(const object of engine.nearbyObjects()){
+    if(object.trigger!=='interact'||!eventVisible(state,{visibleWhen:object.visibleWhen??object.condition}))continue;
+    const done=object.once&&state.events[`${state.location.map}/${object.id}`],enabled=!done&&(object.condition===undefined||engine.value(object.condition));
+    const args={object:object.id,map:state.location.map},info=inspectScript(engine,object.script,args);
+    add(`object:${object.id}`,object.name,done?'調査済み。':object.name,[{label:'調べる',enabled,reason:done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。',consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done]),script:done?null:object.script,args});
+  }
+  if(manual){
+    const l=state.location,[dx,dy]=faces[l.facing];
+    for(const [id,name,x,y] of [['here','足元のセル',l.x,l.y],['ahead','正面のセル',l.x+dx,l.y+dy]]){
+      const cell=dungeonCell(data,state,engine.map(),x,y);if(!cell)continue;
+      add(`cell:${id}`,name,`${engine.walkable(engine.map(),x,y)?'通行できる。':'通行できない。'}${cell.visual.floor?'床がある。':'床はない。'}`,[]);
+    }
+    const door=connectionSurfaces(data,state).doors[`${l.x},${l.y}/${l.facing}`];
+    const names={north:'北',east:'東',south:'南',west:'西'};
+    add('edge:front','正面のエッジ',`${names[l.facing]}側の境界。${door?`${door.name}。${door.closed?'閉鎖中。':'通行可能。'}`:'この面にある対象は一覧から選べる。'}`,[]);
+    return targets;
+  }
+  // Keep a selected target available while its detail/consumption choices are open.
+  return targets.filter(t=>!t.completed&&(engine.state.waiting?.target===t.id||t.actions.some(a=>a.enabled&&a.meaningful!==false)||state.inspections?.[t.record]!==t.signature||t.status&&state.inspections?.[`${t.record}/status`]!==t.status));
 }
 
 export function playerCommands(engine){
   if(engine.state.mode!=='dungeon')return null;
   const enabled=!engine.state.waiting&&!engine.state.battle&&!engine.state.vm.length;
   const command=(id,label)=>({id,label,enabled,intent:{type:'player.command',id}});
-  return {title:'プレイヤーコマンド',movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','足元・正面を調べる'),command('retreat','帰還印で町へ戻る'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[])]};
+  return {title:'プレイヤーコマンド',movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','便利調べる'),command('inspect','任意調べる'),command('retreat','帰還印で町へ戻る'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[])]};
 }
 
 export function commandDialog(engine){
   const wait=engine.state.waiting;
   if(wait?.type!=='command')return null;
   if(wait.command==='result')return {type:'text',text:wait.text,speaker:''};
-  const cancel={id:'cancel',text:wait.command==='retreat'?'やめる':'離れる',enabled:true};
+  const cancel={id:'cancel',text:wait.command==='retreat'?'やめる':wait.command==='inspect'&&wait.target?'対象一覧へ戻る':'離れる',enabled:true};
   if(wait.command==='retreat')return {type:'choice',text:`帰還印で町へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:true},cancel]};
-  const targets=commandTargets(engine,wait.command),target=targets.find(t=>t.id===wait.target);
+  const targets=wait.origin!==inspectionOrigin(engine.state)?[]:commandTargets(engine,wait.command),target=targets.find(t=>t.id===wait.target);
   if(!target)return {type:'choice',text:targets.length?'何を調べる？':'今は調べられるものがない。',options:[...targets.map(t=>({id:key(['target',t.id]),text:t.name,enabled:true,target:t.id})),cancel]};
   return {type:'choice',text:`${target.name}\n\n${target.text}`,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
 }
-
+function remember(engine,target,executing=false){
+  if(!target.script||executing||!target.actions.some(a=>a.enabled))engine.state.inspections[target.record]=target.signature;
+  if(target.status)engine.state.inspections[`${target.record}/status`]=target.status;
+}
+function performTarget(engine,target,action){
+  const s=engine.state;remember(engine,target,true);
+  if(target.script)s.inspectionActive={record:target.record,script:target.script,args:target.args,information:target.information};
+  let changed;
+  if(action.intent.type==='quest.event')changed=openQuestEvent(engine,action.intent.quest,action.intent.id);
+  else if(action.intent.type==='field.object')changed=engine.trigger('interact',action.intent.id);
+  else changed=dungeonAction(engine,action.intent);
+  if(!changed){s.inspectionActive=null;return false;}
+  finishInspection(engine);processFieldEvents(engine);
+  if(!s.waiting&&!s.battle&&!s.vm.length)s.waiting={type:'command',command:'result',text:s.notice||'操作を終えた。'};
+  return true;
+}
+function selectTarget(engine,wait,target){
+  remember(engine,target);
+  const actions=target.actions.filter(a=>a.enabled);
+  // Only convenient inspection skips an unambiguous, resource-free action.
+  if(wait.command==='interact'&&actions.length===1&&!actions[0].consumes){engine.state.waiting=null;return performTarget(engine,target,actions[0]);}
+  engine.state.waiting={...wait,target:target.id};return true;
+}
 export function openPlayerCommand(engine,id){
   const s=engine.state;
-  if(s.mode!=='dungeon'||s.waiting||s.battle||s.vm.length||!['interact','retreat','portable','environment'].includes(id))return false;
+  if(s.mode!=='dungeon'||s.waiting||s.battle||s.vm.length||!['interact','inspect','retreat','portable','environment'].includes(id))return false;
   if(id==='retreat'){s.waiting={type:'command',command:id};return true;}
-  const targets=commandTargets(engine,id);
-  if(!targets.length){s.waiting={type:'command',command:'result',text:'足元と正面を調べた。今は新しい発見はない。'};return true;}
-  // Existing single object interactions keep their authored narration and choices.
-  if(targets.length===1&&targets[0].id.startsWith('object:'))return engine.trigger('interact',targets[0].actions[0].intent.id);
-  if(targets.length===1&&targets[0].id.startsWith('quest:')){const i=targets[0].actions[0].intent;return openQuestEvent(engine,i.quest,i.id);}
-  s.waiting={type:'command',command:id,...(targets.length===1?{target:targets[0].id}:{})};return true;
+  const targets=commandTargets(engine,id),wait={type:'command',command:id,origin:inspectionOrigin(s)};
+  if(!targets.length){if(id==='interact')return false;s.waiting={type:'command',command:'result',text:'今は新しく調べる対象がない。'};return true;}
+  if(id!=='inspect'&&targets.length===1)return selectTarget(engine,wait,targets[0]);
+  s.waiting=wait;return true;
 }
-
 export function advanceCommand(engine){
   if(engine.state.waiting?.type!=='command'||engine.state.waiting.command!=='result')return false;
   engine.state.waiting=null;return true;
 }
-
 export function chooseCommand(engine,id){
   const s=engine.state,wait=s.waiting;
   if(wait?.type!=='command'||wait.command==='result')return false;
   const option=commandDialog(engine).options.find(o=>o.id===id);
   if(!option?.enabled)return false;
-  if(id==='cancel'){s.waiting=null;return true;}
-  if(option.target){s.waiting={...wait,target:option.target};return true;}
+  if(id==='cancel'){
+    if(wait.command==='inspect'&&wait.target){const {target,...parent}=wait;s.waiting=parent;}
+    else s.waiting=null;
+    return true;
+  }
+  const targets=commandTargets(engine,wait.command);
+  if(option.target){const target=targets.find(t=>t.id===option.target);return Boolean(target&&selectTarget(engine,wait,target));}
   s.waiting=null;
-  let changed;
-  if(wait.command==='retreat'){engine.returnTown(true);changed=true;}
-  else if(option.intent.type==='quest.event')changed=openQuestEvent(engine,option.intent.quest,option.intent.id);
-  else if(option.intent.type==='field.object')changed=engine.trigger('interact',option.intent.id);
-  else changed=dungeonAction(engine,option.intent);
-  if(!changed){s.waiting=wait;return false;}
-  // Run real action consequences before presenting a result. Opening and
-  // cancelling a prompt never consumes a turn or activates dungeon danger.
-  processFieldEvents(engine);
-  if(!s.waiting&&!s.battle&&!s.vm.length)s.waiting={type:'command',command:'result',text:s.notice||'操作を終えた。'};
+  if(wait.command==='retreat'){engine.returnTown(true);s.waiting={type:'command',command:'result',text:s.notice};return true;}
+  const target=targets.find(t=>t.id===wait.target),action=target?.actions.find(a=>a.enabled&&key(a.intent)===key(option.intent));
+  if(!action||!performTarget(engine,target,action)){s.waiting=wait;return false;}
   return true;
 }

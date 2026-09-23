@@ -2,6 +2,8 @@
 
 更新日: 2026-09-18。作品版1.14.0。セル進入・条件自動・任意調査、2D区画の配置と共通メッセージへ接続しています。
 
+エッジ配置にはpointsへ `edge: "north"` などを追加します。設置セルでその面を向いた場合にだけinteractまたはactionを実行できます。enter・auto・blockingとの併用は拒否します。[調査仕様](../ui/INSPECTION.md)。
+
 ## 正本と編集
 
 クエスト固有の配置と現地調査は `authoring/quests/qXXX.events.json` を編集します。このファイルの `events` と追加の `scripts` は、対応する `data/quests/qXXX.json` に集約されます。本筋の原稿はq001は `story-q001.mjs`、q002は `story-q002.mjs`、q003〜q010は `stories-v11-*.mjs`、`catalog-q011-q020.json`、`structures-*.mjs`、`scenarios-*.mjs` です。配布時には同じクエストJSONの events・scripts・story・outcomes・model から配置、条件、会話、選択肢、分岐、報酬と結末を追えます。

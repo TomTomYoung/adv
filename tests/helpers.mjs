@@ -1,4 +1,4 @@
-import {commandDialog} from '../src/core/player-commands.js';
+import {commandDialog,commandTargets} from '../src/core/player-commands.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -12,10 +12,11 @@ export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='
 // nearby objects now share the message window. Never choose story decisions.
 export function inspect(engine,objectId){
   const object=engine.interactionObjects().find(o=>objectId===undefined||o.id===objectId);
-  assert.ok(engine.dispatch({type:'interact'}));
+  assert.ok(engine.dispatch({type:'player.command',id:'inspect'}));
   if(engine.state.waiting?.type!=='command'||engine.state.waiting.command==='result')return;
   let dialog=commandDialog(engine);
-  const target=dialog.options.find(o=>o.target===`object:${object?.id}`);
+  const intended=object?`object:${object.id}`:commandTargets(engine,'inspect').find(t=>t.actions.some(a=>a.intent.type==='dungeon.action'&&a.intent.action==='cross'))?.id;
+  const target=dialog.options.find(o=>o.target===intended);
   if(target){assert.ok(engine.dispatch({type:'choose',id:target.id}));dialog=commandDialog(engine);}
   const action=dialog?.options.find(o=>o.enabled&&(o.intent?.type==='field.object'&&o.intent.id===object?.id||!object&&o.intent?.type==='dungeon.action'&&o.intent.action==='cross'));
   if(action)assert.ok(engine.dispatch({type:'choose',id:action.id}));
