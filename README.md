@@ -2,6 +2,8 @@
 
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。
 
+[設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/CONFIG_EDITORS.md)。
+
 作品版1.18.0。町10か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
 
 ## 遊ぶ
@@ -67,7 +69,7 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 [SE一覧・音源](doc/ui/SE_CATALOG.md) / [戦闘・フィールド演出一覧](doc/ui/EFFECT_CATALOG.md)
 
-「記録」でSE音量と演出の通常・軽減・オフを選べます。ビュー用プレビューでは効果を再生し、SEを個別に試聴できます。演出とSEの原稿は `authoring/presentation.json`、素材の再作成は `node tools/assets/generate-effects.mjs`、定義の更新は `node tools/build-presentation.mjs` です。
+「記録」でSE音量と演出の通常・軽減・オフを選べます。ビュー用プレビューでは効果を再生し、SEを個別に試聴できます。演出とSEの原稿は `config/presentation.json`、素材の再作成は `node tools/assets/generate-effects.mjs`、定義の更新は `node tools/build-presentation.mjs` です。
 
 ## 開発確認
 

@@ -29,8 +29,8 @@ q002・q003の `story.worldPlaces`、全配置イベント、案内先、作者�
 
 ## 実装と編集元
 
-1. [authoring/connected-maps.json](../authoring/connected-maps.json)：新しい平面地形、退避する配布マップとスクリプト一覧。
-2. [authoring/dungeons/region_1.json](../authoring/dungeons/region_1.json)：水路・乾いた操作盤・出入口の明示的な接続。ほかの3ダンジョンも各JSONの `systems.connections` が接続の正本です。
+1. [config/connected-maps.json](../config/connected-maps.json)：新しい平面地形、退避する配布マップとスクリプト一覧。
+2. [config/dungeons/region_1.json](../config/dungeons/region_1.json)：水路・乾いた操作盤・出入口の明示的な接続。ほかの3ダンジョンも各JSONの `systems.connections` が接続の正本です。
 3. [map-connections.js](../src/core/systems/map-connections.js)：接続口での移動許可・到着位置・向き・扉の表示状態。リンクのa/bは各マップ側の歩ける接続セルです。扉は `side` が指す隣の壁面に描きます。階段には水平の扉面を指定しません。
 4. [compartment-water.js](../src/core/systems/compartment-water.js)：区画全体の水没、乾いた場所からの給排水、保存検証、排水手段の到達性。全水密扉が閉じた状態から、排水できる区画を順に解放できることを検証します。
 5. [build-connected-maps.mjs](../tools/build-connected-maps.mjs)：旧生成器の後で2D原稿を適用し、旧階段オブジェクトによる別移動経路を除きます。Viewは投影結果の描画とdispatchのみを担当します。

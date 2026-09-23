@@ -5,7 +5,7 @@ import {authoredCellLayers,validateCellLayers} from '../src/core/cell-layers.js'
 export async function buildCellLayers(root){
   const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
   const write=async(file,value)=>fs.writeFile(path.join(root,file),JSON.stringify(value,null,2)+'\n');
-  const source=await read('authoring/cell-layers.json'),game=await read('data/game.json');
+  const source=await read('config/cell-layers.json'),game=await read('data/game.json');
   if(source.schemaVersion!==1)throw Error('セル原稿の形式版が不正です');
   const data={game,cellTypes:source.presets,cellEvents:source.events,scripts:source.scripts,assets:await read('data/assets.json'),maps:{}};
   game.cellLayerVersion=1;

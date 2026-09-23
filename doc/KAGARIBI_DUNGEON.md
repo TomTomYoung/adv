@@ -70,7 +70,7 @@ Lv5で鎮めの火、Lv10で呼び寄せの火をMP4で点火できます。ス�
 
 6. 保存・構造・再生成
 
-編集元は authoring/dungeons/ の11定義、追加マップ・文章・魔物・道具は authoring/kagaribi-content.json、職業の技能は authoring/jobs.json です。範囲、燃料、警告、火の倍率、台座の効果と配置はJSONで変更できます。
+編集元は config/dungeons/ の11定義、追加マップ・文章・魔物・道具は config/kagaribi-content.json、職業の技能は config/jobs.json です。範囲、燃料、警告、火の倍率、台座の効果と配置はJSONで変更できます。
 
 生成は npm run build:dungeons。ゲーム用はdata/dungeons.json、新規マップ、kagaribiスクリプト、追加道具・魔物・遭遇、マニフェストです。build:scenarios、build:jobs、build:charactersの末尾にも組み込みました。既存シナリオの再生成ツールの他の性質はこの変更では改変していません。追加職業の変更を反映する場合はbuild:jobsを使用します。
 

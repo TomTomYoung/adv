@@ -30,7 +30,7 @@
 
 ## JSONとファイル構成
 
-原稿はauthoring/jobs.json。配布データはjobs.json / job-profile.json / buffs.json / field-abilities.json。人物にはinitialJob、装備にはequipmentTypeを付けます。技能の追加も原稿にまとめ、既存の表示演出・SEへ割り当てます。viewは職業選択・比較・使用不能理由をViewModelだけから描きます。
+原稿はconfig/jobs.json。配布データはjobs.json / job-profile.json / buffs.json / field-abilities.json。人物にはinitialJob、装備にはequipmentTypeを付けます。技能の追加も原稿にまとめ、既存の表示演出・SEへ割り当てます。viewは職業選択・比較・使用不能理由をViewModelだけから描きます。
 
 JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob.change意図、探索特技はjob.action意図で要求します。スクリプト側も同名命令から同じ条件検査を通します。移動・装備・戦闘と同様、一般変数setによる自由書込みは許可しません。
 

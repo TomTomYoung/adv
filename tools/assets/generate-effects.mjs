@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {PaintCore} from './vendor/AIPaint/src/core.js';
 import {MusicCore,blankProject,newTrack,INSTRUMENTS} from './vendor/AIMusic/src/core.mjs';
 import {renderPCM,encodeWAV,RELEASE} from './vendor/AIMusic/src/audio.mjs';
-const root=path.resolve(import.meta.dirname,'../..'),plan=JSON.parse(fs.readFileSync(path.join(root,'authoring/presentation.json'),'utf8'));
+const root=path.resolve(import.meta.dirname,'../..'),plan=JSON.parse(fs.readFileSync(path.join(root,'config/presentation.json'),'utf8'));
 const write=(f,v)=>{const p=path.join(root,f);fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,v);};
 const json=(f,v)=>write(f,JSON.stringify(v,null,2)+'\n'),hash=b=>createHash('sha256').update(b).digest('hex');
 const table=Array.from({length:256},(_,n)=>{for(let k=0;k<8;k++)n=n&1?0xedb88320^(n>>>1):n>>>1;return n>>>0;});

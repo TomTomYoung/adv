@@ -189,7 +189,7 @@ export function questPageBundle(data,id){
   add('### 物語の場所と出発・到着行為');
   add(`<details>\n<summary>worldPlaces と5本の移動行為</summary>\n\n${block({worldPlaces:q.story.worldPlaces,actions:Object.fromEntries(Object.entries(q.story.actions).filter(([,a])=>a.journey))})}\n\n</details>`);
   add('## 編集元と再生成');
-  add('本編は [authoring/story-q001.mjs](../authoring/story-q001.mjs)、配置・壁灯・入口の調査は [authoring/quests/q001.events.json](../authoring/quests/q001.events.json)、マップは [authoring/kagaribi-content.json](../authoring/kagaribi-content.json)、町は [authoring/locations.json](../authoring/locations.json) が正本。`npm run build:catalog` でカタログ・このページ・配置図を一緒に生成する。本文を直接改稿した場合は、正本へ取り込んでから再生成する。`npm run build:docs` 単独はこのページの本文を保持する。');
+  add('本編は [authoring/story-q001.mjs](../authoring/story-q001.mjs)、配置・壁灯・入口の調査は [config/quests/q001.events.json](../config/quests/q001.events.json)、マップは [config/kagaribi-content.json](../config/kagaribi-content.json)、町は [config/locations.json](../config/locations.json) が正本。`npm run build:catalog` でカタログ・このページ・配置図を一緒に生成する。本文を直接改稿した場合は、正本へ取り込んでから再生成する。`npm run build:docs` 単独はこのページの本文を保持する。');
   files[questPages[id]]=out.join('\n').replace(/\n{3,}/g,'\n\n').trimEnd()+'\n';
   return files;
 }
@@ -307,7 +307,7 @@ function q002PageBundle(data){
   add('### 物語の場所と出発・到着行為');
   add(`<details>\n<summary>worldPlaces と${journeys.length}本の移動行為</summary>\n\n${block({worldPlaces:q.story.worldPlaces,actions:Object.fromEntries(journeys)})}\n\n</details>`);
   add('## 編集元と再生成');
-  add('本編は [authoring/story-q002.mjs](../authoring/story-q002.mjs)、配置は [authoring/quests/q002.events.json](../authoring/quests/q002.events.json)、2D地形は [authoring/connected-maps.json](../authoring/connected-maps.json)、接続・給排水は [authoring/dungeons/region_1.json](../authoring/dungeons/region_1.json)、町は [authoring/locations.json](../authoring/locations.json) が正本。実装の全文は [data/quests/q002.json](../data/quests/q002.json)。');
+  add('本編は [authoring/story-q002.mjs](../authoring/story-q002.mjs)、配置は [config/quests/q002.events.json](../config/quests/q002.events.json)、2D地形は [config/connected-maps.json](../config/connected-maps.json)、接続・給排水は [config/dungeons/region_1.json](../config/dungeons/region_1.json)、町は [config/locations.json](../config/locations.json) が正本。実装の全文は [data/quests/q002.json](../data/quests/q002.json)。');
   add('`npm run build:catalog` でカタログ・専用ページ・配置図を一緒に生成する。本文を改稿する場合は原稿へ反映し、`npm run build:scenarios` でゲームデータから再生成する。`npm run build:docs` 単独は本文を保持し、`npm run check:docs` は専用ページと配置図を配布データへ照合する。');
   files[questPages[q.id]]=out.join('\n').replace(/\n{3,}/g,'\n\n').trimEnd()+'\n';return files;
 }

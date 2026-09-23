@@ -2,7 +2,7 @@
 
 更新日: 2026-09-18。対象: 作品版1.14.0。13ダンジョン・33件の2Dマップ・200クエスト。区画接続と退避は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
 
-設定の編集元は `authoring/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
+設定の編集元は `config/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
 Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234553b6) と各ページの「ダンジョン固有設定」を2026-09-14に照合しました。既存の物語設定と、ゲームに設定した数値・配置は区別して記載します。
 
@@ -10,15 +10,15 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 1. 篝火の迷宮（`kagaribi`）
 
-   火台へ種火を配置し、火の種類に応じた範囲効果を利用します。携帯松明の燃料、くらがり、灯番に対応します。実装済み。設定: `authoring/dungeons/kagaribi.json`。詳細: [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)。[Notion](https://app.notion.com/p/3dac3c1966b38057b740df426b57da09)。
+   火台へ種火を配置し、火の種類に応じた範囲効果を利用します。携帯松明の燃料、くらがり、灯番に対応します。実装済み。設定: `config/dungeons/kagaribi.json`。詳細: [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)。[Notion](https://app.notion.com/p/3dac3c1966b38057b740df426b57da09)。
 
 2. 灯守の地下水道（`region_1`、乾いた区画6件・水路4件）
 
-   短い直線水路を水密扉で区切り、乾いた操作室の給排水盤で区画全体を排水します。水没区画への進入は禁止。上下階の階段は乾いた荷揚げ場と操作室の間だけに置きます。q002〜q010の人物・イベントを再配置しました。設定: `authoring/connected-maps.json` と `authoring/dungeons/region_1.json`。旧貯水立坑と潮汐式フロアは退避して保持しています。
+   短い直線水路を水密扉で区切り、乾いた操作室の給排水盤で区画全体を排水します。水没区画への進入は禁止。上下階の階段は乾いた荷揚げ場と操作室の間だけに置きます。q002〜q010の人物・イベントを再配置しました。設定: `config/connected-maps.json` と `config/dungeons/region_1.json`。旧貯水立坑と潮汐式フロアは退避して保持しています。
 
 3. 塩哭きの廃坑（`region_2`、2階層）
 
-   戦闘ごとに装備個体へ塩が積もり、水没区画・退出時に洗浄します。塩の多い装備はソルトイーターに食べられると永久消失します。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `authoring/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
+   戦闘ごとに装備個体へ塩が積もり、水没区画・退出時に洗浄します。塩の多い装備はソルトイーターに食べられると永久消失します。発破薬・岩砕きで壁を破壊し、開通状態を保存します。実装済み。設定: `config/dungeons/region_2.json`。詳細: [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)。[Notion](https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13)。
 
 ## 庭園から移動集落までの固有システム
 
@@ -32,7 +32,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    植物を採取・伐採して取り除くと素材を得られますが、その植物による効果や地形変化は失われます。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_3.json`。[Notion](https://app.notion.com/p/3dac3c1966b38185ba02c5a96de1cd0d)。
+   状態: 実装済み。設定: `config/dungeons/region_3.json`。[Notion](https://app.notion.com/p/3dac3c1966b38185ba02c5a96de1cd0d)。
 
 5. 鏡沈みの礼拝堂（`region_4`）
 
@@ -40,7 +40,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    鏡ごとの移動先と接続関係を定義し、ワープを組み合わせて探索するダンジョンとします。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_4.json`。[Notion](https://app.notion.com/p/3dac3c1966b381c7ade8d37c5f844fd8)。
+   状態: 実装済み。設定: `config/dungeons/region_4.json`。[Notion](https://app.notion.com/p/3dac3c1966b381c7ade8d37c5f844fd8)。
 
 6. 灰時計の書庫（`region_5`）
 
@@ -50,7 +50,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    書庫を出ると、借りた技能は失われ、封じた自分の技能は元に戻ります。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_5.json`。[Notion](https://app.notion.com/p/3dac3c1966b38108bea6d2319ae0665a)。
+   状態: 実装済み。設定: `config/dungeons/region_5.json`。[Notion](https://app.notion.com/p/3dac3c1966b38108bea6d2319ae0665a)。
 
 7. 眠れる地下市場（`region_6`）
 
@@ -58,7 +58,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    戦闘を起こすと周辺の警戒が強まり、店が閉まったり、用心棒が増えたりします。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_6.json`。[Notion](https://app.notion.com/p/3dac3c1966b3810683f5ecb24c746c01)。
+   状態: 実装済み。設定: `config/dungeons/region_6.json`。[Notion](https://app.notion.com/p/3dac3c1966b3810683f5ecb24c746c01)。
 
 8. 黒潮の沈没城（`region_7`）
 
@@ -66,7 +66,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    区画ごとの浮上装置を動かすと、新しい空気の補給地点や出入口ができ、活動範囲が広がります。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_7.json`。[Notion](https://app.notion.com/p/3dac3c1966b381bfab6fc23f7f2f23c3)。
+   状態: 実装済み。設定: `config/dungeons/region_7.json`。[Notion](https://app.notion.com/p/3dac3c1966b381bfab6fc23f7f2f23c3)。
 
 9. 鉄胎の機関廟（`region_8`）
 
@@ -76,7 +76,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    配線の切り替えや部品の取り外しによって、必要な装置だけを動かす方法を探します。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_8.json`。[Notion](https://app.notion.com/p/3dac3c1966b3816e8707e7982104b489)。
+   状態: 実装済み。設定: `config/dungeons/region_8.json`。[Notion](https://app.notion.com/p/3dac3c1966b3816e8707e7982104b489)。
 
 10. 星欠けの地下観測所（`region_9`）
 
@@ -86,7 +86,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    プレイヤーが天球儀を操作することで、地形変化を起こすタイミングを選べます。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_9.json`。[Notion](https://app.notion.com/p/3dac3c1966b38156a3e0dd8801998533)。
+   状態: 実装済み。設定: `config/dungeons/region_9.json`。[Notion](https://app.notion.com/p/3dac3c1966b38156a3e0dd8801998533)。
 
 11. 帰還者の深淵（`region_10`）
 
@@ -98,7 +98,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    初期設定では逆行1歩ごとに1重累積し、攻撃・防御・素早さ・知力を0.6の累積数乗倍にします。上限100重で、深淵から退出すると解除されます。HP・MPの上限は変えません。
 
-   状態: 実装済み。設定: `authoring/dungeons/region_10.json`。[Notion](https://app.notion.com/p/3dac3c1966b381b8a90bfba1009b5bdf)。
+   状態: 実装済み。設定: `config/dungeons/region_10.json`。[Notion](https://app.notion.com/p/3dac3c1966b381b8a90bfba1009b5bdf)。
 
 12. 祈りの届かない谷（`prayerless_valley`）
 
@@ -108,7 +108,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    敵の呪いを止めるために谷へ誘い込む、回復祈祷を使うために境界外へ出るなど、境界を利用した位置取りが攻略に関わります。制限の対象は、境界へ入る前に確認できるようにします。
 
-   状態: 実装済み。設定: `authoring/dungeons/prayerless_valley.json`。[Notion](https://app.notion.com/p/3dac3c1966b3817ab7b4eeb4f70890f1)。
+   状態: 実装済み。設定: `config/dungeons/prayerless_valley.json`。[Notion](https://app.notion.com/p/3dac3c1966b3817ab7b4eeb4f70890f1)。
 
 13. 巨獣上の移動集落（`moving_village`）
 
@@ -118,7 +118,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
    地形変化はプレイヤーの操作によらず発生し、プレイヤーはそのタイミングを選べません。
 
-   状態: 実装済み。設定: `authoring/dungeons/moving_village.json`。[Notion](https://app.notion.com/p/3dac3c1966b381e88b2ad3f28cbb6573)。
+   状態: 実装済み。設定: `config/dungeons/moving_village.json`。[Notion](https://app.notion.com/p/3dac3c1966b381e88b2ad3f28cbb6573)。
 
 ## 実装方針と確認事項
 

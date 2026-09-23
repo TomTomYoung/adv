@@ -6,7 +6,7 @@
 
 基準隊はアダ・ニオ・セラ・イルの4人です。最大5人まで編成でき、30職を選べます。地域別の推奨Lvは1〜10ですが、転職履歴、装備、技能の貸出、材料、残りHP・MPによって実際の戦力は変わります。人物定義の旧skills配列から現在の技能を推定しません。
 
-敵の基礎数値は authoring/entities.json と authoring/dungeon-content.json、職業・技能・成長は authoring/jobs.json、各迷宮の補正は authoring/dungeons/*.json を編集します。全体の消費・成長・戦闘式の生成元は tools/build-content.mjs です。生成後の実値は data/system.json、data/formulas.json、data/enemies.json と各迷宮定義で確認します。
+敵の基礎数値は config/entities.json と config/dungeon-content.json、職業・技能・成長は config/jobs.json、各迷宮の補正は config/dungeons/*.json を編集します。全体の消費・成長・戦闘式の生成元は tools/build-content.mjs です。生成後の実値は data/system.json、data/formulas.json、data/enemies.json と各迷宮定義で確認します。
 
 通常遭遇の確認は成功した移動7歩ごとです。マップ側の遭遇率・重み、暗闇の加算、職業、火・植物・護衛などの倍率が作用します。単一の18%を全マップへ固定した仕様として扱いません。固定戦闘、通常遭遇、用心棒・門番を分けて確認します。
 

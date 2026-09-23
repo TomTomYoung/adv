@@ -10,7 +10,7 @@
 
 HTTPで配信する静的ブラウザRPGADVです。ゲーム実行時に外部CDN・APIキー・サーバー側処理は不要です。開発・検証のNode.js要件は22以上。`npm run serve` はPythonのHTTPサーバーを使います。
 
-作品固有データは `data/game.json` のmanifestからJSONとして読み込みます。任意JavaScriptをJSON内で評価しません。シナリオはJSON DSL、ダンジョンはJSON定義と登録された共通部品で構成します。YAML入力や設定フォームは現在ありません。
+作品固有データは `data/game.json` のmanifestからJSONとして読み込みます。任意JavaScriptをJSON内で評価しません。シナリオはJSON DSL、ダンジョンはJSON定義と登録された共通部品で構成します。JSON原稿はconfigの[設定編集HTML](CONFIG_EDITORS.md)で編集・検証して全JSONをコピーできます。YAML入力はありません。
 
 ## 世界と探索
 

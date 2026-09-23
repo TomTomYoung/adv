@@ -4,7 +4,7 @@
 
 ## 正本と生成
 
-[authoring/cell-layers.json](../authoring/cell-layers.json) がセル種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
+[config/cell-layers.json](../config/cell-layers.json) がセル種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
 
 `npm run build:scenarios` は従来の生成を済ませた後、[build-cell-layers.mjs](../tools/build-cell-layers.mjs) でレイヤーを反映します。全33マップの配置が必須で、欠落・ロードされないマップ・未知プリセット・不正な上書きを拒否します。`config/` への整理と対応する編集HTMLは、ハンドオフの後続作業です。
 

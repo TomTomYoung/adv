@@ -71,7 +71,7 @@ FFmpeg decoding and volumedetect confirm non-silent stereo audio with no clipped
 
 ## 1.2.0 SE and effect animation (2026-09-09)
 
-The same pinned AIMusic engine generated 28 original sound effects from the note recipes in `authoring/presentation.json`. Each editable project is shipped in `assets/source/se/`. The actual synth output is trimmed to the last note plus its instrument release and 15ms padding, faded over 5ms at each end, normalized to a peak of 0.55, and encoded using FFmpeg/libvorbis quality 4. No recorded samples were used. Decoded OGG duration, peak, RMS and SHA-256 are in `assets/source/effects-report.json`.
+The same pinned AIMusic engine generated 28 original sound effects from the note recipes in `config/presentation.json`. Each editable project is shipped in `assets/source/se/`. The actual synth output is trimmed to the last note plus its instrument release and 15ms padding, faded over 5ms at each end, normalized to a peak of 0.55, and encoded using FFmpeg/libvorbis quality 4. No recorded samples were used. Decoded OGG duration, peak, RMS and SHA-256 are in `assets/source/effects-report.json`.
 
 The same pinned AIPaint PaintCore drew eight abstract pixel effect sheets, each with eight 128×128 RGBA frames. The sheets are 1024×128. Every pixel comes from AIPaint ellipse/line commands; the small PNG encoder only serializes PaintCore.composite() output. Commands with revisions are retained in `assets/source/effects/`. `node tools/assets/generate-effects.mjs` deterministically recreates both the SE and sheets. No new character illustrations or image-generation calls are involved in this expansion.
 

@@ -20,7 +20,7 @@ x・yは0始まりの整数です。東はx+1、西はx-1、南はy+1、北はy-
 
 ### 3.1 配置と上書き
 
-[authoring/cell-layers.json](../authoring/cell-layers.json) の `presets` がセル種、`maps` が配置です。`legend` の文字から `rows` の各地点にプリセットを割り当て、`overrides` で項目を上書きします。`visual` と `parameters` は項目単位、`events` は配列全体を置き換えます。幅・高さは全行で一致させ、範囲外は進入不可です。
+[config/cell-layers.json](../config/cell-layers.json) の `presets` がセル種、`maps` が配置です。`legend` の文字から `rows` の各地点にプリセットを割り当て、`overrides` で項目を上書きします。`visual` と `parameters` は項目単位、`events` は配列全体を置き換えます。幅・高さは全行で一致させ、範囲外は進入不可です。
 
 生成した `map.cells` がレイヤー配置、`map.tiles` が通行値だけの投影です。ロード時に両者の一致を検査します。例えば次の通行投影の中央 `(2,2)` は進入不可ですが、その画像や遮光属性はこの文字列からは決まりません。
 
@@ -48,7 +48,7 @@ x・yは0始まりの整数です。東はx+1、西はx-1、南はy+1、北はy-
 
 `map.voxels` があるマップを3D方式として扱います。`voxels.version` は1、`minZ` は最下層のz、`layers` は低いzから順番に並ぶ平面図です。`layers[z-minZ][y][x]` の `.` が空、`#` が密です。各層は同じ幅と行数を持ち、`tiles` はz=0の断面と一致させます。
 
-現行の[貯水立坑](../authoring/voxel-content.json)はz=-1、0、1の3層です。`faces` に共有面、`links` に経路、`devices` に給水・掘削装置、`initialWater` に初期水没操作を定義します。これらの配列は空でも必要です。
+現行の[貯水立坑](../config/voxel-content.json)はz=-1、0、1の3層です。`faces` に共有面、`links` に経路、`devices` に給水・掘削装置、`initialWater` に初期水没操作を定義します。これらの配列は空でも必要です。
 
 密の立方体には六方向のどこからも入れず、その中を通る入口・出口の36組もすべて不可です。上面は上の空セルの床になり、側面は隣の空セルから見た壁、下面は下の空セルから見た天井になります。許可された掘削で密から空へ変えられます。
 
@@ -176,7 +176,7 @@ Viewへ渡す `blocked` は通行不可、`opaque` は視線を遮る描画、`w
 
 [マップSchema](../data/schemas/map.schema.json)と[立体Schema生成定義](../tools/voxel-schema.mjs)が現行JSONの形式です。[エンジン](../src/core/engine.js)の `walkable` / `move` が占有と通常移動、[立体地形](../src/core/voxels.js)が隣接・共有面・足場・水、[立体部品](../src/core/systems/voxel-space.js)が経路・操作・退避を担当します。[立体検証](../src/core/voxel-validation.js)が共有面の重複、六方向の連続性、経路、保存状態を検査します。
 
-2Dの基礎配置は[コンテンツ生成器](../tools/build-content.mjs)と[ダンジョン生成器](../tools/build-dungeons.mjs)を確認します。追加配置・変更の編集元は[ダンジョン原稿](../authoring/dungeon-content.json)、[地形原稿](../authoring/terrain-content.json)、[立体原稿](../authoring/voxel-content.json)などです。対象マップの生成元を確認して編集し、配布先 `data/maps` のみを書き換えても再生成で失われる点に注意してください。
+2Dの基礎配置は[コンテンツ生成器](../tools/build-content.mjs)と[ダンジョン生成器](../tools/build-dungeons.mjs)を確認します。追加配置・変更の編集元は[ダンジョン原稿](../config/dungeon-content.json)、[地形原稿](../config/terrain-content.json)、[立体原稿](../config/voxel-content.json)などです。対象マップの生成元を確認して編集し、配布先 `data/maps` のみを書き換えても再生成で失われる点に注意してください。
 
 現在の検証例は[立体テスト](../tests/voxels.test.mjs)、[ダンジョンテスト](../tests/dungeons.test.mjs)、[環境テスト](../tests/environment-dungeons.test.mjs)、[水面・床・遮蔽テスト](../tests/dungeon-surfaces.test.mjs)にあります。方向別制限の導入時は四方16組・六方36組、Uターン、片方向境界の逆走、入場履歴の保存、2Dの省略時互換、経路・退避の可否を追加検証します。
 

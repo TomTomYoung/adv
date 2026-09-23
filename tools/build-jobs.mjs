@@ -5,7 +5,7 @@ const root=path.resolve(import.meta.dirname,'..');
 export async function applyJobs(){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
-  const p=await read('authoring/jobs.json'),game=await read('data/game.json');
+  const p=await read('config/jobs.json'),game=await read('data/game.json');
   const actors=await read('data/actors.json'),items=await read('data/items.json'),shop=await read('data/shops.json');
   for(const [id,job] of Object.entries(p.initialJobs))actors[id].initialJob=job;
   for(const [id,patch] of Object.entries(p.equipmentPatches))Object.assign(items[id],patch);

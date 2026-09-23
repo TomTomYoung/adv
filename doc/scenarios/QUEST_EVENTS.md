@@ -6,7 +6,7 @@
 
 ## 正本と編集
 
-クエスト固有の配置と現地調査は `authoring/quests/qXXX.events.json` を編集します。このファイルの `events` と追加の `scripts` は、対応する `data/quests/qXXX.json` に集約されます。本筋の原稿はq001は `story-q001.mjs`、q002は `story-q002.mjs`、q003〜q010は `stories-v11-*.mjs`、`catalog-q011-q020.json`、`structures-*.mjs`、`scenarios-*.mjs` です。配布時には同じクエストJSONの events・scripts・story・outcomes・model から配置、条件、会話、選択肢、分岐、報酬と結末を追えます。
+クエスト固有の配置と現地調査は `config/quests/qXXX.events.json` を編集します。このファイルの `events` と追加の `scripts` は、対応する `data/quests/qXXX.json` に集約されます。本筋の原稿はq001は `story-q001.mjs`、q002は `story-q002.mjs`、q003〜q010は `stories-v11-*.mjs`、`catalog-q011-q020.json`、`structures-*.mjs`、`scenarios-*.mjs` です。配布時には同じクエストJSONの events・scripts・story・outcomes・model から配置、条件、会話、選択肢、分岐、報酬と結末を追えます。
 
 `npm run build:scenarios` で全体を生成します。イベント原稿だけを修正した場合は `npm run build:dungeons` でもクエストへの反映と文書更新が行われます。編集用スキーマは [quest-events.schema.json](../../data/schemas/quest-events.schema.json)、配布用は [quest.schema.json](../../data/schemas/quest.schema.json) です。
 
@@ -16,7 +16,7 @@
 
 `data/maps/*.json` は地形・入口・階段・汎用の扉や補給箱など109オブジェクトを保持します。クエスト専用の402オブジェクトは含みません。読込時に loader がクエストの events をマップへ投影し、実行用の map.objects は従来と計511オブジェクトになります。投影は読込内容の中だけで行い、配布マップJSONを書き換えません。
 
-ダンジョンは maps・systems・art・入口を保持します。fieldScenes は廃止しました。ダンジョンからクエストを逆参照せず、クエストイベントの任意の dungeon と points が関連先を指定します。画像区画の正本は `authoring/dungeon-art.json` です。
+ダンジョンは maps・systems・art・入口を保持します。fieldScenes は廃止しました。ダンジョンからクエストを逆参照せず、クエストイベントの任意の dungeon と points が関連先を指定します。画像区画の正本は `config/dungeon-art.json` です。
 
 ## イベントの記法
 

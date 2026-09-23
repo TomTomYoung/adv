@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 export async function readQuestEvents(root,id){
-  return JSON.parse(await fs.readFile(path.join(root,`authoring/quests/${id}.events.json`),'utf8'));
+  return JSON.parse(await fs.readFile(path.join(root,`config/quests/${id}.events.json`),'utf8'));
 }
 export function eventLocations(events){
   return events.filter(e=>e.role).flatMap(e=>e.points.map(p=>({...p,object:e.id,role:e.role})));

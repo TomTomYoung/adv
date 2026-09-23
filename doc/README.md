@@ -4,6 +4,8 @@
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
+[CONFIG_EDITORS.md](CONFIG_EDITORS.md)：設定JSON225件の編集画面、コピー出力、検証範囲と反映手順。
+
 ## UIと操作
 
 [ui/README.md](ui/README.md)：UIの根本方針と現状、画面構成、共通キー操作、キー設定、表示契約、効果と音声の入口。

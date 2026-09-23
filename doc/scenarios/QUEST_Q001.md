@@ -1521,4 +1521,4 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 ## 編集元と再生成
 
-本編は [authoring/story-q001.mjs](../../authoring/story-q001.mjs)、配置・壁灯・入口の調査は [authoring/quests/q001.events.json](../../authoring/quests/q001.events.json)、マップは [authoring/kagaribi-content.json](../../authoring/kagaribi-content.json)、町は [authoring/locations.json](../../authoring/locations.json) が正本。`npm run build:catalog` でカタログ・このページ・配置図を一緒に生成する。本文を直接改稿した場合は、正本へ取り込んでから再生成する。`npm run build:docs` 単独はこのページの本文を保持する。
+本編は [authoring/story-q001.mjs](../../authoring/story-q001.mjs)、配置・壁灯・入口の調査は [config/quests/q001.events.json](../../config/quests/q001.events.json)、マップは [config/kagaribi-content.json](../../config/kagaribi-content.json)、町は [config/locations.json](../../config/locations.json) が正本。`npm run build:catalog` でカタログ・このページ・配置図を一緒に生成する。本文を直接改稿した場合は、正本へ取り込んでから再生成する。`npm run build:docs` 単独はこのページの本文を保持する。

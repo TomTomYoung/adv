@@ -4,7 +4,7 @@
 
 ## 編集するデータ
 
-正本は `authoring/dungeons/*.json`。ダンジョンID、表示名、所属地域、入口、マップ一覧、`systems` を定義します。`npm run build:dungeons` が `data/dungeons.json` とマップ・アイテム・遭遇・スクリプト等を生成します。
+正本は `config/dungeons/*.json`。ダンジョンID、表示名、所属地域、入口、マップ一覧、`systems` を定義します。`npm run build:dungeons` が `data/dungeons.json` とマップ・アイテム・遭遇・スクリプト等を生成します。
 
 現在はJSONを直接編集します。JSON Schemaはエディター補助、ロード時の検証器は参照と座標・値の整合を担当します。YAML入力、GUIフォーム、汎用の条件付きルール言語は未実装です。
 
@@ -26,7 +26,7 @@
 
 ## シナリオと表示
 
-現地調査は `authoring/quests/qXXX.events.json` に定義し、クエストJSONへ集約します。素材は `authoring/dungeon-art.json` に定義します。マージ済みのPR #8は実状態を読む調査、手帳への記録、画像の割当を追加しています。操作中の本筋のフラグをビューが直接変更する設計にはしません。
+現地調査は `config/quests/qXXX.events.json` に定義し、クエストJSONへ集約します。素材は `config/dungeon-art.json` に定義します。マージ済みのPR #8は実状態を読む調査、手帳への記録、画像の割当を追加しています。操作中の本筋のフラグをビューが直接変更する設計にはしません。
 
 Coreの投影をApplicationがViewModelへ変換し、Viewは文字・画像・地図と、許可された操作を表示します。画像の切り出し矩形は表示用データです。装置の費用計算や地形変更をViewへ持たせません。
 
@@ -40,4 +40,4 @@ Coreの投影をApplicationがViewModelへ変換し、Viewは文字・画像・�
 
 voxel_spaceはmap.voxelsの層・六面・移動経路・装置を読みます。区域の水没度、面の開閉、掘削、設置を永続状態へ保存し、planで高さ・距離・経路・費用をまとめて検査します。Coreのvoxels.jsが形状・足場・水平連結区域と下部への水没操作、voxel-validation.jsが配置と保存検証、Applicationのvoxel-projection.jsが現在高の表示を担当します。
 
-通常ロードには立体マップを含めません。保存原稿は `authoring/legacy/2026-09-18-map-layout`、旧編集元は `authoring/voxel-content.json` です。新規の立体マップにはvoxel_spaceを一つだけ対応させます。従来のterrain_shiftなどの二次元パッチを立体マップへ併用する対応は今回の範囲外です。[定義例と制約](VOXEL_TERRAIN_AND_WATER.md)を参照してください。
+通常ロードには立体マップを含めません。保存原稿は `authoring/legacy/2026-09-18-map-layout`、旧編集元は `config/voxel-content.json` です。新規の立体マップにはvoxel_spaceを一つだけ対応させます。従来のterrain_shiftなどの二次元パッチを立体マップへ併用する対応は今回の範囲外です。[定義例と制約](VOXEL_TERRAIN_AND_WATER.md)を参照してください。
