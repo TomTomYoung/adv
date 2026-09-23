@@ -1,3 +1,5 @@
+import {closeTo} from './systems/common.js';
+import {finishInspection} from './inspection.js';
 import {openPlayerCommand,advanceCommand,chooseCommand} from './player-commands.js';
 import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
 import {connectionMove} from './systems/map-connections.js';
@@ -32,6 +34,8 @@ export class GameEngine {
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
     this.state.nextScope=1;
     this.state.fieldEntry=null;
+    this.state.inspections={};
+    this.state.inspectionActive=null;
     this.state.fieldReactions=freshFieldReactions();
     this.run(data.game.startScript);
   }
@@ -165,13 +169,17 @@ export class GameEngine {
     return true;
   }
   interactionObjects(){return this.triggerCandidates('interact');}
+  nearbyObjects(){
+    const loc=this.state.location;if(!loc)return [];
+    return this.map().objects.filter(o=>closeTo(this.state,{map:loc.map,...o})&&(o.edge||o.x===loc.x&&o.y===loc.y||!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:o.x,y:o.y,z:loc.z}).passage));
+  }
   triggerCandidates(kind){
     const loc=this.state.location;if(!loc)return [];
     const [dx,dy]=DELTAS[DIRECTIONS.indexOf(loc.facing)];
     const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
-    return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));
+    return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>(!object.edge||closeTo(this.state,{map:loc.map,...object}))&&objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));
   }
   trigger(kind,id){
     const loc=this.state.location;
@@ -194,6 +202,7 @@ export class GameEngine {
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
     beginFeedback(this);const commandPrompt=this.state.waiting?.type==='command';const changed=this.perform(intent);
+    finishInspection(this);
     if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
     return changed;
   }

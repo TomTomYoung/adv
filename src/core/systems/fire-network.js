@@ -1,6 +1,7 @@
 import {objectBlocks,objectVisible} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 import {signalFieldChange} from '../field-signals.js';
+import {closeTo as withinReach,actionConsumes} from './common.js';
 
 const faces={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
 const freshFlame=(effect,fuel)=>({lit:true,effect,fuel});
@@ -16,9 +17,7 @@ export function fireContext(data,state){
   const [id,spec]=pair;return {data,state,definition:d,id,spec,run:active.systems[id],persistent:state.dungeons.persistent[d.id].systems[id]};
 }
 function closeTo(ctx,fixture){
-  const l=ctx.state.location;if(fixture.map!==l?.map)return false;
-  const [dx,dy]=faces[l.facing];
-  return fixture.x===l.x&&fixture.y===l.y||fixture.x===l.x+dx&&fixture.y===l.y+dy;
+  return withinReach(ctx.state,fixture);
 }
 function passable(ctx,map,x,y){
   return map.tiles[y]?.[x]==='.'&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(ctx.state,map,o));
@@ -63,7 +62,7 @@ function plan(ctx,intent){
   if(!portable&&(!fixture||!closeTo(ctx,fixture)))return {ok:false,reason:'足元か正面の台座を選んでください。'};
   if(portable&&!(state.inventory[spec.portable.item]>0))return {ok:false,reason:'携帯松明がありません。'};
   const flame=portable?run.portable:persistent.fixtures[fixture.id],lit=burning(flame);
-  if(intent.action==='collect')return lit?{ok:true,fixture,flame}:{ok:false,reason:'灯っている火から種火を採ってください。'};
+  if(intent.action==='collect')return !lit?{ok:false,reason:'灯っている火から種火を採ってください。'}:run.ember?.effect===(flame.effect??fixture?.effect)?{ok:false,reason:'同じ種火をすでに持っています。'}:{ok:true,fixture,flame};
   if(intent.action==='extinguish')return lit?{ok:true,fixture,flame}:{ok:false,reason:'すでに消えています。'};
   if(!['ignite','transplant','skill','refuel'].includes(intent.action))return {ok:false,reason:'未知の火の操作です。'};
   if(intent.action==='skill'){
@@ -105,6 +104,7 @@ function validate(data,definition,spec){
   if(!Array.isArray(spec.fixtures))return [...errors,'台座一覧がありません'];
   for(const f of spec.fixtures){
     const map=data.maps[f.map];
+    if(f.edge!==undefined&&!Object.hasOwn(faces,f.edge))bad(`台座のエッジ不正 ${f.id}`);
     if(!/^[a-z][a-z0-9_]*$/.test(f.id)||['portable','constructor','prototype','__proto__'].includes(f.id)||ids.has(f.id)||!f.name||!definition.maps.includes(f.map)||!map||map.tiles[f.y]?.[f.x]!=='.'||!integer(f.x,0,10000)||!integer(f.y,0,10000)||!spec.effects[f.effect]||!integer(f.radius,0,30)||!(f.capacity===null||integer(f.capacity,1,100000))||typeof f.initiallyLit!=='boolean')bad(`台座不正 ${f.id}`);ids.add(f.id);
   }
   const entry=spec.fixtures.find(f=>f.id===spec.entryFixture),main=definition.entries.main,at=data.maps[main.map].entrance;
@@ -126,16 +126,16 @@ function project(ctx){
   const makeTarget=(id,name,flame,base,capacity)=>{
     const actions=[];
     for(const [action,label] of [['ignite','普通の火を灯す'],['refuel','燃料を補充'],['collect','種火を採る'],['extinguish','火を消す'],['transplant','種火を移す']]){
-      const intent={type:'dungeon.action',system:ctx.id,action,target:id},p=plan(ctx,intent);actions.push({label:(action==='collect'&&run.ember?'種火を持ち替える':label)+(['ignite','refuel'].includes(action)?`（${ctx.data.items[spec.fuelItem].name}×1）`:''),intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??''});
+      const intent={type:'dungeon.action',system:ctx.id,action,target:id},p=plan(ctx,intent);actions.push({label:(action==='collect'&&run.ember?'種火を持ち替える':label)+(['ignite','refuel'].includes(action)?`（${ctx.data.items[spec.fuelItem].name}×1）`:''),intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??'',consumes:actionConsumes(ctx,intent,p)});
     }
     for(const actor of state.members)for(const grant of ctx.data.jobs?.[state.actors[actor].job]?.grants??[])if(grant.api==='fire.kindling'){
       const ability=ctx.data.fieldAbilities[grant.skill],intent={type:'dungeon.action',system:ctx.id,action:'skill',target:id,actor,ability:grant.skill},p=plan(ctx,intent);
-      actions.push({label:`${ctx.data.actors[actor].name}：${ability.name}（MP${ability.mp}）`,intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??''});
+      actions.push({label:`${ctx.data.actors[actor].name}：${ability.name}（MP${ability.mp}）`,intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??'',consumes:actionConsumes(ctx,intent,p)});
     }
     return {id,name,lit:burning(flame),effect:burning(flame)?spec.effects[flame.effect??base].name:'消灯',baseEffect:spec.effects[base].name,fuel:flame.fuel,capacity,actions};
   };
   const fixtures=spec.fixtures.filter(f=>closeTo(ctx,f)).map(f=>makeTarget(f.id,f.name,ctx.persistent.fixtures[f.id],f.effect,f.capacity));
-  const markers=spec.fixtures.filter(f=>f.map===state.location.map&&(state.discovered[f.map]??[]).includes(`${f.x},${f.y}`)).map(f=>({id:f.id,name:f.name,x:f.x,y:f.y,kind:'brazier',glyph:burning(ctx.persistent.fixtures[f.id])?'灯':'台',lit:burning(ctx.persistent.fixtures[f.id])}));
+  const markers=spec.fixtures.filter(f=>f.map===state.location.map&&(state.discovered[f.map]??[]).includes(`${f.x},${f.y}`)).map(f=>({id:f.id,name:f.name,x:f.x,y:f.y,...(f.edge?{edge:f.edge}:{}),kind:'brazier',glyph:burning(ctx.persistent.fixtures[f.id])?'灯':'台',lit:burning(ctx.persistent.fixtures[f.id])}));
   return {kind:'fire_network',id:ctx.id,title:'火と種火',protected:environment.protected,encounterRate:environment.rate,enemyScale:environment.enemyScale,ember:run.ember?spec.effects[run.ember.effect].name:null,portable:makeTarget('portable','携帯松明',run.portable,spec.portable.baseEffect,spec.portable.capacity),fixtures,markers};
 }
 export const fireNetwork={

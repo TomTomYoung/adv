@@ -10,7 +10,8 @@ export const KEY_ACTIONS=Object.freeze([
   {id:'backward',name:'後退',group:'探索の補助キー',keys:['KeyS',null]},
   {id:'turnLeft',name:'左へ向く',group:'探索の補助キー',keys:['KeyA',null]},
   {id:'turnRight',name:'右へ向く',group:'探索の補助キー',keys:['KeyD',null]},
-  {id:'inspect',name:'調べる',group:'探索の補助キー',keys:['KeyE',null]}
+  {id:'inspect',name:'便利調べる',group:'探索の補助キー',keys:['KeyE',null]},
+  {id:'inspectManual',name:'任意調べる',group:'探索の補助キー',keys:['KeyR',null]}
 ].map(a=>Object.freeze({...a,keys:Object.freeze(a.keys)})));
 export const DEFAULT_BINDINGS=Object.freeze(Object.fromEntries(KEY_ACTIONS.map(a=>[a.id,a.keys])));
 export const NAVIGATION_KEYS=Object.freeze({up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'});
@@ -43,6 +44,10 @@ export function validateBindings(bindings){
   return null;
 }
 export function readKeyConfig(raw){
+  if(raw?.version===1&&raw.bindings&&!Object.hasOwn(raw.bindings,'inspectManual')){
+    const occupied=Object.values(raw.bindings).some(keys=>Array.isArray(keys)&&keys.includes('KeyR'));
+    raw={...raw,bindings:{...raw.bindings,inspectManual:[occupied?null:'KeyR',null]}};
+  }
   const invalid=raw!==undefined&&(raw?.version!==1||Boolean(validateBindings(raw?.bindings)));
   return {config:{version:1,bindings:copyBindings(raw===undefined||invalid?DEFAULT_BINDINGS:raw.bindings)},recovered:invalid};
 }

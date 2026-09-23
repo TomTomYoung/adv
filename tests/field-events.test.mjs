@@ -26,7 +26,7 @@ test('elder starts by stepping onto 13,3; facing the event at 13,2 cannot commit
  const g=prepareQuest('q001');choose(g,'talk');finishJourney(g);choose(g,'inspect');choose(g,'follow');
  walk(g,13,2,{maintain:true});while(g.state.location.facing!=='south')move(g,'right');
  const pending=structuredClone(g.state.journey);assert.equal(g.state.stories.q001.scene,null);
- assert.ok(g.dispatch({type:'interact'}));drain(g);assert.deepEqual(g.state.journey,pending);
+ assert.equal(g.dispatch({type:'interact'}),false);drain(g);assert.deepEqual(g.state.journey,pending);
  assert.equal(g.dispatch({type:'journey.arrive'}),false);checkpoint(g);
  move(g,'forward');assert.equal(g.state.stories.q001.scene,'old');assert.equal(g.state.journey,null);assert.equal(g.state.waiting.type,'text');
  assert.match(g.state.waiting.text,/老人/);assert.equal(g.state.location.x,13);assert.equal(g.state.location.y,3);checkpoint(g);

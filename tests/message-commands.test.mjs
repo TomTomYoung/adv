@@ -15,13 +15,13 @@ const stable=g=>structuredClone({location:g.state.location,mode:g.state.mode,ste
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
 
 test('inspect a valve, reject other commands, drain it and read the result in the message window',()=>{
- const g=start();g.teleport('region_1_f1',2,1,'east');const before=stable(g);open(g);
+ const g=start();g.teleport('region_1_f1',2,1,'east');const before=stable(g);open(g,'inspect');pick(g,'第一水路の給排水盤');
  let m=projectGame(g);assert.match(m.dialog.text,/第一水路.*完全水没/s);assert.ok(m.commands.actions.every(c=>!c.enabled));assert.deepEqual(stable(g),before);
  for(const intent of [{type:'move',direction:'forward'},{type:'player.command',id:'retreat'},{type:'interact'},{type:'retreat'},{type:'item',item:'potion',actor:'ada'},{type:'dungeon.action',system:'water',action:'close',target:'upper_gate'},{type:'advance'}])assert.equal(g.dispatch(intent),false);
  assert.deepEqual(stable(g),before);roundtrip(g);pick(g,'給水を止めて排水');
  assert.equal(g.state.dungeons.persistent.region_1.systems.water.controls.upper_gate,false);assert.equal(g.state.steps,before.steps);assert.equal(g.state.light,before.light);
  m=projectGame(g);assert.equal(m.dialog.type,'text');assert.match(m.dialog.text,/排水した/);roundtrip(g);drain(g);assert.equal(g.state.waiting,null);
- open(g);const disabled=projectGame(g).dialog.options.find(o=>o.text==='給水を止めて排水');assert.equal(disabled.enabled,false);assert.equal(g.dispatch({type:'choose',id:disabled.id}),false);pick(g,'離れる');
+ open(g,'inspect');pick(g,'第一水路の給排水盤');const disabled=projectGame(g).dialog.options.find(o=>o.text==='給水を止めて排水');assert.equal(disabled.enabled,false);assert.equal(g.dispatch({type:'choose',id:disabled.id}),false);pick(g,'対象一覧へ戻る');pick(g,'離れる');
 });
 
 test('return confirmation cancels without cost, survives saving and charges once at confirmation',()=>{
@@ -34,15 +34,15 @@ test('return confirmation cancels without cost, survives saving and charges once
 test('overlapping valve and accepted observation are both reachable; unaccepted and remote targets stay hidden',()=>{
  const g=start();g.teleport('region_1_f1',2,1,'east');assert.ok(!commandTargets(g).some(t=>t.id.startsWith('quest:')));g.state.vars.region_1=3;assert.ok(g.accept('q010'));open(g);
  assert.ok(projectGame(g).dialog.options.some(o=>o.text==='第一水路の給排水盤'));assert.ok(projectGame(g).dialog.options.some(o=>o.text==='排水された横道'));
- roundtrip(g);pick(g,'排水された横道');pick(g,'調査する');assert.equal(g.state.waiting.type,'text');drain(g);
+ roundtrip(g);pick(g,'排水された横道');assert.equal(g.state.waiting.type,'text');drain(g);
  assert.equal(g.state.quests.q010.stage,'active');assert.equal(g.state.quests.q010.outcome,null);
  g.teleport('region_1_f1',5,1,'east');assert.ok(!commandTargets(g).some(t=>t.id.startsWith('quest:')));
 });
 
 test('saved prompts rebuild current plans and cannot inject actions or use stale distant targets',()=>{
- const g=start();g.teleport('region_1_f1',2,1,'east');open(g);const old=projectGame(g).dialog.options.find(o=>o.text==='給水を止めて排水').id;
+ const g=start();g.teleport('region_1_f1',2,1,'east');open(g,'inspect');pick(g,'第一水路の給排水盤');const old=projectGame(g).dialog.options.find(o=>o.text==='給水を止めて排水').id;
  const bad=JSON.parse(g.save());bad.state.waiting.intent={type:'retreat'};assert.ok(validateSave(bad,data).length);
- g.state.location.x=5;assert.equal(g.dispatch({type:'choose',id:old}),false);assert.equal(g.state.dungeons.persistent.region_1.systems.water.controls.upper_gate,true);pick(g,'離れる');
+ g.state.location.x=5;assert.equal(g.dispatch({type:'choose',id:old}),false);assert.equal(g.state.dungeons.persistent.region_1.systems.water.controls.upper_gate,true);pick(g,'対象一覧へ戻る');pick(g,'離れる');
 });
 
 test('portable torch choices are commands and opening or cancelling them cannot trigger danger or burn fuel',()=>{
@@ -53,7 +53,7 @@ test('portable torch choices are commands and opening or cancelling them cannot 
 
 test('all nearby system actions remain reachable through inspect or a player command',()=>{
  for(const id of Object.keys(data.dungeons)){
-  const g=start(id),m=projectGame(g),targets=['interact','portable','environment'].flatMap(c=>commandTargets(g,c));
+  const g=start(id),m=projectGame(g),targets=['inspect','portable','environment'].flatMap(c=>commandTargets(g,c));
   const all=m.dungeon.systems.flatMap(s=>[...(s.actions??[]),...(s.cards??[]).flatMap(c=>c.actions),...(s.controls??[]).flatMap(c=>c.actions),...(s.fixtures??[]).flatMap(c=>c.actions),...(s.walls??[]).filter(w=>!w.broken).flatMap(c=>c.actions),...(s.portable?.actions??[])]);
   for(const action of all)assert.ok(targets.some(t=>t.actions.some(a=>JSON.stringify(a.intent)===JSON.stringify(action.intent))),`${id}: ${action.label}`);
  }
@@ -71,7 +71,11 @@ test('rendered exploration has one command window and choices are inside the mes
  try{
   const g=start();g.teleport('region_1_f1',2,1,'east');const intents=[],view=Object.assign(Object.create(GameView.prototype),{act:i=>{intents.push(i);g.dispatch(i);},scene(){}}),root=dom.root;
   view.explore(root,projectGame(g));assert.equal(root.querySelectorAll('[aria-label="プレイヤーコマンド"]').length,1);assert.equal([...root.querySelectorAll('[aria-label]')].filter(e=>['水路の給排水','区画の出入口','依頼と現地の調査'].includes(e.getAttribute('aria-label'))).length,0);
-  [...root.querySelectorAll('button')].find(e=>e.textContent==='足元・正面を調べる').click();assert.deepEqual(intents.at(-1),{type:'player.command',id:'interact'});
+  [...root.querySelectorAll('button')].find(e=>e.textContent==='任意調べる').click();assert.deepEqual(intents.at(-1),{type:'player.command',id:'inspect'});pick(g,'第一水路の給排水盤');
   const message=dom.document.createElement('div');view.dialog(message,projectGame(g).dialog);const window=message.children[0];assert.equal(window.getAttribute('aria-label'),'メッセージウィンドウ');assert.match(window.textContent,/完全水没/);assert.ok([...window.querySelectorAll('button')].some(e=>e.textContent==='給水を止めて排水'));assert.ok(!window.querySelector('.continue'));
  }finally{dom.restore();}
+});
+
+test('minimap renders edge torches alongside the cell marker and player direction',()=>{
+ const dom=installDOM();try{const g=start('kagaribi');g.teleport('kagaribi_f2',1,1,'north');const m=projectGame(g),view=Object.create(GameView.prototype);view.sidebar(dom.root,m);const marker=dom.root.querySelector('.map-edge-marker.north');assert.ok(marker);assert.match(marker.getAttribute('aria-label'),/壁面松明/);assert.ok(marker.parentElement.classList.contains('current'));assert.ok(marker.parentElement.textContent.includes('↑'));}finally{dom.restore();}
 });

@@ -41,7 +41,7 @@ export function eventCatalog(data){
  add('IDはクエストIDと配置IDの組で一意。配置と起動条件の正本は各クエストのevents。表示・操作条件の詳細はリンク先JSONを参照する。');
  for(const q of Object.values(data.quests)){
   add(`### ${q.id} ${q.title}`);
-  for(const e of q.events??[])add(`${code(`${q.id}/${e.id}`)} ${e.title}：${e.points.length?e.points.map(p=>`${code(p.map)} (${p.x}, ${p.y}${p.z===undefined?'':`, ${p.z}`})`).join(' / '):'セル指定なし'}。起動 ${code(e.trigger)} → ${code(e.script)}。[定義](../data/quests/${q.id}.json)。`);
+  for(const e of q.events??[])add(`${code(`${q.id}/${e.id}`)} ${e.title}：${e.points.length?e.points.map(p=>`${code(p.map)} (${p.x}, ${p.y}${p.z===undefined?'':`, ${p.z}`})${p.edge?` ${p.edge}面`:''}`).join(' / '):'セル指定なし'}。起動 ${code(e.trigger)} → ${code(e.script)}。[定義](../data/quests/${q.id}.json)。`);
  }
  add('## マップ共通の配置一覧');
  for(const map of Object.values(data.maps)){

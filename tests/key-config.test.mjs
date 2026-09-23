@@ -113,3 +113,12 @@ test('required bindings cannot be cleared entirely; optional direct controls and
 test('Tab cancels capture and stays available for native focus traversal',()=>{
   const c=editorSetup();try{c.key('Enter');const e=c.key('Tab');assert.ok(!e.defaultPrevented);assert.doesNotMatch(c.dialog.querySelector('[data-focus="binding:confirm:0"]').textContent,/入力待ち/);}finally{c.cleanup();}
 });
+
+ test('legacy key settings preserve customization and only add an unoccupied manual-inspection key',()=>{
+  for(const occupied of [false,true]){const old=custom();delete old.inspectManual;if(occupied)old.confirm=['KeyR',null];const restored=readKeyConfig({version:1,bindings:old});assert.equal(restored.recovered,false);assert.deepEqual(restored.config.bindings.inspectManual,[occupied?null:'KeyR',null]);for(const [id,keys] of Object.entries(old))assert.deepEqual(restored.config.bindings[id],keys);}
+ });
+ for(const layout of ['scene','classic'])test(`${layout}: R opens manual inspection and respects remapping and key-repeat`,()=>{
+  const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=gameSetup(layout,g);
+  try{c.key('r',{repeat:true});assert.equal(c.intents.length,0);c.key('r');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'inspect'});assert.ok(c.view.model.dialog.options.some(o=>o.text==='足元のセル'));c.key('x');c.bindings.inspectManual=['KeyQ',null];const count=c.intents.length;c.key('r');assert.equal(c.intents.length,count);c.key('q');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'inspect'});}
+  finally{c.cleanup();}
+ });

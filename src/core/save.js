@@ -1,3 +1,4 @@
+import {validateInspections} from './inspection.js';
 import {cellEntryId} from './cell-layers.js';
 import {validateFieldReactions} from './field-signals.js';
 import {castValid} from './cast.js';
@@ -130,6 +131,7 @@ export function validateSave(save,data){
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
   if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
+  if(data.game.inspectionVersion===1)errors.push(...validateInspections(s,data));
   if(data.game.fieldEventVersion===1)errors.push(...validateFieldReactions(data,s));
   if(!['town','dungeon'].includes(s.mode))fail('モード不正');
   for(const [key,min,max] of [['gold',0,1e9],['xp',0,1e9],['level',1,data.system.maxLevel],['steps',0,1e9],['light',0,data.system.lightCapacity],['rng',1,4294967295]])if(!integer(s[key],min,max))fail(`${key}不正`);
@@ -188,7 +190,7 @@ export function validateSave(save,data){
     else if(s.waiting.type==='text'&&(!s.vm.length||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'))fail('会話不正');
     else if(s.waiting.type==='command'){
       const w=s.waiting;
-      if(s.vm.length||s.battle||!['interact','retreat','portable','environment','result'].includes(w.command)||(w.command!=='result'&&s.mode!=='dungeon')||(w.target!==undefined&&typeof w.target!=='string')||(w.command==='result'&&typeof w.text!=='string')||Object.keys(w).some(k=>!['type','command','target','text'].includes(k)))fail('コマンドの確認状態不正');
+      if(s.vm.length||s.battle||!['interact','inspect','retreat','portable','environment','result'].includes(w.command)||(w.command!=='result'&&s.mode!=='dungeon')||(w.target!==undefined&&typeof w.target!=='string')||(!['result','retreat'].includes(w.command)&&typeof w.origin!=='string')||(w.command==='result'&&typeof w.text!=='string')||Object.keys(w).some(k=>!['type','command','target','text','origin'].includes(k)))fail('コマンドの確認状態不正');
     }
     else if(s.waiting.type==='choice'){try{const f=s.vm.at(-1),c=commandsAt(data,f)[s.waiting.index];if(c?.op!=='choice'||f.index!==s.waiting.index+1)fail('選択肢位置不正');}catch{fail('選択肢不正');}}
   }

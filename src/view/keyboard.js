@@ -16,8 +16,8 @@ export function handleGameKey(event,{view,model,dispatch,bindings=DEFAULT_BINDIN
     if(event.key==='Tab')view.tabNavigation=true;
     const direction={up:'forward',down:'back',left:'left',right:'right',forward:'forward',backward:'back',turnLeft:'left',turnRight:'right'}[action];
     if(direction){event.preventDefault();view.tabNavigation=false;dispatch({type:'move',direction});return;}
-    if(action==='inspect'||action==='confirm'&&!view.tabNavigation){
-      event.preventDefault();if(!event.repeat)dispatch({type:'player.command',id:'interact'});return;
+    if(action==='inspectManual'||action==='inspect'||action==='confirm'&&!view.tabNavigation){
+      event.preventDefault();if(!event.repeat)dispatch({type:'player.command',id:action==='inspectManual'?'inspect':'interact'});return;
     }
   }
   if(scope&&NAVIGATION_KEYS[action]){moveFocus(scope,{key:NAVIGATION_KEYS[action],preventDefault:()=>event.preventDefault()});return;}
