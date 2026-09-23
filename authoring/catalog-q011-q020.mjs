@@ -1,4 +1,4 @@
-import catalog from './catalog-q011-q020.json' with {type:'json'};
+import catalog from '../config/catalog-q011-q020.json' with {type:'json'};
 import {eq,and,T} from './scenario-kit.mjs';
 const rows=structuredClone(catalog),R=key=>({ref:`flags.flow.__Q__.${key}`}),F=key=>eq(R(key),true);
 const setup=(n,initial,agents)=>Object.assign(rows.find(q=>q.id===`q${String(n).padStart(3,'0')}`),{initial,agents});

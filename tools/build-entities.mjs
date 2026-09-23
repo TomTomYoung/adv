@@ -6,7 +6,7 @@ const root=path.resolve(import.meta.dirname,'..');
 export async function applyEntityExpansion(){
   const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
   const write=(file,value)=>fs.writeFile(path.join(root,file),JSON.stringify(value,null,2)+'\n');
-  const plan=await read('authoring/entities.json'),game=await read('data/game.json'),enemies=await read('data/enemies.json'),encounters=await read('data/encounters.json'),skills=await read('data/skills.json'),formulas=await read('data/formulas.json'),assets=await read('data/assets.json');
+  const plan=await read('config/entities.json'),game=await read('data/game.json'),enemies=await read('data/enemies.json'),encounters=await read('data/encounters.json'),skills=await read('data/skills.json'),formulas=await read('data/formulas.json'),assets=await read('data/assets.json');
   const ref=p=>({ref:p}),op=(name,...args)=>({op:name,args});
   formulas.pierce=op('max',2,op('sub',op('mul',ref('source.stats.str'),1.25),op('mul',ref('target.stats.vit'),.25)));
   formulas.spread=op('max',1,op('sub',op('mul',ref('source.stats.str'),.55),op('floor',op('div',ref('target.stats.vit'),2))));

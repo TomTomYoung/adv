@@ -48,7 +48,7 @@ map.voxels.layersは低いzから並ぶ同寸の平面図、minZは最下層の�
 
 探索画面と地図は現在のzの断面を表示し、高さと水深を明記します。上下を見回す自由カメラや、橋の下を透かす立体描画は未実装です。境界の壁、水門、床の穴、上下の接続、三段階の水を表示します。Viewは投影済みの空間・面・水深と操作可否だけを読み、ゲーム状態を変更しません。
 
-編集元はauthoring/voxel-content.jsonとauthoring/dungeons/*.json。配布先のmap.voxelsとvoxel_space部品へ生成します。npm run build:dungeons、技能の変更を含む場合はnpm run build:jobsを実行し、Schema・参照・保存・通行・水の検証を行います。
+編集元はconfig/voxel-content.jsonとconfig/dungeons/*.json。配布先のmap.voxelsとvoxel_space部品へ生成します。npm run build:dungeons、技能の変更を含む場合はnpm run build:jobsを実行し、Schema・参照・保存・通行・水の検証を行います。
 
 ## 貯水立坑での確認手順
 
@@ -64,7 +64,7 @@ map.voxels.layersは低いzから並ぶ同寸の平面図、minZは最下層の�
 
 ## JSONの記法
 
-`authoring/voxel-content.json` の `maps.<mapId>` は通常のマップ定義です。その `voxels` にversion、minZ、layers、faces、links、devices、initialWaterを記述します。マップ全体の実例は [編集元JSON](../authoring/voxel-content.json) にあります。
+`config/voxel-content.json` の `maps.<mapId>` は通常のマップ定義です。その `voxels` にversion、minZ、layers、faces、links、devices、initialWaterを記述します。マップ全体の実例は [編集元JSON](../config/voxel-content.json) にあります。
 
 minZ=-1、layersが3枚なら、添字0・1・2がそれぞれz=-1・0・1です。各層は同じ幅と行数を持ち、tilesはz=0の層と一致させます。入口とイベントにはzを指定でき、省略時は0です。全体4096立方体以内、最大16層、空間と掘削予定地の合計512個以内を検証器の上限とします。
 

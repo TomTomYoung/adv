@@ -185,7 +185,7 @@ voxel_spaceのcards/actionsはvisit/toggle/pump/dig/install/traverseのdungeon.a
 
 ## 床材と水面の共通描画
 
-dungeon.floorArtは床材の `{url,rect}` です。authoring/dungeon-art.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
+dungeon.floorArtは床材の `{url,rect}` です。config/dungeon-art.jsonのfloor、またはentriesごとのfloorから生成します。Viewは壁と同じ視点・投影距離で床の座標へ素材を反復投影します。未読込・読込失敗時には石畳模様を表示し、穴は素材で埋めません。
 
 従来マップにもwaterDepthとwaterLabelを渡します。水没度0は表示0、1〜3は表示1、4〜6は表示2、7〜10は表示3です。通行判定は水没度6から別途行い、潜水準備を考慮します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
 

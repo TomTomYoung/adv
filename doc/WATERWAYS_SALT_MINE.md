@@ -6,7 +6,7 @@
 
 ## 現行の地下水道
 
-乾いた操作室・荷揚げ場6区画と、水密扉で閉じた4水路を接続します。外の給排水盤を調べて排水し、同じメッセージ内で水路の出入口を選びます。排水状態は永続保存し、歩数による水位変動や潜水による扉通過はありません。正本は `authoring/connected-maps.json` と `authoring/dungeons/region_1.json`。詳しくは [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
+乾いた操作室・荷揚げ場6区画と、水密扉で閉じた4水路を接続します。外の給排水盤を調べて排水し、同じメッセージ内で水路の出入口を選びます。排水状態は永続保存し、歩数による水位変動や潜水による扉通過はありません。正本は `config/connected-maps.json` と `config/dungeons/region_1.json`。詳しくは [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
 
 ## 退避した地下水道のフロア水没
 
@@ -50,6 +50,6 @@
 
 ## 編集と保存
 
-原稿は `authoring/dungeons/region_1.json`、`region_2.json`、`dungeon-content.json`、`terrain-content.json`、`jobs.json`、`voxel-content.json`。`npm run build:scenarios` で全体を生成します。
+原稿は `config/dungeons/region_1.json`、`region_2.json`、`dungeon-content.json`、`terrain-content.json`、`jobs.json`、`voxel-content.json`。`npm run build:scenarios` で全体を生成します。
 
 現行の排水状態は `state.dungeons.persistent.region_1.systems.water.controls` に保存します。control IDごとの値はtrueで給水・falseで排水済みです。旧実装の周期時刻と潜水準備は `state.dungeons.active.systems.water`、水門は永続状態の controls、破壊壁は broken、装備個体は `state.gear` へ保存します。旧内容版の移行は行いません。不正または旧版の記録は新規開始へ切り替えます。検証結果は[PROGRESS.md](PROGRESS.md)を参照してください。

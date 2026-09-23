@@ -1498,6 +1498,6 @@ flowchart TD
 
 ## 編集元と再生成
 
-本編は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、配置は [authoring/quests/q002.events.json](../../authoring/quests/q002.events.json)、2D地形は [authoring/connected-maps.json](../../authoring/connected-maps.json)、接続・給排水は [authoring/dungeons/region_1.json](../../authoring/dungeons/region_1.json)、町は [authoring/locations.json](../../authoring/locations.json) が正本。実装の全文は [data/quests/q002.json](../../data/quests/q002.json)。
+本編は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、配置は [config/quests/q002.events.json](../../config/quests/q002.events.json)、2D地形は [config/connected-maps.json](../../config/connected-maps.json)、接続・給排水は [config/dungeons/region_1.json](../../config/dungeons/region_1.json)、町は [config/locations.json](../../config/locations.json) が正本。実装の全文は [data/quests/q002.json](../../data/quests/q002.json)。
 
 `npm run build:catalog` でカタログ・専用ページ・配置図を一緒に生成する。本文を改稿する場合は原稿へ反映し、`npm run build:scenarios` でゲームデータから再生成する。`npm run build:docs` 単独は本文を保持し、`npm run check:docs` は専用ページと配置図を配布データへ照合する。

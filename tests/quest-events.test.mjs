@@ -32,7 +32,7 @@ test('distributed maps and dungeons contain no quest-owned definitions; each que
  for(const file of data.game.files.maps)assert.ok((await read(file)).objects.every(o=>!o.quest),file);
  for(const d of Object.values(await read('data/dungeons.json')))assert.equal(d.fieldScenes,undefined);
  for(const q of Object.values(data.quests)){
-  const expected=(await read(`authoring/quests/${q.id}.events.json`)).events;
+  const expected=(await read(`config/quests/${q.id}.events.json`)).events;
   for(const e of expected){for(const p of e.points)p.dungeon=data.maps[p.map].dungeon;const owners=[...new Set(e.points.map(p=>p.dungeon))];if(owners.length===1)e.dungeon=owners[0];}
   assert.deepEqual(q.events,editNarration(expected));
   for(const e of q.events)assert.ok(q.scripts[e.script],`${q.id}/${e.id}`);

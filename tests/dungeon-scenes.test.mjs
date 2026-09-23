@@ -105,12 +105,12 @@ test('a revised quest event preserves the previous script and a saved choice can
  const g=begin('kagaribi');g.dispatch(intent('kagaribi'));drain(g);const saved=g.save(),original=structuredClone(data.scripts['dungeon.scene.kagaribi.v2']);
  const dir=await fs.mkdtemp(path.join(tmpdir(),'adv-event-revision-'));
  try{
-  for(const sub of ['authoring/quests','data/quests'])await fs.mkdir(path.join(dir,sub),{recursive:true});
-  const source=JSON.parse(await fs.readFile(new URL('../authoring/quests/q001.events.json',import.meta.url)));
+  for(const sub of ['config/quests','data/quests'])await fs.mkdir(path.join(dir,sub),{recursive:true});
+  const source=JSON.parse(await fs.readFile(new URL('../config/quests/q001.events.json',import.meta.url)));
   source.events.find(e=>e.id==='kagaribi').script='dungeon.scene.kagaribi.v3';
   source.scripts['dungeon.scene.kagaribi.v3']=structuredClone(original);source.scripts['dungeon.scene.kagaribi.v3'].commands[0].text='改稿後の導入。';
   const write=(name,value)=>fs.writeFile(path.join(dir,name),JSON.stringify(value));
-  await write('authoring/quests/q001.events.json',source);await write('data/quests/q001.json',data.quests.q001);await write('data/game.json',{files:{quests:['data/quests/q001.json']}});
+  await write('config/quests/q001.events.json',source);await write('data/quests/q001.json',data.quests.q001);await write('data/game.json',{files:{quests:['data/quests/q001.json']}});
   await applyQuestEvents(dir);
   const q=JSON.parse(await fs.readFile(path.join(dir,'data/quests/q001.json')));assert.deepEqual(q.scripts['dungeon.scene.kagaribi.v2'],original);assert.ok(q.scripts['dungeon.scene.kagaribi.v3']);
   for(const e of q.events)for(const p of e.points)p.dungeon=data.maps[p.map].dungeon;

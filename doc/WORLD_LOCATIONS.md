@@ -4,7 +4,7 @@
 
 ## 正本と参照
 
-町の正本は [authoring/locations.json](../authoring/locations.json)、配布先は [data/locations.json](../data/locations.json) です。`game.world.townRoot` を起点とし、各施設は安定ID、名称、親、追加の移動先、背景、人物配置、施設機能を持ちます。共通施設を増やすときはここへ追加し、依頼内に同名の独立した町を作りません。
+町の正本は [config/locations.json](../config/locations.json)、配布先は [data/locations.json](../data/locations.json) です。`game.world.townRoot` を起点とし、各施設は安定ID、名称、親、追加の移動先、背景、人物配置、施設機能を持ちます。共通施設を増やすときはここへ追加し、依頼内に同名の独立した町を作りません。
 
 [ロケーション一覧](LOCATION_CATALOG.md) は10か所の親子・機能・背景・参照場面を配布JSONから生成します。篝火広場の下に旅道具店、帰り火亭、灯番組合、医学校、保険審査所があり、医学校の下に標本室、組合の下に灯番詰所、広場の下に上層の待避場、帰り火亭の下に汚水槽があります。`location.move` は親・子・明示した接続先へ移動します。会話・戦闘中は移動できません。
 
@@ -14,7 +14,7 @@
 
 ## q002の実際の場所
 
-依頼の正本は [authoring/story-q002.mjs](../authoring/story-q002.mjs)、イベントの正本は [authoring/quests/q002.events.json](../authoring/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](scenarios/QUEST_Q002.md)へまとめています。
+依頼の正本は [authoring/story-q002.mjs](../authoring/story-q002.mjs)、イベントの正本は [config/quests/q002.events.json](../config/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](scenarios/QUEST_Q002.md)へまとめています。
 
 引き揚げ場は灯守の地下水道 `region_1` / `region_1_landing` の (5, 1)、イベント `q002_decision` です。岸と浅瀬の作業は同じ現地イベントの範囲で扱います。標本室は `hikarigaeri_medical_specimens`、審査所は `hikarigaeri_insurance` を参照します。対応は `story.worldPlaces` に置き、各場面の `place` から引きます。
 

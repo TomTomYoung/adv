@@ -92,7 +92,7 @@ export function cellCatalogInventory(data){
   };
   for(const dungeon of Object.values(data.dungeons)){
     out.push(`#### ${dungeon.name} (${dungeon.id})`,'');
-    line(`定義：[${dungeon.id}.json](../authoring/dungeons/${dungeon.id}.json)。`);
+    line(`定義：[${dungeon.id}.json](../config/dungeons/${dungeon.id}.json)。`);
     for(const scene of questEvents(data).filter(e=>e.dungeon===dungeon.id&&e.note))line(`現地調査 ${code(scene.id)} ${scene.title}：関連${scene.quest}、操作点${locations(scene.points)}。`);
     for(const [id,s] of Object.entries(dungeon.systems)){
       if(!handlers[s.use])throw Error(`セルカタログの集計を追加してください: ${s.use}`);

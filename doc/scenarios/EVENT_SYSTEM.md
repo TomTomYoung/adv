@@ -11,7 +11,7 @@
 3. `interact`：便利調べる・任意調べるから、足元・正面の配置物または向いているエッジ上の物体を調べる。壁灯や宝箱などの任意調査に使う。
 4. `action`：調べるで集める現地調査。便利調べるでは単独の無料操作を直接実行し、それ以外と任意調べるではメッセージ内で選ぶ。常設の操作パネルは設けない。使用条件・所在・高さ・実行済み記録はCoreが再検査する。
 
-`enter` と `interact` はマップオブジェクトへ投影し、`auto` と `action` はクエスト定義から直接判定する。クエスト専用イベントの正本は `authoring/quests/qXXX.events.json`、配布先は `data/quests/qXXX.json`。共通マップの配置物にも `enter` を指定できる。
+`enter` と `interact` はマップオブジェクトへ投影し、`auto` と `action` はクエスト定義から直接判定する。クエスト専用イベントの正本は `config/quests/qXXX.events.json`、配布先は `data/quests/qXXX.json`。共通マップの配置物にも `enter` を指定できる。
 
 ## 発火順と保存
 
@@ -27,7 +27,7 @@
 
 ## 環境変化を購読する条件付きイベント
 
-迷宮の正本 `authoring/dungeons/*.json` に `fieldEvents` を定義する。`data/dungeons.json` へ生成する。現在は篝火の迷宮に通常襲撃を1件登録し、既存の `fire_network.danger` は廃止した。
+迷宮の正本 `config/dungeons/*.json` に `fieldEvents` を定義する。`data/dungeons.json` へ生成する。現在は篝火の迷宮に通常襲撃を1件登録し、既存の `fire_network.danger` は廃止した。
 
 ```json
 {

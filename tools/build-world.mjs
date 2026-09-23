@@ -4,7 +4,7 @@ import path from 'node:path';
 export async function buildWorld(root){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=async(f,value)=>fs.writeFile(path.join(root,f),JSON.stringify(value,null,2)+'\n');
-  const game=await read('data/game.json'),locations=await read('authoring/locations.json'),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
+  const game=await read('data/game.json'),locations=await read('config/locations.json'),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
   const owners={};for(const d of Object.values(dungeons))for(const map of d.maps){if(owners[map])throw Error(`Duplicate dungeon owner: ${map}`);owners[map]=d.id;}
   for(const l of Object.values(locations))assets.images[l.background]=`assets/images/locations/${l.background.slice(9)}.webp`;
   for(const id of ['curator','porter','examiner','elder','rookie','rine'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;

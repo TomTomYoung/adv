@@ -1,6 +1,6 @@
 # 町ロケーション一覧
 
-配布JSONの場所・親子関係・施設機能から生成します。正本は authoring/locations.json、生成先は [data/locations.json](../data/locations.json) です。町は選択肢で移動し、ダンジョンではセル移動を使います。
+配布JSONの場所・親子関係・施設機能から生成します。正本は config/locations.json、生成先は [data/locations.json](../data/locations.json) です。町は選択肢で移動し、ダンジョンではセル移動を使います。
 
 [シナリオ一覧](scenarios/QUEST_CATALOG.md) ／ [ダンジョン一覧](DUNGEON_CATALOG.md) ／ [ワールド接続仕様](WORLD_LOCATIONS.md)
 

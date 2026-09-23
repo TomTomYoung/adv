@@ -6,7 +6,7 @@ const root=path.resolve(import.meta.dirname,'..');
 export async function applyPresentation(){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
-  const plan=await read('authoring/presentation.json'),game=await read('data/game.json'),assets=await read('data/assets.json');
+  const plan=await read('config/presentation.json'),game=await read('data/game.json'),assets=await read('data/assets.json');
   const sounds=Object.fromEntries(Object.entries(plan.sounds).map(([id,s])=>{assets.audio[id]=`assets/audio/se/${id}.ogg`;return [id,{name:s.name,asset:id,gain:s.gain}];}));
   for(const effect of Object.values(plan.effects))for(const track of effect.tracks)if(track.kind==='sprite')assets.images[track.asset]=`assets/effects/${track.asset}.png`;
   game.version=plan.version;game.files.databases={...game.files.databases,effects:'data/effects.json',sounds:'data/sounds.json',presentation:'data/presentation.json'};

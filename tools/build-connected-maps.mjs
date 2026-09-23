@@ -6,7 +6,7 @@ import path from 'node:path';
 export async function buildConnectedMaps(root,definitions,game){
   const read=async p=>JSON.parse(await fs.readFile(path.join(root,p),'utf8'));
   const write=async(p,v)=>fs.writeFile(path.join(root,p),JSON.stringify(v,null,2)+'\n');
-  const source=await read('authoring/connected-maps.json');
+  const source=await read('config/connected-maps.json');
   for(const [id,map] of Object.entries(source.maps))await write(`data/maps/${id}.json`,map);
   game.files.maps=[...new Set([...game.files.maps.filter(p=>!source.retiredMaps.includes(path.basename(p,'.json'))),...Object.keys(source.maps).map(id=>`data/maps/${id}.json`)])];
   game.files.scripts=game.files.scripts.filter(p=>!source.retiredScriptFiles.includes(p));

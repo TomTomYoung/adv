@@ -18,7 +18,7 @@
 
 ## 編集と互換性
 
-素材の正本は authoring/dungeon-art.json、調査を含むクエストイベントの正本は authoring/quests/qXXX.events.json です。対応するクエストJSONへ集約し、ダンジョンからクエストへの逆参照は行いません。編集後は npm run build:dungeons を実行します。[イベントの仕様](scenarios/QUEST_EVENTS.md)を参照してください。
+素材の正本は config/dungeon-art.json、調査を含むクエストイベントの正本は config/quests/qXXX.events.json です。対応するクエストJSONへ集約し、ダンジョンからクエストへの逆参照は行いません。編集後は npm run build:dungeons を実行します。[イベントの仕様](scenarios/QUEST_EVENTS.md)を参照してください。
 
 現地調査は dungeon.scene.* の独立したIDを使います。会話構造の改稿はrevisionを更新します。1.9.0は旧内容版セーブを移行せず、q001の旧場面を削除しました。同版の調査中の保存・再開には通常の会話機構を使用します。
 
@@ -36,7 +36,7 @@ dungeon.wall と各装置の art は画像URLと正規化した切り出し矩�
 
 ## 床材の割り当て
 
-1.8.0の描画修正で床材の参照を追加しました。authoring/dungeon-art.jsonのfloorを全体の既定値とし、entriesごとのfloorで上書きできます。art.floorは既存の画像IDと正規化した切り出し矩形です。現在は壁アトラスの石材部分を使います。旧素材のファイルは変更していません。水面のマーカーには装置画像を付けず、水深に応じて床へ色と波を重ねます。詳細は[DUNGEON_RENDER_REVIEW.md](ui/DUNGEON_RENDER_REVIEW.md)を参照してください。
+1.8.0の描画修正で床材の参照を追加しました。config/dungeon-art.jsonのfloorを全体の既定値とし、entriesごとのfloorで上書きできます。art.floorは既存の画像IDと正規化した切り出し矩形です。現在は壁アトラスの石材部分を使います。旧素材のファイルは変更していません。水面のマーカーには装置画像を付けず、水深に応じて床へ色と波を重ねます。詳細は[DUNGEON_RENDER_REVIEW.md](ui/DUNGEON_RENDER_REVIEW.md)を参照してください。
 
 <!-- generated:quest-observations -->
 

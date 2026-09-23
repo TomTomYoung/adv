@@ -353,7 +353,7 @@ npm run check:docs
 
 #### 篝火の迷宮 (kagaribi)
 
-定義：[kagaribi.json](../authoring/dungeons/kagaribi.json)。
+定義：[kagaribi.json](../config/dungeons/kagaribi.json)。
 
 現地調査 `kagaribi` 灯を受け渡す準備：関連q001、操作点kagaribi_f1 (1,1)。
 
@@ -379,7 +379,7 @@ npm run check:docs
 
 #### 巨獣上の移動集落 (moving_village)
 
-定義：[moving_village.json](../authoring/dungeons/moving_village.json)。
+定義：[moving_village.json](../config/dungeons/moving_village.json)。
 
 現地調査 `moving_village` 暮らしを揺らす足場：関連q194、操作点moving_village_f1 (1,1)。
 
@@ -397,7 +397,7 @@ npm run check:docs
 
 #### 祈りの届かない谷 (prayerless_valley)
 
-定義：[prayerless_valley.json](../authoring/dungeons/prayerless_valley.json)。
+定義：[prayerless_valley.json](../config/dungeons/prayerless_valley.json)。
 
 現地調査 `prayerless_valley` 境界の内側の祈り：関連q193、操作点prayerless_valley_f1 (4,1) ／ prayerless_valley_f1 (5,1)。
 
@@ -413,7 +413,7 @@ npm run check:docs
 
 #### 灯守の地下水道 (region_1)
 
-定義：[region_1.json](../authoring/dungeons/region_1.json)。
+定義：[region_1.json](../config/dungeons/region_1.json)。
 
 現地調査 `region_1` 排水された横道：関連q010、操作点region_1_f1 (2,1)。
 
@@ -451,7 +451,7 @@ npm run check:docs
 
 #### 帰還者の深淵 (region_10)
 
-定義：[region_10.json](../authoring/dungeons/region_10.json)。
+定義：[region_10.json](../config/dungeons/region_10.json)。
 
 現地調査 `region_10` 逆らった足取り：関連q100、操作点region_10_f1 (1,1)。
 
@@ -461,7 +461,7 @@ npm run check:docs
 
 #### 塩哭きの廃坑 (region_2)
 
-定義：[region_2.json](../authoring/dungeons/region_2.json)。
+定義：[region_2.json](../config/dungeons/region_2.json)。
 
 現地調査 `region_2` 塩壁の向こうの退路：関連q011、操作点region_2_f1 (5,1)。
 
@@ -479,7 +479,7 @@ npm run check:docs
 
 #### 根喰みの地下庭園 (region_3)
 
-定義：[region_3.json](../authoring/dungeons/region_3.json)。
+定義：[region_3.json](../config/dungeons/region_3.json)。
 
 現地調査 `region_3` 根が支える橋：関連q030、操作点region_3_f1 (1,3)。
 
@@ -517,7 +517,7 @@ npm run check:docs
 
 #### 鏡沈みの礼拝堂 (region_4)
 
-定義：[region_4.json](../authoring/dungeons/region_4.json)。
+定義：[region_4.json](../config/dungeons/region_4.json)。
 
 現地調査 `region_4` 仮面を運ぶ鏡路：関連q039、操作点region_4_f1 (1,2) ／ region_4_f2 (13,5)。
 
@@ -541,7 +541,7 @@ npm run check:docs
 
 #### 灰時計の書庫 (region_5)
 
-定義：[region_5.json](../authoring/dungeons/region_5.json)。
+定義：[region_5.json](../config/dungeons/region_5.json)。
 
 現地調査 `region_5` 閉じた頁と開いた通路：関連q049、操作点region_5_f1 (1,2)。
 
@@ -559,7 +559,7 @@ npm run check:docs
 
 #### 眠れる地下市場 (region_6)
 
-定義：[region_6.json](../authoring/dungeons/region_6.json)。
+定義：[region_6.json](../config/dungeons/region_6.json)。
 
 現地調査 `region_6` 通行を約束する相手：関連q060、操作点region_6_f1 (1,2)。
 
@@ -577,7 +577,7 @@ npm run check:docs
 
 #### 黒潮の沈没城 (region_7)
 
-定義：[region_7.json](../authoring/dungeons/region_7.json)。
+定義：[region_7.json](../config/dungeons/region_7.json)。
 
 現地調査 `region_7` 一つだけ浮かぶ区画：関連q070、操作点region_7_f1 (1,2)。
 
@@ -591,7 +591,7 @@ npm run check:docs
 
 #### 鉄胎の機関廟 (region_8)
 
-定義：[region_8.json](../authoring/dungeons/region_8.json)。
+定義：[region_8.json](../config/dungeons/region_8.json)。
 
 現地調査 `region_8` 動力の届く範囲：関連q080、操作点region_8_f1 (1,2)。
 
@@ -609,7 +609,7 @@ npm run check:docs
 
 #### 星欠けの地下観測所 (region_9)
 
-定義：[region_9.json](../authoring/dungeons/region_9.json)。
+定義：[region_9.json](../config/dungeons/region_9.json)。
 
 現地調査 `region_9` 観測のための足場：関連q090、操作点region_9_f1 (1,2)。
 

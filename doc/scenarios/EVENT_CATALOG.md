@@ -24,7 +24,7 @@
 
 迷宮原稿のfieldEventsを通知種別と現在の迷宮で索引化し、保留候補だけを定義順に判定する。進入・移動完了・灯火・物体・命令での状態変更を通知し、毎フレーム走査しない。占有セルのレイヤー・合成照度・固有システムの環境値を条件に使う。一回性はonce、入場単位はentry、新しい通知での再評価はchange。保留中の会話・戦闘も保存する。[記法と再発](EVENT_SYSTEM.md)。
 
-`kagaribi/unprotected_kuragari` 火の守りを失った通路のくらがり：購読 `enter` / `move` / `light` / `object` / `state`、再発 `change`、条件 `{"op":"not","arg":{"ref":"field.environment.fires.protected"}}` → `battle` `kuragari_hunt`。[原稿](../../authoring/dungeons/kagaribi.json)。
+`kagaribi/unprotected_kuragari` 火の守りを失った通路のくらがり：購読 `enter` / `move` / `light` / `object` / `state`、再発 `change`、条件 `{"op":"not","arg":{"ref":"field.environment.fires.protected"}}` → `battle` `kuragari_hunt`。[原稿](../../config/dungeons/kagaribi.json)。
 
 通常のくらがり襲撃はfire_network.dangerから削除した。火の部品は保護・燃料などの値を提供し、共通イベントが発火と戦闘開始を管理する。普通の火で明るくても魔除けがなければ襲われる。戦闘開始時には保留中の環境battle候補を消費し、同じ歩行から物語戦闘と通常襲撃を二重発火させない。向き変更・コマンドの開閉・取消・戦闘終了だけでは再発しない。
 

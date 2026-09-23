@@ -8,8 +8,8 @@
 
 ## 編集と再生成
 
-1. 各迷宮の仕組み、対象セル、移動先、消費量は `authoring/dungeons/<ID>.json` で編集します。
-2. 追加マップ・道具・敵・素材価格・初期地図は `authoring/dungeon-content.json`、技能・調合レシピ・職業の許可は `authoring/jobs.json` で編集します。
+1. 各迷宮の仕組み、対象セル、移動先、消費量は `config/dungeons/<ID>.json` で編集します。
+2. 追加マップ・道具・敵・素材価格・初期地図は `config/dungeon-content.json`、技能・調合レシピ・職業の許可は `config/jobs.json` で編集します。
 3. 迷宮だけを変更した場合は `npm run build:dungeons`、技能も変更した場合は `npm run build:jobs` を実行します。Schemaの変更後は `node tools/build-schemas.mjs` も実行します。
 4. `npm run check` で参照、通路、保存、操作と既存クエストを検証します。生成物の `data/` を直接編集すると再生成で上書きされます。
 

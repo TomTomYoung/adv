@@ -215,7 +215,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## ダンジョンの操作と観察
 
-`dungeon.action` と `quest.event` は画面から送る操作意図です。48命令のJSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は authoring/quests/qXXX.events.json に既存のif・narrate・choice・setで記述し、同じクエストJSONへ集約します。
+`dungeon.action` と `quest.event` は画面から送る操作意図です。48命令のJSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は config/quests/qXXX.events.json に既存のif・narrate・choice・setで記述し、同じクエストJSONへ集約します。
 
 観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](../DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
 

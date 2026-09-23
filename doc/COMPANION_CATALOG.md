@@ -102,4 +102,4 @@
 
 ## 編集と保存
 
-人物・初期能力・肖像の正本は authoring/entities.json、職業は authoring/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。
+人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。

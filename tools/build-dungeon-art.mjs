@@ -5,7 +5,7 @@ import path from 'node:path';
 export async function buildDungeonArt(root,definitions){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=async(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
-  const source=await read('authoring/dungeon-art.json'),assets=await read('data/assets.json');
+  const source=await read('config/dungeon-art.json'),assets=await read('data/assets.json');
   if(source.schemaVersion!==1||!Array.isArray(source.entries))throw Error('Dungeon art source is invalid');
   assets.images.dungeon_walls=source.assets.walls;assets.images.dungeon_devices=source.assets.devices;
   const art=(asset,index)=>{
