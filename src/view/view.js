@@ -23,9 +23,10 @@ export class GameView {
     return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
   }
   finishInput(snapshot){
+    if(!this.model.battle){this.battleTurn=null;this.battleMenu=null;this.pendingBattleAction=null;}
     this.tabNavigation=false;
     prepareControls(this.root);
-    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.pendingBattleAction]);
+    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.battleMenu,this.pendingBattleAction]);
     const same=key===this.inputKey;this.inputKey=key;
     if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
     if(this.ui.modalOpen?.())return;
@@ -40,6 +41,7 @@ export class GameView {
     const base=this.model.mode==='town'?'location':'explore';
     if(this.tab!==base){this.closePanel();return;}
     if(this.pendingBattleAction){const key=this.pendingBattleAction.focus;this.pendingBattleAction=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
+    if(this.battleMenu){const key=`battle-menu:${this.battleMenu}`;this.battleMenu=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
     const d=this.model.dialog;
     if(d?.cancelAdvance){this.act({type:'advance'});return;}
     if(d?.cancelId&&d.options?.some(o=>o.id===d.cancelId&&o.enabled)){this.act({type:'choose',id:d.cancelId});return;}
@@ -183,9 +185,10 @@ export class GameView {
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
     const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event]);
-    if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleTurn=turn;}
+    if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.battleTurn=turn;}
     this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,m.dialog);return;}
-    const section=node('div','battle-panel');section.append(heading(`BATTLE / TURN ${m.battle.round}`,`${m.battle.actorName} の行動`),node('p','muted',this.ui.keyHint?.()??'矢印で選択・Enterで決定。対象選択中はEscで行動一覧へ戻ります。'));
+    const section=node('div','battle-panel'),commands=node('section','battle-commands');commands.setAttribute('aria-label','戦闘コマンド');
+    commands.append(node('h2','battle-actor',`${m.battle.actorName} の行動`));section.append(commands);
     const chooseAction=(action,id,target,name,focus)=>{
       const intent={type:'battle',action,[action]:id};
       if(!['enemy','ally'].includes(target)){this.act({...intent,target:m.battle.actorId});return;}
@@ -193,27 +196,38 @@ export class GameView {
     };
     const pending=this.pendingBattleAction;
     if(pending){
-      section.append(node('h3','',`${pending.name}の対象`));const targets=node('div','battle-targets');
+      commands.append(node('h3','battle-menu-title',`${pending.name}の対象`));const targets=node('div','battle-targets');targets.setAttribute('aria-label',`${pending.name}の対象`);
       const skill=pending.intent.action==='skill'?m.battle.skills.find(s=>s.id===pending.intent.skill):null;
       for(const target of (pending.target==='enemy'?m.battle.enemies:m.party).filter(t=>t.hp>0)){
         const available=skill?.availability?.[target.id]??{enabled:true};
         const b=button(`${target.name}　HP ${target.hp}/${target.maxHp}`,()=>{
           if(pending.target==='enemy')this.selectedTarget=target.id;else this.selectedAlly=target.id;
-          this.pendingBattleAction=null;this.act({...pending.intent,target:target.id});
+          this.pendingBattleAction=null;this.battleMenu=null;this.act({...pending.intent,target:target.id});
         },'battle-target',!available.enabled);b.dataset.focus=`target:${target.id}`;b.title=available.reason??'';targets.append(b);
       }
-      targets.append(button('行動へ戻る',()=>this.cancel()));section.append(targets);
+      const back=button('戻る',()=>this.cancel());back.dataset.focus='battle:back';targets.append(back);commands.append(targets);
     }else{
-      const skills=node('div','battle-actions');
-      for(const s of m.battle.skills){const focus=`skill:${s.id}`,b=button(`${s.name}${s.cost?' '+s.cost:s.mp?' MP'+s.mp:''}`,()=>chooseAction('skill',s.id,s.target,s.name,focus),'',!s.enabled);b.dataset.focus=focus;b.title=s.reason||s.description||s.name;skills.append(b);}
-      for(const item of m.battle.items){const focus=`battle-item:${item.id}`,b=button(`${item.name} ×${item.count}`,()=>chooseAction('item',item.id,item.target??'ally',item.name,focus),'',item.enabled===false);b.dataset.focus=focus;skills.append(b);}
-      skills.append(button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape));section.append(skills);
+      const actions=node('div','battle-actions'),basic=new Set(['attack','guard']);
+      const label=this.battleMenu==='skills'?'スキル':this.battleMenu==='items'?'アイテム':'行動';actions.setAttribute('aria-label',label);
+      if(this.battleMenu)commands.append(node('h3','battle-menu-title',label));
+      const appendSkill=s=>{const focus=`skill:${s.id}`,b=button(`${s.name}${s.cost?' '+s.cost:s.mp?' MP'+s.mp:''}`,()=>chooseAction('skill',s.id,s.target,s.name,focus),'',!s.enabled);b.dataset.focus=focus;b.title=s.reason||s.description||s.name;actions.append(b);};
+      if(this.battleMenu==='skills')for(const s of m.battle.skills.filter(s=>!basic.has(s.id)))appendSkill(s);
+      else if(this.battleMenu==='items')for(const item of m.battle.items){const focus=`battle-item:${item.id}`,b=button(`${item.name} ×${item.count}`,()=>chooseAction('item',item.id,item.target??'ally',item.name,focus),'',item.enabled===false);b.dataset.focus=focus;actions.append(b);}
+      else{
+        for(const id of basic){const s=m.battle.skills.find(s=>s.id===id);if(s)appendSkill(s);}
+        for(const [id,title,hasEntries] of [['skills','スキル',m.battle.skills.some(s=>!basic.has(s.id))],['items','アイテム',m.battle.items.length>0]]){
+          const b=button(title,()=>{this.battleMenu=id;this.render(m);},'',!hasEntries);b.dataset.focus=`battle-menu:${id}`;actions.append(b);
+        }
+        const escape=button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape);escape.dataset.focus='battle:escape';actions.append(escape);
+      }
+      if(this.battleMenu){const back=button('戻る',()=>this.cancel());back.dataset.focus='battle:back';actions.append(back);}commands.append(actions);
     }
+    const log=node('section','battle-log');log.setAttribute('aria-label','戦闘メッセージ');log.setAttribute('role','log');log.setAttribute('aria-live','polite');
+    for(const line of m.battle.log.slice(-6))log.append(node('p','',line));
     const selected=m.battle.enemies.find(e=>e.id===this.selectedTarget);
-    if(selected?.analysis){const a=selected.analysis;section.append(node('p','analysis-result',`${selected.name} 解析：攻${a.stats.str} 防${a.stats.vit} 速${a.stats.agi} 知${a.stats.int} MP${a.mp}/${a.stats.mp} ／ 耐性倍率 ${Object.entries(a.resist).map(([key,n])=>key+' ×'+n).join(' / ')||'すべて ×1'}`));}
-    const unavailable=m.battle.skills.filter(s=>!s.enabled).map(s=>`${s.name}：${s.reason}`);if(unavailable.length)section.append(node('p','muted',unavailable.join(' ／ ')));
-    for(const system of m.dungeon?.systems??[])if(system.summary)section.append(node('p','muted',system.summary));
-    const log=node('div','battle-log');log.setAttribute('aria-live','polite');for(const line of m.battle.log.slice(-6))log.append(node('p','',line));section.append(log);parent.append(section);
+    if(selected?.analysis){const a=selected.analysis;log.append(node('p','analysis-result',`${selected.name} 解析：攻${a.stats.str} 防${a.stats.vit} 速${a.stats.agi} 知${a.stats.int} MP${a.mp}/${a.stats.mp} ／ 耐性倍率 ${Object.entries(a.resist).map(([key,n])=>key+' ×'+n).join(' / ')||'すべて ×1'}`));}
+    section.append(log);parent.append(section);
+    requestAnimationFrame(()=>{if(log.isConnected)log.scrollTop=log.scrollHeight;});
   }
   soundButton(){const b=button(this.ui.soundLabel?.()??('音：'+(this.ui.soundEnabled()?'入':'切')),()=>this.ui.sound());b.dataset.audioToggle='true';return b;}
   updateSound(label){const b=this.root.querySelector('[data-audio-toggle]');if(b)b.textContent=label;}

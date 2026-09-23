@@ -53,6 +53,8 @@
 
 項目：battle / 内容：手番、行動者、敵とHP/画像/guarded、使用可能な技能と道具、逃走可否、ログ。skillsはtargetと対象別availability、itemsはtargetを持つ。敵・味方の単体対象はView内で選んでからintentを送る
 
+戦闘メニューの階層と未確定行動はView状態です。attack/guardを最上位へ置き、他のskillsはスキル項目、itemsはアイテム項目へまとめます。候補の表示・取消ではdispatchせず、確定時だけ既存のbattle intentを送ります。配置は左コマンド・右メッセージで、投影モデル・保存データにはレイアウト都合の状態を足しません。
+
 項目：services/inventory/shop / 内容：施設・所持品・購入候補の表示用データ
 
 項目：journal/log/notice/ending / 内容：発見記録、直近ログ、通知、到達した終幕
@@ -161,7 +163,7 @@ dungeon.systems[]はwaterworks（現在の水位・残り刻・既知の区画�
 
 ## その他の固有システム
 
-追加部品はdungeon.systems[]へtitle、summary、cards（name/text/actions）、actions、markersを投影します。各actionはlabel/intent/enabled/reasonを持ちます。dungeons[].previewは入場前の区域制限です。戦闘中もsummaryを表示でき、battle.items[].enabledで道具の術の使用可否を確認します。停止中の状態異常・戦闘補正は表示名へ「停止中」を付けます。cells[].blockedは一般の通行不能、cells[].waterは水没の描画指定です。波模様の判定にはwaterを使います。
+追加部品はdungeon.systems[]へtitle、summary、cards（name/text/actions）、actions、markersを投影します。各actionはlabel/intent/enabled/reasonを持ちます。dungeons[].previewは入場前の区域制限です。戦闘コマンドには探索用summaryを表示せず、battle.items[].enabledで道具の術の使用可否を確認します。停止中の状態異常・戦闘補正は表示名へ「停止中」を付けます。cells[].blockedは一般の通行不能、cells[].waterは水没の描画指定です。波模様の判定にはwaterを使います。
 
 ## 職業・技能と表示可否
 

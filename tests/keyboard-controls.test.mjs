@@ -103,8 +103,36 @@ for(const layout of ['scene','classic']){
   });
   test(`${layout}: battle item selects an ally and consumes once only on confirmation`,()=>{
     const g=battle();g.state.actors.sera.hp=10;const c=setup(layout,g);try{
+      c.selectButton(b=>b.dataset.focus==='battle-menu:items');c.key('Enter');
       c.selectButton(b=>b.dataset.focus==='battle-item:potion');const count=g.state.inventory.potion;c.key('Enter');assert.equal(g.state.inventory.potion,count);
       c.selectButton(b=>b.dataset.focus==='target:sera');c.key('Enter');assert.equal(g.state.inventory.potion,count-1);assert.ok(g.state.actors.sera.hp>10);assert.equal(c.intents.at(-1).target,'sera');
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: battle categories and target cancellation return one level without spending a turn or resources`,()=>{
+    const c=setup(layout,battle());try{
+      const saved=c.g.save();
+      assert.deepEqual([...c.root.querySelector('.battle-actions').querySelectorAll('button')].map(b=>b.textContent),['攻撃','防御','スキル','アイテム','逃走']);
+      const panel=c.root.querySelector('.battle-panel');assert.equal(panel.children[0].className,'battle-commands');assert.equal(panel.children[1].className,'battle-log');
+      assert.doesNotMatch(c.root.querySelector('.battle-commands').textContent,/BATTLE|Enter|出入口|隣の区画/);
+      for(const category of ['skills','items']){
+        c.selectButton(b=>b.dataset.focus===`battle-menu:${category}`);c.key('Enter');
+        assert.ok(!c.root.querySelector('[data-focus="skill:attack"]'));assert.ok(!c.root.querySelector('[data-focus="battle:escape"]'));
+        const first=c.document.activeElement.dataset.focus;c.key('Enter');assert.ok(c.root.querySelector('.battle-targets'));
+        c.key('Escape');assert.equal(c.document.activeElement.dataset.focus,first);assert.equal(c.view.battleMenu,category);
+        c.key('Escape');assert.equal(c.document.activeElement.dataset.focus,`battle-menu:${category}`);assert.equal(c.view.battleMenu,null);
+        assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
+      }
+      c.key('Escape');assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
+    }finally{c.cleanup();}
+  });
+  test(`${layout}: a skill is dispatched once after its target, while defense needs no target menu`,()=>{
+    const c=setup(layout,battle());try{
+      c.selectButton(b=>b.dataset.focus==='battle-menu:skills');c.key('Enter');
+      const skill=c.document.activeElement.dataset.focus.slice('skill:'.length);
+      c.key('Enter');assert.equal(c.intents.length,0);c.key('Enter');
+      assert.equal(c.intents.length,1);assert.equal(c.intents[0].skill,skill);assert.equal(c.intents[0].type,'battle');
+      assert.equal(c.view.battleMenu,null);assert.equal(c.document.activeElement.dataset.focus,'skill:attack');
+      c.selectButton(b=>b.dataset.focus==='skill:guard');c.key('Enter');assert.equal(c.intents.length,2);assert.equal(c.intents[1].skill,'guard');assert.equal(c.root.querySelector('.battle-targets'),null);
     }finally{c.cleanup();}
   });
   test(`${layout}: equipment target uses a cancellable picker and equipment focus survives rerender`,()=>{
