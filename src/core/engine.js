@@ -136,7 +136,7 @@ export class GameEngine {
     if(connection)return dungeonAction(this,connection);
     const map=this.map(),point={x,y,z:loc.z??0};
     if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point,{waterAccess:dungeonWaterAccess(this.data,this.state)})||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
-    if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'石壁か閉ざされた扉です。正面を調べてください。');this.eventCue('bump');return false;}
+    if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'ここへは通行できません。正面を調べてください。');this.eventCue('bump');return false;}
     return this.finishMove(point);
   }
   finishMove(point){

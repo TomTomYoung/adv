@@ -1,5 +1,6 @@
 import {permission,costProblem,payCost} from '../jobs.js';
 import {object,identifier,closeTo,validPoint,knownPoint,available} from './common.js';
+import {cellLayersValid} from '../cell-layers.js';
 
 function plan(ctx,intent){
   const wall=ctx.spec.walls.find(w=>w.id===intent.target);
@@ -38,6 +39,7 @@ function validate(data,definition,spec){
   for(const w of spec.walls){
     if(!object(w)){errors.push('破壊壁が不正です');continue;}
     const map=data.maps[w.map],key=`${w.map}/${w.x},${w.y}`;
+    if(data.game.cellLayerVersion&&!cellLayersValid(data,{...w.openedLayers,passage:'.'}))errors.push('破壊後のセルレイヤーが不正です');
     if(!identifier(w.id)||ids.has(w.id)||!w.name||!validPoint(data,definition,w,'#')||w.x===0||w.y===0||w.x===map?.tiles[0].length-1||w.y===map?.tiles.length-1||cells.has(key))errors.push('破壊壁は重複しない内壁に配置してください');ids.add(w.id);cells.add(key);
     if(!Array.isArray(w.items)||!Array.isArray(w.abilities)||w.items.length+w.abilities.length===0||w.items.some(id=>!data.items[id]||data.items[id].slot)||w.abilities.some(id=>data.fieldAbilities[id]?.api!=='wall.break'))errors.push('壁破壊のアイテム・スキル参照が不正です');
     if(map&&![[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>map.tiles[w.y+dy]?.[w.x+dx]==='.'))errors.push('壁に接近できる床がありません');
@@ -45,6 +47,7 @@ function validate(data,definition,spec){
   return errors;
 }
 export const breakableWalls={createPersistent:()=>({broken:[]}),createRun:()=>({}),plan,act,project,validate,
+  cell:(ctx,map,x,y)=>{const wall=ctx.spec.walls.find(w=>w.map===map.id&&w.x===x&&w.y===y&&ctx.persistent.broken.includes(w.id));return wall?{...wall.openedLayers,passage:'.'}:null;},
   tile:(ctx,map,x,y)=>ctx.spec.walls.some(w=>w.map===map.id&&w.x===x&&w.y===y&&ctx.persistent.broken.includes(w.id))?'.':null,
   itemIntent:(ctx,item)=>ctx.spec.walls.some(w=>w.items.includes(item))?{action:'item',target:target(ctx)?.id,item}:null,
   fieldIntent:(ctx,actor,ability)=>ctx.data.fieldAbilities[ability]?.api==='wall.break'?{action:'skill',target:target(ctx)?.id,actor,ability}:null,

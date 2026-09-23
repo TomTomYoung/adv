@@ -1,5 +1,5 @@
 import {object,identifier,integer,closeTo} from './common.js';
-import {empty,exact,pointsValid,pointValid,floorValid,patchValid,patchTile,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
+import {empty,exact,pointsValid,pointValid,floorValid,patchValid,patchTile,patchCell,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
 const speciesOf=(ctx,plot)=>ctx.spec.species[ctx.persistent.plants[plot.id]?.species];
 const mature=(ctx,plot)=>{const p=ctx.persistent.plants[plot.id];return p&&p.age>=ctx.spec.species[p.species].growth;};
 function terrain(ctx){return ctx.spec.plots.flatMap(plot=>{const patches=mature(ctx,plot)?plot.terrain[speciesOf(ctx,plot).terrain]:null;return Array.isArray(patches)?patches:[];});}
@@ -48,6 +48,7 @@ export const plantGarden={createPersistent:()=>({plants:{},supplied:false}),crea
     if(p.destination){const d=p.destination;ctx.engine.teleport(d.map,d.x,d.y,d.facing??'north');ctx.engine.notify('生長したツタを伝って階層を移りました。');}
   },
   tile:(ctx,map,x,y)=>patchTile(terrain(ctx),map,x,y),
+  cell:(ctx,map,x,y)=>patchCell(terrain(ctx),map,x,y),
   encounter(ctx){return {rate:nearPlants(ctx).reduce((n,p)=>n*(speciesOf(ctx,p).encounterRate??1),1),enemyScale:1};},
   project(ctx){
     const cards=ctx.spec.plots.filter(p=>closeTo(ctx.state,p)).map(p=>{

@@ -1,5 +1,5 @@
 import {closeTo,integer,identifier} from './common.js';
-import {exact,pointsValid,patchValid,patchTile,action,markers,panel,sameCell} from './environment.js';
+import {exact,pointsValid,patchValid,patchTile,patchCell,action,markers,panel,sameCell} from './environment.js';
 const current=ctx=>ctx.spec.states.find(s=>s.id===ctx.persistent.phase);
 function plan(ctx,intent){
   if(intent.action==='wait'&&ctx.spec.mode==='random')return {ok:true};
@@ -31,6 +31,7 @@ function tick(ctx){
 export const terrainShift={createPersistent:s=>({phase:s.initial}),createRun:()=>({remaining:0,changes:0}),step:tick,plan,
   act(ctx,intent,p){if(p.phase)shift(ctx,p.phase);else tick(ctx);},
   tile:(ctx,map,x,y)=>patchTile(current(ctx)?.tiles??[],map,x,y),
+  cell:(ctx,map,x,y)=>patchCell(current(ctx)?.tiles??[],map,x,y),
   project(ctx){return panel(ctx,ctx.spec.title,`${current(ctx).name}。${ctx.spec.mode==='manual'?'天球儀で変化のタイミングを選べます。':'巨獣の動きにより、予告なく道が変わります。'}`,ctx.spec.controls.filter(p=>closeTo(ctx.state,p)).map(p=>({name:p.name,text:'地形と通路の接続を切り替えます。',actions:ctx.spec.states.map(s=>action(ctx,plan,s.name,{action:'shift',target:p.id,phase:s.id}))})),{actions:ctx.spec.mode==='random'?[action(ctx,plan,'様子を見る',{action:'wait'})]:[],markers:markers(ctx,ctx.spec.controls,'儀')});},
   validate(data,d,s){
     const errors=[];

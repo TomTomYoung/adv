@@ -1,6 +1,6 @@
 import {object,closeTo} from './common.js';
 import {baseGrantsFor,permission,costProblem,payCost} from '../jobs.js';
-import {exact,idList,pointsValid,patchValid,patchTile,action,markers,panel} from './environment.js';
+import {exact,idList,pointsValid,patchValid,patchTile,patchCell,action,markers,panel} from './environment.js';
 const bookSkill=(ctx,book)=>book.api==='battle.skill'?ctx.data.skills[book.skill]:ctx.data.fieldAbilities[book.skill];
 function plan(ctx,intent){
   const actor=ctx.state.actors[intent.actor];
@@ -32,6 +32,7 @@ export const skillLibrary={createPersistent:()=>({opened:[]}),createRun:()=>({lo
   },
   fieldIntent(ctx,actor,ability){return ctx.spec.gates.some(g=>g.ability===ability)?{action:'unlock',target:ctx.spec.gates.find(g=>g.ability===ability&&closeTo(ctx.state,g)&&!ctx.persistent.opened.includes(g.id))?.id,actor}:null;},
   tile:(ctx,map,x,y)=>patchTile(ctx.spec.gates.filter(g=>ctx.persistent.opened.includes(g.id)).flatMap(g=>g.tiles),map,x,y),
+  cell:(ctx,map,x,y)=>patchCell(ctx.spec.gates.filter(g=>ctx.persistent.opened.includes(g.id)).flatMap(g=>g.tiles),map,x,y),
   project(ctx){
     const cards=ctx.spec.books.filter(b=>closeTo(ctx.state,b)).map(b=>{
       const actions=[];

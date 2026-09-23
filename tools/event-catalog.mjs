@@ -19,6 +19,10 @@ export function eventCatalog(data){
  add('3. 戦闘中のイベント。`events` の各IDを戦闘開始時 `start`、第2ラウンド以降の開始時 `round_start`、戦闘結果の確定前 `before_end` に判定する。条件成立した未実行イベントを定義順に1件ずつ実行し、各IDは1戦に1度だけ発火する。');
  add('4. 戦闘中の会話・選択中は戦闘操作を止める。イベントの末尾まで進めた場合は戦闘または保留中の通常終了処理を再開する。`battle.end` があれば強制終了し、`on_interrupt` からフィールドの会話へ戻れる。');
  add('5. 強制終了は `records.interruptions` に記録し、勝利・逃走・撃退回数や戦闘報酬を増やさない。すでに倒した敵の撃破数は保持する。戦闘イベントの実行済みID・現在の命令位置・保留結果を保存し、会話中でも重複せず再開する。');
+ add('## セルレイヤーからのイベント');
+ add('通常2Dはセル種と地点上書きのeventsからenterイベントを参照する。判定は実占有セルだけで、既存オブジェクト進入・旅程到着の後、クエスト条件イベントの前。会話・戦闘中は待機し、入場ごとの実行済みIDと地点単位の一回性を保存する。HP減算や戦闘開始は参照先スクリプトで行う。[セル仕様](CELL_LAYERS.md)。');
+ add(`本編のセルイベント定義は${Object.keys(data.cellEvents??{}).length}件。今回の移行では新たな危険床を配置しない。環境変化の購読とfire_network.dangerによるくらがり開始の統合は後続作業。`);
+ for(const [id,e] of Object.entries(data.cellEvents??{}))add(`${code(id)}：${code(e.trigger)} → ${code(e.script)}、一回性 ${e.once}。`);
  add('## 現行q001のイベント');
  add('`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。');
  add('`q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。');

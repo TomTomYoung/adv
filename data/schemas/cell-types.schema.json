@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {},
+  "title": "セル種プリセット",
+  "type": "object",
+  "minProperties": 1,
+  "propertyNames": {
+    "type": "string",
+    "minLength": 1,
+    "pattern": "^[a-z][a-z0-9_]*$"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "passage": {
+        "enum": [
+          ".",
+          "#"
+        ],
+        "description": "通行可否のみ。見た目・遮光・水密・イベントを意味しない。"
+      },
+      "visual": {
+        "type": "object",
+        "properties": {
+          "wall": {
+            "type": "boolean"
+          },
+          "floor": {
+            "type": "boolean"
+          },
+          "opaque": {
+            "type": "boolean"
+          },
+          "material": {
+            "enum": [
+              "floor",
+              "wall"
+            ]
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "wall",
+          "floor",
+          "opaque",
+          "material"
+        ],
+        "additionalProperties": false
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "illumination": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8
+          },
+          "water_passable": {
+            "type": "boolean"
+          }
+        },
+        "propertyNames": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "additionalProperties": {
+          "type": [
+            "number",
+            "string",
+            "boolean"
+          ]
+        },
+        "required": [
+          "illumination",
+          "water_passable"
+        ]
+      },
+      "events": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        }
+      }
+    },
+    "required": [
+      "passage",
+      "visual",
+      "parameters",
+      "events"
+    ],
+    "additionalProperties": false
+  }
+}

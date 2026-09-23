@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.15.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.16.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:b23d513a52366c407d3a8aabba9e742cf4a430c900673b377adaf3e1f47d3ba5 -->
+<!-- quest-page-source:db8f9a295a72a7fe00d2ce15ecea80e9f244438dd300f4718d1d43f3f5479caa -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
@@ -553,6 +553,20 @@ flowchart TD
     "x": 1,
     "y": 1,
     "facing": "east"
+  },
+  "cells": {
+    "legend": {
+      "F": "stone_floor",
+      "W": "stone_wall"
+    },
+    "rows": [
+      "WWWWWWWWWWW",
+      "WFFFFFFFFFW",
+      "WFWWWFWWWFW",
+      "WFFFFFFFFFW",
+      "WWWWWWWWWWW"
+    ],
+    "overrides": {}
   }
 }
 ```
@@ -594,6 +608,18 @@ flowchart TD
     "x": 1,
     "y": 1,
     "facing": "east"
+  },
+  "cells": {
+    "legend": {
+      "F": "stone_floor",
+      "W": "stone_wall"
+    },
+    "rows": [
+      "WWWWWWWWWWW",
+      "WFFFFFFFFFW",
+      "WWWWWWWWWWW"
+    ],
+    "overrides": {}
   }
 }
 ```
@@ -637,6 +663,20 @@ flowchart TD
     "x": 1,
     "y": 1,
     "facing": "east"
+  },
+  "cells": {
+    "legend": {
+      "F": "stone_floor",
+      "W": "stone_wall"
+    },
+    "rows": [
+      "WWWWWWWWWWW",
+      "WFFFFFFFFFW",
+      "WFWWWFWWWFW",
+      "WFFFFFFFFFW",
+      "WWWWWWWWWWW"
+    ],
+    "overrides": {}
   }
 }
 ```

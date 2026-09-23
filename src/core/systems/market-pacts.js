@@ -1,5 +1,5 @@
 import {integer,closeTo} from './common.js';
-import {exact,idList,pointsValid,patchValid,patchTile,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
+import {exact,idList,pointsValid,patchValid,patchTile,patchCell,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
 const guardActive=(ctx,g)=>ctx.run.alarm>=g.alarm&&!ctx.run.cleared.includes(g.id);
 function plan(ctx,intent){
   const guard=ctx.spec.guards.find(g=>g.id===intent.target);
@@ -25,6 +25,7 @@ export const marketPacts={createPersistent:()=>({paid:[]}),createRun:()=>({alarm
   battleEnd(ctx){if(ctx.run.fighting){if(ctx.result==='win')ctx.run.cleared.push(ctx.run.fighting);ctx.run.fighting=null;}},
   encounter:ctx=>({rate:ctx.run.escort>0?ctx.spec.escortRate:1,enemyScale:ctx.run.escort>0?ctx.spec.escortEnemyScale:1}),
   tile:(ctx,map,x,y)=>patchTile(ctx.spec.offers.filter(o=>ctx.persistent.paid.includes(o.id)).flatMap(o=>o.tiles),map,x,y),
+  cell:(ctx,map,x,y)=>patchCell(ctx.spec.offers.filter(o=>ctx.persistent.paid.includes(o.id)).flatMap(o=>o.tiles),map,x,y),
   block:(ctx,map,x,y)=>!sameCell(ctx.state.location,{map:map.id,x,y})&&ctx.spec.guards.some(g=>g.map===map.id&&g.x===x&&g.y===y&&guardActive(ctx,g))?'警戒中の用心棒が通路を塞いでいます。正面で対処してください。':null,
   project(ctx){
     const cards=ctx.spec.offers.filter(o=>closeTo(ctx.state,o)).map(o=>({name:o.name,text:`${o.description}（${o.gold}G${Object.entries(o.cost).map(([id,n])=>`・${ctx.data.items[id].name}×${n}`).join('')}）`,actions:[action(ctx,plan,'取引する',{action:'trade',target:o.id})]}));

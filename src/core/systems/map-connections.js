@@ -1,3 +1,4 @@
+import {authoredCellLayers} from '../cell-layers.js';
 import {object,identifier,validPoint,faces,available} from './common.js';
 import {compartmentBlocked} from './compartment-water.js';
 
@@ -57,7 +58,7 @@ export const mapConnections={
         const key=`${p.map}/${p.x}/${p.y}`;if(endpoints.has(key))errors.push('同じセルに複数の接続口があります');endpoints.add(key);
         if(p.facing!==undefined&&!faces[p.facing])errors.push('到着方向が不正です');
         if(l.kind!=='stairs'){
-          const delta=faces[p.side];if(!delta||data.maps[p.map].tiles[p.y+delta[1]]?.[p.x+delta[0]]!=='#')errors.push('扉は壁に接する通路の端へ置いてください');
+          const delta=faces[p.side];if(!delta||(data.game.cellLayerVersion?!authoredCellLayers(data,data.maps[p.map],p.x+delta[0],p.y+delta[1])?.visual.wall:data.maps[p.map].tiles[p.y+delta[1]]?.[p.x+delta[0]]!=='#'))errors.push('扉は壁に接する通路の端へ置いてください');
         }else if(p.side!==undefined)errors.push('階段に水平の扉面は指定できません');
       }
     }

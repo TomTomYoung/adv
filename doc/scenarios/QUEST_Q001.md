@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.15.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.16.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:b23d513a52366c407d3a8aabba9e742cf4a430c900673b377adaf3e1f47d3ba5 -->
+<!-- quest-page-source:db8f9a295a72a7fe00d2ce15ecea80e9f244438dd300f4718d1d43f3f5479caa -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -858,7 +858,25 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       "weight": 30
     }
   ],
-  "dungeon": "kagaribi"
+  "dungeon": "kagaribi",
+  "cells": {
+    "legend": {
+      "F": "stone_floor",
+      "W": "stone_wall"
+    },
+    "rows": [
+      "WWWWWWWWWWWWWWW",
+      "WFFFFFFFFFFFFFW",
+      "WFWWWFWWWFWWWFW",
+      "WFFFWFFFWFFFWFW",
+      "WWWFWFWFWFWFWFW",
+      "WFFFWFWFFFWFFFW",
+      "WFWWWFWWWWWFWFW",
+      "WFFFFFFFFFFFFFW",
+      "WWWWWWWWWWWWWWW"
+    ],
+    "overrides": {}
+  }
 }
 ```
 

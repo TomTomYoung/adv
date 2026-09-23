@@ -1,6 +1,8 @@
 import {eventVisible,objectVisible,questEvents} from './quest-events.js';
 import {nextQuestPlace} from './quest-navigation.js';
 import {arriveStoryJourney,resumeWorldStory} from './story.js';
+import {dungeonCell} from './dungeons.js';
+import {cellEventKey,cellEntryId} from './cell-layers.js';
 
 export const FIELD_EVENT_TRIGGERS=['enter','auto','interact','action'];
 export const fieldIdle=state=>!state.waiting&&!state.battle&&!state.vm.length;
@@ -37,6 +39,17 @@ function arriveEvent(engine){
   const arrived=place.kind==='town'?s.mode==='town'&&s.townLocation===place.location:onFieldCell(s,place);
   return arrived&&arriveStoryJourney(engine);
 }
+function cellEnterEvent(engine){
+  const s=engine.state,entry=s.fieldEntry;if(!entry||!onFieldCell(s,entry))return false;
+  const cell=dungeonCell(engine.data,s,engine.map(),entry.x,entry.y);
+  for(const id of cell?.events??[]){
+    const event=engine.data.cellEvents[id],firedId=cellEntryId(id),key=cellEventKey(entry.map,entry.x,entry.y,id);
+    if(event.trigger!=='enter'||entry.fired.includes(firedId)||event.once&&s.events[key]||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
+    entry.fired.push(firedId);s.events[key]=(s.events[key]??0)+1;
+    engine.run(event.script,{map:entry.map,x:entry.x,y:entry.y,event:id});return true;
+  }
+  return false;
+}
 function conditionEvent(engine){
   const s=engine.state;if(s.mode!=='dungeon')return false;
   for(const event of questEvents(engine.data)){
@@ -53,7 +66,7 @@ export function processFieldEvents(engine){
   let fired=false,budget=engine.data.system.scriptBudget;
   while(fieldIdle(engine.state)){
     if(--budget<0)throw Error('フィールドイベントが実行上限に達しました');
-    if(!enterEvent(engine)&&!arriveEvent(engine)&&!conditionEvent(engine))break;
+    if(!enterEvent(engine)&&!arriveEvent(engine)&&!cellEnterEvent(engine)&&!conditionEvent(engine))break;
     fired=true;
   }
   return fired;

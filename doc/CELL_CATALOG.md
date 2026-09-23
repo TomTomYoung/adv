@@ -1,30 +1,32 @@
-# セル・地形状態・境界・配置物カタログ
+# セルレイヤー・状態・境界・配置物カタログ
 
-1.14.0では `map_connections` と `compartment_water` が通常の区画接続・水没を担当します。通常ロードに立体マップはありません。末尾の配置索引は現行データ、以下の立体・潮汐水位の説明は退避実装の保守資料です。現行仕様は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
+確認日: 2026-09-23。作品版1.16.0。通常ロードする33マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
 
-確認日: 2026-09-18。対象は作品版1.14.0です。現行の配置索引と、保持している旧地形実装の型を区別して整理しています。2Dマップも継続して保守する対象です。
+`.` と `#` は通行可否だけを表します。床・壁・画像・遮光・水密は記号に含めません。セル種は通行、表示、フィールドイベント参照、照度などのパラメータをまとめたプリセットです。一地点の例外はレイヤーや項目を上書きし、セル種を増やさず表します。宝箱・人物・火台・レバーはオブジェクト、扉・水門・壁面はエッジ側の定義です。
 
-地形データの文字種は `.`（空）と `#`（密）の二つです。水・足場・扉・植物・術の区域などは、地形に重ねる状態や配置物として定義されています。本書の分類名を、新しい `tile` の値としてJSONへ書き込むことはできません。
+形式と編集元は [CELL_LAYERS.md](CELL_LAYERS.md)、座標と境界は [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)、区画水没は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。配置索引は現行の配布データから生成します。
 
-各方向の名称と判定順は[セルと境界の仕様](MAP_CELLS_AND_BOUNDARIES.md)、区域への水没操作は[立体地形と水](VOXEL_TERRAIN_AND_WATER.md)、固有環境の概要は[ダンジョン一覧](DUNGEON_CATALOG.md)を参照してください。末尾の配置索引には、件数・座標・実際のID・編集元へのリンクを配布データから生成します。
+## 現行のセル種プリセット
 
-## 共通の読み方
+### stone_floor：石床の構成
 
-「通行可」は他の条件も満たす場合の候補です。例えば空セルでも閉じた扉や境界があれば入れません。2Dの通常移動は四方、3Dも通常歩行は同じzの四方です。3Dの上下を含む移動には具体的な経路が必要です。
+通行値は `.`、表示は壁なし・床あり・遮光なし、素材はダンジョンの床画像です。局所照度の下限0、水の進入可、セルイベントなしを明示します。通行値だけを `#` へ上書きすれば、床の見た目と光の通過を保ったまま進入だけを拒否できます。
 
-現行の壁セルは全方向から進入不可で、共有面の人物・水の通過設定は両方向共通です。入口に応じたセル内の出口制限や、一方通行の共有面は未実装です。経路リンクの片方向指定は対応済みですが、現在の立体区画の経路は往復可能です。
+### stone_wall：石壁の構成
 
-同じセルが複数項目に該当します。例えば「空・足場あり・腰までの水・ポンプの操作位置」が同時に成立します。分類ごとの件数を足して、マップの総セル数にしないでください。
+通行値は `#`、表示は壁あり・床なし・遮光あり、素材はダンジョンの壁画像です。局所照度の下限0、水の進入不可、セルイベントなしを明示します。これは頻出するレイヤーの組合せであり、`#` 自体を壁の意味で使うものではありません。
 
-## 基礎地形と足場
+### 地点ごとの上書きとセルイベント
 
-### 2Dの通路セル：tiles = .
+`maps.<map>.overrides` の `x,y` ごとに通行、表示の一項目、パラメータ、イベント配列を変更できます。毒床などは `events` の参照先から通常のスクリプトを呼び、そこでHPを減らします。現在の本編配置に毒床は追加していません。
 
-四方から進入し、四方へ退出できる基本の空セルです。2Dでは床のある平面として扱い、セル個別の高さや支持面を持ちません。範囲外、壁、閉じた扉、環境の遮断を移動ごとに検査します。全2Dダンジョンに配置されています。
+「通行可」は追加の扉・環境条件も満たす場合の候補です。`map.tiles` は通行値だけの生成データ、見た目は `visual`、明るさや通水属性は `parameters` から得ます。記号による見た目の暗黙指定は通常データでは使いません。
 
-### 2Dの壁セル：tiles = #
+同じセルに床表示、水面、照度、イベントが同時に成立します。分類ごとの件数を足して総セル数にしないでください。
 
-1マス全体を占有する壁・岩・土などです。四方すべてから進入不可で、水門のような薄い境界ではありません。破壊壁や地形パッチの対象になっている場所だけ、現在の地形を `.` へ変更できます。画像が壁以外の見た目でも、`#` の間は通常移動できません。
+## 退避3Dの基礎地形と足場
+
+以下の空・密は通常2Dの通行記号と意味が異なる退避形式です。専用の互換アダプターとテストだけで保持します。
 
 ### 退避3Dの密セル：voxels.layers = #
 
@@ -249,77 +251,83 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.15.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.16.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
-2D 33マップ、3D 0マップ、計33マップ。2Dの空は2784セル、密は3447セルです。
+2D 33マップ、3D 0マップ、計33マップ。2Dの通行可は2784セル、通行不可は3447セルです。
+
+### セル種プリセット
+
+`stone_floor`：通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+`stone_wall`：通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall"}`、環境 `{"illumination":0,"water_passable":false}`、セルイベント なし。
 
 ### マップ別の基礎地形
 
-[region_1_f1](../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、空21・密34。
+[region_1_f1](../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、通行可21・通行不可34。
 
-[region_1_f2](../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、空21・密34。
+[region_1_f2](../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、通行可21・通行不可34。
 
-[region_2_f1](../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、空132・密153。
+[region_2_f1](../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、通行可132・通行不可153。
 
-[region_2_f2](../data/maps/region_2_f2.json) 塩哭きの廃坑・地下2層：2D、空130・密155。
+[region_2_f2](../data/maps/region_2_f2.json) 塩哭きの廃坑・地下2層：2D、通行可130・通行不可155。
 
-[region_3_f1](../data/maps/region_3_f1.json) 根喰みの地下庭園・地下1層：2D、空129・密156。
+[region_3_f1](../data/maps/region_3_f1.json) 根喰みの地下庭園・地下1層：2D、通行可129・通行不可156。
 
-[region_3_f2](../data/maps/region_3_f2.json) 根喰みの地下庭園・地下2層：2D、空130・密155。
+[region_3_f2](../data/maps/region_3_f2.json) 根喰みの地下庭園・地下2層：2D、通行可130・通行不可155。
 
-[region_4_f1](../data/maps/region_4_f1.json) 鏡沈みの礼拝堂・地下1層：2D、空130・密155。
+[region_4_f1](../data/maps/region_4_f1.json) 鏡沈みの礼拝堂・地下1層：2D、通行可130・通行不可155。
 
-[region_4_f2](../data/maps/region_4_f2.json) 鏡沈みの礼拝堂・地下2層：2D、空132・密153。
+[region_4_f2](../data/maps/region_4_f2.json) 鏡沈みの礼拝堂・地下2層：2D、通行可132・通行不可153。
 
-[region_5_f1](../data/maps/region_5_f1.json) 灰時計の書庫・地下1層：2D、空128・密157。
+[region_5_f1](../data/maps/region_5_f1.json) 灰時計の書庫・地下1層：2D、通行可128・通行不可157。
 
-[region_5_f2](../data/maps/region_5_f2.json) 灰時計の書庫・地下2層：2D、空127・密158。
+[region_5_f2](../data/maps/region_5_f2.json) 灰時計の書庫・地下2層：2D、通行可127・通行不可158。
 
-[region_6_f1](../data/maps/region_6_f1.json) 眠れる地下市場・地下1層：2D、空132・密153。
+[region_6_f1](../data/maps/region_6_f1.json) 眠れる地下市場・地下1層：2D、通行可132・通行不可153。
 
-[region_6_f2](../data/maps/region_6_f2.json) 眠れる地下市場・地下2層：2D、空131・密154。
+[region_6_f2](../data/maps/region_6_f2.json) 眠れる地下市場・地下2層：2D、通行可131・通行不可154。
 
-[region_7_f1](../data/maps/region_7_f1.json) 黒潮の沈没城・地下1層：2D、空129・密156。
+[region_7_f1](../data/maps/region_7_f1.json) 黒潮の沈没城・地下1層：2D、通行可129・通行不可156。
 
-[region_7_f2](../data/maps/region_7_f2.json) 黒潮の沈没城・地下2層：2D、空131・密154。
+[region_7_f2](../data/maps/region_7_f2.json) 黒潮の沈没城・地下2層：2D、通行可131・通行不可154。
 
-[region_8_f1](../data/maps/region_8_f1.json) 鉄胎の機関廟・地下1層：2D、空132・密153。
+[region_8_f1](../data/maps/region_8_f1.json) 鉄胎の機関廟・地下1層：2D、通行可132・通行不可153。
 
-[region_8_f2](../data/maps/region_8_f2.json) 鉄胎の機関廟・地下2層：2D、空131・密154。
+[region_8_f2](../data/maps/region_8_f2.json) 鉄胎の機関廟・地下2層：2D、通行可131・通行不可154。
 
-[region_9_f1](../data/maps/region_9_f1.json) 星欠けの地下観測所・地下1層：2D、空129・密156。
+[region_9_f1](../data/maps/region_9_f1.json) 星欠けの地下観測所・地下1層：2D、通行可129・通行不可156。
 
-[region_9_f2](../data/maps/region_9_f2.json) 星欠けの地下観測所・地下2層：2D、空130・密155。
+[region_9_f2](../data/maps/region_9_f2.json) 星欠けの地下観測所・地下2層：2D、通行可130・通行不可155。
 
-[region_10_f1](../data/maps/region_10_f1.json) 帰還者の深淵・地下1層：2D、空130・密155。
+[region_10_f1](../data/maps/region_10_f1.json) 帰還者の深淵・地下1層：2D、通行可130・通行不可155。
 
-[region_10_f2](../data/maps/region_10_f2.json) 帰還者の深淵・地下2層：2D、空127・密158。
+[region_10_f2](../data/maps/region_10_f2.json) 帰還者の深淵・地下2層：2D、通行可127・通行不可158。
 
-[kagaribi_f1](../data/maps/kagaribi_f1.json) 篝火の迷宮・灯番の巡回路：2D、空60・密75。
+[kagaribi_f1](../data/maps/kagaribi_f1.json) 篝火の迷宮・灯番の巡回路：2D、通行可60・通行不可75。
 
-[kagaribi_f2](../data/maps/kagaribi_f2.json) 篝火の迷宮・消えた灯の回廊：2D、空57・密78。
+[kagaribi_f2](../data/maps/kagaribi_f2.json) 篝火の迷宮・消えた灯の回廊：2D、通行可57・通行不可78。
 
-[kagaribi_f3](../data/maps/kagaribi_f3.json) 篝火の迷宮・深火の祭壇：2D、空57・密78。
+[kagaribi_f3](../data/maps/kagaribi_f3.json) 篝火の迷宮・深火の祭壇：2D、通行可57・通行不可78。
 
-[prayerless_valley_f1](../data/maps/prayerless_valley_f1.json) 祈りの届かない谷：2D、空54・密63。
+[prayerless_valley_f1](../data/maps/prayerless_valley_f1.json) 祈りの届かない谷：2D、通行可54・通行不可63。
 
-[moving_village_f1](../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、空54・密63。
+[moving_village_f1](../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、通行可54・通行不可63。
 
-[region_1_canal_a](../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、空9・密24。
+[region_1_canal_a](../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、通行可9・通行不可24。
 
-[region_1_landing](../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、空21・密34。
+[region_1_landing](../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、通行可21・通行不可34。
 
-[region_1_canal_b](../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、空9・密24。
+[region_1_canal_b](../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、通行可9・通行不可24。
 
-[region_1_inspection](../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、空21・密34。
+[region_1_inspection](../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、通行可21・通行不可34。
 
-[region_1_canal_c](../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、空9・密24。
+[region_1_canal_c](../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、通行可9・通行不可24。
 
-[region_1_lower_landing](../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、空21・密34。
+[region_1_lower_landing](../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、通行可21・通行不可34。
 
-[region_1_canal_d](../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、空9・密24。
+[region_1_canal_d](../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、通行可9・通行不可24。
 
-[region_1_gatehouse](../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、空21・密34。
+[region_1_gatehouse](../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可21・通行不可34。
 
 ### セル上のイベント種別
 

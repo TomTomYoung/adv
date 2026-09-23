@@ -1,5 +1,5 @@
 import {integer,closeTo} from './common.js';
-import {exact,idList,pointsValid,floorValid,patchValid,patchTile,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
+import {exact,idList,pointsValid,floorValid,patchValid,patchTile,patchCell,materialsValid,inventoryPlan,action,markers,panel,sameCell} from './environment.js';
 const connected=(ctx,d)=>!ctx.persistent.disconnected.includes(d.id);
 const powered=(ctx,d)=>connected(ctx,d)&&ctx.persistent.circuits.includes(d.circuit);
 const load=(ctx,circuits=ctx.persistent.circuits)=>ctx.spec.devices.filter(d=>connected(ctx,d)&&circuits.includes(d.circuit)).reduce((n,d)=>n+d.power,0);
@@ -39,6 +39,7 @@ export const powerGrid={createPersistent:()=>({circuits:[],disconnected:[]}),cre
   danger(ctx){const guard=ctx.spec.devices.find(d=>d.kind==='guardian'&&powered(ctx,d)&&!ctx.run.fought.includes(d.id)&&closeTo(ctx.state,d));if(!guard)return false;fight(ctx,guard);return true;},
   battleEnd(ctx){if(ctx.run.fighting){if(ctx.result==='win')ctx.run.fought.push(ctx.run.fighting);ctx.run.fighting=null;}},
   tile:(ctx,map,x,y)=>patchTile(ctx.spec.devices.filter(d=>d.kind==='door'&&powered(ctx,d)).flatMap(d=>d.tiles),map,x,y),
+  cell:(ctx,map,x,y)=>patchCell(ctx.spec.devices.filter(d=>d.kind==='door'&&powered(ctx,d)).flatMap(d=>d.tiles),map,x,y),
   project(ctx){
     const cards=ctx.spec.controls.filter(c=>closeTo(ctx.state,c)).map(c=>({name:c.name,text:`${ctx.persistent.circuits.includes(c.id)?'通電':'停止'}。接続先：${ctx.spec.devices.filter(d=>d.circuit===c.id).map(d=>`${d.name}（${d.power}）`).join('・')}`,actions:[action(ctx,plan,'系統の動力を切り替える',{action:'toggle',target:c.id})]}));
     for(const d of ctx.spec.devices.filter(d=>closeTo(ctx.state,d))){const actions=[action(ctx,plan,connected(ctx,d)?'部品を外して切り離す':'部品を戻して接続する',{action:connected(ctx,d)?'disconnect':'reconnect',target:d.id})];if(d.kind==='repair')actions.push(action(ctx,plan,'隊を修復する',{action:'repair',target:d.id}));if(d.kind==='elevator')actions.push(action(ctx,plan,'昇降機に乗る',{action:'ride',target:d.id}));cards.push({name:d.name,text:`${connected(ctx,d)?powered(ctx,d)?'稼働中':'停止中':'配線切断'} ／ 動力 ${d.power}`,actions});}

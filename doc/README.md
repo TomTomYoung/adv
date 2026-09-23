@@ -26,9 +26,11 @@
 
 ## ダンジョン
 
-[CELL_CATALOG.md](CELL_CATALOG.md)：現在の空・密、足場、水深、地形変化、境界、移動手段、環境効果、イベント種別の仕様と自動集計した配置索引。
+[CELL_LAYERS.md](CELL_LAYERS.md)：セル種プリセット、地点上書き、画像・照度・通水・セル進入イベント、正本と生成。
 
-[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：2Dの四辺・3Dの六面、壁セルと境界壁、方向別の進入・退出、現行実装と拡張仕様、2Dの保持方針。
+[CELL_CATALOG.md](CELL_CATALOG.md)：現在のセル種プリセット・通行値・表示、水深、地形変化、境界、移動手段、環境効果、イベント種別の仕様と自動集計した配置索引。
+
+[MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：2Dの四辺・3Dの六面、セルレイヤーと境界、方向別の進入・退出、現行実装と拡張仕様、2Dの保持方針。
 
 [VOXEL_TERRAIN_AND_WATER.md](VOXEL_TERRAIN_AND_WATER.md)：立方体・六面の境界・区域の水没・梯子と上下移動の仕様。
 
