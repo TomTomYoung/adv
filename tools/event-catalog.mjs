@@ -21,8 +21,15 @@ export function eventCatalog(data){
  add('5. 強制終了は `records.interruptions` に記録し、勝利・逃走・撃退回数や戦闘報酬を増やさない。すでに倒した敵の撃破数は保持する。戦闘イベントの実行済みID・現在の命令位置・保留結果を保存し、会話中でも重複せず再開する。');
  add('## セルレイヤーからのイベント');
  add('通常2Dはセル種と地点上書きのeventsからenterイベントを参照する。判定は実占有セルだけで、既存オブジェクト進入・旅程到着の後、クエスト条件イベントの前。会話・戦闘中は待機し、入場ごとの実行済みIDと地点単位の一回性を保存する。HP減算や戦闘開始は参照先スクリプトで行う。[セル仕様](CELL_LAYERS.md)。');
- add(`本編のセルイベント定義は${Object.keys(data.cellEvents??{}).length}件。今回の移行では新たな危険床を配置しない。環境変化の購読とfire_network.dangerによるくらがり開始の統合は後続作業。`);
+ add(`本編のセルイベント定義は${Object.keys(data.cellEvents??{}).length}件。新たな危険床は配置していない。環境変化を購読する迷宮の条件付きイベントは次節を参照。`);
  for(const [id,e] of Object.entries(data.cellEvents??{}))add(`${code(id)}：${code(e.trigger)} → ${code(e.script)}、一回性 ${e.once}。`);
+ add('## 環境変化を購読する迷宮イベント');
+ add('迷宮原稿のfieldEventsを通知種別と現在の迷宮で索引化し、保留候補だけを定義順に判定する。進入・移動完了・灯火・物体・命令での状態変更を通知し、毎フレーム走査しない。占有セルのレイヤー・合成照度・固有システムの環境値を条件に使う。一回性はonce、入場単位はentry、新しい通知での再評価はchange。保留中の会話・戦闘も保存する。[記法と再発](EVENT_SYSTEM.md)。');
+ for(const d of Object.values(data.dungeons??{}))for(const e of d.fieldEvents??[])add(`${code(`${d.id}/${e.id}`)} ${e.title}：購読 ${e.watch.map(code).join(' / ')}、再発 ${code(e.repeat)}、条件 ${code(JSON.stringify(e.condition))} → ${code(e.action.type)} ${code(e.action.encounter??e.action.script)}。[原稿](../authoring/dungeons/${d.id}.json)。`);
+ add('通常のくらがり襲撃はfire_network.dangerから削除した。火の部品は保護・燃料などの値を提供し、共通イベントが発火と戦闘開始を管理する。普通の火で明るくても魔除けがなければ襲われる。戦闘開始時には保留中の環境battle候補を消費し、同じ歩行から物語戦闘と通常襲撃を二重発火させない。向き変更・コマンドの開閉・取消・戦闘終了だけでは再発しない。');
+ add('## 専用処理を維持する理由');
+ add('旅程到着はすでに共通のarriveEventで実座標・町施設と到着効果を処理する。迷宮限定fieldEventsへの重複登録はしない。クエストautoは受注中クエストのautoだけを候補にする。');
+ add('power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・勝利時の状態更新が一体のため、汎用式への分解による二重管理を避ける。air_supplyの全滅救助はHP更新直後の敗北処理で、条件付き戦闘ではないため専用処理を維持する。水位・腐食・地形変更・通常ランダム遭遇も更新順と乱数規則を維持する。');
  add('## 現行q001のイベント');
  add('`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。');
  add('`q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。');

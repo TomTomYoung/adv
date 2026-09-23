@@ -18,6 +18,7 @@ import {compartmentWater} from './systems/compartment-water.js';
 import {objectBlocks} from './quest-events.js';
 import {authoredCellLayers,mergeCellLayers} from './cell-layers.js';
 import {legacyCellLayers} from './legacy-cell-layers.js';
+import {signalFieldChange} from './field-signals.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
 export const DUNGEON_SYSTEMS={map_connections:mapConnections,compartment_water:compartmentWater,voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
@@ -116,6 +117,9 @@ export function dungeonEncounter(data,state){
   }
   return result;
 }
+export function dungeonFieldParameters(data,state){
+  return Object.fromEntries(dungeonContexts(data,state).filter(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].fieldParameters).map(ctx=>[ctx.id,DUNGEON_SYSTEMS[ctx.spec.use].fieldParameters(ctx)]));
+}
 export function dungeonWaterDepth(data,state,map,x,y){
   return dungeonContexts(data,state).reduce((depth,ctx)=>Math.max(depth,DUNGEON_SYSTEMS[ctx.spec.use].waterDepth?.(ctx,map,x,y)??0),0);
 }
@@ -128,7 +132,9 @@ export function dungeonActionPlan(data,state,intent){
 export function dungeonAction(engine,intent){
   const plan=dungeonActionPlan(engine.data,engine.state,intent);
   if(!plan.ok){engine.notify(plan.reason);return false;}
+  const before=plan.ctx.definition.fieldEvents?.length?JSON.stringify([plan.ctx.run,plan.ctx.persistent]):null;
   DUNGEON_SYSTEMS[plan.ctx.spec.use].act({...plan.ctx,engine},intent,plan);
+  if(before!==null&&before!==JSON.stringify([plan.ctx.run,plan.ctx.persistent]))signalFieldChange(engine.data,engine.state,'object','light');
   dungeonDanger(engine);return true;
 }
 export function dungeonViews(data,state){return dungeonContexts(data,state).map(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].project(ctx)).filter(v=>!v.hidden);}

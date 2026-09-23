@@ -1,5 +1,6 @@
 import {objectBlocks,objectVisible} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
+import {signalFieldChange} from '../field-signals.js';
 
 const faces={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
 const freshFlame=(effect,fuel)=>({lit:true,effect,fuel});
@@ -50,7 +51,7 @@ export function fireSkillPlan(data,state,actor,ability){
 }
 export function kindlePortable(data,state,effect){
   const ctx=fireContext(data,state);if(!ctx||!ctx.spec.effects[effect])return false;
-  state.inventory[ctx.spec.portable.item]=1;ctx.run.portable=freshFlame(effect,ctx.spec.portable.capacity);return true;
+  state.inventory[ctx.spec.portable.item]=1;ctx.run.portable=freshFlame(effect,ctx.spec.portable.capacity);signalFieldChange(data,state,'light');return true;
 }
 export function canRepel(data,state,skill){
   const ctx=fireContext(data,state),battle=state.battle;
@@ -153,12 +154,13 @@ export const fireNetwork={
     burn(ctx.run.portable,ctx.spec.portable.capacity,ctx.spec.portable.warnings,t=>ctx.engine.notify(t),'携帯松明');
     for(const f of ctx.spec.fixtures){const nearby=closeTo(ctx,f);burn(ctx.persistent.fixtures[f.id],f.capacity,[],t=>{if(nearby)ctx.engine.notify(t);},f.name);}
   },
-  danger:ctx=>{if(fireEnvironment(ctx).protected)return false;ctx.engine.startBattle(ctx.spec.threat.encounter,{win:[],escape:[],lose:[]});ctx.engine.notify('火の守りが届かない。くらがりが通路から襲いかかってきました。');return true;},
+  fieldParameters:ctx=>({...fireEnvironment(ctx),fuel:ctx.run.portable.fuel}),
   encounter:ctx=>fireEnvironment(ctx),
   plan,act,project,validate,validateState
 };
 
 export function setPortableFire(data,state,{fuel,effect}){
  const ctx=fireContext(data,state);if(!ctx||!Number.isInteger(fuel)||fuel<0||fuel>ctx.spec.portable.capacity||fuel>0&&!ctx.spec.effects[effect])throw Error("携行松明の状態指定が不正です");
- Object.assign(ctx.run.portable,{lit:fuel>0,fuel,effect:fuel>0?effect:null});
+ const next={lit:fuel>0,fuel,effect:fuel>0?effect:null};
+ if(Object.entries(next).some(([key,value])=>ctx.run.portable[key]!==value)){Object.assign(ctx.run.portable,next);signalFieldChange(data,state,'light');}
 }

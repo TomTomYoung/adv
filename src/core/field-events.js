@@ -1,8 +1,10 @@
-import {eventVisible,objectVisible,questEvents} from './quest-events.js';
+import {eventVisible,objectVisible} from './quest-events.js';
 import {nextQuestPlace} from './quest-navigation.js';
 import {arriveStoryJourney,resumeWorldStory} from './story.js';
-import {dungeonCell} from './dungeons.js';
+import {dungeonCell,dungeonFieldParameters} from './dungeons.js';
 import {cellEventKey,cellEntryId} from './cell-layers.js';
+import {freshFieldReactions,fieldEventIndex,fieldReactionKey} from './field-signals.js';
+import {currentIllumination} from './lighting.js';
 
 export const FIELD_EVENT_TRIGGERS=['enter','auto','interact','action'];
 export const fieldIdle=state=>!state.waiting&&!state.battle&&!state.vm.length;
@@ -13,6 +15,7 @@ export function onFieldCell(state,point){
 export function recordFieldEntry(state){
   const {map,x,y,z=0}=state.location;
   state.fieldEntry={map,x,y,z,fired:[]};
+  state.fieldReactions=freshFieldReactions();
 }
 
 // Exact occupied cell, never the facing cell. Keep the entry's consumed IDs in
@@ -52,7 +55,8 @@ function cellEnterEvent(engine){
 }
 function conditionEvent(engine){
   const s=engine.state;if(s.mode!=='dungeon')return false;
-  for(const event of questEvents(engine.data)){
+  const candidates=Object.entries(s.quests).filter(([,q])=>q.stage==='active').flatMap(([id])=>(engine.data.quests[id].events??[]).filter(e=>e.trigger==='auto').map(e=>({...e,quest:id})));
+  for(const event of candidates){
     if(event.trigger!=='auto'||s.quests[event.quest]?.stage!=='active')continue;
     const key=`quest/${event.quest}/${event.id}`;
     if(s.events[key]||!eventVisible(s,event)||!engine.value(event.condition))continue;
@@ -62,11 +66,37 @@ function conditionEvent(engine){
   }
   return false;
 }
+function environmentEvent(engine){
+  const s=engine.state,q=s.fieldReactions,active=s.dungeons?.active;
+  if(s.mode!=='dungeon'||!q?.pending.length||q.dungeon!==active?.id||q.run!==active.run)return false;
+  const index=fieldEventIndex(engine.data.dungeons[active.id]);
+  // Definition order is stable even when several mutation signals were coalesced.
+  const candidates=[...index.events.values()].filter(e=>q.pending.includes(e.id));
+  const field={cell:dungeonCell(engine.data,s,engine.map(),s.location.x,s.location.y)};
+  let parameters,illumination;
+  Object.defineProperties(field,{
+    environment:{enumerable:true,get:()=>parameters??=dungeonFieldParameters(engine.data,s)},
+    illumination:{enumerable:true,get:()=>illumination??=currentIllumination(engine.data,s)}
+  });
+  for(const event of candidates){
+    q.pending.splice(q.pending.indexOf(event.id),1);
+    const key=fieldReactionKey(active.id,event.id);
+    if(event.repeat==='once'&&s.events[key]||event.repeat==='entry'&&q.fired.includes(event.id))continue;
+    if(event.points?.length&&!event.points.some(p=>onFieldCell(s,p))||!engine.value(event.condition,{field}))continue;
+    s.events[key]=(s.events[key]??0)+1;
+    if(event.repeat==='entry')q.fired.push(event.id);
+    if(event.action.type==='battle')engine.startBattle(event.action.encounter,{win:[],escape:[],lose:[]});
+    else engine.run(event.action.script,{event:event.id,dungeon:active.id,map:s.location.map,x:s.location.x,y:s.location.y});
+    if(event.message)engine.notify(event.message);
+    return true;
+  }
+  return false;
+}
 export function processFieldEvents(engine){
   let fired=false,budget=engine.data.system.scriptBudget;
   while(fieldIdle(engine.state)){
     if(--budget<0)throw Error('フィールドイベントが実行上限に達しました');
-    if(!enterEvent(engine)&&!arriveEvent(engine)&&!cellEnterEvent(engine)&&!conditionEvent(engine))break;
+    if(!enterEvent(engine)&&!arriveEvent(engine)&&!cellEnterEvent(engine)&&!conditionEvent(engine)&&!environmentEvent(engine))break;
     fired=true;
   }
   return fired;

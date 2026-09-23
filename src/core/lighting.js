@@ -1,5 +1,8 @@
 import {fireContext} from './systems/fire-network.js';
-import {objectVisible} from './quest-events.js';
+import {objectVisible,objectBlocks} from './quest-events.js';
+import {dungeonCell,dungeonBlock,dungeonWaterDepth} from './dungeons.js';
+import {connectionSurfaces} from './systems/map-connections.js';
+import {voxelMapState,voxelAt,faceRules,neighbor} from './voxels.js';
 
 export const MAX_LIGHT=8;
 const burning=f=>Boolean(f?.lit&&(f.fuel===null||f.fuel>0));
@@ -46,4 +49,25 @@ export function lightSources(data,state){
 export function fieldLighting(data,state,geometry,boundaries={}){
   const sources=lightSources(data,state),levels=computeLightGrid(geometry,sources,boundaries),p=state.location;
   return {max:MAX_LIGHT,current:levels[p.y]?.[p.x]??0,levels,sources};
+}
+// Condition evaluation needs one occupied cell, not a ViewModel or a complete
+// light grid. Match the projection's occlusion and local illumination minimum.
+export function currentIllumination(data,state){
+  const p=state.location,map=data.maps[p?.map];if(state.mode!=='dungeon'||!map)return 0;
+  const terrain=map.voxels?voxelMapState(data,state,map):null;
+  const boundaries={...connectionSurfaces(data,state).boundaries};
+  const geometry=map.tiles.map((row,y)=>Array.from(row,(_,x)=>{
+    if(map.voxels){
+      const point={x,y,z:p.z??0};
+      for(const side of ['north','east','south','west'])if(!faceRules(map,terrain,point,neighbor(point,side)).passage)boundaries[`${x},${y}/${side}`]=true;
+    }
+    const opaque=map.voxels?voxelAt(map,terrain,{x,y,z:p.z??0})!=='.':dungeonCell(data,state,map,x,y).visual.opaque||(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!dungeonWaterDepth(data,state,map,x,y));
+    return opaque||map.objects.some(o=>o.x===x&&o.y===y&&(o.z??0)===(p.z??0)&&objectBlocks(state,map,o))?'#':'.';
+  }).join(''));
+  let level=map.voxels?0:dungeonCell(data,state,map,p.x,p.y).parameters.illumination??0;
+  for(const source of lightSources(data,state)){
+    const distance=Math.hypot(p.x-source.x,p.y-source.y),r=source.radius,peak=source.intensity??MAX_LIGHT;
+    if(distance<=r&&lightReaches(geometry,boundaries,source,p.x,p.y))level=Math.max(level,Math.min(MAX_LIGHT,r===0?peak:Math.max(1,Math.round(peak-(peak-1)*distance/r))));
+  }
+  return level;
 }

@@ -6,6 +6,7 @@ import {voxelAt} from './voxels.js';
 import {validateDungeonArt} from './dungeon-art.js';
 import {validateQuestEvents} from './quest-events.js';
 import {validateDungeons} from './dungeons.js';
+import {validateConditionalFieldEvents} from './field-event-validation.js';
 import {validateStories} from './story.js';
 import {validatePresentation,colorValid,layerNameValid,targetValid} from './feedback-validation.js';
 import {validateJobs} from './job-validation.js';
@@ -142,6 +143,6 @@ export function validateContent(data){
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
-  errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression));
+  errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression),...validateConditionalFieldEvents(data,expression));
   return errors;
 }

@@ -2,6 +2,7 @@ import {initStory,enterStoryScene,applyStoryAction,storyCanAct,beginStoryJourney
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
 import {resumeBattleEvent,interruptBattle} from './battle-events.js';
+import {signalFieldChange} from './field-signals.js';
 export const COMMANDS=new Set(['story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
@@ -65,9 +66,13 @@ export function pump(engine){
         const root=pathParts(c.target)[0];if(!['flags','vars','local'].includes(root))throw new Error('この状態は専用命令で変更します');
         const target=root==='local'?frame:state;
         const value=c.op==='random.set'?c.min+Math.floor(engine.random()*(c.max-c.min+1)):c.op==='add'?(engine.value({ref:c.target})??0)+v(c.value):v(c.value);
-        setPath(target,c.target,value);break;
+        const changed=JSON.stringify(engine.value({ref:c.target}))!==JSON.stringify(value);
+        setPath(target,c.target,value);if(changed&&root!=='local')signalFieldChange(engine.data,state,'state');break;
       }
-      case 'flag.set':setPath(state,`flags.${c.key}`,v(c.value));break;
+      case 'flag.set':{
+        const value=v(c.value),target=`flags.${c.key}`,changed=JSON.stringify(engine.value({ref:target}))!==JSON.stringify(value);
+        setPath(state,target,value);if(changed)signalFieldChange(engine.data,state,'state');break;
+      }
       case 'random.branch':{
         let roll=engine.random()*c.branches.reduce((sum,b)=>sum+b.weight,0),selected=c.branches.length-1;
         for(let i=0;i<c.branches.length;i++){roll-=c.branches[i].weight;if(roll<0){selected=i;break;}}
@@ -95,7 +100,10 @@ export function pump(engine){
       case 'fire.portable.set':engine.setPortableFire(c);break;
       case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
       case 'facing.set':state.location.facing=c.direction;break;
-      case 'object.state.set':state.objects[`${c.map??state.location.map}/${c.object}`]=c.state;break;
+      case 'object.state.set':{
+        const key=`${c.map??state.location.map}/${c.object}`;
+        if(state.objects[key]!==c.state){state.objects[key]=c.state;signalFieldChange(engine.data,state,'object','light');}break;
+      }
       case 'event.mark_done':state.events[c.event]=1;break;
       case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'});break;
       case 'battle.end':interruptBattle(engine);return;
@@ -117,6 +125,8 @@ export function pump(engine){
       case 'ending.set':state.ending={title:c.title,text:c.text};break;
       default:throw new Error(`未対応の命令: ${c.op}`);
     }
+    if(['item.give','item.take','party.join','party.leave','quest.accept','quest.complete','story.action','event.mark_done'].includes(c.op))signalFieldChange(engine.data,state,'state');
+    if(['light.refill','party.heal_all','rest'].includes(c.op))signalFieldChange(engine.data,state,'light');
   }
   if(!state.vm.length)delete state.presentation.cast;
 }

@@ -9,9 +9,11 @@ import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
 import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
+import {consumeFieldBattleSignals} from './field-signals.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
+  consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
   engine.state.records.battles++;
   engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};

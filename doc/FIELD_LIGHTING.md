@@ -30,3 +30,9 @@
 ## 実装と検証
 
 計算は [lighting.js](../src/core/lighting.js)、地形への投影は [dungeon-surfaces.js](../src/application/dungeon-surfaces.js)、画面描画は [dungeon.js](../src/view/dungeon.js) と [view.js](../src/view/view.js)。[検証](../tests/battle-events-lighting.test.mjs)で円状分布、遮蔽、重なり、消灯・救助後の再点灯、ViewModelの独立性を確認する。
+
+## 条件付きフィールドイベントとの共用
+
+1.17.0では `field.illumination` で占有セルの合成照度を参照できる。Coreの `currentIllumination` が距離・遮蔽・閉じた境界・局所照度を使い、表示と同じ値を返す。通知された候補の条件が実際に照度を読む場合だけ算出する。
+
+くらがり襲撃は照度ゼロではなく `field.environment.fires.protected` の否定を条件にする。通常の火で明るくても魔除けがなければ襲われる既存仕様を維持する。歩行・消灯などの後に評価し、戦闘終了や向き変更だけで再戦しない。[イベント仕様](scenarios/EVENT_SYSTEM.md)。
