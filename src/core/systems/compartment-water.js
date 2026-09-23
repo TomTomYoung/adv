@@ -1,3 +1,4 @@
+import {dungeonCell} from '../dungeons.js';
 import {object,identifier,validPoint,closeTo,available} from './common.js';
 
 // A compartment is a sealed, horizontal 2D map. Its water never creates a
@@ -25,7 +26,7 @@ export const compartmentWater={
   createPersistent:s=>({controls:Object.fromEntries(s.zones.map(z=>[z.control,z.initiallyFlooded]))}),createRun:()=>({}),plan,
   act(ctx,_intent,p){ctx.persistent.controls[p.control.id]=p.flooded;ctx.engine.notify(`${ctx.data.maps[p.zone.map].name}：${p.flooded?'水密扉を施錠して給水した。完全水没のため進入できない。':'給水を止め、床下の排水管へ排水した。水密扉の圧力錠が解除された。'}`);},
   block:(ctx,map)=>compartmentBlocked(ctx.data,ctx.state,map.id),
-  waterDepth:(ctx,map,x,y)=>map.tiles[y]?.[x]==='.'&&compartmentState(ctx.data,ctx.state,map.id)?.flooded?3:0,
+  waterDepth:(ctx,map,x,y)=>dungeonCell(ctx.data,ctx.state,map,x,y)?.parameters.water_passable&&compartmentState(ctx.data,ctx.state,map.id)?.flooded?3:0,
   project(ctx){
     const zones=ctx.spec.zones.map(z=>({...z,name:ctx.data.maps[z.map].name,flooded:ctx.persistent.controls[z.control]}));
     const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c));

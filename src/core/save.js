@@ -1,3 +1,4 @@
+import {cellEntryId} from './cell-layers.js';
 import {castValid} from './cast.js';
 import {gearErrors} from './equipment.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
@@ -136,7 +137,7 @@ export function validateSave(save,data){
   }else if(s.location!==null)fail('町の位置不正');
   if(s.fieldEntry!==null){
     const e=s.fieldEntry,m=data.maps[e?.map];
-    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')))fail('フィールド入場イベントの記録不正');
+    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')))fail('フィールド入場イベントの記録不正');
   }
   if(data.game.world){
     if(s.mode==='town'?!data.locations?.[s.townLocation]:s.townLocation!==null)fail('町ロケーションの参照不正');

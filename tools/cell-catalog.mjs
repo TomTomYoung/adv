@@ -3,7 +3,7 @@ import {emptyVoxels,freshVoxelState,hasFooting,voxelDepth} from '../src/core/vox
 
 // Documentation inventory: count authored records separately from runtime states.
 export function cellCatalogInventory(data){
-  const out=['## 配布データから生成した配置索引','',`作品版${data.game.version}。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。空・密の件数は元の地形、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。`,''];
+  const out=['## 配布データから生成した配置索引','',`作品版${data.game.version}。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。`,''];
   const maps=Object.values(data.maps),flat=maps.filter(m=>!m.voxels),cubic=maps.filter(m=>m.voxels);
   const countTiles=(layers,tile)=>layers.reduce((n,layer)=>n+layer.reduce((n,row)=>n+Array.from(row).filter(c=>c===tile).length,0),0);
   const point=p=>`${p.map??''}${p.map?' ':''}(${p.x},${p.y}${p.z===undefined?'':','+p.z})`;
@@ -16,10 +16,12 @@ export function cellCatalogInventory(data){
   const names=(ids,defs)=>ids.map(id=>`${defs[id]?.name??id} (${id})`).join('・')||'なし';
   const bits=r=>`人物${r.passage?'可':'不可'}・水${r.water?'可':'不可'}・支持${r.support?'あり':'なし'}`;
   const line=s=>out.push(s,'');
-  line(`2D ${flat.length}マップ、3D ${cubic.length}マップ、計${maps.length}マップ。2Dの空は${countTiles(flat.map(m=>m.tiles),'.')}セル、密は${countTiles(flat.map(m=>m.tiles),'#')}セルです。`);
+  line(`2D ${flat.length}マップ、3D ${cubic.length}マップ、計${maps.length}マップ。2Dの通行可は${countTiles(flat.map(m=>m.tiles),'.')}セル、通行不可は${countTiles(flat.map(m=>m.tiles),'#')}セルです。`);
+  out.push('### セル種プリセット','');
+  for(const [id,p] of Object.entries(data.cellTypes??{}))line(`${code(id)}：通行 ${code(p.passage)}、表示 ${code(JSON.stringify(p.visual))}、環境 ${code(JSON.stringify(p.parameters))}、セルイベント ${p.events.map(code).join('・')||'なし'}。`);
   out.push('### マップ別の基礎地形','');
   for(const m of maps){
-    if(!m.voxels){line(`${mapLink(m.id)} ${m.name}：2D、空${countTiles([m.tiles],'.')}・密${countTiles([m.tiles],'#')}。`);continue;}
+    if(!m.voxels){line(`${mapLink(m.id)} ${m.name}：2D、通行可${countTiles([m.tiles],'.')}・通行不可${countTiles([m.tiles],'#')}。`);continue;}
     const state=freshVoxelState(m),empty=emptyVoxels(m,state),standing=empty.filter(p=>hasFooting(m,state,p));
     line(`${mapLink(m.id)} ${m.name}：3D、z=${m.voxels.minZ}〜${m.voxels.minZ+m.voxels.layers.length-1}、空${empty.length}・密${countTiles(m.voxels.layers,'#')}。空の内訳は初期足場あり${standing.length}・なし${empty.length-standing.length}。水深0/1/2/3の初期セル数は${[0,1,2,3].map(n=>empty.filter(p=>voxelDepth(state,p)===n).length).join('/')}。`);
   }

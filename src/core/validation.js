@@ -1,4 +1,5 @@
 import {castValid} from './cast.js';
+import {validateCellLayers} from './cell-layers.js';
 import {validateWorld} from './world.js';
 import {BATTLE_EVENT_PHASES} from './battle-events.js';
 import {voxelAt} from './voxels.js';
@@ -141,6 +142,6 @@ export function validateContent(data){
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
-  errors.push(...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression));
+  errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression));
   return errors;
 }

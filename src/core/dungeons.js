@@ -16,6 +16,8 @@ import {powerGrid} from './systems/power-grid.js';
 import {mapConnections} from './systems/map-connections.js';
 import {compartmentWater} from './systems/compartment-water.js';
 import {objectBlocks} from './quest-events.js';
+import {authoredCellLayers,mergeCellLayers} from './cell-layers.js';
+import {legacyCellLayers} from './legacy-cell-layers.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
 export const DUNGEON_SYSTEMS={map_connections:mapConnections,compartment_water:compartmentWater,voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
@@ -31,6 +33,15 @@ export function dungeonTile(data,state,map,x,y){
   let tile=map?.tiles[y]?.[x];
   for(const ctx of dungeonContexts(data,state))tile=DUNGEON_SYSTEMS[ctx.spec.use].tile?.(ctx,map,x,y)??tile;
   return tile;
+}
+export function dungeonCell(data,state,map,x,y){
+  if(!data.game.cellLayerVersion)return legacyCellLayers(dungeonTile(data,state,map,x,y));
+  let cell=authoredCellLayers(data,map,x,y);if(!cell)return null;
+  for(const ctx of dungeonContexts(data,state)){
+    const patch=DUNGEON_SYSTEMS[ctx.spec.use].cell?.(ctx,map,x,y);
+    if(patch)cell=mergeCellLayers(cell,patch);
+  }
+  return cell;
 }
 export function dungeonBlock(data,state,map,x,y){
   for(const ctx of dungeonContexts(data,state)){const reason=DUNGEON_SYSTEMS[ctx.spec.use].block?.(ctx,map,x,y);if(reason)return reason;}

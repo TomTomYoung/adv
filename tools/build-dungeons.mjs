@@ -1,3 +1,4 @@
+import {buildCellLayers} from './build-cell-layers.mjs';
 import {buildWorld} from './build-world.mjs';
 import {buildConnectedMaps} from './build-connected-maps.mjs';
 import fs from 'node:fs/promises';
@@ -59,6 +60,7 @@ export async function buildDungeons(){
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
   await buildWorld(root);
+  await buildCellLayers(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await buildDungeons();

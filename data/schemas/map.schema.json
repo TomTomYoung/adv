@@ -2071,6 +2071,125 @@
       "type": "string",
       "minLength": 1
     },
+    "cells": {
+      "type": "object",
+      "properties": {
+        "legend": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^[A-Za-z0-9]$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]+$"
+          }
+        },
+        "overrides": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^(0|[1-9]\\d*),(0|[1-9]\\d*)$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "passage": {
+                "enum": [
+                  ".",
+                  "#"
+                ],
+                "description": "通行可否のみ。見た目・遮光・水密・イベントを意味しない。"
+              },
+              "visual": {
+                "type": "object",
+                "properties": {
+                  "wall": {
+                    "type": "boolean"
+                  },
+                  "floor": {
+                    "type": "boolean"
+                  },
+                  "opaque": {
+                    "type": "boolean"
+                  },
+                  "material": {
+                    "enum": [
+                      "floor",
+                      "wall"
+                    ]
+                  },
+                  "image": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "illumination": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 8
+                  },
+                  "water_passable": {
+                    "type": "boolean"
+                  }
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "additionalProperties": {
+                  "type": [
+                    "number",
+                    "string",
+                    "boolean"
+                  ]
+                },
+                "required": []
+              },
+              "events": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                }
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "legend",
+        "rows",
+        "overrides"
+      ],
+      "additionalProperties": false
+    },
     "voxels": {
       "type": "object",
       "properties": {
@@ -2559,6 +2678,7 @@
       "additionalProperties": false
     },
     "tiles": {
+      "description": "通行可否の投影。セル種・画像・遮光・水密はcellsとセル種プリセットに定義する。",
       "type": "array",
       "minItems": 3,
       "items": {

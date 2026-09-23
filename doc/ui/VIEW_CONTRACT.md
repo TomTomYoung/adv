@@ -14,6 +14,8 @@
 
 `key-bindings.js` は物理キーを決定・取消・方向・探索操作へ変換します。`key-config.js` の下書きはUI内に保持し、main.jsが保存に成功した後に両入力経路へ反映します。設定はViewModelやゲームのセーブには含めません。現在のキーに合わせた操作案内はui.keyHint(exploring)から受け取ります。探索では「調べる・移動」、選択画面では「決定・選択」を表示します。[キー設定](KEY_CONFIG.md)。
 
+通常2Dのcellsは `wall`・`floor`・`opaque`・`blocked` を独立して受け取る。セル固有の `art` は解決済みURLと切出し範囲、`parameters` は環境値のコピーであり、Viewは通行記号から見た目を推測しない。[セルレイヤー](../CELL_LAYERS.md)。
+
 ## デザイン作業
 
 1. HTTPで `view-preview.html` を開きます。

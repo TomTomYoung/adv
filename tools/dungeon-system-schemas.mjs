@@ -1,10 +1,11 @@
+import {cellPatchSchema} from './cell-layer-schema.mjs';
 // Authoring schemas describe data only. Runtime validation also checks cross references and topology.
 export function additionalDungeonSystems(authoring=false){
   const str={type:'string',minLength:1},bool={type:'boolean'},int=(lo,hi)=>({type:'integer',minimum:lo,maximum:hi}),num=(lo,hi)=>({type:'number',minimum:lo,maximum:hi});
   const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
   const arr=(items,minItems=0)=>({type:'array',items,minItems}),strings={...arr(str),uniqueItems:true};
   const point={map:str,x:int(1,10000),y:int(1,10000)},named={...point,id:str,name:str},destination=obj({...point,facing:{enum:['north','east','south','west']}},Object.keys(point));
-  const patch=obj({...point,tile:{enum:['.','#']}}),patches=arr(patch,1),materials={type:'object',additionalProperties:int(1,9999)};
+  const patch=obj({...point,tile:{enum:['.','#']},layers:cellPatchSchema()},[...Object.keys(point),'tile']),patches=arr(patch,1),materials={type:'object',additionalProperties:int(1,9999)};
   const system=(use,props,optional=[])=>obj({use:{const:use},enabled:bool,...props},['use',...Object.keys(props).filter(k=>!optional.includes(k))]);
   const plant=system('plant_garden',{
     species:{type:'object',minProperties:1,additionalProperties:obj({name:str,description:str,growth:int(1,100),radius:int(0,8),heal:int(0,100),encounterRate:num(0,5),terrain:{enum:[null,'bridge','barrier','vine']},materials,harvest:materials,immatureHarvest:materials})},
