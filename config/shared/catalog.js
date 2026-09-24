@@ -70,7 +70,7 @@ export const editors=[
     "family": "bundle",
     "title": "篝火の道具・敵・命令",
     "group": "迷宮",
-    "hint": "火台は迷宮設定、壁灯はクエスト配置です。mapsはconnected-maps.json、通行値はcell-layers.jsonの指定を優先します。"
+    "hint": "火台は迷宮設定、壁灯はクエスト配置です。篝火マップの基本情報はこのJSON、通行値はcell-layers.jsonを編集します。"
   },
   {
     "id": "locations",

@@ -16,7 +16,7 @@ const ability=obj({id:str,name:str,api:str,target:str,mp:uint,hp:uint,materials:
 const skill=obj({name:str,mp:uint,target:str,effects:array({type:'object'})},['name','mp','target','effects']);
 const outcome=obj({label:str,text:str,gold:uint,xp:uint});
 export const browserRead=async path=>{const r=await fetch(new URL(`../../${path}`,import.meta.url),{cache:'no-cache'});if(!r.ok)throw Error(`読込失敗: ${path} (${r.status})`);return path.startsWith('config/')?r.text():r.json();};
-export function createValidator(read=browserRead){
+export function createDefinitions(read=browserRead){
   const cache=new Map();
   const schema=name=>{if(!cache.has(name))cache.set(name,Promise.resolve(read(`data/schemas/${name}.schema.json`)).catch(error=>{cache.delete(name);throw error;}));return cache.get(name);};
   async function definition(entry){
@@ -41,6 +41,10 @@ export function createValidator(read=browserRead){
     if(!shape)throw Error(`編集形式がありません: ${family}`);
     return {...shape,$defs:defs};
   }
+  return definition;
+}
+export function createValidator(read=browserRead){
+  const definition=createDefinitions(read);
   return async(entry,value)=>{
     const errors=validateSchema(value,await definition(entry));if(errors.length)return errors;
     const fail=(path,text)=>errors.push(`${pathLabel(path)}: ${text}`);

@@ -28,6 +28,9 @@ export function installDOM(){
     get lastChild(){return this.lastElementChild;}get firstChild(){return this.firstElementChild;}
     get isConnected(){return this===doc.body||Boolean(this.parentElement?.isConnected);}
     append(...nodes){for(const node of nodes){node.remove();node.parentNode=this;this.children.push(node);}}
+    prepend(...nodes){for(const node of nodes.toReversed())this.insertBefore(node,this.firstChild);}
+    select(){this.setSelectionRange(0,this.value.length);}
+    removeAttribute(k){delete this.attrs[k];}
     insertBefore(node,before){node.remove();const i=this.children.indexOf(before);node.parentNode=this;this.children.splice(i<0?this.children.length:i,0,node);}
     showModal(){this.open=true;}close(){this.open=false;this.dispatchEvent({type:'close'});}
     replaceChildren(...nodes){for(const c of [...this.children])c.remove();this.ownText='';this.append(...nodes);}
