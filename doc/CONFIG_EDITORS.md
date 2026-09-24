@@ -2,6 +2,8 @@
 
 更新日: 2026-09-23。作品版1.18.0の設定編集用ツールです。ゲームデータとセーブ形式は変更していません。
 
+[編集HTMLのPages URL一覧](CONFIG_EDITOR_URLS.md)：全225件の直接リンクと設定一覧画面。
+
 ## 入口と使い方
 
 [設定一覧](../config/index.html)から名前・ID・ファイル名で絞り込み、対象のHTMLを開きます。PagesではゲームURLの末尾を `/config/index.html` に置き換えます。ローカルでは `npm run serve` でHTTP配信して開きます。file://での直接起動は対象外です。
