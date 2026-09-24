@@ -1,0 +1,9 @@
+import {commandNames} from './labels.js';
+export function el(tag,text='',className=''){const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;return n;}
+export function button(text,click,className=''){const n=el('button',text,className);n.type='button';n.addEventListener('click',click);return n;}
+export function section(title,description=''){const n=el('section','','editor-section');n.append(el('h3',title));if(description)n.append(el('p',description,'muted'));return n;}
+export function select(options,value,change,label){const n=el('select');n.setAttribute('aria-label',label);for(const option of options){const [id,name]=Array.isArray(option)?option:[option,option];const o=el('option',name);o.value=String(id);n.append(o);}if(!options.some(o=>String(Array.isArray(o)?o[0]:o)===String(value))&&value!==undefined&&value!==null){const o=el('option',String(value)+'（現在値）');o.value=String(value);n.append(o);}n.value=String(value??'');n.addEventListener('change',()=>change(n.value));return n;}
+export function safeAssetURL(source){if(typeof source!=='string'||!/^assets\/[\w./-]+$/.test(source)||source.split('/').includes('..'))return null;return new URL('../../../'+source,import.meta.url).href;}
+export function image(source,alt){const url=safeAssetURL(source);if(!url)return el('span','画像未設定','muted');const n=el('img');n.src=url;n.alt=alt;n.loading='lazy';n.className='asset-preview';return n;}
+export function clear(node,...children){node.replaceChildren(...children);}
+export function short(value){if(value===undefined)return '未設定';if(value===null)return 'なし';if(typeof value==='boolean')return value?'有効':'無効';if(Array.isArray(value))return `${value.length}件`;if(typeof value==='object')return value.name??value.title??value.label??value.text??commandNames[value.op]??`${Object.keys(value).length}項目`;return String(value).length>100?String(value).slice(0,100)+'…':String(value);}

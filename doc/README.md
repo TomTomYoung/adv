@@ -4,7 +4,9 @@
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。
 
-[CONFIG_EDITORS.md](CONFIG_EDITORS.md)：設定JSON225件の編集画面、コピー出力、検証範囲と反映手順。
+[CONFIG_EDITORS.md](CONFIG_EDITORS.md)：分野別の原稿編集、配置図、条件・処理ブロック、複数JSON出力と検証。
+
+[編集対象JSONと正本の対応](CONFIG_EDITOR_SOURCES.md)：225原稿の対象項目、篝火の編集例、読み取り専用の生成データ。
 
 [編集HTMLのPages URL一覧](CONFIG_EDITOR_URLS.md)：全225件の直接リンクと設定一覧画面。
 
