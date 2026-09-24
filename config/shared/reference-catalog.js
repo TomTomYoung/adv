@@ -30274,6 +30274,7 @@ export const referenceData={
       },
       "waterwatch": {
         "name": "水位見張り当番",
+        "sprite": "sprite_waterwatch",
         "portrait": "npc_waterwatch"
       },
       "ina": {
@@ -30308,6 +30309,7 @@ export const referenceData={
       },
       "workers": {
         "name": "工事の職人たち",
+        "sprite": "sprite_workers",
         "portrait": "npc_workers"
       },
       "accused": {
@@ -30327,6 +30329,7 @@ export const referenceData={
       },
       "yoru": {
         "name": "ヨル",
+        "sprite": "sprite_yoru",
         "portrait": "npc_yoru"
       },
       "family": {
@@ -57711,7 +57714,10 @@ export const referenceData={
       "sprite_sister": "assets/images/characters/sprites/sister.webp",
       "sprite_sora": "assets/images/characters/sprites/sora.webp",
       "sprite_storekeeper": "assets/images/characters/sprites/storekeeper.webp",
-      "sprite_toto": "assets/images/characters/sprites/toto.webp"
+      "sprite_toto": "assets/images/characters/sprites/toto.webp",
+      "sprite_waterwatch": "assets/images/characters/sprites/waterwatch.webp",
+      "sprite_workers": "assets/images/characters/sprites/workers.webp",
+      "sprite_yoru": "assets/images/characters/sprites/yoru.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
