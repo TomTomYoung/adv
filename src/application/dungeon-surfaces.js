@@ -14,7 +14,7 @@ export function projectDungeonSurfaces(engine,systems){
     const cell=dungeonCell(data,state,map,x,y),{wall,floor,opaque,material,image}=cell.visual,door=map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(state,map,o));
     const waterDepth=!data.game.cellLayerVersion&&wall?0:dungeonWaterDepth(data,state,map,x,y);
     const art=image?{url:data.assets.images[image],rect:{x:0,y:0,width:1,height:1}}:projectArt(data,dungeonForMap(data,map.id)?.art?.[material]);
-    return {x,y,known:seen.has(`${x},${y}`),wall,opaque:opaque||door||Boolean(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!waterDepth),blocked:!engine.walkable(map,x,y),water:waterDepth>0,waterDepth,waterLabel:depthName(waterDepth),floor,art,parameters:{...cell.parameters}};
+    return {x,y,known:seen.has(`${x},${y}`),wall,opaque:opaque||door||Boolean(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!waterDepth),blocked:!engine.walkable(map,x,y),water:waterDepth>0,waterDepth,waterLabel:depthName(waterDepth),floor,art,surface:cell.visual.surface,cellName:cell.name,parameters:{...cell.parameters}};
   }))};
   // A closed object door also hides the view in a cubic map; water and holes never become masonry.
   if(map.voxels)for(const row of terrain.cells)for(const cell of row)cell.opaque=cell.wall||map.objects.some(o=>o.x===cell.x&&o.y===cell.y&&(o.z??0)===(loc.z??0)&&objectBlocks(state,map,o));

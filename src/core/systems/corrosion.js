@@ -1,3 +1,4 @@
+import {authoredCellLayers} from '../cell-layers.js';
 import {destroyGear} from '../equipment.js';
 import {object,integer,validPoint} from './common.js';
 const copies=ctx=>Object.entries(ctx.state.gear.items);
@@ -22,7 +23,7 @@ function project(ctx){
 }
 export const corrosion={
  createPersistent:()=>({}),createRun:()=>({}),battleStart,battleRound,equipmentStats,project,
- step(ctx){const l=ctx.state.location;if(ctx.spec.washZones.some(p=>p.map===l.map&&p.x===l.x&&p.y===l.y)&&wash(ctx))ctx.engine.notify('水没区画の水で、装備に付いた塩を洗い流しました。');},
+ step(ctx){const l=ctx.state.location,p=authoredCellLayers(ctx.data,ctx.data.maps[l.map],l.x,l.y)?.parameters;if(ctx.movement&&p?.corrosion){for(const actor of ctx.state.members.filter(id=>ctx.state.actors[id].hp>0))for(const id of Object.values(ctx.state.gear.equipped[actor]??{}))ctx.state.gear.items[id].salt+=p.corrosion;clamp(ctx);ctx.engine.notify(`腐食床で装備の塩が${p.corrosion}増えた。`);}if(ctx.spec.washZones.some(p=>p.map===l.map&&p.x===l.x&&p.y===l.y)&&wash(ctx))ctx.engine.notify('水没区画の水で、装備に付いた塩を洗い流しました。');},
  leave(ctx){wash(ctx);},
  waterDepth:(ctx,map,x,y)=>ctx.spec.washZones.some(p=>p.map===map.id&&p.x===x&&p.y===y)?1:0,
  encounter:ctx=>({rate:1,enemyScale:1,...(copies(ctx).some(([,c])=>c.salt>=ctx.spec.eater.threshold)?{encounter:ctx.spec.eater.encounter}:{})}),

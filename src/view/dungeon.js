@@ -42,11 +42,15 @@ function materialPixels(canvas,image,art){
   try{ctx.drawImage(image,...artRect(image,art),0,0,128,128);cache={key,width:128,height:128,pixels:ctx.getImageData(0,0,128,128).data};floorPixels.set(image,cache);return cache;}
   catch{return null;}
 }
-function floorColor(material,wx,wy,cell,distance){
+export function floorColor(material,wx,wy,cell,distance){
   let r,g,b;
   if(cell.floor===false&&!cell.waterDepth)return [4,9,12];
   if(material){const at=(Math.floor(fraction(wy)*material.height)*material.width+Math.floor(fraction(wx)*material.width))*4;r=material.pixels[at];g=material.pixels[at+1];b=material.pixels[at+2];}
   else{const joint=fraction(wx*2)<.035||fraction(wy*2)<.035,shade=(Math.floor(wx*2)+Math.floor(wy*2))%2;r=joint?23:58+shade*6;g=joint?31:64+shade*6;b=joint?32:60+shade*6;}
+  const palette={earth:[102,74,45],wood:[124,84,42],wet:[40,74,81],ice:[128,196,221],cracked:[92,84,72],roots:[78,108,48],thorns:[73,89,42],poison:[86,125,40],corrosion:[133,87,44],rune:[92,72,132]};
+  if(palette[cell.surface]){const color=palette[cell.surface];[r,g,b]=[r,g,b].map((v,i)=>v*.4+color[i]*.6);
+    const u=fraction(wx),v=fraction(wy),line=cell.surface==='wood'?(fraction(wy*5)<.06||fraction(wx+Math.floor(wy*5)*.3)<.025):cell.surface==='cracked'?Math.abs(v-fraction(u*1.7))<.025:cell.surface==='ice'?Math.abs(v-u)<.02:cell.surface==='rune'?Math.abs(Math.hypot(u-.5,v-.5)-.28)<.025:cell.surface==='roots'||cell.surface==='thorns'?fraction(wy*5+Math.sin(wx*9)*.12)<.06:false;
+    if(line){r*=.55;g*=.55;b*=.55;}}
   const depth=cell.waterDepth??(cell.water?3:0);
   if(depth){const color=[[0,0,0],[51,118,127],[32,98,126],[16,60,87]][depth],alpha=[0,.4,.65,.9][depth];r=r*(1-alpha)+color[0]*alpha;g=g*(1-alpha)+color[1]*alpha;b=b*(1-alpha)+color[2]*alpha;
     if(fraction(wy*4+Math.sin(wx*3)*.07)<.03){r+=28;g+=39;b+=40;}}
@@ -93,6 +97,7 @@ export function paintDungeon(canvas,dungeon,battle){
         if(drawable(image)){const rect=art?artRect(image,art):[18,45,50,76];ctx.drawImage(image,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
         else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,STRIDE,h);}
       }
+      const surface=dungeon.cells[hit.y]?.[hit.x]?.surface,color={earth:'rgba(111,75,42,.55)',salt:'rgba(215,200,181,.55)',rock:'rgba(73,79,86,.55)',thorns:'rgba(58,93,38,.55)'}[surface];if(color&&!hit.door){ctx.fillStyle=color;ctx.fillRect(column,top,STRIDE,h);}
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
       const level=dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
       ctx.fillStyle=`rgba(0,0,0,${.72*(1-level/8)})`;ctx.fillRect(column,top,STRIDE,h);
