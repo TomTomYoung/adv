@@ -1,10 +1,10 @@
-# セルレイヤーとプリセット
+# セル・エッジとプリセット
 
 更新日: 2026-09-24。作品版1.20.0。通常ロードする33件の2Dマップに適用済みです。
 
 ## 正本と生成
 
-[config/cell-layers.json](../config/cell-layers.json) がセル種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
+[config/cell-layers.json](../config/cell-layers.json) がセル種・エッジ種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`edgePresets` を `data/edge-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
 
 `npm run build:scenarios` は従来の生成を済ませた後、[build-cell-layers.mjs](../tools/build-cell-layers.mjs) でレイヤーを反映します。全33マップの配置が必須で、欠落・ロードされないマップ・未知プリセット・不正な上書きを拒否します。[統合マップ編集](../config/map.html)でセル種を選んで塗り、[セル種管理](../config/cell-layers.html)で共有定義を編集できます。
 
@@ -17,6 +17,18 @@
 `parameters.illumination` は0〜8の局所的な明るさの下限です。たいまつの距離減衰結果との大きい方を表示・ミニマップへ渡します。周囲へ放射する光源ではありません。`parameters.water_passable` は水が入れる区画内セルを明示し、通常の区画水没の水面表示に使います。給排水・水密扉・区画全体の入場禁止は引き続き `compartment_water` と `map_connections` が担当します。この値だけでセル間の流体計算や新しい水密境界は生成しません。固有の数値・真偽値・文字列パラメータも追加でき、セルイベントの条件から `cell.parameters.<名前>` を参照できます。
 
 `events` はフィールドイベントIDの配列です。セル種はイベントへの参照だけを持ち、HPの減算や戦闘開始の処理を持ちません。宝箱・人物・火台・レバーは配置物、扉・水門・壁面はエッジ側の定義として管理します。エッジ上のたいまつは[調査仕様](ui/INSPECTION.md)に従って操作します。
+
+## 2Dの共有エッジ
+
+`edgePresets` は開口 `open_passage`、石の隔壁 `stone_partition`、木の隔壁 `wood_partition`、見えない障壁 `invisible_barrier` の4種類です。`passage`、`visual.wall`、`visual.opaque`、表面 `visual.surface` と画像、通水属性を構築済みの標準値として持ちます。地点ごとに `overrides` を指定できます。標準値と例外の優先順位はセルと同じです。
+
+配置は `maps.<mapID>.edges` に `{ "preset": "stone_partition", "overrides": { "passage": "." } }` の形で保存します。キーの `h:x,y` は水平線、`v:x,y` は垂直線です。セル `(x,y)` の北は `h:x,y`、南は `h:x,y+1`、西は `v:x,y`、東は `v:x+1,y` です。例えば `(2,1)` の東と `(3,1)` の西は同じ `v:3,1` を指します。外周にも配置できますが、範囲外セルへ歩けるようにはなりません。
+
+未配置の境界は追加制限がありません。通行不可のエッジは両方向の歩行と氷床の滑走を止めます。見えない障壁は通行を止め、壁を描画せず、光も遮りません。壁の描画と遮光も別々に反映します。接続扉の両端にエッジがある場合も通行可否を検査し、ボタンによる移動でも迂回できません。壁灯などのエッジ配置物は既存の原稿に残します。
+
+`parameters.water_passable` は境界の通水属性として保存します。現行の区画単位の給排水は従来の仕掛けが担当し、この値を使ったセル間の流体計算や自動的な区画分割は行いません。操作で開閉する扉や水門は仕掛け・接続の設定を使います。
+
+統合画面の個別設定は変更した項目だけを保存します。項目ごとの解除と地点全体の解除ができ、種類の置換時には例外を引き継ぐか、解除するか、取消すかを選びます。`events` は配列全体の置換です。既存の全項目上書きも読み込めます。
 
 ## 登録済みの種類と動作
 

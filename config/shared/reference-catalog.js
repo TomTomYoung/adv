@@ -28567,6 +28567,7 @@ export const referenceData={
     "data/cell-types.json",
     "data/characters.json",
     "data/dungeons.json",
+    "data/edge-types.json",
     "data/effects.json",
     "data/encounters.json",
     "data/enemies.json",
@@ -30231,10 +30232,12 @@ export const referenceData={
       },
       "rescuers": {
         "name": "灯番救助隊",
+        "sprite": "sprite_rescuers",
         "portrait": "npc_rescuers"
       },
       "belt": {
         "name": "ベルト",
+        "sprite": "sprite_belt",
         "portrait": "npc_belt"
       },
       "porter": {
@@ -30251,18 +30254,22 @@ export const referenceData={
       },
       "sora": {
         "name": "ソラ",
+        "sprite": "sprite_sora",
         "portrait": "npc_sora"
       },
       "passers": {
         "name": "通行人たち",
+        "sprite": "sprite_passers",
         "portrait": "npc_passers"
       },
       "innkeeper": {
         "name": "宿屋の主人",
+        "sprite": "sprite_innkeeper",
         "portrait": "npc_innkeeper"
       },
       "seller": {
         "name": "水売り",
+        "sprite": "sprite_seller",
         "portrait": "npc_seller"
       },
       "waterwatch": {
@@ -30271,26 +30278,32 @@ export const referenceData={
       },
       "ina": {
         "name": "イナ",
+        "sprite": "sprite_ina",
         "portrait": "npc_ina"
       },
       "sister": {
         "name": "イナの姉",
+        "sprite": "sprite_sister",
         "portrait": "npc_sister"
       },
       "passkeeper": {
         "name": "関所番",
+        "sprite": "sprite_passkeeper",
         "portrait": "npc_passkeeper"
       },
       "reviewer": {
         "name": "名義審査官",
+        "sprite": "sprite_reviewer",
         "portrait": "npc_reviewer"
       },
       "toto": {
         "name": "トト",
+        "sprite": "sprite_toto",
         "portrait": "npc_toto"
       },
       "garo": {
         "name": "ガロ",
+        "sprite": "sprite_garo",
         "portrait": "npc_garo"
       },
       "workers": {
@@ -30299,14 +30312,17 @@ export const referenceData={
       },
       "accused": {
         "name": "疑われた荷役人",
+        "sprite": "sprite_accused",
         "portrait": "npc_accused"
       },
       "mire": {
         "name": "ミレ",
+        "sprite": "sprite_mire",
         "portrait": "npc_mire"
       },
       "brother": {
         "name": "ミレの夫の弟",
+        "sprite": "sprite_brother",
         "portrait": "npc_brother"
       },
       "yoru": {
@@ -30315,50 +30331,62 @@ export const referenceData={
       },
       "family": {
         "name": "棺の遺族",
+        "sprite": "sprite_family",
         "portrait": "npc_family"
       },
       "bearers": {
         "name": "棺の担ぎ手",
+        "sprite": "sprite_bearers",
         "portrait": "npc_bearers"
       },
       "recipient": {
         "name": "下流の受取人",
+        "sprite": "sprite_recipient",
         "portrait": "npc_recipient"
       },
       "inspector": {
         "name": "輸送検査官",
+        "sprite": "sprite_inspector",
         "portrait": "npc_inspector"
       },
       "eda": {
         "name": "エダ",
+        "sprite": "sprite_eda",
         "portrait": "npc_eda"
       },
       "cleaners": {
         "name": "清掃係",
+        "sprite": "sprite_cleaners",
         "portrait": "npc_cleaners"
       },
       "storekeeper": {
         "name": "穀倉番",
+        "sprite": "sprite_storekeeper",
         "portrait": "npc_storekeeper"
       },
       "clerks": {
         "name": "共同倉庫の受入れ係",
+        "sprite": "sprite_clerks",
         "portrait": "npc_clerks"
       },
       "gatekeeper": {
         "name": "水門番",
+        "sprite": "sprite_gatekeeper",
         "portrait": "npc_gatekeeper"
       },
       "nearpeople": {
         "name": "手前の住民三人",
+        "sprite": "sprite_nearpeople",
         "portrait": "npc_nearpeople"
       },
       "deeppeople": {
         "name": "奥の住民二人",
+        "sprite": "sprite_deeppeople",
         "portrait": "npc_deeppeople"
       },
       "pumpcrew": {
         "name": "排水隊",
+        "sprite": "sprite_pumpcrew",
         "portrait": "npc_pumpcrew"
       }
     },
@@ -30433,6 +30461,20 @@ export const referenceData={
       },
       "hikarigaeri_tavern_cistern": {
         "name": "宿屋裏の汚水槽"
+      }
+    },
+    "edgeTypes": {
+      "open_passage": {
+        "name": "開口"
+      },
+      "stone_partition": {
+        "name": "石の隔壁"
+      },
+      "wood_partition": {
+        "name": "木の隔壁"
+      },
+      "invisible_barrier": {
+        "name": "見えない障壁"
       }
     },
     "cellTypes": {
@@ -57510,6 +57552,34 @@ export const referenceData={
         "unsupported_space"
       ]
     },
+    "edgeTypes/open_passage": {
+      "file": "cell-layers.json",
+      "path": [
+        "edgePresets",
+        "open_passage"
+      ]
+    },
+    "edgeTypes/stone_partition": {
+      "file": "cell-layers.json",
+      "path": [
+        "edgePresets",
+        "stone_partition"
+      ]
+    },
+    "edgeTypes/wood_partition": {
+      "file": "cell-layers.json",
+      "path": [
+        "edgePresets",
+        "wood_partition"
+      ]
+    },
+    "edgeTypes/invisible_barrier": {
+      "file": "cell-layers.json",
+      "path": [
+        "edgePresets",
+        "invisible_barrier"
+      ]
+    },
     "cellEvents/poison_step": {
       "file": "cell-layers.json",
       "path": [
@@ -57523,7 +57593,7 @@ export const referenceData={
       "corridor": "assets/images/dungeon-corridor.png",
       "slime": "assets/images/slime.png",
       "skeleton": "assets/images/skeleton.png",
-      "wraith": "assets/images/wraith.png",
+      "wraith": "assets/images/monsters/wraith.webp",
       "construct": "assets/images/construct.png",
       "dragon": "assets/images/dragon.png",
       "monster_waterwheel_beaver": "assets/images/monsters/waterwheel_beaver.webp",
@@ -57614,7 +57684,34 @@ export const referenceData={
       "sprite_examiner": "assets/images/characters/sprites/examiner.webp",
       "sprite_elder": "assets/images/characters/sprites/elder.webp",
       "sprite_rookie": "assets/images/characters/sprites/rookie.webp",
-      "sprite_rine": "assets/images/characters/sprites/rine.webp"
+      "sprite_rine": "assets/images/characters/sprites/rine.webp",
+      "sprite_accused": "assets/images/characters/sprites/accused.webp",
+      "sprite_bearers": "assets/images/characters/sprites/bearers.webp",
+      "sprite_belt": "assets/images/characters/sprites/belt.webp",
+      "sprite_brother": "assets/images/characters/sprites/brother.webp",
+      "sprite_cleaners": "assets/images/characters/sprites/cleaners.webp",
+      "sprite_clerks": "assets/images/characters/sprites/clerks.webp",
+      "sprite_deeppeople": "assets/images/characters/sprites/deeppeople.webp",
+      "sprite_eda": "assets/images/characters/sprites/eda.webp",
+      "sprite_family": "assets/images/characters/sprites/family.webp",
+      "sprite_garo": "assets/images/characters/sprites/garo.webp",
+      "sprite_gatekeeper": "assets/images/characters/sprites/gatekeeper.webp",
+      "sprite_ina": "assets/images/characters/sprites/ina.webp",
+      "sprite_innkeeper": "assets/images/characters/sprites/innkeeper.webp",
+      "sprite_inspector": "assets/images/characters/sprites/inspector.webp",
+      "sprite_mire": "assets/images/characters/sprites/mire.webp",
+      "sprite_nearpeople": "assets/images/characters/sprites/nearpeople.webp",
+      "sprite_passers": "assets/images/characters/sprites/passers.webp",
+      "sprite_passkeeper": "assets/images/characters/sprites/passkeeper.webp",
+      "sprite_pumpcrew": "assets/images/characters/sprites/pumpcrew.webp",
+      "sprite_recipient": "assets/images/characters/sprites/recipient.webp",
+      "sprite_rescuers": "assets/images/characters/sprites/rescuers.webp",
+      "sprite_reviewer": "assets/images/characters/sprites/reviewer.webp",
+      "sprite_seller": "assets/images/characters/sprites/seller.webp",
+      "sprite_sister": "assets/images/characters/sprites/sister.webp",
+      "sprite_sora": "assets/images/characters/sprites/sora.webp",
+      "sprite_storekeeper": "assets/images/characters/sprites/storekeeper.webp",
+      "sprite_toto": "assets/images/characters/sprites/toto.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

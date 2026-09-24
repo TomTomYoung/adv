@@ -1,13 +1,18 @@
 import {validateConnections} from '../connection-geometry.js';
 import {object,available} from './common.js';
 import {compartmentBlocked} from './compartment-water.js';
+import {authoredEdge} from '../edge-layers.js';
 
 export const opposite={north:'south',south:'north',east:'west',west:'east'};
 export function connectionSide(link,map){return link.a.map===map?{from:link.a,to:link.b}:link.b.map===map?{from:link.b,to:link.a}:null;}
+export function connectionBlocked(data,state,side){
+  if([side.from,side.to].some(p=>p.side&&authoredEdge(data,data.maps[p.map],p.x,p.y,p.side)?.passage==='#'))return '接続口の境界が通行を妨げている。';
+  return compartmentBlocked(data,state,side.to.map);
+}
 export function connectionPlan(ctx,intent){
   const link=ctx.spec.links.find(l=>l.id===intent.target),side=link&&connectionSide(link,ctx.state.location.map),loc=ctx.state.location;
   if(!side||loc.x!==side.from.x||loc.y!==side.from.y)return {ok:false,reason:'接続口まで歩いて移動する。'};
-  const reason=compartmentBlocked(ctx.data,ctx.state,side.to.map);
+  const reason=connectionBlocked(ctx.data,ctx.state,side);
   if(reason)return {ok:false,reason};
   const map=ctx.data.maps[side.to.map],p=side.to;
   if(!ctx.canOccupy(map,p.x,p.y))return {ok:false,reason:'接続先の足場が塞がれている。'};
@@ -28,7 +33,7 @@ export function connectionSurfaces(data,state){
   for(const spec of Object.values(d.systems))if(spec.use==='map_connections'&&spec.enabled!==false)for(const link of spec.links){
     const s=connectionSide(link,loc.map);if(!s?.from.side)continue;
     const key=`${s.from.x},${s.from.y}/${s.from.side}`;
-    boundaries[key]=true;doors[key]={kind:link.kind,name:link.name,closed:Boolean(compartmentBlocked(data,state,s.to.map)),destination:data.maps[s.to.map].name};
+    boundaries[key]=true;doors[key]={kind:link.kind,name:link.name,closed:Boolean(connectionBlocked(data,state,s)),destination:data.maps[s.to.map].name};
   }
   return {boundaries,doors};
 }
@@ -45,8 +50,8 @@ export const mapConnections={
   project(ctx){
     const loc=ctx.state.location,links=ctx.spec.links.map(l=>({link:l,side:connectionSide(l,loc.map)})).filter(v=>v.side);
     return {kind:'map_connections',id:ctx.id,title:'区画の出入口',summary:'出入口まで歩き、隣の区画へ移動する。',actions:[],
-      cards:links.filter(({side})=>loc.x===side.from.x&&loc.y===side.from.y).map(({link,side})=>({name:link.name,text:`行き先：${ctx.data.maps[side.to.map].name}${compartmentBlocked(ctx.data,ctx.state,side.to.map)?'／完全水没・水密扉施錠':''}`,actions:[available(ctx,{type:'dungeon.action',system:ctx.id,action:'cross',target:link.id},connectionPlan,'隣の区画へ進む')]})),
-      markers:links.map(({link,side})=>({id:link.id,name:`${link.name} → ${ctx.data.maps[side.to.map].name}${compartmentBlocked(ctx.data,ctx.state,side.to.map)?'（完全水没・施錠）':''}`,x:side.from.x,y:side.from.y,kind:'map_connection',glyph:link.kind==='stairs'?'⇵':compartmentBlocked(ctx.data,ctx.state,side.to.map)?'▣':'▯',closed:Boolean(compartmentBlocked(ctx.data,ctx.state,side.to.map))}))};
+      cards:links.filter(({side})=>loc.x===side.from.x&&loc.y===side.from.y).map(({link,side})=>({name:link.name,text:`行き先：${ctx.data.maps[side.to.map].name}${connectionBlocked(ctx.data,ctx.state,side)?'／'+connectionBlocked(ctx.data,ctx.state,side):''}`,actions:[available(ctx,{type:'dungeon.action',system:ctx.id,action:'cross',target:link.id},connectionPlan,'隣の区画へ進む')]})),
+      markers:links.map(({link,side})=>({id:link.id,name:`${link.name} → ${ctx.data.maps[side.to.map].name}${connectionBlocked(ctx.data,ctx.state,side)?'（通行不可）':''}`,x:side.from.x,y:side.from.y,kind:'map_connection',glyph:link.kind==='stairs'?'⇵':connectionBlocked(ctx.data,ctx.state,side)?'▣':'▯',closed:Boolean(connectionBlocked(ctx.data,ctx.state,side))}))};
   },
   validate:validateConnections,
   validateState:(_s,p,r)=>object(p)&&!Object.keys(p).length&&(!r||object(r)&&!Object.keys(r).length)?[]:['接続の保存が不正です']

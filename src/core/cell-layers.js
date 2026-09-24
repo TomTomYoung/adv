@@ -1,3 +1,4 @@
+import {edgeLayersValid,edgePlacementErrors} from './edge-layers.js';
 import {cellSurfaces,cellBindings,cellBindingErrors} from './cell-behaviors.js';
 // Passage glyphs carry no material, opacity, water or event semantics.
 export const mergeCellLayers=(base,patch={})=>{const events=patch.events??base.events??[];return {...base,...patch,visual:{...base.visual,...patch.visual},parameters:{...base.parameters,...patch.parameters},events:Array.isArray(events)?[...events]:events};};
@@ -39,6 +40,7 @@ export function validateCellLayers(data,expression){
   if(data.dungeons)for(const e of cellBindingErrors({presets:data.cellTypes,maps:Object.fromEntries(Object.values(data.maps).filter(m=>m.cells).map(m=>[m.id,m.cells]))},data.dungeons))bad(e.message);
   if(data.game.cellLayerVersion!==1||!object(data.cellTypes)||!Object.keys(data.cellTypes).length||!object(data.cellEvents))return ['セルレイヤー: 定義がありません'];
   for(const [id,preset] of Object.entries(data.cellTypes))if(!identifier(id)||!cellLayersValid(data,preset))bad(`プリセット不正 ${id}`);
+  for(const [id,preset] of Object.entries(data.edgeTypes??{}))if(!identifier(id)||!edgeLayersValid(data,preset))bad(`エッジ種不正 ${id}`);
   for(const [id,event] of Object.entries(data.cellEvents)){
     if(!identifier(id)||!keys(event,['trigger','script','once','condition'])||event.trigger!=='enter'||typeof event.once!=='boolean'||!Object.hasOwn(data.scripts,event.script))bad(`イベント不正 ${id}`);
     if(event?.condition!==undefined)expression(event.condition,`cellEvents/${id}`);
@@ -46,9 +48,11 @@ export function validateCellLayers(data,expression){
   for(const map of Object.values(data.maps)){
     const c=map.cells;
     if(map.voxels){bad(`${map.id}: 通常のセルレイヤーへ退避3Dを混在させないでください`);continue;}
-    if(!keys(c,['legend','rows','overrides'])||!object(c.legend)||!Array.isArray(c.rows)||c.rows.length!==map.tiles.length||c.rows.some((r,y)=>typeof r!=='string'||r.length!==map.tiles[y].length)||!object(c.overrides)){
+    if(!keys(c,['legend','rows','overrides','edges'])||!object(c.legend)||!Array.isArray(c.rows)||c.rows.length!==map.tiles.length||c.rows.some((r,y)=>typeof r!=='string'||r.length!==map.tiles[y].length)||!object(c.overrides)){
       bad(`${map.id}: 配置・寸法不正`);continue;
     }
+    if(c.edges!==undefined&&!object(c.edges)){bad(`${map.id}: エッジ配置不正`);continue;}
+    for(const error of edgePlacementErrors(data.edgeTypes,c.edges,map.tiles[0].length,map.tiles.length,data.assets))bad(`${map.id}: ${error}`);
     for(const [symbol,id] of Object.entries(c.legend))if(!/^[A-Za-z0-9]$/.test(symbol)||!Object.hasOwn(data.cellTypes,id))bad(`${map.id}: 凡例不正 ${symbol}`);
     for(const [key,patch] of Object.entries(c.overrides)){
       const [x,y]=key.split(',').map(Number);

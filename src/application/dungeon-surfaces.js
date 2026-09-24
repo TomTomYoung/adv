@@ -1,3 +1,4 @@
+import {edgeSurfaces} from '../core/edge-layers.js';
 import {objectBlocks} from '../core/quest-events.js';
 import {dungeonCell,dungeonBlock,dungeonWaterDepth,dungeonForMap} from '../core/dungeons.js';
 import {projectArt} from './dungeon-projection.js';
@@ -19,9 +20,11 @@ export function projectDungeonSurfaces(engine,systems){
   // A closed object door also hides the view in a cubic map; water and holes never become masonry.
   if(map.voxels)for(const row of terrain.cells)for(const cell of row)cell.opaque=cell.wall||map.objects.some(o=>o.x===cell.x&&o.y===cell.y&&(o.z??0)===(loc.z??0)&&objectBlocks(state,map,o));
   terrain.geometry=terrain.cells.map(row=>row.map(c=>c.opaque?'#':'.').join(''));
-  const connections=connectionSurfaces(data,state);
-  terrain.boundaries={...terrain.boundaries,...connections.boundaries};terrain.doors=connections.doors;
-  terrain.lighting=fieldLighting(data,state,terrain.geometry,terrain.boundaries??{});
+  const connections=connectionSurfaces(data,state),authored=edgeSurfaces(data,map);
+  terrain.edges=Object.fromEntries(Object.entries(authored.edges).map(([key,e])=>[key,{...e,art:e.visual.image?{url:data.assets.images[e.visual.image],rect:{x:0,y:0,width:1,height:1}}:null}]));
+  const occlusion={...terrain.boundaries,...authored.occlusion,...connections.boundaries};
+  terrain.boundaries={...terrain.boundaries,...authored.boundaries,...connections.boundaries};terrain.doors=connections.doors;
+  terrain.lighting=fieldLighting(data,state,terrain.geometry,occlusion);
   for(const row of terrain.cells)for(const cell of row){
     cell.illumination=Math.max(terrain.lighting.levels[cell.y][cell.x],cell.parameters?.illumination??0);
     terrain.lighting.levels[cell.y][cell.x]=cell.illumination;

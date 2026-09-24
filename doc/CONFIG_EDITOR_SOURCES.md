@@ -4,11 +4,15 @@
 
 ## 統合マップ画面の出力先
 
-[マップ編集](../config/map.html)では、表示中のマップを保ったまま複数原稿を編集できます。地形・地点上書き・共有セル種は `config/cell-layers.json`、既存の篝火マップの基本情報・入口・配置物は `config/kagaribi-content.json`、その他の接続済みマップと新規マップは `config/connected-maps.json` に出力します。マップの所属、仕掛け、接続は選択迷宮の `config/dungeons/<ID>.json`、配置イベントとそのローカル処理は所属クエストの `config/quests/qXXX.events.json` です。
+[マップ編集](../config/map.html)では、表示中のマップを保ったまま複数原稿を編集できます。セル・エッジの配置、通行可否、地点の個別設定、共有種類は `config/cell-layers.json`、既存の篝火マップの基本情報・入口・配置物は `config/kagaribi-content.json`、その他の接続済みマップと新規マップは `config/connected-maps.json` に出力します。マップの所属、仕掛け、接続は選択迷宮の `config/dungeons/<ID>.json`、配置イベントとそのローカル処理は所属クエストの `config/quests/qXXX.events.json` です。
 
 マップ新規作成は `connected-maps.json`、`cell-layers.json`、所属迷宮JSONの3件を一括変更します。接続の作成は迷宮JSONへ追加します。画面の「今回の出力対象」と検証後のJSON全文に実際に変更したファイルだけを表示します。
 
 24種類のセル種の名前・用途・通行・表面模様・パラメータは `config/cell-layers.json` の `presets`、毒沼の進入定義は `events.poison_step`、ダメージと本文は `scripts["cell.poison_step"]` です。仕掛け連動の対象座標・必要物品は各迷宮JSONに残し、セル種の中へ複製しません。
+
+マップサイズは `config/cell-layers.json` の `maps.<ID>.rows` と、有効なマップ原稿の `maps.<ID>.tiles` を同時変更します。JavaScript原稿だけにあるマップは、現在の定義を `config/connected-maps.json` へ引き継いで編集します。流れの配列がある場合は対応する迷宮JSONの `vectorRows` も寸法を合わせます。
+
+エッジ種は同じ `config/cell-layers.json` の `edgePresets`、配置は `maps.<ID>.edges`、セルの個別設定は `maps.<ID>.overrides` です。通行可否タブも同じ場所の `passage` を変更し、別のJSONは作りません。生成結果の `data/edge-types.json` と `data/maps/*.json` は直接編集しません。
 
 ## 直接編集する原稿
 
@@ -16,7 +20,7 @@
 
 編集したい内容：迷宮の基本設定、火・水・装置・接続、条件付きイベント / 編集・出力するJSON：`config/dungeons/*.json`（下記13件） / 対象の主な項目：基本項目、`maps`、`entries`、`systems`、`fieldEvents`
 
-編集したい内容：通常2Dマップの通行・外観・遮光・照度・通水 / 編集・出力するJSON：`config/cell-layers.json` / 対象の主な項目：`presets`、`maps.*.legend/rows/overrides`、`events`、`scripts`
+編集したい内容：通常2Dマップの通行・外観・遮光・照度・通水 / 編集・出力するJSON：`config/cell-layers.json` / 対象の主な項目：`presets`、`edgePresets`、`maps.*.legend/rows/overrides/edges`、`events`、`scripts`
 
 編集したい内容：接続済み2Dマップの名前・入口・配置物・遭遇 / 編集・出力するJSON：`config/connected-maps.json` / 対象の主な項目：`maps`。最終的な通行はセル原稿を優先
 

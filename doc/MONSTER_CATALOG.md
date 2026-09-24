@@ -186,25 +186,25 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：roaming_4・guard_4・boss_4。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：roaming_4・guard_4・boss_4。
 
 ### 鏡沈みの礼拝堂の守護者 (guard_4_elite)
 
 基礎能力：HP 139 / MP 20 / STR 19 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：boss_4。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：boss_4。
 
 ### 灰時計の書庫の迷宮獣 (guard_5)
 
 基礎能力：HP 67 / MP 8 / STR 18 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：roaming_5・guard_5・boss_5。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：roaming_5・guard_5・boss_5。
 
 ### 灰時計の書庫の守護者 (guard_5_elite)
 
 基礎能力：HP 161 / MP 20 / STR 21 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：boss_5。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：boss_5。
 
 ### 眠れる地下市場の迷宮獣 (guard_6)
 
@@ -246,13 +246,13 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：roaming_9・guard_9・boss_9。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：roaming_9・guard_9・boss_9。
 
 ### 星欠けの地下観測所の守護者 (guard_9_elite)
 
 基礎能力：HP 247 / MP 20 / STR 29 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：boss_9。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：boss_9。
 
 ### 帰還者の深淵の迷宮獣 (guard_10)
 
@@ -402,7 +402,7 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 代表技能：攻撃。属性倍率：{"fire":1.3,"physical":1}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：story_123。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：story_123。
 
 ### 荊角獣 (thorn_stag)
 
@@ -450,7 +450,7 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 代表技能：攻撃。属性倍率：{"fire":1,"physical":0.85}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：story_171。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：story_171。
 
 ### 鏡牙獣 (mirror_fang)
 
@@ -468,7 +468,7 @@ ID：guard_10_elite / 名称：帰還者の深淵の守護者 / 画像：dragon 
 
 基礎能力：HP 1800 / MP 0 / STR 130 / VIT 70 / AGI 15 / INT 90。報酬：0G / 0EXP。
 代表技能：攻撃。属性倍率：{"physical":0.5,"fire":1,"light":1.5,"dark":0}。
-画像：[wraith](../assets/images/wraith.png)。出現定義：kuragari_hunt。
+画像：[wraith](../assets/images/monsters/wraith.webp)。出現定義：kuragari_hunt。
 
 ### 境渡りの呪詠み (valley_hexer)
 

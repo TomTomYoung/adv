@@ -1,3 +1,4 @@
+import {componentUI} from './studio/component-ui.js';
 import {ConfigStudio} from './studio.js';
 import {el,button,select,section,clear} from './studio/dom.js';
 import {mapPanel} from './studio/map-view.js';
@@ -21,7 +22,7 @@ export class MapStudio extends ConfigStudio {
    const affected=this.workspace.changed().includes('cell-layers.json')?this.context.options('dungeons').map(([id])=>`dungeons/${id}.json`):this.workspace.changed().filter(f=>f.startsWith('dungeons/'));
    for(const file of affected){await this.prepare(file);const dungeon=this.workspace.value(file);await Promise.all(dungeon.maps.map(id=>this.context.ensureMap(id)));if(epoch!==this.epoch){this.message('検証中に変更されました。もう一度出力してください。',true);return;}
     const source=this.workspace.value('cell-layers.json'),maps=Object.fromEntries(dungeon.maps.map(id=>{const view=projectMap(this.context,id);return [id,{...view.map,tiles:view.cells.map(row=>row.map(c=>c.passage).join('')),cells:source.maps[id]}];}));
-    for(const [key,spec] of Object.entries(dungeon.systems??{}))if(spec.use==='map_connections'){const errors=validateConnections({game:{cellLayerVersion:1},cellTypes:source.presets,maps},dungeon,spec);if(errors.length){this.review.hidden=true;this.message(`config/${file} / ${key}：${[...new Set(errors)].join('、')}。「マップ間の接続」で修正してください。`,true);return;}}
+    for(const [key,spec] of Object.entries(dungeon.systems??{}))if(spec.use==='map_connections'){const errors=validateConnections({game:{cellLayerVersion:1},cellTypes:source.presets,edgeTypes:source.edgePresets,maps},dungeon,spec);if(errors.length){this.review.hidden=true;this.message(`config/${file} / ${key}：${[...new Set(errors)].join('、')}。「マップ間の接続」で修正してください。`,true);return;}}
    }
    await super.reviewChanges();
   }catch(e){this.message('検証できません：'+e.message,true);}
@@ -32,12 +33,12 @@ export class MapStudio extends ConfigStudio {
  }
  async chooseMap(id){
   if(!this.guard()||!id)return;if(this.connectionDraft){if(!this.confirm('編集中の接続を取り消してマップを切り替えますか？作成済みのマップは下書きに残ります。'))return;this.connectionDraft=null;}const token=++this.navigation;
-  try{await this.context.ensureMap(id);if(token!==this.navigation)return;this.mapId=id;this.selectedCell=null;this.target=null;this.task='terrain';await this.open('cell-layers.json',{collection:'maps',record:id});}catch(e){this.message(e.message,true);}
+  try{await this.context.ensureMap(id);if(token!==this.navigation)return;this.mapId=id;this.selectedCell=null;this.target=null;this.task='cells';await this.open('cell-layers.json',{collection:'maps',record:id});}catch(e){this.message(e.message,true);}
  }
  async open(file,options={}){if(!this.guard())return;const cell=this.selectedCell;await super.open(file,options);this.selectedCell=cell?.map===this.mapId?cell:null;this.refresh();}
  async selectTask(task){
-  if(!this.guard())return;if(this.connectionDraft&&task!=='connections'){if(!this.confirm('編集中の接続を取り消しますか？作成済みのマップは下書きに残ります。'))return;this.connectionDraft=null;}this.task=task;this.target=null;
-  if(task==='terrain')await this.open('cell-layers.json',{collection:'maps',record:this.mapId});
+  if(!this.guard())return;if(this.connectionDraft&&task!=='connections'){if(!this.confirm('編集中の接続を取り消しますか？作成済みのマップは下書きに残ります。'))return;this.connectionDraft=null;}this.task=task;this.target=null;if(task!=='passage'&&!(task==='cells'&&!this.selectedCell?.side)&&!(task==='edges'&&this.selectedCell?.side))this.selectedCell=null;this.outlineOpen=['events','systems','connections'].includes(task);
+  if(['size','cells','edges','passage'].includes(task))await this.open('cell-layers.json',{collection:'maps',record:this.mapId});
   else if(task==='objects'){const owner=this.context.maps()[this.mapId].owner;if(owner){await this.open(owner.file,{collection:'maps',record:this.mapId});this.tab=2;this.renderDetail();}else this.refresh();}
   else if(task==='systems')await this.open(this.dungeonFile(),{collection:'systems',record:Object.keys(this.workspace.value(this.dungeonFile()).systems).find(k=>!['map_connections','voxel_space'].includes(this.workspace.value(this.dungeonFile()).systems[k].use))});
   else this.refresh();
@@ -45,13 +46,13 @@ export class MapStudio extends ConfigStudio {
  refresh(){
   if(!this.entry||!this.dungeonId)return;for(const cleanup of this.cleanups.splice(0))cleanup();
   // Undoing creation can remove the map currently on screen.
-  if(!this.context.maps()[this.mapId]){this.mapId=this.mapOptions()[0]?.[0];this.selectedCell=null;this.target=null;this.entry=editors.find(e=>e.file==='cell-layers.json');this.collectionKey='maps';this.recordId=this.mapId;this.task='terrain';}
+  if(!this.context.maps()[this.mapId]){this.mapId=this.mapOptions()[0]?.[0];this.selectedCell=null;this.target=null;this.entry=editors.find(e=>e.file==='cell-layers.json');this.collectionKey='maps';this.recordId=this.mapId;this.task='cells';}
   clear(this.root);this.root.className='studio map-studio';
   const heading=el('div','','map-heading');heading.append(el('h1','マップ編集'));
   heading.append(select(this.context.options('dungeons'),this.dungeonId,id=>this.chooseDungeon(id),'編集する迷宮'),select(this.mapOptions(),this.mapId,id=>this.chooseMap(id),'編集するマップ'),button('マップを追加',()=>this.createMapDialog()));this.root.append(heading);
   const toolbar=el('div','','toolbar');this.undoButton=button('戻す',()=>{if(this.guard()){this.workspace.undo();this.refresh();}});this.redoButton=button('やり直す',()=>{if(this.guard()){this.workspace.redo();this.refresh();}});this.dirty=el('span');toolbar.append(this.undoButton,this.redoButton,button('変更を確認・JSONを出力',()=>this.reviewChanges(),'primary'),button('変更をすべて破棄',()=>{if(this.confirm('下書きの変更をすべて破棄しますか？')){this.errors.clear();this.workspace.discard();this.connectionDraft=null;this.refresh();}}),this.dirty);this.root.append(toolbar);this.invalidate();if(this.connectionDraft){this.undoButton.disabled=true;this.redoButton.disabled=true;}
   this.status=el('p','','status');this.status.hidden=true;this.root.append(this.status);if(this.errors.size){this.message('入力エラーを修正してください。',true);this.root.append(button('不正な入力を取り消す',()=>{this.errors.clear();this.refresh();}));}
-  const nav=el('nav','','collection-tabs');nav.setAttribute('aria-label','編集する内容');for(const [id,name] of [['terrain','地形'],['objects','入口・配置物'],['events','イベント'],['systems','仕掛け'],['connections','マップ間の接続']]){const b=button(name,()=>this.selectTask(id));b.setAttribute('aria-pressed',String(this.task===id));nav.append(b);}this.root.append(nav);
+  const nav=el('nav','','collection-tabs');nav.setAttribute('aria-label','編集する内容');for(const [id,name] of [['size','マップサイズ'],['cells','セル'],['edges','エッジ'],['objects','入口・配置物'],['passage','通行可否'],['events','イベント'],['systems','仕掛け'],['connections','マップ間の接続']]){const b=button(name,()=>this.selectTask(id));b.setAttribute('aria-pressed',String(this.task===id));nav.append(b);}this.root.append(nav);
   const layout=el('div','','map-workspace');this.list=el('aside','','record-list');this.preview=el('section','','record-preview');this.detail=el('section','','record-detail');
   const outline=el('details','','map-outline');outline.open=this.outlineOpen??['events','systems','connections'].includes(this.task);outline.append(el('summary','配置・仕掛け・接続の一覧'),this.list);outline.addEventListener('toggle',()=>{if(outline.isConnected)this.outlineOpen=outline.open;});
   layout.append(this.preview,this.detail,outline);this.root.append(layout);
@@ -74,17 +75,18 @@ export class MapStudio extends ConfigStudio {
  renderPreview(){
   clear(this.preview);if(this.task==='connections'&&this.connectionDraft){this.renderConnectionMaps();return;}
   if(this.target)this.preview.append(button('配置操作を終了',()=>{this.target=null;this.refresh();}));
-  this.preview.append(mapPanel(this,{mapId:this.mapId,target:this.target,paint:this.task==='terrain',selectedCell:this.selectedCell,compact:true,showMapSelect:false}));
+  const components=['size','cells','edges','passage'].includes(this.task)&&!this.target;
+  this.preview.append(mapPanel(this,{mapId:this.mapId,target:this.target,paint:this.task==='cells',selectedCell:this.selectedCell,compact:true,showMapSelect:false,components,showMarkers:components?Boolean(this.showMarkers):true}));
  }
  renderDetail(){
   clear(this.detail);
+  if(['size','passage'].includes(this.task)||this.task==='edges'&&this.group().kind!=='edge'||this.task==='cells'&&this.group().kind==='cellmap'){this.renderComponentDetail();return;}
   if(this.task==='connections'){this.renderConnectionDetail();return;}
   if(this.task==='objects'&&!this.context.maps()[this.mapId]?.owner){this.detail.append(el('p','このマップの基本情報・入口・配置物の正本はJavaScript原稿です。この画面では参照専用です。'));return;}
   if(this.task==='systems'&&['map_connections','voxel_space'].includes(this.current()?.value?.use)){this.detail.append(el('p','一覧から仕掛けを選ぶか、仕掛けを追加してください。接続は「マップ間の接続」で編集します。'));return;}
   if(this.task==='events'&&!['event','fieldEvent','script'].includes(this.group().kind)){this.detail.append(el('h2','イベントを選ぶ'),el('p','配置図または一覧でイベントを選ぶと、条件・本文・処理を編集できます。'),button('イベントを追加',()=>this.createEventDialog()));return;}
   super.renderDetail();
-  if(this.task==='terrain'&&this.group().kind==='cellmap'&&this.selectedCell){const p=this.workspace.value('cell-layers.json').maps[this.mapId],{x,y}=this.selectedCell;if(!p?.rows[y]?.[x])return;const preset=p.legend[p.rows[y][x]];const uses=presetUsage(this.workspace.value('cell-layers.json'),preset);this.detail.append(el('p',`共有セル種「${preset}」は ${uses.maps} マップ・${uses.cells} セルで使用中です。共有設定はすべての使用地点に影響します。地点ごとの上書きが優先されます。`,'cost-warning'),button('共有セル種を編集',async()=>{if(this.confirm(`共有セル種 ${preset} を編集します。${uses.maps} マップ・${uses.cells} セルに影響します。続けますか？`))await this.open('cell-layers.json',{collection:'presets',record:preset});}));}
-  if(this.group().kind==='cell')this.detail.prepend(el('p','共有設定を編集中です。同じセル種を使用する全地点に反映されます。','cost-warning'),button('選択地点だけの編集に戻る',()=>this.open('cell-layers.json',{collection:'maps',record:this.mapId})));
+  if(['cell','edge'].includes(this.group().kind))this.detail.prepend(el('p','共有設定を編集中です。同じ種類を使用する全地点に反映されます。','cost-warning'),button('選択地点だけの編集に戻る',()=>this.open('cell-layers.json',{collection:'maps',record:this.mapId})));
  }
  async openPlacement(p){
   if(!this.guard())return;if(this.connectionDraft){if(!this.confirm('編集中の接続を取り消して配置を選びますか？'))return;this.connectionDraft=null;}
@@ -120,10 +122,11 @@ export class MapStudio extends ConfigStudio {
  }
  saveConnection(){
   if(!this.guard())return;const d=this.connectionDraft;if(!d.name.trim())throw Error('接続名を入力してください。');if(d.a.map===d.b.map)throw Error('別々のマップを選んでください。');
-  for(const p of [d.a,d.b]){const view=projectMap(this.context,p.map);if(!this.mapOptions().some(([id])=>id===p.map)||!view?.cells[p.y]?.[p.x]||view.cells[p.y][p.x].passage==='#')throw Error('AとBをそれぞれ通行可能なセルに配置してください。');if(d.kind!=='stairs'){const delta={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]}[p.side];if(!delta||!view.cells[p.y+delta[1]]?.[p.x+delta[0]]?.visual.wall)throw Error('扉は壁に接する面を選んでください。');}}
+  for(const p of [d.a,d.b]){const view=projectMap(this.context,p.map);if(!this.mapOptions().some(([id])=>id===p.map)||!view?.cells[p.y]?.[p.x]||view.cells[p.y][p.x].passage==='#')throw Error('AとBをそれぞれ通行可能なセルに配置してください。');if(d.kind!=='stairs'){const delta={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]}[p.side];if(!delta||!view.edges.edges[`${p.x},${p.y}/${p.side}`]?.visual.wall&&!view.cells[p.y+delta[1]]?.[p.x+delta[0]]?.visual.wall)throw Error('扉は壁セルか壁エッジに接する面を選んでください。');}}
   const file=this.dungeonFile(),systems=this.workspace.value(file).systems;for(const [key,s] of Object.entries(systems))if(s.use==='map_connections')for(const [i,l] of s.links.entries())if(key!==d.key||i!==d.index)for(const old of [l.a,l.b])if([d.a,d.b].some(p=>p.map===old.map&&p.x===old.x&&p.y===old.y))throw Error('同じセルに既存の接続口があります。');
   this.workspace.transaction('接続を編集',[file],docs=>{const systems=docs[file].systems,key=d.key??Object.keys(systems).find(k=>systems[k].use==='map_connections')??nextId(systems,'connections');systems[key]??={use:'map_connections',links:[]};const links=systems[key].links,link={...(d.index===undefined?{}:links[d.index]),id:d.id??nextId(links,'connection'),name:d.name,kind:d.kind,a:structuredClone(d.a),b:structuredClone(d.b)};if(d.index===undefined)links.push(link);else links[d.index]=link;});
  }
 }
+Object.assign(MapStudio.prototype,componentUI);
 export function presetUsage(source,preset){let maps=0,cells=0;for(const p of Object.values(source.maps)){let count=0;for(const row of p.rows)for(const c of row)if(p.legend[c]===preset)count++;if(count)maps++;cells+=count;}return {maps,cells};}
 if(typeof document!=='undefined'&&document.body.dataset.mapStudio!==undefined){const app=new MapStudio(document.getElementById('editor'));app.start(new URLSearchParams(location.search).get('dungeon')??undefined).catch(e=>app.message('読み込めません：'+e.message,true));globalThis.addEventListener('beforeunload',e=>{if(app.workspace.dirty||app.errors.size||app.connectionDraft){e.preventDefault();e.returnValue='';}});}

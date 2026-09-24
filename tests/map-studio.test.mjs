@@ -12,7 +12,7 @@ test('map workspace retains dungeon, map and cell while editing a wall lamp and 
  app.workspace.set(point.file,['events',3,'title'],'変更した壁灯','名前');paintCell(app.workspace,app.mapId,1,1,'stone_wall');await app.reviewChanges();assert.ok(app.workspace.output,app.status.textContent);assert.deepEqual(app.workspace.output.map(o=>o.file).sort(),['cell-layers.json',point.file].sort());
 });
 test('shared preset scope is counted separately from cell overrides',async t=>{
- const {app,root}=await ui(t);app.selectedCell={map:app.mapId,x:1,y:1};app.refresh();const source=app.workspace.value('cell-layers.json'),preset=source.maps[app.mapId].legend[source.maps[app.mapId].rows[1][1]];const uses=presetUsage(source,preset);assert.ok(uses.maps>1&&uses.cells>1);assert.match(root.textContent,/全地点|使用地点/);assert.ok(root.querySelectorAll('button').some(b=>b.textContent==='この地点だけの設定を作る'));assert.equal(app.workspace.dirty,false);
+ const {app,root}=await ui(t);app.selectedCell={map:app.mapId,x:1,y:1};app.refresh();const source=app.workspace.value('cell-layers.json'),preset=source.maps[app.mapId].legend[source.maps[app.mapId].rows[1][1]];const uses=presetUsage(source,preset);assert.ok(uses.maps>1&&uses.cells>1);assert.match(root.textContent,/全地点|使用地点/);assert.ok(root.querySelector('[aria-label="通行可否"]'));assert.match(root.textContent,/種類の標準/);assert.equal(app.workspace.dirty,false);
 });
 test('new destination map and connection preserve source ownership and support undo',async t=>{
  const {app}=await ui(t);const id=await app.createMap('接続先',6,6);await app.context.ensureMap(id);assert.equal(app.workspace.changed().length,3);

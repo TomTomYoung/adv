@@ -101,12 +101,13 @@ export class ConfigStudio {
   clear(this.detail);const row=this.current(),group=this.group();if(!row){this.detail.append(el('p','まだ登録がありません。「新規作成」で追加できます。'));return;}
   this.recordId=row.key;const value=row.value,location={file:this.entry.file,path:row.path};
   const source=this.schemas.get(this.entry.file),schema=enrichSchema(group.kind,schemaAt(source,this.workspace.value(this.entry.file),row.path));
-  if(group.kind==='cell'&&value.description)this.detail.append(el('p',value.description,'intro'));
+  if(['cell','edge'].includes(group.kind)&&value.description)this.detail.append(el('p',value.description,'intro'));
   if(group.kind==='cell'){const source=this.workspace.value(this.entry.file);let count=0,maps=0;for(const p of Object.values(source.maps)){let n=0;for(const line of p.rows)for(const symbol of line)if(p.legend[symbol]===row.key)n++;if(n)maps++;count+=n;}this.detail.append(el('p',`共有セル種を編集中：${maps} マップ・${count} セルで使用。変更は全使用地点に反映され、地点ごとの上書きが優先されます。`,'cost-warning'));}
   this.detail.append(el('h2',this.recordName()),el('p',`出力先：config/${this.entry.file}${value?.id?' / ID: '+value.id:''}`,'source-caption'));
   if(group.kind==='map'){
    const owner=this.context.maps()[row.key]?.owner;if(owner&&owner.file!==this.entry.file){this.detail.append(el('p',`このマップはconfig/${owner.file}の内容が優先されます。`,'unsupported'),button('有効なマップ原稿を開く',()=>this.open(owner.file,{collection:'maps',record:row.key})));return;}
   }
+  if(group.kind==='edge'){const source=this.workspace.value(this.entry.file),count=Object.values(source.maps).reduce((n,p)=>n+Object.values(p.edges??{}).filter(e=>e.preset===row.key).length,0);this.detail.append(el('p',`共有エッジ種を編集中：${count} 境界で使用。変更は全使用地点に反映され、個別設定が優先されます。`,'cost-warning'));}
   if(group.kind==='cellmap'){this.renderCellControls();return;}
   if(group.kind==='art'){this.detail.append(renderRecord(this,location,schema,{keys:['dungeon','floor']}),renderArt(this,location,value));return;}
   if(['assignments','bindings'].includes(group.kind)){this.detail.append(renderValue(this,location,schema,group.key,{hideLabel:true,required:true}));return;}

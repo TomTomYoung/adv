@@ -28,6 +28,7 @@ export class EditorContext{
    if(kind==='locations'&&file==='locations.json')return v;
    if(kind==='dungeons'&&file.startsWith('dungeons/'))values[v.id]=v;
    if(kind==='cellTypes'&&file==='cell-layers.json')return v.presets;
+   if(kind==='edgeTypes'&&file==='cell-layers.json')return v.edgePresets;
    if(kind==='cellEvents'&&file==='cell-layers.json')return v.events;
    if(kind==='enemies')for(const e of v.monsters??[])values[e.id]=e;
    if(v[kind]&&!Array.isArray(v[kind])&&typeof v[kind]==='object')for(const [id,record] of Object.entries(v[kind]))if(!this.base.owners[kind+'/'+id]||this.base.owners[kind+'/'+id].file===file)values[id]=record;
