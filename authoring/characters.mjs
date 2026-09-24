@@ -1,5 +1,5 @@
 // Visual details are new art direction, not retroactive claims about the old text.
-const C=(id,name,role,quests,look,goal,detail)=>({id,name,role,quests:quests.split(' '),portrait:`npc_${id}`,...(['elder','rookie','rine','accused','bearers','belt','brother','cleaners','clerks'].includes(id)?{sprite:`sprite_${id}`} : {}),goal,detail,design:{...look},provenance:'q001–q010 v1.1 改稿で役割と同一性を固定。外見は今回の素材制作で設定。'});
+const C=(id,name,role,quests,look,goal,detail)=>({id,name,role,quests:quests.split(' '),portrait:`npc_${id}`,...(['elder','rookie','rine','accused','bearers','belt','brother','cleaners','clerks','deeppeople','eda','family'].includes(id)?{sprite:`sprite_${id}`} : {}),goal,detail,design:{...look},provenance:'q001–q010 v1.1 改稿で役割と同一性を固定。外見は今回の素材制作で設定。'});
 export default [
  C('rine','リネ','灯番組合の連絡係','q001 q010',{hair:'bob',color:'teal',prop:'ledger'},'帰還者を名前で数え、取り残しを防ぐ','q001とq010は同一人物。依頼受付・救助名簿・報告を担当する。'),
  C('elder','老灯番','行方不明の灯番','q001',{hair:'bald',color:'brown',prop:'lantern',age:'old'},'新人を安全な入口へ帰し、自分も生きて戻る','本名は未設定。新人へ油を渡し、最後の壁灯の下で救助を待つ。'),
