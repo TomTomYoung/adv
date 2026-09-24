@@ -1,3 +1,4 @@
+import {edgeBetween} from './edge-layers.js';
 import {collapseAfterLeaving} from './cell-behaviors.js';
 import {closeTo} from './systems/common.js';
 import {finishInspection} from './inspection.js';
@@ -147,13 +148,14 @@ export class GameEngine {
     if(connection)return dungeonAction(this,connection);
     const map=this.map(),point={x,y,z:loc.z??0};
     if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point,{waterAccess:dungeonWaterAccess(this.data,this.state)})||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
+    if(!map.voxels&&edgeBetween(this.data,map,loc,point)?.passage==='#'){this.notify('境界が通行を妨げている。');this.eventCue('bump');return false;}
     if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'ここへは通行できません。正面を調べてください。');this.eventCue('bump');return false;}
     const moved=this.finishMove(point);let expected=point;
     // Every slide crosses real cells and runs the usual entry / battle pipeline.
     for(let remaining=map.tiles.length+map.tiles[0].length;moved&&remaining>0;remaining--){
       const current=this.state.location;if(this.state.mode!=='dungeon'||current?.map!==map.id||current.x!==expected.x||current.y!==expected.y||this.state.waiting||this.state.battle||this.state.vm.length||this.state.fieldEntry?.fired.length||!dungeonCell(this.data,this.state,map,current.x,current.y)?.parameters.slippery)break;
       if(connectionMove(this.data,this.state,null))break;
-      const next={x:current.x+dx,y:current.y+dy};if(!this.walkable(map,next.x,next.y))break;this.finishMove(next);expected=next;
+      const next={x:current.x+dx,y:current.y+dy};if(!this.walkable(map,next.x,next.y)||edgeBetween(this.data,map,current,next)?.passage==='#')break;this.finishMove(next);expected=next;
     }
     return moved;
   }
@@ -182,12 +184,12 @@ export class GameEngine {
   interactionObjects(){return this.triggerCandidates('interact');}
   nearbyObjects(){
     const loc=this.state.location;if(!loc)return [];
-    return this.map().objects.filter(o=>closeTo(this.state,{map:loc.map,...o})&&(o.edge||o.x===loc.x&&o.y===loc.y||!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:o.x,y:o.y,z:loc.z}).passage));
+    return this.map().objects.filter(o=>closeTo(this.state,{map:loc.map,...o})&&(o.edge||o.x===loc.x&&o.y===loc.y||!edgeBetween(this.data,this.map(),loc,o)?.visual.opaque&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:o.x,y:o.y,z:loc.z}).passage)));
   }
   triggerCandidates(kind){
     const loc=this.state.location;if(!loc)return [];
     const [dx,dy]=DELTAS[DIRECTIONS.indexOf(loc.facing)];
-    const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
+    const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&!edgeBetween(this.data,this.map(),loc,{x:loc.x+dx,y:loc.y+dy})?.visual.opaque&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
     return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>(!object.edge||closeTo(this.state,{map:loc.map,...object}))&&objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));

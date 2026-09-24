@@ -1,3 +1,4 @@
+import {edgeSurfaces} from './edge-layers.js';
 import {fireContext} from './systems/fire-network.js';
 import {objectVisible,objectBlocks} from './quest-events.js';
 import {dungeonCell,dungeonBlock,dungeonWaterDepth} from './dungeons.js';
@@ -26,7 +27,7 @@ export function fieldLighting(data,state,geometry,boundaries={}){
 export function currentIllumination(data,state){
   const p=state.location,map=data.maps[p?.map];if(state.mode!=='dungeon'||!map)return 0;
   const terrain=map.voxels?voxelMapState(data,state,map):null;
-  const boundaries={...connectionSurfaces(data,state).boundaries};
+  const boundaries={...edgeSurfaces(data,map).occlusion,...connectionSurfaces(data,state).boundaries};
   const geometry=map.tiles.map((row,y)=>Array.from(row,(_,x)=>{
     if(map.voxels){
       const point={x,y,z:p.z??0};

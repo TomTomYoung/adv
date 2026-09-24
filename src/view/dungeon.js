@@ -17,18 +17,21 @@ export function traceDungeonRay(d,ox,oy,dx,dy,max=16){
   let x=Math.floor(ox),y=Math.floor(oy),distance=0,side='north';
   const sx=dx<0?-1:1,sy=dy<0?-1:1,ax=dx===0?Infinity:Math.abs(1/dx),ay=dy===0?Infinity:Math.abs(1/dy);
   let tx=dx===0?Infinity:(sx>0?x+1-ox:ox-x)*ax,ty=dy===0?Infinity:(sy>0?y+1-oy:oy-y)*ay;
-  const hit=()=>({distance,x,y,side,u:fraction(side==='east'||side==='west'?oy+dy*distance:ox+dx*distance),door:d.doors?.[`${x},${y}/${side}`]});
+  const hit=(boundary=false)=>({distance,x,y,side,u:fraction(side==='east'||side==='west'?oy+dy*distance:ox+dx*distance),edge:boundary?d.edges?.[`${x},${y}/${side}`]:undefined,door:d.doors?.[`${x},${y}/${side}`]});
   if(d.geometry[y]?.[x]!=='.')return hit();
   while(distance<max){
     const east=sx>0?'east':'west',south=sy>0?'south':'north';
     // Rays exactly through a corner must not leak between two touching walls.
     if(Math.abs(tx-ty)<1e-9){
       distance=tx;side=east;
-      if(closed(d,x,y,east)||closed(d,x,y,south)||d.geometry[y]?.[x+sx]!=='.'||d.geometry[y+sy]?.[x]!=='.')return distance<=max?hit():{distance:max,empty:true};
-      if(closed(d,x+sx,y,south)||closed(d,x,y+sy,east))return distance<=max?hit():{distance:max,empty:true};
+      if(closed(d,x,y,east))return distance<=max?hit(true):{distance:max,empty:true};
+      if(closed(d,x,y,south)){side=south;return distance<=max?hit(true):{distance:max,empty:true};}
+      if(d.geometry[y]?.[x+sx]!=='.'||d.geometry[y+sy]?.[x]!=='.')return distance<=max?hit():{distance:max,empty:true};
+      if(closed(d,x+sx,y,south)){x+=sx;side=south;return distance<=max?hit(true):{distance:max,empty:true};}
+      if(closed(d,x,y+sy,east)){y+=sy;return distance<=max?hit(true):{distance:max,empty:true};}
       x+=sx;y+=sy;tx+=ax;ty+=ay;
-    }else if(tx<ty){distance=tx;side=east;if(closed(d,x,y,side))return distance<=max?hit():{distance:max,empty:true};x+=sx;tx+=ax;}
-    else{distance=ty;side=south;if(closed(d,x,y,side))return distance<=max?hit():{distance:max,empty:true};y+=sy;ty+=ay;}
+    }else if(tx<ty){distance=tx;side=east;if(closed(d,x,y,side))return distance<=max?hit(true):{distance:max,empty:true};x+=sx;tx+=ax;}
+    else{distance=ty;side=south;if(closed(d,x,y,side))return distance<=max?hit(true):{distance:max,empty:true};y+=sy;ty+=ay;}
     if(distance>max)return {distance:max,empty:true};
     if(d.geometry[y]?.[x]!=='.')return hit();
   }
@@ -93,11 +96,11 @@ export function paintDungeon(canvas,dungeon,battle){
         const wheel=Math.abs(u-.73);if(wheel<.10){const radius=Math.sqrt(.01-wheel*wheel);ctx.fillStyle='#d4dbce';ctx.fillRect(column,top+h*(.57-radius),STRIDE,h*radius*2);if(wheel<.065){const inner=Math.sqrt(.065**2-wheel**2);ctx.fillStyle='#425859';ctx.fillRect(column,top+h*(.57-inner),STRIDE,h*inner*2);}}
       }
       else{
-        const art=dungeon.cells[hit.y]?.[hit.x]?.art??dungeon.wall,image=art?texture(art.url,draw):wall;
+        const art=hit.edge?.art??dungeon.cells[hit.y]?.[hit.x]?.art??dungeon.wall,image=art?texture(art.url,draw):wall;
         if(drawable(image)){const rect=art?artRect(image,art):[18,45,50,76];ctx.drawImage(image,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
         else{ctx.fillStyle='#405b5a';ctx.fillRect(column,top,STRIDE,h);}
       }
-      const surface=dungeon.cells[hit.y]?.[hit.x]?.surface,color={earth:'rgba(111,75,42,.55)',salt:'rgba(215,200,181,.55)',rock:'rgba(73,79,86,.55)',thorns:'rgba(58,93,38,.55)'}[surface];if(color&&!hit.door){ctx.fillStyle=color;ctx.fillRect(column,top,STRIDE,h);}
+      const surface=hit.edge?.visual.surface??dungeon.cells[hit.y]?.[hit.x]?.surface,color={wood:'rgba(124,84,42,.55)',earth:'rgba(111,75,42,.55)',salt:'rgba(215,200,181,.55)',rock:'rgba(73,79,86,.55)',thorns:'rgba(58,93,38,.55)'}[surface];if(color&&!hit.door){ctx.fillStyle=color;ctx.fillRect(column,top,STRIDE,h);}
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
       const level=dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
       ctx.fillStyle=`rgba(0,0,0,${.72*(1-level/8)})`;ctx.fillRect(column,top,STRIDE,h);

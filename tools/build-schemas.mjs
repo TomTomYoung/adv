@@ -1,5 +1,5 @@
 import {FIELD_SIGNALS,FIELD_REPEATS} from '../src/core/field-signals.js';
-import {cellPlacementSchema,cellTypesSchema,cellEventsSchema,cellPatchSchema} from './cell-layer-schema.mjs';
+import {cellPlacementSchema,cellTypesSchema,edgeTypesSchema,cellEventsSchema,cellPatchSchema} from './cell-layer-schema.mjs';
 import {FIELD_EVENT_TRIGGERS} from '../src/core/field-events.js';
 import {BATTLE_EVENT_PHASES} from '../src/core/battle-events.js';
 import {voxelSchema,voxelSystemSchema} from './voxel-schema.mjs';
@@ -99,6 +99,7 @@ await fs.writeFile(path.join(folder,'dungeons.schema.json'),JSON.stringify({$sch
 
 await write('dungeon-art.schema.json',{title:'ダンジョン素材原稿',...obj({schemaVersion:{const:1},assets:obj({walls:string,devices:string}),floor:dungeonArt,entries:{type:'array',items:obj({dungeon:string,floor:dungeonArt,wall:{type:'integer',minimum:0,maximum:15},device:{type:'integer',minimum:0,maximum:15}},['dungeon','wall','device'])}},['schemaVersion','assets','entries'])});
 
+await write('edge-types.schema.json',{title:'エッジ種プリセット',...edgeTypesSchema});
 await write('cell-types.schema.json',{$defs:{},title:'セル種プリセット',...cellTypesSchema});
 await write('cell-events.schema.json',{$defs:{value:definitions.value,expression:definitions.expression},title:'セル進入イベント',...cellEventsSchema(value)});
-await write('cell-layers-authoring.schema.json',{title:'セルレイヤー原稿',...obj({schemaVersion:{const:1},presets:cellTypesSchema,events:cellEventsSchema(value),scripts:{type:'object',additionalProperties:obj({commands:{type:'array',items:{$ref:'#/$defs/command'}}})},maps:{type:'object',additionalProperties:cellPlacementSchema}})});
+await write('cell-layers-authoring.schema.json',{title:'セルレイヤー原稿',...obj({schemaVersion:{const:1},presets:cellTypesSchema,edgePresets:edgeTypesSchema,events:cellEventsSchema(value),scripts:{type:'object',additionalProperties:obj({commands:{type:'array',items:{$ref:'#/$defs/command'}}})},maps:{type:'object',additionalProperties:cellPlacementSchema}})});

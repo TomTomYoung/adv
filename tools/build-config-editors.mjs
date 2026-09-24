@@ -5,7 +5,7 @@ import {pathToFileURL} from 'node:url';
 const root=path.resolve(import.meta.dirname,'..');
 const rootDocs={
  'catalog-q011-q020':['catalog','q011〜q020のシナリオ原稿','物語','本文と分岐の原稿です。ほかのクエストの本筋はauthoringのJavaScript原稿で管理しています。'],
- 'cell-layers':['cells','セル種・照度・セル配置','地形','通常マップの通行値・外観・照度を決める正本です。rowsの順序はマップの座標です。'],
+ 'cell-layers':['cells','セル種・エッジ種と配置','地形','セルとエッジの標準設定、配置、地点ごとの例外を編集する正本です。通常はマップ編集から操作します。'],
  'connected-maps':['maps','接続済み2Dマップ','地形','マップの基本情報と配置物を編集します。最終的な通行値はcell-layers.jsonのrowsから生成します。'],
  'dungeon-art':['art','迷宮の壁・装置・床素材','素材','既存の素材と切り出し位置を指定します。画像ファイルの作成は別途行います。'],
  'dungeon-content':['bundle','追加迷宮の道具・敵・命令','迷宮','共通の道具・敵・命令が対象です。mapsはconnected-maps.json、通行値はcell-layers.jsonの指定を優先します。'],

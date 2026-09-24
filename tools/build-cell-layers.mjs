@@ -7,7 +7,7 @@ export async function buildCellLayers(root){
   const write=async(file,value)=>fs.writeFile(path.join(root,file),JSON.stringify(value,null,2)+'\n');
   const source=await read('config/cell-layers.json'),game=await read('data/game.json');
   if(source.schemaVersion!==1)throw Error('セル原稿の形式版が不正です');
-  const data={game,cellTypes:source.presets,cellEvents:source.events,scripts:source.scripts,assets:await read('data/assets.json'),maps:{}};
+  const data={game,cellTypes:source.presets,edgeTypes:source.edgePresets,cellEvents:source.events,scripts:source.scripts,assets:await read('data/assets.json'),maps:{}};
   game.cellLayerVersion=1;
   for(const file of game.files.maps){
     const map=await read(file),placement=source.maps[map.id];
@@ -21,8 +21,10 @@ export async function buildCellLayers(root){
   const errors=validateCellLayers(data,()=>{});if(errors.length)throw Error(errors.join('\n'));
   for(const [id,map] of Object.entries(data.maps))await write(`data/maps/${id}.json`,map);
   await write('data/cell-types.json',source.presets);
+  await write('data/edge-types.json',source.edgePresets);
   await write('data/cell-events.json',source.events);
   await write('data/scripts/cell-events.json',{scripts:source.scripts});
+  game.files.databases.edgeTypes='data/edge-types.json';
   game.files.databases.cellTypes='data/cell-types.json';game.files.databases.cellEvents='data/cell-events.json';
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/cell-events.json'])];
   await write('data/game.json',game);

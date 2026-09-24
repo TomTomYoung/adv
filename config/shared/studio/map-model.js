@@ -1,3 +1,4 @@
+import {edgeSurfaces} from '../../../src/core/edge-layers.js';
 import {bindingSatisfied} from '../../../src/core/cell-behaviors.js';
 import {mergeCellLayers} from '../../../src/core/cell-layers.js';
 import {computeLightGrid} from '../../../src/core/light-geometry.js';
@@ -12,9 +13,10 @@ export function projectMap(context,id,z=0){
  }));
  const markers=context.placements(id).filter(p=>(p.z??0)===z);
  const sources=markers.filter(p=>p.initiallyLit||p.fire?.litStates?.includes(p.initialState)).map(p=>({x:p.x,y:p.y,radius:p.fire?.radius??p.radius??0,intensity:8}));
- const light=computeLightGrid(cells.map(row=>row.map(c=>c.visual.opaque?'#':'.').join('')),sources);
+ const edges=edgeSurfaces({edgeTypes:source?.edgePresets},{...map,tiles:rows,cells:placement});
+ const light=computeLightGrid(cells.map(row=>row.map(c=>c.visual.opaque?'#':'.').join('')),sources,edges.occlusion);
  for(const row of cells)for(const c of row)c.light=Math.max(light[c.y][c.x],c.parameters?.illumination??0);
- return {map,cells,markers,width:rows[0]?.length??0,height:rows.length,placement,voxels,z};
+ return {map,cells,markers,edges,width:rows[0]?.length??0,height:rows.length,placement,voxels,z};
 }
 export function movePoint(workspace,context,target,mapId,x,y,edge){
  const view=projectMap(context,mapId,target.z??0);if(!view?.cells[y]?.[x])throw Error('配置がマップの範囲外です。');
@@ -24,13 +26,14 @@ export function movePoint(workspace,context,target,mapId,x,y,edge){
  if(edge)next[target.edgeKey??'edge']=edge;else if(target.allowEdge)delete next[target.edgeKey??'edge'];
  workspace.set(target.file,target.path,next,`${target.name??'配置'}を${context.name('maps',mapId)}の${x},${y}${edge?' '+edge:''}へ移動`);
 }
-export function paintCell(workspace,mapId,x,y,preset){
+export function paintCell(workspace,mapId,x,y,preset,policy='keep'){
  const source=workspace.value('cell-layers.json'),placement=source.maps[mapId];
  if(!placement?.rows[y]?.[x]||!source.presets[preset])throw Error('塗る場所とセル種を選んでください。');
- const binding=placement.overrides?.[`${x},${y}`]?.parameters?.binding??source.presets[preset].parameters.binding;const dungeon=[...workspace.documents].filter(([file])=>file.startsWith('dungeons/')).map(([,d])=>d.value).find(d=>d.maps.includes(mapId));if(binding&&!bindingSatisfied(binding,dungeon,mapId,x,y))throw Error(`${source.presets[preset].name??preset} は ${binding} の対象地点に配置してください。「仕掛け」で対象座標を設定できます。`);
+ const binding=(policy==='keep'?placement.overrides?.[`${x},${y}`]?.parameters?.binding:undefined)??source.presets[preset].parameters.binding;const dungeon=[...workspace.documents].filter(([file])=>file.startsWith('dungeons/')).map(([,d])=>d.value).find(d=>d.maps.includes(mapId));if(binding&&!bindingSatisfied(binding,dungeon,mapId,x,y))throw Error(`${source.presets[preset].name??preset} は ${binding} の対象地点に配置してください。「仕掛け」で対象座標を設定できます。`);
  workspace.transaction('セル種を塗る',['cell-layers.json'],docs=>{
   const p=docs['cell-layers.json'].maps[mapId];let symbol=Object.keys(p.legend).find(k=>p.legend[k]===preset);
   if(!symbol){symbol=Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789').find(k=>!Object.hasOwn(p.legend,k));if(!symbol)throw Error('このマップのセル種の記号を使い切っています。');p.legend[symbol]=preset;}
+  if(policy==='reset')delete p.overrides[`${x},${y}`];
   const row=Array.from(p.rows[y]);row[x]=symbol;p.rows[y]=row.join('');
  });
 }

@@ -2237,6 +2237,89 @@
             "required": [],
             "additionalProperties": false
           }
+        },
+        "edges": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[hv]:(0|[1-9]\\d*),(0|[1-9]\\d*)$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "preset": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "overrides": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "passage": {
+                    "enum": [
+                      ".",
+                      "#"
+                    ]
+                  },
+                  "visual": {
+                    "type": "object",
+                    "properties": {
+                      "wall": {
+                        "type": "boolean"
+                      },
+                      "opaque": {
+                        "type": "boolean"
+                      },
+                      "surface": {
+                        "enum": [
+                          "stone",
+                          "wood",
+                          "rock",
+                          "salt"
+                        ]
+                      },
+                      "image": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "water_passable": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "preset"
+            ],
+            "additionalProperties": false
+          }
         }
       },
       "required": [

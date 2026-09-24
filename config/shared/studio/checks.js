@@ -1,3 +1,4 @@
+import {edgePlacementErrors} from '../../../src/core/edge-layers.js';
 import {cellBindingErrors} from '../../../src/core/cell-behaviors.js';
 import {EditorContext} from './context.js';
 import {collectReferences} from './references.js';
@@ -28,6 +29,7 @@ export function checkWorkspace(snapshot,files,base,schemas){
    for(const [id,record] of Object.entries(value[key]??{})){const schema=recordSchemas[kind];for(const message of validateSchema(record,{$defs:schemas.get(file)?.$defs??{},...schema}))fail(file,[key,Array.isArray(value[key])?Number(id):id],message);}
   }
   if(file==='cell-layers.json')for(const [id,c] of Object.entries(value.maps??{})){
+   for(const error of edgePlacementErrors(value.edgePresets,c.edges,c.rows[0]?.length??0,c.rows.length,context.assets()))fail(file,['maps',id,'edges'],error);
    const meta=maps[id],map=meta?.owner&&snapshot.has(meta.owner.file)?get(snapshot.get(meta.owner.file),meta.owner.path):null;
    const width=map?.tiles?.[0]?.length??meta?.width,height=map?.tiles?.length??meta?.height;
    if(width!==undefined&&(c.rows.length!==height||c.rows.some(row=>row.length!==width)))fail(file,['maps',id],'セル配置とマップ原稿の寸法が違います。');

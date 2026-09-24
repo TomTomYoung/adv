@@ -14,9 +14,9 @@ export const editors=[
     "file": "cell-layers.json",
     "page": "cell-layers.html",
     "family": "cells",
-    "title": "セル種・照度・セル配置",
+    "title": "セル種・エッジ種と配置",
     "group": "地形",
-    "hint": "通常マップの通行値・外観・照度を決める正本です。rowsの順序はマップの座標です。"
+    "hint": "セルとエッジの標準設定、配置、地点ごとの例外を編集する正本です。通常はマップ編集から操作します。"
   },
   {
     "id": "connected-maps",

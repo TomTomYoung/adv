@@ -2048,572 +2048,84 @@
       "additionalProperties": false
     }
   },
-  "title": "セルレイヤー原稿",
+  "title": "エッジ種プリセット",
   "type": "object",
-  "properties": {
-    "schemaVersion": {
-      "const": 1
-    },
-    "presets": {
-      "type": "object",
-      "minProperties": 1,
-      "propertyNames": {
+  "minProperties": 1,
+  "propertyNames": {
+    "type": "string",
+    "minLength": 1,
+    "pattern": "^[a-z][a-z0-9_]*$"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "name": {
         "type": "string",
-        "minLength": 1,
-        "pattern": "^[a-z][a-z0-9_]*$"
+        "minLength": 1
       },
-      "additionalProperties": {
+      "description": {
+        "type": "string",
+        "minLength": 1
+      },
+      "passage": {
+        "enum": [
+          ".",
+          "#"
+        ]
+      },
+      "visual": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "passage": {
-            "enum": [
-              ".",
-              "#"
-            ],
-            "description": "通行可否のみ。見た目・遮光・水密・イベントを意味しない。"
-          },
-          "visual": {
-            "type": "object",
-            "properties": {
-              "wall": {
-                "type": "boolean"
-              },
-              "floor": {
-                "type": "boolean"
-              },
-              "opaque": {
-                "type": "boolean"
-              },
-              "material": {
-                "enum": [
-                  "floor",
-                  "wall"
-                ]
-              },
-              "surface": {
-                "enum": [
-                  "stone",
-                  "earth",
-                  "wood",
-                  "wet",
-                  "ice",
-                  "cracked",
-                  "salt",
-                  "roots",
-                  "thorns",
-                  "poison",
-                  "corrosion",
-                  "rune",
-                  "rock"
-                ]
-              },
-              "image": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              }
-            },
-            "required": [
-              "wall",
-              "floor",
-              "opaque",
-              "material"
-            ],
-            "additionalProperties": false
-          },
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "illumination": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 8
-              },
-              "water_passable": {
-                "type": "boolean"
-              },
-              "water_depth": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 2
-              },
-              "slippery": {
-                "type": "boolean"
-              },
-              "fragile": {
-                "type": "boolean"
-              },
-              "safe": {
-                "type": "boolean"
-              },
-              "corrosion": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 100
-              },
-              "binding": {
-                "enum": [
-                  "compartment_water",
-                  "air_pocket",
-                  "corrosion",
-                  "vector_curse",
-                  "suppression_zone",
-                  "breakable_walls",
-                  "root_bridge",
-                  "thorn_wall"
-                ]
-              }
-            },
-            "propertyNames": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[a-z][a-z0-9_]*$"
-            },
-            "additionalProperties": {
-              "type": [
-                "number",
-                "string",
-                "boolean"
-              ]
-            },
-            "required": [
-              "illumination",
-              "water_passable"
-            ]
-          },
-          "events": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[a-z][a-z0-9_]*$"
-            }
-          }
-        },
-        "required": [
-          "passage",
-          "visual",
-          "parameters",
-          "events"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "edgePresets": {
-      "type": "object",
-      "minProperties": 1,
-      "propertyNames": {
-        "type": "string",
-        "minLength": 1,
-        "pattern": "^[a-z][a-z0-9_]*$"
-      },
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "passage": {
-            "enum": [
-              ".",
-              "#"
-            ]
-          },
-          "visual": {
-            "type": "object",
-            "properties": {
-              "wall": {
-                "type": "boolean"
-              },
-              "opaque": {
-                "type": "boolean"
-              },
-              "surface": {
-                "enum": [
-                  "stone",
-                  "wood",
-                  "rock",
-                  "salt"
-                ]
-              },
-              "image": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              }
-            },
-            "required": [
-              "wall",
-              "opaque"
-            ],
-            "additionalProperties": false
-          },
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "water_passable": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "water_passable"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "passage",
-          "visual",
-          "parameters"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "events": {
-      "type": "object",
-      "propertyNames": {
-        "type": "string",
-        "minLength": 1,
-        "pattern": "^[a-z][a-z0-9_]*$"
-      },
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "trigger": {
-            "const": "enter"
-          },
-          "script": {
-            "type": "string",
-            "minLength": 1
-          },
-          "once": {
+          "wall": {
             "type": "boolean"
           },
-          "condition": {
-            "$ref": "#/$defs/value"
+          "opaque": {
+            "type": "boolean"
+          },
+          "surface": {
+            "enum": [
+              "stone",
+              "wood",
+              "rock",
+              "salt"
+            ]
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
-          "trigger",
-          "script",
-          "once"
+          "wall",
+          "opaque"
+        ],
+        "additionalProperties": false
+      },
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "water_passable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "water_passable"
         ],
         "additionalProperties": false
       }
     },
-    "scripts": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "commands": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/command"
-            }
-          }
-        },
-        "required": [
-          "commands"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "maps": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "legend": {
-            "type": "object",
-            "minProperties": 1,
-            "propertyNames": {
-              "pattern": "^[A-Za-z0-9]$"
-            },
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1,
-              "pattern": "^[a-z][a-z0-9_]*$"
-            }
-          },
-          "rows": {
-            "type": "array",
-            "minItems": 3,
-            "items": {
-              "type": "string",
-              "pattern": "^[A-Za-z0-9]+$"
-            }
-          },
-          "overrides": {
-            "type": "object",
-            "propertyNames": {
-              "pattern": "^(0|[1-9]\\d*),(0|[1-9]\\d*)$"
-            },
-            "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "description": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "passage": {
-                  "enum": [
-                    ".",
-                    "#"
-                  ],
-                  "description": "通行可否のみ。見た目・遮光・水密・イベントを意味しない。"
-                },
-                "visual": {
-                  "type": "object",
-                  "properties": {
-                    "wall": {
-                      "type": "boolean"
-                    },
-                    "floor": {
-                      "type": "boolean"
-                    },
-                    "opaque": {
-                      "type": "boolean"
-                    },
-                    "material": {
-                      "enum": [
-                        "floor",
-                        "wall"
-                      ]
-                    },
-                    "surface": {
-                      "enum": [
-                        "stone",
-                        "earth",
-                        "wood",
-                        "wet",
-                        "ice",
-                        "cracked",
-                        "salt",
-                        "roots",
-                        "thorns",
-                        "poison",
-                        "corrosion",
-                        "rune",
-                        "rock"
-                      ]
-                    },
-                    "image": {
-                      "anyOf": [
-                        {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [],
-                  "additionalProperties": false
-                },
-                "parameters": {
-                  "type": "object",
-                  "properties": {
-                    "illumination": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 8
-                    },
-                    "water_passable": {
-                      "type": "boolean"
-                    },
-                    "water_depth": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 2
-                    },
-                    "slippery": {
-                      "type": "boolean"
-                    },
-                    "fragile": {
-                      "type": "boolean"
-                    },
-                    "safe": {
-                      "type": "boolean"
-                    },
-                    "corrosion": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 100
-                    },
-                    "binding": {
-                      "enum": [
-                        "compartment_water",
-                        "air_pocket",
-                        "corrosion",
-                        "vector_curse",
-                        "suppression_zone",
-                        "breakable_walls",
-                        "root_bridge",
-                        "thorn_wall"
-                      ]
-                    }
-                  },
-                  "propertyNames": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "^[a-z][a-z0-9_]*$"
-                  },
-                  "additionalProperties": {
-                    "type": [
-                      "number",
-                      "string",
-                      "boolean"
-                    ]
-                  },
-                  "required": []
-                },
-                "events": {
-                  "type": "array",
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "^[a-z][a-z0-9_]*$"
-                  }
-                }
-              },
-              "required": [],
-              "additionalProperties": false
-            }
-          },
-          "edges": {
-            "type": "object",
-            "propertyNames": {
-              "pattern": "^[hv]:(0|[1-9]\\d*),(0|[1-9]\\d*)$"
-            },
-            "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "preset": {
-                  "type": "string",
-                  "minLength": 1,
-                  "pattern": "^[a-z][a-z0-9_]*$"
-                },
-                "overrides": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "description": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "passage": {
-                      "enum": [
-                        ".",
-                        "#"
-                      ]
-                    },
-                    "visual": {
-                      "type": "object",
-                      "properties": {
-                        "wall": {
-                          "type": "boolean"
-                        },
-                        "opaque": {
-                          "type": "boolean"
-                        },
-                        "surface": {
-                          "enum": [
-                            "stone",
-                            "wood",
-                            "rock",
-                            "salt"
-                          ]
-                        },
-                        "image": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [],
-                      "additionalProperties": false
-                    },
-                    "parameters": {
-                      "type": "object",
-                      "properties": {
-                        "water_passable": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [],
-                  "additionalProperties": false
-                }
-              },
-              "required": [
-                "preset"
-              ],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": [
-          "legend",
-          "rows",
-          "overrides"
-        ],
-        "additionalProperties": false
-      }
-    }
-  },
-  "required": [
-    "schemaVersion",
-    "presets",
-    "edgePresets",
-    "events",
-    "scripts",
-    "maps"
-  ],
-  "additionalProperties": false
+    "required": [
+      "passage",
+      "visual",
+      "parameters"
+    ],
+    "additionalProperties": false
+  }
 }

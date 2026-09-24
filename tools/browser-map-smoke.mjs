@@ -16,13 +16,22 @@ try{
  page.on('dialog',dialog=>dialog.accept());
  await page.setViewportSize({width:1082,height:604});
  await page.goto(base+'config/index.html');await page.getByRole('link',{name:'マップ編集',exact:false}).click();await page.getByLabel('編集する迷宮',{exact:true}).selectOption('kagaribi');await page.getByLabel('編集するマップ',{exact:true}).selectOption('kagaribi_f1');
+ await page.getByRole('group',{name:'篝火の迷宮・灯番の巡回路',exact:true}).waitFor({state:'visible'});await page.locator('.component-palette').waitFor({state:'visible'});
  assert.equal(await page.getByLabel('表示マップ',{exact:true}).count(),0,'only the heading selects the map');
- const grid=await page.locator('.map-grid').boundingBox();assert.ok(grid.y<300&&grid.width>=350,'map is visible and usable at screenshot size');
+ const grid=await page.locator('.map-grid').boundingBox();await page.screenshot({path:'/tmp/adv-map-layout-1082.png',fullPage:false});assert.ok(grid.y<300&&grid.width>=350,`map is visible and usable at screenshot size: ${JSON.stringify(grid)}`);
  const firstCell=await page.locator('[data-cell="1,1"]').boundingBox();assert.ok(firstCell.y+firstCell.height<604,'cells are visible without scrolling');
  assert.equal(await page.locator('.record-preview').evaluate(e=>getComputedStyle(e).overflowY),'visible','no second map scrollbar');
  await page.screenshot({path:'/tmp/adv-map-layout-1082.png',fullPage:false});
  await page.setViewportSize({width:1440,height:1000});
- await page.locator('[data-cell="1,1"]').click();await page.getByRole('button',{name:'この地点だけの設定を作る',exact:true}).click();await page.getByRole('button',{name:'共有セル種を編集',exact:true}).click();await page.getByRole('button',{name:'選択地点だけの編集に戻る',exact:true}).click();
+ await page.getByRole('button',{name:'エッジ',exact:true}).click();await page.getByRole('button',{name:'石の隔壁',exact:true}).click();await page.locator('[data-edge="2,1/east"]').click();
+ await page.getByRole('button',{name:'通行可否',exact:true}).click();await page.locator('[data-edge="3,1/west"]').click();assert.equal(await page.getByLabel('通行可否',{exact:true}).inputValue(),'#');await page.getByLabel('通行可否',{exact:true}).selectOption('.');
+ await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();const boundaryJSON=JSON.parse(await page.getByLabel('config/cell-layers.json のJSON全文',{exact:true}).inputValue());assert.deepEqual(boundaryJSON.maps.kagaribi_f1.edges['v:3,1'],{preset:'stone_partition',overrides:{passage:'.'}});
+ await page.getByRole('button',{name:'通行可否を標準に戻す',exact:true}).click();assert.equal(await page.getByLabel('通行可否',{exact:true}).inputValue(),'#');await page.getByRole('button',{name:'エッジ',exact:true}).click();await page.getByRole('button',{name:'このエッジを取り除く',exact:true}).click();
+ await page.getByRole('button',{name:'変更をすべて破棄',exact:true}).click();
+ await page.getByRole('button',{name:'マップサイズ',exact:true}).click();const oldWidth=Number(await page.getByLabel('マップの横幅').inputValue()),oldHeight=Number(await page.getByLabel('マップの縦幅').inputValue());await page.getByLabel('マップの横幅').fill(String(oldWidth+1));await page.getByRole('button',{name:'サイズ変更を適用',exact:true}).click();await page.locator(`[data-cell="${oldWidth},${oldHeight-1}"]`).waitFor();
+ await page.getByLabel('マップの横幅').fill('3');await page.getByLabel('マップの縦幅').fill('3');await page.getByRole('button',{name:'サイズ変更を適用',exact:true}).click();await page.getByText('サイズを変更できません。先に対象を移動・解除してください。',{exact:false}).waitFor();assert.equal(await page.locator(`[data-cell="${oldWidth},${oldHeight-1}"]`).count(),1);await page.getByRole('button',{name:'戻す',exact:true}).click();
+ await page.getByRole('button',{name:'セル',exact:true}).click();
+ await page.getByRole('button',{name:'設定を調べる',exact:true}).click();await page.locator('[data-cell="1,1"]').click();await page.getByLabel('局所照度',{exact:true}).fill('1');await page.getByLabel('局所照度',{exact:true}).press('Tab');await page.getByRole('button',{name:'共有セル種を編集',exact:true}).click();await page.getByRole('button',{name:'選択地点だけの編集に戻る',exact:true}).click();
  await page.locator('.map-outline>summary').click();await page.locator('.record-list button').filter({hasText:'西の壁松明'}).click();await page.getByLabel('表示名',{exact:true}).fill('統合画面の壁灯');assert.equal(await page.getByLabel('編集するマップ',{exact:true}).inputValue(),'kagaribi_f1');
  await page.getByRole('button',{name:'配置',exact:true}).click();await page.getByRole('button',{name:'配置図で場所を選ぶ',exact:true}).first().click();await page.locator('[data-edge="2,2/north"]').click();
  await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();await page.getByLabel('config/quests/q001.events.json のJSON全文',{exact:true}).waitFor({state:'attached'});assert.equal(await page.locator('.review-panel .editor-section').count(),2);
@@ -30,12 +39,12 @@ try{
  await page.getByRole('button',{name:'接続先のマップを作成',exact:true}).click();await page.getByLabel('新しいマップ名',{exact:true}).fill('新しい接続先');await page.getByRole('button',{name:'この内容で作成',exact:true}).click();await page.locator('.record-preview .editor-section').nth(1).getByRole('group',{name:'新しい接続先',exact:true}).waitFor();await page.locator('.record-preview .editor-section').nth(1).locator('[data-cell="1,1"]').click();
  await page.getByRole('button',{name:'接続を下書きに反映',exact:true}).click();await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();await page.getByLabel('config/dungeons/kagaribi.json のJSON全文',{exact:true}).waitFor({state:'attached'});assert.equal(await page.locator('.review-panel .editor-section').count(),4);
  await page.getByRole('button',{name:'このJSON全文をコピー',exact:true}).first().click();assert.ok(JSON.parse(await page.evaluate(()=>navigator.clipboard.readText())));
- await page.getByRole('button',{name:'地形',exact:true}).click();await page.getByLabel('編集するマップ',{exact:true}).selectOption({label:'新しい接続先'});await page.locator('[data-cell="2,2"]').click();
+ await page.getByRole('button',{name:'セル',exact:true}).click();await page.getByLabel('編集するマップ',{exact:true}).selectOption({label:'新しい接続先'});await page.locator('[data-cell="2,2"]').click();
  for(const width of [1440,900,390,320]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`viewport ${width}`);}
  await page.locator('.map-scroll').evaluate(e=>{e.scrollLeft=60;e.dispatchEvent(new Event('scroll'));});
- await page.getByLabel('塗るセル種',{exact:true}).selectOption('wood_floor');assert.equal(await page.locator('.map-scroll').evaluate(e=>e.scrollLeft),60,'redrawing keeps the inspected part of a wide map');
+ await page.getByRole('button',{name:'配置する',exact:true}).click();await page.getByRole('button',{name:'木床',exact:true}).click();assert.equal(await page.locator('.map-scroll').evaluate(e=>e.scrollLeft),60,'redrawing keeps the inspected part of a wide map');
  await page.screenshot({path:'/tmp/adv-map-layout-320.png',fullPage:false});
  await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'/tmp/adv-map-studio.png',fullPage:false});
  await page.getByRole('button',{name:'戻す',exact:true}).click();await page.getByRole('button',{name:'戻す',exact:true}).click();assert.equal(await page.getByLabel('編集するマップ',{exact:true}).inputValue(),'kagaribi_f1');
- assert.deepEqual(errors,[]);console.log('MAP BROWSER: unified sources, cell scope, connections, destination creation, export, undo and responsive widths passed');
+ assert.deepEqual(errors,[]);console.log('MAP BROWSER: eight tabs, shared edges, sparse exceptions, safe resizing, unified sources, cell scope, connections, destination creation, export, undo and responsive widths passed');
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
