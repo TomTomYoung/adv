@@ -8,7 +8,7 @@ export async function buildWorld(root){
   assets.images.wraith='assets/images/monsters/wraith.webp';
   const owners={};for(const d of Object.values(dungeons))for(const map of d.maps){if(owners[map])throw Error(`Duplicate dungeon owner: ${map}`);owners[map]=d.id;}
   for(const l of Object.values(locations))assets.images[l.background]=`assets/images/locations/${l.background.slice(9)}.webp`;
-  for(const id of ['curator','porter','examiner','elder','rookie','rine','accused','bearers','belt','brother','cleaners','clerks','deeppeople','eda','family','garo','gatekeeper','ina','innkeeper','inspector','mire'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;
+  for(const id of ['curator','porter','examiner','elder','rookie','rine','accused','bearers','belt','brother','cleaners','clerks','deeppeople','eda','family','garo','gatekeeper','ina','innkeeper','inspector','mire','nearpeople','passers','passkeeper'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;
   for(const file of game.files.quests){
     const q=await read(file);
     for(const e of q.events){
