@@ -47,16 +47,18 @@ export class MapStudio extends ConfigStudio {
   // Undoing creation can remove the map currently on screen.
   if(!this.context.maps()[this.mapId]){this.mapId=this.mapOptions()[0]?.[0];this.selectedCell=null;this.target=null;this.entry=editors.find(e=>e.file==='cell-layers.json');this.collectionKey='maps';this.recordId=this.mapId;this.task='terrain';}
   clear(this.root);this.root.className='studio map-studio';
-  const heading=section('マップ編集','迷宮とマップを選び、配置図から地形・イベント・仕掛け・接続を編集します。変更は下書きにまとめ、最後にJSON全文を出力します。');
+  const heading=el('div','','map-heading');heading.append(el('h1','マップ編集'));
   heading.append(select(this.context.options('dungeons'),this.dungeonId,id=>this.chooseDungeon(id),'編集する迷宮'),select(this.mapOptions(),this.mapId,id=>this.chooseMap(id),'編集するマップ'),button('マップを追加',()=>this.createMapDialog()));this.root.append(heading);
   const toolbar=el('div','','toolbar');this.undoButton=button('戻す',()=>{if(this.guard()){this.workspace.undo();this.refresh();}});this.redoButton=button('やり直す',()=>{if(this.guard()){this.workspace.redo();this.refresh();}});this.dirty=el('span');toolbar.append(this.undoButton,this.redoButton,button('変更を確認・JSONを出力',()=>this.reviewChanges(),'primary'),button('変更をすべて破棄',()=>{if(this.confirm('下書きの変更をすべて破棄しますか？')){this.errors.clear();this.workspace.discard();this.connectionDraft=null;this.refresh();}}),this.dirty);this.root.append(toolbar);this.invalidate();if(this.connectionDraft){this.undoButton.disabled=true;this.redoButton.disabled=true;}
   this.status=el('p','','status');this.status.hidden=true;this.root.append(this.status);if(this.errors.size){this.message('入力エラーを修正してください。',true);this.root.append(button('不正な入力を取り消す',()=>{this.errors.clear();this.refresh();}));}
-  const nav=el('nav','','collection-tabs');for(const [id,name] of [['terrain','地形'],['objects','入口・配置物'],['events','イベント'],['systems','仕掛け'],['connections','マップ間の接続']]){const b=button(name,()=>this.selectTask(id));b.setAttribute('aria-pressed',String(this.task===id));nav.append(b);}this.root.append(nav);
-  const layout=el('div','','map-workspace');this.list=el('aside','','record-list');this.preview=el('section','','record-preview');this.detail=el('section','','record-detail');layout.append(this.list,this.preview,this.detail);this.root.append(layout);
+  const nav=el('nav','','collection-tabs');nav.setAttribute('aria-label','編集する内容');for(const [id,name] of [['terrain','地形'],['objects','入口・配置物'],['events','イベント'],['systems','仕掛け'],['connections','マップ間の接続']]){const b=button(name,()=>this.selectTask(id));b.setAttribute('aria-pressed',String(this.task===id));nav.append(b);}this.root.append(nav);
+  const layout=el('div','','map-workspace');this.list=el('aside','','record-list');this.preview=el('section','','record-preview');this.detail=el('section','','record-detail');
+  const outline=el('details','','map-outline');outline.open=this.outlineOpen??['events','systems','connections'].includes(this.task);outline.append(el('summary','配置・仕掛け・接続の一覧'),this.list);outline.addEventListener('toggle',()=>{if(outline.isConnected)this.outlineOpen=outline.open;});
+  layout.append(this.preview,this.detail,outline);this.root.append(layout);
   this.renderList();this.renderPreview();this.renderDetail();this.review=el('section','','review-panel');this.review.hidden=true;this.root.append(this.review);
  }
  renderList(){
-  clear(this.list);this.list.append(el('h2',this.context.name('maps',this.mapId)));
+  clear(this.list);
   this.list.append(el('h3','迷宮内の接続'));
   for(const [key,s] of Object.entries(this.workspace.value(this.dungeonFile()).systems??{}))if(s.use==='map_connections')for(const [i,l] of s.links.entries())this.list.append(button(`${this.context.name('maps',l.a.map)} ↔ ${this.context.name('maps',l.b.map)}：${l.name}`,()=>this.editConnection(key,i)));
   if(this.task==='connections'){this.list.append(button('接続を追加',()=>this.newConnection()));return;}
@@ -72,7 +74,7 @@ export class MapStudio extends ConfigStudio {
  renderPreview(){
   clear(this.preview);if(this.task==='connections'&&this.connectionDraft){this.renderConnectionMaps();return;}
   if(this.target)this.preview.append(button('配置操作を終了',()=>{this.target=null;this.refresh();}));
-  this.preview.append(mapPanel(this,{mapId:this.mapId,target:this.target,paint:this.task==='terrain',selectedCell:this.selectedCell,mapOptions:this.mapOptions(),onMapChange:id=>this.chooseMap(id)}));
+  this.preview.append(mapPanel(this,{mapId:this.mapId,target:this.target,paint:this.task==='terrain',selectedCell:this.selectedCell,compact:true,showMapSelect:false}));
  }
  renderDetail(){
   clear(this.detail);
