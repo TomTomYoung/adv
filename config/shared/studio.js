@@ -49,7 +49,7 @@ export class ConfigStudio {
   if(kind==='stock')return this.context.name('items',record?.item);
   if(kind==='cellmap'||kind==='map')return record?.name??this.context.name('maps',key);
   if(kind==='script')return record?.commands?.find(c=>typeof c.text==='string')?.text?.slice(0,42)??'処理 '+key;
-  if(kind==='cell')return ({stone_floor:'石の床',stone_wall:'石の壁'})[key]??record?.name??enumLabel(key);
+  if(kind==='cell')return record?.name??({stone_floor:'石の床',stone_wall:'石の壁'})[key]??enumLabel(key);
   if(this.group().mode==='single')return this.group().title;
   return record?.name??record?.title??record?.label??enumLabel(key);
  }
@@ -101,6 +101,7 @@ export class ConfigStudio {
   clear(this.detail);const row=this.current(),group=this.group();if(!row){this.detail.append(el('p','まだ登録がありません。「新規作成」で追加できます。'));return;}
   this.recordId=row.key;const value=row.value,location={file:this.entry.file,path:row.path};
   const source=this.schemas.get(this.entry.file),schema=enrichSchema(group.kind,schemaAt(source,this.workspace.value(this.entry.file),row.path));
+  if(group.kind==='cell'&&value.description)this.detail.append(el('p',value.description,'intro'));
   if(group.kind==='cell'){const source=this.workspace.value(this.entry.file);let count=0,maps=0;for(const p of Object.values(source.maps)){let n=0;for(const line of p.rows)for(const symbol of line)if(p.legend[symbol]===row.key)n++;if(n)maps++;count+=n;}this.detail.append(el('p',`共有セル種を編集中：${maps} マップ・${count} セルで使用。変更は全使用地点に反映され、地点ごとの上書きが優先されます。`,'cost-warning'));}
   this.detail.append(el('h2',this.recordName()),el('p',`出力先：config/${this.entry.file}${value?.id?' / ID: '+value.id:''}`,'source-caption'));
   if(group.kind==='map'){
@@ -134,6 +135,7 @@ export class ConfigStudio {
   const cell=this.selectedCell;if(!cell||cell.map!==this.mapId)return;const source=this.workspace.value('cell-layers.json'),placement=source.maps[this.mapId],key=`${cell.x},${cell.y}`;if(!placement)return;
   const preset=placement.legend[placement.rows[cell.y][cell.x]],effective=projectMap(this.context,this.mapId).cells[cell.y][cell.x];
   this.detail.append(el('h3',`${cell.x},${cell.y} のセル`),el('p','セル種：'+this.recordName(source.presets[preset],preset,'cell')));
+  for(const id of effective.events??[])this.detail.append(button('セル進入イベントを編集：'+enumLabel(id),()=>this.open('cell-layers.json',{collection:'events',record:id})));
   const path=['maps',this.mapId,'overrides',key],override=placement.overrides?.[key],schema=this.schemas.get('cell-layers.json');
   if(!override)this.detail.append(button('この地点だけの設定を作る',()=>{if(!this.guard())return;this.workspace.set('cell-layers.json',path,{passage:effective.passage,visual:clone(effective.visual),parameters:clone(effective.parameters),events:clone(effective.events??[])},'地点だけのセル設定を追加');this.refresh();}));
   else this.detail.append(renderRecord(this,{file:'cell-layers.json',path},schemaAt(schema,source,path)),button('セル種の設定に戻す',()=>{if(!this.guard())return;this.workspace.set('cell-layers.json',path,undefined,'地点だけの上書きを解除');this.refresh();}));

@@ -1,6 +1,6 @@
 # セルレイヤー・状態・境界・配置物カタログ
 
-確認日: 2026-09-23。作品版1.16.0。通常ロードする33マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
+確認日: 2026-09-24。作品版1.20.0。通常ロードする33マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
 
 `.` と `#` は通行可否だけを表します。床・壁・画像・遮光・水密は記号に含めません。セル種は通行、表示、フィールドイベント参照、照度などのパラメータをまとめたプリセットです。一地点の例外はレイヤーや項目を上書きし、セル種を増やさず表します。宝箱・人物・火台・レバーはオブジェクト、扉・水門・壁面はエッジ側の定義です。
 
@@ -8,21 +8,13 @@
 
 ## 現行のセル種プリセット
 
-### stone_floor：石床の構成
+[config/cell-layers.json](../config/cell-layers.json)に24種類を登録しています。2種類だけだった従来の状態から、以前の会話で挙げた床・壁・水路・危険・環境の候補を整備しました。末尾の「セル種プリセット」に名前・用途・実際の設定値を原稿から生成しています。
 
-通行値は `.`、表示は壁なし・床あり・遮光なし、素材はダンジョンの床画像です。局所照度の下限0、水の進入可、セルイベントなしを明示します。通行値だけを `#` へ上書きすれば、床の見た目と光の通過を保ったまま進入だけを拒否できます。
+[マップ編集](../config/map.html)では日本語名でセル種を選び、用途説明を見て配置できます。毒沼のダメージ、氷床の滑走、離れた後に崩れる床、通常遭遇を抑える安全地帯は登録済みの動作です。土・木・濡れ・氷などの表面も描き分けます。
 
-### stone_wall：石壁の構成
+完全水没、空気溜まり、腐食、呪い、術封じ、塩壁、植物の橋・茨は既存の仕掛けに結び付けます。必要な迷宮・対象座標がない場所への配置は検証で拒否します。名称だけで未設定の効果があるようには扱いません。仕掛けとの対応、各パラメータ、旧3Dとの区別は[セル仕様](CELL_LAYERS.md)を参照してください。
 
-通行値は `#`、表示は壁あり・床なし・遮光あり、素材はダンジョンの壁画像です。局所照度の下限0、水の進入不可、セルイベントなしを明示します。これは頻出するレイヤーの組合せであり、`#` 自体を壁の意味で使うものではありません。
-
-### 地点ごとの上書きとセルイベント
-
-`maps.<map>.overrides` の `x,y` ごとに通行、表示の一項目、パラメータ、イベント配列を変更できます。毒床などは `events` の参照先から通常のスクリプトを呼び、そこでHPを減らします。現在の本編配置に毒床は追加していません。
-
-「通行可」は追加の扉・環境条件も満たす場合の候補です。`map.tiles` は通行値だけの生成データ、見た目は `visual`、明るさや通水属性は `parameters` から得ます。記号による見た目の暗黙指定は通常データでは使いません。
-
-同じセルに床表示、水面、照度、イベントが同時に成立します。分類ごとの件数を足して総セル数にしないでください。
+既存の仕掛けに対応する361セルを分類し直しました。元の33マップの初期通行値と配置物・接続を保ち、新しい毒沼・氷床・腐食床・崩壊床は既存の経路へ追加していません。地形の種類とその種類が配置済みであることは別です。
 
 ## 退避3Dの基礎地形と足場
 
@@ -251,15 +243,59 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.19.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.20.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
 2D 33マップ、3D 0マップ、計33マップ。2Dの通行可は2784セル、通行不可は3447セルです。
 
 ### セル種プリセット
 
-`stone_floor`：通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+通常石床 `stone_floor`：通常の通行床。迷宮の床素材を表示します。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
 
-`stone_wall`：通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall"}`、環境 `{"illumination":0,"water_passable":false}`、セルイベント なし。
+土床 `earth_floor`：土の粒状模様を持つ通行床。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"earth"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+木床 `wood_floor`：板の継ぎ目と木目を持つ通行床。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"wood"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+濡れた石床 `wet_stone_floor`：濡れた色合いの通行床。水深や滑走効果はありません。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"wet"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+浅水路 `shallow_water`：足元までの水を床面に表示する通行可能な浅水路。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true,"water_depth":1}`、セルイベント なし。
+
+深水路 `deep_water`：腰までの水を床面に表示します。現行2Dでは歩いて通行できます。完全水没の区画制御とは別です。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true,"water_depth":2}`、セルイベント なし。
+
+完全水没通路（給排水連動） `submerged_passage`：区画水没の対象マップに配置します。給水中は水深3で進入禁止、排水後は通行可能。水密扉・給排水盤を仕掛けに設定してください。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true,"binding":"compartment_water"}`、セルイベント なし。
+
+空気溜まり（空気供給連動） `air_pocket`：空気供給のpocketsと同じ地点に配置します。到着時の空気回復と水面の解除は仕掛けが担当します。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true,"binding":"air_pocket"}`、セルイベント なし。
+
+毒沼 `poison_swamp`：進入ごとにセルイベントから隊全員へ3ダメージ。値と本文はセルの処理で編集できます。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"poison"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント `poison_step`。
+
+腐食床（腐食連動） `corrosive_floor`：腐食の仕掛けがある迷宮で、歩いて入るたび装備の塩が1増えます。低下・洗浄・退出時の回復は既存の腐食処理を使います。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"corrosion"}`、環境 `{"illumination":0,"water_passable":true,"binding":"corrosion","corrosion":1}`、セルイベント なし。
+
+滑る氷床 `ice_floor`：進入した方向へ氷を抜けるまで滑ります。各セルで通常の歩行・イベント判定を行い、壁・接続口・会話・戦闘で止まります。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"ice"}`、環境 `{"illumination":0,"water_passable":true,"slippery":true}`、セルイベント なし。
+
+崩れやすい床 `fragile_floor`：通過して離れた後に崩れ、通行できない穴が残ります。崩壊は保存され、自動落下は行いません。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"cracked"}`、環境 `{"illumination":0,"water_passable":true,"fragile":true}`、セルイベント なし。
+
+呪いの流路（流向連動） `cursed_flow`：帰路の呪いのvectorsまたはvectorRowsと同じ地点に配置します。逆行の累積と弱体化は仕掛けの方向・係数を使用します。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"rune"}`、環境 `{"illumination":0,"water_passable":true,"binding":"vector_curse"}`、セルイベント なし。
+
+術封じ床（境界連動） `suppression_floor`：効果を遮る境界のcellsと同じ地点に配置します。停止する技能・効果は迷宮の仕掛けで選びます。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"rune"}`、環境 `{"illumination":0,"water_passable":true,"binding":"suppression_zone"}`、セルイベント なし。
+
+安全地帯 `safe_floor`：このセルでは通常の歩行遭遇を抽選しません。強制イベント・毒・呪いまで無効にするものではありません。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true,"safe":true}`、セルイベント なし。
+
+石壁 `stone_wall`：通常の通行不可・遮光ありの壁。迷宮の壁素材を表示します。 通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall"}`、環境 `{"illumination":0,"water_passable":false}`、セルイベント なし。
+
+岩盤 `rock_wall`：岩盤の外観を持つ通行不可・遮光ありの壁。自動では破壊できません。 通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall","surface":"rock"}`、環境 `{"illumination":0,"water_passable":false}`、セルイベント なし。
+
+土壁 `earth_wall`：土の外観を持つ通行不可・遮光ありの壁。 通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall","surface":"earth"}`、環境 `{"illumination":0,"water_passable":false}`、セルイベント なし。
+
+塩壁（破壊壁連動） `salt_wall`：破壊できる壁のwallsと同じ座標に配置します。必要な道具・技能・破壊後の床は仕掛けで設定します。 通行 `#`、表示 `{"wall":true,"floor":false,"opaque":true,"material":"wall","surface":"salt"}`、環境 `{"illumination":0,"water_passable":false,"binding":"breakable_walls"}`、セルイベント なし。
+
+茨壁の生育床（植物連動） `thorn_wall`：植床のterrain.barrier対象に配置します。初期は床で、生長した塞道茨が通路を塞ぎ、伐採で床に戻ります。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"thorns"}`、環境 `{"illumination":0,"water_passable":true,"binding":"thorn_wall"}`、セルイベント なし。
+
+根橋予定地（植物連動） `root_bridge`：植床のterrain.bridge対象に配置します。初期は通行不可で、生長した根橋草が足場を作り、採取すると元に戻ります。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor","surface":"roots"}`、環境 `{"illumination":0,"water_passable":true,"binding":"root_bridge"}`、セルイベント なし。
+
+穴・縦坑（2D） `pit`：床も壁も表示しない通行不可の穴。下階への自動落下・立体空間は作りません。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+足場付き空間（2D） `supported_space`：床のある通行可能な空間。上下関係の計算は退避中の3D仕様です。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+足場なし空間（2D） `unsupported_space`：床のない通行不可の空間。梯子や縄は別途接続・仕掛けとして設定します。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
 
 ### マップ別の基礎地形
 

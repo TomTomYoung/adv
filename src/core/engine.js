@@ -1,3 +1,4 @@
+import {collapseAfterLeaving} from './cell-behaviors.js';
 import {closeTo} from './systems/common.js';
 import {finishInspection} from './inspection.js';
 import {openPlayerCommand,advanceCommand,chooseCommand} from './player-commands.js';
@@ -5,7 +6,7 @@ import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
 import {connectionMove} from './systems/map-connections.js';
 import {compartmentBlocked} from './systems/compartment-water.js';
 import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxelMap} from './voxels.js';
-import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess} from './dungeons.js';
+import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess,dungeonCell} from './dungeons.js';
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding,resumeWorldStory} from './story.js';
@@ -114,6 +115,7 @@ export class GameEngine {
   }
   teleport(mapId,x,y,facing='north',z=0){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    collapseAfterLeaving(this,this.state.location,{map:mapId,x,y});
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
     this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
@@ -122,6 +124,7 @@ export class GameEngine {
     signalFieldChange(this.data,this.state,'enter');
   }
   returnTown(emergency=false,quiet=false){
+    collapseAfterLeaving(this,this.state.location,null);
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出した。救援費 ${cost}G。依頼と手掛かりは維持される。`);}
@@ -145,11 +148,18 @@ export class GameEngine {
     const map=this.map(),point={x,y,z:loc.z??0};
     if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point,{waterAccess:dungeonWaterAccess(this.data,this.state)})||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
     if(!this.walkable(map,x,y,point.z)){this.notify(dungeonBlock(this.data,this.state,map,x,y)??'ここへは通行できません。正面を調べてください。');this.eventCue('bump');return false;}
-    return this.finishMove(point);
+    const moved=this.finishMove(point);let expected=point;
+    // Every slide crosses real cells and runs the usual entry / battle pipeline.
+    for(let remaining=map.tiles.length+map.tiles[0].length;moved&&remaining>0;remaining--){
+      const current=this.state.location;if(this.state.mode!=='dungeon'||current?.map!==map.id||current.x!==expected.x||current.y!==expected.y||this.state.waiting||this.state.battle||this.state.vm.length||this.state.fieldEntry?.fired.length||!dungeonCell(this.data,this.state,map,current.x,current.y)?.parameters.slippery)break;
+      if(connectionMove(this.data,this.state,null))break;
+      const next={x:current.x+dx,y:current.y+dy};if(!this.walkable(map,next.x,next.y))break;this.finishMove(next);expected=next;
+    }
+    return moved;
   }
   finishMove(point){
     const loc=this.state.location,{x,y}=point,z=point.z??0;
-    const from={...loc};loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    const from={...loc};collapseAfterLeaving(this,from,{...loc,x,y});loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     recordFieldEntry(this.state);
@@ -160,7 +170,7 @@ export class GameEngine {
     if(processFieldEvents(this))return true;
     if(dungeonDanger(this))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
-    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate)){
+    if(!dungeonCell(this.data,this.state,map,x,y)?.parameters.safe&&!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate)){
       let encounter=map.encounter;
       const pool=environment.encounterPool??map.encounterPool;
       if(pool?.length){let roll=this.random()*pool.reduce((sum,e)=>sum+e.weight,0);encounter=pool.at(-1).encounter;for(const entry of pool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}

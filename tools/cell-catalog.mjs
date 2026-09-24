@@ -18,7 +18,7 @@ export function cellCatalogInventory(data){
   const line=s=>out.push(s,'');
   line(`2D ${flat.length}マップ、3D ${cubic.length}マップ、計${maps.length}マップ。2Dの通行可は${countTiles(flat.map(m=>m.tiles),'.')}セル、通行不可は${countTiles(flat.map(m=>m.tiles),'#')}セルです。`);
   out.push('### セル種プリセット','');
-  for(const [id,p] of Object.entries(data.cellTypes??{}))line(`${code(id)}：通行 ${code(p.passage)}、表示 ${code(JSON.stringify(p.visual))}、環境 ${code(JSON.stringify(p.parameters))}、セルイベント ${p.events.map(code).join('・')||'なし'}。`);
+  for(const [id,p] of Object.entries(data.cellTypes??{}))line(`${p.name??id} ${code(id)}：${p.description??''} 通行 ${code(p.passage)}、表示 ${code(JSON.stringify(p.visual))}、環境 ${code(JSON.stringify(p.parameters))}、セルイベント ${p.events.map(code).join('・')||'なし'}。`);
   out.push('### マップ別の基礎地形','');
   for(const m of maps){
     if(!m.voxels){line(`${mapLink(m.id)} ${m.name}：2D、通行可${countTiles([m.tiles],'.')}・通行不可${countTiles([m.tiles],'#')}。`);continue;}

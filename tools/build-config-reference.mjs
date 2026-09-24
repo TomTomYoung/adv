@@ -40,7 +40,7 @@ export async function configReference(folder=root){
  for(const [kind,key] of [['cellTypes','presets'],['cellEvents','events']])for(const id of Object.keys(sources['cell-layers.json'][key]))owners[kind+'/'+id]={file:'cell-layers.json',path:[key,id]};
  for(const [file,value] of Object.entries(sources))references.push(...collectReferences(value,file));
  const unresolvedReferences=references.filter(r=>!Object.hasOwn(r.kind==='maps'?maps:r.kind==='scripts'?scripts:r.kind==='images'?assets.images:r.kind==='audio'?assets.audio:names[r.kind]??{},r.id));
- return {equipmentTypes:sources['jobs.json'].profile.equipmentTypes,unresolvedReferences,references,generatedFrom:[...used].sort(),names,maps,placements,refs:[...refs].sort(),scripts,scriptOwners,owners,assets};
+ return {cellDungeons:Object.fromEntries(Object.entries(sources).filter(([f])=>f.startsWith('dungeons/')).map(([,d])=>[d.id,d])),equipmentTypes:sources['jobs.json'].profile.equipmentTypes,unresolvedReferences,references,generatedFrom:[...used].sort(),names,maps,placements,refs:[...refs].sort(),scripts,scriptOwners,owners,assets};
 }
 export async function buildConfigReference(folder=root){const value=await configReference(folder);await fs.writeFile(path.join(folder,'config/shared/reference-catalog.js'),'// Generated reference index. Edit config sources, never this file.\nexport const referenceData='+JSON.stringify(value,null,2)+';\n');return value;}
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){const value=await buildConfigReference();console.log(`EDITOR REFERENCES: ${Object.keys(value.maps).length} maps, ${value.placements.length} event placements`);}

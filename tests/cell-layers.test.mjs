@@ -87,7 +87,7 @@ test('current plant and terrain patches project all layer changes and restore th
     const {g,d}=game(data.dungeons[id].entries.main.map),[system,spec]=Object.entries(d.dungeons[id].systems).find(([,s])=>s.use===use),persistent=g.state.dungeons.persistent[id].systems[system];
     const plot=spec.plots?.find(p=>p.terrain.bridge),patch=plot?.terrain.bridge[0]??spec.states[1].tiles[0],m=d.maps[patch.map];
     if(plot){const [species,kind]=Object.entries(spec.species).find(([,s])=>s.terrain==='bridge');persistent.plants[plot.id]={species,age:kind.growth};}else persistent.phase=spec.states[1].id;
-    assert.equal(dungeonCell(d,g.state,m,patch.x,patch.y).passage,patch.tile);assert.deepEqual(dungeonCell(d,g.state,m,patch.x,patch.y).visual,patch.layers.visual);
+    assert.equal(dungeonCell(d,g.state,m,patch.x,patch.y).passage,patch.tile);assert.deepEqual(dungeonCell(d,g.state,m,patch.x,patch.y).visual,{...authoredCellLayers(d,m,patch.x,patch.y).visual,...patch.layers.visual});
     if(plot){delete persistent.plants[plot.id];assert.deepEqual(dungeonCell(d,g.state,m,patch.x,patch.y),authoredCellLayers(d,m,patch.x,patch.y));}
   }
 });

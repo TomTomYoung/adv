@@ -1,3 +1,4 @@
+import {cellBindingErrors} from '../../../src/core/cell-behaviors.js';
 import {EditorContext} from './context.js';
 import {collectReferences} from './references.js';
 import {get,pathLabel} from './workspace.js';
@@ -11,6 +12,7 @@ export function checkWorkspace(snapshot,files,base,schemas){
  const deleted=new Set(Object.entries(base.owners??{}).filter(([,o])=>snapshot.has(o.file)&&(o.id?get(snapshot.get(o.file),o.path)?.id!==o.id:get(snapshot.get(o.file),o.path)===undefined)).map(([key])=>key));
  for(const r of references){if(!files.includes(r.file)&&!deleted.has(r.kind+'/'+r.id))continue;if(!Object.hasOwn(context.names(r.kind),r.id)&&!existingGaps.has(JSON.stringify(r)))fail(r.file,r.path,`参照先がありません：${r.id}`);}
  const maps=context.maps(),cellSource=snapshot.get('cell-layers.json');
+ if(cellSource&&(files.includes('cell-layers.json')||files.some(f=>f.startsWith('dungeons/')))){const dungeons={...base.cellDungeons};for(const [file,value] of snapshot)if(file.startsWith('dungeons/'))dungeons[value.id]=value;for(const e of cellBindingErrors(cellSource,dungeons))fail('cell-layers.json',['maps',e.map,'rows',e.y],e.message);}
  for(const file of files){const value=snapshot.get(file);if(!value)continue;
   function walk(v,path=[]){if(!v||typeof v!=='object')return;
    if(typeof v.map==='string'&&Number.isInteger(v.x)&&Number.isInteger(v.y)){

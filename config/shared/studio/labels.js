@@ -20,3 +20,8 @@ Object.assign(labels,{literal:'値',passage:'通行',object:'配置物',assets:'
 Object.assign(enumNames,{...commandNames,...expressionNames,...systemNames,earth:'土',damage:'ダメージ',heal:'HP回復',restore_mp:'MP回復',drain_mp:'MP吸収',guard:'防御',status:'状態異常',cleanse:'状態異常を治す',buff:'強化・弱体',cover:'かばう',analyze:'分析',repel:'撃退',consumable:'消耗品',material:'素材',equipment:'装備',key:'重要品',dungeon_tool:'迷宮の道具',entrance:'入口',watertight_door:'水密扉',battle:'戦闘',start:'開始時',round_start:'ターン開始時',before_end:'終了前',move:'移動時',object:'配置物の変化',state:'状態の変化',classic:'通常探索',bridge:'橋',barrier:'障壁',vine:'つた',str:'力',vit:'防御',agi:'速さ',int:'知力','battle.skill':'戦闘技能','archive.unlock':'書物の封印を解く','inventory.convert':'道具を加工する','fire.kindling':'火を起こす','wall.break':'壁を壊す','party.heal':'隊を回復する','voxel.traverse':'旧3Dの経路を渡る','water.traverse':'水中を渡る','party.dry':'濡れを解消する',toll:'通行料',barter:'物々交換',buy:'購入',escort:'護衛',guardian:'守護者',elevator:'昇降機',repair:'修理',equipped:'装備中',up:'上',down:'下',ladder:'はしご',rope:'縄',fixed:'固定',install:'設置',skill:'技能',pump:'排水',dig:'掘削',auto:'自動'});
 export const label=key=>labels[key]??key;
 export const enumLabel=value=>value===null?'なし':enumNames[value]??String(value);
+
+Object.assign(labels,{surface:'表面の模様',water_depth:'固定水深（0〜2）',slippery:'進入方向へ滑る',fragile:'離れた後に崩れる',safe:'通常の歩行遭遇を抑止',binding:'連動する仕掛け',corrosion:'一歩の塩蓄積'});
+Object.assign(enumNames,{stone:'通常の石',earth:'土',wood:'木目',wet:'濡れた石',cracked:'亀裂',salt:'塩',roots:'根',thorns:'茨',poison:'毒沼',corrosion:'腐食',rune:'紋様',rock:'岩盤',air_pocket:'空気溜まり',root_bridge:'根橋の対象',thorn_wall:'茨の対象'});
+
+Object.assign(enumNames,{poison_step:'毒沼への進入'});

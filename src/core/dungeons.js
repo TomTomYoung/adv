@@ -1,3 +1,4 @@
+import {collapsedCell} from './cell-behaviors.js';
 import {voxelAt,voxelPoint} from './voxels.js';
 import {voxelSpace} from './systems/voxel-space.js';
 import {fireNetwork} from './systems/fire-network.js';
@@ -33,7 +34,7 @@ export function dungeonContexts(data,state){
 export function dungeonTile(data,state,map,x,y){
   let tile=map?.tiles[y]?.[x];
   for(const ctx of dungeonContexts(data,state))tile=DUNGEON_SYSTEMS[ctx.spec.use].tile?.(ctx,map,x,y)??tile;
-  return tile;
+  return collapsedCell(state,map?.id,x,y)?'#':tile;
 }
 export function dungeonCell(data,state,map,x,y){
   if(!data.game.cellLayerVersion)return legacyCellLayers(dungeonTile(data,state,map,x,y));
@@ -42,6 +43,7 @@ export function dungeonCell(data,state,map,x,y){
     const patch=DUNGEON_SYSTEMS[ctx.spec.use].cell?.(ctx,map,x,y);
     if(patch)cell=mergeCellLayers(cell,patch);
   }
+  if(collapsedCell(state,map.id,x,y))cell=mergeCellLayers(cell,{passage:'#',visual:{wall:false,floor:false,opaque:false},parameters:{fragile:false},events:[]});
   return cell;
 }
 export function dungeonBlock(data,state,map,x,y){
@@ -121,7 +123,9 @@ export function dungeonFieldParameters(data,state){
   return Object.fromEntries(dungeonContexts(data,state).filter(ctx=>DUNGEON_SYSTEMS[ctx.spec.use].fieldParameters).map(ctx=>[ctx.id,DUNGEON_SYSTEMS[ctx.spec.use].fieldParameters(ctx)]));
 }
 export function dungeonWaterDepth(data,state,map,x,y){
-  return dungeonContexts(data,state).reduce((depth,ctx)=>Math.max(depth,DUNGEON_SYSTEMS[ctx.spec.use].waterDepth?.(ctx,map,x,y)??0),0);
+  if(!map)return 0;
+  const base=data.game.cellLayerVersion?dungeonCell(data,state,map,x,y)?.parameters.water_depth??0:0;
+  return dungeonContexts(data,state).reduce((depth,ctx)=>Math.max(depth,DUNGEON_SYSTEMS[ctx.spec.use].waterDepth?.(ctx,map,x,y)??0),base);
 }
 export function dungeonActionPlan(data,state,intent){
   if(state.mode!=='dungeon'||state.waiting||state.battle)return {ok:false,reason:'探索中に操作してください。'};

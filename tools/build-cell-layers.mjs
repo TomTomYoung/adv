@@ -17,6 +17,7 @@ export async function buildCellLayers(root){
     data.maps[map.id]=map;
   }
   if(Object.keys(source.maps).some(id=>!data.maps[id]))throw Error('ロードされないマップのセル配置があります');
+  data.dungeons={};for(const file of await fs.readdir(path.join(root,'config/dungeons'))){if(file.endsWith('.json')){const d=await read('config/dungeons/'+file);data.dungeons[d.id]=d;}}
   const errors=validateCellLayers(data,()=>{});if(errors.length)throw Error(errors.join('\n'));
   for(const [id,map] of Object.entries(data.maps))await write(`data/maps/${id}.json`,map);
   await write('data/cell-types.json',source.presets);

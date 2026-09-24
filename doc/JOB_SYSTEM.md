@@ -54,7 +54,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ## 現行30職の定義
 
-作品版1.19.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
+作品版1.20.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
 
 ### 戦士 (warrior)
 

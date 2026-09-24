@@ -1,3 +1,4 @@
+import {cellSurfaces,cellBindings,cellBindingErrors} from './cell-behaviors.js';
 // Passage glyphs carry no material, opacity, water or event semantics.
 export const mergeCellLayers=(base,patch={})=>{const events=patch.events??base.events??[];return {...base,...patch,visual:{...base.visual,...patch.visual},parameters:{...base.parameters,...patch.parameters},events:Array.isArray(events)?[...events]:events};};
 export function authoredCellLayers(data,map,x,y){
@@ -12,18 +13,21 @@ const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const identifier=v=>typeof v==='string'&&/^[a-z][a-z0-9_]*$/.test(v)&&!['constructor','prototype','__proto__'].includes(v);
 const keys=(v,allowed)=>object(v)&&Object.keys(v).every(k=>allowed.includes(k));
 export function cellLayersValid(data,value,partial=false){
-  if(!keys(value,['passage','visual','parameters','events']))return false;
+  if(!keys(value,['name','description','passage','visual','parameters','events']))return false;
+  if(['name','description'].some(k=>value[k]!==undefined&&(typeof value[k]!=='string'||!value[k].trim())))return false;
   if((!partial||value.passage!==undefined)&&!['.','#'].includes(value.passage))return false;
   if(!partial||value.visual!==undefined){
     const v=value.visual;
-    if(!keys(v,['wall','floor','opaque','material','image'])||['wall','floor','opaque'].some(k=>(!partial||v[k]!==undefined)&&typeof v[k]!=='boolean'))return false;
+    if(!keys(v,['wall','floor','opaque','material','image','surface'])||['wall','floor','opaque'].some(k=>(!partial||v[k]!==undefined)&&typeof v[k]!=='boolean'))return false;
     if((!partial||v.material!==undefined)&&!['floor','wall'].includes(v.material))return false;
+    if(v.surface!==undefined&&!cellSurfaces.includes(v.surface))return false;
     if(v.image!==undefined&&v.image!==null&&!Object.hasOwn(data.assets.images,v.image))return false;
   }
   if(!partial||value.parameters!==undefined){
     const p=value.parameters;
     if(!object(p)||Object.entries(p).some(([k,v])=>!identifier(k)||!(typeof v==='boolean'||typeof v==='string'||Number.isFinite(v))))return false;
     if((!partial||p.illumination!==undefined)&&(!Number.isInteger(p.illumination)||p.illumination<0||p.illumination>8))return false;
+    if(p.water_depth!==undefined&&(!Number.isInteger(p.water_depth)||p.water_depth<0||p.water_depth>2)||['slippery','fragile','safe'].some(k=>p[k]!==undefined&&typeof p[k]!=='boolean')||p.corrosion!==undefined&&(!Number.isInteger(p.corrosion)||p.corrosion<0||p.corrosion>100)||p.binding!==undefined&&!cellBindings.includes(p.binding))return false;
     if((!partial||p.water_passable!==undefined)&&typeof p.water_passable!=='boolean')return false;
   }
   if((!partial||value.events!==undefined)&&(!Array.isArray(value.events)||new Set(value.events).size!==value.events.length||value.events.some(id=>!Object.hasOwn(data.cellEvents??{},id))))return false;
@@ -32,6 +36,7 @@ export function cellLayersValid(data,value,partial=false){
 export function validateCellLayers(data,expression){
   if(!data.game.cellLayerVersion)return [];
   const errors=[],bad=text=>errors.push(`セルレイヤー: ${text}`);
+  if(data.dungeons)for(const e of cellBindingErrors({presets:data.cellTypes,maps:Object.fromEntries(Object.values(data.maps).filter(m=>m.cells).map(m=>[m.id,m.cells]))},data.dungeons))bad(e.message);
   if(data.game.cellLayerVersion!==1||!object(data.cellTypes)||!Object.keys(data.cellTypes).length||!object(data.cellEvents))return ['セルレイヤー: 定義がありません'];
   for(const [id,preset] of Object.entries(data.cellTypes))if(!identifier(id)||!cellLayersValid(data,preset))bad(`プリセット不正 ${id}`);
   for(const [id,event] of Object.entries(data.cellEvents)){

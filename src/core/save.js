@@ -1,3 +1,5 @@
+import {collapseKey} from './cell-behaviors.js';
+import {authoredCellLayers} from './cell-layers.js';
 import {validateInspections} from './inspection.js';
 import {cellEntryId} from './cell-layers.js';
 import {validateFieldReactions} from './field-signals.js';
@@ -123,6 +125,7 @@ export function validateSave(save,data){
   const s=save.state;if(!isRecord(s))return ['状態がありません'];
   if(s.gameId!==data.game.id||s.contentVersion!==data.game.version||s.version!==1)fail('状態のバージョン不正');
   for(const key of ['flags','vars','actors','inventory','quests','objects','events','discovered','presentation'])if(!isRecord(s[key]))fail(`${key}不正`);
+  for(const [key,value] of Object.entries(s.events??{}))if(key.startsWith('cell-collapse/')){const match=/^cell-collapse\/([a-z][a-z0-9_]*)\/(\d+),(\d+)$/.exec(key),map=data.maps[match?.[1]],x=Number(match?.[2]),y=Number(match?.[3]);if(!match||!map||key!==collapseKey(map.id,x,y)||value!==1||!authoredCellLayers(data,map,x,y)?.parameters.fragile)fail('崩れたセルの保存記録が不正です');}
   for(const key of ['members','journal','log','vm'])if(!Array.isArray(s[key]))fail(`${key}不正`);
   if(errors.length)return errors;
   const checkPlain=(v,depth=0)=>{

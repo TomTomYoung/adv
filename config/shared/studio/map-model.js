@@ -1,3 +1,4 @@
+import {bindingSatisfied} from '../../../src/core/cell-behaviors.js';
 import {mergeCellLayers} from '../../../src/core/cell-layers.js';
 import {computeLightGrid} from '../../../src/core/light-geometry.js';
 import {get,nextId} from './workspace.js';
@@ -26,6 +27,7 @@ export function movePoint(workspace,context,target,mapId,x,y,edge){
 export function paintCell(workspace,mapId,x,y,preset){
  const source=workspace.value('cell-layers.json'),placement=source.maps[mapId];
  if(!placement?.rows[y]?.[x]||!source.presets[preset])throw Error('塗る場所とセル種を選んでください。');
+ const binding=placement.overrides?.[`${x},${y}`]?.parameters?.binding??source.presets[preset].parameters.binding;const dungeon=[...workspace.documents].filter(([file])=>file.startsWith('dungeons/')).map(([,d])=>d.value).find(d=>d.maps.includes(mapId));if(binding&&!bindingSatisfied(binding,dungeon,mapId,x,y))throw Error(`${source.presets[preset].name??preset} は ${binding} の対象地点に配置してください。「仕掛け」で対象座標を設定できます。`);
  workspace.transaction('セル種を塗る',['cell-layers.json'],docs=>{
   const p=docs['cell-layers.json'].maps[mapId];let symbol=Object.keys(p.legend).find(k=>p.legend[k]===preset);
   if(!symbol){symbol=Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789').find(k=>!Object.hasOwn(p.legend,k));if(!symbol)throw Error('このマップのセル種の記号を使い切っています。');p.legend[symbol]=preset;}

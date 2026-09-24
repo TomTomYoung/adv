@@ -1,5 +1,7 @@
 {
   "stone_floor": {
+    "name": "通常石床",
+    "description": "通常の通行床。迷宮の床素材を表示します。",
     "passage": ".",
     "visual": {
       "wall": false,
@@ -13,7 +15,255 @@
     },
     "events": []
   },
+  "earth_floor": {
+    "name": "土床",
+    "description": "土の粒状模様を持つ通行床。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "earth"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": []
+  },
+  "wood_floor": {
+    "name": "木床",
+    "description": "板の継ぎ目と木目を持つ通行床。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "wood"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": []
+  },
+  "wet_stone_floor": {
+    "name": "濡れた石床",
+    "description": "濡れた色合いの通行床。水深や滑走効果はありません。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "wet"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": []
+  },
+  "shallow_water": {
+    "name": "浅水路",
+    "description": "足元までの水を床面に表示する通行可能な浅水路。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "water_depth": 1
+    },
+    "events": []
+  },
+  "deep_water": {
+    "name": "深水路",
+    "description": "腰までの水を床面に表示します。現行2Dでは歩いて通行できます。完全水没の区画制御とは別です。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "water_depth": 2
+    },
+    "events": []
+  },
+  "submerged_passage": {
+    "name": "完全水没通路（給排水連動）",
+    "description": "区画水没の対象マップに配置します。給水中は水深3で進入禁止、排水後は通行可能。水密扉・給排水盤を仕掛けに設定してください。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "compartment_water"
+    },
+    "events": []
+  },
+  "air_pocket": {
+    "name": "空気溜まり（空気供給連動）",
+    "description": "空気供給のpocketsと同じ地点に配置します。到着時の空気回復と水面の解除は仕掛けが担当します。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "air_pocket"
+    },
+    "events": []
+  },
+  "poison_swamp": {
+    "name": "毒沼",
+    "description": "進入ごとにセルイベントから隊全員へ3ダメージ。値と本文はセルの処理で編集できます。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "poison"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": [
+      "poison_step"
+    ]
+  },
+  "corrosive_floor": {
+    "name": "腐食床（腐食連動）",
+    "description": "腐食の仕掛けがある迷宮で、歩いて入るたび装備の塩が1増えます。低下・洗浄・退出時の回復は既存の腐食処理を使います。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "corrosion"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "corrosion",
+      "corrosion": 1
+    },
+    "events": []
+  },
+  "ice_floor": {
+    "name": "滑る氷床",
+    "description": "進入した方向へ氷を抜けるまで滑ります。各セルで通常の歩行・イベント判定を行い、壁・接続口・会話・戦闘で止まります。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "ice"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "slippery": true
+    },
+    "events": []
+  },
+  "fragile_floor": {
+    "name": "崩れやすい床",
+    "description": "通過して離れた後に崩れ、通行できない穴が残ります。崩壊は保存され、自動落下は行いません。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "cracked"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "fragile": true
+    },
+    "events": []
+  },
+  "cursed_flow": {
+    "name": "呪いの流路（流向連動）",
+    "description": "帰路の呪いのvectorsまたはvectorRowsと同じ地点に配置します。逆行の累積と弱体化は仕掛けの方向・係数を使用します。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "rune"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "vector_curse"
+    },
+    "events": []
+  },
+  "suppression_floor": {
+    "name": "術封じ床（境界連動）",
+    "description": "効果を遮る境界のcellsと同じ地点に配置します。停止する技能・効果は迷宮の仕掛けで選びます。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "rune"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "suppression_zone"
+    },
+    "events": []
+  },
+  "safe_floor": {
+    "name": "安全地帯",
+    "description": "このセルでは通常の歩行遭遇を抽選しません。強制イベント・毒・呪いまで無効にするものではありません。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "safe": true
+    },
+    "events": []
+  },
   "stone_wall": {
+    "name": "石壁",
+    "description": "通常の通行不可・遮光ありの壁。迷宮の壁素材を表示します。",
     "passage": "#",
     "visual": {
       "wall": true,
@@ -24,6 +274,142 @@
     "parameters": {
       "illumination": 0,
       "water_passable": false
+    },
+    "events": []
+  },
+  "rock_wall": {
+    "name": "岩盤",
+    "description": "岩盤の外観を持つ通行不可・遮光ありの壁。自動では破壊できません。",
+    "passage": "#",
+    "visual": {
+      "wall": true,
+      "floor": false,
+      "opaque": true,
+      "material": "wall",
+      "surface": "rock"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": false
+    },
+    "events": []
+  },
+  "earth_wall": {
+    "name": "土壁",
+    "description": "土の外観を持つ通行不可・遮光ありの壁。",
+    "passage": "#",
+    "visual": {
+      "wall": true,
+      "floor": false,
+      "opaque": true,
+      "material": "wall",
+      "surface": "earth"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": false
+    },
+    "events": []
+  },
+  "salt_wall": {
+    "name": "塩壁（破壊壁連動）",
+    "description": "破壊できる壁のwallsと同じ座標に配置します。必要な道具・技能・破壊後の床は仕掛けで設定します。",
+    "passage": "#",
+    "visual": {
+      "wall": true,
+      "floor": false,
+      "opaque": true,
+      "material": "wall",
+      "surface": "salt"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": false,
+      "binding": "breakable_walls"
+    },
+    "events": []
+  },
+  "thorn_wall": {
+    "name": "茨壁の生育床（植物連動）",
+    "description": "植床のterrain.barrier対象に配置します。初期は床で、生長した塞道茨が通路を塞ぎ、伐採で床に戻ります。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor",
+      "surface": "thorns"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "thorn_wall"
+    },
+    "events": []
+  },
+  "root_bridge": {
+    "name": "根橋予定地（植物連動）",
+    "description": "植床のterrain.bridge対象に配置します。初期は通行不可で、生長した根橋草が足場を作り、採取すると元に戻ります。",
+    "passage": "#",
+    "visual": {
+      "wall": false,
+      "floor": false,
+      "opaque": false,
+      "material": "floor",
+      "surface": "roots"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true,
+      "binding": "root_bridge"
+    },
+    "events": []
+  },
+  "pit": {
+    "name": "穴・縦坑（2D）",
+    "description": "床も壁も表示しない通行不可の穴。下階への自動落下・立体空間は作りません。",
+    "passage": "#",
+    "visual": {
+      "wall": false,
+      "floor": false,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": []
+  },
+  "supported_space": {
+    "name": "足場付き空間（2D）",
+    "description": "床のある通行可能な空間。上下関係の計算は退避中の3D仕様です。",
+    "passage": ".",
+    "visual": {
+      "wall": false,
+      "floor": true,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
+    },
+    "events": []
+  },
+  "unsupported_space": {
+    "name": "足場なし空間（2D）",
+    "description": "床のない通行不可の空間。梯子や縄は別途接続・仕掛けとして設定します。",
+    "passage": "#",
+    "visual": {
+      "wall": false,
+      "floor": false,
+      "opaque": false,
+      "material": "floor"
+    },
+    "parameters": {
+      "illumination": 0,
+      "water_passable": true
     },
     "events": []
   }

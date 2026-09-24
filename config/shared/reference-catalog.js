@@ -1,5 +1,4413 @@
 // Generated reference index. Edit config sources, never this file.
 export const referenceData={
+  "cellDungeons": {
+    "kagaribi": {
+      "schemaVersion": 1,
+      "id": "kagaribi",
+      "name": "篝火の迷宮",
+      "description": "灯帰りの町が生まれるきっかけとなった迷宮。灯番の巡回区画の奥には、消えた火と未探索の通路が続く。",
+      "region": 1,
+      "recommendedLevel": 1,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "kagaribi_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "kagaribi_f1",
+        "kagaribi_f2",
+        "kagaribi_f3"
+      ],
+      "systems": {
+        "fires": {
+          "use": "fire_network",
+          "entryFixture": "entry",
+          "fuelItem": "torch",
+          "emberItem": "kagaribi_ember",
+          "portable": {
+            "item": "kagaribi_torch",
+            "capacity": 90,
+            "baseEffect": "ordinary",
+            "entryEffect": "ward",
+            "warnings": [
+              25,
+              8
+            ]
+          },
+          "threat": {
+            "encounterRate": 0.22,
+            "encounterPool": [
+              {
+                "encounter": "kuragari_hunt",
+                "weight": 1
+              }
+            ]
+          },
+          "effects": {
+            "ordinary": {
+              "name": "普通の火",
+              "description": "くらがりを遠ざける通常の火。通常の魔物は出現する。",
+              "repels": true,
+              "encounterRate": 1,
+              "enemyScale": 1,
+              "priority": 0
+            },
+            "ward": {
+              "name": "くらがり除けの火",
+              "description": "くらがりを遠ざける火。通常の魔物は出現する。",
+              "repels": true,
+              "encounterRate": 1,
+              "enemyScale": 1,
+              "priority": 10
+            },
+            "calm": {
+              "name": "鎮めの火",
+              "description": "くらがりを遠ざけ、通常遭遇率を半分、敵の強さを60%にする。",
+              "repels": true,
+              "encounterRate": 0.5,
+              "enemyScale": 0.6,
+              "priority": 20
+            },
+            "lure": {
+              "name": "呼び寄せの火",
+              "description": "くらがりを遠ざける一方、通常遭遇率を倍、敵の強さを160%にする。",
+              "repels": true,
+              "encounterRate": 2,
+              "enemyScale": 1.6,
+              "priority": 30
+            },
+            "deep": {
+              "name": "深火の種火",
+              "description": "深火の祭壇に残る火。くらがりを遠ざける。蘇生の力は確かめられていない。",
+              "repels": true,
+              "encounterRate": 0,
+              "enemyScale": 1,
+              "priority": 40
+            }
+          },
+          "fixtures": [
+            {
+              "id": "entry",
+              "name": "入口の篝火",
+              "map": "kagaribi_f1",
+              "x": 1,
+              "y": 1,
+              "effect": "ward",
+              "radius": 4,
+              "capacity": null,
+              "initiallyLit": true
+            },
+            {
+              "id": "calm",
+              "name": "青銅の火台",
+              "map": "kagaribi_f1",
+              "x": 8,
+              "y": 5,
+              "effect": "calm",
+              "radius": 3,
+              "capacity": 80,
+              "initiallyLit": false
+            },
+            {
+              "id": "crossroads",
+              "name": "交差路の篝火",
+              "map": "kagaribi_f1",
+              "x": 9,
+              "y": 7,
+              "effect": "ward",
+              "radius": 3,
+              "capacity": null,
+              "initiallyLit": true
+            },
+            {
+              "id": "landing",
+              "name": "下り口の壁面松明",
+              "map": "kagaribi_f2",
+              "x": 1,
+              "y": 1,
+              "effect": "ward",
+              "radius": 2,
+              "capacity": 60,
+              "initiallyLit": false,
+              "edge": "north"
+            },
+            {
+              "id": "lure",
+              "name": "赤鉄の火台",
+              "map": "kagaribi_f2",
+              "x": 7,
+              "y": 3,
+              "effect": "lure",
+              "radius": 4,
+              "capacity": 80,
+              "initiallyLit": false
+            },
+            {
+              "id": "refuge",
+              "name": "休息所の篝火",
+              "map": "kagaribi_f2",
+              "x": 11,
+              "y": 7,
+              "effect": "ward",
+              "radius": 3,
+              "capacity": null,
+              "initiallyLit": true
+            },
+            {
+              "id": "deep_landing",
+              "name": "深層の壁面松明",
+              "map": "kagaribi_f3",
+              "x": 1,
+              "y": 1,
+              "effect": "ward",
+              "radius": 2,
+              "capacity": 60,
+              "initiallyLit": false,
+              "edge": "north"
+            },
+            {
+              "id": "last",
+              "name": "最後の篝火",
+              "map": "kagaribi_f3",
+              "x": 7,
+              "y": 3,
+              "effect": "ward",
+              "radius": 3,
+              "capacity": null,
+              "initiallyLit": false
+            },
+            {
+              "id": "origin",
+              "name": "深火の祭壇",
+              "map": "kagaribi_f3",
+              "x": 7,
+              "y": 7,
+              "effect": "deep",
+              "radius": 2,
+              "capacity": null,
+              "initiallyLit": true
+            }
+          ]
+        },
+        "connections": {
+          "use": "map_connections",
+          "links": [
+            {
+              "id": "floor_1_2",
+              "name": "未探索区画への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_f1",
+                "x": 13,
+                "y": 7,
+                "facing": "west"
+              },
+              "b": {
+                "map": "kagaribi_f2",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_2_3",
+              "name": "未探索区画への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_f2",
+                "x": 13,
+                "y": 7,
+                "facing": "west"
+              },
+              "b": {
+                "map": "kagaribi_f3",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            }
+          ]
+        }
+      },
+      "source": "https://app.notion.com/p/3dac3c1966b38057b740df426b57da09",
+      "fieldEvents": []
+    },
+    "moving_village": {
+      "schemaVersion": 1,
+      "id": "moving_village",
+      "name": "巨獣上の移動集落",
+      "description": "巨獣の姿勢で、足場と建物の間をつなぐ道が変わる。",
+      "region": 10,
+      "recommendedLevel": 10,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "moving_village_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "moving_village_f1"
+      ],
+      "systems": {
+        "terrain": {
+          "use": "terrain_shift",
+          "title": "巨獣の姿勢と足場",
+          "mode": "random",
+          "initial": "level",
+          "interval": {
+            "min": 3,
+            "max": 7
+          },
+          "states": [
+            {
+              "id": "level",
+              "name": "平らな背",
+              "tiles": [
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 3,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 4,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "right",
+              "name": "右へ傾く背",
+              "tiles": [
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 3,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 4,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "left",
+              "name": "左へ傾く背",
+              "tiles": [
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 3,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "moving_village_f1",
+                  "x": 4,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            }
+          ],
+          "controls": [],
+          "refuges": [
+            {
+              "id": "fixed_deck",
+              "name": "固定された乗降台",
+              "map": "moving_village_f1",
+              "x": 1,
+              "y": 1
+            }
+          ]
+        }
+      }
+    },
+    "prayerless_valley": {
+      "schemaVersion": 1,
+      "id": "prayerless_valley",
+      "name": "祈りの届かない谷",
+      "description": "境界の内外で術の可否を確認し、位置取りを選ぶ。",
+      "region": 10,
+      "recommendedLevel": 10,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "prayerless_valley_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "prayerless_valley_f1"
+      ],
+      "systems": {
+        "boundary": {
+          "use": "suppression_zone",
+          "cells": [
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 6,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 7,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 10,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 1
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 2
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 2
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 2
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 6,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 7,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 10,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 3
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 4
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 7,
+              "y": 4
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 4
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 4
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 6,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 7,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 10,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 5
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 6
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 6
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 6
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 5,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 6,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 7,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 8,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 10,
+              "y": 7
+            },
+            {
+              "map": "prayerless_valley_f1",
+              "x": 11,
+              "y": 7
+            }
+          ],
+          "blockedSkills": [
+            "heal",
+            "group_heal",
+            "greater_heal",
+            "purify",
+            "holy_guard",
+            "holy_light",
+            "valley_curse"
+          ],
+          "blockedAbilities": [
+            "field_prayer"
+          ],
+          "suppressedSkills": [
+            "heal",
+            "group_heal",
+            "greater_heal",
+            "purify",
+            "holy_guard",
+            "holy_light",
+            "valley_curse"
+          ],
+          "statuses": [
+            "hollow_curse"
+          ],
+          "buffs": [
+            "holy_guard"
+          ],
+          "items": [
+            "focus"
+          ],
+          "threat": {
+            "encounter": "valley_roamers",
+            "point": {
+              "id": "lure_point",
+              "name": "境界の誘導地点",
+              "map": "prayerless_valley_f1",
+              "x": 4,
+              "y": 1
+            }
+          }
+        }
+      }
+    },
+    "region_1": {
+      "schemaVersion": 1,
+      "id": "region_1",
+      "name": "灯守の地下水道",
+      "description": "水密扉で仕切られた短い水路と、乾いた操作室・荷揚げ場をつなぐ地下水道。",
+      "region": 1,
+      "recommendedLevel": 1,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_1_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_1_f1",
+        "region_1_canal_a",
+        "region_1_landing",
+        "region_1_canal_b",
+        "region_1_inspection",
+        "region_1_f2",
+        "region_1_canal_c",
+        "region_1_lower_landing",
+        "region_1_canal_d",
+        "region_1_gatehouse"
+      ],
+      "systems": {
+        "water": {
+          "use": "compartment_water",
+          "zones": [
+            {
+              "map": "region_1_canal_a",
+              "control": "upper_gate",
+              "initiallyFlooded": true
+            },
+            {
+              "map": "region_1_canal_b",
+              "control": "upper_valve",
+              "initiallyFlooded": true
+            },
+            {
+              "map": "region_1_canal_c",
+              "control": "lower_gate",
+              "initiallyFlooded": true
+            },
+            {
+              "map": "region_1_canal_d",
+              "control": "lower_valve",
+              "initiallyFlooded": true
+            }
+          ],
+          "controls": [
+            {
+              "id": "upper_gate",
+              "name": "第一水路の給排水盤",
+              "map": "region_1_f1",
+              "x": 2,
+              "y": 1
+            },
+            {
+              "id": "upper_gate",
+              "name": "第一水路の給排水盤",
+              "map": "region_1_landing",
+              "x": 2,
+              "y": 1
+            },
+            {
+              "id": "upper_valve",
+              "name": "排水支路の給排水盤",
+              "map": "region_1_landing",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "id": "upper_valve",
+              "name": "排水支路の給排水盤",
+              "map": "region_1_inspection",
+              "x": 2,
+              "y": 1
+            },
+            {
+              "id": "lower_gate",
+              "name": "給金箱水路の給排水盤",
+              "map": "region_1_f2",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "id": "lower_gate",
+              "name": "給金箱水路の給排水盤",
+              "map": "region_1_lower_landing",
+              "x": 2,
+              "y": 1
+            },
+            {
+              "id": "lower_valve",
+              "name": "避難水路の給排水盤",
+              "map": "region_1_lower_landing",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "id": "lower_valve",
+              "name": "避難水路の給排水盤",
+              "map": "region_1_gatehouse",
+              "x": 2,
+              "y": 1
+            }
+          ]
+        },
+        "connections": {
+          "use": "map_connections",
+          "links": [
+            {
+              "id": "upper_inlet",
+              "name": "第一水路の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_f1",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_canal_a",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "upper_landing",
+              "name": "荷揚げ場の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_canal_a",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_landing",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "branch_inlet",
+              "name": "排水支路の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_landing",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_canal_b",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "branch_outlet",
+              "name": "点検室の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_canal_b",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_inspection",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "dry_stair",
+              "name": "乾いた階段室",
+              "kind": "stairs",
+              "a": {
+                "map": "region_1_landing",
+                "x": 5,
+                "y": 3,
+                "facing": "north"
+              },
+              "b": {
+                "map": "region_1_f2",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "lower_inlet",
+              "name": "給金箱水路の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_f2",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_canal_c",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "lower_landing",
+              "name": "待避場の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_canal_c",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_lower_landing",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "deep_inlet",
+              "name": "避難水路の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_lower_landing",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_canal_d",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "deep_outlet",
+              "name": "水門詰所の水密扉",
+              "kind": "watertight_door",
+              "a": {
+                "map": "region_1_canal_d",
+                "x": 9,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "region_1_gatehouse",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            }
+          ]
+        }
+      },
+      "source": "https://app.notion.com/p/3dac3c1966b381f6b53ef67b31a65ebf"
+    },
+    "region_10": {
+      "schemaVersion": 1,
+      "id": "region_10",
+      "name": "帰還者の深淵",
+      "description": "歩いてきた道を、次の隊へ渡すための最後の潜行。",
+      "region": 10,
+      "recommendedLevel": 10,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_10_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_10_f1",
+        "region_10_f2"
+      ],
+      "systems": {
+        "return_flow": {
+          "use": "vector_curse",
+          "perStep": 1,
+          "maxStacks": 100,
+          "factor": 0.6,
+          "stats": [
+            "str",
+            "vit",
+            "agi",
+            "int"
+          ],
+          "vectorRows": {
+            "region_10_f1": [
+              "###################",
+              "#↓#←↑→→→→→→→→→#↑→→#",
+              "#↓##↑######↓###↑#↓#",
+              "#↓→→→→→→→→#↓#↑→→#↓#",
+              "#########↓#↓#↑###↓#",
+              "#←←←←←←↑#↓#↓→→#←←↓#",
+              "#↓#####↑#↓#####↓###",
+              "#↓#←←↑#←←↓→→→→#↑→↑#",
+              "#↓#↓#↑#↓#####↓#↑#↑#",
+              "#↓→↓#↑#↓#←←←←↓#↑#↑#",
+              "#↓###↑#↓#↓#####↑#↑#",
+              "#↓#←←←←↓#↓→→→→→→→→#",
+              "#↓#↓#####↓#######↓#",
+              "#↓#↓→→→←←↓→→→→→→→→#",
+              "###################"
+            ],
+            "region_10_f2": [
+              "###################",
+              "#→→→#←←←←←←↑#←←←←↑#",
+              "###↓#↓#####↑#↓###↑#",
+              "#←←↓#↓→→→→#←←↓#↑#↑#",
+              "#↓###↓#####↓###↑#↑#",
+              "#↓→→#↓#↑→→#↓→→→→#↑#",
+              "###↓###↑#↓#######↑#",
+              "#←←↓#↑→→#↓→→→→→→→→#",
+              "#↓###↑#########↓#↓#",
+              "#↓#←←←←↑#←←←←←←↓#↓#",
+              "#↓#####↑#↓#↓##←↓#↓#",
+              "#↓#↑→→#↑#↓#↓#←←↓#↓#",
+              "#↓#↑#↓#↑#↓#↓#####↓#",
+              "#↓→→#↓→→#↓#↓→→←←←↓#",
+              "###################"
+            ]
+          }
+        }
+      }
+    },
+    "region_2": {
+      "schemaVersion": 1,
+      "id": "region_2",
+      "name": "塩哭きの廃坑",
+      "description": "白い坑道に残るのは、富より重い仕事の記録。",
+      "region": 2,
+      "recommendedLevel": 2,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_2_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_2_f1",
+        "region_2_f2"
+      ],
+      "systems": {
+        "salt": {
+          "use": "corrosion",
+          "perBattle": 1,
+          "eater": {
+            "enemy": "salt_eater",
+            "encounter": "salt_eater_feeding",
+            "threshold": 4
+          },
+          "washZones": [
+            {
+              "map": "region_2_f1",
+              "x": 4,
+              "y": 1
+            },
+            {
+              "map": "region_2_f2",
+              "x": 4,
+              "y": 1
+            }
+          ]
+        },
+        "walls": {
+          "use": "breakable_walls",
+          "walls": [
+            {
+              "id": "upper_entry",
+              "name": "入口脇の脆い塩壁",
+              "map": "region_2_f1",
+              "x": 6,
+              "y": 1,
+              "items": [
+                "blasting_charge"
+              ],
+              "abilities": [
+                "break_rock"
+              ],
+              "openedLayers": {
+                "visual": {
+                  "wall": false,
+                  "floor": true,
+                  "opaque": false,
+                  "material": "floor"
+                },
+                "parameters": {
+                  "illumination": 0,
+                  "water_passable": true
+                },
+                "events": []
+              }
+            },
+            {
+              "id": "upper_crossing",
+              "name": "上層の亀裂壁",
+              "map": "region_2_f1",
+              "x": 3,
+              "y": 6,
+              "items": [
+                "blasting_charge"
+              ],
+              "abilities": [
+                "break_rock"
+              ],
+              "openedLayers": {
+                "visual": {
+                  "wall": false,
+                  "floor": true,
+                  "opaque": false,
+                  "material": "floor"
+                },
+                "parameters": {
+                  "illumination": 0,
+                  "water_passable": true
+                },
+                "events": []
+              }
+            },
+            {
+              "id": "lower_entry",
+              "name": "下層入口の塩壁",
+              "map": "region_2_f2",
+              "x": 6,
+              "y": 1,
+              "items": [
+                "blasting_charge"
+              ],
+              "abilities": [
+                "break_rock"
+              ],
+              "openedLayers": {
+                "visual": {
+                  "wall": false,
+                  "floor": true,
+                  "opaque": false,
+                  "material": "floor"
+                },
+                "parameters": {
+                  "illumination": 0,
+                  "water_passable": true
+                },
+                "events": []
+              }
+            },
+            {
+              "id": "lower_crossing",
+              "name": "下層の亀裂壁",
+              "map": "region_2_f2",
+              "x": 10,
+              "y": 9,
+              "items": [
+                "blasting_charge"
+              ],
+              "abilities": [
+                "break_rock"
+              ],
+              "openedLayers": {
+                "visual": {
+                  "wall": false,
+                  "floor": true,
+                  "opaque": false,
+                  "material": "floor"
+                },
+                "parameters": {
+                  "illumination": 0,
+                  "water_passable": true
+                },
+                "events": []
+              }
+            }
+          ]
+        },
+        "connections": {
+          "use": "map_connections",
+          "links": [
+            {
+              "id": "floor_1_2",
+              "name": "地下二層への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f1",
+                "x": 13,
+                "y": 12,
+                "facing": "west"
+              },
+              "b": {
+                "map": "region_2_f2",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            }
+          ]
+        }
+      },
+      "source": "https://app.notion.com/p/3dac3c1966b3810e8954cf22aeaafc13"
+    },
+    "region_3": {
+      "schemaVersion": 1,
+      "id": "region_3",
+      "name": "根喰みの地下庭園",
+      "description": "陽の届かない庭で、育てるものと刈るものを選ぶ。",
+      "region": 3,
+      "recommendedLevel": 3,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_3_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_3_f1",
+        "region_3_f2"
+      ],
+      "systems": {
+        "garden": {
+          "use": "plant_garden",
+          "species": {
+            "cool_spore": {
+              "name": "解熱胞子",
+              "description": "範囲内の回復 +3／遭遇率 ×1。",
+              "growth": 3,
+              "radius": 3,
+              "heal": 3,
+              "encounterRate": 1,
+              "terrain": null,
+              "materials": {
+                "cool_spores": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "cool_spores": 1,
+                "medicinal_leaf": 2
+              },
+              "immatureHarvest": {
+                "cool_spores": 1
+              }
+            },
+            "red_nectar": {
+              "name": "赤蜜花",
+              "description": "範囲内の回復 +0／遭遇率 ×2。",
+              "growth": 4,
+              "radius": 3,
+              "heal": 0,
+              "encounterRate": 2,
+              "terrain": null,
+              "materials": {
+                "nectar_seed": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "nectar_seed": 1,
+                "red_nectar": 2
+              },
+              "immatureHarvest": {
+                "nectar_seed": 1
+              }
+            },
+            "quiet_moss": {
+              "name": "静謐苔",
+              "description": "範囲内の回復 +0／遭遇率 ×0.5。",
+              "growth": 3,
+              "radius": 3,
+              "heal": 0,
+              "encounterRate": 0.5,
+              "terrain": null,
+              "materials": {
+                "quiet_spores": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "quiet_spores": 1,
+                "soft_fiber": 2
+              },
+              "immatureHarvest": {
+                "quiet_spores": 1
+              }
+            },
+            "root_bridge": {
+              "name": "根橋草",
+              "description": "根が橋となり、離れた通路をつなぎます。",
+              "growth": 5,
+              "radius": 3,
+              "heal": 0,
+              "encounterRate": 1,
+              "terrain": "bridge",
+              "materials": {
+                "bridge_seed": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "bridge_seed": 1,
+                "soft_fiber": 3
+              },
+              "immatureHarvest": {
+                "bridge_seed": 1
+              }
+            },
+            "thorn_wall": {
+              "name": "塞道茨",
+              "description": "茨が伸び、近くの通路を塞ぎます。",
+              "growth": 4,
+              "radius": 3,
+              "heal": 0,
+              "encounterRate": 1,
+              "terrain": "barrier",
+              "materials": {
+                "thorn_seed": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "thorn_seed": 1,
+                "hard_thorn": 3
+              },
+              "immatureHarvest": {
+                "thorn_seed": 1
+              }
+            },
+            "stair_vine": {
+              "name": "階渡りツタ",
+              "description": "別の階層へ登れるツタが育ちます。",
+              "growth": 6,
+              "radius": 3,
+              "heal": 0,
+              "encounterRate": 1,
+              "terrain": "vine",
+              "materials": {
+                "vine_seed": 1,
+                "garden_soil": 1
+              },
+              "harvest": {
+                "vine_seed": 1,
+                "soft_fiber": 3
+              },
+              "immatureHarvest": {
+                "vine_seed": 1
+              }
+            }
+          },
+          "plots": [
+            {
+              "id": "bridge_1",
+              "name": "第1層・亀裂沿いの植床",
+              "map": "region_3_f1",
+              "x": 1,
+              "y": 3,
+              "terrain": {
+                "bridge": [
+                  {
+                    "map": "region_3_f1",
+                    "x": 1,
+                    "y": 2,
+                    "tile": ".",
+                    "layers": {
+                      "visual": {
+                        "wall": false,
+                        "floor": true,
+                        "opaque": false,
+                        "material": "floor"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": true
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "barrier_1",
+              "name": "第1層・横道の植床",
+              "map": "region_3_f1",
+              "x": 2,
+              "y": 3,
+              "terrain": {
+                "barrier": [
+                  {
+                    "map": "region_3_f1",
+                    "x": 2,
+                    "y": 2,
+                    "tile": "#",
+                    "layers": {
+                      "visual": {
+                        "wall": true,
+                        "floor": false,
+                        "opaque": true,
+                        "material": "wall"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": false
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "vine_1",
+              "name": "第1層・縦穴の植床",
+              "map": "region_3_f1",
+              "x": 5,
+              "y": 2,
+              "terrain": {
+                "vine": {
+                  "map": "region_3_f2",
+                  "x": 1,
+                  "y": 1,
+                  "facing": "south"
+                }
+              }
+            },
+            {
+              "id": "bridge_2",
+              "name": "第2層・亀裂沿いの植床",
+              "map": "region_3_f2",
+              "x": 1,
+              "y": 2,
+              "terrain": {
+                "bridge": [
+                  {
+                    "map": "region_3_f2",
+                    "x": 2,
+                    "y": 2,
+                    "tile": ".",
+                    "layers": {
+                      "visual": {
+                        "wall": false,
+                        "floor": true,
+                        "opaque": false,
+                        "material": "floor"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": true
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "barrier_2",
+              "name": "第2層・横道の植床",
+              "map": "region_3_f2",
+              "x": 1,
+              "y": 3,
+              "terrain": {
+                "barrier": [
+                  {
+                    "map": "region_3_f2",
+                    "x": 2,
+                    "y": 3,
+                    "tile": "#",
+                    "layers": {
+                      "visual": {
+                        "wall": true,
+                        "floor": false,
+                        "opaque": true,
+                        "material": "wall"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": false
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "vine_2",
+              "name": "第2層・縦穴の植床",
+              "map": "region_3_f2",
+              "x": 1,
+              "y": 5,
+              "terrain": {
+                "vine": {
+                  "map": "region_3_f1",
+                  "x": 1,
+                  "y": 1,
+                  "facing": "south"
+                }
+              }
+            }
+          ],
+          "supply": {
+            "id": "seed_box",
+            "name": "育苗箱",
+            "map": "region_3_f1",
+            "x": 1,
+            "y": 1
+          },
+          "supplies": {
+            "cool_spores": 2,
+            "nectar_seed": 2,
+            "quiet_spores": 2,
+            "bridge_seed": 2,
+            "thorn_seed": 2,
+            "vine_seed": 2,
+            "garden_soil": 12
+          }
+        },
+        "connections": {
+          "use": "map_connections",
+          "links": [
+            {
+              "id": "floor_1_2",
+              "name": "地下二層への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f1",
+                "x": 14,
+                "y": 11,
+                "facing": "west"
+              },
+              "b": {
+                "map": "region_3_f2",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "region_4": {
+      "schemaVersion": 1,
+      "id": "region_4",
+      "name": "鏡沈みの礼拝堂",
+      "description": "祈りと仕掛け。そのどちらにも、人の願いがある。",
+      "region": 4,
+      "recommendedLevel": 4,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_4_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_4_f1",
+        "region_4_f2"
+      ],
+      "systems": {
+        "mirrors": {
+          "use": "warp_network",
+          "portals": [
+            {
+              "id": "mirror_1_0",
+              "name": "第1層・入口の鏡",
+              "map": "region_4_f1",
+              "x": 1,
+              "y": 2,
+              "facing": "south",
+              "destination": "mirror_2_1"
+            },
+            {
+              "id": "mirror_1_1",
+              "name": "第1層・聖歌席の鏡",
+              "map": "region_4_f1",
+              "x": 3,
+              "y": 3,
+              "facing": "south",
+              "destination": "mirror_2_3"
+            },
+            {
+              "id": "mirror_1_2",
+              "name": "第1層・告解室の鏡",
+              "map": "region_4_f1",
+              "x": 17,
+              "y": 4,
+              "facing": "south",
+              "destination": "mirror_2_0"
+            },
+            {
+              "id": "mirror_1_3",
+              "name": "第1層・奥殿の鏡",
+              "map": "region_4_f1",
+              "x": 17,
+              "y": 8,
+              "facing": "south",
+              "destination": "mirror_2_2"
+            },
+            {
+              "id": "mirror_2_0",
+              "name": "第2層・入口の鏡",
+              "map": "region_4_f2",
+              "x": 1,
+              "y": 2,
+              "facing": "south",
+              "destination": "mirror_1_2"
+            },
+            {
+              "id": "mirror_2_1",
+              "name": "第2層・聖歌席の鏡",
+              "map": "region_4_f2",
+              "x": 13,
+              "y": 5,
+              "facing": "south",
+              "destination": "mirror_1_0"
+            },
+            {
+              "id": "mirror_2_2",
+              "name": "第2層・告解室の鏡",
+              "map": "region_4_f2",
+              "x": 16,
+              "y": 13,
+              "facing": "south",
+              "destination": "mirror_1_3"
+            },
+            {
+              "id": "mirror_2_3",
+              "name": "第2層・奥殿の鏡",
+              "map": "region_4_f2",
+              "x": 17,
+              "y": 1,
+              "facing": "south",
+              "destination": "mirror_1_1"
+            }
+          ]
+        }
+      }
+    },
+    "region_5": {
+      "schemaVersion": 1,
+      "id": "region_5",
+      "name": "灰時計の書庫",
+      "description": "閉じられた本の先にも、誰かの暮らしが続いている。",
+      "region": 5,
+      "recommendedLevel": 5,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_5_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_5_f1",
+        "region_5_f2"
+      ],
+      "systems": {
+        "library": {
+          "use": "skill_library",
+          "books": [
+            {
+              "id": "book_1_0",
+              "name": "第1層・通路の余白",
+              "map": "region_5_f1",
+              "x": 1,
+              "y": 2,
+              "skill": "read_path",
+              "api": "archive.unlock"
+            },
+            {
+              "id": "book_1_1",
+              "name": "第1層・借り物の聖光",
+              "map": "region_5_f1",
+              "x": 1,
+              "y": 5,
+              "skill": "holy_light",
+              "api": "battle.skill"
+            },
+            {
+              "id": "book_1_2",
+              "name": "第1層・息継ぎの記録",
+              "map": "region_5_f1",
+              "x": 3,
+              "y": 5,
+              "skill": "breathe",
+              "api": "battle.skill"
+            },
+            {
+              "id": "book_2_0",
+              "name": "第2層・通路の余白",
+              "map": "region_5_f2",
+              "x": 1,
+              "y": 2,
+              "skill": "read_path",
+              "api": "archive.unlock"
+            },
+            {
+              "id": "book_2_1",
+              "name": "第2層・借り物の聖光",
+              "map": "region_5_f2",
+              "x": 3,
+              "y": 3,
+              "skill": "holy_light",
+              "api": "battle.skill"
+            },
+            {
+              "id": "book_2_2",
+              "name": "第2層・息継ぎの記録",
+              "map": "region_5_f2",
+              "x": 3,
+              "y": 5,
+              "skill": "breathe",
+              "api": "battle.skill"
+            }
+          ],
+          "gates": [
+            {
+              "id": "seal_1_0",
+              "name": "第1層・封印扉1",
+              "map": "region_5_f1",
+              "x": 3,
+              "y": 2,
+              "ability": "read_path",
+              "tiles": [
+                {
+                  "map": "region_5_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seal_1_1",
+              "name": "第1層・封印扉2",
+              "map": "region_5_f1",
+              "x": 1,
+              "y": 3,
+              "ability": "read_path",
+              "tiles": [
+                {
+                  "map": "region_5_f1",
+                  "x": 2,
+                  "y": 3,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seal_2_0",
+              "name": "第2層・封印扉1",
+              "map": "region_5_f2",
+              "x": 1,
+              "y": 3,
+              "ability": "read_path",
+              "tiles": [
+                {
+                  "map": "region_5_f2",
+                  "x": 1,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seal_2_1",
+              "name": "第2層・封印扉2",
+              "map": "region_5_f2",
+              "x": 3,
+              "y": 4,
+              "ability": "read_path",
+              "tiles": [
+                {
+                  "map": "region_5_f2",
+                  "x": 2,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "region_6": {
+      "schemaVersion": 1,
+      "id": "region_6",
+      "name": "眠れる地下市場",
+      "description": "名、夢、釣銭。取引に載らない値打ちを探す。",
+      "region": 6,
+      "recommendedLevel": 6,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_6_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_6_f1",
+        "region_6_f2"
+      ],
+      "systems": {
+        "market": {
+          "use": "market_pacts",
+          "offers": [
+            {
+              "id": "toll_1",
+              "name": "第1層・通行料取りの魔物",
+              "map": "region_6_f1",
+              "x": 1,
+              "y": 2,
+              "kind": "toll",
+              "gold": 15,
+              "cost": {},
+              "output": {},
+              "tiles": [
+                {
+                  "map": "region_6_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ],
+              "description": "相手に通してもらい、横道を開きます。"
+            },
+            {
+              "id": "barter_1",
+              "name": "第1層・魔物追いの仲介人",
+              "map": "region_6_f1",
+              "x": 1,
+              "y": 3,
+              "kind": "barter",
+              "gold": 0,
+              "cost": {
+                "red_nectar": 1
+              },
+              "output": {},
+              "tiles": [
+                {
+                  "map": "region_6_f1",
+                  "x": 1,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ],
+              "description": "赤い蜜を渡し、別の魔物を追い払って通路を開きます。"
+            },
+            {
+              "id": "shop_1",
+              "name": "第1層・眠らぬ薬売り",
+              "map": "region_6_f1",
+              "x": 3,
+              "y": 3,
+              "kind": "buy",
+              "gold": 8,
+              "cost": {},
+              "output": {
+                "potion": 1
+              },
+              "tiles": [],
+              "description": "傷薬を一つ購入します。"
+            },
+            {
+              "id": "escort_1",
+              "name": "第1層・護衛の雇用所",
+              "map": "region_6_f1",
+              "x": 2,
+              "y": 5,
+              "kind": "escort",
+              "gold": 20,
+              "cost": {},
+              "output": {},
+              "tiles": [],
+              "description": "30歩の間、遭遇率と敵の強さを抑える護衛を雇います。"
+            },
+            {
+              "id": "toll_2",
+              "name": "第2層・通行料取りの魔物",
+              "map": "region_6_f2",
+              "x": 1,
+              "y": 2,
+              "kind": "toll",
+              "gold": 15,
+              "cost": {},
+              "output": {},
+              "tiles": [
+                {
+                  "map": "region_6_f2",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ],
+              "description": "相手に通してもらい、横道を開きます。"
+            },
+            {
+              "id": "barter_2",
+              "name": "第2層・魔物追いの仲介人",
+              "map": "region_6_f2",
+              "x": 1,
+              "y": 3,
+              "kind": "barter",
+              "gold": 0,
+              "cost": {
+                "red_nectar": 1
+              },
+              "output": {},
+              "tiles": [
+                {
+                  "map": "region_6_f2",
+                  "x": 1,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ],
+              "description": "赤い蜜を渡し、別の魔物を追い払って通路を開きます。"
+            },
+            {
+              "id": "shop_2",
+              "name": "第2層・眠らぬ薬売り",
+              "map": "region_6_f2",
+              "x": 3,
+              "y": 3,
+              "kind": "buy",
+              "gold": 8,
+              "cost": {},
+              "output": {
+                "potion": 1
+              },
+              "tiles": [],
+              "description": "傷薬を一つ購入します。"
+            },
+            {
+              "id": "escort_2",
+              "name": "第2層・護衛の雇用所",
+              "map": "region_6_f2",
+              "x": 5,
+              "y": 4,
+              "kind": "escort",
+              "gold": 20,
+              "cost": {},
+              "output": {},
+              "tiles": [],
+              "description": "30歩の間、遭遇率と敵の強さを抑える護衛を雇います。"
+            }
+          ],
+          "guards": [
+            {
+              "id": "guard_1_0",
+              "name": "第1層・増員用心棒1",
+              "map": "region_6_f1",
+              "x": 2,
+              "y": 4,
+              "alarm": 2
+            },
+            {
+              "id": "guard_1_1",
+              "name": "第1層・増員用心棒2",
+              "map": "region_6_f1",
+              "x": 4,
+              "y": 5,
+              "alarm": 3
+            },
+            {
+              "id": "guard_2_0",
+              "name": "第2層・増員用心棒1",
+              "map": "region_6_f2",
+              "x": 2,
+              "y": 4,
+              "alarm": 2
+            },
+            {
+              "id": "guard_2_1",
+              "name": "第2層・増員用心棒2",
+              "map": "region_6_f2",
+              "x": 4,
+              "y": 2,
+              "alarm": 3
+            }
+          ],
+          "guardEncounter": "market_enforcers",
+          "closeAt": 2,
+          "maxAlarm": 5,
+          "escortSteps": 30,
+          "escortRate": 0.35,
+          "escortEnemyScale": 0.75
+        }
+      }
+    },
+    "region_7": {
+      "schemaVersion": 1,
+      "id": "region_7",
+      "name": "黒潮の沈没城",
+      "description": "水の下に沈んだのは、城だけではなかった。",
+      "region": 7,
+      "recommendedLevel": 7,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_7_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_7_f1",
+        "region_7_f2"
+      ],
+      "systems": {
+        "air": {
+          "use": "air_supply",
+          "capacity": 36,
+          "warning": 10,
+          "perStep": 1,
+          "perBattle": 2,
+          "perRound": 2,
+          "suffocation": 0.12,
+          "water": [
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 6,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 12,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 14,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 16,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 1
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 2
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 2
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 2
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 2
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 2
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 10,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 16,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 3
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 4
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 4
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 4
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 4
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 4
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 12,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 14,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 5
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 12,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 6
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 6,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 14,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 16,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 7
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 8
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 8
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 8
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 8
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 6,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 12,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 14,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 16,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 9
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 10
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 10
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 10
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 10
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 10
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 14,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 11
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 12
+            },
+            {
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 2,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 3,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 4,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 11,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 12,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 16,
+              "y": 13
+            },
+            {
+              "map": "region_7_f1",
+              "x": 17,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 4,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 8,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 10,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 14,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 16,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 1
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 2
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 4,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 6,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 8,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 10,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 3
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 4
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 4
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 4
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 4
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 4,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 6,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 10,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 14,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 5
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 6
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 6
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 6
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 6
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 6,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 10,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 7
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 14,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 8
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 2,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 12,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 9
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 10
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 2,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 4,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 8,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 14,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 11
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 2,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 12
+            },
+            {
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 2,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 4,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 8,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 10,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 16,
+              "y": 13
+            },
+            {
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 13
+            }
+          ],
+          "pockets": [
+            {
+              "id": "air_1_0",
+              "name": "第1層・残存空気1",
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 1
+            },
+            {
+              "id": "air_1_1",
+              "name": "第1層・残存空気2",
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 13
+            },
+            {
+              "id": "air_1_2",
+              "name": "第1層・残存空気3",
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 9
+            },
+            {
+              "id": "air_1_3",
+              "name": "第1層・残存空気4",
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "id": "air_1_4",
+              "name": "第1層・残存空気5",
+              "map": "region_7_f1",
+              "x": 5,
+              "y": 5
+            },
+            {
+              "id": "air_1_5",
+              "name": "第1層・残存空気6",
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 1
+            },
+            {
+              "id": "air_1_6",
+              "name": "第1層・残存空気7",
+              "map": "region_7_f1",
+              "x": 13,
+              "y": 9
+            },
+            {
+              "id": "air_1_7",
+              "name": "第1層・残存空気8",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 7
+            },
+            {
+              "id": "air_1_8",
+              "name": "第1層・残存空気9",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 3
+            },
+            {
+              "id": "air_1_9",
+              "name": "第1層・残存空気10",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 11
+            },
+            {
+              "id": "air_2_0",
+              "name": "第2層・残存空気1",
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 1
+            },
+            {
+              "id": "air_2_1",
+              "name": "第2層・残存空気2",
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 11
+            },
+            {
+              "id": "air_2_2",
+              "name": "第2層・残存空気3",
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 11
+            },
+            {
+              "id": "air_2_3",
+              "name": "第2層・残存空気4",
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 9
+            },
+            {
+              "id": "air_2_4",
+              "name": "第2層・残存空気5",
+              "map": "region_7_f2",
+              "x": 14,
+              "y": 8
+            },
+            {
+              "id": "air_2_5",
+              "name": "第2層・残存空気6",
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 5
+            },
+            {
+              "id": "air_2_6",
+              "name": "第2層・残存空気7",
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 9
+            },
+            {
+              "id": "air_2_7",
+              "name": "第2層・残存空気8",
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 5
+            },
+            {
+              "id": "air_2_8",
+              "name": "第2層・残存空気9",
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 3
+            },
+            {
+              "id": "air_2_9",
+              "name": "第2層・残存空気10",
+              "map": "region_7_f2",
+              "x": 11,
+              "y": 3
+            },
+            {
+              "id": "air_2_10",
+              "name": "第2層・残存空気11",
+              "map": "region_7_f2",
+              "x": 9,
+              "y": 1
+            },
+            {
+              "id": "air_2_11",
+              "name": "第2層・残存空気12",
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 7
+            },
+            {
+              "id": "air_2_12",
+              "name": "第2層・残存空気13",
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 5
+            },
+            {
+              "id": "air_2_13",
+              "name": "第2層・残存空気14",
+              "map": "region_7_f2",
+              "x": 5,
+              "y": 1
+            }
+          ],
+          "devices": [
+            {
+              "id": "float_1_0",
+              "name": "第1層・浮上装置1",
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 2,
+              "pockets": [
+                {
+                  "id": "raised_air_1_0",
+                  "name": "第1層・浮上区画1",
+                  "map": "region_7_f1",
+                  "x": 1,
+                  "y": 2
+                }
+              ],
+              "tiles": [
+                {
+                  "map": "region_7_f1",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "float_1_1",
+              "name": "第1層・浮上装置2",
+              "map": "region_7_f1",
+              "x": 1,
+              "y": 3,
+              "pockets": [
+                {
+                  "id": "raised_air_1_1",
+                  "name": "第1層・浮上区画2",
+                  "map": "region_7_f1",
+                  "x": 1,
+                  "y": 3
+                }
+              ],
+              "tiles": [
+                {
+                  "map": "region_7_f1",
+                  "x": 2,
+                  "y": 3,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "float_2_0",
+              "name": "第2層・浮上装置1",
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 2,
+              "pockets": [
+                {
+                  "id": "raised_air_2_0",
+                  "name": "第2層・浮上区画1",
+                  "map": "region_7_f2",
+                  "x": 1,
+                  "y": 2
+                }
+              ],
+              "tiles": [
+                {
+                  "map": "region_7_f2",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "float_2_1",
+              "name": "第2層・浮上装置2",
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 3,
+              "pockets": [
+                {
+                  "id": "raised_air_2_1",
+                  "name": "第2層・浮上区画2",
+                  "map": "region_7_f2",
+                  "x": 1,
+                  "y": 3
+                }
+              ],
+              "tiles": [
+                {
+                  "map": "region_7_f2",
+                  "x": 2,
+                  "y": 3,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "region_8": {
+      "schemaVersion": 1,
+      "id": "region_8",
+      "name": "鉄胎の機関廟",
+      "description": "古い命令と新しい暮らしのあいだで、歯車が軋む。",
+      "region": 8,
+      "recommendedLevel": 8,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_8_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_8_f1",
+        "region_8_f2"
+      ],
+      "systems": {
+        "power": {
+          "use": "power_grid",
+          "capacity": 3,
+          "repairsPerRun": 3,
+          "controls": [
+            {
+              "id": "circuit_1_0",
+              "name": "第1層・門扉系統の配電盤",
+              "map": "region_8_f1",
+              "x": 1,
+              "y": 2
+            },
+            {
+              "id": "circuit_1_1",
+              "name": "第1層・移送系統の配電盤",
+              "map": "region_8_f1",
+              "x": 2,
+              "y": 3
+            },
+            {
+              "id": "circuit_2_0",
+              "name": "第2層・門扉系統の配電盤",
+              "map": "region_8_f2",
+              "x": 1,
+              "y": 2
+            },
+            {
+              "id": "circuit_2_1",
+              "name": "第2層・移送系統の配電盤",
+              "map": "region_8_f2",
+              "x": 3,
+              "y": 3
+            }
+          ],
+          "devices": [
+            {
+              "id": "door_1",
+              "name": "第1層・動力扉",
+              "map": "region_8_f1",
+              "x": 3,
+              "y": 4,
+              "kind": "door",
+              "circuit": "circuit_1_0",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              },
+              "tiles": [
+                {
+                  "map": "region_8_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "guardian_1",
+              "name": "第1層・門番機械",
+              "map": "region_8_f1",
+              "x": 1,
+              "y": 5,
+              "kind": "guardian",
+              "circuit": "circuit_1_0",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              }
+            },
+            {
+              "id": "elevator_1",
+              "name": "第1層・昇降機",
+              "map": "region_8_f1",
+              "x": 3,
+              "y": 2,
+              "kind": "elevator",
+              "circuit": "circuit_1_1",
+              "power": 2,
+              "salvage": {
+                "machine_part": 1
+              },
+              "destination": {
+                "map": "region_8_f2",
+                "x": 1,
+                "y": 1,
+                "facing": "south"
+              }
+            },
+            {
+              "id": "repair_1",
+              "name": "第1層・修復装置",
+              "map": "region_8_f1",
+              "x": 4,
+              "y": 3,
+              "kind": "repair",
+              "circuit": "circuit_1_1",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              }
+            },
+            {
+              "id": "door_2",
+              "name": "第2層・動力扉",
+              "map": "region_8_f2",
+              "x": 1,
+              "y": 3,
+              "kind": "door",
+              "circuit": "circuit_2_0",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              },
+              "tiles": [
+                {
+                  "map": "region_8_f2",
+                  "x": 1,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "guardian_2",
+              "name": "第2層・門番機械",
+              "map": "region_8_f2",
+              "x": 2,
+              "y": 4,
+              "kind": "guardian",
+              "circuit": "circuit_2_0",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              }
+            },
+            {
+              "id": "elevator_2",
+              "name": "第2層・昇降機",
+              "map": "region_8_f2",
+              "x": 1,
+              "y": 5,
+              "kind": "elevator",
+              "circuit": "circuit_2_1",
+              "power": 2,
+              "salvage": {
+                "machine_part": 1
+              },
+              "destination": {
+                "map": "region_8_f1",
+                "x": 1,
+                "y": 1,
+                "facing": "south"
+              }
+            },
+            {
+              "id": "repair_2",
+              "name": "第2層・修復装置",
+              "map": "region_8_f2",
+              "x": 6,
+              "y": 3,
+              "kind": "repair",
+              "circuit": "circuit_2_1",
+              "power": 1,
+              "salvage": {
+                "machine_part": 1
+              }
+            }
+          ],
+          "guardEncounter": "machine_sentry"
+        }
+      }
+    },
+    "region_9": {
+      "schemaVersion": 1,
+      "id": "region_9",
+      "name": "星欠けの地下観測所",
+      "description": "天井の星を読み、その向こうにある空を考える。",
+      "region": 9,
+      "recommendedLevel": 9,
+      "profile": "classic",
+      "entries": {
+        "main": {
+          "map": "region_9_f1",
+          "point": "entrance"
+        }
+      },
+      "maps": [
+        "region_9_f1",
+        "region_9_f2"
+      ],
+      "systems": {
+        "terrain": {
+          "use": "terrain_shift",
+          "title": "天球儀による地形変化",
+          "mode": "manual",
+          "initial": "east",
+          "states": [
+            {
+              "id": "east",
+              "name": "東星の配置",
+              "tiles": [
+                {
+                  "map": "region_9_f1",
+                  "x": 1,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 3,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 4,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 5,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 3,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 6,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            },
+            {
+              "id": "west",
+              "name": "西星の配置",
+              "tiles": [
+                {
+                  "map": "region_9_f1",
+                  "x": 1,
+                  "y": 4,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 2,
+                  "y": 4,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 3,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f1",
+                  "x": 4,
+                  "y": 2,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 5,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 3,
+                  "y": 2,
+                  "tile": "#",
+                  "layers": {
+                    "visual": {
+                      "wall": true,
+                      "floor": false,
+                      "opaque": true,
+                      "material": "wall"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": false
+                    },
+                    "events": []
+                  }
+                },
+                {
+                  "map": "region_9_f2",
+                  "x": 2,
+                  "y": 6,
+                  "tile": ".",
+                  "layers": {
+                    "visual": {
+                      "wall": false,
+                      "floor": true,
+                      "opaque": false,
+                      "material": "floor"
+                    },
+                    "parameters": {
+                      "illumination": 0,
+                      "water_passable": true
+                    },
+                    "events": []
+                  }
+                }
+              ]
+            }
+          ],
+          "controls": [
+            {
+              "id": "orrery_1",
+              "name": "第1層の天球儀",
+              "map": "region_9_f1",
+              "x": 1,
+              "y": 2
+            },
+            {
+              "id": "orrery_2",
+              "name": "第2層の天球儀",
+              "map": "region_9_f2",
+              "x": 1,
+              "y": 2
+            }
+          ],
+          "refuges": [
+            {
+              "id": "refuge_1",
+              "name": "第1層の固定足場",
+              "map": "region_9_f1",
+              "x": 1,
+              "y": 1
+            },
+            {
+              "id": "refuge_2",
+              "name": "第2層の固定足場",
+              "map": "region_9_f2",
+              "x": 1,
+              "y": 1
+            }
+          ]
+        }
+      }
+    }
+  },
   "equipmentTypes": {
     "weapon": [
       "sword",
@@ -9376,6 +13784,27 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "q200.flow.visit"
+    },
+    {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "poison_swamp",
+        "events",
+        0
+      ],
+      "kind": "cellEvents",
+      "id": "poison_step"
+    },
+    {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "poison_step",
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "cell.poison_step"
     },
     {
       "file": "connected-maps.json",
@@ -26008,13 +30437,83 @@ export const referenceData={
     },
     "cellTypes": {
       "stone_floor": {
-        "name": "stone_floor"
+        "name": "通常石床"
+      },
+      "earth_floor": {
+        "name": "土床"
+      },
+      "wood_floor": {
+        "name": "木床"
+      },
+      "wet_stone_floor": {
+        "name": "濡れた石床"
+      },
+      "shallow_water": {
+        "name": "浅水路"
+      },
+      "deep_water": {
+        "name": "深水路"
+      },
+      "submerged_passage": {
+        "name": "完全水没通路（給排水連動）"
+      },
+      "air_pocket": {
+        "name": "空気溜まり（空気供給連動）"
+      },
+      "poison_swamp": {
+        "name": "毒沼"
+      },
+      "corrosive_floor": {
+        "name": "腐食床（腐食連動）"
+      },
+      "ice_floor": {
+        "name": "滑る氷床"
+      },
+      "fragile_floor": {
+        "name": "崩れやすい床"
+      },
+      "cursed_flow": {
+        "name": "呪いの流路（流向連動）"
+      },
+      "suppression_floor": {
+        "name": "術封じ床（境界連動）"
+      },
+      "safe_floor": {
+        "name": "安全地帯"
       },
       "stone_wall": {
-        "name": "stone_wall"
+        "name": "石壁"
+      },
+      "rock_wall": {
+        "name": "岩盤"
+      },
+      "earth_wall": {
+        "name": "土壁"
+      },
+      "salt_wall": {
+        "name": "塩壁（破壊壁連動）"
+      },
+      "thorn_wall": {
+        "name": "茨壁の生育床（植物連動）"
+      },
+      "root_bridge": {
+        "name": "根橋予定地（植物連動）"
+      },
+      "pit": {
+        "name": "穴・縦坑（2D）"
+      },
+      "supported_space": {
+        "name": "足場付き空間（2D）"
+      },
+      "unsupported_space": {
+        "name": "足場なし空間（2D）"
       }
     },
-    "cellEvents": {},
+    "cellEvents": {
+      "poison_step": {
+        "name": "poison_step"
+      }
+    },
     "quests": {
       "q001": {
         "name": "帰らない灯番"
@@ -38348,6 +42847,10 @@ export const referenceData={
       "name": "moving_village.exit",
       "file": "config/dungeon-content.json"
     },
+    "cell.poison_step": {
+      "name": "毒の沼地を踏んだ。",
+      "file": "config/cell-layers.json"
+    },
     "q001.v11.entry": {
       "name": "入口の篝火の下で、新人が松明を両手で握っていた。",
       "file": "data/quests/q001.json"
@@ -47234,6 +51737,13 @@ export const referenceData={
         "dungeon.scene.moving_village.v1"
       ]
     },
+    "cell.poison_step": {
+      "file": "cell-layers.json",
+      "path": [
+        "scripts",
+        "cell.poison_step"
+      ]
+    },
     "prayerless_valley.exit": {
       "file": "dungeon-content.json",
       "path": [
@@ -52583,6 +57093,13 @@ export const referenceData={
         "dungeon.scene.moving_village.v1"
       ]
     },
+    "scripts/cell.poison_step": {
+      "file": "cell-layers.json",
+      "path": [
+        "scripts",
+        "cell.poison_step"
+      ]
+    },
     "scripts/prayerless_valley.exit": {
       "file": "dungeon-content.json",
       "path": [
@@ -52832,11 +57349,172 @@ export const referenceData={
         "stone_floor"
       ]
     },
+    "cellTypes/earth_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "earth_floor"
+      ]
+    },
+    "cellTypes/wood_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "wood_floor"
+      ]
+    },
+    "cellTypes/wet_stone_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "wet_stone_floor"
+      ]
+    },
+    "cellTypes/shallow_water": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "shallow_water"
+      ]
+    },
+    "cellTypes/deep_water": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "deep_water"
+      ]
+    },
+    "cellTypes/submerged_passage": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "submerged_passage"
+      ]
+    },
+    "cellTypes/air_pocket": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "air_pocket"
+      ]
+    },
+    "cellTypes/poison_swamp": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "poison_swamp"
+      ]
+    },
+    "cellTypes/corrosive_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "corrosive_floor"
+      ]
+    },
+    "cellTypes/ice_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "ice_floor"
+      ]
+    },
+    "cellTypes/fragile_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "fragile_floor"
+      ]
+    },
+    "cellTypes/cursed_flow": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "cursed_flow"
+      ]
+    },
+    "cellTypes/suppression_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "suppression_floor"
+      ]
+    },
+    "cellTypes/safe_floor": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "safe_floor"
+      ]
+    },
     "cellTypes/stone_wall": {
       "file": "cell-layers.json",
       "path": [
         "presets",
         "stone_wall"
+      ]
+    },
+    "cellTypes/rock_wall": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "rock_wall"
+      ]
+    },
+    "cellTypes/earth_wall": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "earth_wall"
+      ]
+    },
+    "cellTypes/salt_wall": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "salt_wall"
+      ]
+    },
+    "cellTypes/thorn_wall": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "thorn_wall"
+      ]
+    },
+    "cellTypes/root_bridge": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "root_bridge"
+      ]
+    },
+    "cellTypes/pit": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "pit"
+      ]
+    },
+    "cellTypes/supported_space": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "supported_space"
+      ]
+    },
+    "cellTypes/unsupported_space": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "unsupported_space"
+      ]
+    },
+    "cellEvents/poison_step": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "poison_step"
       ]
     }
   },

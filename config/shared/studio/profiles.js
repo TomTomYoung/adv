@@ -30,7 +30,7 @@ export const groups={
  ability:[['基本',['name','description','api','target','modes']],['消費',['mp','hp','materials']],['効果',['output','radius','effect','cue']]],
  map:[['基本',['name','region','floor','dungeon','background','music']],['入口・遭遇',['entrance','encounter','encounterRate','encounterPool']],['配置物',['objects']],['旧3Dの面と経路',['voxels']]],
  location:[['基本',['name','description','background']],['接続',['parent','links','dungeons']],['施設・人物',['shop','party','quests','services','cast']]],
- cell:[['通行',['passage']],['外観・遮光',['visual']],['性質・イベント',['parameters','events']]],
+ cell:[['名前・用途',['name','description']],['通行',['passage']],['外観・遮光',['visual']],['性質・イベント',['parameters','events']]],
  story:[['本文',['title','brief','past','progression']],['分岐',['nodes']],['結末',['outcomes']],['制約・メモ',['authoringNotes']]],
  sound:[['基本',['name','use','instrument','gain']],['音符',['notes']]],
  effect:[['基本',['name','category','duration','palette']],['効果の構成',['tracks']]],
