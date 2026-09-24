@@ -1,5 +1,7 @@
 # adv ドキュメント
 
+通常の地形編集は[統合マップ編集](../config/map.html)から始めます。操作と編集先JSONは[編集UIの仕様](CONFIG_EDITORS.md)、公開先は[Pages URL一覧](CONFIG_EDITOR_URLS.md)を参照してください。
+
 更新日: 2026-09-24。対象は作品版1.19.0。便利調べる・任意調べるとエッジ上のたいまつを追加しました。通常は33件の2Dマップを読み込み、シナリオ本文と選択肢をメッセージウィンドウへ統合しています。[2D区画接続と水密扉](CONNECTED_2D_MAPS.md)、[現在の状態](CURRENT_STATUS.md)を確認してください。
 
 最初に[現行仕様](SPEC.md)、[検証・残作業](PROGRESS.md)、[引き継ぎ](HANDOFF.md)を読んでください。[データ集計](DATA_SNAPSHOT.json)は配布JSONから生成します。

@@ -1,12 +1,21 @@
 # 設定編集HTMLのGitHub Pages URL一覧
 
-更新日: 2026-09-24。編集HTML全225件への直接リンクです。
+更新日: 2026-09-24。統合マップ編集と原稿別編集HTML全225件への直接リンクです。
 
 [設定一覧・検索画面](https://tomtomyoung.github.io/adv/config/index.html)
 
 公開先: https://tomtomyoung.github.io/adv/config/index.html
 
 使い方・検証範囲・JSONの反映方法は[設定JSONの編集画面](CONFIG_EDITORS.md)を参照してください。各リンクはGitHub Pages上の編集画面を開きます。変更を公開するには、対応JSONへの貼り付けとGitHubへの反映を行います。
+
+## 通常の作業入口
+
+1. [マップ編集](https://tomtomyoung.github.io/adv/config/map.html) — 迷宮・マップを選んで複数JSONを一緒に編集
+2. [篝火の迷宮を編集](https://tomtomyoung.github.io/adv/config/map.html?dungeon=kagaribi) — 篝火を選択した状態で開く
+3. [セル種の管理](https://tomtomyoung.github.io/adv/config/cell-layers.html?collection=presets) — `config/cell-layers.json` の共有設定
+4. [道具・商品の編集](https://tomtomyoung.github.io/adv/config/terrain-content.html) — `config/terrain-content.json`
+
+以下は原稿別の編集URLです。
 
 ## 物語
 

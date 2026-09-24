@@ -1,10 +1,10 @@
 import {el,button,select} from './dom.js';
 import {enumLabel} from './labels.js';
 import {projectMap,movePoint,paintCell} from './map-model.js';
-export function mapPanel(app,{mapId,target=null,paint=false,onInspect,selectedCell=null,z=0}={}){
+export function mapPanel(app,{mapId,target=null,paint=false,onInspect,selectedCell=null,z=0,mapOptions,onMapChange,onPlace}={}){
  const root=el('section','','map-panel'),context=app.context,workspace=app.workspace,meta=context.maps()[mapId];
  root.append(el('h3',target?`配置する対象：${target.name??'選択中の地点'}`:paint?'セルを塗る・調べる':'配置図'));
- const toolbar=el('div','','map-tools');toolbar.append(select(target?.omitMap?[[mapId,context.name('maps',mapId)]]:context.options('maps'),mapId,async id=>{if(!app.guard())return;try{await context.ensureMap(id);app.mapId=id;app.z=0;app.refresh();}catch(e){app.message(e.message,true);}},'表示マップ'));
+ const toolbar=el('div','','map-tools');toolbar.append(select(target?.omitMap?[[mapId,context.name('maps',mapId)]]:(mapOptions??context.options('maps')),mapId,async id=>{if(!app.guard())return;try{if(onMapChange){await onMapChange(id);return;}await context.ensureMap(id);app.mapId=id;app.z=0;app.refresh();}catch(e){app.message(e.message,true);}},'表示マップ'));
  const view=projectMap(context,mapId,z);if(!view){root.append(toolbar,el('p','マップを読み込んでください。'));return root;}
  if(view.voxels)toolbar.append(select(view.voxels.layers.map((_,i)=>[i+view.voxels.minZ,`高さ ${i+view.voxels.minZ}`]),z,n=>{app.z=Number(n);app.refresh();},'表示する高さ'));
  if(paint&&view.placement){const presets=workspace.value('cell-layers.json').presets;app.brush??=Object.keys(presets)[0];toolbar.append(select([['inspect','セルの詳細を調べる'],['paint','選んだセル種を塗る']],app.mapTool??'inspect',v=>{app.mapTool=v;app.refresh();},'マップの操作'),select(Object.keys(presets).map(id=>[id,({stone_floor:'石の床',stone_wall:'石の壁'})[id]??presets[id].name??id]),app.brush,v=>{app.brush=v;},'塗るセル種'));}
@@ -13,7 +13,8 @@ export function mapPanel(app,{mapId,target=null,paint=false,onInspect,selectedCe
  if(app.showLight)root.append(el('p','初期配置の灯火・遮光・局所照度のプレビューです。進行条件や開閉後の状態は評価しません。','preview-note'));
  const scroller=el('div','','map-scroll'),grid=el('div','','map-grid');grid.style.setProperty('--columns',view.width);grid.setAttribute('role','group');grid.setAttribute('aria-label',meta?.name??mapId);
  const click=(x,y,edge)=>{if(!app.guard())return;try{
-  if(target){movePoint(workspace,context,{...target,z},mapId,x,y,edge);app.refresh();}
+  if(onPlace){onPlace(x,y,edge);}
+  else if(target){movePoint(workspace,context,{...target,z},mapId,x,y,edge);app.refresh();}
   else if(paint&&app.mapTool==='paint'){paintCell(workspace,mapId,x,y,app.brush);app.refresh();}
   else{app.selectedCell={map:mapId,x,y,z};onInspect?.(x,y);app.refresh();}
  }catch(e){app.message(e.message,true);}};
