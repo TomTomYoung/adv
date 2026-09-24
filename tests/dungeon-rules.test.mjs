@@ -24,7 +24,9 @@ for(const ending of ['informed','compromise'])test(`q001 ${ending}: fire rules, 
  assert.match(g.state.log.join('\n'),/くらがり除け/);assert.equal(g.state.stories.q001.values.rookieAt,'entry');
  for(const id of ['talk','inspect','follow']){choose(g,id);roundtrip(g);assert.equal(g.state.stories.q001.values.rookieAt,'entry');}
  const lamp=data.maps.kagaribi_f1.objects.find(o=>o.id==='q001_last_lamp');assert.equal(g.objectState(lamp),'low');
- assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);choose(g,'support');roundtrip(g);
+ assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);
+ const random=g.random.bind(g);g.random=()=>0.999999;choose(g,'support');roundtrip(g);
+ assert.equal(g.state.battle.encounter,'kuragari_hunt');assert.ok(g.state.battle.continuations.frame,'q001 must use authored event continuations, not a random encounter');g.random=random;
  assert.equal(g.state.objects['kagaribi_f1/q001_last_lamp'],'extinguished');assert.equal(fireContext(data,g.state).run.portable.lit,false);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false);
  assert.equal(g.state.stories.q001.values.darkness,'attacking');fight(g);roundtrip(g);
  const v=g.state.stories.q001.values;assert.equal(v.afraid,true);assert.equal(v.steppedForward,true);assert.equal(v.rookieAt,'dark');assert.equal(v.oldOil+v.newOil+v.oilUsed,2);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);

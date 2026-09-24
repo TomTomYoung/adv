@@ -34,22 +34,28 @@
         ]
       },
       "threat": {
-        "encounter": "kuragari_hunt"
+        "encounterRate": 0.22,
+        "encounterPool": [
+          {
+            "encounter": "kuragari_hunt",
+            "weight": 1
+          }
+        ]
       },
       "effects": {
         "ordinary": {
           "name": "普通の火",
-          "description": "明かりはあるが、くらがりを退ける魔力はない。",
-          "repels": false,
+          "description": "くらがりを遠ざける通常の火。通常の魔物は出現する。",
+          "repels": true,
           "encounterRate": 1,
           "enemyScale": 1,
           "priority": 0
         },
         "ward": {
           "name": "くらがり除けの火",
-          "description": "くらがりと通常の魔物を遠ざける安全用の火。",
+          "description": "くらがりを遠ざける火。通常の魔物は出現する。",
           "repels": true,
-          "encounterRate": 0,
+          "encounterRate": 1,
           "enemyScale": 1,
           "priority": 10
         },
@@ -223,29 +229,5 @@
     }
   },
   "source": "https://app.notion.com/p/3dac3c1966b38057b740df426b57da09",
-  "fieldEvents": [
-    {
-      "id": "unprotected_kuragari",
-      "title": "火の守りを失った通路のくらがり",
-      "watch": [
-        "enter",
-        "move",
-        "light",
-        "object",
-        "state"
-      ],
-      "repeat": "change",
-      "condition": {
-        "op": "not",
-        "arg": {
-          "ref": "field.environment.fires.protected"
-        }
-      },
-      "action": {
-        "type": "battle",
-        "encounter": "kuragari_hunt"
-      },
-      "message": "火の守りが届かない。くらがりが通路から襲いかかる。"
-    }
-  ]
+  "fieldEvents": []
 }

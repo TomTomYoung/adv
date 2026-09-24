@@ -42,13 +42,13 @@ test('aura follows connected passages and is limited to the configured map',()=>
   place(g,'kagaribi_f1',7,3);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false,'neither entry nor patrol torch reaches across the wall');
   place(g,'kagaribi_f2',1,1);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false,'same coordinates on a different floor receive no aura');
 });
-test('unprotected movement forces kuragari even off the ordinary encounter cadence',()=>{
-  const g=begin();action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.state.steps=0;
+test('unprotected movement rolls for kuragari only on the ordinary encounter cadence',()=>{
+  const g=begin();action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.state.steps=g.data.system.encounterCheckSteps-1;g.random=()=>0;
   assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.battle.encounter,'kuragari_hunt');assert.equal(g.state.records.battles,1);roundtrip(g);
   assert.equal(action(g,'ignite'),false,'field actions are unavailable during battle');
 });
-test('a lit ordinary portable torch is not a magical ward; refill preserves a live transferred effect',()=>{
-  const g=begin();action(g,'extinguish');action(g,'ignite');assert.equal(flame(g).effect,'ordinary');place(g,'kagaribi_f2',2,1);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,false);
+test('a lit ordinary portable torch repels kuragari; refill preserves a live transferred effect',()=>{
+  const g=begin();action(g,'extinguish');action(g,'ignite');assert.equal(flame(g).effect,'ordinary');place(g,'kagaribi_f2',2,1);assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);
   const h=begin();flame(h).fuel=12;const count=h.state.inventory.torch;assert.ok(h.dispatch({type:'item',item:'torch',actor:'ada'}));assert.equal(flame(h).effect,'ward');assert.equal(flame(h).fuel,90);assert.equal(h.state.inventory.torch,count-1);
   assert.equal(h.dispatch({type:'item',item:'torch',actor:'ada'}),false);assert.equal(h.state.inventory.torch,count-1);
 });
@@ -60,14 +60,14 @@ test('field skills enforce job, living party membership, MP and target reach bef
   assert.ok(before);roundtrip(g);
 });
 test('lamplighter repels kuragari without kills, victory rewards or player escape, and relights the torch',()=>{
-  const g=begin(true);g.state.members=['ada'];action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.dispatch({type:'move',direction:'forward'});
+  const g=begin(true);g.state.members=['ada'];action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.state.steps=g.data.system.encounterCheckSteps-1;g.random=()=>0;g.dispatch({type:'move',direction:'forward'});
   const reward={gold:g.state.gold,xp:g.state.xp},hp=g.state.battle.enemies[0].hp;assert.equal(activeActor(g),'ada');assert.ok(hp>=1000);
   assert.ok(battleSkillPlan(g,'ada','repel_kuragari','ada').ok);roundtrip(g);
   assert.ok(g.dispatch({type:'battle',action:'skill',skill:'repel_kuragari',target:'ada'}));assert.equal(g.state.battle,null);assert.equal(g.state.records.repels,1);assert.equal(g.state.records.wins,0);assert.equal(g.state.records.escapes,0);assert.equal(g.state.records.kills.kuragari,undefined);assert.deepEqual({gold:g.state.gold,xp:g.state.xp},reward);assert.equal(flame(g).effect,'ward');roundtrip(g);
   g.startBattle('kagaribi_roaming',{win:[],escape:[],lose:[]});assert.equal(battleSkillPlan(g,'ada','repel_kuragari','ada').ok,false);
 });
 test('escaping kuragari does not recursively restart the same battle in one input',()=>{
-  const g=begin();action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.dispatch({type:'move',direction:'forward'});g.random=()=>0;
+  const g=begin();action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.state.steps=g.data.system.encounterCheckSteps-1;g.random=()=>0;g.dispatch({type:'move',direction:'forward'});g.random=()=>0;
   assert.ok(g.dispatch({type:'battle',action:'escape'}));assert.equal(g.state.battle,null);assert.equal(g.state.records.battles,1);assert.equal(g.state.records.escapes,1);
 });
 test('normal encounter strength is calculated from active fires and survives battle save/replay',()=>{
@@ -78,7 +78,7 @@ test('normal encounter strength is calculated from active fires and survives bat
 });
 test('every floor and the deep seed can be reached using actual movement and stairs',()=>{
   const g=begin(true);g.state.inventory.torch=99;
-  const walk=(x,y)=>{for(const [nx,ny] of pathTo(g,x,y)){const l=g.state.location,wanted=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==wanted)g.dispatch({type:'move',direction:'right'});if(flame(g).fuel<30)action(g,'refuel');assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.battle,null);}};
+  g.random=()=>0.999999;const walk=(x,y)=>{for(const [nx,ny] of pathTo(g,x,y)){const l=g.state.location,wanted=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==wanted)g.dispatch({type:'move',direction:'right'});if(flame(g).fuel<30)action(g,'refuel');assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.battle,null);}};
   for(const next of ['kagaribi_f2','kagaribi_f3']){walk(13,7);inspect(g);drain(g);assert.equal(g.state.location.map,next);roundtrip(g);}
   walk(7,7);assert.ok(action(g,'collect','origin'));assert.equal(fireContext(g.data,g.state).run.ember.effect,'deep');g.returnTown();assert.equal(g.state.inventory.kagaribi_ember,1);assert.equal(g.state.inventory.kagaribi_torch,0);roundtrip(g);
   g.dispatch({type:'travel',dungeon:'kagaribi'});assert.equal(fireContext(data,g.state).run.ember.effect,'deep');assert.equal(g.state.inventory.kagaribi_torch,1);

@@ -160,9 +160,10 @@ export class GameEngine {
     if(processFieldEvents(this))return true;
     if(dungeonDanger(this))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
-    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0))*this.partyEffect('encounterRate')*environment.rate)){
+    if(!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate)){
       let encounter=map.encounter;
-      if(map.encounterPool?.length){let roll=this.random()*map.encounterPool.reduce((sum,e)=>sum+e.weight,0);encounter=map.encounterPool.at(-1).encounter;for(const entry of map.encounterPool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
+      const pool=environment.encounterPool??map.encounterPool;
+      if(pool?.length){let roll=this.random()*pool.reduce((sum,e)=>sum+e.weight,0);encounter=pool.at(-1).encounter;for(const entry of pool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
       encounter=environment.encounter??encounter;
       this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
     }

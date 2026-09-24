@@ -23,27 +23,9 @@ const countScript=(d,id,commands=[])=>d.scripts[`test.${id}`]={commands:[{op:'ad
 const move=(g,direction='forward')=>assert.ok(g.dispatch({type:'move',direction}));
 const fire=(g,action)=>assert.ok(g.dispatch({type:'dungeon.action',system:'fires',action,target:'portable'}));
 
-test('kuragari is authored as a common condition, with no fire danger hook; extinction and movement rearm it',()=>{
-  const {g}=make();processFieldEvents(g);assert.equal(fireNetwork.danger,undefined);
-  assert.equal(g.state.battle,null);fire(g,'extinguish');assert.equal(g.state.battle.encounter,'kuragari_hunt');
-  assert.equal(g.state.events['field/kagaribi/unprotected_kuragari'],1);checkpoint(g);
-  g.random=()=>0;assert.ok(g.dispatch({type:'battle',action:'escape'}));checkpoint(g);
-  for(let n=0;n<4;n++){processFieldEvents(g);projectGame(g);move(g,'right');}
-  assert.equal(g.state.records.battles,1);
-  assert.ok(g.dispatch({type:'player.command',id:'portable'}));assert.ok(g.dispatch({type:'choose',id:'cancel'}));
-  assert.equal(g.state.records.battles,1);checkpoint(g);
-  move(g);assert.equal(g.state.battle.encounter,'kuragari_hunt');assert.equal(g.state.records.battles,2);
-});
-
-test('ordinary light stays bright without repelling; depleted fuel is evaluated after the step',()=>{
-  const {g}=make();g.setPortableFire({fuel:2,effect:'ordinary'});
-  assert.equal(currentIllumination(g.data,g.state),8);processFieldEvents(g);assert.equal(g.state.battle.encounter,'kuragari_hunt');
-  const {g:h}=make();h.setPortableFire({fuel:1,effect:'ward'});processFieldEvents(h);assert.equal(h.state.battle,null);
-  move(h);assert.equal(fireContext(h.data,h.state).run.portable.fuel,0);assert.equal(h.state.battle.encounter,'kuragari_hunt');
-});
-
-test('pending field battles yield to an authored battle and do not restart from stale entry signals',()=>{
-  const {g,d}=make();g.setPortableFire({fuel:0,effect:null});
+test('pending conditional battles yield to an authored battle and do not restart from stale signals',()=>{
+  const event={id:'test_battle',title:'test',repeat:'change',watch:['light','move'],condition:true,action:{type:'battle',encounter:'kuragari_hunt'}};
+  const {g,d}=make([event]);signalFieldChange(d,g.state,'light');
   d.scripts.authored={commands:[{op:'battle.start',encounter:'kuragari_hunt',on_win:[],on_lose:[],on_escape:[]}]};
   g.run('authored');assert.deepEqual(g.state.fieldReactions.pending,[]);checkpoint(g);
   g.random=()=>0;g.dispatch({type:'battle',action:'escape'});assert.equal(g.state.battle,null);assert.equal(g.state.records.battles,1);
@@ -108,11 +90,11 @@ test('object state commands notify subscribers but setting an unchanged value do
 
 test('invalid subscriptions, targets, conditions, repetitions and queued saves are rejected atomically',()=>{
   for(const mutate of [e=>e.watch=['unknown'],e=>e.watch=['move','move'],e=>e.repeat='always',e=>delete e.condition,e=>e.condition={op:'bogus'},e=>e.action.encounter='missing',e=>e.action={type:'script',script:'missing'},e=>e.points=[{map:'region_2_f1',x:1,y:1}]]){
-    const d=structuredClone(data);mutate(d.dungeons.kagaribi.fieldEvents[0]);assert.ok(validateContent(d).length);
+    const d=structuredClone(data);d.dungeons.kagaribi.fieldEvents=[{id:'test_battle',title:'test',repeat:'change',watch:['move'],condition:true,action:{type:'battle',encounter:'kuragari_hunt'}}];mutate(d.dungeons.kagaribi.fieldEvents[0]);assert.ok(validateContent(d).length);
   }
-  const {g}=make();processFieldEvents(g);const before=g.save();
-  for(const mutate of [q=>q.pending=['missing'],q=>q.pending=['unprotected_kuragari','unprotected_kuragari'],q=>q.run=999,q=>q.fired=['unprotected_kuragari'],q=>q.dungeon='region_2']){
+  const {g,d}=make([scriptEvent('test_event','change',['light'])]);countScript(d,'test_event');signalFieldChange(d,g.state,'light');processFieldEvents(g);const before=g.save();
+  for(const mutate of [q=>q.pending=['missing'],q=>q.pending=['test_event','test_event'],q=>q.run=999,q=>q.fired=['test_event'],q=>q.dungeon='region_2']){
     const save=JSON.parse(before);mutate(save.state.fieldReactions);assert.throws(()=>g.load(JSON.stringify(save)));assert.equal(g.save(),before);
   }
-  const bad=JSON.parse(before);bad.state.events['field/kagaribi/unprotected_kuragari']=-1;assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
+  const bad=JSON.parse(before);bad.state.events['field/kagaribi/test_event']=-1;assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
 });

@@ -54,7 +54,7 @@ export function kindlePortable(data,state,effect){
 }
 export function canRepel(data,state,skill){
   const ctx=fireContext(data,state),battle=state.battle;
-  return Boolean(ctx&&battle&&battle.encounter===ctx.spec.threat.encounter&&ctx.spec.effects[skill.fireEffect]?.repels);
+  return Boolean(ctx&&battle&&ctx.spec.threat.encounterPool.some(e=>e.encounter===battle.encounter)&&ctx.spec.effects[skill.fireEffect]?.repels);
 }
 function plan(ctx,intent){
   const {spec,run,persistent,state}=ctx,portable=intent.target==='portable';
@@ -99,8 +99,14 @@ function validate(data,definition,spec){
   if(!object(spec.effects)||!Object.keys(spec.effects).length)return ['火の効果がありません'];
   for(const [id,e] of Object.entries(spec.effects))if(!/^[a-z][a-z0-9_]*$/.test(id)||['constructor','prototype','__proto__'].includes(id)||!object(e)||!e.name||typeof e.repels!=='boolean'||!finite(e.encounterRate,0,5)||!finite(e.enemyScale,.1,5)||!integer(e.priority,0,1000))bad(`火の効果不正 ${id}`);
   if(!p||!integer(p.capacity,2,100000)||!data.items[p.item]||!spec.effects[p.baseEffect]||!spec.effects[p.entryEffect]?.repels||!Array.isArray(p.warnings)||p.warnings.length!==2||!p.warnings.every(n=>integer(n,1,p.capacity-1))||p.warnings[0]<=p.warnings[1])bad('携帯松明・二段階警告が不正です');
-  if(!data.items[spec.fuelItem]||!data.items[spec.emberItem]||!data.encounters[spec.threat?.encounter])bad('燃料・脅威の参照不正');
-  if(data.encounters[spec.threat?.encounter]?.enemies.some(id=>data.enemies[id]?.rewards.gold||data.enemies[id]?.rewards.xp))bad('脅威の報酬は0にしてください');
+  if(!data.items[spec.fuelItem]||!data.items[spec.emberItem])bad('燃料の参照不正');
+  const threat=spec.threat,pool=threat?.encounterPool;
+  if(!finite(threat?.encounterRate,0,1)||!Array.isArray(pool)||!pool.length)bad('消灯時の遭遇確率・候補が不正です');
+  else for(const entry of pool){
+    if(!data.encounters[entry?.encounter]||!Number.isFinite(entry?.weight)||entry.weight<=0)bad('消灯時の遭遇候補・重みが不正です');
+    if(data.encounters[entry?.encounter]?.enemies.some(id=>data.enemies[id]?.rewards.gold||data.enemies[id]?.rewards.xp))bad('脅威の報酬は0にしてください');
+  }
+  if(Array.isArray(pool)&&!Number.isFinite(pool.reduce((sum,e)=>sum+(e?.weight??0),0)))bad('消灯時の遭遇重みの合計が不正です');
   if(!Array.isArray(spec.fixtures))return [...errors,'台座一覧がありません'];
   for(const f of spec.fixtures){
     const map=data.maps[f.map];
@@ -155,7 +161,14 @@ export const fireNetwork={
     for(const f of ctx.spec.fixtures){const nearby=closeTo(ctx,f);burn(ctx.persistent.fixtures[f.id],f.capacity,[],t=>{if(nearby)ctx.engine.notify(t);},f.name);}
   },
   fieldParameters:ctx=>({...fireEnvironment(ctx),fuel:ctx.run.portable.fuel}),
-  encounter:ctx=>fireEnvironment(ctx),
+  encounter:ctx=>{
+    const environment=fireEnvironment(ctx);
+    // Light protection and encounter frequency are independent. Darkness changes
+    // the encounter pool, but still uses the shared successful-step lottery.
+    return environment.protected
+      ?{...environment,encounterRate:ctx.data.maps[ctx.state.location.map].encounterRate}
+      :{...environment,rate:1,enemyScale:1,encounterRate:ctx.spec.threat.encounterRate,encounterPool:ctx.spec.threat.encounterPool};
+  },
   plan,act,project,validate,validateState
 };
 
