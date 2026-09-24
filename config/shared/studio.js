@@ -24,7 +24,7 @@ export class ConfigStudio {
   const readDefinition=async file=>{const value=await read(file);return typeof value==='string'?JSON.parse(value):value;};this.definition=createDefinitions(readDefinition);this.validateFile=createValidator(readDefinition);this.schemas=new Map();this.errors=new Map();this.cleanups=[];this.epoch=0;this.navigation=0;this.search='';this.tab=0;
   this.workspace.subscribe(()=>this.invalidate());
  }
- async start(file){this.dsl=await this.context.data('data/schemas/script.schema.json');await this.open(file);}
+ async start(file){this.dsl=await this.context.data('data/schemas/script.schema.json');await this.open(file,{collection:typeof location!=='undefined'?new URLSearchParams(location.search).get('collection')??undefined:undefined});}
  async prepare(file){const entry=fileEntry(file);if(!entry)throw Error('編集対象のJSONではありません: '+file);await this.workspace.load(file);if(!this.schemas.has(file))this.schemas.set(file,await this.definition(entry));return entry;}
  async open(file,{collection,record,path}={}){
   if(!this.guard())return;const token=++this.navigation;
@@ -79,7 +79,7 @@ export class ConfigStudio {
   this.dirty=el('span',`変更したJSON：${this.workspace.changed().length}件`);this.dirty.id='dirty';toolbar.append(this.dirty);this.root.append(toolbar,el('p','出力前に形式・数値・配置範囲・原稿間の参照を確認します。分岐の全通し実行・到達可能性・素材生成は、反映後のプロジェクト検証で確認してください。','validation-note'));
   this.status=el('p','','status');this.status.setAttribute('role','status');this.status.hidden=true;this.root.append(this.status);
   if(this.errors.size){this.message('入力エラーがあります。出力できません。',true);this.root.append(button('不正な入力を取り消す',()=>{this.errors.clear();this.refresh();}));}
-  const nav=el('nav','','collection-tabs');nav.setAttribute('aria-label','編集する内容');for(const c of collections(this.entry,this.workspace.value(this.entry.file))){const b=button(c.title,()=>this.selectCollection(c.key));b.setAttribute('aria-pressed',String(this.group().key===c.key));nav.append(b);}this.root.append(nav);
+  const nav=el('nav','','collection-tabs');nav.setAttribute('aria-label','編集する内容');for(const c of collections(this.entry,this.workspace.value(this.entry.file))){const b=button(c.title,()=>this.selectCollection(c.key));b.setAttribute('aria-pressed',String(this.group().key===c.key));if(this.entry.family==='terrain'&&c.key==='mapOpenings'){const legacy=el('details');legacy.append(el('summary','互換原稿'),b);nav.append(legacy);}else nav.append(b);}this.root.append(nav);
   const layout=el('div','','studio-layout');this.list=el('aside','','record-list');this.detail=el('section','','record-detail');this.preview=el('aside','','record-preview');layout.append(this.list,this.detail,this.preview);this.root.append(layout);
   this.renderList();this.renderDetail();this.renderPreview();this.review=el('section','','review-panel');this.review.hidden=true;this.root.append(this.review);this.renderAdvanced();
  }
@@ -101,6 +101,7 @@ export class ConfigStudio {
   clear(this.detail);const row=this.current(),group=this.group();if(!row){this.detail.append(el('p','まだ登録がありません。「新規作成」で追加できます。'));return;}
   this.recordId=row.key;const value=row.value,location={file:this.entry.file,path:row.path};
   const source=this.schemas.get(this.entry.file),schema=enrichSchema(group.kind,schemaAt(source,this.workspace.value(this.entry.file),row.path));
+  if(group.kind==='cell'){const source=this.workspace.value(this.entry.file);let count=0,maps=0;for(const p of Object.values(source.maps)){let n=0;for(const line of p.rows)for(const symbol of line)if(p.legend[symbol]===row.key)n++;if(n)maps++;count+=n;}this.detail.append(el('p',`共有セル種を編集中：${maps} マップ・${count} セルで使用。変更は全使用地点に反映され、地点ごとの上書きが優先されます。`,'cost-warning'));}
   this.detail.append(el('h2',this.recordName()),el('p',`出力先：config/${this.entry.file}${value?.id?' / ID: '+value.id:''}`,'source-caption'));
   if(group.kind==='map'){
    const owner=this.context.maps()[row.key]?.owner;if(owner&&owner.file!==this.entry.file){this.detail.append(el('p',`このマップはconfig/${owner.file}の内容が優先されます。`,'unsupported'),button('有効なマップ原稿を開く',()=>this.open(owner.file,{collection:'maps',record:row.key})));return;}
@@ -129,7 +130,7 @@ export class ConfigStudio {
   else card.append(el('p','この処理の正本はJavaScript原稿です。ここでは参照だけを設定します。生成済みのdata/は編集しません。','muted'),el('code',value.script));this.detail.append(card);
  }
  renderCellControls(){
-  this.detail.append(el('p','右の配置図でセルを選びます。「選んだセル種を塗る」で通行や外観をまとめて変更できます。'));
+  this.detail.append(el('p','配置図でセルを選びます。「選んだセル種を塗る」で通行や外観をまとめて変更できます。'));
   const cell=this.selectedCell;if(!cell||cell.map!==this.mapId)return;const source=this.workspace.value('cell-layers.json'),placement=source.maps[this.mapId],key=`${cell.x},${cell.y}`;if(!placement)return;
   const preset=placement.legend[placement.rows[cell.y][cell.x]],effective=projectMap(this.context,this.mapId).cells[cell.y][cell.x];
   this.detail.append(el('h3',`${cell.x},${cell.y} のセル`),el('p','セル種：'+this.recordName(source.presets[preset],preset,'cell')));

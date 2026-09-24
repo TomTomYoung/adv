@@ -57,10 +57,11 @@ export class EditorContext{
  placements(mapId){
   const loaded=new Set([...this.workspace.documents.keys()].filter(f=>f.startsWith('quests/'))),values=this.base.placements.filter(p=>p.map===mapId&&!loaded.has(p.file));
   for(const file of loaded)for(const [i,e] of (this.workspace.value(file).events??[]).entries())for(const [n,p] of (e.points??[]).entries())if(p.map===mapId)values.push({file,path:['events',i,'points',n],eventPath:['events',i],id:e.id,name:e.title,...p,trigger:e.trigger,fire:e.fire,initialState:e.initialState});
-  const meta=this.maps()[mapId],map=this.map(mapId);for(const [i,o] of (map?.objects??[]).entries())values.push({...o,map:mapId,file:meta.owner?.file,path:meta.owner?[...meta.owner.path,'objects',i]:null,name:o.name??o.id});
+  const meta=this.maps()[mapId],map=this.map(mapId);if(map?.entrance)values.push({...map.entrance,map:mapId,file:meta.owner?.file,path:meta.owner?[...meta.owner.path,'entrance']:null,name:'マップの入口'});for(const [i,o] of (map?.objects??[]).entries())values.push({...o,map:mapId,file:meta.owner?.file,path:meta.owner?[...meta.owner.path,'objects',i]:null,name:o.name??o.id});
   for(const [file,d] of this.workspace.documents)if(file.startsWith('dungeons/')){
-   function walk(v,path=[]){if(!v||typeof v!=='object')return;if(v.map===mapId&&Number.isInteger(v.x)&&Number.isInteger(v.y))values.push({...v,file,path,name:v.name??label(path.at(-2)??path.at(-1)),system:true});for(const [k,x] of Object.entries(v))walk(x,[...path,Array.isArray(v)?Number(k):k]);}
+   function walk(v,path=[],name){if(!v||typeof v!=='object')return;name=v.name??name;if(v.map===mapId&&Number.isInteger(v.x)&&Number.isInteger(v.y))values.push({...v,file,path,name:name?name+(['a','b'].includes(path.at(-1))?' / '+path.at(-1).toUpperCase():''):label(path.at(-2)??path.at(-1)),system:true});for(const [k,x] of Object.entries(v))walk(x,[...path,Array.isArray(v)?Number(k):k],name);}
    walk(d.value.systems,['systems']);
+   for(const [i,e] of (d.value.fieldEvents??[]).entries())for(const [n,p] of (e.points??[]).entries())if(p.map===mapId)values.push({...p,file,path:['fieldEvents',i,'points',n],eventPath:['fieldEvents',i],name:e.title??e.id});
   }return values;
  }
  refLabel(ref){
