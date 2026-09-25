@@ -20,7 +20,13 @@
 
 2026-09-25、スライム・スケルトン・構造体の3点を内蔵画像生成で作成し、背景透過のWebPへ換装しました。画像IDを共有する計20定義の敵に反映されます。旧PNGは元コミットとバイト一致し、AIPaint原稿も保持しています。生成PNGからWebPへの変換では画像寸法とアルファ値の全画素一致を確認しました。生成条件・ハッシュ・透過画素数は `assets/source/monsters/refresh-2026-09-25-batch1.json` と同名の `-prompts.json` に記録しています。
 
-`buildWorld` による正本からの再生成、`npm run build:docs`、`npm run check:docs`（55文書・2601リンク・20保存原文）、`node tools/validate.mjs`、`node tools/check-static.mjs`、`git diff --check` が成功しました。ゲームデータの変更は `data/assets.json` の3画像参照のみです。公開Pagesの実画面は今回再確認していません。残る旧共通画像はドラゴン1点です。
+`buildWorld` による正本からの再生成、`npm run build:docs`、`npm run check:docs`（55文書・2601リンク・20保存原文）、`node tools/validate.mjs`、`node tools/check-static.mjs`、`git diff --check` が成功しました。ゲームデータの変更は `data/assets.json` の3画像参照のみです。公開Pagesの実画面は今回再確認していません。第1便終了時点では旧共通画像のドラゴン1点が残っていました。
+
+## 旧共通魔物素材・第2便
+
+2026-09-25、第1便で残ったドラゴン1点を内蔵画像生成で作成し、透過WebPへ換装しました。共通画像IDを共有する7定義へ反映済みです。現行59定義が使う25画像ファイルはすべてWebPとなり、旧共通PNGを使う敵は0定義です。旧PNGは元コミットとバイト一致し、AIPaint原稿も保持しています。画像寸法・アルファ値を維持した変換と、全身が画像内に収まることを確認しました。生成条件・ハッシュ・透過画素数は `assets/source/monsters/refresh-2026-09-25-batch2.json` と同名の `-prompts.json` に記録しています。
+
+`buildWorld` による再生成、`npm run build:docs`、`npm run check:docs`（55文書・2605リンク・20保存原文）、`node tools/validate.mjs`、`node tools/check-static.mjs`、`git diff --check` が成功しました。ゲームデータの変更は `data/assets.json` のドラゴン画像参照のみです。公開Pagesの実画面は今回再確認していません。
 
 ## 過去に確認済みの範囲
 

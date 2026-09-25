@@ -17,7 +17,9 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 現在のくらがり画像は `wraith` が参照する `assets/images/monsters/wraith.webp` です。同じ画像を地域4・5・9の迷宮獣／守護者、腐肉鬼、足跡の追跡者も共有しています。くらがりだけの専用画像IDへ分離された状態ではありません。旧PNGの保存と現行の参照は[適用記録](../../assets/source/characters/recovery-2026-09-24.json)で確認できます。
 
-2026-09-25の素材更新第1便で、共通画像ID `slime`・`skeleton`・`construct` の3点を新しい魔物素材と同じタッチの透過WebPへ換装しました。同じIDを使う各敵も新画像へ切り替わります。旧PNGとAIPaint原稿は保持し、残る旧共通画像は `dragon` です。[適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch1.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch1-prompts.json)。
+2026-09-25の素材更新第1便で、共通画像ID `slime`・`skeleton`・`construct` の3点を新しい魔物素材と同じタッチの透過WebPへ換装しました。同じIDを使う各敵も新画像へ切り替わります。[第1便の適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch1.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch1-prompts.json)。
+
+同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。
 
 旧内容版のセーブは移行しません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
 
@@ -55,9 +57,9 @@ kuragari_hunt：くらがり×1。逃走可。
 
 ### 境渡りの呪詠み (valley_hexer)
 
-<img src="../../assets/images/dragon.png" width="160" alt="境渡りの呪詠み">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="境渡りの呪詠み">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・黒潮の沈没城の守護者・帰還者の深淵の迷宮獣・帰還者の深淵の守護者・谷の飛竜・荊角獣。
 
 基礎能力：HP 112 / MP 8 / STR 28 / VIT 13 / AGI 15 / INT 26。報酬：20G / 30EXP。
@@ -772,9 +774,9 @@ story_121：荒野狼×1。逃走可。
 
 ### 谷の飛竜 (valley_drake)
 
-<img src="../../assets/images/dragon.png" width="160" alt="谷の飛竜">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="谷の飛竜">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・黒潮の沈没城の守護者・帰還者の深淵の迷宮獣・帰還者の深淵の守護者・荊角獣・境渡りの呪詠み。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -814,9 +816,9 @@ story_123：腐肉鬼×1。逃走可。
 
 ### 荊角獣 (thorn_stag)
 
-<img src="../../assets/images/dragon.png" width="160" alt="荊角獣">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="荊角獣">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・黒潮の沈没城の守護者・帰還者の深淵の迷宮獣・帰還者の深淵の守護者・谷の飛竜・境渡りの呪詠み。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -1326,9 +1328,9 @@ boss_6：眠れる地下市場の守護者×1・眠れる地下市場の迷宮�
 
 ### 黒潮の沈没城の迷宮獣 (guard_7)
 
-<img src="../../assets/images/dragon.png" width="160" alt="黒潮の沈没城の迷宮獣">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="黒潮の沈没城の迷宮獣">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の守護者・帰還者の深淵の迷宮獣・帰還者の深淵の守護者・谷の飛竜・荊角獣・境渡りの呪詠み。
 
 基礎能力：HP 85 / MP 8 / STR 22 / VIT 10 / AGI 12 / INT 20。報酬：19G / 29EXP。
@@ -1353,9 +1355,9 @@ boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1�
 
 ### 黒潮の沈没城の守護者 (guard_7_elite)
 
-<img src="../../assets/images/dragon.png" width="160" alt="黒潮の沈没城の守護者">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="黒潮の沈没城の守護者">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・帰還者の深淵の迷宮獣・帰還者の深淵の守護者・谷の飛竜・荊角獣・境渡りの呪詠み。
 
 基礎能力：HP 204 / MP 20 / STR 25 / VIT 10 / AGI 12 / INT 20。報酬：19G / 29EXP。
@@ -1476,9 +1478,9 @@ boss_9：星欠けの地下観測所の守護者×1・星欠けの地下観測�
 
 ### 帰還者の深淵の迷宮獣 (guard_10)
 
-<img src="../../assets/images/dragon.png" width="160" alt="帰還者の深淵の迷宮獣">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="帰還者の深淵の迷宮獣">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・黒潮の沈没城の守護者・帰還者の深淵の守護者・谷の飛竜・荊角獣・境渡りの呪詠み。
 
 基礎能力：HP 112 / MP 8 / STR 28 / VIT 13 / AGI 15 / INT 26。報酬：25G / 38EXP。
@@ -1503,9 +1505,9 @@ boss_10：帰還者の深淵の守護者×1・帰還者の深淵の迷宮獣×1�
 
 ### 帰還者の深淵の守護者 (guard_10_elite)
 
-<img src="../../assets/images/dragon.png" width="160" alt="帰還者の深淵の守護者">
+<img src="../../assets/images/monsters/dragon.webp" width="160" alt="帰還者の深淵の守護者">
 
-画像ID：dragon。実ファイル：[assets/images/dragon.png](../../assets/images/dragon.png)。
+画像ID：dragon。実ファイル：[assets/images/monsters/dragon.webp](../../assets/images/monsters/dragon.webp)。
 画像共有：黒潮の沈没城の迷宮獣・黒潮の沈没城の守護者・帰還者の深淵の迷宮獣・谷の飛竜・荊角獣・境渡りの呪詠み。
 
 基礎能力：HP 269 / MP 20 / STR 31 / VIT 13 / AGI 15 / INT 26。報酬：25G / 38EXP。

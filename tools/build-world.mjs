@@ -5,7 +5,7 @@ export async function buildWorld(root){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=async(f,value)=>fs.writeFile(path.join(root,f),JSON.stringify(value,null,2)+'\n');
   const game=await read('data/game.json'),locations=await read('config/locations.json'),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
-  for(const id of ['slime','skeleton','construct','wraith'])assets.images[id]=`assets/images/monsters/${id}.webp`;
+  for(const id of ['slime','skeleton','construct','wraith','dragon'])assets.images[id]=`assets/images/monsters/${id}.webp`;
   const owners={};for(const d of Object.values(dungeons))for(const map of d.maps){if(owners[map])throw Error(`Duplicate dungeon owner: ${map}`);owners[map]=d.id;}
   for(const l of Object.values(locations))assets.images[l.background]=`assets/images/locations/${l.background.slice(9)}.webp`;
   for(const id of ['curator','porter','examiner','elder','rookie','rine','accused','bearers','belt','brother','cleaners','clerks','deeppeople','eda','family','garo','gatekeeper','ina','innkeeper','inspector','mire','nearpeople','passers','passkeeper','pumpcrew','recipient','rescuers','reviewer','seller','sister','sora','storekeeper','toto','waterwatch','workers','yoru'])assets.images[`sprite_${id}`]=`assets/images/characters/sprites/${id}.webp`;
