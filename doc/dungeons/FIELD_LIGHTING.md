@@ -25,11 +25,11 @@
 
 歩行画面では壁面・床面をそれぞれのセル値で暗くし、現在セルの照度によって黒い画面レイヤーの不透明度を `0.65 * (1 - current / 8)` にする。8なら重ねず、0なら0.65。操作ボタンや会話、ミニマップはこの暗幕の外に置く。演出オフでも照明は維持する。
 
-ミニマップの踏査済みセルは、照度0でも元の地形色の55%を残す。光が強いほど明るく暖色になり、セルの説明にも「明るさ N/8」を表示する。現在地の矢印は常に読める。未踏査セルは照明情報を表示せず、光源によって未発見の地形が漏れない。
+ミニマップの踏査済みセルは、照度0でも地形素材の明るさを85%残す。光が強いほど明るく暖色になり、セルの説明にも「明るさ N/8」を表示する。現在地・配置物の正方形SVG記号には減光を掛けず、常に読める。[地図素材と拡大表示](../ui/MINIMAP.md)を参照。未踏査セルは照明情報を表示せず、光源によって未発見の地形が漏れない。
 
 ## 実装と検証
 
-計算は [lighting.js](../../src/core/lighting.js)、地形への投影は [dungeon-surfaces.js](../../src/application/dungeon-surfaces.js)、画面描画は [dungeon.js](../../src/view/dungeon.js) と [view.js](../../src/view/view.js)。[検証](../../tests/battle-events-lighting.test.mjs)で円状分布、遮蔽、重なり、消灯・救助後の再点灯、ViewModelの独立性を確認する。
+計算は [lighting.js](../../src/core/lighting.js)、地形への投影は [dungeon-surfaces.js](../../src/application/dungeon-surfaces.js)、画面描画は [dungeon.js](../../src/view/dungeon.js) と [minimap.js](../../src/view/minimap.js)。[検証](../../tests/battle-events-lighting.test.mjs)で円状分布、遮蔽、重なり、消灯・救助後の再点灯、ViewModelの独立性を確認する。
 
 ## 条件付きフィールドイベントとの共用
 

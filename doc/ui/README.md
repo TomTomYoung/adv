@@ -16,6 +16,8 @@
 
 [IN_SCENE_VIEW.md](IN_SCENE_VIEW.md)：背景内表示と従来表示、画面内ウィンドウ、長文、狭い画面の検証。
 
+[MINIMAP.md](MINIMAP.md)：正方形の地図素材、暗所の踏査記録、拡大・復帰と入力遮断。
+
 [VIEW_CONTRACT.md](VIEW_CONTRACT.md)：ViewModel、操作意図、素材と表示の責務。
 
 [EFFECT_CATALOG.md](EFFECT_CATALOG.md)：表示効果の定義と描画契約。

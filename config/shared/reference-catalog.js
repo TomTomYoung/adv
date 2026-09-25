@@ -57594,11 +57594,11 @@ export const referenceData={
   "assets": {
     "images": {
       "corridor": "assets/images/dungeon-corridor.png",
-      "slime": "assets/images/slime.png",
-      "skeleton": "assets/images/skeleton.png",
+      "slime": "assets/images/monsters/slime.webp",
+      "skeleton": "assets/images/monsters/skeleton.webp",
       "wraith": "assets/images/monsters/wraith.webp",
-      "construct": "assets/images/construct.png",
-      "dragon": "assets/images/dragon.png",
+      "construct": "assets/images/monsters/construct.webp",
+      "dragon": "assets/images/monsters/dragon.webp",
       "monster_waterwheel_beaver": "assets/images/monsters/waterwheel_beaver.webp",
       "monster_sluice_crocodile": "assets/images/monsters/sluice_crocodile.webp",
       "monster_drill_mole": "assets/images/monsters/drill_mole.webp",

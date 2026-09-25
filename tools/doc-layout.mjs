@@ -12,7 +12,7 @@ export const uiDocs = new Set([
   'PHILOSOPHY_AND_STATUS.md', 'VIEW_CONTRACT.md', 'IN_SCENE_VIEW.md',
   'INSPECTION.md', 'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md',
   'MESSAGE_AND_COMMAND_WINDOWS.md', 'CHARACTER_STAGING.md', 'SE_CATALOG.md',
-  'EFFECT_CATALOG.md'
+  'EFFECT_CATALOG.md', 'MINIMAP.md'
 ]);
 export const dungeonsDocs = new Set([
   'CELL_CATALOG.md', 'CELL_LAYERS.md', 'CONNECTED_2D_MAPS.md',

@@ -77,5 +77,5 @@ test('rendered exploration has one command window and choices are inside the mes
 });
 
 test('minimap renders edge torches alongside the cell marker and player direction',()=>{
- const dom=installDOM();try{const g=start('kagaribi');g.teleport('kagaribi_f2',1,1,'north');const m=projectGame(g),view=Object.create(GameView.prototype);view.sidebar(dom.root,m);const marker=dom.root.querySelector('.map-edge-marker.north');assert.ok(marker);assert.match(marker.getAttribute('aria-label'),/壁面松明/);assert.ok(marker.parentElement.classList.contains('current'));assert.ok(marker.parentElement.textContent.includes('↑'));}finally{dom.restore();}
+ const dom=installDOM();try{const g=start('kagaribi');g.teleport('kagaribi_f2',1,1,'north');const m=projectGame(g),view=Object.create(GameView.prototype);view.sidebar(dom.root,m);const marker=dom.root.querySelector('.map-edge-marker.north');assert.ok(marker);assert.match(marker.getAttribute('aria-label'),/壁面松明/);assert.ok(marker.parentElement.classList.contains('current'));assert.ok(marker.parentElement.querySelector('.map-player').src.endsWith('/player.svg'));assert.equal(marker.parentElement.querySelector('.map-player').style.transform,'rotate(0deg)');assert.equal(marker.parentElement.textContent,'');}finally{dom.restore();}
 });

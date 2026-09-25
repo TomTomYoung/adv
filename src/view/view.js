@@ -1,3 +1,4 @@
+import {mapSection} from './minimap.js';
 import {appendDungeonArt} from './dungeon-art.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
@@ -10,14 +11,42 @@ const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(no
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
   constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
-  destroy(){this.effects.destroy();}
+  destroy(){this.closeMap({restore:false});this.effects.destroy();}
   advanceText(){this.act({type:'advance'});}
-  blocksGameInput(){return false;}
+  blocksGameInput(){return Boolean(this.mapOverlay);}
+  openMap(){
+    if(this.mapOverlay||!this.model?.dungeon)return;
+    this.mapReturnFocus=captureFocus(this.root);
+    this.mapInert=[...this.root.children].map(e=>[e,e.inert]);for(const [e] of this.mapInert)e.inert=true;
+    const overlay=node('div','map-overlay'),panel=node('section','map-dialog');
+    panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','expanded-map-title');
+    const header=node('header','map-dialog-header'),title=node('h2','',this.model.dungeon.name);title.id='expanded-map-title';
+    const close=button('元に戻す',()=>this.closeMap());close.dataset.focus='map:close';header.append(title,close);
+    const body=node('div','map-dialog-body'),section=mapSection(this.model);section.style.setProperty('--map-expanded-width',`${this.model.dungeon.width*36+10}px`);body.append(section);
+    panel.append(header,body);overlay.append(panel);this.root.append(overlay);this.mapOverlay=overlay;
+    prepareControls(panel);focusButton(close);
+  }
+  closeMap({restore=true}={}){
+    if(!this.mapOverlay)return;
+    this.mapOverlay.remove();this.mapOverlay=null;
+    for(const [e,inert] of this.mapInert??[])e.inert=inert;this.mapInert=null;
+    if(restore){restoreFocus(this.root,this.mapReturnFocus);this.tabNavigation=true;}
+  }
+  handleKey(event){
+    const panel=this.mapOverlay?.querySelector('.map-dialog');if(!panel)return false;
+    if(event.key==='Tab'){
+      const nodes=buttons(panel),first=nodes[0],last=nodes.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();focusButton(last);}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();focusButton(first);}
+    }
+    return true;
+  }
   explorationInput(){return this.model?.mode==='dungeon'&&!this.model.busy&&!this.model.dialog&&!this.model.battle&&this.tab==='explore'&&!this.blocksGameInput()&&!this.root.querySelector('.button-picker');}
   explorationDefault(){return this.root.querySelector('[data-focus="command:interact"]:not(:disabled)');}
   resumeExploration(){this.tabNavigation=false;if(!this.explorationInput())return false;focusButton(this.explorationDefault());return true;}
   keyHint(){const exploring=this.explorationInput();return this.ui.keyHint?.(exploring)??inputHint(undefined,exploring);}
   inputScope(){
+    const expanded=this.mapOverlay?.querySelector('.map-dialog');if(expanded)return expanded;
     const panel=this.root.querySelector('.scene-window');
     if(panel)return panel.querySelector('.button-picker')??panel;
     return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
@@ -37,6 +66,7 @@ export class GameView {
   }
   closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
+    if(this.mapOverlay){this.closeMap();return;}
     if(closeDetails(this.inputScope()))return;
     const base=this.model.mode==='town'?'location':'explore';
     if(this.tab!==base){this.closePanel();return;}
@@ -50,6 +80,7 @@ export class GameView {
   }
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
+    this.closeMap({restore:false});
     const snapshot=captureFocus(this.root);this.ui.cancelFeedback?.();this.effects.capture();this.model=model;
     this.root.replaceChildren();
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
@@ -268,7 +299,7 @@ export class GameView {
   }
   sidebar(parent,m){
     const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=node('div',`party-row ${a.hp<=0?'fallen':''}`),avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
-    if(m.dungeon){const mapSection=node('section','side-section');mapSection.append(node('span','eyebrow','測量図'),node('p','muted',`${m.lightLabel??'灯油'} ${m.light}/${m.lightMax}${m.light===0?(m.dungeon.systems?.some(s=>s.kind==='fire_network')?'・台座の守りを確認してください':'・暗闇では遭遇が増えます'):''}`));const grid=node('div','minimap');grid.style.setProperty('--map-width',m.dungeon.width);grid.style.aspectRatio=`${m.dungeon.width}/${m.dungeon.height}`;grid.setAttribute('aria-label','探索済みの地図');for(const row of m.dungeon.cells)for(const cell of row){const obj=m.dungeon.objects.find(o=>!o.edge&&o.x===cell.x&&o.y===cell.y),here=cell.x===m.dungeon.location.x&&cell.y===m.dungeon.location.y;const square=node('span',`map-cell ${cell.known?(cell.wall?'wall':'floor'):'unknown'} ${cell.known&&cell.water?'flooded':''} ${here?'current':''}`);if(here)square.textContent=({north:'↑',east:'→',south:'↓',west:'←'})[m.dungeon.location.facing];else if(cell.known&&obj)square.textContent=obj.glyph;if(cell.known&&obj?.kind==='map_connection')square.dataset.connection=obj.closed?'closed':'open';if(cell.known&&cell.edges)for(const [side,closed] of Object.entries(cell.edges))if(closed)square.style[{north:'borderTop',east:'borderRight',south:'borderBottom',west:'borderLeft'}[side]]='2px solid #e4bd80';if(cell.known&&cell.waterDepth)square.dataset.depth=String(cell.waterDepth);if(cell.known&&cell.floor===false&&!cell.wall){square.classList.add('pit');if(!here&&!obj)square.textContent='○';}if(cell.known){const light=cell.illumination??0;square.dataset.light=String(light);if(!here){square.style.filter=`brightness(${.55+light/8})`;square.style.boxShadow=`inset 0 0 0 100px rgba(255,212,115,${.28*light/8})`;}}if(cell.known)square.title=`${cell.x},${cell.y}${m.dungeon.voxel?', 高さ '+m.dungeon.z+' / '+cell.waterLabel:''}${obj?' '+obj.name:''} / 明るさ ${cell.illumination??0}/8`;if(cell.known)for(const marker of m.dungeon.objects.filter(o=>o.edge&&o.x===cell.x&&o.y===cell.y)){const edge=node('span',`map-edge-marker ${marker.edge}`,marker.glyph);edge.title=marker.name;edge.setAttribute('aria-label',`${marker.name} (${marker.edge})`);square.append(edge);}grid.append(square);}mapSection.append(grid,node('p','map-legend','明るい色ほど光が強い。暗闇でも踏査済みの地図は読める。? 手掛かり　! 決着　⇵ 階段　▣ 水密扉施錠　▯ 扉通行可　≈ 水没'));parent.append(mapSection);}
+    if(m.dungeon)parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','メインクエスト'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief));this.questDestination(tracked,m.tracked);parent.append(tracked);}
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
   }

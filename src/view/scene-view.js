@@ -1,3 +1,4 @@
+import {mapSection} from './minimap.js';
 import {GameView} from './view.js';
 import {appendSceneCast} from './scene-cast.js';
 import {messagePages,pageAtOffset} from './message-pages.js';
@@ -10,15 +11,16 @@ const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabl
 export class SceneView extends GameView{
   constructor(...args){super(...args);this.messageKey=null;this.page=0;this.pages=[''];this.sceneKey=null;this.fontsChanged=()=>{const snapshot=captureFocus(this.root);if(this.measureMessage(true))this.finishInput(snapshot);};document.fonts?.addEventListener('loadingdone',this.fontsChanged);}
   destroy(){this.resizeObserver?.disconnect();globalThis.cancelAnimationFrame?.(this.measureFrame);document.fonts?.removeEventListener('loadingdone',this.fontsChanged);super.destroy();}
-  blocksGameInput(){return Boolean(this.root.querySelector('.scene-window'));}
+  blocksGameInput(){return super.blocksGameInput()||Boolean(this.root.querySelector('.scene-window'));}
   canChoose(){return this.page===this.pages.length-1;}
   advanceText(){if(!this.canChoose())this.setPage(this.page+1);else if(this.messageNodes?.dialog.type!=='description')super.advanceText();}
   setPage(page){this.page=Math.max(0,Math.min(page,this.pages.length-1));this.refreshMessage();this.finishInput(captureFocus(this.root));}
   cancel(){if(!this.blocksGameInput()&&this.model.dialog){if(this.model.dialog.cancelId||this.model.dialog.cancelAdvance){super.cancel();return;}if(this.page>0){this.setPage(this.page-1);return;}if(!this.canChoose())return;}super.cancel();}
   inputScope(){if(!this.blocksGameInput()&&!this.model.dialog&&this.model.town)return this.root.querySelector('.scene-dock')??super.inputScope();return super.inputScope();}
-  openPanel(tab){this.tab=tab;this.render(this.model);}
+  openPanel(tab){if(tab==='map'){this.openMap();return;}this.tab=tab;this.render(this.model);}
   closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   handleKey(event){
+    if(super.handleKey(event))return true;
     const panel=this.root.querySelector('.scene-window');
     if(!panel)return false;
     if(event.key==='Tab'){
@@ -69,6 +71,7 @@ export class SceneView extends GameView{
     this.page=pageAtOffset(this.pages,offset);this.refreshMessage();return true;
   }
   render(model){
+    this.closeMap({restore:false});
     const snapshot=captureFocus(this.root),oldPanel=this.root.querySelector('.scene-window-body');
     const scrollTop=oldPanel?.scrollTop??0,hadPanel=Boolean(oldPanel),oldTab=this.model?this.renderedTab:null;
     const key=JSON.stringify([model.mode,model.town?.id,model.dungeon?.location,model.dialog,model.battle?.event]);
@@ -85,7 +88,7 @@ export class SceneView extends GameView{
     place.append(make('span','eyebrow',model.town?.breadcrumbs.map(p=>p.name).join(' / ')??`${model.dungeon?.name??''} / ${model.dungeon?.floor??''}階`),make('span','scene-title',model.town?.name??model.dungeon?.name??model.title));
     const toolbar=make('nav','scene-toolbar');toolbar.setAttribute('aria-label','管理メニュー');
     for(const [id,label] of [['journal','手帳'],['bag','道具'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
-      const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;toolbar.append(b);
+      const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;if(id==='map'){b.dataset.focus='map:toolbar';b.setAttribute('aria-label','地図を拡大');b.setAttribute('aria-haspopup','dialog');}toolbar.append(b);
     }
     toolbar.append(button('記録',()=>this.ui.menu()),this.soundButton(),button('遊び方',()=>this.ui.help()));header.append(place,toolbar);hud.append(header);
     const status=make('div','scene-status');status.append(make('span','',`隊 Lv.${model.level} / ${model.gold} G`));
@@ -141,8 +144,6 @@ export class SceneView extends GameView{
     }parent.append(party);
   }
   mapPanel(parent,m){
-    // Reuse the existing cells, lighting, boundaries and labels without reinterpreting them.
-    const holder=make('div');super.sidebar(holder,m);
-    const grid=holder.querySelector('.minimap');if(grid)parent.append(grid.parentElement);
+    parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
   }
 }
