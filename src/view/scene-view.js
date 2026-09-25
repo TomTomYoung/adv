@@ -5,7 +5,7 @@ import {messagePages,pageAtOffset} from './message-pages.js';
 import {captureFocus} from './focus.js';
 const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,fn,className='')=>{const e=make('button',className,text);e.type='button';e.addEventListener('click',fn);return e;};
-const panelNames={bag:'道具・旅支度',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
+const panelNames={bag:'旅支度',shop:'ショップ',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
 const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], summary';
 
 export class SceneView extends GameView{
@@ -17,8 +17,8 @@ export class SceneView extends GameView{
   setPage(page){this.page=Math.max(0,Math.min(page,this.pages.length-1));this.refreshMessage();this.finishInput(captureFocus(this.root));}
   cancel(){if(!this.blocksGameInput()&&this.model.dialog){if(this.model.dialog.cancelId||this.model.dialog.cancelAdvance){super.cancel();return;}if(this.page>0){this.setPage(this.page-1);return;}if(!this.canChoose())return;}super.cancel();}
   inputScope(){if(!this.blocksGameInput()&&!this.model.dialog&&this.model.town)return this.root.querySelector('.scene-dock')??super.inputScope();return super.inputScope();}
-  openPanel(tab){if(tab==='map'){this.openMap();return;}this.tab=tab;this.render(this.model);}
-  closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
+  openPanel(tab){this.inventoryAction=null;if(tab==='map'){this.openMap();return;}this.tab=tab;this.render(this.model);}
+  closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   handleKey(event){
     if(super.handleKey(event))return true;
     const panel=this.root.querySelector('.scene-window');
@@ -77,8 +77,9 @@ export class SceneView extends GameView{
     const key=JSON.stringify([model.mode,model.town?.id,model.dungeon?.location,model.dialog,model.battle?.event]);
     if(this.sceneKey!==null&&this.sceneKey!==key)this.tab=model.mode==='town'?'location':'explore';
     this.sceneKey=key;this.model=model;
-    const allowed=['bag','party','journal',...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
+    const allowed=['bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
     if(!allowed.includes(this.tab))this.tab=model.mode==='town'?'location':'explore';
+    if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     this.renderedTab=this.tab;
     this.ui.cancelFeedback?.();this.effects.capture();this.root.replaceChildren();this.messageNodes=null;
     const stage=make('main','scene-stage');stage.dataset.mode=model.mode;stage.dataset.state=model.battle?'battle':model.dialog?'dialog':'idle';stage.setAttribute('aria-label',model.title);this.root.append(stage);
@@ -87,7 +88,7 @@ export class SceneView extends GameView{
     const header=make('header','scene-header'),place=make('div','scene-place');
     place.append(make('span','eyebrow',model.town?.breadcrumbs.map(p=>p.name).join(' / ')??`${model.dungeon?.name??''} / ${model.dungeon?.floor??''}階`),make('span','scene-title',model.town?.name??model.dungeon?.name??model.title));
     const toolbar=make('nav','scene-toolbar');toolbar.setAttribute('aria-label','管理メニュー');
-    for(const [id,label] of [['journal','手帳'],['bag','道具'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
+    for(const [id,label] of [['journal','手帳'],['bag','旅支度'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
       const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;if(id==='map'){b.dataset.focus='map:toolbar';b.setAttribute('aria-label','地図を拡大');b.setAttribute('aria-haspopup','dialog');}toolbar.append(b);
     }
     toolbar.append(button('記録',()=>this.ui.menu()),this.soundButton(),button('遊び方',()=>this.ui.help()));header.append(place,toolbar);hud.append(header);

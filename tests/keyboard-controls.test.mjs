@@ -36,8 +36,8 @@ for(const layout of ['scene','classic']){
     const g=newGame();g.dispatch({type:'location.move',id:'hikarigaeri_medical'});g.dispatch({type:'location.move',id:'hikarigaeri_medical_specimens'});
     const c=setup(layout,g);try{
       const save=g.save();for(const k of ['ArrowUp','ArrowRight','ArrowDown','ArrowLeft']){assert.ok(c.key(k).defaultPrevented);assert.equal(c.document.activeElement.tagName,'BUTTON');assert.ok(!c.document.activeElement.disabled);}assert.ok(g.save()===save);
-      c.panel('bag');c.key('Enter');assert.ok(c.root.querySelector('.button-picker'));
-      c.key('Escape');assert.equal(c.root.querySelector('.button-picker'),null);assert.equal(c.view.tab,'bag');
+      c.panel('bag');c.selectButton(b=>b.dataset.focus==='inventory:use:potion');c.key('Enter');assert.ok(c.root.querySelector('.inventory-choice'));
+      c.key('Escape');assert.equal(c.root.querySelector('.inventory-choice'),null);assert.equal(c.view.tab,'bag');
       c.key('Escape');assert.equal(c.view.tab,'location');assert.equal(g.state.townLocation,'hikarigaeri_medical_specimens');
       c.key('Escape');assert.equal(g.state.townLocation,'hikarigaeri_medical');
       c.key('Escape');assert.equal(g.state.townLocation,'hikarigaeri_square');
@@ -80,7 +80,7 @@ for(const layout of ['scene','classic']){
   test(`${layout}: explicit Tab traversal can open management, and cancel or direction restores direct exploration`,()=>{
     const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g);
     try{
-      assert.ok(!c.key('Tab').defaultPrevented);named(c.root,'道具').focus();c.key('Enter');assert.equal(c.view.tab,'bag');assert.equal(c.intents.length,0);
+      assert.ok(!c.key('Tab').defaultPrevented);named(c.root,'旅支度').focus();c.key('Enter');assert.equal(c.view.tab,'bag');assert.equal(c.intents.length,0);
       c.key('Escape');assert.equal(c.view.tab,'explore');c.key('Tab');c.root.querySelector('.back').focus();c.key('ArrowRight');c.key('Enter');assert.deepEqual(c.intents.at(-1),{type:'player.command',id:'interact'});
     }finally{c.cleanup();}
   });
@@ -135,12 +135,19 @@ for(const layout of ['scene','classic']){
       c.selectButton(b=>b.dataset.focus==='skill:guard');c.key('Enter');assert.equal(c.intents.length,2);assert.equal(c.intents[1].skill,'guard');assert.equal(c.root.querySelector('.battle-targets'),null);
     }finally{c.cleanup();}
   });
-  test(`${layout}: equipment target uses a cancellable picker and equipment focus survives rerender`,()=>{
+  test(`${layout}: portrait equipment selection cancels without cost and commits only after choosing a recipient`,()=>{
     const g=newGame();g.give('iron_sword',1);const c=setup(layout,g);try{
-      c.panel('bag');const original=c.view.bagActor;c.key('Enter');c.key('ArrowDown');c.key('Escape');assert.equal(c.view.bagActor,original);
-      c.key('Enter');c.key('ArrowDown');c.key('Enter');assert.equal(c.view.bagActor,'nio');assert.ok(c.document.activeElement.dataset.focus.startsWith('select:'));
-      c.key('Enter');c.key('ArrowUp');c.key('Enter');assert.equal(c.view.bagActor,'ada');
-      c.selectButton(b=>b.textContent==='装備する');c.key('Enter');assert.equal(g.state.actors.ada.equipment.weapon,'iron_sword');assert.equal(c.document.activeElement.tagName,'BUTTON');assert.ok(c.document.activeElement.isConnected);
+      c.panel('bag');const saved=g.save();
+      c.selectButton(b=>b.dataset.focus==='inventory:equip:iron_sword');c.key('Enter');
+      assert.equal(c.document.activeElement.dataset.focus,'inventory:target:ada');
+      c.key('ArrowDown');c.key('Escape');assert.equal(g.save(),saved);
+      assert.equal(c.document.activeElement.dataset.focus,'inventory:equip:iron_sword');
+      c.key('Enter');c.key('Enter');assert.equal(g.state.actors.ada.equipment.weapon,'iron_sword');
+      assert.equal(c.intents.length,1);assert.equal(c.intents[0].source,'shared');
+      c.selectButton(b=>b.dataset.focus==='inventory:holder:ada');c.key('Enter');
+      assert.equal(c.view.bagActor,'ada');assert.equal(c.document.activeElement.dataset.focus,'inventory:holder:ada');
+      c.selectButton(b=>b.dataset.focus==='inventory:unequip:weapon');c.key('Enter');assert.deepEqual(g.state.actors.ada.equipment,{});
+      assert.equal(c.document.activeElement.tagName,'BUTTON');assert.ok(c.document.activeElement.isConnected);
     }finally{c.cleanup();}
   });
   test(`${layout}: job details and candidate selection cancel one level at a time`,()=>{

@@ -64,8 +64,8 @@ for(const layout of ['scene','classic']){
     const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});const c=gameSetup(layout,g);
     try{const save=g.save();c.key('z');c.key('k');c.key('x');assert.ok(g.save()===save);assert.equal(c.intents.length,0);c.key('z');c.key('k');c.key('z');assert.equal(c.intents.at(-1).target,'enemy_1');assert.equal(c.document.activeElement.dataset.focus,'skill:attack');}finally{c.cleanup();}
   });
-  test(`${layout}: custom cancel closes a picker and utility window, while text entry keeps its keys`,()=>{
-    const c=gameSetup(layout);try{c.view.tab='bag';c.view.render(projectGame(c.engine));c.key('z');assert.ok(c.root.querySelector('.button-picker'));c.key('x');assert.equal(c.root.querySelector('.button-picker'),null);assert.equal(c.view.tab,'bag');
+  test(`${layout}: custom cancel closes an item target and utility window, while text entry keeps its keys`,()=>{
+    const c=gameSetup(layout);try{c.view.tab='bag';c.view.render(projectGame(c.engine));c.root.querySelector('[data-focus="inventory:use:potion"]').focus();c.key('z');assert.ok(c.root.querySelector('.inventory-choice'));c.key('x');assert.equal(c.root.querySelector('.inventory-choice'),null);assert.equal(c.view.tab,'bag');
       const input=c.document.createElement('input');input.type='text';c.root.append(input);input.focus();for(const k of ['x','z','i','w'])assert.ok(!c.key(k).defaultPrevented);assert.equal(c.view.tab,'bag');c.key('Escape');assert.equal(c.view.tab,'location');assert.equal(c.intents.length,0);
     }finally{c.cleanup();}
   });

@@ -1,3 +1,4 @@
+import {renderBag,renderShop,cancelInventoryAction} from './inventory-view.js';
 import {mapSection} from './minimap.js';
 import {appendDungeonArt} from './dungeon-art.js';
 import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
@@ -47,6 +48,7 @@ export class GameView {
   keyHint(){const exploring=this.explorationInput();return this.ui.keyHint?.(exploring)??inputHint(undefined,exploring);}
   inputScope(){
     const expanded=this.mapOverlay?.querySelector('.map-dialog');if(expanded)return expanded;
+    const inventory=this.root.querySelector('.inventory-choice');if(inventory)return inventory;
     const panel=this.root.querySelector('.scene-window');
     if(panel)return panel.querySelector('.button-picker')??panel;
     return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
@@ -55,7 +57,7 @@ export class GameView {
     if(!this.model.battle){this.battleTurn=null;this.battleMenu=null;this.pendingBattleAction=null;}
     this.tabNavigation=false;
     prepareControls(this.root);
-    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.battleMenu,this.pendingBattleAction]);
+    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.battleMenu,this.pendingBattleAction,this.inventoryAction,this.bagActor]);
     const same=key===this.inputKey;this.inputKey=key;
     if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
     if(this.ui.modalOpen?.())return;
@@ -64,9 +66,10 @@ export class GameView {
     const preferred=scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
     restoreFocus(scope,same?snapshot:null,preferred??(same?null:buttons(scope.querySelector('.scene-window-body')??(!['location','explore'].includes(this.tab)?scope.querySelector('.panel-content'):null)??scope)[0]));
   }
-  closePanel(){this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
+  closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
     if(this.mapOverlay){this.closeMap();return;}
+    if(cancelInventoryAction(this))return;
     if(closeDetails(this.inputScope()))return;
     const base=this.model.mode==='town'?'location':'explore';
     if(this.tab!==base){this.closePanel();return;}
@@ -89,8 +92,9 @@ export class GameView {
     const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
-    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),...(model.town?.party?[['party','酒場・仲間']]:[]),['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','道具'],['party','隊の状態'],['journal','冒険手帳']];
+    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),...(model.town?.party?[['party','酒場・仲間']]:[]),['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
+    if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     for(const [id,label] of allTabs){const b=button(label,()=>{this.tab=id;this.render(model);},id===this.tab?'active':'');b.setAttribute('aria-current',id===this.tab?'page':'false');tabs.append(b);}main.append(tabs);
     if(model.town)this.townScene(main,model);
     // Narrative and battles stay visible even if the player opens a utility tab.
@@ -102,6 +106,7 @@ export class GameView {
     else if(this.tab==='regions')this.regions(main,model);
     else if(this.tab==='party')this.party(main,model);
     else if(this.tab==='bag')this.bag(main,model);
+    else if(this.tab==='shop')this.shop(main,model);
     else this.journal(main,model);
     this.sidebar(side,model);
     if(model.notice&&model.notice!==model.dialog?.text){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
@@ -123,7 +128,7 @@ export class GameView {
     for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
     if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
     if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
-    if(t.shop)choices.append(button('品物を見せてもらう',()=>{this.tab='bag';this.render(m);}));
+    if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
     if(t.dungeons.length&&m.tracked?.destination?.kind==='dungeon')this.questEntrance(choices,m.tracked);
     if(t.dungeons.length)choices.append(button('迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
     if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
@@ -287,10 +292,8 @@ export class GameView {
     if(town){section.append(heading('REST / RECOVERY','出発前の休息'));for(const service of m.town?.services??m.services){const row=node('div','service');row.append(button(service.label,()=>this.act({type:'service',id:service.id})),node('p','muted',service.detail));section.append(row);}}
     parent.append(section);
   }
-  bag(parent,m){const section=node('div','panel-content');section.append(heading('PROVISIONS','持ち物と旅支度'));const target=node('select');target.setAttribute('aria-label','道具・装備の対象');for(const a of m.party)target.append(new Option(`${a.name} (${a.class})`,a.id));if(!m.party.some(a=>a.id===this.bagActor))this.bagActor=m.party[0]?.id;target.value=this.bagActor;target.addEventListener('change',()=>{this.bagActor=target.value;this.render(m);});section.append(target);
-    for(const item of m.inventory){const row=node('article','item-row');row.dataset.controlGroup=`item:${item.id}`;const body=node('div');body.append(node('h3','',`${item.name} ×${item.count}`),node('p','muted',item.description));row.append(body);if(item.field||item.slot)row.append(button(item.slot?'装備する':'使う',()=>this.act({type:item.slot?'equip':'item',item:item.id,actor:target.value}),'',Boolean(item.slot&&item.allowedActors&&!item.allowedActors.includes(target.value))));section.append(row);}
-    if(m.mode==='town'&&m.town?.shop){section.append(heading('TRAVEL SHOP','買い足す'));for(const item of m.shop){const row=node('article','item-row');row.dataset.controlGroup=`shop:${item.id}`;const body=node('div');body.append(node('h3','',item.name),node('p','muted',item.description));row.append(body,button(`${item.price} G`,()=>this.act({type:'buy',item:item.id}),'',!item.canBuy));section.append(row);}}parent.append(section);
-  }
+  bag(parent,m){renderBag(this,parent,m);}
+  shop(parent,m){renderShop(this,parent,m);}
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
     const active=m.quests.filter(q=>q.stage==='active');if(active.length){section.append(node('h3','','受注中'));for(const q of active){const entry=node('article','journal-entry');entry.append(node('h3','',q.title));this.questDestination(entry,q);this.mainQuestControl(entry,q,m);this.questEntrance(entry,q);section.append(entry);}}
     for(const note of m.fieldNotes??[]){const row=node('article','journal-entry');row.append(node('span','eyebrow','現地の観察'),node('h3','',note.title),node('p','muted',m.quests.find(q=>q.id===note.quest)?.title??''),node('p','',note.text));section.append(row);}

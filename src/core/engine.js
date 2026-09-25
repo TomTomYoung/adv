@@ -4,6 +4,7 @@ import {closeTo} from './systems/common.js';
 import {finishInspection} from './inspection.js';
 import {openPlayerCommand,advanceCommand,chooseCommand} from './player-commands.js';
 import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
+import {SHARED_BAG,validHolder,holderName,heldCount,moveHolding,settleHoldings,purchasePlan,transferPlan,equipmentPlan} from './inventory.js';
 import {connectionMove} from './systems/map-connections.js';
 import {compartmentBlocked} from './systems/compartment-water.js';
 import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxelMap} from './voxels.js';
@@ -21,7 +22,7 @@ import {startBattle,endBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
-import {actorStats,initializeJob,recordGrowth,knownSkills,canEquip,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
+import {actorStats,initializeJob,recordGrowth,knownSkills,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
@@ -31,6 +32,7 @@ export class GameEngine {
     this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const [item,count] of Object.entries(this.state.inventory))if(data.items[item]?.slot)addGear(this.state,item,count);
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
+    this.state.carried={};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
@@ -74,6 +76,7 @@ export class GameEngine {
     if(next<0) throw new Error('所持数が足りません');
     const capped=Math.min(this.data.system.maxStack,next);if(this.data.items[item].slot)addGear(this.state,item,capped-(this.state.inventory[item]??0));
     this.state.inventory[item]=capped;
+    if(!this.dispatching)settleHoldings(this.data,this.state);
   }
   accept(id){
     const q=this.data.quests[id];if(!q||!this.unlocked(q))return false;
@@ -214,10 +217,15 @@ export class GameEngine {
   finishBattle(result,skipEvents=false){endBattle(this,result,skipEvents);}
   startBattle(id,continuations,options){startBattle(this,id,continuations,options);}
   dispatch(intent){
-    beginFeedback(this);const commandPrompt=this.state.waiting?.type==='command';const changed=this.perform(intent);
-    finishInspection(this);
-    if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
-    return changed;
+    beginFeedback(this);const commandPrompt=this.state.waiting?.type==='command',before=this.state.inventory[intent?.item]??0;this.dispatching=true;
+    try{
+      const changed=this.perform(intent);
+      // Attribute direct item consumption before follow-up scripts can award more.
+      settleHoldings(this.data,this.state,intent?.type==='item'&&changed?{item:intent.item,source:intent.source,spent:Math.max(0,before-(this.state.inventory[intent.item]??0))}:{});
+      finishInspection(this);
+      if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
+      return changed;
+    }finally{this.dispatching=false;settleHoldings(this.data,this.state);}
   }
   perform(intent){
     const type=intent?.type;if(typeof type!=='string')return false;
@@ -262,13 +270,23 @@ export class GameEngine {
     if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
     if(type==='unequip')return this.unequip(intent.actor,intent.slot);
-    if(type==='buy'&&this.state.mode==='town'){
-      if(this.data.game.world&&!townLocation(this.data,this.state)?.shop)return false;
-      const stock=this.data.shops.goods.find(g=>g.item===intent.item);if(!stock||this.state.gold<this.price(stock.price)||(this.state.inventory[intent.item]??0)>=this.data.system.maxStack)return false;
-      this.state.gold-=this.price(stock.price);this.give(stock.item,1);this.notify(`${this.data.items[stock.item].name}を購入しました。`);return true;
+    if(type==='buy'){
+      const actor=intent.actor??SHARED_BAG,plan=purchasePlan(this,intent.item,actor);if(!plan.ok){this.state.notice=plan.reason;return false;}
+      this.state.gold-=plan.price;this.give(intent.item,1);
+      if(this.data.items[intent.item].slot){if(actor!==SHARED_BAG)this.state.gear.items[this.state.gear.bag[intent.item].at(-1)].holder=actor;}
+      else moveHolding(this.data,this.state,intent.item,SHARED_BAG,actor);
+      this.notify(`${this.data.items[intent.item].name}を購入し、${holderName(this.data,actor)}へ渡した。`);return true;
     }
-    if(type==='equip')return this.equip(intent.actor,intent.item);
-    if(type==='item')return this.useItem(intent.item,intent.actor);
+    if(type==='inventory.transfer'){
+      const count=intent.count??1,plan=transferPlan(this,intent.item,intent.from,intent.to,count);if(!plan.ok){this.state.notice=plan.reason;return false;}
+      moveHolding(this.data,this.state,intent.item,intent.from,intent.to,count);
+      this.notify(`${this.data.items[intent.item].name}を${count}個、${holderName(this.data,intent.from)}から${holderName(this.data,intent.to)}へ渡した。`);return true;
+    }
+    if(type==='equip')return this.equip(intent.actor,intent.item,intent.source);
+    if(type==='item'){
+      if(intent.source!==undefined&&(!validHolder(this.state,intent.source)||heldCount(this.data,this.state,intent.item,intent.source)<1)){this.state.notice='選んだ持ち主は、その品物を持っていません。';return false;}
+      return this.useItem(intent.item,intent.actor);
+    }
     return false;
   }
   moveLocation(id){
@@ -277,11 +295,11 @@ export class GameEngine {
     if(dest.parent!==here.id&&here.parent!==id&&!(here.links??[]).includes(id))return false;
     s.townLocation=id;s.presentation.background=dest.background;syncWorldStories(this);this.notify(dest.description);return true;
   }
-  equip(actorId,itemId){
+  equip(actorId,itemId,source){
     const item=this.data.items[itemId],actor=this.state.actors[actorId];
-    if(!this.state.members.includes(actorId)||!canEquip(this.data,this.state,actorId,itemId)||!item?.slot||!(this.state.inventory[itemId]>0)||!actor||actor.hp<=0)return false;
-    const previous=actor.equipment[item.slot];if(previous&&previous!==itemId&&(this.state.inventory[previous]??0)>=this.data.system.maxStack)return false;
-    equipGear(this.state,actorId,item.slot,itemId);this.state.inventory[itemId]--;if(previous)this.state.inventory[previous]=(this.state.inventory[previous]??0)+1;actor.equipment[item.slot]=itemId;
+    const plan=equipmentPlan(this,actorId,itemId,source);if(!plan.ok){this.state.notice=plan.reason;return false;}
+    const previous=actor.equipment[item.slot];
+    equipGear(this.state,actorId,item.slot,itemId,source);this.state.inventory[itemId]--;if(previous)this.state.inventory[previous]=(this.state.inventory[previous]??0)+1;actor.equipment[item.slot]=itemId;
     const stats=this.stats(actorId);actor.hp=Math.min(actor.hp,stats.hp);actor.mp=Math.min(actor.mp,stats.mp);return true;
   }
   changeParty(action,actorId,replaceId){
@@ -295,7 +313,7 @@ export class GameEngine {
     s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
   }
   unequip(actorId,slot){
-    const s=this.state,a=s.actors[actorId];if(s.mode!=='town'||s.waiting||s.battle||!a)return false;
+    const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||s.mode!=='town'&&!s.members.includes(actorId))return false;
     const item=a.equipment[slot];if(!item||(s.inventory[item]??0)>=this.data.system.maxStack)return false;
     unequipGear(s,actorId,slot);delete a.equipment[slot];s.inventory[item]=(s.inventory[item]??0)+1;const stats=this.stats(actorId);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);return true;
   }
@@ -311,6 +329,6 @@ export class GameEngine {
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.state=clone(save.state);this.feedback=freshFeedback();return true;
+    this.state=clone(save.state);this.state.carried??={};this.feedback=freshFeedback();return true;
   }
 }

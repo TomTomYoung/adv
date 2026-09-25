@@ -1,6 +1,6 @@
+import {projectInventory} from './inventory-projection.js';
 import {projectCast} from './cast-projection.js';
 import {playerCommands,commandDialog} from '../core/player-commands.js';
-import {townLocation} from '../core/world.js';
 import {projectWorld} from './world-projection.js';
 import {dungeonEntryReason} from '../core/quest-navigation.js';
 import {projectQuestNavigation} from './quest-navigation.js';
@@ -9,14 +9,14 @@ import {projectDungeonSurfaces} from './dungeon-surfaces.js';
 import {projectArt,projectQuestNotes,projectQuestLinks,projectDungeonEvents,projectEventArt} from './dungeon-projection.js';
 import {dungeonViews,dungeonPreview,dungeonAbilityReason,dungeonEffectActive} from '../core/dungeons.js';
 import {storyCanAct} from '../core/story.js';
-import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob,allowedEquipmentActors} from './job-projection.js';
+import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob} from './job-projection.js';
 import {activeActor} from '../core/battle.js';
 import {commandsAt} from '../core/script.js';
 import {clone} from '../core/expression.js';
 const glyphs={exit:'↑',stairs:'⇵',chest:'▣',fountain:'♧',door:'▥',clue:'?',decision:'!',trap:'×'};
 export function projectGame(engine){
   const s=engine.state,d=engine.data,map=engine.map();
-  const actorView=id=>{const a=s.actors[id],def=d.actors[id],stats=engine.stats(id);return {id,name:def.name,class:def.class,role:def.role,color:def.color,bio:def.bio??'',portrait:d.assets.images[def.portrait]??null,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,statuses:a.statuses.map(x=>d.statuses[x].name+(dungeonEffectActive(d,s,'status',x)?'':'（停止中）')),stats,skills:engine.skills(id).map(id=>({id,...clone(d.skills[id])})),equipment:Object.fromEntries(Object.entries(a.equipment).map(([slot,item])=>[slot,d.items[item].name])),equipmentSlots:Object.entries(a.equipment).map(([slot,item])=>({slot,name:d.items[item].name,canRemove:s.mode==='town'&&!s.waiting&&(s.inventory[item]??0)<d.system.maxStack}))};};
+  const actorView=id=>{const a=s.actors[id],def=d.actors[id],stats=engine.stats(id);return {id,name:def.name,class:def.class,role:def.role,color:def.color,bio:def.bio??'',portrait:d.assets.images[def.portrait]??null,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,statuses:a.statuses.map(x=>d.statuses[x].name+(dungeonEffectActive(d,s,'status',x)?'':'（停止中）')),stats,skills:engine.skills(id).map(id=>({id,...clone(d.skills[id])})),equipment:Object.fromEntries(Object.entries(a.equipment).map(([slot,item])=>[slot,d.items[item].name])),equipmentSlots:Object.entries(a.equipment).map(([slot,item])=>({slot,id:item,name:d.items[item].name,description:d.items[item].description,canRemove:(s.mode==='town'||s.members.includes(id))&&!s.waiting&&!s.battle&&(s.inventory[item]??0)<d.system.maxStack}))};};
   const baseActorView=actorView,jobActorView=id=>({...baseActorView(id),...projectActorJob(engine,id)});
   const party=s.members.map(jobActorView),editable=s.mode==='town'&&!s.waiting&&!s.battle;
   const roster=(d.game.tavern?.candidates??Object.keys(d.actors)).map(id=>{const active=s.members.includes(id),aliveAfterRemoval=s.members.some(other=>other!==id&&s.actors[other].hp>0);return {...jobActorView(id),active,canJoin:editable&&!active&&s.members.length<d.system.maxParty&&(s.actors[id].hp>0||s.members.some(other=>s.actors[other].hp>0)),canLeave:editable&&active&&s.members.length>1&&aliveAfterRemoval,swapCandidates:editable&&!active?s.members.filter(other=>s.actors[id].hp>0||s.members.some(remaining=>remaining!==other&&s.actors[remaining].hp>0)).map(other=>({id:other,name:d.actors[other].name})):[]};});
@@ -55,7 +55,7 @@ export function projectGame(engine){
     commands:playerCommands(engine),...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,level:s.level,xp:s.xp,nextXp:d.system.xpBase*s.level*(s.level+1),completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light,lightMax,lightLabel:fire?'携帯松明':'灯油',
     party,roster,jobs:jobCatalog(engine),statNames:clone(d.jobProfile?.statNames??{}),tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),dungeons:d.dungeons?Object.values(d.dungeons).sort((a,b)=>a.region-b.region||Object.keys(a.systems).length-Object.keys(b.systems).length).map(v=>({id:v.id,canEnter:canEnter(v.id),art:projectArt(d,v.art?.wall),name:v.name,description:v.description,preview:dungeonPreview(d,v),region:v.region,mapCount:v.maps.length,recommendedLevel:v.recommendedLevel,color:d.regions.find(r=>r.id===v.region)?.color??'#c6ae77'})):null,tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),
-    inventory:Object.entries(s.inventory).filter(([,n])=>n>0).map(([id,count])=>({id,count,...clone(d.items[id]),allowedActors:d.items[id].slot?allowedEquipmentActors(engine,id):s.members.slice()})),shop:d.shops.goods.map(g=>({id:g.item,name:d.items[g.item].name,description:d.items[g.item].description,price:engine.price(g.price),basePrice:g.price,canBuy:s.mode==='town'&&!s.waiting&&!s.battle&&(!d.game.world||Boolean(townLocation(d,s)?.shop))&&s.gold>=engine.price(g.price)&&(s.inventory[g.item]??0)<d.system.maxStack})),
+    ...projectInventory(engine),
     dungeon:map?{systems,wall,floorArt,scenes,name:map.name,region:map.region,floor:map.floor,location:clone(s.location),width:map.tiles[0].length,height:map.tiles.length,objects,here:current,background:d.assets.images[s.presentation.background]??d.assets.images[map.background],color:d.regions[map.region-1].color,...terrain}:null,
     dialog,battle,fieldNotes,busy:Boolean(s.waiting||s.battle),journal:clone(s.journal),log:s.log.slice(-20),notice:s.notice,ending:clone(s.ending),music:d.assets.audio[s.presentation.music]??null,se:null
   };

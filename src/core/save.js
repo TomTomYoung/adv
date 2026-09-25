@@ -5,6 +5,7 @@ import {cellEntryId} from './cell-layers.js';
 import {validateFieldReactions} from './field-signals.js';
 import {castValid} from './cast.js';
 import {gearErrors} from './equipment.js';
+import {carriedErrors} from './inventory.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
 import {scaledEnemy} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock,dungeonWaterAccess} from './dungeons.js';
@@ -164,7 +165,7 @@ export function validateSave(save,data){
     for(const [slot,itemId] of Object.entries(actor.equipment)){const item=data.items[itemId];if(!item||item.slot!==slot)fail('装備不正');}
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
-  errors.push(...gearErrors(data,s),...validateJobState(data,s));
+  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
