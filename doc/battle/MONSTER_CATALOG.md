@@ -17,6 +17,8 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 現在のくらがり画像は `wraith` が参照する `assets/images/monsters/wraith.webp` です。同じ画像を地域4・5・9の迷宮獣／守護者、腐肉鬼、足跡の追跡者も共有しています。くらがりだけの専用画像IDへ分離された状態ではありません。旧PNGの保存と現行の参照は[適用記録](../../assets/source/characters/recovery-2026-09-24.json)で確認できます。
 
+2026-09-25の素材更新第1便で、共通画像ID `slime`・`skeleton`・`construct` の3点を新しい魔物素材と同じタッチの透過WebPへ換装しました。同じIDを使う各敵も新画像へ切り替わります。旧PNGとAIPaint原稿は保持し、残る旧共通画像は `dragon` です。[適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch1.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch1-prompts.json)。
+
 旧内容版のセーブは移行しません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
 
 ## 編集元
@@ -74,9 +76,9 @@ valley_roamers：境渡りの呪詠み×1。逃走可。
 
 ### 水路の小魚 (water_darter)
 
-<img src="../../assets/images/slime.png" width="160" alt="水路の小魚">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の小魚">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
@@ -95,9 +97,9 @@ water_small：水路の小魚×1。逃走可。
 
 ### 水路の牙魚 (water_predator)
 
-<img src="../../assets/images/slime.png" width="160" alt="水路の牙魚">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の牙魚">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
@@ -116,9 +118,9 @@ water_predator：水路の牙魚×1。逃走可。
 
 ### 大水喰い (water_giant)
 
-<img src="../../assets/images/slime.png" width="160" alt="大水喰い">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="大水喰い">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
@@ -137,9 +139,9 @@ water_giant：大水喰い×1。逃走可。
 
 ### ソルトイーター (salt_eater)
 
-<img src="../../assets/images/slime.png" width="160" alt="ソルトイーター">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="ソルトイーター">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い。
 
 塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](../dungeons/WATERWAYS_SALT_MINE.md)。
@@ -833,9 +835,9 @@ story_125：荊角獣×1。逃走可。
 
 ### 借証の泥人形 (debt_golem)
 
-<img src="../../assets/images/construct.png" width="160" alt="借証の泥人形">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="借証の泥人形">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・砦の守護獣・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -875,9 +877,9 @@ story_128：鉄喰い蛾×1。逃走可。
 
 ### 砦の守護獣 (last_fort_guard)
 
-<img src="../../assets/images/construct.png" width="160" alt="砦の守護獣">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="砦の守護獣">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -896,9 +898,9 @@ story_129：砦の守護獣×1。逃走可。
 
 ### 苔冠の小魔 (moss_crawler)
 
-<img src="../../assets/images/slime.png" width="160" alt="苔冠の小魔">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="苔冠の小魔">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -917,9 +919,9 @@ story_130：苔冠の小魔×1。逃走可。
 
 ### 詰所の擬態箱 (watchbox_mimic)
 
-<img src="../../assets/images/construct.png" width="160" alt="詰所の擬態箱">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="詰所の擬態箱">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・石喰い獣。
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
@@ -938,9 +940,9 @@ story_132：詰所の擬態箱×1。逃走可。
 
 ### 石喰い獣 (stone_eater)
 
-<img src="../../assets/images/construct.png" width="160" alt="石喰い獣">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="石喰い獣">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱。
 
 基礎能力：HP 85 / MP 8 / STR 22 / VIT 10 / AGI 12 / INT 20。報酬：19G / 29EXP。
@@ -1001,9 +1003,9 @@ story_175：鏡牙獣×1。逃走可。
 
 ### 戦場の骸骨獣 (battlefield_bonebeast)
 
-<img src="../../assets/images/skeleton.png" width="160" alt="戦場の骸骨獣">
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="戦場の骸骨獣">
 
-画像ID：skeleton。実ファイル：[assets/images/skeleton.png](../../assets/images/skeleton.png)。
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者。
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
@@ -1024,9 +1026,9 @@ story_190：戦場の骸骨獣×1。逃走可。
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
 
-<img src="../../assets/images/slime.png" width="160" alt="灯守の地下水道の迷宮獣">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の迷宮獣">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
 
 基礎能力：HP 31 / MP 8 / STR 10 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
@@ -1054,9 +1056,9 @@ kagaribi_roaming：灯守の地下水道の迷宮獣×1。逃走可。
 
 ### 灯守の地下水道の守護者 (guard_1_elite)
 
-<img src="../../assets/images/slime.png" width="160" alt="灯守の地下水道の守護者">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の守護者">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
 
 基礎能力：HP 74 / MP 20 / STR 13 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
@@ -1076,9 +1078,9 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 
 ### 塩哭きの廃坑の迷宮獣 (guard_2)
 
-<img src="../../assets/images/skeleton.png" width="160" alt="塩哭きの廃坑の迷宮獣">
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の迷宮獣">
 
-画像ID：skeleton。実ファイル：[assets/images/skeleton.png](../../assets/images/skeleton.png)。
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣。
 
 基礎能力：HP 40 / MP 8 / STR 12 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
@@ -1103,9 +1105,9 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 
 ### 塩哭きの廃坑の守護者 (guard_2_elite)
 
-<img src="../../assets/images/skeleton.png" width="160" alt="塩哭きの廃坑の守護者">
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の守護者">
 
-画像ID：skeleton。実ファイル：[assets/images/skeleton.png](../../assets/images/skeleton.png)。
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
 画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣。
 
 基礎能力：HP 96 / MP 20 / STR 15 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
@@ -1125,9 +1127,9 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 
 ### 根喰みの地下庭園の迷宮獣 (guard_3)
 
-<img src="../../assets/images/slime.png" width="160" alt="根喰みの地下庭園の迷宮獣">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の迷宮獣">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -1152,9 +1154,9 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 
 ### 根喰みの地下庭園の守護者 (guard_3_elite)
 
-<img src="../../assets/images/slime.png" width="160" alt="根喰みの地下庭園の守護者">
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の守護者">
 
-画像ID：slime。実ファイル：[assets/images/slime.png](../../assets/images/slime.png)。
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
 
 基礎能力：HP 118 / MP 20 / STR 17 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
@@ -1272,9 +1274,9 @@ boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1�
 
 ### 眠れる地下市場の迷宮獣 (guard_6)
 
-<img src="../../assets/images/construct.png" width="160" alt="眠れる地下市場の迷宮獣">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の迷宮獣">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 76 / MP 8 / STR 20 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
@@ -1302,9 +1304,9 @@ market_enforcers：眠れる地下市場の迷宮獣×2。逃走可。
 
 ### 眠れる地下市場の守護者 (guard_6_elite)
 
-<img src="../../assets/images/construct.png" width="160" alt="眠れる地下市場の守護者">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の守護者">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 182 / MP 20 / STR 23 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
@@ -1373,9 +1375,9 @@ boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1�
 
 ### 鉄胎の機関廟の迷宮獣 (guard_8)
 
-<img src="../../assets/images/construct.png" width="160" alt="鉄胎の機関廟の迷宮獣">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の迷宮獣">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
@@ -1403,9 +1405,9 @@ machine_sentry：鉄胎の機関廟の迷宮獣×1。逃走可。
 
 ### 鉄胎の機関廟の守護者 (guard_8_elite)
 
-<img src="../../assets/images/construct.png" width="160" alt="鉄胎の機関廟の守護者">
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の守護者">
 
-画像ID：construct。実ファイル：[assets/images/construct.png](../../assets/images/construct.png)。
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
 
 基礎能力：HP 226 / MP 20 / STR 27 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。

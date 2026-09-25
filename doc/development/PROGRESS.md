@@ -16,6 +16,12 @@
 
 初回整理 `f5167dd` 後に残っていた旧本文とAIの表示漏れを修正しました。`npm run build:docs`、`npm run check:docs`、`node --test tests/monster-catalog.test.mjs` の3試験、`git diff --check` が成功しました。現行55文書、2598件の内部リンク、20件の保存原文と生成一致を確認しています。全体693試験の結果は上記の初回整理時のもので、この追加修正では再実行していません。ゲームの原稿・配布JSON・srcに差分はありません。
 
+## 旧共通魔物素材・第1便
+
+2026-09-25、スライム・スケルトン・構造体の3点を内蔵画像生成で作成し、背景透過のWebPへ換装しました。画像IDを共有する計20定義の敵に反映されます。旧PNGは元コミットとバイト一致し、AIPaint原稿も保持しています。生成PNGからWebPへの変換では画像寸法とアルファ値の全画素一致を確認しました。生成条件・ハッシュ・透過画素数は `assets/source/monsters/refresh-2026-09-25-batch1.json` と同名の `-prompts.json` に記録しています。
+
+`buildWorld` による正本からの再生成、`npm run build:docs`、`npm run check:docs`（55文書・2601リンク・20保存原文）、`node tools/validate.mjs`、`node tools/check-static.mjs`、`git diff --check` が成功しました。ゲームデータの変更は `data/assets.json` の3画像参照のみです。公開Pagesの実画面は今回再確認していません。残る旧共通画像はドラゴン1点です。
+
 ## 過去に確認済みの範囲
 
 2026-09-24のマップ編集8タブと共有エッジの実装では `npm run build:scenarios`、`npm run check` の692試験、`npm run check:docs` が成功した記録があります。ローカルChromiumでmap・cell・configの各smokeスクリプトを実行し、共有エッジ、サイズ変更、24セル種、接続先作成、複数原稿出力・コピー、1082×604と1440／900／390／320px幅を確認しています。これらは今回のブラウザ再実行結果ではありません。
