@@ -1,8 +1,8 @@
 # 町ロケーション一覧
 
-配布JSONの場所・親子関係・施設機能から生成します。正本は config/locations.json、生成先は [data/locations.json](../data/locations.json) です。町は選択肢で移動し、ダンジョンではセル移動を使います。
+配布JSONの場所・親子関係・施設機能から生成します。正本は config/locations.json、生成先は [data/locations.json](../../data/locations.json) です。町は選択肢で移動し、ダンジョンではセル移動を使います。
 
-[シナリオ一覧](scenarios/QUEST_CATALOG.md) ／ [ダンジョン一覧](DUNGEON_CATALOG.md) ／ [ワールド接続仕様](WORLD_LOCATIONS.md)
+[シナリオ一覧](../scenarios/QUEST_CATALOG.md) ／ [ダンジョン一覧](../dungeons/DUNGEON_CATALOG.md) ／ [ワールド接続仕様](WORLD_LOCATIONS.md)
 
 ## 灯帰り・篝火広場 (hikarigaeri_square)
 
@@ -12,7 +12,7 @@
 
 機能: 会話・調査。
 
-背景: [location_square](../assets/images/locations/square.webp)。
+背景: [location_square](../../assets/images/locations/square.webp)。
 
 接続ダンジョン: 篝火の迷宮 (kagaribi) / 巨獣上の移動集落 (moving_village) / 祈りの届かない谷 (prayerless_valley) / 灯守の地下水道 (region_1) / 帰還者の深淵 (region_10) / 塩哭きの廃坑 (region_2) / 根喰みの地下庭園 (region_3) / 鏡沈みの礼拝堂 (region_4) / 灰時計の書庫 (region_5) / 眠れる地下市場 (region_6) / 黒潮の沈没城 (region_7) / 鉄胎の機関廟 (region_8) / 星欠けの地下観測所 (region_9)。
 
@@ -24,7 +24,7 @@
 
 機能: 取引。
 
-背景: [location_shop](../assets/images/locations/shop.webp)。
+背景: [location_shop](../../assets/images/locations/shop.webp)。
 
 ## 帰り火亭 (hikarigaeri_tavern)
 
@@ -34,7 +34,7 @@
 
 機能: 編成 / 宿屋で全回復 / 守衛ベルグを訪ねる。
 
-背景: [location_tavern](../assets/images/locations/tavern.webp)。
+背景: [location_tavern](../../assets/images/locations/tavern.webp)。
 
 ## 灯番組合 (hikarigaeri_guild)
 
@@ -44,7 +44,7 @@
 
 機能: 依頼掲示板。
 
-背景: [location_guild](../assets/images/locations/guild.webp)。
+背景: [location_guild](../../assets/images/locations/guild.webp)。
 
 ## 医学校 (hikarigaeri_medical)
 
@@ -54,7 +54,7 @@
 
 機能: 施療所で応急手当。
 
-背景: [location_medical](../assets/images/locations/medical.webp)。
+背景: [location_medical](../../assets/images/locations/medical.webp)。
 
 ## 医学校・標本室 (hikarigaeri_medical_specimens)
 
@@ -64,7 +64,7 @@
 
 機能: 会話・調査。
 
-背景: [location_specimens](../assets/images/locations/specimens.webp)。
+背景: [location_specimens](../../assets/images/locations/specimens.webp)。
 
 参照場面: q002「骨の荷札」 / school。
 
@@ -78,7 +78,7 @@
 
 機能: 会話・調査。
 
-背景: [location_insurance](../assets/images/locations/insurance.webp)。
+背景: [location_insurance](../../assets/images/locations/insurance.webp)。
 
 参照場面: q002「骨の荷札」 / hearing。
 
@@ -90,7 +90,7 @@
 
 機能: 会話・調査。
 
-背景: [location_guild](../assets/images/locations/guild.webp)。
+背景: [location_guild](../../assets/images/locations/guild.webp)。
 
 参照場面: q001「帰らない灯番」 / post。
 
@@ -102,7 +102,7 @@
 
 機能: 会話・調査。
 
-背景: [location_square](../assets/images/locations/square.webp)。
+背景: [location_square](../../assets/images/locations/square.webp)。
 
 参照場面: q003「逆流する鐘」 / relay。
 
@@ -116,6 +116,6 @@
 
 機能: 会話・調査。
 
-背景: [location_tavern](../assets/images/locations/tavern.webp)。
+背景: [location_tavern](../../assets/images/locations/tavern.webp)。
 
 参照場面: q003「逆流する鐘」 / reservoir。

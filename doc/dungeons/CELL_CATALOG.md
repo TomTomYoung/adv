@@ -1,6 +1,6 @@
 # セルレイヤー・状態・境界・配置物カタログ
 
-確認日: 2026-09-24。作品版1.20.0。通常ロードする33マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
+確認日: 2026-09-25。作品版1.20.0。通常ロードする33マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
 
 `.` と `#` は通行可否だけを表します。床・壁・画像・遮光・水密は記号に含めません。セル種は通行、表示、フィールドイベント参照、照度などのパラメータをまとめたプリセットです。一地点の例外はレイヤーや項目を上書きし、セル種を増やさず表します。宝箱・人物・火台・レバーはオブジェクト、扉・水門・壁面はエッジ側の定義です。
 
@@ -8,9 +8,9 @@
 
 ## 現行のセル種プリセット
 
-[config/cell-layers.json](../config/cell-layers.json)に24種類を登録しています。2種類だけだった従来の状態から、以前の会話で挙げた床・壁・水路・危険・環境の候補を整備しました。末尾の「セル種プリセット」に名前・用途・実際の設定値を原稿から生成しています。
+[config/cell-layers.json](../../config/cell-layers.json)に24種類を登録しています。2種類だけだった従来の状態から、以前の会話で挙げた床・壁・水路・危険・環境の候補を整備しました。末尾の「セル種プリセット」に名前・用途・実際の設定値を原稿から生成しています。
 
-[マップ編集](../config/map.html)では日本語名でセル種を選び、用途説明を見て配置できます。毒沼のダメージ、氷床の滑走、離れた後に崩れる床、通常遭遇を抑える安全地帯は登録済みの動作です。土・木・濡れ・氷などの表面も描き分けます。
+[マップ編集](../../config/map.html)では日本語名でセル種を選び、用途説明を見て配置できます。毒沼のダメージ、氷床の滑走、離れた後に崩れる床、通常遭遇を抑える安全地帯は登録済みの動作です。土・木・濡れ・氷などの表面も描き分けます。
 
 完全水没、空気溜まり、腐食、呪い、術封じ、塩壁、植物の橋・茨は既存の仕掛けに結び付けます。必要な迷宮・対象座標がない場所への配置は検証で拒否します。名称だけで未設定の効果があるようには扱いません。仕掛けとの対応、各パラメータ、旧3Dとの区別は[セル仕様](CELL_LAYERS.md)を参照してください。
 
@@ -232,7 +232,7 @@
 
 ## 更新と照合
 
-本文は挙動を説明する正本です。変更時には[エンジン](../src/core/engine.js)、[立体地形](../src/core/voxels.js)、[固有部品](../src/core/systems)、[描画用の投影](../src/application/dungeon-surfaces.js)と照合します。配置・数値・IDの索引は[集計処理](../tools/cell-catalog.mjs)から生成し、新しいダンジョン部品は対応する集計も追加します。集計処理はゲーム状態を書き換えません。
+本文は挙動を説明する正本です。変更時には[エンジン](../../src/core/engine.js)、[立体地形](../../src/core/voxels.js)、[固有部品](../../src/core/systems)、[描画用の投影](../../src/application/dungeon-surfaces.js)と照合します。配置・数値・IDの索引は[集計処理](../../tools/cell-catalog.mjs)から生成し、新しいダンジョン部品は対応する集計も追加します。集計処理はゲーム状態を書き換えません。
 
 ```sh
 npm run build:docs
@@ -299,71 +299,71 @@ npm run check:docs
 
 ### マップ別の基礎地形
 
-[region_1_f1](../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、通行可21・通行不可34。
+[region_1_f1](../../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、通行可21・通行不可34。
 
-[region_1_f2](../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、通行可21・通行不可34。
+[region_1_f2](../../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、通行可21・通行不可34。
 
-[region_2_f1](../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、通行可132・通行不可153。
+[region_2_f1](../../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、通行可132・通行不可153。
 
-[region_2_f2](../data/maps/region_2_f2.json) 塩哭きの廃坑・地下2層：2D、通行可130・通行不可155。
+[region_2_f2](../../data/maps/region_2_f2.json) 塩哭きの廃坑・地下2層：2D、通行可130・通行不可155。
 
-[region_3_f1](../data/maps/region_3_f1.json) 根喰みの地下庭園・地下1層：2D、通行可129・通行不可156。
+[region_3_f1](../../data/maps/region_3_f1.json) 根喰みの地下庭園・地下1層：2D、通行可129・通行不可156。
 
-[region_3_f2](../data/maps/region_3_f2.json) 根喰みの地下庭園・地下2層：2D、通行可130・通行不可155。
+[region_3_f2](../../data/maps/region_3_f2.json) 根喰みの地下庭園・地下2層：2D、通行可130・通行不可155。
 
-[region_4_f1](../data/maps/region_4_f1.json) 鏡沈みの礼拝堂・地下1層：2D、通行可130・通行不可155。
+[region_4_f1](../../data/maps/region_4_f1.json) 鏡沈みの礼拝堂・地下1層：2D、通行可130・通行不可155。
 
-[region_4_f2](../data/maps/region_4_f2.json) 鏡沈みの礼拝堂・地下2層：2D、通行可132・通行不可153。
+[region_4_f2](../../data/maps/region_4_f2.json) 鏡沈みの礼拝堂・地下2層：2D、通行可132・通行不可153。
 
-[region_5_f1](../data/maps/region_5_f1.json) 灰時計の書庫・地下1層：2D、通行可128・通行不可157。
+[region_5_f1](../../data/maps/region_5_f1.json) 灰時計の書庫・地下1層：2D、通行可128・通行不可157。
 
-[region_5_f2](../data/maps/region_5_f2.json) 灰時計の書庫・地下2層：2D、通行可127・通行不可158。
+[region_5_f2](../../data/maps/region_5_f2.json) 灰時計の書庫・地下2層：2D、通行可127・通行不可158。
 
-[region_6_f1](../data/maps/region_6_f1.json) 眠れる地下市場・地下1層：2D、通行可132・通行不可153。
+[region_6_f1](../../data/maps/region_6_f1.json) 眠れる地下市場・地下1層：2D、通行可132・通行不可153。
 
-[region_6_f2](../data/maps/region_6_f2.json) 眠れる地下市場・地下2層：2D、通行可131・通行不可154。
+[region_6_f2](../../data/maps/region_6_f2.json) 眠れる地下市場・地下2層：2D、通行可131・通行不可154。
 
-[region_7_f1](../data/maps/region_7_f1.json) 黒潮の沈没城・地下1層：2D、通行可129・通行不可156。
+[region_7_f1](../../data/maps/region_7_f1.json) 黒潮の沈没城・地下1層：2D、通行可129・通行不可156。
 
-[region_7_f2](../data/maps/region_7_f2.json) 黒潮の沈没城・地下2層：2D、通行可131・通行不可154。
+[region_7_f2](../../data/maps/region_7_f2.json) 黒潮の沈没城・地下2層：2D、通行可131・通行不可154。
 
-[region_8_f1](../data/maps/region_8_f1.json) 鉄胎の機関廟・地下1層：2D、通行可132・通行不可153。
+[region_8_f1](../../data/maps/region_8_f1.json) 鉄胎の機関廟・地下1層：2D、通行可132・通行不可153。
 
-[region_8_f2](../data/maps/region_8_f2.json) 鉄胎の機関廟・地下2層：2D、通行可131・通行不可154。
+[region_8_f2](../../data/maps/region_8_f2.json) 鉄胎の機関廟・地下2層：2D、通行可131・通行不可154。
 
-[region_9_f1](../data/maps/region_9_f1.json) 星欠けの地下観測所・地下1層：2D、通行可129・通行不可156。
+[region_9_f1](../../data/maps/region_9_f1.json) 星欠けの地下観測所・地下1層：2D、通行可129・通行不可156。
 
-[region_9_f2](../data/maps/region_9_f2.json) 星欠けの地下観測所・地下2層：2D、通行可130・通行不可155。
+[region_9_f2](../../data/maps/region_9_f2.json) 星欠けの地下観測所・地下2層：2D、通行可130・通行不可155。
 
-[region_10_f1](../data/maps/region_10_f1.json) 帰還者の深淵・地下1層：2D、通行可130・通行不可155。
+[region_10_f1](../../data/maps/region_10_f1.json) 帰還者の深淵・地下1層：2D、通行可130・通行不可155。
 
-[region_10_f2](../data/maps/region_10_f2.json) 帰還者の深淵・地下2層：2D、通行可127・通行不可158。
+[region_10_f2](../../data/maps/region_10_f2.json) 帰還者の深淵・地下2層：2D、通行可127・通行不可158。
 
-[kagaribi_f1](../data/maps/kagaribi_f1.json) 篝火の迷宮・灯番の巡回路：2D、通行可60・通行不可75。
+[kagaribi_f1](../../data/maps/kagaribi_f1.json) 篝火の迷宮・灯番の巡回路：2D、通行可60・通行不可75。
 
-[kagaribi_f2](../data/maps/kagaribi_f2.json) 篝火の迷宮・消えた灯の回廊：2D、通行可57・通行不可78。
+[kagaribi_f2](../../data/maps/kagaribi_f2.json) 篝火の迷宮・消えた灯の回廊：2D、通行可57・通行不可78。
 
-[kagaribi_f3](../data/maps/kagaribi_f3.json) 篝火の迷宮・深火の祭壇：2D、通行可57・通行不可78。
+[kagaribi_f3](../../data/maps/kagaribi_f3.json) 篝火の迷宮・深火の祭壇：2D、通行可57・通行不可78。
 
-[prayerless_valley_f1](../data/maps/prayerless_valley_f1.json) 祈りの届かない谷：2D、通行可54・通行不可63。
+[prayerless_valley_f1](../../data/maps/prayerless_valley_f1.json) 祈りの届かない谷：2D、通行可54・通行不可63。
 
-[moving_village_f1](../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、通行可54・通行不可63。
+[moving_village_f1](../../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、通行可54・通行不可63。
 
-[region_1_canal_a](../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、通行可9・通行不可24。
+[region_1_canal_a](../../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、通行可9・通行不可24。
 
-[region_1_landing](../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、通行可21・通行不可34。
+[region_1_landing](../../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、通行可21・通行不可34。
 
-[region_1_canal_b](../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、通行可9・通行不可24。
+[region_1_canal_b](../../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、通行可9・通行不可24。
 
-[region_1_inspection](../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、通行可21・通行不可34。
+[region_1_inspection](../../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、通行可21・通行不可34。
 
-[region_1_canal_c](../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、通行可9・通行不可24。
+[region_1_canal_c](../../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、通行可9・通行不可24。
 
-[region_1_lower_landing](../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、通行可21・通行不可34。
+[region_1_lower_landing](../../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、通行可21・通行不可34。
 
-[region_1_canal_d](../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、通行可9・通行不可24。
+[region_1_canal_d](../../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、通行可9・通行不可24。
 
-[region_1_gatehouse](../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可21・通行不可34。
+[region_1_gatehouse](../../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可21・通行不可34。
 
 ### セル上のイベント種別
 
@@ -389,7 +389,7 @@ npm run check:docs
 
 #### 篝火の迷宮 (kagaribi)
 
-定義：[kagaribi.json](../config/dungeons/kagaribi.json)。
+定義：[kagaribi.json](../../config/dungeons/kagaribi.json)。
 
 現地調査 `kagaribi` 灯を受け渡す準備：関連q001、操作点kagaribi_f1 (1,1)。
 
@@ -415,7 +415,7 @@ npm run check:docs
 
 #### 巨獣上の移動集落 (moving_village)
 
-定義：[moving_village.json](../config/dungeons/moving_village.json)。
+定義：[moving_village.json](../../config/dungeons/moving_village.json)。
 
 現地調査 `moving_village` 暮らしを揺らす足場：関連q194、操作点moving_village_f1 (1,1)。
 
@@ -433,7 +433,7 @@ npm run check:docs
 
 #### 祈りの届かない谷 (prayerless_valley)
 
-定義：[prayerless_valley.json](../config/dungeons/prayerless_valley.json)。
+定義：[prayerless_valley.json](../../config/dungeons/prayerless_valley.json)。
 
 現地調査 `prayerless_valley` 境界の内側の祈り：関連q193、操作点prayerless_valley_f1 (4,1) ／ prayerless_valley_f1 (5,1)。
 
@@ -449,7 +449,7 @@ npm run check:docs
 
 #### 灯守の地下水道 (region_1)
 
-定義：[region_1.json](../config/dungeons/region_1.json)。
+定義：[region_1.json](../../config/dungeons/region_1.json)。
 
 現地調査 `region_1` 排水された横道：関連q010、操作点region_1_f1 (2,1)。
 
@@ -487,7 +487,7 @@ npm run check:docs
 
 #### 帰還者の深淵 (region_10)
 
-定義：[region_10.json](../config/dungeons/region_10.json)。
+定義：[region_10.json](../../config/dungeons/region_10.json)。
 
 現地調査 `region_10` 逆らった足取り：関連q100、操作点region_10_f1 (1,1)。
 
@@ -497,7 +497,7 @@ npm run check:docs
 
 #### 塩哭きの廃坑 (region_2)
 
-定義：[region_2.json](../config/dungeons/region_2.json)。
+定義：[region_2.json](../../config/dungeons/region_2.json)。
 
 現地調査 `region_2` 塩壁の向こうの退路：関連q011、操作点region_2_f1 (5,1)。
 
@@ -515,7 +515,7 @@ npm run check:docs
 
 #### 根喰みの地下庭園 (region_3)
 
-定義：[region_3.json](../config/dungeons/region_3.json)。
+定義：[region_3.json](../../config/dungeons/region_3.json)。
 
 現地調査 `region_3` 根が支える橋：関連q030、操作点region_3_f1 (1,3)。
 
@@ -553,7 +553,7 @@ npm run check:docs
 
 #### 鏡沈みの礼拝堂 (region_4)
 
-定義：[region_4.json](../config/dungeons/region_4.json)。
+定義：[region_4.json](../../config/dungeons/region_4.json)。
 
 現地調査 `region_4` 仮面を運ぶ鏡路：関連q039、操作点region_4_f1 (1,2) ／ region_4_f2 (13,5)。
 
@@ -577,7 +577,7 @@ npm run check:docs
 
 #### 灰時計の書庫 (region_5)
 
-定義：[region_5.json](../config/dungeons/region_5.json)。
+定義：[region_5.json](../../config/dungeons/region_5.json)。
 
 現地調査 `region_5` 閉じた頁と開いた通路：関連q049、操作点region_5_f1 (1,2)。
 
@@ -595,7 +595,7 @@ npm run check:docs
 
 #### 眠れる地下市場 (region_6)
 
-定義：[region_6.json](../config/dungeons/region_6.json)。
+定義：[region_6.json](../../config/dungeons/region_6.json)。
 
 現地調査 `region_6` 通行を約束する相手：関連q060、操作点region_6_f1 (1,2)。
 
@@ -613,7 +613,7 @@ npm run check:docs
 
 #### 黒潮の沈没城 (region_7)
 
-定義：[region_7.json](../config/dungeons/region_7.json)。
+定義：[region_7.json](../../config/dungeons/region_7.json)。
 
 現地調査 `region_7` 一つだけ浮かぶ区画：関連q070、操作点region_7_f1 (1,2)。
 
@@ -627,7 +627,7 @@ npm run check:docs
 
 #### 鉄胎の機関廟 (region_8)
 
-定義：[region_8.json](../config/dungeons/region_8.json)。
+定義：[region_8.json](../../config/dungeons/region_8.json)。
 
 現地調査 `region_8` 動力の届く範囲：関連q080、操作点region_8_f1 (1,2)。
 
@@ -645,7 +645,7 @@ npm run check:docs
 
 #### 星欠けの地下観測所 (region_9)
 
-定義：[region_9.json](../config/dungeons/region_9.json)。
+定義：[region_9.json](../../config/dungeons/region_9.json)。
 
 現地調査 `region_9` 観測のための足場：関連q090、操作点region_9_f1 (1,2)。
 

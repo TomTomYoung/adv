@@ -1,6 +1,6 @@
 # ダンジョン一覧
 
-更新日: 2026-09-18。対象: 作品版1.14.0。13ダンジョン・33件の2Dマップ・200クエスト。区画接続と退避は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
+更新日: 2026-09-25。対象: 作品版1.20.0。13ダンジョン・33件の2Dマップ・200クエスト。区画接続と退避は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md) を参照してください。
 
 設定の編集元は `config/dungeons/*.json` です。`npm run build:dungeons` で配信データを生成します。共通の拡張方法は [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md) を参照してください。
 
@@ -126,13 +126,13 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 谷と移動集落には、町から選べる専用の探索マップを用意しました。既存10地域の分類と200クエストの進行は維持します。q193・q194の分岐結果は各クエストの選択に従い、探索装置の状態から物語上の結末を確定させません。
 
-未指定の消費量、成長時間、警戒値、空気量、動力容量、変化周期、デバフ係数はJSONで調整できる初期値を置き、[実装仕様](DUNGEON_SYSTEMS_1_7.md)に記載しています。技能や魔法の禁止対象はIDで個別指定し、町での行先選択と境界外でも確認できます。
+未指定の消費量、成長時間、警戒値、空気量、動力容量、変化周期、デバフ係数はJSONで調整できる初期値を置き、[実装仕様](DUNGEON_SYSTEMS.md)に記載しています。技能や魔法の禁止対象はIDで個別指定し、町での行先選択と境界外でも確認できます。
 
 保存データには設置物・開通・装置などの永続状態と、技能貸出・空気・護衛・逆行デバフなど探索中だけの状態を分けて保持します。旧版のセーブは進行や乱数を保ったまま追加部品を補います。
 
-実際の操作、初期数値、JSON項目、保存期間、検証結果は [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md) を参照してください。
+実際の操作、初期数値、JSON項目、保存期間、検証結果は [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS.md) を参照してください。
 
-素材と依頼の対応、現地の観察条件は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。GitHub反映状態は[CURRENT_STATUS.md](CURRENT_STATUS.md)へ記載します。
+素材と依頼の対応、現地の観察条件は[DUNGEON_ART_AND_SCENARIOS.md](DUNGEON_ART_AND_SCENARIOS.md)を参照してください。GitHub反映状態は[CURRENT_STATUS.md](../CURRENT_STATUS.md)へ記載します。
 
 <!-- generated:dungeons -->
 

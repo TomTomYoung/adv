@@ -1,6 +1,6 @@
 # マップのセルレイヤー・境界・方向別通行仕様
 
-確認日: 2026-09-24。作品版1.20.0。通常ロードは33件すべて2Dのセルレイヤー方式です。マップ間の水密扉・階段・給排水は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)、セル種と編集形式は [CELL_LAYERS.md](CELL_LAYERS.md) を正本とします。後半の六面・立体に関する記述は退避実装の保守仕様です。
+確認日: 2026-09-25。作品版1.20.0。通常ロードは33件すべて2Dのセルレイヤー方式です。マップ間の水密扉・階段・給排水は [CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)、セル種と編集形式は [CELL_LAYERS.md](CELL_LAYERS.md) を正本とします。後半の六面・立体に関する記述は退避実装の保守仕様です。
 
 ## 1. セル・レイヤー・配置物・境界
 
@@ -8,7 +8,7 @@
 
 `.` は通行可候補、`#` は通行不可だけを意味します。床・壁の見た目、水が入れるか、光が通るかを記号から推測しません。見た目が石床でも通行不可にでき、通行できる場所に遮光表現を設けることもできます。素材画像を変更しても通行判定は変わりません。
 
-宝箱・人物・火台・レバーはオブジェクトとしてセル種から分離します。境界はセル間の継ぎ目で、2Dは辺、3Dは面です。扉・水門・壁面は境界側の定義に属します。現在の2Dマップ間接続の扉は `map_connections` の端点・方向で管理し、セル内の古い `map.objects` の扉も保守対象です。エッジ上のたいまつ・調査物体は設置セルとedge方向で配置できます。[調査仕様](ui/INSPECTION.md)を参照してください。2D内部エッジは `cell-layers.json` の `edgePresets` と `maps.*.edges` に定義し、共有境界の通行・壁表示・遮光を両側から同じ値で扱います。
+宝箱・人物・火台・レバーはオブジェクトとしてセル種から分離します。境界はセル間の継ぎ目で、2Dは辺、3Dは面です。扉・水門・壁面は境界側の定義に属します。現在の2Dマップ間接続の扉は `map_connections` の端点・方向で管理し、セル内の古い `map.objects` の扉も保守対象です。エッジ上のたいまつ・調査物体は設置セルとedge方向で配置できます。[調査仕様](../ui/INSPECTION.md)を参照してください。2D内部エッジは `cell-layers.json` の `edgePresets` と `maps.*.edges` に定義し、共有境界の通行・壁表示・遮光を両側から同じ値で扱います。
 
 ## 2. 座標と方向
 
@@ -20,7 +20,7 @@ x・yは0始まりの整数です。東はx+1、西はx-1、南はy+1、北はy-
 
 ### 3.1 配置と上書き
 
-[config/cell-layers.json](../config/cell-layers.json) の `presets` がセル種、`maps` が配置です。`legend` の文字から `rows` の各地点にプリセットを割り当て、`overrides` で項目を上書きします。`visual` と `parameters` は項目単位、`events` は配列全体を置き換えます。幅・高さは全行で一致させ、範囲外は進入不可です。
+[config/cell-layers.json](../../config/cell-layers.json) の `presets` がセル種、`maps` が配置です。`legend` の文字から `rows` の各地点にプリセットを割り当て、`overrides` で項目を上書きします。`visual` と `parameters` は項目単位、`events` は配列全体を置き換えます。幅・高さは全行で一致させ、範囲外は進入不可です。
 
 生成した `map.cells` がレイヤー配置、`map.tiles` が通行値だけの投影です。ロード時に両者の一致を検査します。例えば次の通行投影の中央 `(2,2)` は進入不可ですが、その画像や遮光属性はこの文字列からは決まりません。
 
@@ -48,7 +48,7 @@ x・yは0始まりの整数です。東はx+1、西はx-1、南はy+1、北はy-
 
 `map.voxels` があるマップを3D方式として扱います。`voxels.version` は1、`minZ` は最下層のz、`layers` は低いzから順番に並ぶ平面図です。`layers[z-minZ][y][x]` の `.` が空、`#` が密です。各層は同じ幅と行数を持ち、`tiles` はz=0の断面と一致させます。
 
-現行の[貯水立坑](../config/voxel-content.json)はz=-1、0、1の3層です。`faces` に共有面、`links` に経路、`devices` に給水・掘削装置、`initialWater` に初期水没操作を定義します。これらの配列は空でも必要です。
+退避中の[貯水立坑](../../config/voxel-content.json)はz=-1、0、1の3層です。`faces` に共有面、`links` に経路、`devices` に給水・掘削装置、`initialWater` に初期水没操作を定義します。これらの配列は空でも必要です。
 
 密の立方体には六方向のどこからも入れず、その中を通る入口・出口の36組もすべて不可です。上面は上の空セルの床になり、側面は隣の空セルから見た壁、下面は下の空セルから見た天井になります。許可された掘削で密から空へ変えられます。
 
@@ -99,7 +99,7 @@ x・yは0始まりの整数です。東はx+1、西はx-1、南はy+1、北はy-
 
 ## 5. 方向別制限の拡張仕様
 
-この節は、ユーザーが指定した「どちらからどちらへ入れるか」を表せるようにするための仕様です。入口依存のセル内通行、一方向だけ通す境界、2Dの独立した境界は未実装です。以下の記法は設計例であり、現在のSchemaは受理しません。実装時には版を追加し、既存マップの省略時の挙動を保持します。
+この節は、ユーザーが指定した「どちらからどちらへ入れるか」を表せるようにするための仕様です。入口依存のセル内通行と、一方向だけ通す境界は未実装です。2Dの独立した共有エッジは実装済みで、両方向に共通の通行値を使います。以下の記法は設計例であり、現在のSchemaは受理しません。実装時には版を追加し、既存マップの省略時の挙動を保持します。
 
 ### 5.1 セルへの進入・退出と、内部の接続
 
@@ -162,7 +162,7 @@ Aから隣接Bへ移動するときは、Aの退出側の許可、Aの進入側�
 
 Viewへ渡す `blocked` は通行不可、`opaque` は視線を遮る描画、`wall` は壁の表示、`floor` は床表示、`waterDepth` は水深です。通常2Dはセルレイヤーから、退避3Dは空・密と足場から表示を投影します。すべてを一つの「壁」へまとめません。現行3Dの横四面は `edges` / `boundaries` に投影し、閉じた面を描画します。六面の通行可否と現在のzの断面表示は別の情報です。
 
-素材画像はダンジョンの `art.floor` / `art.wall` などから取得します。床材を貼っても足場は生まれず、通行不可の水を壁画像へ変換しません。詳細は[表示契約](ui/VIEW_CONTRACT.md)と[描画修正記録](ui/DUNGEON_RENDER_REVIEW.md)を参照してください。
+素材画像はダンジョンの `art.floor` / `art.wall` などから取得します。床材を貼っても足場は生まれず、通行不可の水を壁画像へ変換しません。詳細は[表示契約](../ui/VIEW_CONTRACT.md)と[描画修正記録](../legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md)を参照してください。
 
 ## 7. 2Dを保持するための互換性
 
@@ -174,10 +174,10 @@ Viewへ渡す `blocked` は通行不可、`opaque` は視線を遮る描画、`w
 
 ## 8. 実装・編集・検証の参照先
 
-[マップSchema](../data/schemas/map.schema.json)と[立体Schema生成定義](../tools/voxel-schema.mjs)が現行JSONの形式です。[エンジン](../src/core/engine.js)の `walkable` / `move` が占有と通常移動、[立体地形](../src/core/voxels.js)が隣接・共有面・足場・水、[立体部品](../src/core/systems/voxel-space.js)が経路・操作・退避を担当します。[立体検証](../src/core/voxel-validation.js)が共有面の重複、六方向の連続性、経路、保存状態を検査します。
+[マップSchema](../../data/schemas/map.schema.json)と[立体Schema生成定義](../../tools/voxel-schema.mjs)が現行JSONの形式です。[エンジン](../../src/core/engine.js)の `walkable` / `move` が占有と通常移動、[立体地形](../../src/core/voxels.js)が隣接・共有面・足場・水、[立体部品](../../src/core/systems/voxel-space.js)が経路・操作・退避を担当します。[立体検証](../../src/core/voxel-validation.js)が共有面の重複、六方向の連続性、経路、保存状態を検査します。
 
-2Dの基礎配置は[コンテンツ生成器](../tools/build-content.mjs)と[ダンジョン生成器](../tools/build-dungeons.mjs)を確認します。追加配置・変更の編集元は[ダンジョン原稿](../config/dungeon-content.json)、[地形原稿](../config/terrain-content.json)、[立体原稿](../config/voxel-content.json)などです。対象マップの生成元を確認して編集し、配布先 `data/maps` のみを書き換えても再生成で失われる点に注意してください。
+2Dの基礎配置は[コンテンツ生成器](../../tools/build-content.mjs)と[ダンジョン生成器](../../tools/build-dungeons.mjs)を確認します。追加配置・変更の編集元は[ダンジョン原稿](../../config/dungeon-content.json)、[地形原稿](../../config/terrain-content.json)、[立体原稿](../../config/voxel-content.json)などです。対象マップの生成元を確認して編集し、配布先 `data/maps` のみを書き換えても再生成で失われる点に注意してください。
 
-現在の検証例は[立体テスト](../tests/voxels.test.mjs)、[ダンジョンテスト](../tests/dungeons.test.mjs)、[環境テスト](../tests/environment-dungeons.test.mjs)、[水面・床・遮蔽テスト](../tests/dungeon-surfaces.test.mjs)にあります。方向別制限の導入時は四方16組・六方36組、Uターン、片方向境界の逆走、入場履歴の保存、2Dの省略時互換、経路・退避の可否を追加検証します。
+現在の検証例は[立体テスト](../../tests/voxels.test.mjs)、[ダンジョンテスト](../../tests/dungeons.test.mjs)、[環境テスト](../../tests/environment-dungeons.test.mjs)、[水面・床・遮蔽テスト](../../tests/dungeon-surfaces.test.mjs)にあります。方向別制限の導入時は四方16組・六方36組、Uターン、片方向境界の逆走、入場履歴の保存、2Dの省略時互換、経路・退避の可否を追加検証します。
 
 セルレイヤーは1.16.0で実装済みです。第5節の入口依存・方向別制限は設計段階で、ゲーム処理には追加していません。

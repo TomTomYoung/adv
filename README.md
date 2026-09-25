@@ -2,9 +2,9 @@
 
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。
 
-[設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/CONFIG_EDITORS.md)。
+[設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/authoring/CONFIG_EDITORS.md)。
 
-作品版1.18.0。町10か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
+作品版1.20.0。町10か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
 
 ## 遊ぶ
 
@@ -40,7 +40,7 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 「酒場・仲間」で人物の「職業・成長」を開き、30職から転職先を選んで確定します。能力・成長・習得段階・袋へ戻る装備を確認できます。転職は無料ですが回復はせず、過去の成長は保持します。測量・調合は「隊の状態」の探索特技から使用します。
 
-詳細は [職業システム・30職一覧](doc/JOB_SYSTEM.md) と [現在の検証結果](doc/PROGRESS.md) を参照してください。
+詳細は [職業システム・30職一覧](doc/battle/JOB_SYSTEM.md) と [現在の検証結果](doc/development/PROGRESS.md) を参照してください。
 
 ## 内容
 
@@ -61,11 +61,11 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 [view-preview.html](view-preview.html) は画面だけをデザインする独立ページです。11種類のサンプル画面を選べ、テーマをJSONへ書き出せます。ゲーム本番の「記録 → 画面テーマを読み込む」で適用します。より大きな構成変更も `src/view/` だけで行えます。
 
-[フィールド・戦闘中イベント一覧](doc/scenarios/EVENT_CATALOG.md) / [セルの明るさ](doc/FIELD_LIGHTING.md)
+[フィールド・戦闘中イベント一覧](doc/scenarios/EVENT_CATALOG.md) / [セルの明るさ](doc/dungeons/FIELD_LIGHTING.md)
 
 [仕様・進捗・引き継ぎ](doc/README.md) / [UIの根本方針と現状](doc/ui/PHILOSOPHY_AND_STATUS.md) / [JSON命令リファレンス](doc/scenarios/SCRIPT_REFERENCE.md) / [ビュー契約](doc/ui/VIEW_CONTRACT.md) / [200件の索引](doc/scenarios/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
 
-[魔物一覧・画像](doc/MONSTER_CATALOG.md) / [戦闘バランス計画・実測](doc/BALANCE_PLAN.md) / [仲間一覧・肖像](doc/COMPANION_CATALOG.md)
+[魔物一覧・画像](doc/battle/MONSTER_CATALOG.md) / [戦闘バランス計画・実測](doc/battle/BALANCE_PLAN.md) / [仲間一覧・肖像](doc/battle/COMPANION_CATALOG.md)
 
 [SE一覧・音源](doc/ui/SE_CATALOG.md) / [戦闘・フィールド演出一覧](doc/ui/EFFECT_CATALOG.md)
 

@@ -4,4 +4,4 @@ PR #25反映後のmaster `16da1dd` にあった文書を原文のまま保存し
 
 [旧引き継ぎ](HANDOFF.md) ／ [旧検証履歴](PROGRESS.md) ／ [旧文書監査](DOCUMENTATION_AUDIT.md) ／ [元ファイルとハッシュ](manifest.json)
 
-[現行の引き継ぎ](../../HANDOFF.md) ／ [現行の進捗](../../PROGRESS.md) ／ [現行の文書監査](../../DOCUMENTATION_AUDIT.md) ／ [履歴索引](../README.md)
+[現行の引き継ぎ](../../HANDOFF.md) ／ [現行の進捗](../../development/PROGRESS.md) ／ [現行の文書監査](../../development/DOCUMENTATION_AUDIT.md) ／ [履歴索引](../README.md)

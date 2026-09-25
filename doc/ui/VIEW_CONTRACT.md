@@ -1,6 +1,6 @@
 # ビューと表示データの契約
 
-更新日: 2026-09-19。作品版1.15.0、背景内ビュー・固定領域・人物演出・共通キー操作・キー設定を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
+更新日: 2026-09-25。作品版1.20.0、背景内ビュー・固定領域・人物演出・共通キー操作・キー設定を対象とします。町ロケーション、人物スプライト、2D区画、メッセージ内の選択肢、プレイヤーコマンドを含みます。立方体地形の投影は退避実装向けの保守契約です。
 
 ## 境界
 
@@ -14,7 +14,7 @@
 
 `key-bindings.js` は物理キーを決定・取消・方向・探索操作へ変換します。`key-config.js` の下書きはUI内に保持し、main.jsが保存に成功した後に両入力経路へ反映します。設定はViewModelやゲームのセーブには含めません。現在のキーに合わせた操作案内はui.keyHint(exploring)から受け取ります。探索では「調べる・移動」、選択画面では「決定・選択」を表示します。[キー設定](KEY_CONFIG.md)。
 
-通常2Dのcellsは `wall`・`floor`・`opaque`・`blocked` を独立して受け取る。セル固有の `art` は解決済みURLと切出し範囲、`parameters` は環境値のコピーであり、Viewは通行記号から見た目を推測しない。[セルレイヤー](../CELL_LAYERS.md)。
+通常2Dのcellsは `wall`・`floor`・`opaque`・`blocked` を独立して受け取る。セル固有の `art` は解決済みURLと切出し範囲、`parameters` は環境値のコピーであり、Viewは通行記号から見た目を推測しない。[セルレイヤー](../dungeons/CELL_LAYERS.md)。
 
 ## デザイン作業
 
@@ -175,7 +175,7 @@ dungeons[].art、dungeon.wall、各固有システム・カード・マーカー
 
 dungeon.scenesは現在地または正面の調査情報です。常設パネルとして描画しません。調査の入口はplayer.commandのinteract（便利）・inspect（任意）で、Coreが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
-quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](../DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
+quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](../dungeons/DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
 
 ## 立方体の断面と六面
 
@@ -191,11 +191,11 @@ dungeon.floorArtは床材の `{url,rect}` です。config/dungeon-art.jsonのflo
 
 従来マップにもwaterDepthとwaterLabelを渡します。水没度0は表示0、1〜3は表示1、4〜6は表示2、7〜10は表示3です。通行判定は水没度6から別途行い、潜水準備を考慮します。geometryへ水没の通行不可を混ぜず、水は水平面として描きます。cells[].blockedは通行判定、opaqueは描画用の遮蔽です。既存の非水障害は従来の遮蔽を維持します。
 
-surfaceNoticeは正面の水深と通行可否、その対処の文章です。周期水域にはCoreの待機actionをコピーし、常設水路には対応するバルブ名を案内します。水・流れ・境界のマーカーへ装置画像を割り当てず、左右や閉じた境界の向こうの装置を正面へ表示しません。[修正記録と比較](DUNGEON_RENDER_REVIEW.md)を参照してください。
+surfaceNoticeは正面の水深と通行可否、その対処の文章です。周期水域にはCoreの待機actionをコピーし、常設水路には対応するバルブ名を案内します。水・流れ・境界のマーカーへ装置画像を割り当てず、左右や閉じた境界の向こうの装置を正面へ表示しません。[修正記録と比較](../legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md)を参照してください。
 
 ## 1.12.0の照明と戦闘中会話
 
-`dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](../FIELD_LIGHTING.md)を参照。
+`dungeon.lighting` は `{max:8, current, levels, sources}`、各 `dungeon.cells[y][x].illumination` は0〜8。計算済みの値を壁・床・ミニマップへ使い、表示側で光源やクエストの条件を再計算しない。`atmosphere` の `lighting:true` は演出オフでも維持する。ミニマップの未踏査セルには照度を表示しない。[FIELD_LIGHTING.md](../dungeons/FIELD_LIGHTING.md)を参照。
 
 `battle.event` がある間は戦闘画面の下へ `dialog` の会話・選択を表示し、戦闘操作ボタンは表示しない。会話を送るとゲーム側が戦闘再開または強制終了を判断する。`battle` が消えた後も `dialog` があればフィールドの会話として描画する。
 
@@ -213,4 +213,4 @@ SceneViewは左の本文を実寸でページ分割し、右の選択肢だけ�
 
 scene.castの指定はCoreのpresentation.castへ保存し、Applicationが画像URL・人物名・発話者IDへ投影します。Viewが任意の人物の所在を決めたりシナリオ原本を読むことはありません。演出フィールドの詳細は[CHARACTER_STAGING.md](CHARACTER_STAGING.md)。
 
-作品版1.18.0の調査は[INSPECTION.md](INSPECTION.md)に従う。dungeon.objectsの任意edgeは設置セルの向きを表し、歩行画面は現在セルでその面を向いたときに表示する。ミニマップはセル中央の配置物とは別に該当辺へ目印を置く。光源の効果は表示・操作の向き条件で切らない。
+現行の調査は[INSPECTION.md](INSPECTION.md)に従う。dungeon.objectsの任意edgeは設置セルの向きを表し、歩行画面は現在セルでその面を向いたときに表示する。ミニマップはセル中央の配置物とは別に該当辺へ目印を置く。光源の効果は表示・操作の向き条件で切らない。

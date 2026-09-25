@@ -1,7 +1,8 @@
-import {docPath,relocateDoc,currentMarkdown,scenarioDocs,uiDocs} from './doc-layout.mjs';
+import {docPath,relocateDoc,currentMarkdown,docGroups} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
 import {eventCatalog} from './event-catalog.mjs';
+import {characterCatalog} from './character-catalog.mjs';
 import {locationCatalog,questPlaces} from './location-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
@@ -14,7 +15,7 @@ const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
 const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
 const current=(await currentMarkdown(folder)).map(f=>'doc/'+f);
-for(const name of [...scenarioDocs,...uiDocs]){
+for(const name of Object.values(docGroups).flatMap(names=>[...names])){
  check(!current.includes('doc/'+name),`doc/${name}: obsolete output; use doc/${docPath(name)}`);
 }
 const manifests=[];
@@ -30,7 +31,7 @@ for(const file of manifests){const manifest=await read(file);for(const entry of 
 // while the manifests above check the exact original content, including those links.
 const indexes=['doc/legacy/README.md',...manifests.map(f=>path.posix.join(path.posix.dirname(f),'README.md'))];
 let links=0;
-for(const file of [...current,...indexes,'README.md']){
+for(const file of [...current,...indexes,'README.md','config/README.md','config/index.html','config/map.html']){
  const source=(await fs.readFile(path.join(root,file),'utf8')).replace(/```[^\n]*\n[\s\S]*?```/g,'');
  const targets=[...source.matchAll(/\[[^\]\n]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)/g)].map(m=>m[1]);
  targets.push(...[...source.matchAll(/(?:src|href)=["']([^"']+)["']/g)].map(m=>m[1]));
@@ -45,12 +46,13 @@ for(const file of [...current,...indexes,'README.md']){
   }
  }
 }
-const data=await loadContent(read),snapshot=await read('doc/DATA_SNAPSHOT.json'),count=o=>Object.keys(o??{}).length;
+const data=await loadContent(read),snapshot=await read('doc/'+docPath('DATA_SNAPSHOT.json')),count=o=>Object.keys(o??{}).length;
 check(await fs.readFile(path.join(folder,docPath('EVENT_CATALOG.md')),'utf8')===relocateDoc(eventCatalog(data),'EVENT_CATALOG.md'),'EVENT_CATALOG: generated inventory differs');
+check(await fs.readFile(path.join(folder,docPath('CHARACTERS.md')),'utf8')===relocateDoc(characterCatalog(data),'CHARACTERS.md'),'CHARACTERS: generated portraits or sprites differ');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
 const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
-check(await fs.readFile(path.join(folder,'LOCATION_CATALOG.md'),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
+check(await fs.readFile(path.join(folder,docPath('LOCATION_CATALOG.md')),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
 for(const q of Object.values(data.quests)){
  const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,docPath(file)),'utf8'):catalog;
  for(const line of questPlaces(data,q))check(source.includes(relocateDoc(line,file??'QUEST_CATALOG.md')),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);

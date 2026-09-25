@@ -1,10 +1,10 @@
 # 町とシナリオのワールド接続
 
-更新日: 2026-09-18。作品版1.14.0。町の共通ロケーションとq001〜q003の実移動を接続しています。[1.11.0改訂](scenarios/EXPLORATION_AND_PROSE_1_11.md)も参照してください。
+更新日: 2026-09-25。作品版1.20.0。町の共通ロケーションとq001〜q003の実移動を接続しています。[探索による到達の方針](../scenarios/EXPLORATION_AND_PROSE.md)も参照してください。
 
 ## 正本と参照
 
-町の正本は [config/locations.json](../config/locations.json)、配布先は [data/locations.json](../data/locations.json) です。`game.world.townRoot` を起点とし、各施設は安定ID、名称、親、追加の移動先、背景、人物配置、施設機能を持ちます。共通施設を増やすときはここへ追加し、依頼内に同名の独立した町を作りません。
+町の正本は [config/locations.json](../../config/locations.json)、配布先は [data/locations.json](../../data/locations.json) です。`game.world.townRoot` を起点とし、各施設は安定ID、名称、親、追加の移動先、背景、人物配置、施設機能を持ちます。共通施設を増やすときはここへ追加し、依頼内に同名の独立した町を作りません。
 
 [ロケーション一覧](LOCATION_CATALOG.md) は10か所の親子・機能・背景・参照場面を配布JSONから生成します。篝火広場の下に旅道具店、帰り火亭、灯番組合、医学校、保険審査所があり、医学校の下に標本室、組合の下に灯番詰所、広場の下に上層の待避場、帰り火亭の下に汚水槽があります。`location.move` は親・子・明示した接続先へ移動します。会話・戦闘中は移動できません。
 
@@ -14,7 +14,7 @@
 
 ## q002の実際の場所
 
-依頼の正本は [authoring/story-q002.mjs](../authoring/story-q002.mjs)、イベントの正本は [config/quests/q002.events.json](../config/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](scenarios/QUEST_Q002.md)へまとめています。
+依頼の正本は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、イベントの正本は [config/quests/q002.events.json](../../config/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](../scenarios/QUEST_Q002.md)へまとめています。
 
 引き揚げ場は灯守の地下水道 `region_1` / `region_1_landing` の (5, 1)、イベント `q002_decision` です。岸と浅瀬の作業は同じ現地イベントの範囲で扱います。標本室は `hikarigaeri_medical_specimens`、審査所は `hikarigaeri_insurance` を参照します。対応は `story.worldPlaces` に置き、各場面の `place` から引きます。
 
@@ -35,7 +35,7 @@ Coreのフィールドイベントは、目的地への実到着で到着効果�
 
 通常の中断では現在の場面を保持します。その後に実際の場所を離れた探索隊の `partyAt` は現在地に同期し、依頼の定義外なら `transit` になります。同行指定のないNPCは元の場所で待ちます。戻ると施設の「続きを話す」または現地イベントから再開します。完了済み依頼の物語状態は結末の記録として保持します。
 
-不正な場所ID、移動行為、同行者の所在、現在地と会話の不一致はセーブ検証で拒否します。Applicationの共通復元処理は読込失敗時に最初から開始します。同じ1.14.0の正常な町・会話・移動途中の保存は継続します。
+不正な場所ID、移動行為、同行者の所在、現在地と会話の不一致はセーブ検証で拒否します。Applicationの共通復元処理は読込失敗時に最初から開始します。同じ内容版1.20.0の正常な町・会話・移動途中の保存は継続します。
 
 ## 表示と素材
 
@@ -43,9 +43,9 @@ Coreが現在地・会話・人物・物品・移動記録を所有し、Applica
 
 背景7枚は `assets/images/locations/`、標本係・運搬人・審査官の立ち絵3枚は `assets/images/characters/sprites/` です。既存の生成肖像を参照して透過立ち絵を生成しました。背景1536×1024、立ち絵1173×1341。元の生成PNGは保持し、配布画像はサイズ変更・描き直しをせずWebPへ符号化しました。
 
-英語・日本語プロンプト、参照画像、生成元・配布画像のSHA-256は [素材manifest](../assets/source/world-locations/manifest.json)、概要は [PROVENANCE](../assets/PROVENANCE.md) にあります。背景と立ち絵の単体を目視確認し、透過・寸法・ファイル参照を検査しました。
+英語・日本語プロンプト、参照画像、生成元・配布画像のSHA-256は [素材manifest](../../assets/source/world-locations/manifest.json)、概要は [PROVENANCE](../../assets/PROVENANCE.md) にあります。背景と立ち絵の単体を目視確認し、透過・寸法・ファイル参照を検査しました。
 
-`node tools/build-fixtures.mjs` は現在の処理から11個の独立した表示例を作ります。1.10.0ではブラウザのローカル接続が拒否されました。1.11.0でも実ブラウザ確認は実施しておらず、背景と人物の重なりを含む実画面、スマートフォン幅、音声は未確認です。
+`node tools/build-fixtures.mjs` は現在の処理から独立した表示例を作ります。過去のローカル描画確認と今回の確認範囲は[検証記録](../development/PROGRESS.md)へ集約します。公開版で全施設・全人物・音声を通した確認は未完了です。
 
 ## 生成と検証
 

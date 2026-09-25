@@ -64,7 +64,7 @@ map.voxels.layersは低いzから並ぶ同寸の平面図、minZは最下層の�
 
 ## JSONの記法
 
-`config/voxel-content.json` の `maps.<mapId>` は通常のマップ定義です。その `voxels` にversion、minZ、layers、faces、links、devices、initialWaterを記述します。マップ全体の実例は [編集元JSON](../config/voxel-content.json) にあります。
+`config/voxel-content.json` の `maps.<mapId>` は通常のマップ定義です。その `voxels` にversion、minZ、layers、faces、links、devices、initialWaterを記述します。マップ全体の実例は [編集元JSON](../../config/voxel-content.json) にあります。
 
 minZ=-1、layersが3枚なら、添字0・1・2がそれぞれz=-1・0・1です。各層は同じ幅と行数を持ち、tilesはz=0の層と一致させます。入口とイベントにはzを指定でき、省略時は0です。全体4096立方体以内、最大16層、空間と掘削予定地の合計512個以内を検証器の上限とします。
 
@@ -116,4 +116,4 @@ devicesではkind=pumpにat、target、amountを、kind=digにat、target、item
 
 区域面積によらない増分、開いた上面、下穴の再帰、同じ下部への複数穴、閉鎖時の保持、開放時の均一化、上部へ越流しないことを `tests/flood-regions.test.mjs` で検査します。経路・足場・支払い前の拒否・潜水・溺死・保存・投影は `tests/voxels.test.mjs` と `tests/dungeon-rules.test.mjs` で検査します。
 
-全体の結果とブラウザ確認の制約は[PROGRESS.md](PROGRESS.md)を参照してください。
+全体の結果とブラウザ確認の制約は[PROGRESS.md](../development/PROGRESS.md)を参照してください。

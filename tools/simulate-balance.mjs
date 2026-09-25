@@ -48,6 +48,6 @@ export function simulateBalance(data,{seeds=20}={}){
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   const data=await loadContent(file=>fs.readFile(path.join(root,file),'utf8').then(JSON.parse));
-  const report=simulateBalance(data);await fs.writeFile(path.join(root,'doc/BALANCE_RESULTS.json'),JSON.stringify(report,null,2)+'\n');
+  const report=simulateBalance(data);await fs.writeFile(path.join(root,'doc/battle/BALANCE_RESULTS.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({passed:report.passed,battles:report.battles,maxRounds:Math.max(...report.results.map(r=>r.maxRounds)),maxHpLoss:Math.max(...report.results.map(r=>r.maxHpLossPercent)),failed:report.results.filter(r=>r.wins!==r.battles||r.medianRounds>6||r.maxRounds>10)},null,2));if(!report.passed)process.exitCode=1;
 }

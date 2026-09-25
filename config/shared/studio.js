@@ -71,7 +71,7 @@ export class ConfigStudio {
   if(!this.entry)return;for(const cleanup of this.cleanups.splice(0))cleanup();
   this.root.className='studio';clear(this.root);const title=el('div','','studio-heading');title.append(el('p','灯帰りの迷宮 / 原稿編集','eyebrow'),el('h1',this.entry.title));
   title.append(el('p',editableScope[this.entry.family],'intro'),el('p','編集対象：config/'+this.entry.file,'source-file'));
-  const guide=el('a','編集対象JSON・使い方');guide.href=new URL('../../doc/CONFIG_EDITORS.md',import.meta.url).href;title.append(guide);
+  const guide=el('a','編集対象JSON・使い方');guide.href=new URL('../../doc/authoring/CONFIG_EDITORS.md',import.meta.url).href;title.append(guide);
   const chooser=select(editors.map(e=>[e.file,`${e.group} / ${e.title}`]),this.entry.file,file=>this.open(file),'編集するJSON');title.append(chooser);this.root.append(title);
   const toolbar=el('div','','toolbar');this.undoButton=button('戻す',()=>{if(this.guard()){this.workspace.undo();this.refresh();}});this.redoButton=button('やり直す',()=>{if(this.guard()){this.workspace.redo();this.refresh();}});
   this.undoButton.disabled=!this.workspace.history.length;this.redoButton.disabled=!this.workspace.future.length;

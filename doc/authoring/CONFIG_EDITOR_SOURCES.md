@@ -1,10 +1,10 @@
 # 編集対象JSONと正本の対応
 
-更新日: 2026-09-24。設定編集UIの対象は `config/` 配下の225原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全225件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](README.md)。
+更新日: 2026-09-25。設定編集UIの対象は `config/` 配下の225原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全225件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](../README.md)。
 
 ## 統合マップ画面の出力先
 
-[マップ編集](../config/map.html)では、表示中のマップを保ったまま複数原稿を編集できます。セル・エッジの配置、通行可否、地点の個別設定、共有種類は `config/cell-layers.json`、既存の篝火マップの基本情報・入口・配置物は `config/kagaribi-content.json`、その他の接続済みマップと新規マップは `config/connected-maps.json` に出力します。マップの所属、仕掛け、接続は選択迷宮の `config/dungeons/<ID>.json`、配置イベントとそのローカル処理は所属クエストの `config/quests/qXXX.events.json` です。
+[マップ編集](../../config/map.html)では、表示中のマップを保ったまま複数原稿を編集できます。セル・エッジの配置、通行可否、地点の個別設定、共有種類は `config/cell-layers.json`、既存の篝火マップの基本情報・入口・配置物は `config/kagaribi-content.json`、その他の接続済みマップと新規マップは `config/connected-maps.json` に出力します。マップの所属、仕掛け、接続は選択迷宮の `config/dungeons/<ID>.json`、配置イベントとそのローカル処理は所属クエストの `config/quests/qXXX.events.json` です。
 
 マップ新規作成は `connected-maps.json`、`cell-layers.json`、所属迷宮JSONの3件を一括変更します。接続の作成は迷宮JSONへ追加します。画面の「今回の出力対象」と検証後のJSON全文に実際に変更したファイルだけを表示します。
 

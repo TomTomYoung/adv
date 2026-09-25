@@ -1,10 +1,10 @@
 # 仲間一覧と酒場の編成
 
-更新日: 2026-09-24。作品版1.20.0。仲間10人から1〜5人を編成します。初期隊はアダ・ニオ・セラ・イルです。
+更新日: 2026-09-25。作品版1.20.0。仲間10人から1〜5人を編成します。初期隊はアダ・ニオ・セラ・イルです。
 
 ## 編成と状態
 
-町の酒場で加入・待機・入れ替えを行います。生存者を最低1人残し、会話・戦闘中は編成しません。HP・MP・状態異常・装備・職業と成長履歴を保持し、編成変更だけでは回復しません。NPCの人物一覧は[CHARACTERS.md](scenarios/CHARACTERS.md)に分けます。
+町の酒場で加入・待機・入れ替えを行います。生存者を最低1人残し、会話・戦闘中は編成しません。HP・MP・状態異常・装備・職業と成長履歴を保持し、編成変更だけでは回復しません。NPCの人物一覧は[CHARACTERS.md](../scenarios/CHARACTERS.md)に分けます。
 
 技能は現在職とレベル、装備、貸出、固有環境から判定します。下記はLv1・初期職・初期装備の状態です。人物定義に残る旧skills配列だけを現在の習得技能として表示しません。
 
@@ -12,7 +12,7 @@
 
 ### アダ (ada)
 
-![アダ](../assets/images/portraits/ada.webp)
+![アダ](../../assets/images/portraits/ada.webp)
 
 32歳。元水門警備隊。新人にも必ず帰り道を教える剣士。
 人物の役割：剣士／前衛・安定した斬撃。初期職：戦士。
@@ -21,7 +21,7 @@
 
 ### ニオ (nio)
 
-![ニオ](../assets/images/portraits/nio.webp)
+![ニオ](../../assets/images/portraits/nio.webp)
 
 24歳。地下の配達人出身。道を覚えるため毎晩靴底を描く斥候。
 人物の役割：斥候／先手・罠の観察。初期職：斥候。
@@ -30,7 +30,7 @@
 
 ### セラ (sera)
 
-![セラ](../assets/images/portraits/sera.webp)
+![セラ](../../assets/images/portraits/sera.webp)
 
 40歳。町の施療所から来た祈祷師。帰った後の食事まで気に掛ける。
 人物の役割：祈祷師／治療・解毒。初期職：祈祷師。
@@ -39,7 +39,7 @@
 
 ### イル (il)
 
-![イル](../assets/images/portraits/il.webp)
+![イル](../../assets/images/portraits/il.webp)
 
 29歳。書庫を追われた魔術師。暗所で読める灯火の術を磨いた。
 人物の役割：魔術師／炎術・守りを貫く。初期職：魔術師。
@@ -48,7 +48,7 @@
 
 ### ベルグ (berg)
 
-![ベルグ](../assets/images/portraits/berg.webp)
+![ベルグ](../../assets/images/portraits/berg.webp)
 
 54歳。引退した守衛。遅い足取りで誰より先に出口を確かめる。
 人物の役割：守衛／耐久重視・粘り強い前衛。初期職：騎士。
@@ -57,7 +57,7 @@
 
 ### ルカ (luka)
 
-![ルカ](../assets/images/portraits/luka.webp)
+![ルカ](../../assets/images/portraits/luka.webp)
 
 27歳。救助隊の槍使い。届く距離を測り、無理な一歩を踏まない。
 人物の役割：槍使い／貫通攻撃・速い前衛。初期職：槍使い。
@@ -66,7 +66,7 @@
 
 ### トーマ (toma)
 
-![トーマ](../assets/images/portraits/toma.webp)
+![トーマ](../../assets/images/portraits/toma.webp)
 
 36歳。坑道の薬師。持ち運べる薬と集団の応急手当を研究する。
 人物の役割：薬師／集団回復・解毒。初期職：薬師。
@@ -75,7 +75,7 @@
 
 ### ミカ (mica)
 
-![ミカ](../assets/images/portraits/mica.webp)
+![ミカ](../../assets/images/portraits/mica.webp)
 
 24歳。機関廟で学んだ符術師。凍結と雷を使い分けて守りを崩す。
 人物の役割：符術師／氷術・雷術の使い分け。初期職：刻印師。
@@ -84,7 +84,7 @@
 
 ### ドーラ (dora)
 
-![ドーラ](../assets/images/portraits/dora.webp)
+![ドーラ](../../assets/images/portraits/dora.webp)
 
 46歳。石工の盾兵。崩れた天井の下で人を庇った経験を持つ。
 人物の役割：盾兵／隊全体の防御。初期職：騎士。
@@ -93,7 +93,7 @@
 
 ### レン (ren)
 
-![レン](../assets/images/portraits/ren.webp)
+![レン](../../assets/images/portraits/ren.webp)
 
 31歳。旅の楽師。眠気を払う節と呼吸を整える声掛けが得意。
 人物の役割：楽師／仲間のMP補給・回復。初期職：吟遊詩人。
@@ -102,4 +102,4 @@
 
 ## 編集と保存
 
-人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。
+人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](../SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。

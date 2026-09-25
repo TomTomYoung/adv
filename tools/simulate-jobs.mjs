@@ -28,6 +28,6 @@ export function simulateJobs(data){
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   const data=await loadContent(file=>fs.readFile(path.join(root,file),'utf8').then(JSON.parse)),report=simulateJobs(data);
-  await fs.writeFile(path.join(root,'doc/JOB_BALANCE_RESULTS.json'),JSON.stringify(report,null,2)+'\n');
+  await fs.writeFile(path.join(root,'doc/battle/JOB_BALANCE_RESULTS.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({passed:report.passed,battles:report.battles,failed:report.results.filter(r=>r.wins!==r.runs.length)},null,2));if(!report.passed)process.exitCode=1;
 }

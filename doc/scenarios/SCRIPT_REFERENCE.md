@@ -1,6 +1,6 @@
 # JSON DSL 実装リファレンス
 
-更新日: 2026-09-19。作品版1.15.0の53命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
+更新日: 2026-09-25。作品版1.20.0の53命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
 JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
@@ -61,7 +61,7 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 
 `has_member` は出撃隊への所属だけを判定します。不在は `not`、生存も必要なら `actors.<id>.hp > 0` を組み合わせます。現在HP・MP・職業・状態異常は保存状態から参照できますが、装備・職歴を含む最終能力値を任意人物から読む `actor_stat` はありません。戦闘式の `source.stats` を一般のシナリオ条件でそのまま使えるわけではありません。戦績用の `record_count` と受注時差分は末尾のシナリオ拡張節を参照してください。
 
-## 実装した48命令
+## 実装済み命令の使い方
 
 命令：say / narrate / 主なフィールドと動作：text、任意でname/speaker。本文を表示し、advanceまで待機
 
@@ -97,7 +97,7 @@ conditionもvisibleWhenもない選択肢を一つ以上残します。条件を
 
 命令：status.apply / status.remove / 主なフィールドと動作：target、status。状態異常の追加・削除
 
-命令：map.teleport / 主なフィールドと動作：map、x、y、任意zとfacing。z省略は0。実在する通行可能な立方体へ移動し、完全水没・足場不足は拒否
+命令：map.teleport / 主なフィールドと動作：map、x、y、任意zとfacing。z省略は0。実在する通行可能セルへ移動し、完全水没区画への進入は拒否。退避3Dでは足場も検査
 
 命令：map.reveal / 主なフィールドと動作：radius。現在位置の周囲を探索済みにする
 
@@ -215,9 +215,9 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## ダンジョンの操作と観察
 
-`dungeon.action` と `quest.event` は画面から送る操作意図です。48命令のJSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は config/quests/qXXX.events.json に既存のif・narrate・choice・setで記述し、同じクエストJSONへ集約します。
+`dungeon.action` と `quest.event` は画面から送る操作意図です。JSON DSLに同名のopがあるという意味ではありません。スクリプトから探索技能を使う場合は job.action、現地調査は config/quests/qXXX.events.json に既存のif・narrate・choice・setで記述し、同じクエストJSONへ集約します。
 
-観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](../DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
+観察記録は flags.dungeonNotes に保存します。dungeonsの永続状態・探索状態は読取りに利用できますが、setで直接書き換えられる領域ではありません。各部品の操作はコアの計画器を通します。詳細は[DUNGEON_ART_AND_SCENARIOS.md](../dungeons/DUNGEON_ART_AND_SCENARIOS.md)へ記載します。
 
 <!-- generated:commands -->
 
@@ -237,7 +237,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実移動待ちと共通メッセージ
 
-`story.journey` は quest と action を受け取り、定義された移動行為の出発だけを確定します。`state.journey` へ依頼・行為・出発場面を保存し、会話を閉じます。Coreが目的セルまたは町施設への実到着を検出すると、到着効果を確定して次場面を自動開始します。正面のセルは到着扱いにしません。詳細は [WORLD_LOCATIONS.md](../WORLD_LOCATIONS.md) を参照してください。
+`story.journey` は quest と action を受け取り、定義された移動行為の出発だけを確定します。`state.journey` へ依頼・行為・出発場面を保存し、会話を閉じます。Coreが目的セルまたは町施設への実到着を検出すると、到着効果を確定して次場面を自動開始します。正面のセルは到着扱いにしません。詳細は [WORLD_LOCATIONS.md](../world/WORLD_LOCATIONS.md) を参照してください。
 
 シナリオのchoiceは直前に表示した本文・話者を保持し、同じメッセージウィンドウに選択肢を表示します。調べる・仕掛け・帰還の確認は `waiting.type=command` ですが、実行スクリプトの命令ではありません。Coreのプレイヤーコマンドから開き、表示時・選択時に対象と条件を再判定します。[共通ウィンドウ仕様](../ui/MESSAGE_AND_COMMAND_WINDOWS.md)に保存と操作の区分を記載しています。
 

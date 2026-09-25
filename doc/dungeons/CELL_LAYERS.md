@@ -1,12 +1,12 @@
 # セル・エッジとプリセット
 
-更新日: 2026-09-24。作品版1.20.0。通常ロードする33件の2Dマップに適用済みです。
+更新日: 2026-09-25。作品版1.20.0。通常ロードする33件の2Dマップに適用済みです。
 
 ## 正本と生成
 
-[config/cell-layers.json](../config/cell-layers.json) がセル種・エッジ種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`edgePresets` を `data/edge-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
+[config/cell-layers.json](../../config/cell-layers.json) がセル種・エッジ種プリセット・配置・例外上書き・セルイベントとそのスクリプトの正本です。`presets` を `data/cell-types.json`、`edgePresets` を `data/edge-types.json`、`events` を `data/cell-events.json`、`scripts` を `data/scripts/cell-events.json`、`maps` を各 `data/maps/*.json` の `cells` へ生成します。既存マップ原稿にある `tiles` は旧生成工程の中間値であり、最終的な通行配置はこの原稿から生成した値で置き換えます。セル配置を変更するときは既存原稿の `tiles` だけを変更しないでください。オブジェクト・接続口の配置は従来の各原稿で管理します。
 
-`npm run build:scenarios` は従来の生成を済ませた後、[build-cell-layers.mjs](../tools/build-cell-layers.mjs) でレイヤーを反映します。全33マップの配置が必須で、欠落・ロードされないマップ・未知プリセット・不正な上書きを拒否します。[統合マップ編集](../config/map.html)でセル種を選んで塗り、[セル種管理](../config/cell-layers.html)で共有定義を編集できます。
+`npm run build:scenarios` は従来の生成を済ませた後、[build-cell-layers.mjs](../../tools/build-cell-layers.mjs) でレイヤーを反映します。全33マップの配置が必須で、欠落・ロードされないマップ・未知プリセット・不正な上書きを拒否します。[統合マップ編集](../../config/map.html)でセル種を選んで塗り、[セル種管理](../../config/cell-layers.html)で共有定義を編集できます。
 
 ## レイヤーの独立性
 
@@ -16,7 +16,7 @@
 
 `parameters.illumination` は0〜8の局所的な明るさの下限です。たいまつの距離減衰結果との大きい方を表示・ミニマップへ渡します。周囲へ放射する光源ではありません。`parameters.water_passable` は水が入れる区画内セルを明示し、通常の区画水没の水面表示に使います。給排水・水密扉・区画全体の入場禁止は引き続き `compartment_water` と `map_connections` が担当します。この値だけでセル間の流体計算や新しい水密境界は生成しません。固有の数値・真偽値・文字列パラメータも追加でき、セルイベントの条件から `cell.parameters.<名前>` を参照できます。
 
-`events` はフィールドイベントIDの配列です。セル種はイベントへの参照だけを持ち、HPの減算や戦闘開始の処理を持ちません。宝箱・人物・火台・レバーは配置物、扉・水門・壁面はエッジ側の定義として管理します。エッジ上のたいまつは[調査仕様](ui/INSPECTION.md)に従って操作します。
+`events` はフィールドイベントIDの配列です。セル種はイベントへの参照だけを持ち、HPの減算や戦闘開始の処理を持ちません。宝箱・人物・火台・レバーは配置物、扉・水門・壁面はエッジ側の定義として管理します。エッジ上のたいまつは[調査仕様](../ui/INSPECTION.md)に従って操作します。
 
 ## 2Dの共有エッジ
 
@@ -79,7 +79,7 @@
 
 `fieldEntry.fired` に `cell:<イベントID>` を保存し、同じ入場中の再実行を防ぎます。`once: false` は再入場ごとに実行可能、`once: true` は `cell/<map>/<x>,<y>/<イベントID>` の実行記録でその地点につき一度です。同じプリセットを別の地点へ置いた場合、その地点は独立して発火します。会話・戦闘中の保存と再開も同じ記録を使います。初期配置・明示された転送も入場として扱います。
 
-毒の沼地を作る場合、プリセットの `events` に `poison_step` を指定し、イベントから次のような通常スクリプトを呼びます。現行のゲーム配置へ毒床を新たに追加したわけではなく、原稿には `poison_swamp`、`poison_step`、`cell.poison_step` を登録済みです。動作は [cell-catalog.test.mjs](../tests/cell-catalog.test.mjs) で検証しています。
+毒の沼地を作る場合、プリセットの `events` に `poison_step` を指定し、イベントから次のような通常スクリプトを呼びます。現行のゲーム配置へ毒床を新たに追加したわけではなく、原稿には `poison_swamp`、`poison_step`、`cell.poison_step` を登録済みです。動作は [cell-catalog.test.mjs](../../tests/cell-catalog.test.mjs) で検証しています。
 
 ```json
 {
@@ -101,10 +101,10 @@
 
 植物、封印、取引、浮上装置、動力扉、天球儀と巨獣の地形パッチは、通行値 `tile` と変更後の `layers` を別々に持ちます。破壊壁は開通時に適用する `openedLayers` を持ちます。現在の原稿では変更後の表示・パラメータ・イベント配列を明記し、`tile` の文字から見た目を推測しません。解除時は元のセルプリセットと地点上書きへ戻ります。複数部品が同じ項目を変更すると定義順の後の変更を採用するため、意図しない重複は避けます。
 
-[dungeonCell](../src/core/dungeons.js) が描画とセルイベントへ現在のレイヤーを提供し、`dungeonTile` は通行値だけを提供します。通常のSchemaは [cell-types.schema.json](../data/schemas/cell-types.schema.json)、[cell-events.schema.json](../data/schemas/cell-events.schema.json)、[原稿Schema](../data/schemas/cell-layers-authoring.schema.json)、[マップSchema](../data/schemas/map.schema.json) です。ランタイム検証では参照・寸法・通行投影・イベントとパッチの内容も検査します。
+[dungeonCell](../../src/core/dungeons.js) が描画とセルイベントへ現在のレイヤーを提供し、`dungeonTile` は通行値だけを提供します。通常のSchemaは [cell-types.schema.json](../../data/schemas/cell-types.schema.json)、[cell-events.schema.json](../../data/schemas/cell-events.schema.json)、[原稿Schema](../../data/schemas/cell-layers-authoring.schema.json)、[マップSchema](../../data/schemas/map.schema.json) です。ランタイム検証では参照・寸法・通行投影・イベントとパッチの内容も検査します。
 
 ## 退避実装と次の作業
 
-旧3D・旧潮汐マップは従来の意味を [legacy-cell-layers.js](../src/core/legacy-cell-layers.js) の専用アダプターへ隔離しました。通常データの `game.cellLayerVersion: 1` では使いません。退避原稿は変更せず、専用テストも維持します。内容版1.15.0以前のセーブは移行せず、新規開始します。
+旧3D・旧潮汐マップは従来の意味を [legacy-cell-layers.js](../../src/core/legacy-cell-layers.js) の専用アダプターへ隔離しました。通常データの `game.cellLayerVersion: 1` では使いません。退避原稿は変更せず、専用テストも維持します。旧内容版のセーブは移行せず、新規開始します。
 
-1.17.0で環境変化の購読・再発条件・くらがりの戦闘開始を共通イベントへ統合しました。`fire_network.danger` は削除し、火は保護状態などの値を提供します。迷宮原稿のfieldEventsから `field.cell.parameters` と `field.illumination` を条件に使えます。[条件付きイベント](scenarios/EVENT_SYSTEM.md)。セル進入イベントを増やす際も、同じ危険を二重登録しないでください。
+環境変化の購読・再発条件・条件成立時の処理を共通イベントで管理します。通常のくらがりは歩行確率遭遇へ移行済みで、fieldEventsから無条件に開始しません。`fire_network.danger` は削除し、火は保護状態などの値を提供します。迷宮原稿のfieldEventsから `field.cell.parameters` と `field.illumination` を条件に使えます。[条件付きイベント](../scenarios/EVENT_SYSTEM.md)。セル進入イベントを増やす際も、同じ危険を二重登録しないでください。

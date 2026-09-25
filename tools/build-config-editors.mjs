@@ -35,7 +35,7 @@ export async function configArtifacts(folder=root){
 <body data-config="${escape(entry.file)}"><header><a href="${prefix}index.html">設定一覧へ</a><span>灯帰りの迷宮 / 設定編集</span><a href="${game}index.html">ゲームへ</a></header><main id="editor"><p role="status">設定を読み込んでいます。HTTPでこのページを開いてください。</p></main><noscript>編集にはJavaScriptを有効にしてください。</noscript><script type="module" src="${prefix}shared/studio.js"></script></body></html>
 `);}
  artifacts.set('map.html',`<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>マップ編集 | 灯帰りの迷宮</title><link rel="stylesheet" href="shared/studio.css"></head><body data-map-studio><header><a href="index.html">設定一覧へ</a><a href="../doc/CONFIG_EDITORS.md">使い方</a><a href="../index.html">ゲームへ</a></header><main id="editor"><p role="status">マップ編集を読み込んでいます。</p></main><noscript>JavaScriptを有効にしてください。</noscript><script type="module" src="shared/map-studio.js"></script></body></html>\n`);
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>マップ編集 | 灯帰りの迷宮</title><link rel="stylesheet" href="shared/studio.css"></head><body data-map-studio><header><a href="index.html">設定一覧へ</a><a href="../doc/authoring/CONFIG_EDITORS.md">使い方</a><a href="../index.html">ゲームへ</a></header><main id="editor"><p role="status">マップ編集を読み込んでいます。</p></main><noscript>JavaScriptを有効にしてください。</noscript><script type="module" src="shared/map-studio.js"></script></body></html>\n`);
  const reference=await configReference(folder);artifacts.set('shared/reference-catalog.js','// Generated reference index. Edit config sources, never this file.\nexport const referenceData='+JSON.stringify(reference,null,2)+';\n');
  return {entries,artifacts};
 }

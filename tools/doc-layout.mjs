@@ -3,16 +3,44 @@ import path from 'node:path';
 
 // Generators compose links relative to doc/; relocate only at the write boundary.
 export const scenarioDocs = new Set([
-  'QUEST_CATALOG.md', 'QUEST_Q001.md', 'QUEST_Q002.md', 'QUEST_EVENTS.md',
-  'SCENARIO_DESIGN.md', 'SCENARIO_MODEL_V11.md', 'EXPLORATION_AND_PROSE_1_11.md',
-  'EVENT_SYSTEM.md', 'EVENT_CATALOG.md', 'SCRIPT_REFERENCE.md', 'CHARACTERS.md'
+  'QUEST_CATALOG.md', 'QUEST_Q001.md', 'QUEST_Q002.md',
+  'QUEST_EVENTS.md', 'SCENARIO_DESIGN.md', 'SCENARIO_MODEL_V11.md',
+  'EXPLORATION_AND_PROSE.md', 'EVENT_SYSTEM.md', 'EVENT_CATALOG.md',
+  'SCRIPT_REFERENCE.md', 'CHARACTERS.md'
 ]);
 export const uiDocs = new Set([
   'PHILOSOPHY_AND_STATUS.md', 'VIEW_CONTRACT.md', 'IN_SCENE_VIEW.md',
-  'INSPECTION.md', 'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md', 'MESSAGE_AND_COMMAND_WINDOWS.md',
-  'CHARACTER_STAGING.md', 'DUNGEON_RENDER_REVIEW.md', 'SE_CATALOG.md', 'EFFECT_CATALOG.md'
+  'INSPECTION.md', 'KEYBOARD_CONTROLS.md', 'KEY_CONFIG.md',
+  'MESSAGE_AND_COMMAND_WINDOWS.md', 'CHARACTER_STAGING.md', 'SE_CATALOG.md',
+  'EFFECT_CATALOG.md'
 ]);
-export const docPath = name => scenarioDocs.has(name) || name.startsWith('quest-maps/') ? `scenarios/${name}` : uiDocs.has(name) ? `ui/${name}` : name;
+export const dungeonsDocs = new Set([
+  'CELL_CATALOG.md', 'CELL_LAYERS.md', 'CONNECTED_2D_MAPS.md',
+  'DUNGEON_ART_AND_SCENARIOS.md', 'DUNGEON_CATALOG.md', 'DUNGEON_SYSTEMS.md',
+  'DUNGEON_SYSTEM_DESIGN.md', 'FIELD_LIGHTING.md', 'KAGARIBI_DUNGEON.md',
+  'MAP_CELLS_AND_BOUNDARIES.md', 'VOXEL_TERRAIN_AND_WATER.md', 'WATERWAYS_SALT_MINE.md'
+]);
+export const worldDocs = new Set([
+  'WORLD_LOCATIONS.md', 'LOCATION_CATALOG.md'
+]);
+export const battleDocs = new Set([
+  'BALANCE_PLAN.md', 'COMPANION_CATALOG.md', 'JOB_SYSTEM.md',
+  'MONSTER_CATALOG.md'
+]);
+export const authoringDocs = new Set([
+  'CONFIG_EDITORS.md', 'CONFIG_EDITOR_SOURCES.md', 'CONFIG_EDITOR_URLS.md'
+]);
+export const developmentDocs = new Set([
+  'PROGRESS.md', 'DOCUMENTATION_AUDIT.md', 'DATA_SNAPSHOT.json'
+]);
+export const docGroups = {scenarios:scenarioDocs,ui:uiDocs,dungeons:dungeonsDocs,world:worldDocs,battle:battleDocs,authoring:authoringDocs,development:developmentDocs};
+const aliases = {'DUNGEON_SYSTEMS_1_7.md':'dungeons/DUNGEON_SYSTEMS.md','EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','scenarios/EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','DUNGEON_REVISION_1_9.md':'legacy/2026-09-25/DUNGEON_REVISION_1_9.md','DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md','ui/DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md'};
+export function docPath(name) {
+  if (aliases[name]) return aliases[name];
+  if (name.startsWith('quest-maps/')) return `scenarios/${name}`;
+  for (const [folder,names] of Object.entries(docGroups)) if (names.has(name)) return `${folder}/${name}`;
+  return name;
+}
 
 export function relocateDoc(source, name) {
   const from = path.posix.dirname(docPath(name));
