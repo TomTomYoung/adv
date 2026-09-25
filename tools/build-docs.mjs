@@ -10,6 +10,7 @@ import {EXPRESSION_OPS} from '../src/core/expression.js';
 import {cellCatalogInventory} from './cell-catalog.mjs';
 import {eventCatalog} from './event-catalog.mjs';
 import {characterCatalog} from './character-catalog.mjs';
+import {monsterCatalog} from './monster-catalog.mjs';
 import {locationCatalog} from './location-catalog.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
@@ -31,8 +32,7 @@ jobs.push(`## 探索特技${count(data.fieldAbilities)}定義`,'');for(const [id
 const actors=['# 仲間一覧と酒場の編成','',`更新日: ${date}。作品版${version}。仲間${count(data.actors)}人から1〜${data.system.maxParty}人を編成します。初期隊は${data.game.initial.members.map(id=>data.actors[id].name).join('・')}です。`,'','## 編成と状態','','町の酒場で加入・待機・入れ替えを行います。生存者を最低1人残し、会話・戦闘中は編成しません。HP・MP・状態異常・装備・職業と成長履歴を保持し、編成変更だけでは回復しません。NPCの人物一覧は[CHARACTERS.md](scenarios/CHARACTERS.md)に分けます。','','技能は現在職とレベル、装備、貸出、固有環境から判定します。下記はLv1・初期職・初期装備の状態です。人物定義に残る旧skills配列だけを現在の習得技能として表示しません。','','## 現行の仲間',''];
 for(const [id,a] of Object.entries(data.actors))actors.push(`### ${a.name} (${id})`,'',`![${a.name}](../${data.assets.images[a.portrait]})`,'',a.bio,`人物の役割：${a.class}／${a.role}。初期職：${data.jobs[a.initialJob].name}。`,`初期能力：${stats(engine.stats(id))}。`,`初期戦闘技能：${names(engine.skills(id))}。`,'');
 actors.push('## 編集と保存','','人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。');await fs.writeFile(path.join(folder,docPath('COMPANION_CATALOG.md')),relocateDoc(actors.join('\n')+'\n','COMPANION_CATALOG.md'));
-const enemies=[`## 現行の敵${count(data.enemies)}定義`,'',`作品版${version}の data/enemies.json から生成。画像IDを共有する敵も含みます。基礎数値にダンジョンの敵倍率や戦闘補正が作用します。`,''];
-for(const [id,e] of Object.entries(data.enemies)){const encounters=Object.entries(data.encounters).filter(([,c])=>(c.enemies??[]).some(v=>typeof v==='string'?v===id:v.id===id||v.enemy===id)).map(([id])=>id);enemies.push(`### ${e.name} (${id})`,'',`基礎能力：${stats(e.stats)}。報酬：${e.rewards?.gold??0}G / ${e.rewards?.xp??0}EXP。`,`代表技能：${names([e.skill??'attack'])}。属性倍率：${JSON.stringify(e.resist??{})}。`,`画像：[${e.sprite}](../${data.assets.images[e.sprite]})。出現定義：${encounters.join('・')||'data/encounters.json を参照'}。`,'');}await section('MONSTER_CATALOG.md','enemies',enemies.join('\n'));
+await fs.writeFile(path.join(folder,docPath('MONSTER_CATALOG.md')),relocateDoc(monsterCatalog(data),'MONSTER_CATALOG.md'));
 const dungeons=['## 配布データの構成',''];for(const dungeon of Object.values(data.dungeons))dungeons.push(`${dungeon.name} (${dungeon.id})：${dungeon.maps.length}マップ。部品：${Object.entries(dungeon.systems).map(([id,s])=>`${id}=${s.use}${s.enabled===false?'（無効）':''}`).join(' / ')}。現地調査：${questEvents(data).filter(e=>e.dungeon===dungeon.id&&e.note).map(s=>`${s.title} → ${s.quest}`).join(' / ')||'なし'}。`,'');await section('DUNGEON_CATALOG.md','dungeons',dungeons.join('\n'));
 await section('SCRIPT_REFERENCE.md','commands',`## 実装との照合用一覧\n\n${COMMANDS.size}命令：${[...COMMANDS].map(v=>'`'+v+'`').join(' / ')}。\n\n${EXPRESSION_OPS.size}式演算子：${[...EXPRESSION_OPS].map(v=>'`'+v+'`').join(' / ')}。`);
 await section('CELL_CATALOG.md','cell-inventory',cellCatalogInventory(data));

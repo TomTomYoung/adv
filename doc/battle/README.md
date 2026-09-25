@@ -6,6 +6,6 @@
 
 [COMPANION_CATALOG.md](COMPANION_CATALOG.md)：仲間10人、初期能力と酒場の編成。
 
-[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵59定義、画像・能力・出現先。
+[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵59定義、画像と共有先・能力・AIの全規則・出現経路。
 
 [BALANCE_PLAN.md](BALANCE_PLAN.md)：調整対象、測定条件、旧測定と未実施項目。

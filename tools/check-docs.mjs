@@ -3,6 +3,7 @@ import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
 import {eventCatalog} from './event-catalog.mjs';
 import {characterCatalog} from './character-catalog.mjs';
+import {monsterCatalog} from './monster-catalog.mjs';
 import {locationCatalog,questPlaces} from './location-catalog.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
@@ -49,6 +50,7 @@ for(const file of [...current,...indexes,'README.md','config/README.md','config/
 const data=await loadContent(read),snapshot=await read('doc/'+docPath('DATA_SNAPSHOT.json')),count=o=>Object.keys(o??{}).length;
 check(await fs.readFile(path.join(folder,docPath('EVENT_CATALOG.md')),'utf8')===relocateDoc(eventCatalog(data),'EVENT_CATALOG.md'),'EVENT_CATALOG: generated inventory differs');
 check(await fs.readFile(path.join(folder,docPath('CHARACTERS.md')),'utf8')===relocateDoc(characterCatalog(data),'CHARACTERS.md'),'CHARACTERS: generated portraits or sprites differ');
+check(await fs.readFile(path.join(folder,docPath('MONSTER_CATALOG.md')),'utf8')===relocateDoc(monsterCatalog(data),'MONSTER_CATALOG.md'),'MONSTER_CATALOG: generated AI, images or encounter references differ');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
 const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'utf8');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
