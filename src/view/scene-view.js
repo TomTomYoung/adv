@@ -5,7 +5,7 @@ import {messagePages,pageAtOffset} from './message-pages.js';
 import {captureFocus} from './focus.js';
 const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,fn,className='')=>{const e=make('button',className,text);e.type='button';e.addEventListener('click',fn);return e;};
-const panelNames={bag:'旅支度',shop:'ショップ',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
+const panelNames={profile:'キャラクタープロフィール',bag:'旅支度',shop:'ショップ',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
 const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], summary';
 
 export class SceneView extends GameView{
@@ -77,7 +77,7 @@ export class SceneView extends GameView{
     const key=JSON.stringify([model.mode,model.town?.id,model.dungeon?.location,model.dialog,model.battle?.event]);
     if(this.sceneKey!==null&&this.sceneKey!==key)this.tab=model.mode==='town'?'location':'explore';
     this.sceneKey=key;this.model=model;
-    const allowed=['bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
+    const allowed=[...(model.mode==='town'?['profile']:[]),'bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
     if(!allowed.includes(this.tab))this.tab=model.mode==='town'?'location':'explore';
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     this.renderedTab=this.tab;
@@ -116,7 +116,7 @@ export class SceneView extends GameView{
     if(model.notice&&model.notice!==model.dialog?.text){const notice=make('div','scene-notice',model.notice);notice.setAttribute('role','status');hud.append(notice);}
     if(panelNames[this.tab]){
       world.inert=true;hud.inert=true;dock.inert=true;
-      const overlay=make('div','scene-overlay'),panel=make('section','scene-window');panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','scene-window-title');
+      const overlay=make('div','scene-overlay'),panel=make('section','scene-window');panel.dataset.panel=this.tab;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','scene-window-title');
       const head=make('header','scene-window-header'),title=make('h2','',panelNames[this.tab]);title.id='scene-window-title';
       const close=button('閉じる',()=>this.closePanel());head.append(title,close);
       const body=make('div','scene-window-body');panel.append(head,body);overlay.append(panel);stage.append(overlay);
@@ -139,8 +139,8 @@ export class SceneView extends GameView{
   }
   compactParty(parent,m){
     const party=make('div','scene-party');party.dataset.fx='party';
-    for(const a of m.party){const b=button('',()=>this.openPanel('party'),'scene-member'+(a.hp<=0?' fallen':''));
-      b.append(this.portrait(a,'scene-member-portrait'),make('span','',a.name),make('span','scene-member-values',`HP ${a.hp}/${a.maxHp}${m.battle?' / MP '+a.mp+'/'+a.maxMp:''}`));
+    for(const a of m.party){const b=button('',()=>m.mode==='town'?this.openCharacter(a.id):(this.partySelection={...this.partySelection,party:a.id},this.openPanel('party')),'scene-member'+(a.hp<=0?' fallen':''));
+      b.dataset.focus=`character:${a.id}`;b.append(this.portrait(a,'scene-member-portrait'),make('span','',a.name),make('span','scene-member-values',`HP ${a.hp}/${a.maxHp}${m.battle?' / MP '+a.mp+'/'+a.maxMp:''}`));
       if(a.statuses.length)b.append(make('span','scene-member-status',a.statuses.join('・')));party.append(b);
     }parent.append(party);
   }

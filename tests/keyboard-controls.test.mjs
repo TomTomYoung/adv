@@ -152,9 +152,9 @@ for(const layout of ['scene','classic']){
   });
   test(`${layout}: job details and candidate selection cancel one level at a time`,()=>{
     const g=newGame();g.dispatch({type:'location.move',id:'hikarigaeri_tavern'});const c=setup(layout,g);try{
-      c.panel('party');c.selectButton(b=>b.closest('summary'));c.key('Enter');assert.ok(c.root.querySelector('details').open);
-      c.key('ArrowDown');assert.match(c.document.activeElement.dataset.focus,/転職先/);c.key('Enter');c.key('ArrowDown');c.key('Escape');assert.ok(c.root.querySelector('details').open);
-      c.key('Escape');assert.ok(!c.root.querySelector('details').open);assert.equal(c.view.tab,'party');c.key('Escape');assert.equal(c.view.tab,'location');c.key('Escape');assert.equal(g.state.townLocation,'hikarigaeri_square');
+      c.view.openCharacter('ada');c.selectButton(b=>b.dataset.focus==='profile:town:jobs');c.key('Enter');assert.ok(c.root.querySelector('details').open);
+      c.selectButton(b=>b.dataset.focus.includes('転職先'));assert.match(c.document.activeElement.dataset.focus,/転職先/);c.key('Enter');c.key('ArrowDown');c.key('Escape');assert.ok(c.root.querySelector('details').open);
+      c.key('Escape');assert.equal(c.view.profilePage,'overview');assert.equal(c.view.tab,'profile');c.key('Escape');assert.equal(c.view.tab,'location');c.key('Escape');assert.equal(g.state.townLocation,'hikarigaeri_square');
     }finally{c.cleanup();}
   });
 }
@@ -198,7 +198,7 @@ test('system dialogs preserve save-slot focus, navigate settings and cancel conf
 
 test('job change keeps its detail open and preserves a connected focus after the actor card changes',()=>{
   const g=newGame();g.dispatch({type:'location.move',id:'hikarigaeri_tavern'});const c=setup('scene',g);
-  try{c.panel('party');c.selectButton(b=>b.closest('summary'));c.key('Enter');c.key('ArrowDown');c.key('Enter');c.key('ArrowDown');c.key('Enter');
+  try{c.view.openCharacter('ada');c.selectButton(b=>b.dataset.focus==='profile:town:jobs');c.key('Enter');c.selectButton(b=>b.dataset.focus.includes('転職先'));c.key('Enter');c.key('ArrowDown');c.key('Enter');
     c.selectButton(b=>b.textContent==='この職業へ転職');c.key('Enter');assert.notEqual(g.state.actors.ada.job,'warrior');assert.ok(c.root.querySelector('details').open);assert.ok(c.document.activeElement.isConnected);assert.ok(!c.document.activeElement.disabled);
   }finally{c.cleanup();}
 });

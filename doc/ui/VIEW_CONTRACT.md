@@ -214,3 +214,7 @@ SceneViewは左の本文を実寸でページ分割し、右の選択肢だけ�
 scene.castの指定はCoreのpresentation.castへ保存し、Applicationが画像URL・人物名・発話者IDへ投影します。Viewが任意の人物の所在を決めたりシナリオ原本を読むことはありません。演出フィールドの詳細は[CHARACTER_STAGING.md](CHARACTER_STAGING.md)。
 
 現行の調査は[INSPECTION.md](INSPECTION.md)に従う。dungeon.objectsの任意edgeは設置セルの向きを表し、歩行画面は現在セルでその面を向いたときに表示する。ミニマップはセル中央の配置物とは別に該当辺へ目印を置く。光源の効果は表示・操作の向き条件で切らない。
+
+## 人物プロフィールの追加投影
+
+party/rosterの各人物にitems（個人の未装備品と個数）、skills/fieldAbilitiesにcategory（skills/magic）を投影します。shopの各品物にsharedCount、recipientsの各人にcount（未装備）とequippedCount（装備中）を加えます。Viewは所持数や魔法区分を独自に推測しません。詳細は[人物画面](CHARACTER_PROFILES.md)、[ショップ](SHOP_AND_PREPARATIONS.md)。

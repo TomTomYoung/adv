@@ -11,6 +11,7 @@ export function focusButton(e){e?.focus({preventScroll:true});e?.scrollIntoView?
 export function captureFocus(root){
   const e=document.activeElement,nodes=buttons(root);
   return {key:root.contains(e)?e.dataset.focus:null,index:nodes.indexOf(e),selection:e?.selectionStart,
+    scrolls:[...root.querySelectorAll('[data-scroll]')].map(e=>({key:e.dataset.scroll,top:e.scrollTop,left:e.scrollLeft})),
     details:[...root.querySelectorAll('details')].filter(d=>d.open).map(d=>d.querySelector('summary button')?.dataset.focus)};
 }
 export function restoreFocus(root,snapshot,preferred){

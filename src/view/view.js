@@ -1,7 +1,8 @@
+import {renderCharacter,renderParty} from './character-profile.js';
 import {renderBag,renderShop,cancelInventoryAction} from './inventory-view.js';
 import {mapSection} from './minimap.js';
 import {appendDungeonArt} from './dungeon-art.js';
-import {jobPanel,fieldSkills,buffLabels} from './jobs.js';
+import {buffLabels} from './jobs.js';
 import {EffectsRenderer} from './effects.js';
 import {paintDungeon} from './dungeon.js';
 import {buttons,captureFocus,prepareControls,restoreFocus,closeDetails,focusButton} from './focus.js';
@@ -48,7 +49,7 @@ export class GameView {
   keyHint(){const exploring=this.explorationInput();return this.ui.keyHint?.(exploring)??inputHint(undefined,exploring);}
   inputScope(){
     const expanded=this.mapOverlay?.querySelector('.map-dialog');if(expanded)return expanded;
-    const inventory=this.root.querySelector('.inventory-choice');if(inventory)return inventory;
+    const inventory=this.root.querySelector('.inventory-choice');if(inventory&&!inventory.classList.contains('shop-recipients'))return inventory;
     const panel=this.root.querySelector('.scene-window');
     if(panel)return panel.querySelector('.button-picker')??panel;
     return this.root.querySelector('.button-picker')??this.root.querySelector('.message-window')??this.root.querySelector('.battle-targets')??this.root.querySelector('.battle-actions')??(['location','explore'].includes(this.tab)?this.root.querySelector('.location-choices, .explore-controls'):null)??this.root.querySelector('.main-panel')??this.root;
@@ -57,18 +58,23 @@ export class GameView {
     if(!this.model.battle){this.battleTurn=null;this.battleMenu=null;this.pendingBattleAction=null;}
     this.tabNavigation=false;
     prepareControls(this.root);
+    for(const scroll of snapshot.scrolls??[]){const e=[...this.root.querySelectorAll('[data-scroll]')].find(e=>e.dataset.scroll===scroll.key);if(e){e.scrollTop=scroll.top;e.scrollLeft=scroll.left;}}
     const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event]:null,this.battleMenu,this.pendingBattleAction,this.inventoryAction,this.bagActor]);
     const same=key===this.inputKey;this.inputKey=key;
     if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
     if(this.ui.modalOpen?.())return;
     if(this.resumeExploration())return;
     const scope=this.inputScope(),selected=this.pendingBattleAction?.target==='enemy'?this.selectedTarget:this.selectedAlly;
-    const preferred=scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
+    const preferred=(this.inventoryAction?.kind==='buy'?scope.querySelector('.shop-recipients button:not(:disabled)'):null)??scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
     restoreFocus(scope,same?snapshot:null,preferred??(same?null:buttons(scope.querySelector('.scene-window-body')??(!['location','explore'].includes(this.tab)?scope.querySelector('.panel-content'):null)??scope)[0]));
   }
+  openCharacter(id){this.profileActor=id;this.profilePage='overview';this.inventoryAction=null;this.tab='profile';this.render(this.model);}
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
     if(this.mapOverlay){this.closeMap();return;}
+    if(this.tab==='profile'&&this.profilePage!=='overview'&&!this.root.querySelector('.button-picker')){this.profilePage='overview';this.render(this.model);return;}
+    const profile=document.activeElement?.closest('.character-profile')?.dataset.profile;
+    if(this.tab==='party'&&profile&&this.partyPages?.[profile]!=='overview'){this.partyPages[profile]='overview';this.render(this.model);return;}
     if(cancelInventoryAction(this))return;
     if(closeDetails(this.inputScope()))return;
     const base=this.model.mode==='town'?'location':'explore';
@@ -92,7 +98,8 @@ export class GameView {
     const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
-    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),...(model.town?.party?[['party','酒場・仲間']]:[]),['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
+    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
+    if(this.tab==='profile'&&model.mode==='town')allTabs.push(['profile','キャラクター']);
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     for(const [id,label] of allTabs){const b=button(label,()=>{this.tab=id;this.render(model);},id===this.tab?'active':'');b.setAttribute('aria-current',id===this.tab?'page':'false');tabs.append(b);}main.append(tabs);
@@ -105,6 +112,7 @@ export class GameView {
     else if(this.tab==='quests')this.quests(main,model);
     else if(this.tab==='regions')this.regions(main,model);
     else if(this.tab==='party')this.party(main,model);
+    else if(this.tab==='profile')this.profile(main,model);
     else if(this.tab==='bag')this.bag(main,model);
     else if(this.tab==='shop')this.shop(main,model);
     else this.journal(main,model);
@@ -268,30 +276,8 @@ export class GameView {
   soundButton(){const b=button(this.ui.soundLabel?.()??('音：'+(this.ui.soundEnabled()?'入':'切')),()=>this.ui.sound());b.dataset.audioToggle='true';return b;}
   updateSound(label){const b=this.root.querySelector('[data-audio-toggle]');if(b)b.textContent=label;}
   portrait(a,className='actor-portrait'){if(!a.portrait){const fallback=node('span',className,a.class[0]);fallback.style.color=a.color;return fallback;}const img=node('img',className);img.src=a.portrait;img.alt=a.name;img.dataset.fx=`actor:${a.id}`;img.width=160;img.height=160;img.loading='lazy';return img;}
-  party(parent,m){
-    const section=node('div','panel-content'),town=m.mode==='town';section.append(heading(town?'TAVERN / COMPANIONS':'COMPANIONS',town?(m.tavern?.name??'帰り火亭'):'冒険者の隊'));
-    if(town)section.append(node('p','',m.tavern?.description??''),node('p','muted',`出発する仲間 ${m.party.length} / ${m.tavern?.maxParty??5}人。入れ替えは無料です。待機だけでは回復しません。`));
-    const roster=town?(m.roster??m.party):m.party;
-    for(const active of town?[true,false]:[true]){
-      if(town)section.append(node('h3','roster-heading',active?'出発する仲間':'酒場で待つ仲間'));
-      const grid=node('div','roster-grid');
-      for(const a of roster.filter(a=>!town||(a.active??true)===active)){
-        const card=node('article','companion-card');card.dataset.controlGroup=`actor:${a.id}`;const head=node('div','companion-head'),body=node('div');body.append(node('span','eyebrow',a.class),node('h3','',a.name),node('p','',a.role));head.append(this.portrait(a),body);card.append(head,node('p','companion-bio',a.bio??''),node('p','muted',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'),node('p','muted',`攻 ${a.stats.str}　防 ${a.stats.vit}　速 ${a.stats.agi}　知 ${a.stats.int}`));
-        if(buffLabels(a).length)card.append(node('p','buff-summary',buffLabels(a).join(' / ')));
-        if(a.statuses.length)card.append(node('p','requirement',a.statuses.join('・')));
-        const skillList=node('div','skill-list');for(const skill of a.skills??[]){const label=node('span','badge',`${skill.name}${skill.mp?' MP'+skill.mp:''}`);label.title=skill.description??skill.name;skillList.append(label);}card.append(skillList);
-        for(const item of a.equipmentSlots??[]){const row=node('div','equipment-row');row.append(node('span','',item.name));if(town)row.append(button('袋へ戻す',()=>this.act({type:'unequip',actor:a.id,slot:item.slot}),'',!item.canRemove));card.append(row);}
-        if(!Object.keys(a.equipment).length)card.append(node('p','muted','標準の旅装'));
-        card.append(fieldSkills(a,intent=>this.act(intent)));if(town){const panel=jobPanel(a,m,intent=>this.act(intent));if(panel)card.append(panel);const actions=node('div','companion-actions');
-          if(active)actions.append(button('酒場で待機',()=>this.act({type:'party',action:'leave',actor:a.id}),'',!a.canLeave));
-          else{actions.append(button('隊に加える',()=>this.act({type:'party',action:'join',actor:a.id}),'primary',!a.canJoin));if(a.swapCandidates?.length){const target=node('select');target.setAttribute('aria-label',`${a.name}と交代する仲間`);for(const c of a.swapCandidates)target.append(new Option(c.name,c.id));actions.append(target,button('この仲間と交代',()=>this.act({type:'party',action:'swap',actor:a.id,replace:target.value})));}}
-          card.append(actions);
-        }grid.append(card);
-      }section.append(grid);
-    }
-    if(town){section.append(heading('REST / RECOVERY','出発前の休息'));for(const service of m.town?.services??m.services){const row=node('div','service');row.append(button(service.label,()=>this.act({type:'service',id:service.id})),node('p','muted',service.detail));section.append(row);}}
-    parent.append(section);
-  }
+  profile(parent,m){renderCharacter(this,parent,m);}
+  party(parent,m){renderParty(this,parent,m);}
   bag(parent,m){renderBag(this,parent,m);}
   shop(parent,m){renderShop(this,parent,m);}
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
@@ -301,7 +287,7 @@ export class GameView {
     for(const entry of [...m.journal].reverse()){const row=node('article','journal-entry');row.append(node('span','eyebrow',entry.type==='evidence'?'手掛かり':'決着'),node('h3','',entry.title),node('p','',entry.text));section.append(row);}parent.append(section);
   }
   sidebar(parent,m){
-    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=node('div',`party-row ${a.hp<=0?'fallen':''}`),avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
+    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=m.mode==='town'?button('',()=>this.openCharacter(a.id),`party-row ${a.hp<=0?'fallen':''}`):node('div',`party-row ${a.hp<=0?'fallen':''}`);row.dataset.focus=`character:${a.id}`;const avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
     if(m.dungeon)parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','メインクエスト'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief));this.questDestination(tracked,m.tracked);parent.append(tracked);}
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
