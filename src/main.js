@@ -37,7 +37,7 @@ function toggleSound(){
   storageWrite('settings',JSON.stringify(settings));view.updateSound(sound.label());
   if(settings.sound)status('探索・戦闘BGMを再生します。音量は「記録」で調整できます。');
 }
-function render(){lastModel=projectGame(engine);view.render(lastModel);syncSystemPlacement();syncAudio();}
+function render(){lastModel=projectGame(engine);lastModel.feedback.startedAt=performance.now();view.render(lastModel);syncSystemPlacement();syncAudio();}
 function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length||engine.state.notice)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
 function restore(text){const result=restoreGame(data,text);engine=result.engine;storageWrite('auto',engine.save());dialog.close();render();status(result.message);}
 function menu(){

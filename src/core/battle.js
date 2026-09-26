@@ -10,6 +10,7 @@ import {passives,permission,costProblem,payCost} from './jobs.js';
 import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
+import {describeTarget,playBattleCue} from './feedback.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
@@ -78,6 +79,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   return {ok:true,skill,targets};
 }
 function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null){
+  let damageTotal=0;
   const b=engine.state.battle,s=engine.state;
   const sourceStats=enemySource?enemyStats(engine,source):engine.stats(source.id);
   const targetStats=target.instance?enemyStats(engine,target):engine.stats(target.id);
@@ -103,7 +105,7 @@ function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
-      target.hp=Math.max(0,target.hp-damage);recordDefeated(engine);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
+      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
     }
     if(effect.type==='heal'){
       const multiplier=effect.itemHealing||itemId==='potion'?(powers.itemHealing??1):itemId?1:(powers.healingPower??1);
@@ -117,6 +119,18 @@ function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=
     }
     if(effect.type==='cleanse')target.statuses=[];
   }
+  return damageTotal;
+}
+function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
+  const origin=describeTarget(engine,unitKey(source));
+  const results=targets.map(target=>{
+    const result=describeTarget(engine,unitKey(target));
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId);
+    if(damage>0)result.damage=damage;
+    return result;
+  });
+  const hostile=enemySource&&targets.some(t=>!t.instance)&&skill.effects.some(e=>e.type==='damage');
+  playBattleCue(engine,engine.data.presentation?.bindings.skills[skillId],origin,results,hostile);
 }
 function coveredTarget(engine,target,skill){
   if(skill.target!=='enemy'||!skill.effects.some(e=>e.type==='damage'))return target;
@@ -146,8 +160,7 @@ function enemiesTurn(engine){
     else if(skill.target==='ally')targets=[b.enemies.filter(e=>e.hp>0).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
     else targets=[coveredTarget(engine,s.actors[targetId],skill)];
     if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
-    engine.cue(engine.data.presentation?.bindings.skills[rule.skill],targets.map(unitKey));
-    for(const target of targets)applySkill(engine,enemy,target,skill,rule.skill,true);
+    useSkill(engine,enemy,targets,skill,rule.skill,true);
   }
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
@@ -166,15 +179,13 @@ export function battleAction(engine,intent){
     const item=engine.data.items[intent.item],target=s.actors[intent.target];
     if(!item?.battleSkill||!(s.inventory[intent.item]>0)||!s.members.includes(intent.target)||!target||target.hp<=0)return false;
     const skill=engine.data.skills[item.battleSkill];if(!skill||effectsProblem(engine.data,skill)||dungeonAbilityReason(engine.data,s,item.battleSkill,'battle.skill')||!dungeonEffectActive(engine.data,s,'item',intent.item))return false;
-    engine.cue(engine.data.presentation?.bindings.skills[item.battleSkill],[unitKey(target)]);
-    engine.give(intent.item,-1);applySkill(engine,actor,target,skill,item.battleSkill,false,intent.item);
+    engine.give(intent.item,-1);useSkill(engine,actor,[target],skill,item.battleSkill,false,intent.item);
   }else if(intent.action==='skill'){
     const plan=battleSkillPlan(engine,actorId,intent.skill,intent.target);
     if(!plan.ok){engine.notify(plan.reason);return false;}
     const {skill,targets}=plan;payCost(engine,actorId,skill);
     if(skill.effects.some(e=>e.type==='repel')){kindlePortable(engine.data,s,skill.fireEffect);engine.eventCue('light');endBattle(engine,'repel');return true;}
-    engine.cue(engine.data.presentation?.bindings.skills[intent.skill],targets.map(unitKey));
-    for(const target of targets)applySkill(engine,actor,target,skill,intent.skill);
+    useSkill(engine,actor,targets,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;
   const used=intent.action==='skill'?engine.data.skills[intent.skill]:engine.data.skills[engine.data.items[intent.item]?.battleSkill];if(used)wetAfterSkill(engine,actor,used);

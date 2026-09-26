@@ -11,10 +11,13 @@ export function validatePresentation(data){
     if(!number(e.duration,50,5000)||!Array.isArray(e.tracks)||e.tracks.length<1||e.tracks.length>8){fail(id,'時間・トラック数が不正です');continue;}
     for(const t of e.tracks){
       if(t.kind==='motion'){
+        if(t.directed!==undefined&&typeof t.directed!=='boolean')fail(id,'方向指定は真偽値です');
         if(!Array.isArray(t.frames)||t.frames.length<2||t.frames.length>32){fail(id,'キーフレーム数が不正です');continue;}
         if(t.frames[0].at!==0||t.frames.at(-1).at!==1)fail(id,'開始0・終了1が必要です');let previous=-1;
         const ranges={at:[0,1],x:[-200,200],y:[-200,200],rotate:[-360,360],skewX:[-40,40],skewY:[-40,40],scaleX:[.1,3],scaleY:[.1,3],opacity:[0,1]};
         for(const f of t.frames){if(!isRecord(f)||!number(f.at,0,1)||f.at<=previous){fail(id,'キーフレームの順序が不正です');continue;}previous=f.at;for(const [k,v] of Object.entries(f))if(!ranges[k]||!number(v,...ranges[k]))fail(id,`変形値が不正です: ${k}`);}
+      }else if(t.kind==='strike'){
+        if(!['slash','blunt','pierce'].includes(t.pattern)||!colorValid(t.color))fail(id,'物理攻撃の形・色が不正です');
       }else if(t.kind==='sprite'){
         ref(data.assets.images,t.asset,id);for(const [k,min,max] of [['frames',2,64],['columns',1,64],['cell',8,512]])if(!Number.isInteger(t[k])||!number(t[k],min,max))fail(id,`コマ指定が不正です: ${k}`);if(!number(t.scale??1,.1,3))fail(id,'拡大率が不正です');
       }else if(t.kind==='split'){if(!['vertical','diagonal'].includes(t.axis)||!number(t.distance,0,100)||!number(t.rotate,-45,45))fail(id,'切断指定が不正です');}
@@ -24,6 +27,11 @@ export function validatePresentation(data){
   }
   const p=data.presentation;if(!p)return errors;
   for(const [id,c] of Object.entries(p.cues??{})){if(!Array.isArray(c.effects)||c.effects.length>8)fail(id,'効果の数が不正です');else for(const e of c.effects)ref(data.effects,e,id);if(c.sound)ref(data.sounds,c.sound,id);if(c.target!=='target'&&!targetValid(c.target))fail(id,'対象が不正です');if(!number(c.gap,0,1000))fail(id,'間隔が不正です');}
+  for(const [id,c] of Object.entries(p.cues??{}))if(c.battle!==undefined){
+    if(!isRecord(c.battle)||!number(c.battle.impact,0,1000)){fail(id,'戦闘の命中時刻が不正です');continue;}
+    if(c.battle.anticipation)ref(data.effects,c.battle.anticipation,id);
+    if(Object.keys(c.battle).some(k=>!['impact','anticipation'].includes(k)))fail(id,'未知の戦闘演出指定です');
+  }
   for(const [kind,bindings] of Object.entries(p.bindings??{}))for(const [key,cue] of Object.entries(bindings)){ref(p.cues,cue,`${kind}.${key}`);if(kind==='skills')ref(data.skills,key,key);}
   const {darkness,shade}=p.ambient??{};if(!darkness||!number(darkness.threshold,1,data.system.lightCapacity)||!number(darkness.maxOpacity,0,.65)||!colorValid(darkness.color))fail('ambient','暗さが不正です');if(!shade||!number(shade.opacity,0,.65)||!colorValid(shade.color))fail('ambient','シェードが不正です');
   return errors;

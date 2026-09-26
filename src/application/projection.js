@@ -50,7 +50,8 @@ export function projectGame(engine){
   if(map)for(const location of Object.values(d.locations??{})){const entrance=location.dungeonEntrance;if(entrance?.map===map.id)objects.push({id:`interior:${location.id}`,name:location.name,x:entrance.x,y:entrance.y,kind:'door',open:false});}
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
   const terrain=projectDungeonSurfaces(engine,systems);
-  const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};
+  const feedbackTarget=t=>({...clone(t),image:d.assets.images[t.image]??null});
+  const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(feedbackTarget),...(e.source?{source:feedbackTarget(e.source)}:{})}))};
   const fire=systems.find(system=>system.kind==='fire_network'),light=fire?fire.portable.fuel:s.light,lightMax=fire?fire.portable.capacity:d.system.lightCapacity;
   const shade=d.presentation?.ambient.shade;
   const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:'#000000',opacity:.65*(1-(terrain.lighting?.current??8)/8),shade:false,lighting:true}]:[];

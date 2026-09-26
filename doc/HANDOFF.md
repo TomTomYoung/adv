@@ -1,8 +1,10 @@
 # 実装引き継ぎ
 
-確認日: 2026-09-27。作品版1.22.0、今回の基点master `3cff23e`（PR #50反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
+確認日: 2026-09-27。作品版1.22.0、今回の基点master `4c7b395`（PR #51反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
 
 ## 完了していること
+
+戦闘演出の改善案1・2・3を実装しました。敵の予備動作→130ms後の命中を共通化し、効果音・反動・ダメージ数字を同期します。斬撃・打撃・刺突は別の軌跡を使い、強打は表示姿勢を50ms保持します。軽減設定、スマートフォンの着弾先、かばう・全体攻撃・とどめ・中断を扱います。[演出定義](ui/EFFECT_CATALOG.md)。戦闘計算・入力待ち・セーブ形式は変更しません。
 
 トラップ・イベントから迷宮単位の封印・禁止を設定し、発生元ごとに解除する共通状態を追加しました。q001は老人との遭遇で帰還印・入口帰還を封じ、新人救援によるイベント戦闘終了直後に解除します。保存読込・階層移動・中断・通常戦闘では解除しません。救援前の全滅時は共通チェックポイントで老人遭遇からの処理を取り消し、封印・帰路・壁灯・一度限りの消灯フラグを戻します。町から再入場し、老人との再遭遇からやり直します。成功後の全滅は巻き戻しません。[共通チェックポイント](scenarios/EVENT_CHECKPOINTS.md)。[封印・禁止](dungeons/DUNGEON_RESTRICTIONS.md)。
 
