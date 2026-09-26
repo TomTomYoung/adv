@@ -140,7 +140,7 @@ export class SceneView extends GameView{
   compactParty(parent,m){
     const party=make('div','scene-party');party.dataset.fx='party';
     for(const a of m.party){const b=button('',()=>m.mode==='town'?this.openCharacter(a.id):(this.partySelection={...this.partySelection,party:a.id},this.openPanel('party')),'scene-member'+(a.hp<=0?' fallen':''));
-      b.dataset.focus=`character:${a.id}`;b.append(this.portrait(a,'scene-member-portrait'),make('span','',a.name),make('span','scene-member-values',`HP ${a.hp}/${a.maxHp}${m.battle?' / MP '+a.mp+'/'+a.maxMp:''}`));
+      b.dataset.focus=`character:${a.id}`;b.dataset.fxFallback=`actor:${a.id}`;b.append(this.portrait(a,'scene-member-portrait'),make('span','',a.name),make('span','scene-member-values',`HP ${a.hp}/${a.maxHp}${m.battle?' / MP '+a.mp+'/'+a.maxMp:''}`));
       if(a.statuses.length)b.append(make('span','scene-member-status',a.statuses.join('・')));party.append(b);
     }parent.append(party);
   }
