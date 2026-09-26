@@ -1,11 +1,12 @@
+import {reliefPreview} from './relief-preview.js';
 import {el,button,select,section,clear} from './dom.js';
 import {componentAt,setComponentField,resetComponentField,paintEdge,resizeMap} from './map-components.js';
 import {paintCell} from './map-model.js';
 import {editors} from '../catalog.js';
 import {get} from './workspace.js';
 const file='cell-layers.json';
-const groups={floor:'床',wall:'壁',water:'水域',special:'危険・特殊'};
-function category(id){if(['shallow_water','deep_water','submerged_passage','air_pocket'].includes(id))return 'water';if(['stone_wall','rock_wall','earth_wall','salt_wall','thorn_wall'].includes(id))return 'wall';if(['stone_floor','earth_floor','wood_floor','wet_stone_floor','root_bridge','supported_space'].includes(id))return 'floor';return 'special';}
+const groups={floor:'床',wall:'壁',water:'水域',depression:'くぼみ',special:'危険・特殊'};
+function category(id){if(id.includes('_depression'))return 'depression';if(['shallow_water','deep_water','submerged_passage','air_pocket'].includes(id))return 'water';if(['stone_wall','rock_wall','earth_wall','salt_wall','thorn_wall'].includes(id))return 'wall';if(['stone_floor','earth_floor','wood_floor','wet_stone_floor','root_bridge','supported_space'].includes(id))return 'floor';return 'special';}
 export const componentUI={
  componentTools(){
   const bar=el('div','','component-tools');
@@ -26,8 +27,8 @@ export const componentUI={
   for(const [id,p] of Object.entries(presets)){
    if(!edge&&this.paletteGroup&&this.paletteGroup!=='all'&&category(id,p)!==this.paletteGroup)continue;
    const b=button('',()=>{if(!this.guard())return;this[key]=id;this.refresh();},'palette-choice');b.setAttribute('aria-label',p.name??id);b.setAttribute('aria-pressed',String(this[key]===id));b.title=p.description??'';
-   const swatch=el('span',edge?'━':'','map-tile palette-swatch '+(p.visual.wall?'wall':'floor'));swatch.dataset.surface=p.visual.surface??'stone';swatch.dataset.preset=id;if(p.parameters.water_depth)swatch.dataset.depth=p.parameters.water_depth;if(!p.visual.floor&&!p.visual.wall&&!edge)swatch.dataset.void='true';swatch.setAttribute('aria-hidden','true');b.append(swatch,el('span',p.name??id));list.append(b);
-  }box.append(list,el('p',presets[this[key]]?.description??'','preview-note'));this.detail.append(box);
+   const swatch=el('span',edge?'━':'','map-tile palette-swatch '+(p.visual.wall?'wall':'floor'));swatch.dataset.surface=p.visual.surface??'stone';swatch.dataset.preset=id;if(p.parameters.water_depth)swatch.dataset.depth=p.parameters.water_depth;if(!p.visual.floor&&!p.visual.wall&&!edge)swatch.dataset.void='true';if(!edge)reliefPreview(swatch,p);swatch.setAttribute('aria-hidden','true');b.append(swatch,el('span',p.name??id));list.append(b);
+  }box.append(list,el('p',presets[this[key]]?.description??'','preview-note'));if(!edge){const link=el('a','くぼみの表示確認');link.href='../depression-preview.html';link.target='_blank';link.rel='noopener';box.append(link);}this.detail.append(box);
  },
  changeComponent(x,y,side){
   if(!this.guard()||this.task==='edges'&&!side)return;const edge=Boolean(side);this.selectedCell={map:this.mapId,x,y,...(side?{side}:{})};
@@ -46,9 +47,10 @@ export const componentUI={
  componentField(c,path,title,kind='boolean',options){
   const row=el('label','','component-field'),value=get(c.effective,path)??(kind==='number'?0:undefined),override=get(c.override,path)!==undefined;
   row.append(el('span',title),el('small',override?'個別設定':'種類の標準','setting-origin'));
-  const change=v=>{if(!this.guard())return;try{if(kind==='number'&&(!Number.isFinite(Number(v))||Number(v)<0||Number(v)> (path.at(-1)==='illumination'?8:path.at(-1)==='water_depth'?2:100)||!Number.isInteger(Number(v))))throw Error('範囲内の整数を入力してください。');setComponentField(this.workspace,this.mapId,this.selectedCell,path,kind==='number'?Number(v):kind==='boolean'?v==='true':v===''&&path.at(-1)==='image'?null:v);this.refresh();}catch(e){input.value=value??'';this.message(e.message,true);}};
+  const key=path.at(-1),metres=['floor_depth','water_level'].includes(key),min=key==='water_level'?-30:0,max=metres?(key==='water_level'?0:30):key==='illumination'?8:key==='water_depth'?2:100;
+  const change=v=>{if(!this.guard())return;try{if(kind==='number'&&(!Number.isFinite(Number(v))||Number(v)<min||Number(v)>max||!metres&&!Number.isInteger(Number(v))))throw Error(metres?'範囲内のメートル値を入力してください。':'範囲内の整数を入力してください。');setComponentField(this.workspace,this.mapId,this.selectedCell,path,kind==='number'?Number(v):kind==='boolean'?v==='true':v===''&&path.at(-1)==='image'?null:v);this.refresh();}catch(e){input.value=value??'';this.message(e.message,true);}};
   let input;if(kind==='boolean'||options)input=select(options??[['false','いいえ'],['true','はい']],value??(options?options[0]?.[0]:false),change,title);
-  else{input=el('input');input.type=kind==='number'?'number':'text';input.value=value??'';input.setAttribute('aria-label',title);if(kind==='number'){input.min=0;input.max=path.at(-1)==='illumination'?8:path.at(-1)==='water_depth'?2:100;input.step=1;}input.addEventListener('change',()=>change(input.value));}
+  else{input=el('input');input.type=kind==='number'?'number':'text';input.value=value??'';input.setAttribute('aria-label',title);if(kind==='number'){input.min=min;input.max=max;input.step=metres?.01:1;}input.addEventListener('change',()=>change(input.value));}
   row.append(input);if(override)row.append(button(title+'を標準に戻す',()=>{if(this.guard()){resetComponentField(this.workspace,this.mapId,this.selectedCell,path);this.refresh();}},'field-remove'));return row;
  },
  renderComponentDetail(){
@@ -64,7 +66,7 @@ export const componentUI={
   const visual=section('外観');for(const [key,name] of (c.edge?[['wall','壁を表示'],['opaque','光を遮る']]:[['wall','壁を表示'],['floor','床を表示'],['opaque','光を遮る']]))visual.append(this.componentField(c,['visual',key],name));
   if(!c.edge)visual.append(this.componentField(c,['visual','material'],'素材の種類','string',[['floor','床素材'],['wall','壁素材']]));
   visual.append(this.componentField(c,['visual','surface'],'表面模様','string',(c.edge?['stone','wood','rock','salt']:['stone','earth','wood','wet','ice','cracked','salt','roots','thorns','poison','corrosion','rune','rock']).map(v=>[v,({stone:'石',earth:'土',wood:'木',wet:'濡れ',ice:'氷',cracked:'亀裂',salt:'塩',roots:'根',thorns:'茨',poison:'毒',corrosion:'腐食',rune:'紋様',rock:'岩'})[v]])),this.componentField(c,['visual','image'],'画像','string',[['','標準の素材'],...this.context.options('images')]));this.detail.append(visual);
-  const params=section('性質');for(const [key,v] of Object.entries(c.edge?c.effective.parameters:{water_depth:0,slippery:false,fragile:false,safe:false,corrosion:0,...c.effective.parameters}))params.append(this.componentField(c,['parameters',key],({illumination:'局所照度',water_passable:'水を通す',water_depth:'水深',slippery:'滑る',fragile:'離れると崩れる',safe:'通常遭遇を抑える',corrosion:'塩の蓄積',binding:'連動する仕掛け'})[key]??key,typeof v==='boolean'?'boolean':typeof v==='number'?'number':'string'));this.detail.append(params);
+  const params=section('性質');for(const [key,v] of Object.entries(c.edge?c.effective.parameters:{floor_depth:0,bottomless:false,water_level:-.1,water_depth:0,slippery:false,fragile:false,safe:false,corrosion:0,...c.effective.parameters}))params.append(this.componentField(c,['parameters',key],({floor_depth:'くぼみの深さ（m）',bottomless:'底が見えない',water_level:'水面の高さ（m・周囲の床が0）',illumination:'局所照度',water_passable:'水を通す',water_depth:'水深',slippery:'滑る',fragile:'離れると崩れる',safe:'通常遭遇を抑える',corrosion:'塩の蓄積',binding:'連動する仕掛け'})[key]??key,typeof v==='boolean'?'boolean':typeof v==='number'?'number':'string'));this.detail.append(params);
   if(!c.edge){const events=section('セル進入時の処理');for(const id of c.effective.events??[])events.append(button('セル進入イベントを編集：'+this.context.name('cellEvents',id),()=>this.open(file,{collection:'events',record:id})),button('この地点から外す：'+this.context.name('cellEvents',id),()=>{if(!this.guard())return;setComponentField(this.workspace,this.mapId,this.selectedCell,['events'],c.effective.events.filter(v=>v!==id));this.refresh();}));const ids=Object.keys(this.workspace.value(file).events).filter(id=>!c.effective.events?.includes(id));if(ids.length){let chosen=ids[0];events.append(select(ids.map(id=>[id,this.context.name('cellEvents',id)]),chosen,v=>{chosen=v;},'追加する進入イベント'),button('この地点に進入イベントを追加',()=>{if(!this.guard())return;setComponentField(this.workspace,this.mapId,this.selectedCell,['events'],[...(c.effective.events??[]),chosen]);this.refresh();}));}if(c.override.events)events.append(button('進入イベントを標準に戻す',()=>{resetComponentField(this.workspace,this.mapId,this.selectedCell,['events']);this.refresh();}));this.detail.append(events);}
   if(Object.keys(c.override).length)this.detail.append(button('この地点の個別設定をすべて解除',()=>{if(this.guard()){resetComponentField(this.workspace,this.mapId,this.selectedCell);this.refresh();}}));
   if(c.edge)this.detail.append(button('このエッジを取り除く',()=>{if(this.guard()){this.workspace.set(file,['maps',this.mapId,'edges',c.key],undefined,'エッジを除去');this.refresh();}}));

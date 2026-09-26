@@ -51,7 +51,7 @@ test('resize scans nested inherited points, script destinations and directional 
 });
 test('eight tabs share the same exceptions and output rejects a deleted used edge preset',async t=>{
  const {app,root}=await ui(t);assert.deepEqual(root.querySelector('.collection-tabs').children.map(b=>b.textContent),['マップサイズ','セル','エッジ','入口・配置物','通行可否','イベント','仕掛け','マップ間の接続']);
- assert.equal(root.querySelectorAll('.palette-choice').length,24);assert.equal(root.querySelectorAll('.map-marker').length,0);await app.selectTask('edges');app.edgeBrush='stone_partition';app.changeComponent(2,1,'east');await app.selectTask('passage');app.changeComponent(3,1,'west');setComponentField(app.workspace,app.mapId,app.selectedCell,['passage'],'.');assert.equal(componentAt(app.workspace,app.mapId,{x:2,y:1,side:'east'}).effective.passage,'.');
+ assert.equal(root.querySelectorAll('.palette-choice').length,30);assert.equal(root.querySelectorAll('.map-marker').length,0);await app.selectTask('edges');app.edgeBrush='stone_partition';app.changeComponent(2,1,'east');await app.selectTask('passage');app.changeComponent(3,1,'west');setComponentField(app.workspace,app.mapId,app.selectedCell,['passage'],'.');assert.equal(componentAt(app.workspace,app.mapId,{x:2,y:1,side:'east'}).effective.passage,'.');
  await app.reviewChanges();assert.ok(app.workspace.output,app.status.textContent);app.workspace.set('cell-layers.json',['edgePresets','stone_partition'],undefined,'delete');await app.reviewChanges();assert.equal(app.workspace.output,null);assert.match(app.review.textContent,/エッジ種/);
 });
 
@@ -68,4 +68,16 @@ test('replacing a modified cell asks to keep, reset or cancel before changing th
  const {app,root}=await ui(t),p={x:2,y:1};setComponentField(app.workspace,app.mapId,p,['passage'],'#');app.brush='wood_floor';app.changeComponent(p.x,p.y);assert.equal(componentAt(app.workspace,app.mapId,p).preset,'stone_floor');
  const buttons=()=>root.querySelectorAll('button');buttons().find(b=>b.textContent==='置き換えを取り消す').click();assert.equal(componentAt(app.workspace,app.mapId,p).preset,'stone_floor');app.changeComponent(p.x,p.y);buttons().find(b=>b.textContent==='個別設定を引き継ぐ').click();assert.equal(componentAt(app.workspace,app.mapId,p).effective.passage,'#');
  app.brush='stone_floor';app.changeComponent(p.x,p.y);buttons().find(b=>b.textContent==='新しい種類の標準に戻す').click();assert.deepEqual(componentAt(app.workspace,app.mapId,p).override,{});
+});
+
+test('depression UI filters six brushes, accepts metres and rejects water below the edited floor on export',async t=>{
+ const {app,root}=await ui(t);app.paletteGroup='depression';app.renderDetail();assert.equal(root.querySelectorAll('.palette-choice').length,6);
+ app.brush='shallow_depression_water';app.changeComponent(2,1);app.mapTool='inspect';app.refresh();
+ const input=label=>root.querySelectorAll('input').find(e=>e.getAttribute('aria-label')===label);
+ let field=input('くぼみの深さ（m）');assert.equal(Number(field.step),.01);field.value='.45';field.dispatchEvent({type:'change'});
+ field=input('水面の高さ（m・周囲の床が0）');assert.equal(Number(field.min),-30);field.value='-.2';field.dispatchEvent({type:'change'});
+ assert.equal(componentAt(app.workspace,app.mapId,{x:2,y:1}).effective.parameters.floor_depth,.45);
+ assert.equal(componentAt(app.workspace,app.mapId,{x:2,y:1}).effective.parameters.water_level,-.2);
+ await app.reviewChanges();assert.ok(app.workspace.output,app.status.textContent);
+ field=input('水面の高さ（m・周囲の床が0）');field.value='-.8';field.dispatchEvent({type:'change'});await app.reviewChanges();assert.equal(app.workspace.output,null);assert.match(app.review.textContent,/底より上/);
 });

@@ -4,7 +4,7 @@
 
 プレイヤーコマンドとメッセージ内の選択肢の区分は [MESSAGE_AND_COMMAND_WINDOWS.md](ui/MESSAGE_AND_COMMAND_WINDOWS.md) を正本とする。移動・調べる・帰還はコマンドウィンドウ、会話・調査・仕掛けの説明と選択肢は共通のメッセージウィンドウで扱う。
 
-通常マップはセルレイヤー方式です。セル種24種類・共有エッジ種4種類を登録し、通行可否、表示、照度・通水、セルイベントを独立させ、セル種は頻出構成のプリセットとして扱います。編集元と一地点の上書きは [CELL_LAYERS.md](dungeons/CELL_LAYERS.md)、状態・配置索引は [CELL_CATALOG.md](dungeons/CELL_CATALOG.md) を参照してください。迷宮のfieldEventsは環境変化を購読し、条件成立時に戦闘またはスクリプトを開始します。保留・一回性・再発は共通処理で管理します。[条件付きイベント仕様](scenarios/EVENT_SYSTEM.md)。
+通常マップはセルレイヤー方式です。セル種30種類・共有エッジ種4種類を登録し、通行可否、表示、照度・通水、セルイベントを独立させ、セル種は頻出構成のプリセットとして扱います。編集元と一地点の上書きは [CELL_LAYERS.md](dungeons/CELL_LAYERS.md)、状態・配置索引は [CELL_CATALOG.md](dungeons/CELL_CATALOG.md) を参照してください。迷宮のfieldEventsは環境変化を購読し、条件成立時に戦闘またはスクリプトを開始します。保留・一回性・再発は共通処理で管理します。[条件付きイベント仕様](scenarios/EVENT_SYSTEM.md)。
 
 ## 実行と構成
 

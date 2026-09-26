@@ -71,6 +71,8 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 「記録」でSE音量と演出の通常・軽減・オフを選べます。ビュー用プレビューでは効果を再生し、SEを個別に試聴できます。演出とSEの原稿は `config/presentation.json`、素材の再作成は `node tools/assets/generate-effects.mjs`、定義の更新は `node tools/build-presentation.mjs` です。
 
+[くぼみ6種類の表示確認](depression-preview.html)では、連結形状・見る方向・照度を切り替えられます。[くぼみの仕様](doc/dungeons/FLOOR_DEPRESSIONS.md)。
+
 ## 開発確認
 
 Node.js 22以上。依存のインストールは不要です。

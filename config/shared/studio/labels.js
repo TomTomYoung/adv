@@ -25,3 +25,5 @@ Object.assign(labels,{surface:'表面の模様',water_depth:'固定水深（0〜
 Object.assign(enumNames,{stone:'通常の石',earth:'土',wood:'木目',wet:'濡れた石',cracked:'亀裂',salt:'塩',roots:'根',thorns:'茨',poison:'毒沼',corrosion:'腐食',rune:'紋様',rock:'岩盤',air_pocket:'空気溜まり',root_bridge:'根橋の対象',thorn_wall:'茨の対象'});
 
 Object.assign(enumNames,{poison_step:'毒沼への進入'});
+
+Object.assign(labels,{floor_depth:'くぼみの深さ（m）',bottomless:'底が見えない',water_level:'水面の高さ（m・周囲の床が0）'});

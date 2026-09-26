@@ -220,3 +220,7 @@ scene.castの指定はCoreのpresentation.castへ保存し、Applicationが画�
 ## 人物プロフィールの追加投影
 
 party/rosterの各人物にitems（個人の未装備品と個数）、skills/fieldAbilitiesにcategory（skills/magic）を投影します。shopの各品物にsharedCount、recipientsの各人にcount（未装備）とequippedCount（装備中）を加えます。Viewは所持数や魔法区分を独自に推測しません。詳細は[人物画面](CHARACTER_PROFILES.md)、[ショップ](SHOP_AND_PREPARATIONS.md)。
+
+## くぼみの表示形状
+
+通常2Dのくぼみセルには `relief: {depth, bottomless, waterLevel}` を追加します。depthは下向きのm、waterLevelは通常床基準のmで、水がなければnullです。同深度の側面省略、床・側面・水平な水面の投影と遮蔽、目の高さはViewが計算します。passageや泳ぎ・落下の判定を描画側へ持ち込みません。[仕様](../dungeons/FLOOR_DEPRESSIONS.md)。

@@ -30,3 +30,9 @@ export function cellBindingErrors(source,dungeons){
  if(binding&&!bindingSatisfied(binding,dungeon,map,x,y))errors.push({map,x,y,binding,message:`${map} ${x},${y}：${preset?.name??p.legend?.[symbol]} に必要な仕掛け・対象座標（${binding}）がありません。迷宮の仕掛けを設定してください。`});}}
  return errors;
 }
+
+// Shared by runtime and JSON authoring checks, including merged point overrides.
+export function reliefParametersValid(p,partial=false){
+ if(p.floor_depth!==undefined&&(!Number.isFinite(p.floor_depth)||p.floor_depth<0||p.floor_depth>30)||p.bottomless!==undefined&&typeof p.bottomless!=='boolean'||p.water_level!==undefined&&(!Number.isFinite(p.water_level)||p.water_level>0||p.water_level< -30))return false;
+ return partial||!(p.floor_depth>0&&!p.bottomless&&p.water_depth>0&&(p.water_level??-.1)< -p.floor_depth);
+}

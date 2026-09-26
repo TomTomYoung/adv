@@ -2,7 +2,9 @@
 
 確認日: 2026-09-25。作品版1.20.0。[文書全体へ戻る](../README.md)。
 
-[CELL_LAYERS.md](CELL_LAYERS.md)：セル種24種類・共有エッジ4種類と地点ごとの上書き。
+[CELL_LAYERS.md](CELL_LAYERS.md)：セル種30種類・共有エッジ4種類と地点ごとの上書き。
+
+[FLOOR_DEPRESSIONS.md](FLOOR_DEPRESSIONS.md)：浅い・深い・底の見えないくぼみと水入り、境界と水面の描画。
 
 [CELL_CATALOG.md](CELL_CATALOG.md)：種類・状態・配置の生成一覧。
 

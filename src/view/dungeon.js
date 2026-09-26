@@ -1,3 +1,4 @@
+import {eyeElevation,traceFloorSegments,paintReliefPixels} from './dungeon-relief.js';
 import {artRect} from './dungeon-art.js';
 // Presentation only: collision, water depth and material references arrive in the snapshot.
 const WIDTH=800,HEIGHT=400,FOCAL=WIDTH/(2*Math.tan(Math.PI/5.2)),EYE=.5,STRIDE=2;
@@ -72,11 +73,12 @@ export function paintDungeon(canvas,dungeon,battle){
     const materials=new Map();
     for(const row of dungeon.cells)for(const cell of row)if(cell.art&&cell.floor)materials.set(cell,materialPixels(canvas,texture(cell.art.url,draw),cell.art));
     const {x,y,facing}=dungeon.location,angle={north:-Math.PI/2,east:0,south:Math.PI/2,west:Math.PI}[facing],vx=Math.cos(angle),vy=Math.sin(angle);
+    const relief=dungeon.cells.some(row=>row.some(cell=>cell.relief)),eye=relief?eyeElevation(dungeon.cells[y]?.[x]):EYE;
     const rays=[];
     for(let column=0;column<WIDTH;column+=STRIDE){const camera=(column+STRIDE/2-WIDTH/2)/FOCAL,dx=vx-vy*camera,dy=vy+vx*camera;rays.push({column,dx,dy,hit:traceDungeonRay(dungeon,x+.5,y+.5,dx,dy)});}
     // The same focal length and eye height anchor floor texels to the wall bases.
     const pixels=ctx.getImageData(0,0,WIDTH,HEIGHT);
-    for(let row=HEIGHT/2+1;row<HEIGHT;row+=STRIDE){
+    for(let row=HEIGHT/2+1;!relief&&row<HEIGHT;row+=STRIDE){
       const distance=EYE*FOCAL/(row+STRIDE/2-HEIGHT/2);if(distance>16)continue;
       for(const ray of rays){if(distance>=ray.hit.distance)continue;const wx=x+.5+ray.dx*distance,wy=y+.5+ray.dy*distance,cell=dungeon.cells[Math.floor(wy)]?.[Math.floor(wx)];if(!cell||cell.wall)continue;
         const [r,g,b]=floorColor(materials.has(cell)?materials.get(cell):material,wx,wy,cell,distance);
@@ -85,7 +87,7 @@ export function paintDungeon(canvas,dungeon,battle){
     }
     ctx.putImageData(pixels,0,0);
     for(const {column,hit} of rays){
-      if(hit.empty)continue;const h=FOCAL/Math.max(.01,hit.distance),top=HEIGHT/2-h*(1-EYE);
+      if(hit.empty)continue;const h=FOCAL/Math.max(.01,hit.distance),top=HEIGHT/2-h*(1-eye);
       if(hit.door){
         // An actual opaque pressure door, including frame, ribs, lock and wheel.
         // The water is behind this surface and never rendered as a vertical wall.
@@ -104,6 +106,12 @@ export function paintDungeon(canvas,dungeon,battle){
       ctx.fillStyle=`rgba(2,9,11,${Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
       const level=dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
       ctx.fillStyle=`rgba(0,0,0,${.72*(1-level/8)})`;ctx.fillRect(column,top,STRIDE,h);
+    }
+    if(relief){
+      for(const ray of rays)ray.segments=traceFloorSegments(dungeon,x+.5,y+.5,ray.dx,ray.dy,ray.hit.distance,!ray.hit.empty);
+      const terrainPixels=ctx.getImageData(0,0,WIDTH,HEIGHT),wallMaterial=materialPixels(canvas,wall,dungeon.wall);
+      paintReliefPixels(terrainPixels,rays,{width:WIDTH,height:HEIGHT,stride:STRIDE,focal:FOCAL,eye,ox:x+.5,oy:y+.5,floorColor,material,materials,wallMaterial});
+      ctx.putImageData(terrainPixels,0,0);
     }
     const shade=ctx.createRadialGradient(WIDTH*.5,HEIGHT*.55,100,WIDTH*.5,HEIGHT*.5,WIDTH*.65);shade.addColorStop(0,'#00000000');shade.addColorStop(1,'#000000b0');ctx.fillStyle=shade;ctx.fillRect(0,0,WIDTH,HEIGHT);
     if(!battle){

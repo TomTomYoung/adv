@@ -1,5 +1,5 @@
 import {edgeLayersValid,edgePlacementErrors} from './edge-layers.js';
-import {cellSurfaces,cellBindings,cellBindingErrors} from './cell-behaviors.js';
+import {cellSurfaces,cellBindings,cellBindingErrors,reliefParametersValid} from './cell-behaviors.js';
 // Passage glyphs carry no material, opacity, water or event semantics.
 export const mergeCellLayers=(base,patch={})=>{const events=patch.events??base.events??[];return {...base,...patch,visual:{...base.visual,...patch.visual},parameters:{...base.parameters,...patch.parameters},events:Array.isArray(events)?[...events]:events};};
 export function authoredCellLayers(data,map,x,y){
@@ -29,6 +29,7 @@ export function cellLayersValid(data,value,partial=false){
     if(!object(p)||Object.entries(p).some(([k,v])=>!identifier(k)||!(typeof v==='boolean'||typeof v==='string'||Number.isFinite(v))))return false;
     if((!partial||p.illumination!==undefined)&&(!Number.isInteger(p.illumination)||p.illumination<0||p.illumination>8))return false;
     if(p.water_depth!==undefined&&(!Number.isInteger(p.water_depth)||p.water_depth<0||p.water_depth>2)||['slippery','fragile','safe'].some(k=>p[k]!==undefined&&typeof p[k]!=='boolean')||p.corrosion!==undefined&&(!Number.isInteger(p.corrosion)||p.corrosion<0||p.corrosion>100)||p.binding!==undefined&&!cellBindings.includes(p.binding))return false;
+    if(!reliefParametersValid(p,partial))return false;
     if((!partial||p.water_passable!==undefined)&&typeof p.water_passable!=='boolean')return false;
   }
   if((!partial||value.events!==undefined)&&(!Array.isArray(value.events)||new Set(value.events).size!==value.events.length||value.events.some(id=>!Object.hasOwn(data.cellEvents??{},id))))return false;

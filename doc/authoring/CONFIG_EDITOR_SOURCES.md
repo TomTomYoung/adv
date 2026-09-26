@@ -8,7 +8,7 @@
 
 マップ新規作成は `connected-maps.json`、`cell-layers.json`、所属迷宮JSONの3件を一括変更します。接続の作成は迷宮JSONへ追加します。画面の「今回の出力対象」と検証後のJSON全文に実際に変更したファイルだけを表示します。
 
-24種類のセル種の名前・用途・通行・表面模様・パラメータは `config/cell-layers.json` の `presets`、毒沼の進入定義は `events.poison_step`、ダメージと本文は `scripts["cell.poison_step"]` です。仕掛け連動の対象座標・必要物品は各迷宮JSONに残し、セル種の中へ複製しません。
+30種類のセル種の名前・用途・通行・表面模様・パラメータは `config/cell-layers.json` の `presets`、毒沼の進入定義は `events.poison_step`、ダメージと本文は `scripts["cell.poison_step"]` です。仕掛け連動の対象座標・必要物品は各迷宮JSONに残し、セル種の中へ複製しません。
 
 マップサイズは `config/cell-layers.json` の `maps.<ID>.rows` と、有効なマップ原稿の `maps.<ID>.tiles` を同時変更します。JavaScript原稿だけにあるマップは、現在の定義を `config/connected-maps.json` へ引き継いで編集します。流れの配列がある場合は対応する迷宮JSONの `vectorRows` も寸法を合わせます。
 
