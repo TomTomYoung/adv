@@ -223,7 +223,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実装との照合用一覧
 
-53命令：`story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `scene.cast` / `scene.cast.clear` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+57命令：`event.checkpoint.begin` / `event.checkpoint.commit` / `dungeon.restriction.set` / `dungeon.restriction.clear` / `story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `scene.cast` / `scene.cast.clear` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
 
 31式演算子：`object_state` / `record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
 
@@ -248,3 +248,11 @@ scene.castはmode（stage/cards）とcast配列を受け取り、表示人物を
 say/narrateは任意のcharacter IDを受け取ります。say.characterで話者を指定すると、人物名を表示し、その人物を配置位置のまま手前へ出します。name/speakerで表示名だけを変えることもできます。character付きsayの口調は地の文の常体変換の対象にしません。
 
 story.scenesのcastには同じdisplayを記述でき、castModeで表示形式を指定できます。JSON例と保存・解除の寿命は[人物演出仕様](../ui/CHARACTER_STAGING.md)。
+
+## ダンジョンの封印・禁止
+
+`dungeon.restriction.set` は `dungeon`、`action`、`source`、表示用の `reason` を指定します。`dungeon.restriction.clear` は同じ `dungeon`、`action`、`source` の一件だけを解除します。`action: return_mark` は帰還印封印、`action: return` は入口からの帰還も含む帰還禁止です。トラップ・イベントの命令列から使い、戦闘中イベント内にも記述できます。詳細とJSON例は[封印・禁止](../dungeons/DUNGEON_RESTRICTIONS.md)。
+
+## 全滅時のイベント区間の巻き戻し
+
+`event.checkpoint.begin` は区間ID・クエスト・開始場面・迷宮と、戻すフラグ・変数・配置物・イベント記録・封印の発生元を指定します。`event.checkpoint.commit` は区間IDを指定し、成功時に巻き戻し対象から外します。物語状態は自動記録し、全滅では宣言した範囲だけを復元します。同じ開始会話を再開しても初回の記録を上書きしません。[仕様と例](EVENT_CHECKPOINTS.md)。

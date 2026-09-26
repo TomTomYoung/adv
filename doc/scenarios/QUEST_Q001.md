@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.21.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.22.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:422ecf1921e567e53f7351690c45668218aa9fffd0165effbaef7e0844ba905d -->
+<!-- quest-page-source:625668515d7a7747d54d8cd6f80ca4b50d939c157cfb367f763cd85f556d57a0 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -543,9 +543,13 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 老灯番の配置: `{"position":"left"}`。
 
+再挑戦区間を開始: `q001.elder_rescue`。全滅時は `q001/old` へ進行を戻す。復元対象: `{"flags":["worldSceneEffects.q001.old","worldSceneEffects.q001.outage"],"objects":["kagaribi_f1/q001_last_lamp"],"eventKeys":["kagaribi_f1/q001_elder","kagaribi_f1/q001_return"],"restrictionSources":["q001.elder_rescue"]}`。
+
 ［条件 `{"op":"ne","left":{"ref":"flags.worldSceneEffects.q001.old"},"right":true}` が成立するとき］
 
 携行火: 燃料 8、効果 `ward`。
+
+封印・禁止: `kagaribi` / `return`。発生元 `q001.elder_rescue`。帰還印が封印されている。老人と帰路の巡灯路へ向かおう。
 
 ［条件分岐ここまで］
 
@@ -614,6 +618,10 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 ［敗北後］
 
 ［強制終了後］
+
+封印・禁止を解除: `kagaribi` / `return`。発生元 `q001.elder_rescue` のみ。
+
+再挑戦区間を確定: `q001.elder_rescue`。以後の全滅ではこの区間を巻き戻さない。
 
 進行先: [`rescue`](#q001--rescue--油の尽きた巡灯路)。
 

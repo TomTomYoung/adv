@@ -1213,6 +1213,27 @@
           "scene": "old"
         },
         {
+          "op": "event.checkpoint.begin",
+          "id": "q001.elder_rescue",
+          "quest": "q001",
+          "scene": "old",
+          "dungeon": "kagaribi",
+          "flags": [
+            "worldSceneEffects.q001.old",
+            "worldSceneEffects.q001.outage"
+          ],
+          "objects": [
+            "kagaribi_f1/q001_last_lamp"
+          ],
+          "eventKeys": [
+            "kagaribi_f1/q001_elder",
+            "kagaribi_f1/q001_return"
+          ],
+          "restrictionSources": [
+            "q001.elder_rescue"
+          ]
+        },
+        {
           "op": "if",
           "condition": {
             "op": "ne",
@@ -1226,6 +1247,13 @@
               "op": "fire.portable.set",
               "fuel": 8,
               "effect": "ward"
+            },
+            {
+              "op": "dungeon.restriction.set",
+              "dungeon": "kagaribi",
+              "action": "return",
+              "source": "q001.elder_rescue",
+              "reason": "帰還印が封印されている。老人と帰路の巡灯路へ向かおう。"
             },
             {
               "op": "set",
@@ -1401,6 +1429,16 @@
             }
           ],
           "on_interrupt": [
+            {
+              "op": "dungeon.restriction.clear",
+              "dungeon": "kagaribi",
+              "action": "return",
+              "source": "q001.elder_rescue"
+            },
+            {
+              "op": "event.checkpoint.commit",
+              "id": "q001.elder_rescue"
+            },
             {
               "op": "jump",
               "script": "q001.v11.rescue"

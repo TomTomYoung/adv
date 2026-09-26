@@ -20,6 +20,8 @@
 
 [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)：共通部品・正本・責務・拡張方法。
 
+[DUNGEON_RESTRICTIONS.md](DUNGEON_RESTRICTIONS.md)：トラップ・イベントによる帰還印封印と帰還禁止、発生元別の解除・保存。
+
 [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)：火・種火、通常魔物とくらがり、q001イベント戦闘。
 
 [WATERWAYS_SALT_MINE.md](WATERWAYS_SALT_MINE.md)：現行の地下水道、装備個体の塩・洗浄・破壊壁。

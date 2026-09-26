@@ -1,3 +1,5 @@
+import {checkpointCommandValid} from './event-checkpoints.js';
+import {restrictionValid} from './dungeon-restrictions.js';
 import {castValid} from './cast.js';
 import {validateCellLayers} from './cell-layers.js';
 import {validateWorld} from './world.js';
@@ -31,6 +33,7 @@ export function validateContent(data){
     if(value.op==='has_item')reference(data.items,value.item,path);
     if(value.op==='has_member'||value.op==='has_status')reference(data.actors,value.actor,path);
   };
+  const checkpointBegins=new Set(),checkpointCommits=[];
   const commands=(list,path,depth=0,inBattleEvent=false)=>{
     if(!Array.isArray(list)){fail(path,'commandsは配列です');return;}
     if(depth>32){fail(path,'入れ子が深すぎます');return;}
@@ -39,8 +42,12 @@ export function validateContent(data){
       for(const key of ['condition','value','amount','count','text','target'])if(c[key]!==undefined)expression(c[key],at);
       if(['say','narrate'].includes(c.op)&&typeof c.text!=='string'&&!c.text?.format)fail(at,'本文が必要です');
       if(['call','jump'].includes(c.op))reference(data.scripts,c.script,at);
+      if(c.op.startsWith('event.checkpoint.')&&!checkpointCommandValid(data,c))fail(at,'イベントチェックポイントの命令が不正です');
+      if(c.op==='event.checkpoint.begin'){if(checkpointBegins.has(c.id))fail(at,'イベントチェックポイントIDが重複しています');checkpointBegins.add(c.id);}
+      if(c.op==='event.checkpoint.commit')checkpointCommits.push({id:c.id,at});
+      if(c.op.startsWith('dungeon.restriction.')&&!restrictionValid(data,c,c.op==='dungeon.restriction.set'))fail(at,'迷宮の封印・禁止命令が不正です');
       if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
-      if(inBattleEvent&&!['say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
+      if(inBattleEvent&&!['event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
         reference(data.encounters,c.encounter,at);
         if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
@@ -104,6 +111,7 @@ export function validateContent(data){
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');
   if(data.game.initial.members.length>data.system.maxParty)fail('initial.members','人数超過');
   for(const [id,s] of Object.entries(data.scripts))commands(s.commands,`scripts.${id}`);
+  for(const {id,at} of checkpointCommits)if(!checkpointBegins.has(id))fail(at,'確定するイベントチェックポイントの開始命令がありません');
   for(const [id,formula] of Object.entries(data.formulas))expression(formula,`formulas.${id}`);
   for(const [id,skill] of Object.entries(data.skills)){
     if(!['enemy','ally','self','all_enemies','all_allies'].includes(skill.target)||!Number.isInteger(skill.mp)||skill.mp<0)fail(id,'スキル対象・MPが不正です');

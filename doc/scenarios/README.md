@@ -24,6 +24,8 @@
 
 [QUEST_EVENTS.md](QUEST_EVENTS.md)：クエスト固有配置、出現条件と操作条件、調査記録、保存。
 
+[EVENT_CHECKPOINTS.md](EVENT_CHECKPOINTS.md)：全滅時に未完了のイベント区間を取り消す共通チェックポイント。
+
 [EVENT_SYSTEM.md](EVENT_SYSTEM.md)：enter・auto・interact・action、戦闘中イベント、自動到着と重複抑止。
 
 [EVENT_CATALOG.md](EVENT_CATALOG.md)：全クエスト・共通マップの配置と強制戦闘の索引。

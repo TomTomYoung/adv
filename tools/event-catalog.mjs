@@ -31,9 +31,10 @@ export function eventCatalog(data){
  add('旅程到着はすでに共通のarriveEventで実座標・町施設と到着効果を処理する。迷宮限定fieldEventsへの重複登録はしない。クエストautoは受注中クエストのautoだけを候補にする。');
  add('power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・勝利時の状態更新が一体のため、汎用式への分解による二重管理を避ける。air_supplyの全滅救助はHP更新直後の敗北処理で、条件付き戦闘ではないため専用処理を維持する。水位・腐食・地形変更・通常ランダム遭遇も更新順と乱数規則を維持する。');
  add('## 現行q001のイベント');
+ add('老人の発見場面 `q001.v11.old` で帰還印封印・帰還禁止を付与する。帰路のイベント戦闘が `battle.end` で終了した直後、`on_interrupt` の先頭でq001の封印だけを解除する。会話中断・階層移動・保存読込で解除せず、通常戦闘の勝利や単なる再点火も解除条件にならない。救援前の全滅時はチェックポイントから老人遭遇時へ進行を戻し、q001の封印・帰路・壁灯変更を取り消す。[封印・禁止](DUNGEON_RESTRICTIONS.md)。');
  add('`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。');
  add('`q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。');
- add('`q001-B-rookie`：同じ位置。第1ラウンド終了後に新人が登場して発言。セリフを送ると `outage_call` で新品油1を消費し、くらがり除けの携帯松明を25歩分点灯。`battle.end` → `on_interrupt` → `q001.v11.rescue` で現地の救助会話へ移る。1ラウンドより早い勝利・逃走・撃退も確定前にこのイベントを通る。到着前の全滅は通常敗北で、救助は未成立のまま再挑戦できる。');
+ add('`q001-B-rookie`：同じ位置。第1ラウンド終了後に新人が登場して発言。セリフを送ると `outage_call` で新品油1を消費し、くらがり除けの携帯松明を25歩分点灯。`battle.end` → `on_interrupt` → `q001.v11.rescue` で現地の救助会話へ移る。1ラウンドより早い勝利・逃走・撃退も確定前にこのイベントを通る。新人救援前の全滅は町へ救助され、老人との再遭遇からやり直す。確定後の全滅では救援を巻き戻さない。[区間の巻き戻し](EVENT_CHECKPOINTS.md)。');
  add('## 登録済みの戦闘中イベント');
  const sites=battleSites(data);
  for(const s of sites)for(const e of s.command.events??[])add(`${code(e.id)}：${code(s.script)} / ${code(s.path.join('.'))}。判定 ${e.triggers.map(code).join(' / ')}。条件 ${code(JSON.stringify(e.condition??true))}。命令 ${e.commands.map(c=>code(c.op)).join(' → ')}。`);

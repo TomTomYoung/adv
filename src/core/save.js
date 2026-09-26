@@ -1,3 +1,5 @@
+import {validateEventCheckpoints} from './event-checkpoints.js';
+import {validateDungeonRestrictions} from './dungeon-restrictions.js';
 import {collapseKey} from './cell-behaviors.js';
 import {validRosterOrder} from './party-order.js';
 import {authoredCellLayers} from './cell-layers.js';
@@ -224,6 +226,6 @@ export function validateSave(save,data){
     }catch{fail('戦闘イベント状態不正');}
   }else if(s.waiting?.type==='battle')fail('戦闘がありません');
   if(s.vm.length&&!s.waiting)fail('待機位置がありません');
-  errors.push(...validateDungeonState(data,s));
+  errors.push(...validateDungeonState(data,s),...validateDungeonRestrictions(data,s),...validateEventCheckpoints(data,s));
   return [...new Set(errors)];
 }

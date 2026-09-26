@@ -5,7 +5,7 @@ import path from 'node:path';
 export const scenarioDocs = new Set([
   'QUEST_CATALOG.md', 'QUEST_Q001.md', 'QUEST_Q002.md',
   'QUEST_EVENTS.md', 'SCENARIO_DESIGN.md', 'SCENARIO_MODEL_V11.md',
-  'EXPLORATION_AND_PROSE.md', 'EVENT_SYSTEM.md', 'EVENT_CATALOG.md',
+  'EXPLORATION_AND_PROSE.md', 'EVENT_CHECKPOINTS.md', 'EVENT_SYSTEM.md', 'EVENT_CATALOG.md',
   'SCRIPT_REFERENCE.md', 'CHARACTERS.md'
 ]);
 export const uiDocs = new Set([
@@ -17,7 +17,7 @@ export const uiDocs = new Set([
 export const dungeonsDocs = new Set([
   'CELL_CATALOG.md', 'CELL_LAYERS.md', 'CONNECTED_2D_MAPS.md',
   'DUNGEON_ART_AND_SCENARIOS.md', 'DUNGEON_CATALOG.md', 'DUNGEON_SYSTEMS.md',
-  'DUNGEON_SYSTEM_DESIGN.md', 'FIELD_LIGHTING.md', 'KAGARIBI_DUNGEON.md',
+  'DUNGEON_RESTRICTIONS.md', 'DUNGEON_SYSTEM_DESIGN.md', 'FIELD_LIGHTING.md', 'KAGARIBI_DUNGEON.md',
   'MAP_CELLS_AND_BOUNDARIES.md', 'VOXEL_TERRAIN_AND_WATER.md', 'WATERWAYS_SALT_MINE.md'
 ]);
 export const worldDocs = new Set([

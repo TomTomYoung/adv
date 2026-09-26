@@ -212,8 +212,9 @@ export class GameView {
     const movement=node('div','movement-pad');
     for(const c of commands.movement)movement.append(button(c.label,()=>this.act(c.intent),c.direction,!c.enabled));
     const actions=node('div','explore-actions');
-    for(const c of commands.actions){const b=button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled);b.dataset.focus=`command:${c.id}`;actions.append(b);}
+    for(const c of commands.actions){const b=button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled);b.dataset.focus=`command:${c.id}`;if(c.reason)b.title=c.reason;actions.append(b);}
     window.append(movement,actions);
+    for(const reason of commands.restrictions??[])window.append(node('p','muted dungeon-restriction',reason));
     if(this.explorationInput())window.append(node('p','muted exploration-hint',this.keyHint()));
     parent.append(window);
   }
