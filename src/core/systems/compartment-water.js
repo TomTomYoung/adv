@@ -24,7 +24,7 @@ function plan(ctx,intent){
 }
 export const compartmentWater={
   createPersistent:s=>({controls:Object.fromEntries(s.zones.map(z=>[z.control,z.initiallyFlooded]))}),createRun:()=>({}),plan,
-  act(ctx,_intent,p){ctx.persistent.controls[p.control.id]=p.flooded;ctx.engine.notify(`${ctx.data.maps[p.zone.map].name}：${p.flooded?'水密扉を施錠して給水した。完全水没のため進入できない。':'給水を止め、床下の排水管へ排水した。水密扉の圧力錠が解除された。'}`);},
+  act(ctx,_intent,p){ctx.persistent.controls[p.control.id]=p.flooded;ctx.engine.notify(`${ctx.data.maps[p.zone.map].name}：${p.flooded?'水密扉を施錠して給水した。完全水没のため進入できない。':'給水を止め、通路の高さまで排水した。低いくぼみには水が残る。水密扉の圧力錠が解除された。'}`);},
   block:(ctx,map)=>compartmentBlocked(ctx.data,ctx.state,map.id),
   waterDepth:(ctx,map,x,y)=>dungeonCell(ctx.data,ctx.state,map,x,y)?.parameters.water_passable&&compartmentState(ctx.data,ctx.state,map.id)?.flooded?3:0,
   project(ctx){

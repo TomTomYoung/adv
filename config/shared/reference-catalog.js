@@ -771,7 +771,7 @@ export const referenceData={
       "schemaVersion": 1,
       "id": "region_1",
       "name": "灯守の地下水道",
-      "description": "水密扉で仕切られた短い水路と、乾いた操作室・荷揚げ場をつなぐ地下水道。",
+      "description": "水密扉で仕切られた地下水道。浅瀬、深い水路、底の見えない溜まりに沿って岸を進み、荷揚げ場の地下関所へ向かう。",
       "region": 1,
       "recommendedLevel": 1,
       "profile": "classic",
@@ -4761,57 +4761,13 @@ export const referenceData={
         "map"
       ],
       "kind": "maps",
-      "id": "region_1_f1"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        0,
-        "script"
-      ],
-      "kind": "scripts",
-      "id": "q004.clue_a"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        1,
-        "points",
-        0,
-        "map"
-      ],
-      "kind": "maps",
       "id": "region_1_landing"
     },
     {
       "file": "quests/q004.events.json",
       "path": [
         "events",
-        1,
-        "script"
-      ],
-      "kind": "scripts",
-      "id": "q004.clue_b"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        2,
-        "points",
         0,
-        "map"
-      ],
-      "kind": "maps",
-      "id": "region_1_landing"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        2,
         "script"
       ],
       "kind": "scripts",
@@ -19241,6 +19197,71 @@ export const referenceData={
       "id": "location_tavern"
     },
     {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint",
+        "background"
+      ],
+      "kind": "images",
+      "id": "location_checkpoint"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint",
+        "dungeonEntrance",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint",
+        "dungeonEntrance",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_landing"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint_holding",
+        "parent"
+      ],
+      "kind": "locations",
+      "id": "waterway_checkpoint"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint_holding",
+        "background"
+      ],
+      "kind": "images",
+      "id": "location_checkpoint"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "hikarigaeri_pass_registry",
+        "parent"
+      ],
+      "kind": "locations",
+      "id": "hikarigaeri_square"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "hikarigaeri_pass_registry",
+        "background"
+      ],
+      "kind": "images",
+      "id": "location_insurance"
+    },
+    {
       "file": "presentation.json",
       "path": [
         "effects",
@@ -30464,6 +30485,15 @@ export const referenceData={
       },
       "hikarigaeri_tavern_cistern": {
         "name": "宿屋裏の汚水槽"
+      },
+      "waterway_checkpoint": {
+        "name": "地下関所の詰所"
+      },
+      "waterway_checkpoint_holding": {
+        "name": "詰所・留置室前"
+      },
+      "hikarigaeri_pass_registry": {
+        "name": "通行資格審査所"
       }
     },
     "edgeTypes": {
@@ -31210,14 +31240,8 @@ export const referenceData={
       "q003_passage": {
         "name": "低い通路に残る通行人"
       },
-      "q004_clue_a": {
-        "name": "二枚目の通行証：現場の痕跡"
-      },
-      "q004_clue_b": {
-        "name": "二枚目の通行証：記録と証言"
-      },
       "q004_decision": {
-        "name": "二枚目の通行証：決着の場"
+        "name": "関所の外で待つイナ"
       },
       "q005_clue_a": {
         "name": "甘い排水：現場の痕跡"
@@ -32600,7 +32624,7 @@ export const referenceData={
       "id": "region_1_f1",
       "name": "灯守の地下水道・上層・入口操作室",
       "width": 11,
-      "height": 5,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_f1.json",
       "owner": {
@@ -32615,7 +32639,7 @@ export const referenceData={
       "id": "region_1_f2",
       "name": "灯守の地下水道・下層・操作室",
       "width": 11,
-      "height": 5,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_f2.json",
       "owner": {
@@ -32867,7 +32891,7 @@ export const referenceData={
       "id": "region_1_canal_a",
       "name": "灯守の地下水道・上層・第一水路",
       "width": 11,
-      "height": 3,
+      "height": 7,
       "dungeon": "region_1",
       "file": "data/maps/region_1_canal_a.json",
       "owner": {
@@ -32881,8 +32905,8 @@ export const referenceData={
     "region_1_landing": {
       "id": "region_1_landing",
       "name": "灯守の地下水道・上層・荷揚げ場",
-      "width": 11,
-      "height": 5,
+      "width": 17,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_landing.json",
       "owner": {
@@ -32897,7 +32921,7 @@ export const referenceData={
       "id": "region_1_canal_b",
       "name": "灯守の地下水道・上層・排水支路",
       "width": 11,
-      "height": 3,
+      "height": 7,
       "dungeon": "region_1",
       "file": "data/maps/region_1_canal_b.json",
       "owner": {
@@ -32912,7 +32936,7 @@ export const referenceData={
       "id": "region_1_inspection",
       "name": "灯守の地下水道・上層・鐘と浮子の点検室",
       "width": 11,
-      "height": 5,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_inspection.json",
       "owner": {
@@ -32927,7 +32951,7 @@ export const referenceData={
       "id": "region_1_canal_c",
       "name": "灯守の地下水道・下層・給金箱の水路",
       "width": 11,
-      "height": 3,
+      "height": 7,
       "dungeon": "region_1",
       "file": "data/maps/region_1_canal_c.json",
       "owner": {
@@ -32942,7 +32966,7 @@ export const referenceData={
       "id": "region_1_lower_landing",
       "name": "灯守の地下水道・下層・棺の待避場",
       "width": 11,
-      "height": 5,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_lower_landing.json",
       "owner": {
@@ -32957,7 +32981,7 @@ export const referenceData={
       "id": "region_1_canal_d",
       "name": "灯守の地下水道・下層・避難水路",
       "width": 11,
-      "height": 3,
+      "height": 7,
       "dungeon": "region_1",
       "file": "data/maps/region_1_canal_d.json",
       "owner": {
@@ -32972,7 +32996,7 @@ export const referenceData={
       "id": "region_1_gatehouse",
       "name": "灯守の地下水道・下層・奥の水門詰所",
       "width": 11,
-      "height": 5,
+      "height": 9,
       "dungeon": "region_1",
       "file": "data/maps/region_1_gatehouse.json",
       "owner": {
@@ -33217,49 +33241,11 @@ export const referenceData={
         "events",
         0
       ],
-      "id": "q004_clue_a",
-      "name": "二枚目の通行証：現場の痕跡",
-      "map": "region_1_f1",
-      "x": 5,
-      "y": 1,
-      "trigger": "interact"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        1,
-        "points",
-        0
-      ],
-      "eventPath": [
-        "events",
-        1
-      ],
-      "id": "q004_clue_b",
-      "name": "二枚目の通行証：記録と証言",
-      "map": "region_1_landing",
-      "x": 3,
-      "y": 3,
-      "trigger": "interact"
-    },
-    {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        2,
-        "points",
-        0
-      ],
-      "eventPath": [
-        "events",
-        2
-      ],
       "id": "q004_decision",
-      "name": "二枚目の通行証：決着の場",
+      "name": "関所の外で待つイナ",
       "map": "region_1_landing",
-      "x": 7,
-      "y": 3,
+      "x": 13,
+      "y": 5,
       "trigger": "interact"
     },
     {
@@ -40968,8 +40954,6 @@ export const referenceData={
     "flags.dungeonNotes.region_7",
     "flags.dungeonNotes.region_8",
     "flags.dungeonNotes.region_9",
-    "flags.flow.q004.application",
-    "flags.flow.q004.node",
     "flags.flow.q005.node",
     "flags.flow.q005.warmTrial",
     "flags.flow.q006.node",
@@ -41248,7 +41232,6 @@ export const referenceData={
     "flags.flow.q200.homeConsent",
     "flags.flow.q200.intent",
     "flags.flow.q200.node",
-    "flags.legacyQuestRoutes.q004",
     "flags.legacyQuestRoutes.q005",
     "flags.legacyQuestRoutes.q006",
     "flags.legacyQuestRoutes.q007",
@@ -41355,15 +41338,12 @@ export const referenceData={
     "flags.legacyQuestRoutes.q196",
     "flags.legacyQuestRoutes.q198",
     "flags.legacyQuestRoutes.q200",
-    "flags.legacyStoryRoutes.q004",
     "flags.legacyStoryRoutes.q005",
     "flags.legacyStoryRoutes.q006",
     "flags.legacyStoryRoutes.q007",
     "flags.legacyStoryRoutes.q008",
     "flags.legacyStoryRoutes.q009",
     "flags.legacyStoryRoutes.q010",
-    "flags.quest.q004.disclosed",
-    "flags.quest.q004.questioned",
     "flags.quest.q005.disclosed",
     "flags.quest.q005.questioned",
     "flags.quest.q006.disclosed",
@@ -41789,7 +41769,6 @@ export const referenceData={
     "quests.q002.stage",
     "quests.q003.outcome",
     "quests.q003.stage",
-    "quests.q004.evidence",
     "quests.q004.outcome",
     "quests.q004.stage",
     "quests.q005.evidence",
@@ -42315,9 +42294,11 @@ export const referenceData={
     "stories.q004.scene",
     "stories.q004.values.copyInvalid",
     "stories.q004.values.filed",
+    "stories.q004.values.inaAt",
     "stories.q004.values.keeperConsent",
     "stories.q004.values.numberRevoked",
     "stories.q004.values.originalAt",
+    "stories.q004.values.partyAt",
     "stories.q004.values.provisional",
     "stories.q004.values.released",
     "stories.q004.values.sisterAt",
@@ -43074,80 +43055,64 @@ export const referenceData={
       "name": "逆流する鐘",
       "file": "data/quests/q003.json"
     },
-    "q004.clue_a": {
-      "name": "通行証の擦れ方が違い、両方に同じ修正傷がある。",
-      "file": "data/quests/q004.json"
-    },
-    "q004.clue_b": {
-      "name": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なります。",
-      "file": "data/quests/q004.json"
-    },
-    "q004.decision": {
-      "name": "二枚目の通行証\n\n地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あ",
-      "file": "data/quests/q004.json"
-    },
-    "q004.review": {
-      "name": "二枚目の通行証\n\n地下関所で捕まった姉を助けてください。同じ番号の通行証が二枚あ",
-      "file": "data/quests/q004.json"
-    },
-    "q004.aftermath": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
-    "q004.visit": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.entry": {
-      "name": "イナは姉の証を示し、係員は番号の重複を指摘した。双方の机が離れている。",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.sisters": {
-      "name": "姉妹は証の共有を認めた。「罰金で今日だけ通れるなら」。書類には臨時証の申請欄もあ",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.keeper": {
-      "name": "係員の名簿には十年前の戦死記号があり、筆跡は今の記録と異なる。 係員は兄の名を借",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.applications": {
-      "name": "姉妹は臨時証、係員は再試験を希望した。一方だけを見逃す取引にはしないと三人が署名",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.end.informed": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.end.contract": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.end.compromise": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
-    "q004.flow.visit": {
-      "name": "二枚目の通行証",
-      "file": "data/quests/q004.json"
-    },
     "q004.v11.entry": {
       "name": "イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まっ",
       "file": "data/quests/q004.json"
     },
     "q004.v11.duplicate": {
-      "name": "入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた",
+      "name": "受付の入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続い",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.registry": {
+      "name": "地上の審査窓口で、勤務簿から控えた名義を住民登録簿と照合した。記録上、その名義人",
       "file": "data/quests/q004.json"
     },
     "q004.v11.consent": {
-      "name": "住民登録簿の死亡記録を伝えると、番人は兄の名で働いていると認めた。イナが姉を見た",
+      "name": "詰所へ戻り、住民登録簿の死亡記録を示すと、番人は兄の名で働いていると認めた。イナ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.filing": {
+      "name": "審査窓口へ戻った。姉妹と番人の同意を得てきたが、申告はまだ提出していない。三人の",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.escort": {
+      "name": "審査官が申告を受理し、住民登録の記録を鞄に収めた。「現物と本人を、地下の窓口で確",
       "file": "data/quests/q004.json"
     },
     "q004.v11.review": {
-      "name": "審査官は住民登録の記録を携えて地上から来た。窓口の通行記録、勤務簿、原本と写しを",
+      "name": "審査官と詰所へ着いた。受付に通行記録、勤務簿、原本と写し、持参した住民登録の記録",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.issued": {
+      "name": "留置室の錠が開き、姉が受付へ出てきた。姉妹は別々の仮証を受け取り、元の証と写しは",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.issued_outside": {
+      "name": "姉妹と関所の外へ戻った。二人の手には、それぞれ別の仮証がある。正式資格の審査はこ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.fine_release": {
+      "name": "罰金を納め、イナの写しを渡した。番人が留置室を開け、受付へ来た姉に原本を返す。有",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.fine_outside": {
+      "name": "姉妹を連れて関所の外へ出た。イナの写しは窓口で回収された。二人が別々に地下へ通え",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.force_entry": {
+      "name": "受付の奥、留置室の前まで来た。姉は鉄格子の向こうにいる。錠を破れば番人が駆けつけ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.force_freed": {
+      "name": "錠が壊れ、姉が留置室から出た。イナは関所の外で待っている。原本を取り返す余裕はな",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.force_outside": {
+      "name": "姉を連れて関所の外へ戻ると、イナが駆け寄った。原本は番人の手元にあり、その番号も",
       "file": "data/quests/q004.json"
     },
     "q004.v11.window": {
-      "name": "入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた",
+      "name": "受付の入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続い",
       "file": "data/quests/q004.json"
     },
     "q004.v11.end.informed": {
@@ -53820,27 +53785,11 @@ export const referenceData={
       ],
       "id": "q003_passage"
     },
-    "events/q004_clue_a": {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        0
-      ],
-      "id": "q004_clue_a"
-    },
-    "events/q004_clue_b": {
-      "file": "quests/q004.events.json",
-      "path": [
-        "events",
-        1
-      ],
-      "id": "q004_clue_b"
-    },
     "events/q004_decision": {
       "file": "quests/q004.events.json",
       "path": [
         "events",
-        2
+        0
       ],
       "id": "q004_decision"
     },
@@ -57405,6 +57354,24 @@ export const referenceData={
         "hikarigaeri_tavern_cistern"
       ]
     },
+    "locations/waterway_checkpoint": {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint"
+      ]
+    },
+    "locations/waterway_checkpoint_holding": {
+      "file": "locations.json",
+      "path": [
+        "waterway_checkpoint_holding"
+      ]
+    },
+    "locations/hikarigaeri_pass_registry": {
+      "file": "locations.json",
+      "path": [
+        "hikarigaeri_pass_registry"
+      ]
+    },
     "cellTypes/stone_floor": {
       "file": "cell-layers.json",
       "path": [
@@ -57777,7 +57744,8 @@ export const referenceData={
       "sprite_toto": "assets/images/characters/sprites/toto.webp",
       "sprite_waterwatch": "assets/images/characters/sprites/waterwatch.webp",
       "sprite_workers": "assets/images/characters/sprites/workers.webp",
-      "sprite_yoru": "assets/images/characters/sprites/yoru.webp"
+      "sprite_yoru": "assets/images/characters/sprites/yoru.webp",
+      "location_checkpoint": "assets/images/locations/checkpoint.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

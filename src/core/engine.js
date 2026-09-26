@@ -13,7 +13,7 @@ import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding,resumeWorldStory} from './story.js';
-import {townRoot,townLocation,syncWorldStories} from './world.js';
+import {townRoot,townLocation,syncWorldStories,locationRoot,dungeonInterior,interiorEntrances} from './world.js';
 import {questEntryPlan} from './quest-navigation.js';
 import {processFieldEvents,recordFieldEntry} from './field-events.js';
 import {freshFieldReactions,signalFieldChange} from './field-signals.js';
@@ -236,6 +236,9 @@ export class GameEngine {
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
     if(type==='location.move')return this.moveLocation(intent.id);
+    if(type==='location.enter')return this.enterLocation(intent.id);
+    if(type==='location.exit')return this.exitLocation();
+    if(dungeonInterior(this.data,this.state)&&['accept','travel','quest.travel','service','party','party.order','job.change'].includes(type))return false;
     if(type==='story.resume')return resumeWorldStory(this,intent.quest);
     if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
@@ -295,7 +298,20 @@ export class GameEngine {
     const s=this.state,here=townLocation(this.data,s),dest=this.data.locations?.[id];
     if(s.mode!=='town'||s.waiting||s.battle||!here||!dest)return false;
     if(dest.parent!==here.id&&here.parent!==id&&!(here.links??[]).includes(id))return false;
+    if(locationRoot(this.data,here.id)?.id!==locationRoot(this.data,id)?.id)return false;
     s.townLocation=id;s.presentation.background=dest.background;syncWorldStories(this);this.notify(dest.description);return true;
+  }
+  enterLocation(id){
+    const s=this.state,dest=interiorEntrances(this.data,s).find(l=>l.id===id);
+    if(!dest||s.waiting||s.battle||s.vm.length)return false;
+    s.mode='town';s.townLocation=id;s.location=null;s.fieldEntry=null;
+    s.presentation.background=dest.background;syncWorldStories(this);this.notify(dest.description);return true;
+  }
+  exitLocation(){
+    const s=this.state,entrance=dungeonInterior(this.data,s);
+    if(!entrance||townLocation(this.data,s)?.parent||s.waiting||s.battle||s.vm.length)return false;
+    if(!this.walkable(this.data.maps[entrance.map],entrance.x,entrance.y,entrance.z??0))return false;
+    this.teleport(entrance.map,entrance.x,entrance.y,entrance.facing,entrance.z??0);this.notify(`${this.data.maps[entrance.map].name}へ戻った。`);return true;
   }
   equip(actorId,itemId,source){
     const item=this.data.items[itemId],actor=this.state.actors[actorId];
@@ -305,7 +321,7 @@ export class GameEngine {
     const stats=this.stats(actorId);actor.hp=Math.min(actor.hp,stats.hp);actor.mp=Math.min(actor.mp,stats.mp);return true;
   }
   changeParty(action,actorId,replaceId){
-    const s=this.state;if(s.mode!=='town'||s.waiting||s.battle||!this.data.game.tavern?.candidates.includes(actorId))return false;
+    const s=this.state;if(s.mode!=='town'||dungeonInterior(this.data,s)||s.waiting||s.battle||!this.data.game.tavern?.candidates.includes(actorId))return false;
     const next=[...s.members],at=next.indexOf(actorId);
     if(action==='join'){if(at!==-1||next.length>=this.data.system.maxParty)return false;next.push(actorId);}
     else if(action==='leave'){if(at===-1||next.length===1)return false;next.splice(at,1);}
@@ -315,7 +331,7 @@ export class GameEngine {
     s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
   }
   unequip(actorId,slot){
-    const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||s.mode!=='town'&&!s.members.includes(actorId))return false;
+    const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||(s.mode!=='town'||dungeonInterior(this.data,s))&&!s.members.includes(actorId))return false;
     const item=a.equipment[slot];if(!item||(s.inventory[item]??0)>=this.data.system.maxStack)return false;
     unequipGear(s,actorId,slot);delete a.equipment[slot];s.inventory[item]=(s.inventory[item]??0)+1;const stats=this.stats(actorId);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);return true;
   }

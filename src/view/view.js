@@ -85,6 +85,7 @@ export class GameView {
     if(d?.cancelAdvance){this.act({type:'advance'});return;}
     if(d?.cancelId&&d.options?.some(o=>o.id===d.cancelId&&o.enabled)){this.act({type:'choose',id:d.cancelId});return;}
     if(!this.model.busy&&this.model.town?.parent)this.act({type:'location.move',id:this.model.town.parent.id});
+    else if(!this.model.busy&&this.model.town?.exit)this.act(this.model.town.exit.intent);
     else if(!this.resumeExploration())focusButton(buttons(this.inputScope())[0]);
   }
   act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
@@ -98,7 +99,7 @@ export class GameView {
     const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
-    const allTabs=model.mode==='town'?[['location','町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
+    const allTabs=model.mode==='town'?[['location',model.town?.interior?'詰所':'町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
     if(this.tab==='profile'&&model.mode==='town')allTabs.push(['profile','キャラクター']);
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
@@ -137,14 +138,15 @@ export class GameView {
     if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
     if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
     if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
-    if(t.dungeons.length&&m.tracked?.destination?.kind==='dungeon')this.questEntrance(choices,m.tracked);
+    if(t.dungeons.length&&m.tracked?.entryDungeon)this.questEntrance(choices,m.tracked);
     if(t.dungeons.length)choices.append(button('迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
     if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
+    if(t.exit)choices.append(button(t.exit.label,()=>this.act(t.exit.intent),'location-back',t.busy));
     section.append(choices);parent.append(section);
   }
   questEntrance(parent,q){
-    if(q.destination?.kind!=='dungeon')return;
-    parent.append(button(`迷宮の入口へ向かう（${q.destination.name}）`,()=>this.act({type:'quest.travel',id:q.id}),'',!q.canEnter));
+    if(!q.entryDungeon)return;
+    parent.append(button(`迷宮の入口へ向かう（${q.entryDungeonName??q.destination.name}）`,()=>this.act({type:'quest.travel',id:q.id}),'',!q.canEnter));
     if(!q.canEnter&&q.entryReason)parent.append(node('p','requirement',q.entryReason));
   }
   questDestination(parent,q){

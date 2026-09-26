@@ -1,3 +1,4 @@
+import {dungeonInterior} from './world.js';
 // Domain mutations enqueue only subscribers in the current dungeon. Rendering,
 // turning and opening/cancelling a command never publish a signal.
 export const FIELD_SIGNALS=['enter','move','light','object','state'];
@@ -32,7 +33,7 @@ export function validateFieldReactions(data,state){
   if(!q||typeof q!=='object'||Array.isArray(q)||Object.keys(q).sort().join()!=='dungeon,fired,pending,run')return ['条件付きイベントの保存形式不正'];
   const empty=q.dungeon===null&&q.run===null;
   const events=data.dungeons?.[q.dungeon]?.fieldEvents??[];
-  if(!empty&&(state.mode!=='dungeon'||q.dungeon!==state.dungeons?.active?.id||q.run!==state.dungeons?.active?.run))return ['条件付きイベントの探索参照不正'];
+  if(!empty&&(state.mode!=='dungeon'&&!dungeonInterior(data,state)||q.dungeon!==state.dungeons?.active?.id||q.run!==state.dungeons?.active?.run))return ['条件付きイベントの探索参照不正'];
   for(const key of ['pending','fired'])if(!Array.isArray(q[key])||new Set(q[key]).size!==q[key].length||q[key].some(id=>empty||!events.some(e=>e.id===id&&(key!=='fired'||e.repeat==='entry'))))return ['条件付きイベントの実行記録不正'];
   for(const [key,count] of Object.entries(state.events??{}))if(key.startsWith('field/')){
     const [,dungeon,id,...rest]=key.split('/');

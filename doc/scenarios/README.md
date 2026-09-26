@@ -1,5 +1,7 @@
 # シナリオ・クエスト文書
 
+2026-09-26: [q004の実移動](Q004_WORLD_ROUTE.md)を実装済み。
+
 作品版1.20.0、確認日2026-09-25。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
 
 ## 本文と人物

@@ -1,5 +1,7 @@
 # くぼみと水面
 
+2026-09-26: [地下水道10区画への配置](WATERWAY_EXPANSION.md)を実装済み。
+
 更新日: 2026-09-26。作品版1.20.0。正本は [config/cell-layers.json](../../config/cell-layers.json)、配布セルは [data/cell-types.json](../../data/cell-types.json) です。
 
 ## 六つのセル種

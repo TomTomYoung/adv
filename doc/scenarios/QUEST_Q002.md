@@ -2,9 +2,9 @@
 
 [クエストカタログへ戻る](QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.20.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.21.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:e61ae23b9968fbc6cef4eda0139109b707da764f846c16f4bb5eee7411dc72c1 -->
+<!-- quest-page-source:422ecf1921e567e53f7351690c45668218aa9fffd0165effbaef7e0844ba905d -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
@@ -481,6 +481,10 @@ flowchart TD
     "#.........#",
     "#.###.###.#",
     "#.........#",
+    "#.###.###.#",
+    "#.....###.#",
+    "#.....###.#",
+    "#.........#",
     "###########"
   ],
   "objects": [
@@ -556,17 +560,40 @@ flowchart TD
   },
   "cells": {
     "legend": {
+      "W": "stone_wall",
       "F": "stone_floor",
-      "W": "stone_wall"
+      "S": "shallow_depression_water",
+      "D": "deep_depression_water",
+      "B": "bottomless_depression_water"
     },
     "rows": [
       "WWWWWWWWWWW",
       "WFFFFFFFFFW",
       "WFWWWFWWWFW",
       "WFFFFFFFFFW",
+      "WFWWWFWWWFW",
+      "WFSSSFDDDFW",
+      "WFSSSFDDDFW",
+      "WFFFFFFFFFW",
       "WWWWWWWWWWW"
     ],
-    "overrides": {}
+    "overrides": {
+      "1,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "9,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "1,7": {
+        "parameters": {
+          "illumination": 3
+        }
+      }
+    }
   }
 }
 ```
@@ -601,6 +628,10 @@ flowchart TD
   "tiles": [
     "###########",
     "#.........#",
+    "#.........#",
+    "#.#######.#",
+    "#.#######.#",
+    "#.........#",
     "###########"
   ],
   "objects": [],
@@ -611,16 +642,38 @@ flowchart TD
   },
   "cells": {
     "legend": {
-      "F": "stone_floor",
       "W": "stone_wall",
-      "A": "submerged_passage"
+      "F": "stone_floor",
+      "S": "shallow_depression_water",
+      "D": "deep_depression_water",
+      "B": "bottomless_depression_water"
     },
     "rows": [
       "WWWWWWWWWWW",
-      "WAAAAAAAAAW",
+      "WFFFSSSFFFW",
+      "WFSSSSSSSFW",
+      "WFDDDDDDDFW",
+      "WFDDDDDDDFW",
+      "WFFFFFFFFFW",
       "WWWWWWWWWWW"
     ],
-    "overrides": {}
+    "overrides": {
+      "1,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "9,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "1,5": {
+        "parameters": {
+          "illumination": 3
+        }
+      }
+    }
   }
 }
 ```
@@ -653,11 +706,15 @@ flowchart TD
   "name": "灯守の地下水道・上層・荷揚げ場",
   "floor": 1,
   "tiles": [
-    "###########",
-    "#.........#",
-    "#.###.###.#",
-    "#.........#",
-    "###########"
+    "#################",
+    "#.........#######",
+    "#.###.###.#######",
+    "#...............#",
+    "#.###.###.#.#.#.#",
+    "#.........#.....#",
+    "#.....###.#.#.#.#",
+    "#.....###.#.....#",
+    "#################"
   ],
   "objects": [],
   "entrance": {
@@ -667,17 +724,40 @@ flowchart TD
   },
   "cells": {
     "legend": {
+      "W": "stone_wall",
       "F": "stone_floor",
-      "W": "stone_wall"
+      "S": "shallow_depression_water",
+      "D": "deep_depression_water",
+      "B": "bottomless_depression_water"
     },
     "rows": [
-      "WWWWWWWWWWW",
-      "WFFFFFFFFFW",
-      "WFWWWFWWWFW",
-      "WFFFFFFFFFW",
-      "WWWWWWWWWWW"
+      "WWWWWWWWWWWWWWWWW",
+      "WFFFFFFFFFWWWWWWW",
+      "WFWWWFWWWFWWWWWWW",
+      "WFFFFFFFFFFFFFFFW",
+      "WFWWWFWWWFWFWFWFW",
+      "WFSSSFFFFFWFFFFFW",
+      "WFSSSFDDDFWFWFWFW",
+      "WFFFFFDDDFWFFFFFW",
+      "WWWWWWWWWWWWWWWWW"
     ],
-    "overrides": {}
+    "overrides": {
+      "1,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "9,1": {
+        "parameters": {
+          "illumination": 3
+        }
+      },
+      "1,7": {
+        "parameters": {
+          "illumination": 3
+        }
+      }
+    }
   }
 }
 ```

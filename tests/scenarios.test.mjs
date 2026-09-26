@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {data,newGame,drain,fight,exploreSpot} from './helpers.mjs';
+import {data,newGame,drain,fight,exploreSpot,goWorldLocation} from './helpers.mjs';
 import {finishJourney} from './structure-routes.mjs';
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
@@ -63,7 +63,13 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
   // Defeat can leave a scene to be resumed at its map hub.
   if(g.state.journey)finishJourney(g);
   if(g.state.battle)fight(g);
-  if(!g.state.waiting){if(q.story?.worldPlaces)exploreSpot(g,q.locations.find(l=>l.role==='decision'),{heal:true});else{g.run(visit(q.id));drain(g);}}
+  if(!g.state.waiting){
+   if(q.story?.worldPlaces){
+    const place=q.story.worldPlaces[q.story.scenes[g.state.stories[q.id]?.scene??'entry'].place];
+    if(place.kind==='town'){goWorldLocation(g,place.location);assert.ok(g.dispatch({type:'story.resume',quest:q.id}));drain(g);}
+    else exploreSpot(g,place,{heal:true});
+   }else{g.run(visit(q.id));drain(g);}
+  }
   assert.equal(g.state.waiting?.type,'choice');
   const available=options(g).filter(o=>o.id!=='pause'&&enabled(g,o));
   assert.ok(available.length,`${q.id}: a live route at ${scene(g,q.id)}`);

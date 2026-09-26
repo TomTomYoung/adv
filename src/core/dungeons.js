@@ -20,6 +20,7 @@ import {objectBlocks} from './quest-events.js';
 import {authoredCellLayers,mergeCellLayers} from './cell-layers.js';
 import {legacyCellLayers} from './legacy-cell-layers.js';
 import {signalFieldChange} from './field-signals.js';
+import {dungeonInterior} from './world.js';
 
 // Dungeon IDs are data. Only reusable system implementations belong in this registry.
 export const DUNGEON_SYSTEMS={map_connections:mapConnections,compartment_water:compartmentWater,voxel_space:voxelSpace,fire_network:fireNetwork,waterworks,corrosion,breakable_walls:breakableWalls,plant_garden:plantGarden,warp_network:warpNetwork,terrain_shift:terrainShift,vector_curse:vectorCurse,suppression_zone:suppressionZone,skill_library:skillLibrary,air_supply:airSupply,market_pacts:marketPacts,power_grid:powerGrid};
@@ -170,7 +171,7 @@ export function validateDungeonState(data,state){
   if(!data.game.dungeonVersion)return [];
   const s=state.dungeons,errors=[],bad=m=>errors.push(`迷宮保存: ${m}`),object=v=>v&&typeof v==='object'&&!Array.isArray(v);
   if(!object(s)||s.version!==1||!Number.isSafeInteger(s.nextRun)||s.nextRun<1||!object(s.persistent))return ['迷宮保存: 基本状態が不正です'];
-  const active=s.active,expected=state.mode==='dungeon'?dungeonForMap(data,state.location?.map):null;
+  const active=s.active,expected=dungeonForMap(data,state.mode==='dungeon'?state.location?.map:dungeonInterior(data,state)?.map);
   if(expected){if(!object(active)||active.id!==expected.id||!Number.isSafeInteger(active.run)||active.run<1||active.run>=s.nextRun||!Number.isSafeInteger(active.steps)||active.steps<0||!object(active.systems))bad('現在地・探索番号が不正です');}
   else if(active!==null)bad('退場後も探索が残っています');
   for(const [id,p] of Object.entries(s.persistent)){
