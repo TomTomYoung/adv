@@ -1,3 +1,4 @@
+import {reliefParametersValid} from '../../src/core/cell-behaviors.js';
 import {validateSchema} from './schema.js';
 import {kind,pathLabel} from './model.js';
 const str={type:'string',minLength:1},bool={type:'boolean'},num={type:'number'},uint={type:'integer',minimum:0};
@@ -77,10 +78,12 @@ export function createValidator(read=browserRead){
     }
     if(entry.family==='jobs')for(const [actor,job] of Object.entries(value.initialJobs))if(!Object.hasOwn(value.jobs,job))fail(['initialJobs',actor],'職業IDがjobsにありません。');
     if(entry.family==='presentation')for(const [id,c] of Object.entries(value.cues)){for(const effect of c.effects)if(!Object.hasOwn(value.effects,effect))fail(['cues',id,'effects'],'効果がありません: '+effect);if(c.sound&&!Object.hasOwn(value.sounds,c.sound))fail(['cues',id,'sound'],'SEがありません: '+c.sound);}
+    if(entry.family==='cells')for(const [id,preset] of Object.entries(value.presets))if(!reliefParametersValid(preset.parameters))fail(['presets',id,'parameters'],'くぼみの深さ・水面高さを確認してください。水面は底より上に設定します。');
     if(entry.family==='cells')for(const [id,map] of Object.entries(value.maps)){
       for(const [symbol,preset] of Object.entries(map.legend))if(!Object.hasOwn(value.presets,preset))fail(['maps',id,'legend',symbol],'セル種がありません。');
       if(map.rows.some(r=>r.length!==map.rows[0].length))fail(['maps',id,'rows'],'行の幅を揃えてください。');
       for(const [y,row] of map.rows.entries())for(const symbol of row)if(!Object.hasOwn(map.legend,symbol))fail(['maps',id,'rows',y],'凡例にない記号です: '+symbol);
+      for(const [key,patch] of Object.entries(map.overrides??{})){const [x,y]=key.split(',').map(Number),base=value.presets[map.legend[map.rows[y]?.[x]]];if(base&&!reliefParametersValid({...base.parameters,...patch.parameters}))fail(['maps',id,'overrides',key,'parameters'],'くぼみの水面は底より上に設定してください。');}
       for(const p of Object.keys(map.overrides??{})){const [x,y]=p.split(',').map(Number);if(x<0||y<0||y>=map.rows.length||x>=map.rows[0].length)fail(['maps',id,'overrides',p],'上書き位置が範囲外です。');}
     }
     if(value.maps&&kind(value.maps)==='object'&&entry.family!=='cells')for(const [id,map] of Object.entries(value.maps)){

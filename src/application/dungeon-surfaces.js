@@ -15,7 +15,8 @@ export function projectDungeonSurfaces(engine,systems){
     const cell=dungeonCell(data,state,map,x,y),{wall,floor,opaque,material,image}=cell.visual,door=map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(state,map,o));
     const waterDepth=!data.game.cellLayerVersion&&wall?0:dungeonWaterDepth(data,state,map,x,y);
     const art=image?{url:data.assets.images[image],rect:{x:0,y:0,width:1,height:1}}:projectArt(data,dungeonForMap(data,map.id)?.art?.[material]);
-    return {x,y,known:seen.has(`${x},${y}`),wall,opaque:opaque||door||Boolean(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!waterDepth),blocked:!engine.walkable(map,x,y),water:waterDepth>0,waterDepth,waterLabel:depthName(waterDepth),floor,art,surface:cell.visual.surface,cellName:cell.name,parameters:{...cell.parameters}};
+    const p=cell.parameters,relief=p.floor_depth>0||p.bottomless?{depth:p.floor_depth??0,bottomless:Boolean(p.bottomless),waterLevel:waterDepth>0?(waterDepth===3?0:p.water_level??-.1):null}:undefined;
+    return {relief,x,y,known:seen.has(`${x},${y}`),wall,opaque:opaque||door||Boolean(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!waterDepth),blocked:!engine.walkable(map,x,y),water:waterDepth>0,waterDepth,waterLabel:depthName(waterDepth),floor,art,surface:cell.visual.surface,cellName:cell.name,parameters:{...cell.parameters}};
   }))};
   // A closed object door also hides the view in a cubic map; water and holes never become masonry.
   if(map.voxels)for(const row of terrain.cells)for(const cell of row)cell.opaque=cell.wall||map.objects.some(o=>o.x===cell.x&&o.y===cell.y&&(o.z??0)===(loc.z??0)&&objectBlocks(state,map,o));
@@ -36,6 +37,7 @@ export function projectDungeonSurfaces(engine,systems){
   let text='';
   const door=terrain.doors[`${loc.x},${loc.y}/${loc.facing}`];
   if(door)text=`正面：${door.name}。${door.closed?'圧力錠が掛かっている。扉の向こうは完全水没している。外の操作盤で排水する。':`${door.destination}へ通行可能。扉を開けて進む。`}`;
+  else if(ahead?.relief&&ahead.waterDepth!==3&&!ahead.opaque&&!closedFace){text=`正面：${ahead.cellName}。${ahead.blocked?'通行不可':'通行可'}。`;}
   else if(ahead?.waterDepth&&!ahead.opaque&&!closedFace){
     text=`正面：${ahead.waterLabel}・${ahead.blocked?'通行不可':'通行可'}。`;
     if(ahead.blocked)text+=map.voxels?'排水するか、別の足場を探してください。':waterMarker?.waitable?'水位が下がるのを待つか、水門で排水してください。':waterMarker?.controlName?`${waterMarker.controlName}で水を止めてください。待つだけでは水は引きません。`:'水を抜くか、別の経路を探してください。';

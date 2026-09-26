@@ -18,7 +18,7 @@ export function mapSection(model,{onExpand}={}){
   for(const row of d.cells)for(const cell of row){
     const here=cell.x===d.location.x&&cell.y===d.location.y,known=cell.known||here;
     const objects=known?d.objects.filter(o=>o.x===cell.x&&o.y===cell.y):[],object=objects.find(o=>!o.edge);
-    const terrain=!known?'unknown':cell.wall?'wall':cell.floor===false?'pit':cell.water?'water':'floor';
+    const terrain=!known?'unknown':cell.wall?'wall':cell.water?'water':cell.floor===false||cell.relief?'pit':'floor';
     const square=make('span',`map-cell ${terrain}${here?' current':''}`);square.dataset.x=String(cell.x);square.dataset.y=String(cell.y);
     const tile=image(terrain,'map-terrain');square.append(tile);
     if(known){
@@ -32,7 +32,7 @@ export function mapSection(model,{onExpand}={}){
         if(closed)square.append(make('span',`map-boundary ${side}`));
       }
       if(!here&&object)square.append(image(markerAsset(object),'map-object'));
-      square.title=`${cell.x},${cell.y}${d.voxel?', 高さ '+d.z+' / '+cell.waterLabel:''}${objects.length?' '+objects.map(o=>o.name).join('・'):''} / 明るさ ${light}/8`;
+      square.title=`${cell.x},${cell.y}${cell.relief?' '+cell.cellName+' / '+(cell.blocked?'通行不可':'通行可'):''}${d.voxel?', 高さ '+d.z+' / '+cell.waterLabel:''}${objects.length?' '+objects.map(o=>o.name).join('・'):''} / 明るさ ${light}/8`;
       for(const marker of objects.filter(o=>o.edge)){
         const edge=make('span',`map-edge-marker ${marker.edge}`);edge.title=marker.name;edge.setAttribute('aria-label',`${marker.name} (${marker.edge})`);edge.append(image(markerAsset(marker),'map-edge-image'));square.append(edge);
       }

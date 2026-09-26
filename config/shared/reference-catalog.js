@@ -30552,6 +30552,24 @@ export const referenceData={
       },
       "unsupported_space": {
         "name": "足場なし空間（2D）"
+      },
+      "shallow_depression": {
+        "name": "浅いくぼみ"
+      },
+      "shallow_depression_water": {
+        "name": "水の張った浅いくぼみ"
+      },
+      "deep_depression": {
+        "name": "深いくぼみ"
+      },
+      "deep_depression_water": {
+        "name": "水の張った深いくぼみ"
+      },
+      "bottomless_depression": {
+        "name": "底の見えないくぼみ"
+      },
+      "bottomless_depression_water": {
+        "name": "水の張った底の見えないくぼみ"
       }
     },
     "cellEvents": {
@@ -57553,6 +57571,48 @@ export const referenceData={
       "path": [
         "presets",
         "unsupported_space"
+      ]
+    },
+    "cellTypes/shallow_depression": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "shallow_depression"
+      ]
+    },
+    "cellTypes/shallow_depression_water": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "shallow_depression_water"
+      ]
+    },
+    "cellTypes/deep_depression": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "deep_depression"
+      ]
+    },
+    "cellTypes/deep_depression_water": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "deep_depression_water"
+      ]
+    },
+    "cellTypes/bottomless_depression": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "bottomless_depression"
+      ]
+    },
+    "cellTypes/bottomless_depression_water": {
+      "file": "cell-layers.json",
+      "path": [
+        "presets",
+        "bottomless_depression_water"
       ]
     },
     "edgeTypes/open_passage": {

@@ -8,7 +8,7 @@
 
 ## 現行のセル種プリセット
 
-[config/cell-layers.json](../../config/cell-layers.json)に24種類を登録しています。2種類だけだった従来の状態から、以前の会話で挙げた床・壁・水路・危険・環境の候補を整備しました。末尾の「セル種プリセット」に名前・用途・実際の設定値を原稿から生成しています。
+[config/cell-layers.json](../../config/cell-layers.json)に30種類を登録しています。2種類だけだった従来の状態から、以前の会話で挙げた床・壁・水路・危険・環境の候補を整備しました。末尾の「セル種プリセット」に名前・用途・実際の設定値を原稿から生成しています。
 
 [マップ編集](../../config/map.html)では日本語名でセル種を選び、用途説明を見て配置できます。毒沼のダメージ、氷床の滑走、離れた後に崩れる床、通常遭遇を抑える安全地帯は登録済みの動作です。土・木・濡れ・氷などの表面も描き分けます。
 
@@ -296,6 +296,18 @@ npm run check:docs
 足場付き空間（2D） `supported_space`：床のある通行可能な空間。上下関係の計算は退避中の3D仕様です。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
 
 足場なし空間（2D） `unsupported_space`：床のない通行不可の空間。梯子や縄は別途接続・仕掛けとして設定します。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor"}`、環境 `{"illumination":0,"water_passable":true}`、セルイベント なし。
+
+浅いくぼみ `shallow_depression`：周囲の床から0.3m沈んだくぼみ。隣接する床との高低差だけに側面を描く。標準は通行可。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":0.3,"bottomless":false,"water_level":-0.1,"water_depth":0}`、セルイベント なし。
+
+水の張った浅いくぼみ `shallow_depression_water`：周囲の床から0.3m沈んだくぼみ。水面は周囲の床から10cm下。同じ水位の隣接水面は連続する。隣接する床との高低差だけに側面を描く。標準は通行可。 通行 `.`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":0.3,"bottomless":false,"water_level":-0.1,"water_depth":1}`、セルイベント なし。
+
+深いくぼみ `deep_depression`：周囲の床から1.5m沈んだくぼみ。隣接する床との高低差だけに側面を描く。標準は通行不可。 通行 `#`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":1.5,"bottomless":false,"water_level":-0.1,"water_depth":0}`、セルイベント なし。
+
+水の張った深いくぼみ `deep_depression_water`：周囲の床から1.5m沈んだくぼみ。水面は周囲の床から10cm下。同じ水位の隣接水面は連続する。隣接する床との高低差だけに側面を描く。標準は通行不可。 通行 `#`、表示 `{"wall":false,"floor":true,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":1.5,"bottomless":false,"water_level":-0.1,"water_depth":2}`、セルイベント なし。
+
+底の見えないくぼみ `bottomless_depression`：底面を描かず、側面が暗闇へ続くくぼみ。隣接する床との高低差だけに側面を描く。標準は通行不可。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":0,"bottomless":true,"water_level":-0.1,"water_depth":0}`、セルイベント なし。
+
+水の張った底の見えないくぼみ `bottomless_depression_water`：底面を描かず、側面が暗闇へ続くくぼみ。水面は周囲の床から10cm下。同じ水位の隣接水面は連続する。隣接する床との高低差だけに側面を描く。標準は通行不可。 通行 `#`、表示 `{"wall":false,"floor":false,"opaque":false,"material":"floor","surface":"stone"}`、環境 `{"illumination":0,"water_passable":true,"floor_depth":0,"bottomless":true,"water_level":-0.1,"water_depth":2}`、セルイベント なし。
 
 ### マップ別の基礎地形
 
