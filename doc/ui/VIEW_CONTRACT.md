@@ -101,6 +101,8 @@ type：item / equip / フィールド：item、actor
 
 type：party / フィールド：action: join/leave/swap、actor。swap時はreplaceに交代する現隊員ID
 
+type：party.order / フィールド：group: party/tavern、actor、direction: up/down。同じ一覧内の隣接人物と順序を入れ替える。rosterのcanMoveUp/canMoveDownはCoreの同じ判定から投影する。
+
 type：unequip / フィールド：actor、slot。町で装備を袋へ戻す
 
 type：job.change / フィールド：actor、job: 転職先ID
