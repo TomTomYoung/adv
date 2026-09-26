@@ -16,6 +16,8 @@
 
 [IN_SCENE_VIEW.md](IN_SCENE_VIEW.md)：背景内表示と従来表示、画面内ウィンドウ、長文、狭い画面の検証。
 
+[CHARACTER_PROFILES.md](CHARACTER_PROFILES.md)：町の人物プロフィール、転職・技能・魔法・所持品、隊と酒場の4領域表示。
+
 [SHOP_AND_PREPARATIONS.md](SHOP_AND_PREPARATIONS.md)：ショップの購入先選択、個人の持ち物、使用・受け渡し・装備と保存。
 
 [MINIMAP.md](MINIMAP.md)：正方形の地図素材、暗所の踏査記録、拡大・復帰と入力遮断。

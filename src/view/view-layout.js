@@ -5,7 +5,7 @@ export const normalizeLayout=value=>Object.hasOwn(VIEW_LAYOUTS,value)?value:'sce
 export function replaceView(previous,layout,root,dispatch,ui){
   const next=new (normalizeLayout(layout)==='scene'?SceneView:GameView)(root,dispatch,ui);
   if(previous){
-    for(const key of ['tab','bagActor','dungeonFilter','query','filter','selectedTarget','selectedAlly'])next[key]=previous[key];
+    for(const key of ['tab','shopItem','profileActor','profilePage','partySelection','partyPages','bagActor','dungeonFilter','query','filter','selectedTarget','selectedAlly'])next[key]=previous[key];
     next.effects.key=previous.effects.key;
     previous.destroy();
   }

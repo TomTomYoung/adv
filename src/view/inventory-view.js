@@ -59,18 +59,26 @@ export function renderShop(view,parent,m){
   const section=make('section','panel-content shop-panel'),head=make('div','shop-heading');
   head.append(make('h2','','ショップ'),make('p','shop-gold',`所持金 ${m.gold.toLocaleString('ja-JP')} G`));head.querySelector('.shop-gold').setAttribute('aria-live','polite');section.append(head);parent.append(section);
   if(!m.town?.shop){section.append(make('p','','ショップへ移動すると購入できます。'));return;}
-  const action=view.inventoryAction;
-  if(action?.kind==='buy'){
-    const item=m.shop.find(i=>i.id===action.item);if(item){choice(view,section,m,item,action);return;}view.inventoryAction=null;
-  }
-  section.append(make('p','muted','品物を選び、持たせる仲間を決めて購入します。'));
-  if(m.notice)section.append(make('p','inventory-notice',m.notice));
+  const item=m.shop.find(i=>i.id===(view.inventoryAction?.item??view.shopItem))??m.shop[0];
+  if(!item){section.append(make('p','empty','品物はありません。'));return;}view.shopItem=item.id;
+  const contents=make('div','shop-contents'),list=make('nav','shop-products');list.dataset.scroll='shop:products';list.setAttribute('aria-label','商品一覧');
   for(const item of m.shop){
-    const row=make('article','item-row shop-item');row.dataset.controlGroup=`shop:${item.id}`;
     const key=`shop:item:${item.id}`;
-    row.append(description(item),button(`${item.name}を選ぶ　${item.price.toLocaleString('ja-JP')} G`,()=>selectAction(view,{kind:'buy',item:item.id,focus:key}),key,m.busy));
-    if(!item.canBuy)row.append(make('p','requirement',item.reason));section.append(row);
+    const row=button('',()=>{view.shopItem=item.id;selectAction(view,{kind:'buy',item:item.id,focus:key});},key);row.className='shop-product';row.dataset.controlGroup=`shop:${item.id}`;row.setAttribute('aria-pressed',String(item.id===view.shopItem));
+    row.append(make('span','',item.name),make('span','shop-price',`${item.price.toLocaleString('ja-JP')} G`));list.append(row);
   }
+  const details=make('section','shop-details');details.setAttribute('aria-label','選択中の品物');details.append(description(item),make('p','muted',`共通の袋：${item.sharedCount??0}個`));
+  if(!item.canBuy)details.append(make('p','requirement',item.reason));
+  if(m.notice)details.append(make('p','inventory-notice',m.notice));contents.append(list,details);section.append(contents);
+  const targets=make('section','shop-recipients'+(view.inventoryAction?.kind==='buy'?' inventory-choice':''));targets.setAttribute('aria-label','購入先を選ぶ');
+  targets.append(make('h3','',`誰に持たせる？　${item.name}を1個購入`));
+  const people=make('div','shop-character-cards');people.dataset.scroll='shop:recipients';
+  for(const actor of m.party){
+    const recipient=item.recipients.find(a=>a.actor===actor.id),label=item.slot?(recipient.equipAllowed?'装備可':'装備不可'):'持ち運び可';
+    const action={kind:'buy',item:item.id,focus:`shop:item:${item.id}`};
+    people.append(actorButton(view,actor,label,`inventory:target:${actor.id}`,()=>commit(view,{type:'buy',item:item.id,actor:actor.id},action),{disabled:m.busy||!item.canBuy,note:`所持 ${recipient.count??0}個${item.slot?` / 装備中 ${recipient.equippedCount??0}個`:''}`}));
+  }
+  targets.append(people,make('p','muted',item.slot?'カードを決定すると購入して持たせます。装備不可の品も持ち運べます。':'カードを決定すると購入して持たせます。'));section.append(targets);
 }
 export function renderBag(view,parent,m){
   const section=make('section','panel-content inventory-panel');section.append(make('h2','','旅支度'));parent.append(section);

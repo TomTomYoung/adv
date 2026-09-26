@@ -88,7 +88,7 @@ class Element {
  click(){if(!this.disabled)this.listeners.click?.();}
 }
 
-test('board and journal expose one named entrance action, main quest controls, dungeon filters and an exit; sidebar is guidance only',()=>{
+test('board and journal expose one named entrance action, main quest controls, dungeon filters and an exit; sidebar quest guidance has no travel action',()=>{
  const previous={document:globalThis.document,Option:globalThis.Option};
  globalThis.document={createElement:tag=>new Element(tag)};
  globalThis.Option=class extends Element{constructor(text,value){super('option');this.textContent=text;this.value=value;}};
@@ -106,7 +106,7 @@ test('board and journal expose one named entrance action, main quest controls, d
   const location=new Element('div');v.location(location,model);location.queryAll('button').find(b=>b.textContent==='迷宮の入口へ向かう（篝火の迷宮）').click();assert.deepEqual(intents.pop(),{type:'quest.travel',id:'q001'});
   g.returnTown();model=projectGame(g);
   const sidebar=new Element('aside');v.portrait=()=>new Element('img');v.sidebar(sidebar,model);
-  assert.match(sidebar.textContent,/メインクエスト/);assert.equal(sidebar.queryAll('button').length,0);
+  assert.match(sidebar.textContent,/メインクエスト/);assert.deepEqual(sidebar.queryAll('button').map(b=>b.dataset.focus),model.party.map(a=>`character:${a.id}`));
   const journal=new Element('section');v.journal(journal,model);assert.equal(journal.queryAll('button').filter(b=>b.textContent==='メインクエストに設定').length,1);assert.match(journal.textContent,/次の目的地：篝火の迷宮/);
  }finally{globalThis.document=previous.document;globalThis.Option=previous.Option;}
 });

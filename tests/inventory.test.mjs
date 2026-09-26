@@ -101,7 +101,7 @@ for(const layout of ['scene','classic']){
       assert.match(c.button('inventory:target:ada').textContent,/装備可/);assert.match(c.button('inventory:target:sera').textContent,/装備不可/);assert.ok(!c.button('inventory:target:sera').disabled);
       c.key('Escape');assert.equal(c.document.activeElement.dataset.focus,'shop:item:iron_sword');assert.equal(c.g.save(),saved);
       c.click('shop:item:iron_sword');c.click('inventory:target:sera');assert.equal(c.intents.length,1);assert.equal(count(c.g,'iron_sword','sera'),1);assert.equal(c.g.state.actors.sera.equipment.weapon,undefined);
-      assert.match(c.root.querySelector('.shop-gold').textContent,/25 G/);c.click('shop:item:iron_sword');assert.match(c.root.querySelector('.inventory-choice').textContent,/足りません/);assert.ok(c.button('inventory:target:ada').disabled);
+      assert.match(c.root.querySelector('.shop-gold').textContent,/25 G/);c.click('shop:item:iron_sword');assert.match(c.root.querySelector('.shop-details').textContent,/足りません/);assert.ok(c.button('inventory:target:ada').disabled);
     }finally{c.close();}
   });
   test(`${layout}: preparations select the holder, transfer, use, equip and remove with reversible selection steps`,()=>{

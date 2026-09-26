@@ -20,7 +20,7 @@ export function projectInventory(engine){
   }).filter(Boolean)}));
   const shop=d.shops.goods.map(g=>{
     const item=details(g.item,s.inventory[g.item]??0),plan=purchasePlan(engine,g.item);
-    return {...item,price:engine.price(g.price),basePrice:g.price,canBuy:plan.ok,reason:plan.reason??'',recipients:s.members.map(actor=>({actor,equipAllowed:item.slot?canEquip(d,s,actor,g.item):null}))};
+    return {...item,price:engine.price(g.price),basePrice:g.price,canBuy:plan.ok,reason:plan.reason??'',sharedCount:heldCount(d,s,g.item),recipients:s.members.map(actor=>({actor,equipAllowed:item.slot?canEquip(d,s,actor,g.item):null,count:heldCount(d,s,g.item,actor),equippedCount:Object.values(s.actors[actor].equipment).filter(id=>id===g.item).length}))};
   });
   return {inventory,inventoryHolders,shop};
 }
