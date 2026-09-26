@@ -1,5 +1,5 @@
 import {clone} from './expression.js';
-import {townLocation} from './world.js';
+import {townLocation,dungeonInterior,locationRoot} from './world.js';
 
 // Resolve the pending physical event, without advancing a script or choosing a branch.
 export function nextQuestPlace(data,state,id){
@@ -21,7 +21,7 @@ export function nextQuestPlace(data,state,id){
 function townDepartureReason(data,state,id){
   if(!data.dungeons[id])return '行き先の迷宮が見つからない。';
   if(state.waiting||state.battle)return '会話・戦闘を終えてから出発する。';
-  if(state.mode!=='town')return '現在の迷宮から町へ戻ってから出発する。';
+  if(state.mode!=='town'||dungeonInterior(data,state))return '現在の迷宮から町へ戻ってから出発する。';
   return '';
 }
 
@@ -35,7 +35,8 @@ export function dungeonEntryReason(data,state,id){
 }
 
 export function questEntryPlan(data,state,id){
-  const place=nextQuestPlace(data,state,id);
+  const destination=nextQuestPlace(data,state,id),entrance=destination?.kind==='town'?locationRoot(data,destination.location)?.dungeonEntrance:null;
+  const place=entrance?{kind:'dungeon',...entrance}:destination;
   let reason='';
   if(state.quests[id]?.stage!=='active')reason='受注中の依頼を選ぶ。';
   else if(!place)reason='次のイベントの場所が未定義。';

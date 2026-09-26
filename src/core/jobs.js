@@ -1,3 +1,4 @@
+import {dungeonInterior} from './world.js';
 import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
@@ -43,7 +44,7 @@ export function canEquip(data,state,id,itemId,jobId=state.actors[id]?.job){
   return Boolean(data.jobs[jobId]?.equipment[item.slot]?.includes(item.equipmentType));
 }
 export function jobChangePlan(data,state,id,jobId){
-  if(state.mode!=='town'||state.waiting||state.battle)return {ok:false,reason:'転職は町の会話・戦闘が終わってから行えます。'};
+  if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle)return {ok:false,reason:'転職は町の会話・戦闘が終わってから行えます。'};
   if(!owns(data.actors,id)||!state.actors[id]||!owns(data.jobs,jobId))return {ok:false,reason:'人物または職業がありません。'};
   const actor=state.actors[id];if(actor.job===jobId)return {ok:false,reason:'現在の職業です。'};
   const inventory={...state.inventory},equipment={...actor.equipment},returned=[];

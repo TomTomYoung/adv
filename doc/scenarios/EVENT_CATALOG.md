@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.20.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.21.0。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -78,11 +78,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### q004 二枚目の通行証
 
-`q004/q004_clue_a` 二枚目の通行証：現場の痕跡：`region_1_f1` (5, 1)。起動 `interact` → `q004.clue_a`。[定義](../../data/quests/q004.json)。
-
-`q004/q004_clue_b` 二枚目の通行証：記録と証言：`region_1_landing` (3, 3)。起動 `interact` → `q004.clue_b`。[定義](../../data/quests/q004.json)。
-
-`q004/q004_decision` 二枚目の通行証：決着の場：`region_1_landing` (7, 3)。起動 `interact` → `q004.v11.visit`。[定義](../../data/quests/q004.json)。
+`q004/q004_decision` 関所の外で待つイナ：`region_1_landing` (13, 5)。起動 `interact` → `q004.v11.visit`。[定義](../../data/quests/q004.json)。
 
 ### q005 甘い排水
 
@@ -1570,13 +1566,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `q002.v11.entry/commands.2.options.1.commands.0`：`q002.v11.entry` / `commands.2.options.1.commands.0` → `guard_1`。
 
-`q004.decision/commands.1.options.1.commands.0`：`q004.decision` / `commands.1.options.1.commands.0` → `guard_1`。
-
-`q004.review/commands.2.options.1.commands.0`：`q004.review` / `commands.2.options.1.commands.0` → `guard_1`。
-
-`q004.flow.entry/commands.2.options.2.commands.0`：`q004.flow.entry` / `commands.2.options.2.commands.0` → `guard_1`。
-
-`q004.v11.entry/commands.2.options.1.commands.0`：`q004.v11.entry` / `commands.2.options.1.commands.0` → `guard_1`。
+`q004.v11.force_entry/commands.2.options.0.commands.0`：`q004.v11.force_entry` / `commands.2.options.0.commands.0` → `guard_1`。
 
 `q005.decision/commands.1.options.0.commands.0`：`q005.decision` / `commands.1.options.0.commands.0` → `guard_1`。
 

@@ -3,6 +3,13 @@ import {closeTo} from './systems/common.js';
 
 export const townRoot=data=>data.game.world?.townRoot;
 export const townLocation=(data,state)=>data.locations?.[state.townLocation];
+export function locationRoot(data,id){
+  const seen=new Set();let location=data.locations?.[id];
+  while(location?.parent&&!seen.has(location.id)){seen.add(location.id);location=data.locations[location.parent];}
+  return location;
+}
+export const dungeonInterior=(data,state)=>state.mode==='town'?locationRoot(data,state.townLocation)?.dungeonEntrance??null:null;
+export const interiorEntrances=(data,state)=>state.mode==='dungeon'?Object.values(data.locations??{}).filter(l=>l.dungeonEntrance&&atWorldPlace(state,{kind:'dungeon',...l.dungeonEntrance},{exact:true})):[];
 export function atWorldPlace(state,place,{exact=false}={}){
   if(!place)return true;
   if(place.kind==='town')return state.mode==='town'&&state.townLocation===place.location;
@@ -42,10 +49,15 @@ export function validateWorld(data){
   for(const m of Object.values(data.maps))if(!owners.has(m.id)||m.dungeon!==owners.get(m.id))fail(m.id,'マップの所属ダンジョンが一致しません');
   for(const [id,l] of Object.entries(locations)){
     if(l.id!==id||!l.name||!l.description||!data.assets.images[l.background])fail(id,'ロケーション名・本文・背景が不正です');
-    if(id!==root&&!locations[l.parent])fail(id,'親ロケーションがありません');
+    if(id!==root&&!locations[l.parent]&&!l.dungeonEntrance)fail(id,'親ロケーションまたはダンジョン入口がありません');
+    if(l.dungeonEntrance){
+      if(l.parent!==null||!['north','east','south','west'].includes(l.dungeonEntrance.facing))fail(id,'室内入口は独立したルートと退出時の向きが必要です');
+      for(const error of worldPlaceErrors(data,{kind:'dungeon',...l.dungeonEntrance}))fail(id,error);
+      if(Object.values(data.dungeons[l.dungeonEntrance.dungeon]?.systems??{}).some(s=>s.use==='compartment_water'&&s.zones.some(z=>z.map===l.dungeonEntrance.map)))fail(id,'室内入口は完全水没しない区画へ置いてください');
+    }
     const seen=new Set([id]);let parent=l.parent;
     while(parent){if(seen.has(parent)){fail(id,'親子関係が循環しています');break;}seen.add(parent);parent=locations[parent]?.parent;}
-    for(const next of l.links??[])if(!locations[next])fail(id,'移動先がありません');
+    for(const next of l.links??[])if(!locations[next])fail(id,'移動先がありません');else if(locationRoot(data,next)?.id!==locationRoot(data,id)?.id)fail(id,'町とダンジョン室内を直接つなぐことはできません');
     for(const c of l.cast??[])if(!data.characters[c.character]||!data.assets.images[c.sprite]||!Number.isFinite(c.x)||c.x<0||c.x>100)fail(id,'人物またはスプライト配置が不正です');
     for(const service of l.services??[])if(!data.game.services.some(s=>s.id===service))fail(id,'施設サービスがありません');
     for(const d of l.dungeons??[])if(!data.dungeons[d])fail(id,'接続するダンジョンがありません');

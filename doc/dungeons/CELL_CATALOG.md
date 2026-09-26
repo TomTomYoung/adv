@@ -243,9 +243,9 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.20.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.21.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
-2D 33マップ、3D 0マップ、計33マップ。2Dの通行可は2784セル、通行不可は3447セルです。
+2D 33マップ、3D 0マップ、計33マップ。2Dの通行可は3038セル、通行不可は3687セルです。
 
 ### セル種プリセット
 
@@ -311,9 +311,9 @@ npm run check:docs
 
 ### マップ別の基礎地形
 
-[region_1_f1](../../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、通行可21・通行不可34。
+[region_1_f1](../../data/maps/region_1_f1.json) 灯守の地下水道・上層・入口操作室：2D、通行可45・通行不可54。
 
-[region_1_f2](../../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、通行可21・通行不可34。
+[region_1_f2](../../data/maps/region_1_f2.json) 灯守の地下水道・下層・操作室：2D、通行可45・通行不可54。
 
 [region_2_f1](../../data/maps/region_2_f1.json) 塩哭きの廃坑・地下1層：2D、通行可132・通行不可153。
 
@@ -361,29 +361,29 @@ npm run check:docs
 
 [moving_village_f1](../../data/maps/moving_village_f1.json) 巨獣上の移動集落：2D、通行可54・通行不可63。
 
-[region_1_canal_a](../../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、通行可9・通行不可24。
+[region_1_canal_a](../../data/maps/region_1_canal_a.json) 灯守の地下水道・上層・第一水路：2D、通行可31・通行不可46。
 
-[region_1_landing](../../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、通行可21・通行不可34。
+[region_1_landing](../../data/maps/region_1_landing.json) 灯守の地下水道・上層・荷揚げ場：2D、通行可67・通行不可86。
 
-[region_1_canal_b](../../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、通行可9・通行不可24。
+[region_1_canal_b](../../data/maps/region_1_canal_b.json) 灯守の地下水道・上層・排水支路：2D、通行可31・通行不可46。
 
-[region_1_inspection](../../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、通行可21・通行不可34。
+[region_1_inspection](../../data/maps/region_1_inspection.json) 灯守の地下水道・上層・鐘と浮子の点検室：2D、通行可45・通行不可54。
 
-[region_1_canal_c](../../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、通行可9・通行不可24。
+[region_1_canal_c](../../data/maps/region_1_canal_c.json) 灯守の地下水道・下層・給金箱の水路：2D、通行可31・通行不可46。
 
-[region_1_lower_landing](../../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、通行可21・通行不可34。
+[region_1_lower_landing](../../data/maps/region_1_lower_landing.json) 灯守の地下水道・下層・棺の待避場：2D、通行可45・通行不可54。
 
-[region_1_canal_d](../../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、通行可9・通行不可24。
+[region_1_canal_d](../../data/maps/region_1_canal_d.json) 灯守の地下水道・下層・避難水路：2D、通行可31・通行不可46。
 
-[region_1_gatehouse](../../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可21・通行不可34。
+[region_1_gatehouse](../../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可45・通行不可54。
 
 ### セル上のイベント種別
 
-マップ固有とクエストから投影した map.objects は計511定義、8種、配置座標は509か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
+マップ固有とクエストから投影した map.objects は計509定義、8種、配置座標は508か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
 
 `chest`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
 
-`clue`：199定義。進入時0／調べる199、blocking指定0、safe指定194、once指定0。配置例：`q004_clue_a` region_1_f1 (5,1) ／ `q006_clue_a` region_1_f2 (4,3)。
+`clue`：197定義。進入時0／調べる197、blocking指定0、safe指定192、once指定0。配置例：`q006_clue_a` region_1_f2 (4,3) ／ `q008_clue_a` region_1_f2 (6,3)。
 
 `decision`：205定義。進入時3／調べる202、blocking指定0、safe指定201、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
 

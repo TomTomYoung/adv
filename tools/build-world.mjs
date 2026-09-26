@@ -18,7 +18,7 @@ export async function buildWorld(root){
     await write(file,q);
   }
   for(const file of game.files.maps){const map=await read(file);map.dungeon=owners[map.id];await write(file,map);}
-  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.20.0';game.inspectionVersion=1;game.fieldEventVersion=1;game.files.databases.locations='data/locations.json';
+  game.world={version:1,townRoot:'hikarigaeri_square'};game.version='1.21.0';game.inspectionVersion=1;game.fieldEventVersion=1;game.files.databases.locations='data/locations.json';
   await write('data/locations.json',locations);await write('data/assets.json',assets);await write('data/game.json',game);
   await buildNarration(root);
 }

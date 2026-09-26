@@ -19,8 +19,8 @@ test('q003 agreement requires a separate overnight verification after people rea
 test('q004 learning the guard identity still allows the sisters to pay without filing it',()=>{
  const g=prepareQuest('q004');choose(g,'window');
  assert.equal(story(g,'q004').scene,'duplicate');assert.equal(story(g,'q004').knowledge.party.includes('brother'),false);
- choose(g,'inspect');for(const fact of ['duty','resident','brother'])assert.ok(story(g,'q004').knowledge.party.includes(fact));
- const gold=g.state.gold;choose(g,'fine');const v=story(g,'q004').values;
+ choose(g,'inspect','return');for(const fact of ['duty','resident','brother'])assert.ok(story(g,'q004').knowledge.party.includes(fact));
+ const gold=g.state.gold;choose(g,'fine','leave','finish');const v=story(g,'q004').values;
  assert.equal(v.truthKnown,true);assert.equal(v.filed,false);assert.equal(v.provisional,false);assert.equal(v.originalAt,'sister');assert.equal(v.copyAt,'keeper');
  assert.equal(g.state.gold,gold-20+data.quests.q004.outcomes.compromise.gold);g.load(g.save());
 });
@@ -31,7 +31,7 @@ test('q004 the former window scene remains resumable at a saved choice and after
   // Former releases used this scene and script identifier at the same VM boundary.
   const old=JSON.parse(g.save());old.state.stories.q004.scene='window';old.state.vm.at(-1).script='q004.v11.window';g.load(JSON.stringify(old));
   if(pause){choose(g,'pause');g.run(data.quests.q004.model.entryScript);drain(g);}
-  choose(g,'inspect','file','issue');assert.equal(g.state.quests.q004.outcome,'informed');g.load(g.save());
+  choose(g,'inspect','return','file','submit','accompany','issue','leave','finish');assert.equal(g.state.quests.q004.outcome,'informed');g.load(g.save());
  }
 });
 

@@ -4,6 +4,7 @@ import {data,newGame,drain,goTownLocation,fight} from './helpers.mjs';
 import {prepareQuest,finishJourney} from './structure-routes.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {projectGame} from '../src/application/projection.js';
+import {locationRoot} from '../src/core/world.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {GameView} from '../src/view/view.js';
 import {installDOM} from './view-dom.mjs';
@@ -21,7 +22,7 @@ test('accepting q001 on the guild board allows immediate travel to its named dun
 });
 
 test('the quest entrance shortcut works from every town facility, including nested locations',()=>{
- for(const id of Object.keys(data.locations)){
+ for(const id of Object.keys(data.locations).filter(id=>!locationRoot(data,id).dungeonEntrance)){
   const g=newGame();g.accept('q001');goTownLocation(g,id);
   assert.equal(quest(g).canEnter,true,id);assert.equal(quest(g).entryReason,'',id);
   assert.ok(g.dispatch({type:'quest.travel',id:'q001'}),id);assert.equal(g.state.location.map,'kagaribi_f1',id);

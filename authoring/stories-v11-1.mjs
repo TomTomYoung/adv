@@ -2,6 +2,7 @@ import {connectWorld} from './world-story-kit.mjs';
 import {story,O,move,give,set,see,when,and,or,not} from './story-kit.mjs';
 import q001 from './story-q001.mjs';
 import q002 from './story-q002.mjs';
+import q004 from './story-q004.mjs';
 const rows=[q001,q002];
 
 {
@@ -47,37 +48,8 @@ const rows=[q001,q002];
  route('collect_carry','high',{depart:[give('bell','alarm','party')],companions:['sora'],arrive:[give('bell','party','high')]});
  rows.push(s.done());
 }
-{
- const s=story(4,{outside:'関所の外',desk:'公開窓口',cell:'留置室',office:'地上の審査窓口'},[['outside','desk'],['desk','cell'],['outside','office']]);
- s.entity('ina','outside','ina').entity('sister','cell','sister').entity('keeper','desk','passkeeper').entity('reviewer','office','reviewer').entity('original','keeper').entity('copy','ina').entity('register','keeper');
- for(const k of ['windowOpen','truthKnown','sistersConsent','keeperConsent','filed','released','copyInvalid','numberRevoked','provisional'])s.bool(k);
- s.fact('shared','イナが姉の写しで先に入場し、後から同じ番号の原本を提示した姉が拘束された').fact('duty','勤務簿には関所番が申告した勤務名義がある').fact('resident','別管理の住民登録簿では、その名義人は死亡している').fact('brother','関所番は死んだ兄の名義を使っている');
- s.brief="地下関所で姉が拘束されました。姉とイナが持つ通行証には、同じ番号が記されています。";
- s.past=["地下通行資格を持つのは姉だけだった。資格取得前のイナは姉の通行証を写し、姉妹は同じ番号の証を別々に使用した。イナが写しで入場した後、姉が原本を提示したため、同じ番号が同時に使われたと判定され、姉が拘束された。関所番もまた、住民登録上は死亡している兄の就業資格を使って勤務している。"];
- s.authoringNotes={"notice":"以下の事実はq004を成立させる世界設定上の制約です。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はありません。ただし、生成・改稿時に矛盾させてはいけません。","factsHeading":"世界設定上の事実","facts":["地下通行証は一つの資格と一人の名義に対応し、関所では番号ごとに入退場を記録します。同じ番号の人物が地下にいる間、その番号を使った二人目は通過できません。","イナの持つ証は姉の原本を写した複製です。イナが先に通過したため、後から原本を提示した姉がその場で拘束されました。","関所の通行記録、勤務簿、住民登録簿は別々に管理されています。そのため、関所番が死亡した兄の名義で勤務している事実は、勤務簿だけを見ても発覚しません。"]};
- s.revealText=s.past.join(' ');s.progression="二枚の通行証と入退場記録から姉の拘束理由を確かめる。番人の勤務名義を住民登録簿まで照合した場合だけ、三人の資格問題を同じ審査へ戻せる。";
- s.node('entry','outside',['ina'],'イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まったと聞いて、引き返してきました」。原本は番人に押収され、姉は留置室にいる。',[
-  O('window',"二枚の通行証と入退場記録を照合する",'duplicate',[move('party ina','outside','desk'),set('windowOpen'),see('shared','register')]),
-  O('force',"関所の錠を破って姉を連れ出す",'@contract',[move('party','outside','desk','cell'),move('party sister','cell','desk','outside'),set('released'),set('numberRevoked')],{combat:true})
- ]);
- const fine=[give('copy','ina','keeper'),move('sister','cell','desk'),give('original','keeper','sister'),move('sister','desk','outside'),move('party ina','desk','outside'),set('released'),set('copyInvalid')];
- s.node('duplicate','desk',['ina','keeper',{entity:'sister',mode:'remote',requires:s.is('windowOpen')}],'入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。窓口には勤務簿があるが、住民登録簿は地上で別に管理されている。',[
-  O('fine',"複製を認め、罰金を納めて姉を引き取る",'@compromise',fine,{cost:{gold:20}}),
-  O('inspect',"番人の勤務名義を住民登録簿と照合する",'consent',[see('duty','keeper'),move('party','desk','outside','office'),see('resident','reviewer'),move('party','office','outside','desk'),see('brother','keeper',and(s.known('duty'),s.known('resident'))),set('truthKnown')])
- ]);
- s.node('consent','desk',['ina','keeper',{entity:'sister',mode:'remote',requires:s.is('windowOpen')}],'住民登録簿の死亡記録を伝えると、番人は兄の名で働いていると認めた。イナが姉を見た。「私たちのことも、この人のことも、全部話すの？」。申告すれば、姉妹の資格だけでなく番人の勤務も審査の対象になる。',[
-  O('file',"姉妹と番人へ審査の不利益を説明し、三人から申告への同意を取る",'review',[set('sistersConsent'),set('keeperConsent'),move('party','desk','outside','office'),set('filed'),move('party reviewer','office','outside','desk')],{when:s.is('truthKnown')}),
-  O('fine',"姉妹の違反だけを処理し、罰金を納める",'@compromise',fine,{cost:{gold:20}})
- ]);
- s.node('review','desk',['ina','keeper','reviewer',{entity:'sister',mode:'remote',requires:s.is('windowOpen')}],'審査官は住民登録の記録を携えて地上から来た。窓口の通行記録、勤務簿、原本と写しを並べ、三人の申告を聞く。姉は自分の資格を使い、イナはその写しを使った。番人の勤務名義は亡兄のものだった。',[
-  O('issue',"通行記録、勤務簿、住民登録簿を審査官へ提出し、別々の仮証の発行と姉の釈放を見届ける",'@informed',[give('copy','ina','reviewer'),give('original','keeper','reviewer'),set('provisional'),set('copyInvalid'),move('sister','cell','desk'),move('party ina sister','desk','outside'),set('released')])
- ]);
- s.sceneAliases={window:'duplicate'};
- s.end('informed',"三人の名義を審査へ戻す","通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。",and(s.is('released'),s.is('provisional'),s.is('filed'),s.is('sistersConsent'),s.is('keeperConsent')));
- s.end('contract',"錠を破って姉を連れ出す","姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。",and(s.is('released'),s.is('numberRevoked'),s.is('sisterAt','outside')));
- s.end('compromise',"罰金で留置を解く","姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。",and(s.is('released'),s.is('copyInvalid'),s.is('originalAt','sister'),not(s.is('provisional'))));
- rows.push(s.done());
-}
+rows.push(q004);
+
 {
  const s=story(5,{drain:'旧排水溜めの作業室',sump:'隣の空き溜め',disposal:'工房の焼却場'},[['drain','sump'],['drain','disposal']]);
  s.entity('toto','drain','toto').entity('bed','drain').entity('net','toto');

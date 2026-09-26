@@ -1,6 +1,6 @@
-# 町ロケーション一覧
+# 町・ダンジョン室内ロケーション一覧
 
-配布JSONの場所・親子関係・施設機能から生成します。正本は config/locations.json、生成先は [data/locations.json](../../data/locations.json) です。町は選択肢で移動し、ダンジョンではセル移動を使います。
+配布JSONの場所・親子関係・施設機能から生成します。正本は config/locations.json、生成先は [data/locations.json](../../data/locations.json) です。町と室内は選択肢で移動します。ダンジョン室内は定義されたセルで入室を選び、退出すると同じセルへ戻ります。
 
 [シナリオ一覧](../scenarios/QUEST_CATALOG.md) ／ [ダンジョン一覧](../dungeons/DUNGEON_CATALOG.md) ／ [ワールド接続仕様](WORLD_LOCATIONS.md)
 
@@ -8,7 +8,7 @@
 
 迷宮から帰った人々が灯を囲む広場。施設の戸口と、迷宮へ下りる道が見える。
 
-親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance) / 地下水道上層・待避場 (hikarigaeri_waterwatch)。追加の移動先: なし。
+親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance) / 地下水道上層・待避場 (hikarigaeri_waterwatch) / 通行資格審査所 (hikarigaeri_pass_registry)。追加の移動先: なし。
 
 機能: 会話・調査。
 
@@ -119,3 +119,57 @@
 背景: [location_tavern](../../assets/images/locations/tavern.webp)。
 
 参照場面: q003「逆流する鐘」 / reservoir。
+
+## 地下関所の詰所 (waterway_checkpoint)
+
+水路に面した石造りの詰所。受付には入退場記録と勤務簿が置かれ、奥の面会窓は留置室につながっている。
+
+親: ダンジョン内の戸口。子: 詰所・留置室前 (waterway_checkpoint_holding)。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_checkpoint](../../assets/images/locations/checkpoint.webp)。
+
+入退室地点: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 3)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。
+
+参照場面: q004「二枚目の通行証」 / duplicate。
+
+参照場面: q004「二枚目の通行証」 / consent。
+
+参照場面: q004「二枚目の通行証」 / review。
+
+参照場面: q004「二枚目の通行証」 / issued。
+
+参照場面: q004「二枚目の通行証」 / fine_release。
+
+参照場面: q004「二枚目の通行証」 / window。
+
+## 詰所・留置室前 (waterway_checkpoint_holding)
+
+受付の奥にある留置室。鉄格子と錠が通路を隔て、面会窓から受付の声が届く。
+
+親: 地下関所の詰所 (waterway_checkpoint)。子: なし。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_checkpoint](../../assets/images/locations/checkpoint.webp)。
+
+参照場面: q004「二枚目の通行証」 / force_entry。
+
+参照場面: q004「二枚目の通行証」 / force_freed。
+
+## 通行資格審査所 (hikarigaeri_pass_registry)
+
+地上で住民登録と通行資格を管理する審査窓口。地下関所の勤務簿とは別に、名義人の記録を照合する。
+
+親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
+
+機能: 会話・調査。
+
+背景: [location_insurance](../../assets/images/locations/insurance.webp)。
+
+参照場面: q004「二枚目の通行証」 / registry。
+
+参照場面: q004「二枚目の通行証」 / filing。
+
+参照場面: q004「二枚目の通行証」 / escort。

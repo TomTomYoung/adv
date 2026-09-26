@@ -70,6 +70,6 @@
 
 `data/` は生成結果です。画像・道具・人物・技能の候補やSchemaを読むために参照しますが、編集画面から `data/maps/`、`data/quests/`、`data/scripts/`、各データベースへ出力しません。`config/shared/catalog.js` と `reference-catalog.js` も生成索引で、編集対象ではありません。
 
-q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q003〜q010は `authoring/stories-v11-1.mjs` と `stories-v11-2.mjs`、q021以降は `authoring/structures-*.mjs` / `scenarios-*.mjs` が本筋の正本です。人物の正本は `authoring/characters.mjs`。これらをJSON原稿へ自動変換する仕様ではありません。該当処理を選んだ場合は参照専用と表示します。
+q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-1.mjs` と `stories-v11-2.mjs`、q021以降は `authoring/structures-*.mjs` / `scenarios-*.mjs` が本筋の正本です。人物の正本は `authoring/characters.mjs`。これらをJSON原稿へ自動変換する仕様ではありません。該当処理を選んだ場合は参照専用と表示します。
 
 画像・音声のバイナリ制作、制作記録・ハッシュ・プロンプト、テスト用固定JSON、保存原文、互換セーブ、文献索引、`package.json`、生成済みSchemaと文書集計も対象外です。未知の原稿項目は保持し、必要に応じて補助のJSON取り込みで扱います。

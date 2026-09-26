@@ -14,13 +14,14 @@ import {storyCanAct} from '../core/story.js';
 import {jobCatalog,projectActorJob,projectBattleSkills,projectEnemyJob} from './job-projection.js';
 import {activeActor} from '../core/battle.js';
 import {commandsAt} from '../core/script.js';
+import {dungeonInterior} from '../core/world.js';
 import {clone} from '../core/expression.js';
 const glyphs={exit:'↑',stairs:'⇵',chest:'▣',fountain:'♧',door:'▥',clue:'?',decision:'!',trap:'×'};
 export function projectGame(engine){
   const s=engine.state,d=engine.data,map=engine.map();
-  const actorView=id=>{const a=s.actors[id],def=d.actors[id],stats=engine.stats(id);return {id,name:def.name,class:def.class,role:def.role,color:def.color,bio:def.bio??'',portrait:d.assets.images[def.portrait]??null,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,statuses:a.statuses.map(x=>d.statuses[x].name+(dungeonEffectActive(d,s,'status',x)?'':'（停止中）')),stats,items:personalItems(engine,id),skills:engine.skills(id).map(id=>({id,...clone(d.skills[id]),category:abilityCategory(id)})),equipment:Object.fromEntries(Object.entries(a.equipment).map(([slot,item])=>[slot,d.items[item].name])),equipmentSlots:Object.entries(a.equipment).map(([slot,item])=>({slot,id:item,name:d.items[item].name,description:d.items[item].description,canRemove:(s.mode==='town'||s.members.includes(id))&&!s.waiting&&!s.battle&&(s.inventory[item]??0)<d.system.maxStack}))};};
+  const actorView=id=>{const a=s.actors[id],def=d.actors[id],stats=engine.stats(id);return {id,name:def.name,class:def.class,role:def.role,color:def.color,bio:def.bio??'',portrait:d.assets.images[def.portrait]??null,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,statuses:a.statuses.map(x=>d.statuses[x].name+(dungeonEffectActive(d,s,'status',x)?'':'（停止中）')),stats,items:personalItems(engine,id),skills:engine.skills(id).map(id=>({id,...clone(d.skills[id]),category:abilityCategory(id)})),equipment:Object.fromEntries(Object.entries(a.equipment).map(([slot,item])=>[slot,d.items[item].name])),equipmentSlots:Object.entries(a.equipment).map(([slot,item])=>({slot,id:item,name:d.items[item].name,description:d.items[item].description,canRemove:(s.mode==='town'&&!dungeonInterior(d,s)||s.members.includes(id))&&!s.waiting&&!s.battle&&(s.inventory[item]??0)<d.system.maxStack}))};};
   const baseActorView=actorView,jobActorView=id=>({...baseActorView(id),...projectActorJob(engine,id)});
-  const party=s.members.map(jobActorView),editable=s.mode==='town'&&!s.waiting&&!s.battle;
+  const party=s.members.map(jobActorView),editable=s.mode==='town'&&!dungeonInterior(d,s)&&!s.waiting&&!s.battle;
   const roster=rosterOrder(d,s).map(id=>{const active=s.members.includes(id),aliveAfterRemoval=s.members.some(other=>other!==id&&s.actors[other].hp>0);return {...jobActorView(id),active,canMoveUp:partyOrderPlan(d,s,active?'party':'tavern',id,'up').ok,canMoveDown:partyOrderPlan(d,s,active?'party':'tavern',id,'down').ok,canJoin:editable&&!active&&s.members.length<d.system.maxParty&&(s.actors[id].hp>0||s.members.some(other=>s.actors[other].hp>0)),canLeave:editable&&active&&s.members.length>1&&aliveAfterRemoval,swapCandidates:editable&&!active?s.members.filter(other=>s.actors[id].hp>0||s.members.some(remaining=>remaining!==other&&s.actors[remaining].hp>0)).map(other=>({id:other,name:d.actors[other].name})):[]};});
   const routeLocations=q=>q.model.flowVersion>=2&&!s.flags.legacyQuestRoutes?.[q.id]?q.locations.filter(l=>l.role==='decision'):q.locations;
   const fieldNotes=projectQuestNotes(d,s);
@@ -46,6 +47,7 @@ export function projectGame(engine){
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectVisible(s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,...(o.edge?{edge:o.edge}:{}),glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]));
+  if(map)for(const location of Object.values(d.locations??{})){const entrance=location.dungeonEntrance;if(entrance?.map===map.id)objects.push({id:`interior:${location.id}`,name:location.name,x:entrance.x,y:entrance.y,kind:'door',open:false});}
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
   const terrain=projectDungeonSurfaces(engine,systems);
   const feedback={session:engine.feedback.session,revision:engine.feedback.revision,events:engine.feedback.events.map(e=>({...clone(e),sound:e.sound?{url:d.assets.audio[e.sound],gain:e.gain*(d.sounds?.[e.sound]?.gain??1)}:null,targets:e.targets.map(t=>({...clone(t),image:d.assets.images[t.image]??null}))}))};

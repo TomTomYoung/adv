@@ -1,8 +1,8 @@
 # シナリオ一覧
 
-全 200 本・629 結末。作品版 1.20.0。更新日: 2026-09-25。
+全 200 本・629 結末。作品版 1.21.0。更新日: 2026-09-26。
 
-<!-- quest-catalog-source:e61ae23b9968fbc6cef4eda0139109b707da764f846c16f4bb5eee7411dc72c1 -->
+<!-- quest-catalog-source:422ecf1921e567e53f7351690c45668218aa9fffd0165effbaef7e0844ba905d -->
 
 q001の[専用ページ](QUEST_Q001.md)とq002の[専用ページ](QUEST_Q002.md)に全文・マップデータ・イベント配置を掲載します。q003〜q020の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は従来の概要・進行一覧・結末を掲載します。作者向けのため真相と結末を含みます。
 
@@ -320,13 +320,15 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 地下関所で姉が拘束された。姉とイナが持つ通行証には、同じ番号が記されている。
 
-モデル: 1.1。実装: [JSON](../../data/quests/q004.json)。場面 4、結末 3。物語状態の改訂 1。
+モデル: 1.1。実装: [JSON](../../data/quests/q004.json)。場面 14、結末 3。物語状態の改訂 2。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・入口操作室・B1 (`region_1_f1`) / (5, 1) / イベント `q004_clue_a`。[ダンジョン定義](../../data/dungeons.json)。二枚目の通行証：現場の痕跡。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。関所の外で待つイナ。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (3, 3) / イベント `q004_clue_b`。[ダンジョン定義](../../data/dungeons.json)。二枚目の通行証：記録と証言。現地イベント。
+参照施設: `desk` → 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 3) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。二枚目の通行証：決着の場。現地イベント。
+参照施設: `cell` → 詰所・留置室前 (`waterway_checkpoint_holding`)。[ロケーション定義](../../data/locations.json)。
+
+参照施設: `office` → 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
 
 固定された過去: 地下通行資格を持つのは姉だけだった。資格取得前のイナは姉の通行証を写し、姉妹は同じ番号の証を別々に使用した。イナが写しで入場した後、姉が原本を提示したため、同じ番号が同時に使われたと判定され、姉が拘束された。関所番もまた、住民登録上は死亡している兄の就業資格を使って勤務している。
 
@@ -364,17 +366,269 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 実装場面: `q004.v11.entry`。
 
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
+
 登場: イナ。
 
-イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まったと聞いて、引き返してきました」。原本は番人に押収され、姉は留置室にいる。
+イナは姉の通行証を写した紙を見せた。「先に入ったのは私です。後から来た姉が捕まったと聞いて、引き返してきました」。水路脇の戸口が詰所だ。原本は番人に押収され、姉は奥の留置室にいる。
 
-選択 `window`: 二枚の通行証と入退場記録を照合する
+選択 `window`: イナと詰所へ入り、二枚の通行証を照合する
 
-行為: `entry_window`。
+出発: `entry_window`。移動先: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
 
-進行先: [`duplicate`](#q004--duplicate--公開窓口)。
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`duplicate`](#q004--duplicate--公開窓口) へ進み、到着時の処理を確定します。
 
-選択 `force`: 関所の錠を破って姉を連れ出す
+選択 `force`: 詰所へ入り、奥の留置室へ向かう
+
+出発: `entry_force`。移動先: 詰所・留置室前 (`waterway_checkpoint_holding`)。[ロケーション定義](../../data/locations.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`force_entry`](#q004--force_entry--留置室) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / duplicate — 公開窓口
+
+実装場面: `q004.v11.duplicate`。
+
+場面の現在地: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナ・関所番・イナの姉（遠隔会話）。
+
+イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
+
+受付の入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。勤務簿はここにあるが、住民登録簿は地上の通行資格審査所で別に管理されている。
+
+選択 `fine`: 複製を認め、窓口で罰金を納めて姉を引き取る
+
+必要事項: G 20消費。
+
+行為: `duplicate_fine`。
+
+成立時の消費: `{"gold":20}`。
+
+進行先: [`fine_release`](#q004--fine_release--公開窓口)。
+
+選択 `inspect`: 番人の勤務名義を控え、地上の通行資格審査所へ向かう
+
+出発: `duplicate_inspect`。移動先: 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`registry`](#q004--registry--地上の審査窓口) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / registry — 地上の審査窓口
+
+実装場面: `q004.v11.registry`。
+
+場面の現在地: 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
+
+登場: 名義審査官。
+
+地上の審査窓口で、勤務簿から控えた名義を住民登録簿と照合した。記録上、その名義人はすでに死亡している。これだけでは、地下で働いている番人との関係までは分からない。本人に確かめる必要がある。
+
+選択 `return`: 死亡記録の写しを携え、地下の詰所へ戻る
+
+出発: `registry_return`。移動先: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`consent`](#q004--consent--公開窓口) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / consent — 公開窓口
+
+実装場面: `q004.v11.consent`。
+
+場面の現在地: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナ・関所番・イナの姉（遠隔会話）。
+
+イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
+
+詰所へ戻り、住民登録簿の死亡記録を示すと、番人は兄の名で働いていると認めた。イナが面会窓の姉を見る。「私たちのことも、この人のことも、全部話すの？」。申告すれば、三人の資格と勤務が審査の対象になる。
+
+選択 `file`: 三人に不利益を説明して同意を取り、地上へ申告に行く
+
+選択条件: `{"op":"eq","left":{"ref":"stories.q004.values.truthKnown"},"right":true}`
+
+出発: `consent_file`。移動先: 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
+
+出発の条件: `{"op":"eq","left":{"ref":"stories.q004.values.truthKnown"},"right":true}`
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`filing`](#q004--filing--地上の審査窓口) へ進み、到着時の処理を確定します。
+
+選択 `fine`: 姉妹の違反だけを処理し、窓口で罰金を納める
+
+必要事項: G 20消費。
+
+行為: `consent_fine`。
+
+成立時の消費: `{"gold":20}`。
+
+進行先: [`fine_release`](#q004--fine_release--公開窓口)。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / filing — 地上の審査窓口
+
+実装場面: `q004.v11.filing`。
+
+場面の現在地: 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
+
+登場: 名義審査官。
+
+審査窓口へ戻った。姉妹と番人の同意を得てきたが、申告はまだ提出していない。三人の名義と、地下に残る原本・写し・通行記録の所在を申告書に記す。
+
+選択 `submit`: 申告書を提出し、地下関所での現場確認を依頼する
+
+行為: `filing_submit`。
+
+進行先: [`escort`](#q004--escort--地上の審査窓口)。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / escort — 地上の審査窓口
+
+実装場面: `q004.v11.escort`。
+
+場面の現在地: 通行資格審査所 (`hikarigaeri_pass_registry`)。[ロケーション定義](../../data/locations.json)。
+
+登場: 名義審査官。
+
+審査官が申告を受理し、住民登録の記録を鞄に収めた。「現物と本人を、地下の窓口で確かめます」。姉妹と番人はまだ詰所にいる。
+
+選択 `accompany`: 審査官と地下水道を歩き、詰所へ戻る
+
+出発: `escort_accompany`。移動先: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`review`](#q004--review--公開窓口) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / review — 公開窓口
+
+実装場面: `q004.v11.review`。
+
+場面の現在地: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナ・関所番・名義審査官・イナの姉（遠隔会話）。
+
+イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
+
+審査官と詰所へ着いた。受付に通行記録、勤務簿、原本と写し、持参した住民登録の記録を並べる。姉は自分の資格を使い、イナはその写しを使った。番人の勤務名義は亡兄のものだった。
+
+選択 `issue`: 証書を提出し、別々の仮証の発行と姉の釈放を見届ける
+
+行為: `review_issue`。
+
+進行先: [`issued`](#q004--issued--公開窓口)。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / issued — 公開窓口
+
+実装場面: `q004.v11.issued`。
+
+場面の現在地: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナ・イナの姉・関所番・名義審査官。
+
+留置室の錠が開き、姉が受付へ出てきた。姉妹は別々の仮証を受け取り、元の証と写しは審査官が預かる。番人は勤務を止められ、審査官と詰所に残る。
+
+選択 `leave`: 姉妹と詰所を出て、関所の外へ戻る
+
+出発: `issued_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`issued_outside`](#q004--issued_outside--関所の外) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / issued_outside — 関所の外
+
+実装場面: `q004.v11.issued_outside`。
+
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
+
+登場: イナ・イナの姉。
+
+姉妹と関所の外へ戻った。二人の手には、それぞれ別の仮証がある。正式資格の審査はこれから続く。
+
+選択 `finish`: 二人の帰路を確かめ、依頼を終える
+
+行為: `issued_outside_finish`。
+
+進行先: [結末 `informed`](#q004-結末-informed--三人の名義を審査へ戻す)。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / fine_release — 公開窓口
+
+実装場面: `q004.v11.fine_release`。
+
+場面の現在地: 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナ・イナの姉・関所番。
+
+罰金を納め、イナの写しを渡した。番人が留置室を開け、受付へ来た姉に原本を返す。有効な通行資格は、姉のもの一つだけだ。
+
+選択 `leave`: 姉妹と詰所を出て、関所の外へ戻る
+
+出発: `fine_release_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
+
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`fine_outside`](#q004--fine_outside--関所の外) へ進み、到着時の処理を確定します。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / fine_outside — 関所の外
+
+実装場面: `q004.v11.fine_outside`。
+
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
+
+登場: イナ・イナの姉。
+
+姉妹を連れて関所の外へ出た。イナの写しは窓口で回収された。二人が別々に地下へ通えるようになったわけではない。
+
+選択 `finish`: 姉の原本と二人の帰路を確かめ、依頼を終える
+
+行為: `fine_outside_finish`。
+
+進行先: [結末 `compromise`](#q004-結末-compromise--罰金で留置を解く)。
+
+選択 `pause`: ここで中断し、同じ場面から再開する
+
+中断して現在の場面を保持します。
+
+### q004 / force_entry — 留置室
+
+実装場面: `q004.v11.force_entry`。
+
+場面の現在地: 詰所・留置室前 (`waterway_checkpoint_holding`)。[ロケーション定義](../../data/locations.json)。
+
+登場: イナの姉。
+
+受付の奥、留置室の前まで来た。姉は鉄格子の向こうにいる。錠を破れば番人が駆けつける。押収された通行証の原本は、受付に残ったままだ。
+
+選択 `break`: 錠を破り、駆けつけた番人を退ける
 
 必要事項: 戦闘・作業と消費は勝利時に確定。
 
@@ -382,9 +636,9 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 ［勝利後］
 
-行為: `entry_force`。
+行為: `force_entry_break`。
 
-進行先: [結末 `contract`](#q004-結末-contract--錠を破って姉を連れ出す)。
+進行先: [`force_freed`](#q004--force_freed--留置室)。
 
 ［逃走後］
 
@@ -400,85 +654,41 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 中断して現在の場面を保持します。
 
-### q004 / duplicate — 公開窓口
+### q004 / force_freed — 留置室
 
-実装場面: `q004.v11.duplicate`。
+実装場面: `q004.v11.force_freed`。
 
-登場: イナ・関所番・イナの姉（遠隔会話）。
+場面の現在地: 詰所・留置室前 (`waterway_checkpoint_holding`)。[ロケーション定義](../../data/locations.json)。
 
-イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
+登場: イナの姉。
 
-入退場記録には、イナが写しで入場した時刻と、姉の原本が止められた時刻が続いていた。番人は同じ番号を指した。「一人が中にいる間、二人目は通せない」。面会窓の姉も複製を認める。窓口には勤務簿があるが、住民登録簿は地上で別に管理されている。
+錠が壊れ、姉が留置室から出た。イナは関所の外で待っている。原本を取り返す余裕はなく、この番号は関所破りに使われたものとして記録された。
 
-選択 `fine`: 複製を認め、罰金を納めて姉を引き取る
+選択 `escort`: 姉を連れて受付を抜け、関所の外へ戻る
 
-必要事項: G 20消費。
+出発: `force_freed_escort`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
 
-行為: `duplicate_fine`。
-
-成立時の消費: `{"gold":20}`。
-
-進行先: [結末 `compromise`](#q004-結末-compromise--罰金で留置を解く)。
-
-選択 `inspect`: 番人の勤務名義を住民登録簿と照合する
-
-行為: `duplicate_inspect`。
-
-進行先: [`consent`](#q004--consent--公開窓口)。
+この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`force_outside`](#q004--force_outside--関所の外) へ進み、到着時の処理を確定します。
 
 選択 `pause`: ここで中断し、同じ場面から再開する
 
 中断して現在の場面を保持します。
 
-### q004 / consent — 公開窓口
+### q004 / force_outside — 関所の外
 
-実装場面: `q004.v11.consent`。
+実装場面: `q004.v11.force_outside`。
 
-登場: イナ・関所番・イナの姉（遠隔会話）。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../data/dungeons.json)。
 
-イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
+登場: イナ・イナの姉。
 
-住民登録簿の死亡記録を伝えると、番人は兄の名で働いていると認めた。イナが姉を見た。「私たちのことも、この人のことも、全部話すの？」。申告すれば、姉妹の資格だけでなく番人の勤務も審査の対象になる。
+姉を連れて関所の外へ戻ると、イナが駆け寄った。原本は番人の手元にあり、その番号も写しも、もう通行には使えない。
 
-選択 `file`: 姉妹と番人へ審査の不利益を説明し、三人から申告への同意を取る
+選択 `finish`: 姉妹の安全を確かめ、依頼を終える
 
-選択条件: `{"op":"eq","left":{"ref":"stories.q004.values.truthKnown"},"right":true}`
+行為: `force_outside_finish`。
 
-行為: `consent_file`。
-
-行為の前提条件: `{"op":"eq","left":{"ref":"stories.q004.values.truthKnown"},"right":true}`
-
-進行先: [`review`](#q004--review--公開窓口)。
-
-選択 `fine`: 姉妹の違反だけを処理し、罰金を納める
-
-必要事項: G 20消費。
-
-行為: `consent_fine`。
-
-成立時の消費: `{"gold":20}`。
-
-進行先: [結末 `compromise`](#q004-結末-compromise--罰金で留置を解く)。
-
-選択 `pause`: ここで中断し、同じ場面から再開する
-
-中断して現在の場面を保持します。
-
-### q004 / review — 公開窓口
-
-実装場面: `q004.v11.review`。
-
-登場: イナ・関所番・名義審査官・イナの姉（遠隔会話）。
-
-イナの姉の会話条件: `{"op":"eq","left":{"ref":"stories.q004.values.windowOpen"},"right":true}`
-
-審査官は住民登録の記録を携えて地上から来た。窓口の通行記録、勤務簿、原本と写しを並べ、三人の申告を聞く。姉は自分の資格を使い、イナはその写しを使った。番人の勤務名義は亡兄のものだった。
-
-選択 `issue`: 通行記録、勤務簿、住民登録簿を審査官へ提出し、別々の仮証の発行と姉の釈放を見届ける
-
-行為: `review_issue`。
-
-進行先: [結末 `informed`](#q004-結末-informed--三人の名義を審査へ戻す)。
+進行先: [結末 `contract`](#q004-結末-contract--錠を破って姉を連れ出す)。
 
 選択 `pause`: ここで中断し、同じ場面から再開する
 
@@ -490,7 +700,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 57G / 68EXP
 
-物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.provisional"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.filed"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.sistersConsent"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.keeperConsent"},"right":true}]}`
+物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.provisional"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.filed"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.sistersConsent"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.keeperConsent"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.partyAt"},"right":"outside"},{"op":"eq","left":{"ref":"stories.q004.values.sisterAt"},"right":"outside"},{"op":"eq","left":{"ref":"stories.q004.values.inaAt"},"right":"outside"}]}`
 
 ### q004 結末 contract — 錠を破って姉を連れ出す
 
@@ -498,7 +708,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 77G / 47EXP
 
-物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.numberRevoked"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.sisterAt"},"right":"outside"}]}`
+物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.numberRevoked"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.sisterAt"},"right":"outside"},{"op":"eq","left":{"ref":"stories.q004.values.partyAt"},"right":"outside"}]}`
 
 ### q004 結末 compromise — 罰金で留置を解く
 
@@ -506,7 +716,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 37G / 51EXP
 
-物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.copyInvalid"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.originalAt"},"right":"sister"},{"op":"not","arg":{"op":"eq","left":{"ref":"stories.q004.values.provisional"},"right":true}}]}`
+物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q004.values.released"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.copyInvalid"},"right":true},{"op":"eq","left":{"ref":"stories.q004.values.originalAt"},"right":"sister"},{"op":"not","arg":{"op":"eq","left":{"ref":"stories.q004.values.provisional"},"right":true}},{"op":"eq","left":{"ref":"stories.q004.values.partyAt"},"right":"outside"},{"op":"eq","left":{"ref":"stories.q004.values.sisterAt"},"right":"outside"},{"op":"eq","left":{"ref":"stories.q004.values.inaAt"},"right":"outside"}]}`
 
 ## q005 甘い排水
 

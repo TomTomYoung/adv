@@ -25,7 +25,7 @@ test('last blows keep the defeated enemy image, group skills emit one sound for 
  const h=newGame();h.state.members=['toma','dora'];h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});const heals=h.feedback.events.filter(e=>e.sound==='se_heal');assert.equal(heals.length,1);assert.equal(heals[0].targets.length,2);
 });
 test('field atmosphere follows light and malformed effect scripts and transforms are rejected',()=>{
- const g=newGame();g.dispatch({type:'travel',region:1});g.state.light=0;assert.equal(projectGame(g).atmosphere[1].opacity,.65);g.state.light=90;assert.equal(projectGame(g).atmosphere[1].opacity,0);
+ const g=newGame();g.dispatch({type:'travel',region:2});g.state.light=0;assert.equal(projectGame(g).atmosphere[1].opacity,.65);g.state.light=90;assert.equal(projectGame(g).atmosphere[1].opacity,0);
  assert.equal(Object.keys(data.effects).length,24);assert.equal(Object.keys(data.sounds).length,28);for(const id of Object.keys(data.skills))assert.ok(data.presentation.bindings.skills[id],id);
  for(const mutate of [d=>d.effects.skew.tracks[0].frames[1].skewX=999,d=>d.effects.skew.tracks[0].frames[1].filter='url(evil)',d=>d.effects.slash_arc.tracks[0].asset='missing',d=>d.scripts.bad={commands:[{op:'effect.play',effect:'skew',target:'body > img'}]},d=>d.scripts.bad={commands:[{op:'screen.set',layer:'__proto__',color:'#000000',opacity:.2}]}]){const d=structuredClone(data);mutate(d);assert.ok(validateContent(d).length>0);}
 });

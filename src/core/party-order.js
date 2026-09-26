@@ -1,8 +1,9 @@
+import {dungeonInterior} from './world.js';
 export const rosterCandidates=data=>data.game.tavern?.candidates??Object.keys(data.actors);
 export const rosterOrder=(data,state)=>state.rosterOrder??rosterCandidates(data);
 
 export function partyOrderPlan(data,state,group,actor,direction){
-  if(state.mode!=='town'||state.waiting||state.battle||!['up','down'].includes(direction))return {ok:false};
+  if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle||!['up','down'].includes(direction))return {ok:false};
   const list=group==='party'?state.members:group==='tavern'?rosterOrder(data,state).filter(id=>!state.members.includes(id)):[];
   const index=list.indexOf(actor),target=index+(direction==='up'?-1:1);
   return index>=0&&target>=0&&target<list.length?{ok:true,other:list[target]}:{ok:false};

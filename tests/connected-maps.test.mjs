@@ -23,8 +23,9 @@ test('retired 3D layout is preserved byte for byte and absent from normal loadin
   for(const q of Object.values(data.quests).filter(q=>q.number<=30))for(const e of q.events)for(const p of e.points){const d=data.dungeons[p.dungeon];assert.ok(d.systems.connections?.links.length,q.id);assert.ok(!data.maps[p.map].voxels);}
 });
 
-test('q002-q010 migration preserves scenario decisions, outcomes and scripts',async()=>{
+test('unchanged q002-q010 scenarios preserve their migration baseline',async()=>{
   for(let n=2;n<=10;n++){
+    if(n===4)continue; // q004 now has real travel; its three conclusions are covered by checkpoint routes.
     const id=`q${String(n).padStart(3,'0')}`,old=JSON.parse(await fs.readFile(new URL(`../authoring/legacy/2026-09-18-map-layout/data/quests/${id}.json`,import.meta.url)));
     for(const key of ['scripts','outcomes'])assert.deepEqual(data.quests[id][key],old[key],`${id}/${key}`);
     assert.deepEqual(data.quests[id].model.graph,old.model.graph,id);
@@ -43,7 +44,7 @@ test('a sealed flooded map cannot be entered by moving, interacting, an action, 
 test('door appearance, ray occlusion, map marker and action permission follow the same flood state',()=>{
   const g=begin();walk(g,9,1);g.state.location.facing='east';let d=projectGame(g).dungeon;
   assert.ok(d.doors['9,1/east'].closed);assert.ok(d.objects.find(o=>o.id==='upper_inlet').closed);
-  assert.ok(d.cells.flat().every(c=>c.waterDepth===0));const ray=traceDungeonRay(d,9.5,1.5,1,0);assert.equal(ray.distance,.5);assert.equal(ray.door.kind,'watertight_door');
+  assert.ok(d.cells[1].every(c=>c.waterDepth===0));assert.ok(d.cells.flat().some(c=>c.waterDepth===1));const ray=traceDungeonRay(d,9.5,1.5,1,0);assert.equal(ray.distance,.5);assert.equal(ray.door.kind,'watertight_door');
   walk(g,2,1);assert.ok(act(g,'water','close','upper_gate'));walk(g,9,1);g.state.location.facing='east';d=projectGame(g).dungeon;
   assert.equal(d.doors['9,1/east'].closed,false);assert.equal(d.objects.find(o=>o.id==='upper_inlet').closed,false);
   for(const a of d.systems.flatMap(s=>s.cards??[]).flatMap(c=>c.actions))assert.equal(a.enabled,dungeonActionPlan(data,g.state,a.intent).ok);

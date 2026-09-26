@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import zlib from 'node:zlib';
 import {data,newGame,drain,fight} from './helpers.mjs';
-import {prepareQuest} from './structure-routes.mjs';
+import {prepareQuest,finishJourney} from './structure-routes.mjs';
 import {applyStoryAction,storyPlace,storyStateErrors} from '../src/core/story.js';
 import {projectGame} from '../src/application/projection.js';
 import {validateContent} from '../src/core/validation.js';
@@ -28,8 +28,8 @@ test('failed movement, transfer, observation and invariant violations are atomic
  }
 });
 test('q004 sisters converse through a window but cannot exchange items across the cell',()=>{
- const g=prepareQuest('q004');choose(g,'window');const cast=projectGame(g).dialog.scene.cast;assert.equal(cast.find(c=>c.id==='sister').remote,true);assert.equal(state(g,'q004').values.sisterAt,'cell');
- choose(g,'fine');assert.equal(state(g,'q004').values.sisterAt,'outside');assert.equal(state(g,'q004').values.originalAt,'sister');assert.equal(g.state.quests.q004.outcome,'compromise');
+ const g=prepareQuest('q004');choose(g,'window');finishJourney(g);const cast=projectGame(g).dialog.scene.cast;assert.equal(cast.find(c=>c.id==='sister').remote,true);assert.equal(state(g,'q004').values.sisterAt,'cell');
+ choose(g,'fine');assert.equal(state(g,'q004').values.sisterAt,'desk');choose(g,'leave');finishJourney(g);choose(g,'finish');assert.equal(state(g,'q004').values.sisterAt,'outside');assert.equal(state(g,'q004').values.originalAt,'sister');assert.equal(g.state.quests.q004.outcome,'compromise');
 });
 test('q007 brother appears only after discovery, and letters alone do not move him',()=>{
  const g=prepareQuest('q007');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['mire']);assert.equal(JSON.stringify(projectGame(g).dialog).includes('弟'),false);

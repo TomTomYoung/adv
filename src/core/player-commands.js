@@ -4,6 +4,7 @@ import {processFieldEvents} from './field-events.js';
 import {closeTo,faces} from './systems/common.js';
 import {connectionSurfaces} from './systems/map-connections.js';
 import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection} from './inspection.js';
+import {interiorEntrances} from './world.js';
 
 const key=value=>JSON.stringify(value);
 const idleState=state=>({...state,waiting:null});
@@ -31,6 +32,7 @@ export function commandTargets(engine,command='interact'){
     for(const t of system.walls??[])add(key([system.id,t.id]),t.name,t.broken?'壁は崩れ、通路が開いている。':'壁に亀裂がある。',t.broken?[]:t.actions);
   }
   if(!inspection)return targets;
+  for(const location of interiorEntrances(data,state))add(`interior:${location.id}`,location.name,location.description,[{label:location.enterLabel??`${location.name}に入る`,enabled:true,consumes:false,explicit:true,intent:{type:'location.enter',id:location.id}}]);
   for(const event of questEvents(data)){
     if(event.trigger!=='action'||!eventVisible(state,event)||!event.points.some(p=>closeTo(state,p))||event.dungeon&&event.dungeon!==state.dungeons?.active?.id)continue;
     const plan=questEventPlan(data,state,event.quest,event.id);
@@ -87,6 +89,7 @@ function performTarget(engine,target,action){
   let changed;
   if(action.intent.type==='quest.event')changed=openQuestEvent(engine,action.intent.quest,action.intent.id);
   else if(action.intent.type==='field.object')changed=engine.trigger('interact',action.intent.id);
+  else if(action.intent.type==='location.enter')changed=engine.enterLocation(action.intent.id);
   else changed=dungeonAction(engine,action.intent);
   if(!changed){s.inspectionActive=null;return false;}
   finishInspection(engine);processFieldEvents(engine);
@@ -97,7 +100,7 @@ function selectTarget(engine,wait,target){
   remember(engine,target);
   const actions=target.actions.filter(a=>a.enabled);
   // Only convenient inspection skips an unambiguous, resource-free action.
-  if(wait.command==='interact'&&actions.length===1&&!actions[0].consumes){engine.state.waiting=null;return performTarget(engine,target,actions[0]);}
+  if(wait.command==='interact'&&actions.length===1&&!actions[0].consumes&&!actions[0].explicit){engine.state.waiting=null;return performTarget(engine,target,actions[0]);}
   engine.state.waiting={...wait,target:target.id};return true;
 }
 export function openPlayerCommand(engine,id){

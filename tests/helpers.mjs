@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {loadContent} from '../src/core/loader.js';
 import {GameEngine,DIRECTIONS} from '../src/core/engine.js';
 import {activeActor} from '../src/core/battle.js';
+import {dungeonInterior,locationRoot} from '../src/core/world.js';
 export const data=await loadContent(file=>fs.readFile(path.resolve(import.meta.dirname,'..',file),'utf8').then(JSON.parse));
 export function newGame(seed=42){const engine=new GameEngine(data,seed);drain(engine);return engine;}
 export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='text'||engine.state.waiting?.type==='command'&&engine.state.waiting.command==='result'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
@@ -39,6 +40,7 @@ export function maintainParty(g){
   if(needsFood&&g.state.inventory.ration>0){g.dispatch({type:'item',item:'ration',actor:'ada'});drain(g);}
 }
 export function exploreSpot(engine,spot,options={}){
+  leaveInterior(engine);
   const dungeon=Object.values(data.dungeons).find(d=>d.maps.includes(spot.map));
   if(engine.state.mode==='town'){goTownLocation(engine,data.game.world.townRoot);assert.ok(engine.dispatch({type:'travel',dungeon:dungeon.id}));}
   if(dungeon.systems.connections?.use==='map_connections'){
@@ -63,6 +65,7 @@ export function goTownLocation(g,destination){
   assert.equal(g.state.townLocation,destination);
 }
 export function leaveDungeonOnFoot(g){
+  leaveInterior(g);
   if(g.state.mode!=='dungeon')return;
   const dungeon=data.dungeons[g.state.dungeons.active.id],entry=dungeon.entries.main;
   exploreSpot(g,{map:entry.map,...data.maps[entry.map][entry.point]},{maintain:true,interact:false});
@@ -70,6 +73,23 @@ export function leaveDungeonOnFoot(g){
   assert.ok(exit,'normal dungeon exit');
   walk(g,exit.x,exit.y,{maintain:true});inspect(g,exit.id);drain(g);
   assert.equal(g.state.mode,'town');
+}
+
+export function leaveInterior(g){
+  if(!dungeonInterior(data,g.state))return;
+  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
+  assert.ok(g.dispatch({type:'location.exit'}));drain(g);
+}
+export function goWorldLocation(g,destination){
+  const root=locationRoot(data,destination),entrance=root.dungeonEntrance;
+  if(!entrance){leaveDungeonOnFoot(g);goTownLocation(g,destination);return;}
+  if(g.state.mode!=='town'||locationRoot(data,g.state.townLocation)?.id!==root.id){
+    leaveInterior(g);
+    if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==entrance.dungeon)leaveDungeonOnFoot(g);
+    exploreSpot(g,entrance,{maintain:true,interact:false});
+    assert.ok(g.dispatch({type:'location.enter',id:root.id}));
+  }
+  if(g.state.townLocation!==destination)goTownLocation(g,destination);
 }
 
 export function navigateMaps(engine,target,options={}){
