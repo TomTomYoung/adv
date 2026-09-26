@@ -1,8 +1,10 @@
 # 実装引き継ぎ
 
-確認日: 2026-09-26。作品版1.21.0、今回の基点master `4cc36b5`（PR #49反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
+確認日: 2026-09-27。作品版1.22.0、今回の基点master `3cff23e`（PR #50反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
 
 ## 完了していること
+
+トラップ・イベントから迷宮単位の封印・禁止を設定し、発生元ごとに解除する共通状態を追加しました。q001は老人との遭遇で帰還印・入口帰還を封じ、新人救援によるイベント戦闘終了直後に解除します。保存読込・階層移動・中断・通常戦闘では解除しません。救援前の全滅時は共通チェックポイントで老人遭遇からの処理を取り消し、封印・帰路・壁灯・一度限りの消灯フラグを戻します。町から再入場し、老人との再遭遇からやり直します。成功後の全滅は巻き戻しません。[共通チェックポイント](scenarios/EVENT_CHECKPOINTS.md)。[封印・禁止](dungeons/DUNGEON_RESTRICTIONS.md)。
 
 浅い0.3m・深い1.5m・底の見えないくぼみと各水入りの6種を追加しました。同深度の境界はつなぎ、高低差のある側面だけを描画します。水面は通常床から10cm下で、深さによって透過を変えます。30種類のセルパレットから配置でき、深さ・水面高さ・通行の例外も編集できます。[仕様と表示確認](dungeons/FLOOR_DEPRESSIONS.md)。灯守の地下水道10区画へ水張り3種を配置済みです。[水路拡張](dungeons/WATERWAY_EXPANSION.md)。
 

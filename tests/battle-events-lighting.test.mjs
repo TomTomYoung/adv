@@ -47,11 +47,13 @@ for(const mode of ['win','escape','repel'])test(`q001 intercepts early ${mode} a
  drain(g);assert.equal(g.state.battle,null);assert.equal(g.state.stories.q001.scene,'rescue');assert.equal(g.state.stories.q001.values.oilUsed,2);
 });
 
-test('q001 defeat before rescue does not spend oil and can retry at the outage',()=>{
+test('q001 defeat before rescue does not spend oil and retries from the elder',()=>{
  const g=outage();for(const id of g.state.members){g.state.actors[id].hp=1;g.state.actors[id].statuses=['poison'];}
  for(let n=0;n<10&&g.state.battle;n++)g.dispatch({type:'battle',action:'skill',skill:'guard'});
  assert.equal(g.state.mode,'town');assert.equal(g.state.battle,null);assert.equal(g.state.stories.q001.values.newOil,1);checkpoint(g);
- g.healAll();g.teleport('kagaribi_f1',9,1);g.run('q001.v11.outage');drain(g);
+ assert.equal(g.state.stories.q001.scene,'old');assert.equal(g.state.dungeonRestrictions.length,0);
+ g.healAll();g.teleport('kagaribi_f1',13,3);g.run('q001.v11.old');drain(g);
+ assert.ok(g.dispatch({type:'choose',id:'support'}));finishJourney(g);
  assert.equal(g.state.battle.encounter,'kuragari_hunt');checkpoint(g);
 });
 

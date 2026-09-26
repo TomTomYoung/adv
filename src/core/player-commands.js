@@ -5,6 +5,7 @@ import {closeTo,faces} from './systems/common.js';
 import {connectionSurfaces} from './systems/map-connections.js';
 import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection} from './inspection.js';
 import {interiorEntrances} from './world.js';
+import {dungeonRestrictions,dungeonRestrictionReason} from './dungeon-restrictions.js';
 
 const key=value=>JSON.stringify(value);
 const idleState=state=>({...state,waiting:null});
@@ -43,9 +44,10 @@ export function commandTargets(engine,command='interact'){
   }
   for(const object of engine.nearbyObjects()){
     if(object.trigger!=='interact'||!eventVisible(state,{visibleWhen:object.visibleWhen??object.condition}))continue;
-    const done=object.once&&state.events[`${state.location.map}/${object.id}`],enabled=!done&&(object.condition===undefined||engine.value(object.condition));
+    const reason=object.kind==='exit'?dungeonRestrictionReason(state,'return'):'';
+    const done=object.once&&state.events[`${state.location.map}/${object.id}`],enabled=!reason&&!done&&(object.condition===undefined||engine.value(object.condition));
     const args={object:object.id,map:state.location.map},info=inspectScript(engine,object.script,args);
-    add(`object:${object.id}`,object.name,done?'調査済み。':object.name,[{label:'調べる',enabled,reason:done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。',consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done]),script:done?null:object.script,args});
+    add(`object:${object.id}`,object.name,reason||(done?'調査済み。':object.name),[{label:'調べる',enabled,reason:reason||(done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。'),consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done,reason]),script:done?null:object.script,args});
   }
   if(manual){
     const l=state.location,[dx,dy]=faces[l.facing];
@@ -65,8 +67,9 @@ export function commandTargets(engine,command='interact'){
 export function playerCommands(engine){
   if(engine.state.mode!=='dungeon')return null;
   const enabled=!engine.state.waiting&&!engine.state.battle&&!engine.state.vm.length;
-  const command=(id,label)=>({id,label,enabled,intent:{type:'player.command',id}});
-  return {title:'プレイヤーコマンド',movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','便利調べる'),command('inspect','任意調べる'),command('retreat','帰還印で町へ戻る'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[])]};
+  const reason=dungeonRestrictionReason(engine.state,'return_mark');
+  const command=(id,label)=>({id,label:id==='retreat'&&reason?'帰還印封印中':label,enabled:enabled&&!(id==='retreat'&&reason),reason:id==='retreat'?reason:'',intent:{type:'player.command',id}});
+  return {title:'プレイヤーコマンド',restrictions:[...new Set(dungeonRestrictions(engine.state).map(r=>r.reason))],movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','便利調べる'),command('inspect','任意調べる'),command('retreat','帰還印で町へ戻る'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[])]};
 }
 
 export function commandDialog(engine){
@@ -74,7 +77,7 @@ export function commandDialog(engine){
   if(wait?.type!=='command')return null;
   if(wait.command==='result')return {type:'text',text:wait.text,speaker:''};
   const cancel={id:'cancel',text:wait.command==='retreat'?'やめる':wait.command==='inspect'&&wait.target?'対象一覧へ戻る':'離れる',enabled:true};
-  if(wait.command==='retreat')return {type:'choice',text:`帰還印で町へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:true},cancel]};
+  if(wait.command==='retreat'){const reason=dungeonRestrictionReason(engine.state,'return_mark');return {type:'choice',text:reason||`帰還印で町へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:!reason,requirement:reason},cancel]};}
   const targets=wait.origin!==inspectionOrigin(engine.state)?[]:commandTargets(engine,wait.command),target=targets.find(t=>t.id===wait.target);
   if(!target)return {type:'choice',text:targets.length?'何を調べる？':'今は調べられるものがない。',options:[...targets.map(t=>({id:key(['target',t.id]),text:t.name,enabled:true,target:t.id})),cancel]};
   return {type:'choice',text:`${target.name}\n\n${target.text}`,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
@@ -106,7 +109,7 @@ function selectTarget(engine,wait,target){
 export function openPlayerCommand(engine,id){
   const s=engine.state;
   if(s.mode!=='dungeon'||s.waiting||s.battle||s.vm.length||!['interact','inspect','retreat','portable','environment'].includes(id))return false;
-  if(id==='retreat'){s.waiting={type:'command',command:id};return true;}
+  if(id==='retreat'){const reason=dungeonRestrictionReason(s,'return_mark');if(reason){engine.notify(reason);return false;}s.waiting={type:'command',command:id};return true;}
   const targets=commandTargets(engine,id),wait={type:'command',command:id,origin:inspectionOrigin(s)};
   if(!targets.length){if(id==='interact')return false;s.waiting={type:'command',command:'result',text:'今は新しく調べる対象がない。'};return true;}
   if(id!=='inspect'&&targets.length===1)return selectTarget(engine,wait,targets[0]);
@@ -129,7 +132,7 @@ export function chooseCommand(engine,id){
   const targets=commandTargets(engine,wait.command);
   if(option.target){const target=targets.find(t=>t.id===option.target);return Boolean(target&&selectTarget(engine,wait,target));}
   s.waiting=null;
-  if(wait.command==='retreat'){engine.returnTown(true);s.waiting={type:'command',command:'result',text:s.notice};return true;}
+  if(wait.command==='retreat'){if(!engine.returnTown(true)){s.waiting=wait;return false;}s.waiting={type:'command',command:'result',text:s.notice};return true;}
   const target=targets.find(t=>t.id===wait.target),action=target?.actions.find(a=>a.enabled&&key(a.intent)===key(option.intent));
   if(!action||!performTarget(engine,target,action)){s.waiting=wait;return false;}
   return true;

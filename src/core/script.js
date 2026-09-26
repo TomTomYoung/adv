@@ -1,9 +1,11 @@
+import {beginEventCheckpoint,commitEventCheckpoint} from './event-checkpoints.js';
+import {setDungeonRestriction,clearDungeonRestriction} from './dungeon-restrictions.js';
 import {initStory,enterStoryScene,applyStoryAction,storyCanAct,beginStoryJourney} from './story.js';
 import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
 import {resumeBattleEvent,interruptBattle} from './battle-events.js';
 import {signalFieldChange} from './field-signals.js';
-export const COMMANDS=new Set(['story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -40,6 +42,8 @@ export function pump(engine){
     if(frame.index>=commands.length){state.vm.pop();const parent=state.vm.at(-1);if(frame.branch&&parent?.scope===frame.scope)parent.local=clone(frame.local);continue;}
     const index=frame.index++,c=commands[index],v=x=>engine.value(x),branch=path=>pushBranch(engine,frame,index,path);
     switch(c.op){
+      case 'event.checkpoint.begin':beginEventCheckpoint(engine,c,frame,index);break;
+      case 'event.checkpoint.commit':commitEventCheckpoint(engine,c.id);break;
       case 'story.init':initStory(engine,c.quest);break;
       case 'story.scene':enterStoryScene(engine,c.quest,c.scene);break;
       case 'story.journey':beginStoryJourney(engine,c.quest,c.action);return;
@@ -97,6 +101,8 @@ export function pump(engine){
       }
       case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
+      case 'dungeon.restriction.set':setDungeonRestriction(engine,c);signalFieldChange(engine.data,state,'state');break;
+      case 'dungeon.restriction.clear':clearDungeonRestriction(engine,c);signalFieldChange(engine.data,state,'state');break;
       case 'fire.portable.set':engine.setPortableFire(c);break;
       case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
       case 'facing.set':state.location.facing=c.direction;break;

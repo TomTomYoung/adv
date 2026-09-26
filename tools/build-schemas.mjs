@@ -1,3 +1,4 @@
+import {DUNGEON_RESTRICTIONS} from '../src/core/dungeon-restrictions.js';
 import {FIELD_SIGNALS,FIELD_REPEATS} from '../src/core/field-signals.js';
 import {cellPlacementSchema,cellTypesSchema,edgeTypesSchema,cellEventsSchema,cellPatchSchema} from './cell-layer-schema.mjs';
 import {FIELD_EVENT_TRIGGERS} from '../src/core/field-events.js';
@@ -15,6 +16,12 @@ const command=(names,properties={},required=Object.keys(properties))=>{for(const
 const castDisplay=obj({position:{enum:['left','center','right']},x:{type:'number',minimum:0,maximum:100},y:{type:'number',minimum:-25,maximum:50},scale:{type:'number',minimum:.5,maximum:1.5},flip:boolean,layer:{type:'integer',minimum:0,maximum:99},asset:string},[]);
 command('scene.cast',{mode:{enum:['stage','cards']},cast:{type:'array',maxItems:8,items:obj({character:string,display:castDisplay},['character'])}},['cast']);
 command('scene.cast.clear');
+const checkpointStrings={type:'array',uniqueItems:true,items:string};
+command('event.checkpoint.begin',{id:string,quest:string,scene:string,dungeon:string,flags:checkpointStrings,vars:checkpointStrings,objects:checkpointStrings,eventKeys:checkpointStrings,restrictionSources:checkpointStrings},['id','quest','scene','dungeon']);
+command('event.checkpoint.commit',{id:string});
+const restriction={dungeon:string,action:{enum:DUNGEON_RESTRICTIONS},source:{type:'string',pattern:'^[a-z][a-z0-9_.:-]{0,127}$'}};
+command('dungeon.restriction.set',{...restriction,reason:{type:'string',minLength:1,maxLength:500}});
+command('dungeon.restriction.clear',restriction);
 command('fire.portable.set',{fuel:integer,effect:{type:['string','null']}});
 command('story.init',{quest:string});command('story.scene',{quest:string,scene:string});command('story.action story.journey',{quest:string,action:string});
 command('say narrate',{text:value,name:{type:'string'},speaker:{type:'string'},character:string},['text']);

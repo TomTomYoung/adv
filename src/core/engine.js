@@ -1,4 +1,6 @@
+import {rollbackEventCheckpoints} from './event-checkpoints.js';
 import {edgeBetween} from './edge-layers.js';
+import {dungeonRestrictionReason} from './dungeon-restrictions.js';
 import {reorderParty} from './party-order.js';
 import {collapseAfterLeaving} from './cell-behaviors.js';
 import {closeTo} from './systems/common.js';
@@ -42,6 +44,8 @@ export class GameEngine {
     this.state.inspections={};
     this.state.inspectionActive=null;
     this.state.fieldReactions=freshFieldReactions();
+    this.state.dungeonRestrictions=[];
+    this.state.eventCheckpoints=[];
     this.run(data.game.startScript);
   }
   cue(id,targets){playCue(this,id,targets);}
@@ -129,6 +133,13 @@ export class GameEngine {
     signalFieldChange(this.data,this.state,'enter');
   }
   returnTown(emergency=false,quiet=false){
+    const reason=dungeonRestrictionReason(this.state,emergency?'return_mark':'return');
+    if(reason){this.notify(reason);return false;}
+    this.#arriveTown(emergency,quiet);return true;
+  }
+  // Defeat rescue is forced recovery. Roll back unfinished event checkpoints
+  // before synchronizing the party to its rescued location.
+  #arriveTown(emergency=false,quiet=false){
     collapseAfterLeaving(this,this.state.location,null);
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
@@ -138,9 +149,12 @@ export class GameEngine {
     this.state.fieldReactions=freshFieldReactions();
   }
   defeat(){
+    const rolledBack=rollbackEventCheckpoints(this);
+    delete this.state.presentation.cast;delete this.state.presentation.message;
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
-    this.state.vm=[];this.state.waiting=null;this.returnTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
+    this.state.vm=[];this.state.waiting=null;this.#arriveTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
     this.notify('隊は救助されました。所持金の一部を救援費に充て、町で目覚めました。依頼は再挑戦できます。');
+    return rolledBack;
   }
   move(direction){
     if(this.state.mode!=='dungeon'||this.state.waiting)return false;
@@ -202,6 +216,8 @@ export class GameEngine {
     const loc=this.state.location;
     for(const object of this.triggerCandidates(kind)){
       if(id!==undefined&&object.id!==id)continue;
+      const reason=object.kind==='exit'&&dungeonRestrictionReason(this.state,'return');
+      if(reason){this.notify(reason);return false;}
       const key=`${loc.map}/${object.id}`;
       this.state.events[key]=(this.state.events[key]??0)+1;
       this.cue(this.data.presentation?.bindings.objects[object.kind]);
@@ -245,7 +261,7 @@ export class GameEngine {
     if(type==='move')return this.move(intent.direction);
     if(type==='player.command')return openPlayerCommand(this,intent.id);
     if(type==='interact')return this.interact();
-    if(type==='retreat'&&this.state.mode==='dungeon'){this.returnTown(true);return true;}
+    if(type==='retreat'&&this.state.mode==='dungeon')return this.returnTown(true);
     if(type==='accept'&&this.state.mode==='town')return this.accept(intent.id);
     if(type==='track'&&this.state.quests[intent.id]?.stage==='active'){this.state.trackedQuest=intent.id;return true;}
     if(type==='quest.travel'){

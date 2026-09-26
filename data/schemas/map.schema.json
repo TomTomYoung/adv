@@ -791,6 +791,159 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "event.checkpoint.begin"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "quest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scene": {
+              "type": "string",
+              "minLength": 1
+            },
+            "dungeon": {
+              "type": "string",
+              "minLength": 1
+            },
+            "flags": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "vars": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "objects": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "eventKeys": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "restrictionSources": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "quest",
+            "scene",
+            "dungeon"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "event.checkpoint.commit"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "dungeon.restriction.set"
+            },
+            "dungeon": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "enum": [
+                "return_mark",
+                "return"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.:-]{0,127}$"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          },
+          "required": [
+            "op",
+            "dungeon",
+            "action",
+            "source",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "dungeon.restriction.clear"
+            },
+            "dungeon": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "enum": [
+                "return_mark",
+                "return"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.:-]{0,127}$"
+            }
+          },
+          "required": [
+            "op",
+            "dungeon",
+            "action",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "fire.portable.set"
             },
             "fuel": {

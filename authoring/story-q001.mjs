@@ -17,10 +17,14 @@ s.revealText='入口に残った新人は、恐怖を失わないまま老人と
 s.progression='火のルールを入口で聞く。油切れの壁松明を実地に確かめ、最後の灯の下から老人を介助する。帰路の消灯とくらがりの襲来に対して、新人が自ら戻る。救助後に巡灯路の修繕と二人の休養のどちらを先に引き受けるかを決める。';
 s.authoringNotes={notice:'火と恐怖と所在を一貫して扱うための作者向け制約です。',facts:['灯番は原則一経路一人。本件のみ実地教育の新人が同行した。','老人は正式な当直、新人は見習い。リネは同行を把握している。','新人はクライマックスまで入口から動かず、恐怖を抱えたまま救助を選ぶ。','油切れの壁灯は点火だけでは灯らない。壁灯の現在状態はstate.objectsだけに保存する。','全ての結末は新人による救助の後に選ぶ。老人の油が二人を救う往復を省略しない。']};
 const wall=(id,state)=>({op:'object.state.set',map:'kagaribi_f1',object:id,state});
+const returnSeal={dungeon:'kagaribi',action:'return',source:'q001.elder_rescue'};
 const portable=(fuel)=>({op:'fire.portable.set',fuel,effect:fuel?'ward':null});
 s.sceneCommands={
  entry:onceAtScene('q001','entry',[portable(25)]),
- old:onceAtScene('q001','old',[portable(8)]),
+ old:[{op:'event.checkpoint.begin',id:'q001.elder_rescue',quest:'q001',scene:'old',dungeon:'kagaribi',
+  flags:['worldSceneEffects.q001.old','worldSceneEffects.q001.outage'],
+  objects:['kagaribi_f1/q001_last_lamp'],eventKeys:['kagaribi_f1/q001_elder','kagaribi_f1/q001_return'],restrictionSources:[returnSeal.source]},
+  ...onceAtScene('q001','old',[portable(8),{op:'dungeon.restriction.set',...returnSeal,reason:'帰還印が封印されている。老人と帰路の巡灯路へ向かおう。'}])],
  outage:onceAtScene('q001','outage',[wall('q001_last_lamp','extinguished'),portable(0)]),
  rescue:[]
 };
@@ -35,7 +39,7 @@ s.sceneFlow={outage:[{
    {op:'story.action',quest:'q001',action:'outage_call'},
    portable(25),{op:'battle.end'}
   ]}],
- on_interrupt:[{op:'jump',script:'q001.v11.rescue'}],on_win:[],on_escape:[],
+ on_interrupt:[{op:'dungeon.restriction.clear',...returnSeal},{op:'event.checkpoint.commit',id:'q001.elder_rescue'},{op:'jump',script:'q001.v11.rescue'}],on_win:[],on_escape:[],
  on_lose:[]
 }]};
 s.node('entry','entry',['rookie'],'入口の篝火の下で、新人が松明を両手で握っていた。「壁の松明か、くらがり除けの火を持っていれば、あれは寄れません。でも、巡灯路の火が消えて……あの人が、自分の油を僕にくれたんです」。奥で石をこする音がする。新人は一歩を出そうとし、足を引いた。「戻らなきゃいけないのに、怖くて」。',[

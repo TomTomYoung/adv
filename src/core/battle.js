@@ -35,8 +35,8 @@ export function endBattle(engine,result,skipEvents=false){
   dungeonBattleEnd(engine,b,result);
   s.presentation.music=b.musicBefore;s.battle=null;s.waiting=null;
   if(result==='lose'){
-    engine.defeat();
-    if(continuation.frame){pushBranch(engine,continuation.frame,continuation.index,[continuation.lose]);pump(engine);}
+    const rolledBack=engine.defeat();
+    if(continuation.frame&&!rolledBack){pushBranch(engine,continuation.frame,continuation.index,[continuation.lose]);pump(engine);}
     return;
   }
   if(result!=='interrupted')engine.eventCue(result==='win'?'victory':'escape');

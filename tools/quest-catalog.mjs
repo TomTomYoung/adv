@@ -80,6 +80,10 @@ export function questCatalog(data,date,{questId}={}){
         case 'gold.change':add(`所持金の変化: ${c.amount}G。`);break;
         case 'map.teleport':add(`現地の移動: ${code(c.map)} (${c.x}, ${c.y}${c.z===undefined?'':', '+c.z})。`);break;
         case 'town.return':add('現地の移動: 町へ帰還します。');break;
+        case 'event.checkpoint.begin':add(`再挑戦区間を開始: ${code(c.id)}。全滅時は ${code(c.quest+'/'+c.scene)} へ進行を戻す。復元対象: ${code(json({flags:c.flags,vars:c.vars,objects:c.objects,eventKeys:c.eventKeys,restrictionSources:c.restrictionSources}))}。`);break;
+        case 'event.checkpoint.commit':add(`再挑戦区間を確定: ${code(c.id)}。以後の全滅ではこの区間を巻き戻さない。`);break;
+        case 'dungeon.restriction.set':add(`封印・禁止: ${code(c.dungeon)} / ${code(c.action)}。発生元 ${code(c.source)}。${c.reason}`);break;
+        case 'dungeon.restriction.clear':add(`封印・禁止を解除: ${code(c.dungeon)} / ${code(c.action)}。発生元 ${code(c.source)} のみ。`);break;
         case 'fire.portable.set':add(`携行火: 燃料 ${c.fuel}、効果 ${code(c.effect??'消灯')}。`);break;
         case 'object.state.set':add(`物体の状態: ${code(c.map+'/'+c.object)} → ${code(c.state)}。`);break;
         default:throw Error(`${q.id}: catalog renderer needs support for ${c.op}`);
