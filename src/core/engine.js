@@ -1,4 +1,5 @@
 import {edgeBetween} from './edge-layers.js';
+import {reorderParty} from './party-order.js';
 import {collapseAfterLeaving} from './cell-behaviors.js';
 import {closeTo} from './systems/common.js';
 import {finishInspection} from './inspection.js';
@@ -269,6 +270,7 @@ export class GameEngine {
     if(type==='job.change')return this.changeJob(intent.actor,intent.job);
     if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
+    if(type==='party.order')return reorderParty(this,intent.group,intent.actor,intent.direction);
     if(type==='unequip')return this.unequip(intent.actor,intent.slot);
     if(type==='buy'){
       const actor=intent.actor??SHARED_BAG,plan=purchasePlan(this,intent.item,actor);if(!plan.ok){this.state.notice=plan.reason;return false;}

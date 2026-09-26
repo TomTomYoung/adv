@@ -60,7 +60,19 @@ export function renderParty(view,parent,m){
     const cards=make('div','party-card-list');cards.dataset.scroll=`roster:${group}`;
     for(const actor of actors){const key=`roster:${group}:${actor.id}`;cards.append(characterCard(view,actor,key,actor===selected,()=>{view.partySelection[group]=actor.id;view.partyPages[group]='overview';view.render(view.model);refocus(view,key);}));}choices.append(cards);
     if(!actors.length)cards.append(make('p','empty','酒場で待つ仲間はいません。'));
-    if(m.mode==='town')choices.append(button(group==='party'?'待機':'加入',`roster:${group}:apply`,()=>view.act({type:'party',action:group==='party'?'leave':'join',actor:selected.id}),!selected||!(group==='party'?selected.canLeave:selected.canJoin)));
+    if(m.mode==='town'){
+      const actions=make('div','party-list-actions');
+      actions.append(button(group==='party'?'待機':'加入',`roster:${group}:apply`,()=>view.act({type:'party',action:group==='party'?'leave':'join',actor:selected.id}),!selected||!(group==='party'?selected.canLeave:selected.canJoin)));
+      for(const [direction,label,enabled] of [['up','△',selected?.canMoveUp],['down','▽',selected?.canMoveDown]]){
+        const key=`roster:${group}:${direction}`,move=button(label,key,()=>{
+          view.act({type:'party.order',group,actor:selected.id,direction});
+          const control=view.root.querySelector(`[data-focus="${key}"]`);
+          if(control&&!control.disabled)refocus(view,key);else refocus(view,`roster:${group}:${selected.id}`);
+        },!enabled);
+        move.setAttribute('aria-label',`${title}の選択キャラクターを${direction==='up'?'一つ上':'一つ下'}へ`);move.title=direction==='up'?'一つ上へ':'一つ下へ';actions.append(move);
+      }
+      choices.append(actions);
+    }
     section.append(choices);
     const details=make('section',`party-detail ${group}-detail`);details.setAttribute('aria-label',`${title}キャラクタープロフィール`);
     if(selected)details.append(profile(view,selected,m,{context:group,page:view.partyPages[group]??'overview',onPage:page=>{view.partyPages[group]=page;}}));else details.append(make('p','empty','表示するキャラクターがいません。'));

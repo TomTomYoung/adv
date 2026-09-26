@@ -1,4 +1,5 @@
 import {collapseKey} from './cell-behaviors.js';
+import {validRosterOrder} from './party-order.js';
 import {authoredCellLayers} from './cell-layers.js';
 import {validateInspections} from './inspection.js';
 import {cellEntryId} from './cell-layers.js';
@@ -157,6 +158,7 @@ export function validateSave(save,data){
   for(const message of [s.presentation.message,s.waiting])if(message?.speakerId!==undefined&&(typeof message.speakerId!=='string'||!Object.hasOwn(data.characters,message.speakerId)))fail('発話人物不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
   if(s.members.length<1||s.members.length>data.system.maxParty||new Set(s.members).size!==s.members.length||s.members.some(id=>!data.actors[id]))fail('隊員不正');
+  if(!validRosterOrder(data,s))fail('酒場の並び順不正');
   if(Object.keys(s.actors).some(id=>!Object.hasOwn(data.actors,id)))fail('未知の隊員状態');
   for(const [id,definition] of Object.entries(data.actors)){
     const actor=s.actors[id];if(!isRecord(actor)||!isRecord(actor.equipment)||!Array.isArray(actor.statuses)){fail('隊員状態不正');continue;}

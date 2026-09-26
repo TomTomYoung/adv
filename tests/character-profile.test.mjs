@@ -14,6 +14,21 @@ function screen(layout){
   return {...dom,g,view,intents,click,key,panel(tab){view.render(projectGame(g));view.tab=tab;view.render(projectGame(g));},close(){view.destroy();dom.restore();}};
 }
 for(const layout of ['scene','classic']){
+  test(`${layout}: arrows beside join/leave move only the selected character and retain profile and keyboard focus`,()=>{
+    const c=screen(layout);try{
+      c.panel('party');const party=[...c.g.state.members],reserve=c.view.model.roster.filter(a=>!a.active).map(a=>a.id);
+      for(const group of ['party','tavern'])assert.deepEqual(c.root.querySelector(`.${group}-picker .party-list-actions`).children.map(b=>b.textContent),[group==='party'?'待機':'加入','△','▽']);
+      assert.ok(c.root.querySelector('[data-focus="roster:party:up"]').disabled);
+      c.click(`roster:party:${party[1]}`);c.click('profile:party:items');c.click('roster:party:up');
+      assert.deepEqual(c.g.state.members,[party[1],party[0],...party.slice(2)]);assert.equal(c.view.partySelection.party,party[1]);assert.equal(c.view.partyPages.party,'items');
+      assert.equal(c.document.activeElement.dataset.focus,`roster:party:${party[1]}`);assert.ok(c.root.querySelector('[data-focus="roster:party:up"]').disabled);
+      c.click('roster:party:down');assert.equal(c.document.activeElement.dataset.focus,'roster:party:down');assert.deepEqual(c.g.state.members,party);
+      c.key('Enter');assert.equal(c.g.state.members[2],party[1]);assert.equal(c.intents.at(-1).type,'party.order');
+      c.click(`roster:tavern:${reserve.at(-1)}`);assert.ok(c.root.querySelector('[data-focus="roster:tavern:down"]').disabled);
+      const unchanged=[...c.g.state.members];c.click('roster:tavern:up');assert.deepEqual(c.g.state.members,unchanged);assert.equal(c.view.partySelection.tavern,reserve.at(-1));
+      assert.equal(c.view.model.roster.filter(a=>!a.active).at(-2).id,reserve.at(-1));assert.equal(c.root.querySelector('[data-profile="tavern"]').dataset.actor,reserve.at(-1));
+    }finally{c.close();}
+  });
   test(`${layout}: town cards open the chosen actor, pages preserve state, and jobs are separate`,()=>{
     const c=screen(layout);try{
       const save=c.g.save();c.click('character:il');assert.equal(c.view.tab,'profile');assert.equal(c.root.querySelector('[data-profile="town"]').dataset.actor,'il');
