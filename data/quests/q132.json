@@ -229,7 +229,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q132.scene.isolate",
+        "action": "seal",
+        "option": "seal_supplies",
+        "shortage": "q132.scene.isolate.seal.shortage",
+        "resume": "q132.scene.isolate.seal.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q132.visit"
+    ]
   },
   "scripts": {
     "q132.scene.entry": {
@@ -289,11 +304,6 @@
                   "script": "q132.scene.test"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -361,11 +371,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -445,9 +450,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "seal_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q132.scene.isolate.seal.shortage"
+                }
+              ]
             }
           ]
         }
@@ -508,86 +534,135 @@
     "q132.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q132.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q132"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q132.outcome"
-              },
-              "cases": [
+              "equals": "q132.scene.isolate.seal.resume",
+              "commands": [
                 {
-                  "equals": "destroy",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "襲う箱は壊れた。回収された椅子へ、管理人は父の薄い座布団を掛けた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "isolate",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "生物は隔離された。管理人は当番と費用を帳面へ入れ、古い椅子を安全な側に置いた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q132.scene.isolate.seal.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q132.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q132.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q132.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "destroy",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "襲う箱は壊れた。回収された椅子へ、管理人は父の薄い座布団を掛けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "isolate",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "生物は隔離された。管理人は当番と費用を帳面へ入れ、古い椅子を安全な側に置いた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q132.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q132.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q132.scene.test"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "isolate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q132.scene.isolate"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q132.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "test",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q132.scene.test"
-                    }
-                  ]
-                },
-                {
-                  "equals": "isolate",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q132.scene.isolate"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q132.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q132.scene.isolate.seal.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q132",
+          "value": "q132.scene.isolate.seal.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q132.scene.isolate.seal.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q132",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q132.scene.isolate"
         }
       ]
     }

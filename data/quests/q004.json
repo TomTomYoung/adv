@@ -1142,7 +1142,42 @@
       "adapter": "adv-story-state/1",
       "revision": "2026-09-13",
       "scope": "quest-episode"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q004.v11.duplicate",
+        "action": "fine",
+        "option": "fine_supplies",
+        "shortage": "q004.v11.duplicate.fine.shortage",
+        "resume": "q004.v11.duplicate.fine.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q004.v11.consent",
+        "action": "fine",
+        "option": "fine_supplies",
+        "shortage": "q004.v11.consent.fine.shortage",
+        "resume": "q004.v11.consent.fine.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q004.v11.window",
+        "action": "fine",
+        "option": "fine_supplies",
+        "shortage": "q004.v11.window.fine.shortage",
+        "resume": "q004.v11.window.fine.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q004.v11.visit"
+    ]
   },
   "scripts": {
     "q004.v11.entry": {
@@ -1191,11 +1226,6 @@
                   "action": "entry_force"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1253,9 +1283,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "fine_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.duplicate.fine.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1291,11 +1346,6 @@
                   "action": "registry_return"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1360,9 +1410,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "fine_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.consent.fine.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1402,11 +1477,6 @@
                   "script": "q004.v11.escort"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1442,11 +1512,6 @@
                   "action": "escort_accompany"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1486,11 +1551,6 @@
                   "script": "q004.v11.issued"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1526,11 +1586,6 @@
                   "action": "issued_leave"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1570,11 +1625,6 @@
                   "script": "q004.v11.end.informed"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1610,11 +1660,6 @@
                   "action": "fine_release_leave"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1654,11 +1699,6 @@
                   "script": "q004.v11.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1716,11 +1756,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1756,11 +1791,6 @@
                   "action": "force_freed_escort"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1800,11 +1830,6 @@
                   "script": "q004.v11.end.contract"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1862,9 +1887,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "fine_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.window.fine.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1927,214 +1977,341 @@
     "q004.v11.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": false,
-          "then": [],
-          "else": [
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q004"
+          },
+          "cases": [
+            {
+              "equals": "q004.v11.duplicate.fine.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.duplicate.fine.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q004.v11.consent.fine.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.consent.fine.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q004.v11.window.fine.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q004.v11.window.fine.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
             {
               "op": "if",
-              "condition": {
-                "op": "eq",
-                "left": {
-                  "ref": "quests.q004.stage"
-                },
-                "right": "completed"
-              },
-              "then": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q004.outcome"
-                  },
-                  "cases": [
-                    {
-                      "equals": "informed",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": []
-                }
-              ],
+              "condition": false,
+              "then": [],
               "else": [
                 {
-                  "op": "story.init",
-                  "quest": "q004"
-                },
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "stories.q004.scene"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q004.stage"
+                    },
+                    "right": "completed"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q004.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "通行記録、勤務簿、住民登録簿を照合し、姉妹による通行証の複製・共用と、番人による兄名義の使用を審査へ戻した。現場確認の間、姉妹には別々の仮証が発行され、姉は釈放された。番人は勤務を止められ、兄の名を使った経緯の審査を受ける。三人とも正式資格の結論はまだ先にある。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "姉を関所の外へ連れ出した。押収された原本は番人の手元に残り、関所破りに使われた番号として取消扱いになった。イナの写しも通行には使えない。姉妹は自由になったが、資格を得たわけではない。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "姉妹は通行証を複製した事実を認め、罰金を納めた。姉は釈放されて原本を返され、イナの写しは回収・失効した。有効な資格は姉の一つだけで、二人が別々に通行できる状態にはならなかった。番人の名義については審査へ申し立てなかった。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q004"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q004.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "duplicate",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.duplicate"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "registry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.registry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "consent",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.consent"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "filing",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.filing"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "escort",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.escort"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "review",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.review"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "issued",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.issued"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "issued_outside",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.issued_outside"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "fine_release",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.fine_release"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "fine_outside",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.fine_outside"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "force_entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.force_entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "force_freed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.force_freed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "force_outside",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.force_outside"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "window",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q004.v11.window"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q004.v11.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "duplicate",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.duplicate"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "registry",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.registry"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "consent",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.consent"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "filing",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.filing"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "escort",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.escort"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "review",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.review"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "issued",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.issued"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "issued_outside",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.issued_outside"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "fine_release",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.fine_release"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "fine_outside",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.fine_outside"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "force_entry",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.force_entry"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "force_freed",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.force_freed"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "force_outside",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.force_outside"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "window",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q004.v11.window"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q004.v11.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q004.v11.duplicate.fine.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": "q004.v11.duplicate.fine.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q004.v11.duplicate.fine.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q004.v11.duplicate"
+        }
+      ]
+    },
+    "q004.v11.consent.fine.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": "q004.v11.consent.fine.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q004.v11.consent.fine.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q004.v11.consent"
+        }
+      ]
+    },
+    "q004.v11.window.fine.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": "q004.v11.window.fine.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q004.v11.window.fine.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q004",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q004.v11.window"
         }
       ]
     }

@@ -1,8 +1,10 @@
 # 実装引き継ぎ
 
-確認日: 2026-09-27。作品版1.23.0、今回の基点master `902e2db`（PR #53反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
+確認日: 2026-09-27。作品版1.24.0、今回の基点master `b0a29f5`（PR #53・54反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
 
 ## 完了していること
+
+1.24.0でシナリオ共通の中断選択肢644個とEscのpause割当を廃止しました。資材・所持金不足には作業別の不足経路と再開スクリプトを生成し、未着手の状態で探索へ戻します。補給後は現場へ戻り、作業のあった場面から進めます。費用・戦闘後の確定・全滅巻戻しを保持します。[設計と生成](scenarios/SCENARIO_DESIGN.md)。旧内容版セーブは新規開始になります。
 
 scene.castに時間演出を追加しました。登場・退場のフェード、移動・拡縮・角度・不透明度の補間、画像クロスフェード、イージング、完了待ちが使えます。単独waitと既存effect.playの完了待ちも戦闘内で利用できます。q001の新人救援には登場フェードを適用済みです。最新の保存は目標配置と待機位置を保持し、読込時の再演出・二重実行を防止します。[指定方法](ui/CHARACTER_STAGING.md)。全791試験と実Chromium 145での演出・自動進行・保存再開・スマートフォン表示が成功しました。[今回の検証記録](development/PROGRESS.md)を参照してください。
 

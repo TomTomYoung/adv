@@ -362,7 +362,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q082.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q082.decision.informed.shortage",
+        "resume": "q082.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q082.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q082.review.informed.shortage",
+        "resume": "q082.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q082.visit",
+      "q082.flow.visit"
+    ]
   },
   "scripts": {
     "q082.clue_a": {
@@ -533,6 +559,70 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.decision.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -741,6 +831,94 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q082.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q082.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.review.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -840,24 +1018,52 @@
     "q082.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q082.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q082"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q082.aftermath"
+              "equals": "q082.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q082.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.review.informed.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q082.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q082.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q082.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q082.review"
+                }
+              ]
             }
           ]
         }
@@ -909,11 +1115,6 @@
                   "script": "q082.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -965,11 +1166,6 @@
                   "script": "q082.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1010,11 +1206,6 @@
                   "script": "q082.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1055,11 +1246,6 @@
                   "script": "q082.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1161,122 +1347,210 @@
     "q082.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q082.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q082"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q082.outcome"
-              },
-              "cases": [
+              "equals": "q082.decision.informed.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "星は戻った。エルは光の寿命と再充填の方法も売り札へ書く。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "一瞬は明るくなった。蓄えた光はすぐ尽き、客は空瓶を持ち帰る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "商いは縮んだ。説明を聞いた客の一部は瓶を残した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q082.decision.informed.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q082.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q082.review.informed.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q082"
+                  "ref": "quests.q082.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q082.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q082.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "星は戻った。エルは光の寿命と再充填の方法も売り札へ書く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "一瞬は明るくなった。蓄えた光はすぐ尽き、客は空瓶を持ち帰る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "商いは縮んだ。説明を聞いた客の一部は瓶を残した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q082.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q082"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q082.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q082.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q082.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "temperature",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q082.flow.temperature"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "spent",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q082.flow.spent"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "label",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q082.flow.label"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q082.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "temperature",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q082.flow.temperature"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "spent",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q082.flow.spent"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "label",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q082.flow.label"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q082.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q082.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q082",
+          "value": "q082.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q082.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q082",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q082.decision"
+        }
+      ]
+    },
+    "q082.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q082",
+          "value": "q082.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q082.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q082",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q082.review"
         }
       ]
     }

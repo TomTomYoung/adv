@@ -197,7 +197,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q147.scene.entry",
+        "action": "car",
+        "option": "car_supplies",
+        "shortage": "q147.scene.entry.car.shortage",
+        "resume": "q147.scene.entry.car.resume",
+        "cost": {
+          "gold": 30
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q147.visit"
+    ]
   },
   "scripts": {
     "q147.scene.entry": {
@@ -264,9 +279,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "car_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.entry.car.shortage"
+                }
+              ]
             }
           ]
         }
@@ -307,11 +347,6 @@
                   "script": "q147.end.record"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -398,86 +433,135 @@
     "q147.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q147.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q147"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q147.outcome"
-              },
-              "cases": [
+              "equals": "q147.scene.entry.car.resume",
+              "commands": [
                 {
-                  "equals": "quiet",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "tomorrow",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "record",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q147.scene.entry.car.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q147.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q147.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "quiet",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tomorrow",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "record",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q147.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.scene.closed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q147.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "closed",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q147.scene.closed"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q147.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q147.scene.entry.car.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q147",
+          "value": "q147.scene.entry.car.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q147.scene.entry.car.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q147",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q147.scene.entry"
         }
       ]
     }

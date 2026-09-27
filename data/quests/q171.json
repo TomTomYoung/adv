@@ -378,7 +378,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q171.scene.watch",
+        "action": "ward",
+        "option": "ward_supplies",
+        "shortage": "q171.scene.watch.ward.shortage",
+        "resume": "q171.scene.watch.ward.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q171.visit"
+    ]
   },
   "scripts": {
     "q171.scene.entry": {
@@ -410,11 +425,6 @@
                   "script": "q171.scene.watch"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -732,9 +742,78 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "ward_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q171.ward"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q171.ward"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch.ward.shortage"
+                }
+              ]
             }
           ]
         }
@@ -847,95 +926,144 @@
     "q171.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q171.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q171"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q171.outcome"
-              },
-              "cases": [
+              "equals": "q171.scene.watch.ward.resume",
+              "commands": [
                 {
-                  "equals": "loop",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "return",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "fight",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "evacuate",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q171.scene.watch.ward.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q171.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q171.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "loop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fight",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q171.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.scene.watch"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q171.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "watch",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q171.scene.watch"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q171.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q171.scene.watch.ward.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q171",
+          "value": "q171.scene.watch.ward.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q171.scene.watch.ward.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q171",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q171.scene.watch"
         }
       ]
     }

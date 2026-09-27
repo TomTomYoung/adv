@@ -316,7 +316,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q121.scene.entry",
+        "action": "fence",
+        "option": "fence_supplies",
+        "shortage": "q121.scene.entry.fence.shortage",
+        "resume": "q121.scene.entry.fence.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q121.visit"
+    ]
   },
   "scripts": {
     "q121.scene.entry": {
@@ -376,9 +391,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "fence_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q121.scene.entry.fence.shortage"
+                }
+              ]
             }
           ]
         }
@@ -517,11 +553,6 @@
                   "script": "q121.end.retire"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -616,11 +647,6 @@
                   "script": "q121.end.alone"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -707,95 +733,144 @@
     "q121.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q121.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q121"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q121.outcome"
-              },
-              "cases": [
+              "equals": "q121.scene.entry.fence.resume",
+              "commands": [
                 {
-                  "equals": "together",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "狼の被害は止まった。最後の一撃を誰の功績にするか、バスクが自分で娘へ話した。猟帳の次の頁には兄の名を書いた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "alone",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "あなたの隊が倒した狼を、猟師の百頭目とは呼ばなかった。羊は囲いへ戻り、誓いの扱いはバスクに残った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "retire",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "今夜は囲いが羊を守る。狼は残り、次の防衛当番が必要だ。娘は閉じた猟帳を本棚へ戻した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q121.scene.entry.fence.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q121.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q121.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q121.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "together",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "狼の被害は止まった。最後の一撃を誰の功績にするか、バスクが自分で娘へ話した。猟帳の次の頁には兄の名を書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "alone",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "あなたの隊が倒した狼を、猟師の百頭目とは呼ばなかった。羊は囲いへ戻り、誓いの扱いはバスクに残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retire",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "今夜は囲いが羊を守る。狼は残り、次の防衛当番が必要だ。娘は閉じた猟帳を本棚へ戻した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q121.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q121.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "talk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q121.scene.talk"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q121.scene.report"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q121.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "talk",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q121.scene.talk"
-                    }
-                  ]
-                },
-                {
-                  "equals": "report",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q121.scene.report"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q121.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q121.scene.entry.fence.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q121",
+          "value": "q121.scene.entry.fence.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q121.scene.entry.fence.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q121",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q121.scene.entry"
         }
       ]
     }

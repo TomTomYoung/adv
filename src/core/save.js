@@ -242,7 +242,17 @@ export function validateSave(save,data){
     }catch{fail('戦闘イベント状態不正');}
   }else if(s.waiting?.type==='battle')fail('戦闘がありません');
   if(s.vm.length&&!s.waiting)fail('待機位置がありません');
+  if(s.flags.questResume!==undefined){
+    if(!isRecord(s.flags.questResume))fail('依頼の再開経路が不正です');
+    else for(const [id,resume] of Object.entries(s.flags.questResume)){
+      const q=data.quests[id];if(!q){fail('依頼の再開経路が不正です');continue;}
+      if(resume===null)continue;
+      const route=q.model.interruptionRoutes?.find(r=>r.resume===resume);
+      if(!route||s.quests[id].stage!=='active'){fail('依頼の再開経路が不正です');continue;}
+      const scene=data.scripts[route.from].commands.find(c=>c.op==='story.scene'||c.op==='set'&&c.target.endsWith('.node'));
+      if(scene&&(scene.op==='story.scene'?s.stories[id]?.scene!==scene.scene:evaluate({ref:scene.target},s)!==scene.value))fail('依頼の再開場面が一致しません');
+    }
+  }
   errors.push(...validateDungeonState(data,s),...validateDungeonRestrictions(data,s),...validateEventCheckpoints(data,s));
   return [...new Set(errors)];
 }
-

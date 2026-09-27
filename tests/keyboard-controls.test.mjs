@@ -164,8 +164,8 @@ test('long choice pages require Enter before choices receive focus',()=>{
   try{const save=g.save();while(!c.view.canChoose()){assert.ok(c.document.activeElement.classList.contains('continue'));c.key('Enter');assert.ok(g.save()===save);}assert.equal(c.document.activeElement.dataset.focus,'choice:yes');c.key('Enter');assert.equal(g.state.waiting,null);}finally{c.cleanup();}
 });
 
-test('cancel uses authored pause only when all script frames are finished; mandatory actions are preserved',()=>{
-  for(const [id,commands,tail,expected] of [['pause',[],[],true],['leave',[],[],true],['home',[{op:'gold.change',amount:100}],[],false],['pause',[],[{op:'gold.change',amount:100}],false]]){
+test('cancel uses an authored leave only when all script frames are finished; mandatory actions are preserved',()=>{
+  for(const [id,commands,tail,expected] of [['pause',[],[],false],['leave',[],[],true],['home',[{op:'gold.change',amount:100}],[],false],['pause',[],[{op:'gold.change',amount:100}],false]]){
     const g=story([{op:'choice',options:[{id,text:'戻る',commands}]},...tail]);const c=setup('scene',g);try{assert.equal(Boolean(c.view.model.dialog.cancelId),expected);const gold=g.state.gold;c.key('Escape');assert.equal(g.state.gold,gold);assert.equal(g.state.waiting===null,expected);}finally{c.cleanup();}
   }
 });

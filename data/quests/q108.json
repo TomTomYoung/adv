@@ -283,7 +283,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q108.scene.entry",
+        "action": "shared",
+        "option": "shared_supplies",
+        "shortage": "q108.scene.entry.shared.shortage",
+        "resume": "q108.scene.entry.shared.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q108.flow.agreement",
+        "action": "build",
+        "option": "build_supplies",
+        "shortage": "q108.flow.agreement.build.shortage",
+        "resume": "q108.flow.agreement.build.resume",
+        "cost": {
+          "gold": 30
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q108.visit",
+      "q108.flow.visit"
+    ]
   },
   "scripts": {
     "q108.scene.entry": {
@@ -434,9 +460,72 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "shared_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.shortage"
+                }
+              ]
             }
           ]
         }
@@ -523,73 +612,101 @@
     "q108.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q108.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q108"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q108.outcome"
-              },
-              "cases": [
+              "equals": "q108.scene.entry.shared.resume",
+              "commands": [
                 {
-                  "equals": "shared",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "fish",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "bird",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q108.flow.agreement.build.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q108.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q108.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q108.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "shared",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fish",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bird",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q108.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.scene.entry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q108.scene.entry"
                     }
                   ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q108.scene.entry"
                 }
               ]
             }
@@ -648,11 +765,6 @@
                   "script": "q108.flow.end.bird"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -704,11 +816,6 @@
                   "script": "q108.flow.end.bird"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -767,11 +874,6 @@
                   "script": "q108.flow.end.bird"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -830,9 +932,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "build_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.shortage"
+                }
+              ]
             }
           ]
         }
@@ -919,122 +1046,210 @@
     "q108.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q108.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q108"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q108.outcome"
-              },
-              "cases": [
+              "equals": "q108.scene.entry.shared.resume",
+              "commands": [
                 {
-                  "equals": "shared",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "fish",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "bird",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q108.flow.agreement.build.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q108"
+                  "ref": "quests.q108.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q108.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q108.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "shared",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fish",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bird",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q108.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q108"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q108.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q108.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "caught",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.caught"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "birds",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.birds"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "agreement",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.agreement"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q108.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "caught",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q108.flow.caught"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "birds",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q108.flow.birds"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "agreement",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q108.flow.agreement"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q108.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q108.scene.entry.shared.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": "q108.scene.entry.shared.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q108.scene.entry.shared.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q108.scene.entry"
+        }
+      ]
+    },
+    "q108.flow.agreement.build.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": "q108.flow.agreement.build.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q108.flow.agreement.build.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q108.flow.agreement"
         }
       ]
     }

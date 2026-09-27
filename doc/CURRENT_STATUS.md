@@ -1,6 +1,8 @@
 # advの現状
 
-確認日: 2026-09-27。配布作品版1.23.0。今回の個別経験値・戦闘報酬の基点はmaster `cbb72bd`。[現行仕様](SPEC.md)、[検証と残作業](development/PROGRESS.md)、[引き継ぎ](HANDOFF.md)を参照してください。
+確認日: 2026-09-27。配布作品版1.24.0。今回の中断選択肢廃止の基点はmaster `b0a29f5`。[現行仕様](SPEC.md)、[検証と残作業](development/PROGRESS.md)、[引き継ぎ](HANDOFF.md)を参照してください。
+
+共通の中断選択肢を廃止し、資材・所持金不足は作業別の不足・再開経路へ分岐します。[設計](scenarios/SCENARIO_DESIGN.md)。
 
 個別経験値、戦闘リザルトとレベルアップ、魔物ごとの宝箱抽選、戦闘外の解毒・回復を1.23.0で実装しました。[経験値と戦闘リザルト](battle/PROGRESSION_AND_REWARDS.md)。
 ## マップと編集

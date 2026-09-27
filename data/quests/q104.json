@@ -277,7 +277,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q104.scene.found",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q104.scene.found.buy.shortage",
+        "resume": "q104.scene.found.buy.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q104.visit"
+    ]
   },
   "scripts": {
     "q104.scene.entry": {
@@ -315,11 +330,6 @@
                   "script": "q104.scene.rule"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -354,11 +364,6 @@
                   "script": "q104.scene.found"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -399,11 +404,6 @@
                   "script": "q104.scene.rule"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -473,9 +473,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -516,11 +541,6 @@
                   "script": "q104.end.return"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -607,113 +627,162 @@
     "q104.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q104.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q104"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q104.outcome"
-              },
-              "cases": [
+              "equals": "q104.scene.found.buy.resume",
+              "commands": [
                 {
-                  "equals": "return",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "buy",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "lease",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q104.scene.found.buy.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q104.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q104.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q104.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "buy",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lease",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q104.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rule",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.rule"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sound",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.sound"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "found",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.found"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lease",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.lease"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q104.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "rule",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q104.scene.rule"
-                    }
-                  ]
-                },
-                {
-                  "equals": "sound",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q104.scene.sound"
-                    }
-                  ]
-                },
-                {
-                  "equals": "found",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q104.scene.found"
-                    }
-                  ]
-                },
-                {
-                  "equals": "lease",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q104.scene.lease"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q104.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q104.scene.found.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": "q104.scene.found.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q104.scene.found.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q104.scene.found"
         }
       ]
     }

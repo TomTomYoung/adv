@@ -339,7 +339,53 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q096.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q096.decision.informed.shortage",
+        "resume": "q096.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q096.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q096.review.informed.shortage",
+        "resume": "q096.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q096.flow.cache",
+        "action": "replace",
+        "option": "replace_supplies",
+        "shortage": "q096.flow.cache.replace.shortage",
+        "resume": "q096.flow.cache.replace.resume",
+        "cost": {
+          "ration": 1
+        }
+      },
+      {
+        "from": "q096.flow.deep",
+        "action": "fresh",
+        "option": "fresh_supplies",
+        "shortage": "q096.flow.deep.fresh.shortage",
+        "resume": "q096.flow.deep.fresh.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q096.visit",
+      "q096.flow.visit"
+    ]
   },
   "scripts": {
     "q096.clue_a": {
@@ -510,6 +556,70 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.decision.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -718,6 +828,94 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q096.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q096.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.review.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -817,24 +1015,70 @@
     "q096.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q096.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q096"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q096.aftermath"
+              "equals": "q096.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q096.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q096.flow.cache.replace.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.cache.replace.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q096.flow.deep.fresh.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.deep.fresh.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q096.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q096.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q096.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q096.review"
+                }
+              ]
             }
           ]
         }
@@ -875,11 +1119,6 @@
                   "script": "q096.flow.end.contract"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -948,9 +1187,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "replace_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.cache.replace.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1008,9 +1268,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "fresh_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.deep.fresh.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1112,113 +1393,279 @@
     "q096.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q096.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q096"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q096.outcome"
-              },
-              "cases": [
+              "equals": "q096.decision.informed.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "次の隊が空腹で止まらずに済む。ノアは持主欄へ次に来る人と書く。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "町へ多くの物資が戻った。深い曲がり角の箱は空になる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "補給は新しくなった。あなたの隊の荷は少し軽くなる。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q096.decision.informed.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q096.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q096.flow.cache.replace.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.cache.replace.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q096.flow.deep.fresh.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q096.flow.deep.fresh.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q096"
+                  "ref": "quests.q096.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q096.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q096.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "次の隊が空腹で止まらずに済む。ノアは持主欄へ次に来る人と書く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "町へ多くの物資が戻った。深い曲がり角の箱は空になる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "補給は新しくなった。あなたの隊の荷は少し軽くなる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q096.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q096"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q096.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q096.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q096.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "cache",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q096.flow.cache"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "deep",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q096.flow.deep"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q096.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "cache",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q096.flow.cache"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "deep",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q096.flow.deep"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q096.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q096.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": "q096.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q096.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q096.decision"
+        }
+      ]
+    },
+    "q096.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": "q096.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q096.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q096.review"
+        }
+      ]
+    },
+    "q096.flow.cache.replace.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": "q096.flow.cache.replace.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q096.flow.cache.replace.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q096.flow.cache"
+        }
+      ]
+    },
+    "q096.flow.deep.fresh.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": "q096.flow.deep.fresh.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q096.flow.deep.fresh.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q096",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q096.flow.deep"
         }
       ]
     }

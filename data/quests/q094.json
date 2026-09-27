@@ -374,7 +374,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q094.flow.entry",
+        "action": "advance",
+        "option": "advance_supplies",
+        "shortage": "q094.flow.entry.advance.shortage",
+        "resume": "q094.flow.entry.advance.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q094.flow.budget",
+        "action": "pay",
+        "option": "pay_supplies",
+        "shortage": "q094.flow.budget.pay.shortage",
+        "resume": "q094.flow.budget.pay.resume",
+        "cost": {
+          "gold": 30
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q094.visit",
+      "q094.flow.visit"
+    ]
   },
   "scripts": {
     "q094.clue_a": {
@@ -798,24 +824,52 @@
     "q094.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q094.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q094"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q094.aftermath"
+              "equals": "q094.flow.entry.advance.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.entry.advance.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q094.flow.budget.pay.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.budget.pay.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q094.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q094.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q094.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q094.review"
+                }
+              ]
             }
           ]
         }
@@ -908,9 +962,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "advance_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.entry.advance.shortage"
+                }
+              ]
             }
           ]
         }
@@ -951,11 +1030,6 @@
                   "script": "q094.flow.budget"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1047,9 +1121,64 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "pay_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q094.advanced"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q094.advanced"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.budget.pay.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1151,113 +1280,201 @@
     "q094.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q094.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q094"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q094.outcome"
-              },
-              "cases": [
+              "equals": "q094.flow.entry.advance.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "巻上機は動き続け、負傷者も帰れた。宝物を多く持つ隊は少し多く払う。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "その日の帰還は無料だった。翌週の修理代を集める相談が始まる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "全員その日に上がれた。モリは立替額を、新制度の材料として記録する。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q094.flow.entry.advance.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q094.flow.budget.pay.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q094.flow.budget.pay.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q094"
+                  "ref": "quests.q094.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q094.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q094.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "巻上機は動き続け、負傷者も帰れた。宝物を多く持つ隊は少し多く払う。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "その日の帰還は無料だった。翌週の修理代を集める相談が始まる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "全員その日に上がれた。モリは立替額を、新制度の材料として記録する。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q094.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q094"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q094.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q094.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q094.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "returned",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q094.flow.returned"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "budget",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q094.flow.budget"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q094.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "returned",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q094.flow.returned"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "budget",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q094.flow.budget"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q094.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q094.flow.entry.advance.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q094",
+          "value": "q094.flow.entry.advance.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q094.flow.entry.advance.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q094",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q094.flow.entry"
+        }
+      ]
+    },
+    "q094.flow.budget.pay.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q094",
+          "value": "q094.flow.budget.pay.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q094.flow.budget.pay.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q094",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q094.flow.budget"
         }
       ]
     }

@@ -204,7 +204,32 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q130.scene.entry",
+        "action": "holes",
+        "option": "holes_supplies",
+        "shortage": "q130.scene.entry.holes.shortage",
+        "resume": "q130.scene.entry.holes.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q130.scene.crown",
+        "action": "holes",
+        "option": "holes_supplies",
+        "shortage": "q130.scene.crown.holes.shortage",
+        "resume": "q130.scene.crown.holes.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q130.visit"
+    ]
   },
   "scripts": {
     "q130.scene.entry": {
@@ -281,9 +306,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "holes_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q130.scene.entry.holes.shortage"
+                }
+              ]
             }
           ]
         }
@@ -374,9 +420,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "holes_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q130.scene.crown.holes.shortage"
+                }
+              ]
             }
           ]
         }
@@ -463,86 +530,174 @@
     "q130.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q130.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q130"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q130.outcome"
-              },
-              "cases": [
+              "equals": "q130.scene.entry.holes.resume",
+              "commands": [
                 {
-                  "equals": "holes",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "穴を塞いで住居を守った。群れは外に残り、テオは次の点検当番を頼んだ。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "seal",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "冠を封じると群れは散った。テオの武勇談は王の大きさでなく、見落としかけた三つ目の穴から始まった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "study",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "冠は研究者へ届いた。討伐数と冠の受渡しは別々に記録され、テオは運ぶ方にも仕事があると知った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q130.scene.entry.holes.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q130.scene.crown.holes.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q130.scene.crown.holes.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q130.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q130.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q130.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "holes",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "穴を塞いで住居を守った。群れは外に残り、テオは次の点検当番を頼んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "冠を封じると群れは散った。テオの武勇談は王の大きさでなく、見落としかけた三つ目の穴から始まった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "study",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "冠は研究者へ届いた。討伐数と冠の受渡しは別々に記録され、テオは運ぶ方にも仕事があると知った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q130.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q130.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crown",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q130.scene.crown"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q130.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "crown",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q130.scene.crown"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q130.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q130.scene.entry.holes.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q130",
+          "value": "q130.scene.entry.holes.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q130.scene.entry.holes.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q130",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q130.scene.entry"
+        }
+      ]
+    },
+    "q130.scene.crown.holes.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q130",
+          "value": "q130.scene.crown.holes.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q130.scene.crown.holes.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q130",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q130.scene.crown"
         }
       ]
     }

@@ -1,3 +1,4 @@
+import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
 import {buildBattleRewards} from './build-battle-rewards.mjs';
 import {buildCellLayers} from './build-cell-layers.mjs';
 import {buildWorld} from './build-world.mjs';
@@ -63,6 +64,7 @@ export async function buildDungeons(){
   await buildBattleRewards(root);
   await buildWorld(root);
   await buildCellLayers(root);
+  await buildQuestInterruptions(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await buildDungeons();

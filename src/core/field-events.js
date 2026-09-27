@@ -19,7 +19,7 @@ export function recordFieldEntry(state){
 }
 
 // Exact occupied cell, never the facing cell. Keep the entry's consumed IDs in
-// saves so pausing a conversation does not immediately start it again.
+// saves so a scripted exit does not immediately start the same event again.
 function enterEvent(engine){
   const s=engine.state,entry=s.fieldEntry;if(!entry||!onFieldCell(s,entry))return false;
   for(const o of engine.map().objects){

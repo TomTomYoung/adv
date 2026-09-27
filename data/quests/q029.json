@@ -337,7 +337,23 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q029.flow.substitute",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q029.flow.substitute.buy.shortage",
+        "resume": "q029.flow.substitute.buy.resume",
+        "cost": {
+          "gold": 15
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q029.visit",
+      "q029.flow.visit"
+    ]
   },
   "scripts": {
     "q029.clue_a": {
@@ -761,24 +777,43 @@
     "q029.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q029.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q029"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q029.aftermath"
+              "equals": "q029.flow.substitute.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.substitute.buy.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q029.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q029.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q029.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q029.review"
+                }
+              ]
             }
           ]
         }
@@ -848,11 +883,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -893,11 +923,6 @@
                   "script": "q029.flow.substitute"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -956,9 +981,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "15Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 15
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 15
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q029.flow.substitute.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1060,113 +1110,162 @@
     "q029.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q029.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q029"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q029.outcome"
-              },
-              "cases": [
+              "equals": "q029.flow.substitute.buy.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "蜂は冬を越せる。養蜂家は違約金を払いながら、地下用の暦を作る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "代金は入った。春に戻った巣には、前ほど羽音がない。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "契約先は味の違いを認めた。赤い蜜は限定品として扱われる。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q029.flow.substitute.buy.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q029"
+                  "ref": "quests.q029.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q029.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q029.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "蜂は冬を越せる。養蜂家は違約金を払いながら、地下用の暦を作る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "代金は入った。春に戻った巣には、前ほど羽音がない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "契約先は味の違いを認めた。赤い蜜は限定品として扱われる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q029.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q029"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q029.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q029.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q029.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "deadline",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q029.flow.deadline"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "substitute",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q029.flow.substitute"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q029.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "deadline",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q029.flow.deadline"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "substitute",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q029.flow.substitute"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q029.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q029.flow.substitute.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q029",
+          "value": "q029.flow.substitute.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "15Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q029.flow.substitute.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q029",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "15Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q029.flow.substitute"
         }
       ]
     }

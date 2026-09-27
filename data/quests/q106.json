@@ -224,7 +224,32 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q106.scene.entry",
+        "action": "seal",
+        "option": "seal_supplies",
+        "shortage": "q106.scene.entry.seal.shortage",
+        "resume": "q106.scene.entry.seal.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q106.scene.meal",
+        "action": "eat",
+        "option": "eat_supplies",
+        "shortage": "q106.scene.meal.eat.shortage",
+        "resume": "q106.scene.meal.eat.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q106.visit"
+    ]
   },
   "scripts": {
     "q106.scene.entry": {
@@ -291,9 +316,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "seal_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.entry.seal.shortage"
+                }
+              ]
             }
           ]
         }
@@ -334,11 +384,6 @@
                   "script": "q106.end.guard"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -396,9 +441,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "eat_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal.eat.shortage"
+                }
+              ]
             }
           ]
         }
@@ -485,95 +551,183 @@
     "q106.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q106.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q106"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q106.outcome"
-              },
-              "cases": [
+              "equals": "q106.scene.entry.seal.resume",
+              "commands": [
                 {
-                  "equals": "seal",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "meal",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "guard",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q106.scene.entry.seal.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q106.scene.meal.eat.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal.eat.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q106.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q106.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q106.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guard",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q106.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "owner",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.owner"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.meal"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q106.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "owner",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q106.scene.owner"
-                    }
-                  ]
-                },
-                {
-                  "equals": "meal",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q106.scene.meal"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q106.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q106.scene.entry.seal.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.scene.entry.seal.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.scene.entry.seal.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.scene.entry"
+        }
+      ]
+    },
+    "q106.scene.meal.eat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.scene.meal.eat.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.scene.meal.eat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.scene.meal"
         }
       ]
     }

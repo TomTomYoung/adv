@@ -272,7 +272,32 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q195.scene.fuel",
+        "action": "convert",
+        "option": "convert_supplies",
+        "shortage": "q195.scene.fuel.convert.shortage",
+        "resume": "q195.scene.fuel.convert.resume",
+        "cost": {
+          "gold": 60
+        }
+      },
+      {
+        "from": "q195.scene.deliver",
+        "action": "one",
+        "option": "one_supplies",
+        "shortage": "q195.scene.deliver.one.shortage",
+        "resume": "q195.scene.deliver.one.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q195.visit"
+    ]
   },
   "scripts": {
     "q195.scene.entry": {
@@ -315,11 +340,6 @@
                   "script": "q195.scene.deliver"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -394,9 +414,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "convert_supplies",
+              "text": "60Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 60
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 60
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.fuel.convert.shortage"
+                }
+              ]
             }
           ]
         }
@@ -497,9 +542,54 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "one_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q195.deliveries"
+                    },
+                    "right": 2
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q195.deliveries"
+                    },
+                    "right": 2
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.deliver.one.shortage"
+                }
+              ]
             }
           ]
         }
@@ -586,95 +676,183 @@
     "q195.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q195.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q195"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q195.outcome"
-              },
-              "cases": [
+              "equals": "q195.scene.fuel.convert.resume",
+              "commands": [
                 {
-                  "equals": "convert",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "収量は落ちたが、拘束を燃料にしない炉が動いた。村人は肖像画を燃やし、設計図を棚へ戻した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "aid",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "二便を届けた。村は供給に頼る季節を受け入れ、次の作付けと支援の負担を相談し始めた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "old",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "収量は戻った。牢の仕組みも戻り、被害を農業の必要という言葉で消すことはできなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q195.scene.fuel.convert.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q195.scene.deliver.one.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q195.scene.deliver.one.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q195.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q195.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q195.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "convert",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "収量は落ちたが、拘束を燃料にしない炉が動いた。村人は肖像画を燃やし、設計図を棚へ戻した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "aid",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "二便を届けた。村は供給に頼る季節を受け入れ、次の作付けと支援の負担を相談し始めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "old",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "収量は戻った。牢の仕組みも戻り、被害を農業の必要という言葉で消すことはできなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q195.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q195.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fuel",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q195.scene.fuel"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deliver",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q195.scene.deliver"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q195.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "fuel",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q195.scene.fuel"
-                    }
-                  ]
-                },
-                {
-                  "equals": "deliver",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q195.scene.deliver"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q195.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q195.scene.fuel.convert.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q195",
+          "value": "q195.scene.fuel.convert.resume"
+        },
+        {
+          "op": "say",
+          "text": "60Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q195.scene.fuel.convert.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q195",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "60Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q195.scene.fuel"
+        }
+      ]
+    },
+    "q195.scene.deliver.one.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q195",
+          "value": "q195.scene.deliver.one.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q195.scene.deliver.one.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q195",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q195.scene.deliver"
         }
       ]
     }

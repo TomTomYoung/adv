@@ -689,7 +689,54 @@
       "adapter": "adv-story-state/1",
       "revision": "2026-09-13",
       "scope": "quest-episode"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q006.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q006.decision.informed.shortage",
+        "resume": "q006.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q006.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q006.review.informed.shortage",
+        "resume": "q006.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q006.flow.entry",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q006.flow.entry.lift.shortage",
+        "resume": "q006.flow.entry.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q006.v11.entry",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q006.v11.entry.lift.shortage",
+        "resume": "q006.v11.entry.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q006.visit",
+      "q006.flow.visit",
+      "q006.v11.visit"
+    ]
   },
   "scripts": {
     "q006.clue_a": {
@@ -860,6 +907,70 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.decision.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1068,6 +1179,94 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q006.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q006.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.review.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1167,24 +1366,70 @@
     "q006.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q006.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q006"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q006.aftermath"
+              "equals": "q006.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.flow.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.entry.lift.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.v11.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.v11.entry.lift.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q006.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q006.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q006.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q006.review"
+                }
+              ]
             }
           ]
         }
@@ -1260,9 +1505,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.entry.lift.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1303,11 +1569,6 @@
                   "script": "q006.flow.accounts"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1348,11 +1609,6 @@
                   "script": "q006.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1454,107 +1710,153 @@
     "q006.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q006.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q006"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q006.outcome"
-              },
-              "cases": [
+              "equals": "q006.decision.informed.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "工事頭は工具を売って一部を支払った。工事は止まったが、疑われた職人は戻れる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えた。箱の石だけが増える。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "職人たちは自分の手で箱を開いた。あなたは裁く役を降り、証人として名を残す。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q006.decision.informed.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q006.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.flow.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.entry.lift.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.v11.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.v11.entry.lift.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q006"
+                  "ref": "quests.q006.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q006.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q006.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "工事頭は工具を売って一部を支払った。工事は止まったが、疑われた職人は戻れる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "工事頭は安堵して報酬を払い、職人には捜索失敗と伝えた。箱の石だけが増える。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "職人たちは自分の手で箱を開いた。あなたは裁く役を降り、証人として名を残す。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q006.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q006"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q006.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q006.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "empty",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.flow.empty"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "accounts",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.flow.accounts"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q006.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "empty",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.flow.empty"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "accounts",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.flow.accounts"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q006.flow.entry"
                     }
                   ]
                 }
@@ -1638,9 +1940,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.v11.entry.lift.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1700,11 +2023,6 @@
                   "script": "q006.v11.accounts"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1764,11 +2082,6 @@
                   "script": "q006.v11.accounts"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1808,11 +2121,6 @@
                   "script": "q006.v11.ledger"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1872,11 +2180,6 @@
                   "script": "q006.v11.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1939,135 +2242,301 @@
     "q006.v11.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "flags.legacyStoryRoutes.q006"
-            },
-            "right": true
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q006"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q006.flow.visit"
+              "equals": "q006.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.flow.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.flow.entry.lift.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q006.v11.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q006.v11.entry.lift.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "quests.q006.stage"
+                  "ref": "flags.legacyStoryRoutes.q006"
                 },
-                "right": "completed"
+                "right": true
               },
               "then": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q006.outcome"
-                  },
-                  "cases": [
-                    {
-                      "equals": "informed",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "石入りの箱、給金台帳、入金台帳を職人全員の前で照合し、ガロは盗難の説明を撤回した。ガロは自分の荷車と予備工具を売って給金の一部を払った。荷役人への疑いは解けたが、残額と工事の停止が残る。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "未開封の箱を受け取ったガロは、盗難で給金が失われたという説明を続けた。箱の中身も入金台帳も公開されず、疑われた荷役人への疑いは解けなかった。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "荷役人は石入りの箱、給金台帳、入金台帳、沈没位置の目撃報告を受け取り、自分たちで支払い交渉を始めた。不正を追及する材料は渡ったが、ガロによる説明の撤回と実際の支払いまでは確認していない。"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": []
+                  "op": "jump",
+                  "script": "q006.flow.visit"
                 }
               ],
               "else": [
                 {
-                  "op": "story.init",
-                  "quest": "q006"
-                },
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "stories.q006.scene"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q006.stage"
+                    },
+                    "right": "completed"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q006.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "石入りの箱、給金台帳、入金台帳を職人全員の前で照合し、ガロは盗難の説明を撤回した。ガロは自分の荷車と予備工具を売って給金の一部を払った。荷役人への疑いは解けたが、残額と工事の停止が残る。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "未開封の箱を受け取ったガロは、盗難で給金が失われたという説明を続けた。箱の中身も入金台帳も公開されず、疑われた荷役人への疑いは解けなかった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "荷役人は石入りの箱、給金台帳、入金台帳、沈没位置の目撃報告を受け取り、自分たちで支払い交渉を始めた。不正を追及する材料は渡ったが、ガロによる説明の撤回と実際の支払いまでは確認していない。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q006"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q006.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "box",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.v11.box"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "private",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.v11.private"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "accounts",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.v11.accounts"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ledger",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q006.v11.ledger"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q006.v11.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "box",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.v11.box"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "private",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.v11.private"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "accounts",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.v11.accounts"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "ledger",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q006.v11.ledger"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q006.v11.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q006.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": "q006.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q006.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q006.decision"
+        }
+      ]
+    },
+    "q006.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": "q006.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q006.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q006.review"
+        }
+      ]
+    },
+    "q006.flow.entry.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": "q006.flow.entry.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q006.flow.entry.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q006.flow.entry"
+        }
+      ]
+    },
+    "q006.v11.entry.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": "q006.v11.entry.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q006.v11.entry.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q006",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q006.v11.entry"
         }
       ]
     }

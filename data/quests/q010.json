@@ -916,7 +916,24 @@
       "adapter": "adv-story-state/1",
       "revision": "2026-09-13",
       "scope": "quest-episode"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q010.flow.rescue",
+        "action": "deep",
+        "option": "deep_supplies",
+        "shortage": "q010.flow.rescue.deep.shortage",
+        "resume": "q010.flow.rescue.deep.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q010.visit",
+      "q010.flow.visit",
+      "q010.v11.visit"
+    ]
   },
   "scripts": {
     "q010.clue_a": {
@@ -1366,24 +1383,43 @@
     "q010.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q010.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q010"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q010.aftermath"
+              "equals": "q010.flow.rescue.deep.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue.deep.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q010.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q010.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q010.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q010.review"
+                }
+              ]
             }
           ]
         }
@@ -1453,11 +1489,6 @@
                   "script": "q010.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1667,9 +1698,60 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "deep_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q010.deep"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q010.deep"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue.deep.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1797,107 +1879,126 @@
     "q010.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q010.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q010"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q010.outcome"
-              },
-              "cases": [
+              "equals": "q010.flow.rescue.deep.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "地下の全員が上がった。組合は責任を問われ、リネは証言台でも灯番の名を名乗る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "地上は守られた。遅れた住人を救うため、後日もう一度水門を開ける工事が始まる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "その夜は持ちこたえた。疲れた町の手で、次の避難計画が書き直される。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "partial",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "手前の班は帰還した。奥へ通じる坑は水に沈み、残る班の捜索が翌朝へ持ち越された。救助した人数と残した人数を、同じ帳簿へ記した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q010.flow.rescue.deep.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q010"
+                  "ref": "quests.q010.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q010.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q010.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地下の全員が上がった。組合は責任を問われ、リネは証言台でも灯番の名を名乗る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上は守られた。遅れた住人を救うため、後日もう一度水門を開ける工事が始まる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "その夜は持ちこたえた。疲れた町の手で、次の避難計画が書き直される。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "partial",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "手前の班は帰還した。奥へ通じる坑は水に沈み、残る班の捜索が翌朝へ持ち越された。救助した人数と残した人数を、同じ帳簿へ記した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q010.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q010"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q010.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q010.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q010.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rescue",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q010.flow.rescue"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q010.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "rescue",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q010.flow.rescue"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q010.flow.entry"
                     }
                   ]
                 }
@@ -1981,11 +2082,6 @@
                   "script": "q010.v11.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -2334,11 +2430,6 @@
                   "script": "q010.v11.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -2405,11 +2496,6 @@
                   "script": "q010.v11.end.rescued"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -2498,129 +2584,148 @@
     "q010.v11.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "flags.legacyStoryRoutes.q010"
-            },
-            "right": true
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q010"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q010.flow.visit"
+              "equals": "q010.flow.rescue.deep.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q010.flow.rescue.deep.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "quests.q010.stage"
+                  "ref": "flags.legacyStoryRoutes.q010"
                 },
-                "right": "completed"
+                "right": true
               },
               "then": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q010.outcome"
-                  },
-                  "cases": [
-                    {
-                      "equals": "informed",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "住民五人と門番が地上へ帰った。検査印と契約印を欠く帳簿と門番本人の証言がリネの報告に載り、未承認の補強工事と閉門の遅れを調べる根拠になった。責任の裁定は救助の後に残された。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "rescued",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "住民五人を縦坑から地上へ送り、到着を確認した。門番は水門を閉じて操作梯子から脱出した。救助の成功は報告された。回収済みの帳簿があればリネの手元に残るが、帳簿と門番の証言をそろえた調査報告は作っていない。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "partial",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "地上への到着を確認できた組だけを救助名簿へ記した。門番は水門を閉じて脱出した。閉門時に内側へ残った組は固着した水門の向こうに取り残され、生死を確認できていない。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "住民五人が内側に残ると確認した上で、門番は水門を閉じて地上へ出た。上層市街への流入は止まったが、固着した水門の向こうに残る五人の帰還は確認されていない。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "リネが招集した排水隊が操作室へ到着し、現在の救助数、残留者の位置、縦坑の状態、帳簿の所在を引き継いだ。門番は地上へ出た。救助済みの住民は地上に残り、未救助者の帰還を先取りして報告しなかった。"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": []
+                  "op": "jump",
+                  "script": "q010.flow.visit"
                 }
               ],
               "else": [
                 {
-                  "op": "story.init",
-                  "quest": "q010"
-                },
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "stories.q010.scene"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q010.stage"
+                    },
+                    "right": "completed"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q010.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "住民五人と門番が地上へ帰った。検査印と契約印を欠く帳簿と門番本人の証言がリネの報告に載り、未承認の補強工事と閉門の遅れを調べる根拠になった。責任の裁定は救助の後に残された。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rescued",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "住民五人を縦坑から地上へ送り、到着を確認した。門番は水門を閉じて操作梯子から脱出した。救助の成功は報告された。回収済みの帳簿があればリネの手元に残るが、帳簿と門番の証言をそろえた調査報告は作っていない。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "partial",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "地上への到着を確認できた組だけを救助名簿へ記した。門番は水門を閉じて脱出した。閉門時に内側へ残った組は固着した水門の向こうに取り残され、生死を確認できていない。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "住民五人が内側に残ると確認した上で、門番は水門を閉じて地上へ出た。上層市街への流入は止まったが、固着した水門の向こうに残る五人の帰還は確認されていない。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "リネが招集した排水隊が操作室へ到着し、現在の救助数、残留者の位置、縦坑の状態、帳簿の所在を引き継いだ。門番は地上へ出た。救助済みの住民は地上に残り、未救助者の帰還を先取りして報告しなかった。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q010"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q010.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q010.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "operations",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q010.v11.operations"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ground",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q010.v11.ground"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q010.v11.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "operations",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q010.v11.operations"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "ground",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q010.v11.ground"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q010.v11.entry"
                     }
                   ]
                 }
@@ -2690,6 +2795,36 @@
               "text": "上層の水門は開き、水路に水が流れている。探索画面でこの水門を閉じてから、横道の変化を調べられる。"
             }
           ]
+        }
+      ]
+    },
+    "q010.flow.rescue.deep.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q010",
+          "value": "q010.flow.rescue.deep.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q010.flow.rescue.deep.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q010",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q010.flow.rescue"
         }
       ]
     }

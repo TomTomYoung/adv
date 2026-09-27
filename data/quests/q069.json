@@ -374,7 +374,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q069.flow.entry",
+        "action": "pay",
+        "option": "pay_supplies",
+        "shortage": "q069.flow.entry.pay.shortage",
+        "resume": "q069.flow.entry.pay.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q069.flow.work",
+        "action": "single",
+        "option": "single_supplies",
+        "shortage": "q069.flow.work.single.shortage",
+        "resume": "q069.flow.work.single.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q069.visit",
+      "q069.flow.visit"
+    ]
   },
   "scripts": {
     "q069.clue_a": {
@@ -798,24 +824,52 @@
     "q069.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q069.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q069"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q069.aftermath"
+              "equals": "q069.flow.entry.pay.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.entry.pay.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q069.flow.work.single.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.work.single.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q069.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q069.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q069.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q069.review"
+                }
+              ]
             }
           ]
         }
@@ -908,9 +962,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "pay_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.entry.pay.shortage"
+                }
+              ]
             }
           ]
         }
@@ -951,11 +1030,6 @@
                   "script": "q069.flow.work"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1047,9 +1121,64 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "single_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q069.paid"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q069.paid"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.work.single.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1151,113 +1280,201 @@
     "q069.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q069.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q069"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q069.outcome"
-              },
-              "cases": [
+              "equals": "q069.flow.entry.pay.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "門は持ちこたえた。海王は税額より先に必要な板の寸法を伝える。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "通行は無料になった。崩れる門を抜けるため潜水士が危険を背負う。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "道は通れた。ハルは次の船に使わない鉄板を積む。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q069.flow.entry.pay.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q069.flow.work.single.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q069.flow.work.single.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q069"
+                  "ref": "quests.q069.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q069.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q069.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "門は持ちこたえた。海王は税額より先に必要な板の寸法を伝える。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "通行は無料になった。崩れる門を抜けるため潜水士が危険を背負う。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "道は通れた。ハルは次の船に使わない鉄板を積む。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q069.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q069"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q069.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q069.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q069.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "passed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q069.flow.passed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "work",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q069.flow.work"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q069.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "passed",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q069.flow.passed"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "work",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q069.flow.work"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q069.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q069.flow.entry.pay.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q069",
+          "value": "q069.flow.entry.pay.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q069.flow.entry.pay.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q069",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q069.flow.entry"
+        }
+      ]
+    },
+    "q069.flow.work.single.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q069",
+          "value": "q069.flow.work.single.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q069.flow.work.single.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q069",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q069.flow.work"
         }
       ]
     }

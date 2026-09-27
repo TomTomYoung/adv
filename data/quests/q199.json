@@ -224,7 +224,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q199.scene.future",
+        "action": "tower",
+        "option": "tower_supplies",
+        "shortage": "q199.scene.future.tower.shortage",
+        "resume": "q199.scene.future.tower.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q199.visit"
+    ]
   },
   "scripts": {
     "q199.scene.entry": {
@@ -251,11 +266,6 @@
                   "script": "q199.scene.future"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -367,9 +377,58 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "tower_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q199.consent"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 40
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q199.consent"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 40
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q199.scene.future.tower.shortage"
+                }
+              ]
             }
           ]
         }
@@ -456,86 +515,135 @@
     "q199.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q199.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q199"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q199.outcome"
-              },
-              "cases": [
+              "equals": "q199.scene.future.tower.resume",
+              "commands": [
                 {
-                  "equals": "small",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "部品は小時計へ分かれた。窓に返った時計は少しずつ違う時を示し、ミルは次の修理を受け取った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "store",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "配送は精算し、部品はミルへ残した。塔の夢を相続の義務にせず、工房の鍵を本人に返した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "tower",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "町が部品と維持を引き受けて塔を直した。ミルは小時計の工房を続け、塔だけに父の記憶を預けなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q199.scene.future.tower.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q199.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q199.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q199.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "small",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "部品は小時計へ分かれた。窓に返った時計は少しずつ違う時を示し、ミルは次の修理を受け取った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "store",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "配送は精算し、部品はミルへ残した。塔の夢を相続の義務にせず、工房の鍵を本人に返した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tower",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "町が部品と維持を引き受けて塔を直した。ミルは小時計の工房を続け、塔だけに父の記憶を預けなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q199.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q199.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "future",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q199.scene.future"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q199.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "future",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q199.scene.future"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q199.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q199.scene.future.tower.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q199",
+          "value": "q199.scene.future.tower.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q199.scene.future.tower.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q199",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q199.scene.future"
         }
       ]
     }

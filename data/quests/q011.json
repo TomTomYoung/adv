@@ -533,7 +533,54 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q011.flow.entry",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.flow.entry.rope.shortage",
+        "resume": "q011.flow.entry.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.flow.sign",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.flow.sign.rope.shortage",
+        "resume": "q011.flow.sign.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.catalog1.entry",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.catalog1.entry.rope.shortage",
+        "resume": "q011.catalog1.entry.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.catalog1.sign",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.catalog1.sign.rope.shortage",
+        "resume": "q011.catalog1.sign.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q011.visit",
+      "q011.flow.visit",
+      "q011.catalog1.visit"
+    ]
   },
   "scripts": {
     "q011.clue_a": {
@@ -921,24 +968,70 @@
     "q011.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q011.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q011.aftermath"
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q011.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q011.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q011.review"
+                }
+              ]
             }
           ]
         }
@@ -1007,9 +1100,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1067,9 +1181,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1171,98 +1306,144 @@
     "q011.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q011.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q011.outcome"
-              },
-              "cases": [
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q011"
+                  "ref": "quests.q011.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q011.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q011.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q011.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q011"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q011.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q011.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sign",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.flow.sign"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q011.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "sign",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q011.flow.sign"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q011.flow.entry"
                     }
                   ]
                 }
@@ -1388,9 +1569,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1486,9 +1688,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1638,131 +1861,177 @@
     "q011.catalog1.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "and",
-            "args": [
-              {
-                "op": "not",
-                "arg": {
-                  "op": "eq",
-                  "left": {
-                    "ref": "flags.flow.q011.catalogRevision"
-                  },
-                  "right": 1
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
+          },
+          "cases": [
+            {
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
                 }
-              },
-              {
-                "op": "or",
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "and",
                 "args": [
                   {
-                    "op": "exists",
-                    "value": {
-                      "ref": "flags.flow.q011.node"
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q011.catalogRevision"
+                      },
+                      "right": 1
                     }
                   },
                   {
-                    "op": "eq",
-                    "left": {
-                      "ref": "flags.legacyQuestRoutes.q011"
-                    },
-                    "right": true
-                  },
-                  {
+                    "op": "or",
+                    "args": [
+                      {
+                        "op": "exists",
+                        "value": {
+                          "ref": "flags.flow.q011.node"
+                        }
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.legacyQuestRoutes.q011"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "quests.q011.stage"
+                        },
+                        "right": "completed"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
                     "op": "eq",
                     "left": {
                       "ref": "quests.q011.stage"
                     },
                     "right": "completed"
-                  }
-                ]
-              }
-            ]
-          },
-          "then": [
-            {
-              "op": "jump",
-              "script": "q011.flow.visit"
-            }
-          ],
-          "else": [
-            {
-              "op": "if",
-              "condition": {
-                "op": "eq",
-                "left": {
-                  "ref": "quests.q011.stage"
-                },
-                "right": "completed"
-              },
-              "then": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q011.outcome"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "informed",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q011.outcome"
+                      },
+                      "cases": [
                         {
-                          "op": "say",
-                          "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+                            }
+                          ]
+                        },
                         {
-                          "op": "say",
-                          "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+                            }
+                          ]
+                        },
                         {
-                          "op": "say",
-                          "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+                            }
+                          ]
                         }
-                      ]
+                      ],
+                      "default": []
                     }
                   ],
-                  "default": []
-                }
-              ],
-              "else": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q011.node"
-                  },
-                  "cases": [
+                  "else": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q011.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.catalog1.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sign",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.catalog1.sign"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
-                          "script": "q011.catalog1.entry"
+                          "script": "q011.catalog1.start"
                         }
                       ]
-                    },
-                    {
-                      "equals": "sign",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q011.catalog1.sign"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q011.catalog1.start"
                     }
                   ]
                 }
@@ -1832,6 +2101,126 @@
               "text": "塩壁はまだ通路を塞いでいる。壁の正面から発破薬か対応する探索スキルで開通させ、改めて確認できる。"
             }
           ]
+        }
+      ]
+    },
+    "q011.flow.entry.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.flow.entry.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.flow.entry.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.flow.entry"
+        }
+      ]
+    },
+    "q011.flow.sign.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.flow.sign.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.flow.sign.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.flow.sign"
+        }
+      ]
+    },
+    "q011.catalog1.entry.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.catalog1.entry.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.catalog1.entry.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.entry"
+        }
+      ]
+    },
+    "q011.catalog1.sign.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.catalog1.sign.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.catalog1.sign.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.sign"
         }
       ]
     }

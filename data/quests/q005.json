@@ -627,7 +627,24 @@
       "adapter": "adv-story-state/1",
       "revision": "2026-09-13",
       "scope": "quest-episode"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q005.v11.entry",
+        "action": "burn",
+        "option": "burn_supplies",
+        "shortage": "q005.v11.entry.burn.shortage",
+        "resume": "q005.v11.entry.burn.resume",
+        "cost": {
+          "torch": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q005.visit",
+      "q005.flow.visit",
+      "q005.v11.visit"
+    ]
   },
   "scripts": {
     "q005.clue_a": {
@@ -1051,24 +1068,43 @@
     "q005.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q005.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q005"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q005.aftermath"
+              "equals": "q005.v11.entry.burn.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.v11.entry.burn.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q005.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q005.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q005.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q005.review"
+                }
+              ]
             }
           ]
         }
@@ -1120,11 +1156,6 @@
                   "script": "q005.flow.end.contract"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1170,11 +1201,6 @@
                   "script": "q005.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1215,11 +1241,6 @@
                   "script": "q005.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1260,11 +1281,6 @@
                   "script": "q005.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1366,116 +1382,135 @@
     "q005.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q005.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q005"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q005.outcome"
-              },
-              "cases": [
+              "equals": "q005.v11.entry.burn.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "排水は流れ、職人は少量の樹液を新しい菓子に使った。菌槽の掃除が新しい仕事になる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "工房はすぐ再開した。甘い香りは消え、味を覚えた子供だけが首をかしげる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "詰まりは管理できる量になった。毎朝の網洗いを条件に仕事は残る。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q005.v11.entry.burn.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q005"
+                  "ref": "quests.q005.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q005.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q005.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "排水は流れ、職人は少量の樹液を新しい菓子に使った。菌槽の掃除が新しい仕事になる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "工房はすぐ再開した。甘い香りは消え、味を覚えた子供だけが首をかしげる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "詰まりは管理できる量になった。毎朝の網洗いを条件に仕事は残る。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q005.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q005"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q005.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q005.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "overflow",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.flow.overflow"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "cold",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.flow.cold"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "transfer",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.flow.transfer"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q005.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "overflow",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.flow.overflow"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "cold",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.flow.cold"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "transfer",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.flow.transfer"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q005.flow.entry"
                     }
                   ]
                 }
@@ -1581,9 +1616,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "burn_supplies",
+              "text": "予備灯油1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.v11.entry.burn.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1643,11 +1699,6 @@
                   "script": "q005.v11.net"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1707,11 +1758,6 @@
                   "script": "q005.v11.net"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1751,11 +1797,6 @@
                   "script": "q005.v11.end.informed"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1805,11 +1846,6 @@
                   "script": "q005.v11.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1872,135 +1908,184 @@
     "q005.v11.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "flags.legacyStoryRoutes.q005"
-            },
-            "right": true
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q005"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q005.flow.visit"
+              "equals": "q005.v11.entry.burn.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q005.v11.entry.burn.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "quests.q005.stage"
+                  "ref": "flags.legacyStoryRoutes.q005"
                 },
-                "right": "completed"
+                "right": true
               },
               "then": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q005.outcome"
-                  },
-                  "cases": [
-                    {
-                      "equals": "informed",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "菌床を濾材ごと冷水管理の空き溜めへ移し、一晩の試運転で排水本管が詰まらないことを確認した。排水に触れていない箇所から採取した糖液は食用試験を通った。トトは分離槽の維持費を負い、少量の食用糖液を得る。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "菌床と古い濾材を本管から取り出して焼却すると、排水は流れた。詰まりは解消したが、菌床と糖液を食料へ転用する道も失われた。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "本管の手前へ回収網を設置し、トトが毎日の清掃を引き受けた。菌床は旧排水溜めに残るため、流れを保つには継続的な手入れが必要で、温排水による増殖原因を除いたわけではない。"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": []
+                  "op": "jump",
+                  "script": "q005.flow.visit"
                 }
               ],
               "else": [
                 {
-                  "op": "story.init",
-                  "quest": "q005"
-                },
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "stories.q005.scene"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q005.stage"
+                    },
+                    "right": "completed"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q005.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "菌床を濾材ごと冷水管理の空き溜めへ移し、一晩の試運転で排水本管が詰まらないことを確認した。排水に触れていない箇所から採取した糖液は食用試験を通った。トトは分離槽の維持費を負い、少量の食用糖液を得る。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "菌床と古い濾材を本管から取り出して焼却すると、排水は流れた。詰まりは解消したが、菌床と糖液を食料へ転用する道も失われた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "本管の手前へ回収網を設置し、トトが毎日の清掃を引き受けた。菌床は旧排水溜めに残るため、流れを保つには継続的な手入れが必要で、温排水による増殖原因を除いたわけではない。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q005"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q005.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "overflow",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.v11.overflow"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "cold",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.v11.cold"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "test",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.v11.test"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "net",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q005.v11.net"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q005.v11.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "overflow",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.v11.overflow"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "cold",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.v11.cold"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "test",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.v11.test"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "net",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q005.v11.net"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q005.v11.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q005.v11.entry.burn.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q005",
+          "value": "q005.v11.entry.burn.resume"
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q005.v11.entry.burn.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q005",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q005.v11.entry"
         }
       ]
     }

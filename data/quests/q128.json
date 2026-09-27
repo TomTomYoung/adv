@@ -225,7 +225,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q128.scene.test",
+        "action": "replica",
+        "option": "replica_supplies",
+        "shortage": "q128.scene.test.replica.shortage",
+        "resume": "q128.scene.test.replica.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q128.visit"
+    ]
   },
   "scripts": {
     "q128.scene.entry": {
@@ -285,11 +300,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -381,9 +391,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "replica_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q128.scene.test.replica.shortage"
+                }
+              ]
             }
           ]
         }
@@ -424,11 +459,6 @@
                   "script": "q128.scene.test"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -515,95 +545,144 @@
     "q128.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q128.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q128"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q128.outcome"
-              },
-              "cases": [
+              "equals": "q128.scene.test.replica.resume",
+              "commands": [
                 {
-                  "equals": "fight",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "蛾と巣の核を除いた。薬の原因までは解明されず、ベルは次の入荷を隔離して調べることになった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "replica",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "出費で祖伝の鎧と庫内品を守った。ベルは薬の回収を始め、下働きは謝る手を止めた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "heirloom",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "巣の核を除いた。下働きが鎧の歯形を見て初めて笑い、当主もそれを咎めなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q128.scene.test.replica.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q128.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q128.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q128.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "fight",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "蛾と巣の核を除いた。薬の原因までは解明されず、ベルは次の入荷を隔離して調べることになった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "replica",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "出費で祖伝の鎧と庫内品を守った。ベルは薬の回収を始め、下働きは謝る手を止めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "heirloom",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "巣の核を除いた。下働きが鎧の歯形を見て初めて笑い、当主もそれを咎めなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q128.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q128.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q128.scene.test"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "heirloom",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q128.scene.heirloom"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q128.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "test",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q128.scene.test"
-                    }
-                  ]
-                },
-                {
-                  "equals": "heirloom",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q128.scene.heirloom"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q128.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q128.scene.test.replica.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q128",
+          "value": "q128.scene.test.replica.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q128.scene.test.replica.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q128",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q128.scene.test"
         }
       ]
     }

@@ -28,7 +28,6 @@ s.sceneCommands={
  outage:onceAtScene('q001','outage',[wall('q001_last_lamp','extinguished'),portable(0)]),
  rescue:[]
 };
-s.noPauseScenes=['outage','rescue'];
 s.sceneFlow={outage:[{
  op:'battle.start',id:'q001-F-kuragari',encounter:'kuragari_hunt',
  events:[{id:'q001-B-rookie',triggers:['round_start','before_end'],

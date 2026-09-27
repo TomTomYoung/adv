@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {compileQuestInterruptions} from '../tools/build-quest-interruptions.mjs';
 import {data,newGame,walk,navigateMaps,drain} from './helpers.mjs';
 import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
@@ -23,10 +24,11 @@ test('retired 3D layout is preserved byte for byte and absent from normal loadin
   for(const q of Object.values(data.quests).filter(q=>q.number<=30))for(const e of q.events)for(const p of e.points){const d=data.dungeons[p.dungeon];assert.ok(d.systems.connections?.links.length,q.id);assert.ok(!data.maps[p.map].voxels);}
 });
 
-test('unchanged q002-q010 scenarios preserve their migration baseline',async()=>{
+test('q002-q010 scenarios preserve their migration baseline apart from explicit interruption routes',async()=>{
   for(let n=2;n<=10;n++){
     if(n===4)continue; // q004 now has real travel; its three conclusions are covered by checkpoint routes.
     const id=`q${String(n).padStart(3,'0')}`,old=JSON.parse(await fs.readFile(new URL(`../authoring/legacy/2026-09-18-map-layout/data/quests/${id}.json`,import.meta.url)));
+    compileQuestInterruptions(old,data.items);
     for(const key of ['scripts','outcomes'])assert.deepEqual(data.quests[id][key],old[key],`${id}/${key}`);
     assert.deepEqual(data.quests[id].model.graph,old.model.graph,id);
   }

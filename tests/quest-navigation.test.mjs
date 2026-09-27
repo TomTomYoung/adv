@@ -29,10 +29,10 @@ test('the quest entrance shortcut works from every town facility, including nest
  }
 });
 
-test('q001 guidance follows journeys and paused scenes, then points to the town report rather than the initial dungeon',()=>{
- const g=prepareQuest('q001');choose(g,'talk');assert.equal(quest(g).destination.x,9);finishJourney(g);
- choose(g,'pause');g.returnTown();assert.equal(quest(g).destination.x,9);const save=g.save();g.load(save);assert.equal(quest(g).destination.x,9);
- g.teleport('kagaribi_f1',9,1);g.run(data.quests.q001.model.entryScript);drain(g);choose(g,'inspect');choose(g,'follow');
+test('q001 guidance follows saved journeys, then points to the town report rather than the initial dungeon',()=>{
+ const g=prepareQuest('q001');choose(g,'talk');assert.equal(quest(g).destination.x,9);
+ g.returnTown();assert.equal(quest(g).destination.x,9);const save=g.save();g.load(save);assert.equal(quest(g).destination.x,9);
+ finishJourney(g);choose(g,'inspect');choose(g,'follow');
  assert.equal(quest(g).destination.x,13);finishJourney(g);choose(g,'support');finishJourney(g);fight(g);choose(g,'home');finishJourney(g);choose(g,'report');
  let q=quest(g);assert.equal(q.destination.kind,'town');assert.equal(q.destination.name,'灯番詰所');assert.equal(q.entryDungeon,null);assert.equal(q.canEnter,false);
  g.returnTown();const loc=g.state.townLocation;assert.equal(g.dispatch({type:'quest.travel',id:'q001'}),false);assert.equal(g.state.townLocation,loc);

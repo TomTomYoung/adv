@@ -207,7 +207,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q183.scene.support",
+        "action": "goods",
+        "option": "goods_supplies",
+        "shortage": "q183.scene.support.goods.shortage",
+        "resume": "q183.scene.support.goods.resume",
+        "cost": {
+          "ration": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q183.visit"
+    ]
   },
   "scripts": {
     "q183.scene.entry": {
@@ -256,11 +271,6 @@
                   "script": "q183.end.hidden"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -340,9 +350,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "goods_supplies",
+              "text": "野営糧食2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.support.goods.shortage"
+                }
+              ]
             }
           ]
         }
@@ -429,86 +460,135 @@
     "q183.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q183.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q183"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q183.outcome"
-              },
-              "cases": [
+              "equals": "q183.scene.support.goods.resume",
+              "commands": [
                 {
-                  "equals": "report",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "supported",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "hidden",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q183.scene.support.goods.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q183.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q183.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supported",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hidden",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q183.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.scene.support"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q183.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "support",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q183.scene.support"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q183.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q183.scene.support.goods.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q183",
+          "value": "q183.scene.support.goods.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q183.scene.support.goods.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q183",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q183.scene.support"
         }
       ]
     }

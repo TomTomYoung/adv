@@ -234,7 +234,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q139.scene.air",
+        "action": "tools",
+        "option": "tools_supplies",
+        "shortage": "q139.scene.air.tools.shortage",
+        "resume": "q139.scene.air.tools.resume",
+        "cost": {
+          "rope": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q139.visit"
+    ]
   },
   "scripts": {
     "q139.scene.entry": {
@@ -277,11 +292,6 @@
                   "script": "q139.end.many"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -333,11 +343,6 @@
                   "script": "q139.end.many"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -395,9 +400,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "tools_supplies",
+              "text": "補修用の縄2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.air.tools.shortage"
+                }
+              ]
             }
           ]
         }
@@ -484,95 +510,144 @@
     "q139.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q139.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q139"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q139.outcome"
-              },
-              "cases": [
+              "equals": "q139.scene.air.tools.resume",
+              "commands": [
                 {
-                  "equals": "many",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "wounded",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "both",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q139.scene.air.tools.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q139.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q139.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "many",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wounded",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "both",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q139.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rooms",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.rooms"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "air",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.air"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q139.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "rooms",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q139.scene.rooms"
-                    }
-                  ]
-                },
-                {
-                  "equals": "air",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q139.scene.air"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q139.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q139.scene.air.tools.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q139",
+          "value": "q139.scene.air.tools.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q139.scene.air.tools.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q139",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q139.scene.air"
         }
       ]
     }

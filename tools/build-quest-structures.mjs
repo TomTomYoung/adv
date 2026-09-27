@@ -43,7 +43,6 @@ for(const file of game.files.quests){
    const requirement=[o.requirement,...prerequisite.map(t=>`先に「${prose(t)}」`),...Object.entries(o.cost??{}).map(([k,v])=>`${{gold:'G',rope:'縄',ration:'野営糧食',potion:'傷薬',torch:'松明'}[k]??k} ${v}消費`),...(encounter?['戦闘（支払い・作業確定は勝利時）']:[])].filter(Boolean).join('・');
    return {id:o.id,text:prose(o.text),...(terms.length?{condition:and(...terms)}:{}),...(o.visible!==undefined?{visibleWhen:replace(o.visible)}:{}),requirement,commands};
   });
-  options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
   q.scripts[sid(n.id)]={commands:[{op:'set',target:state('node'),value:n.id},...render(n.text),{op:'choice',options}]};
  }
  for(const [key,out] of Object.entries(q.outcomes)){

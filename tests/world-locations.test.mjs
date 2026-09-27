@@ -42,12 +42,13 @@ test('q002 departure persists without school knowledge; only actual arrival comm
  const ids=projectGame(g).town.cast.map(c=>c.id);assert.ok(ids.includes('curator'));assert.ok(ids.includes('porter'));
 });
 
-test('pausing at school follows real party movement while the porter waits; resume requires the room',()=>{
- const g=prepareQuest('q002');choose(g,'school');finishJourney(g);choose(g,'pause');
- move(g,'hikarigaeri_medical');assert.equal(state(g).values.partyAt,'transit');assert.equal(state(g).values.porterAt,'school');
+test('school decisions survive saving and cannot be bypassed by movement or resume',()=>{
+ const g=prepareQuest('q002');choose(g,'school');finishJourney(g);
+ assert.equal(g.dispatch({type:'choose',id:'pause'}),false);
+ assert.equal(g.dispatch({type:'location.move',id:'hikarigaeri_medical'}),false);
  assert.equal(g.dispatch({type:'story.resume',quest:'q002'}),false);g.load(g.save());
- move(g,'hikarigaeri_medical_specimens');assert.equal(state(g).values.partyAt,'school');
- assert.ok(g.dispatch({type:'story.resume',quest:'q002'}));drain(g);assert.equal(state(g).scene,'school');
+ assert.equal(state(g).scene,'school');assert.equal(state(g).values.partyAt,'school');
+ choose(g,'recover');assert.ok(g.state.journey);
 });
 
 test('returning to the waterway needs actual steps; items and witness follow the declared journey',()=>{

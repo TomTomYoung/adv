@@ -296,7 +296,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q194.scene.talk",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q194.scene.talk.buy.shortage",
+        "resume": "q194.scene.talk.buy.resume",
+        "cost": {
+          "gold": 120
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q194.visit"
+    ]
   },
   "scripts": {
     "q194.scene.entry": {
@@ -339,11 +354,6 @@
                   "script": "q194.scene.talk"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -485,9 +495,58 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "120Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q194.survey"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 120
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q194.survey"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 120
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q194.scene.talk.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -574,82 +633,101 @@
     "q194.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q194.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q194"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q194.outcome"
-              },
-              "cases": [
+              "equals": "q194.scene.talk.buy.resume",
+              "commands": [
                 {
-                  "equals": "season",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "季節ごとに巡る契約へ変えた。降りる家は別の暮らしを選び、移動する窓の灯りが遠ざかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "buy",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "建物を共同所有へ戻した。住人は維持費も引き受け、次の塩場までの当番を決めた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "move",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "希望者は降りた。建物が売られたことと人の行先を分け、動く故郷の灯りを陸から見送った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q194.scene.talk.buy.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q194.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q194.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q194.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "season",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "季節ごとに巡る契約へ変えた。降りる家は別の暮らしを選び、移動する窓の灯りが遠ざかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "buy",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "建物を共同所有へ戻した。住人は維持費も引き受け、次の塩場までの当番を決めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "move",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "希望者は降りた。建物が売られたことと人の行先を分け、動く故郷の灯りを陸から見送った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q194.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q194.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "talk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q194.scene.talk"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q194.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "talk",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q194.scene.talk"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q194.scene.entry"
                 }
               ]
             }
@@ -717,6 +795,36 @@
               "text": "今回の滞在では、まだ足場の変化を見ていない。安全な場所で様子を見るか、探索を続けてから戻って調べよう。"
             }
           ]
+        }
+      ]
+    },
+    "q194.scene.talk.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q194",
+          "value": "q194.scene.talk.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "120Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q194.scene.talk.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q194",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "120Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q194.scene.talk"
         }
       ]
     }

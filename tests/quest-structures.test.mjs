@@ -9,7 +9,7 @@ const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choos
 
 test('new map/journal routes do not advertise retired two-clue locations',()=>{
  for(const q of Object.values(data.quests).filter(q=>q.number<=100)){
-  const g=prepareQuest(q.id);choose(g,'pause');const projected=projectGame(g).tracked;
+  const g=prepareQuest(q.id);const projected=projectGame(g).tracked;
   assert.equal(projected.evidenceTotal,0,q.id);assert.equal(projected.locations.length,1,q.id);
   for(const loc of q.locations.filter(l=>l.role!=='decision')){
    const o=data.maps[loc.map].objects.find(o=>o.id===loc.object);assert.equal(Boolean(g.value(o.condition)),false);
@@ -17,15 +17,15 @@ test('new map/journal routes do not advertise retired two-clue locations',()=>{
  }
 });
 
-test('q010 individual rescue actions survive a pause; opening the shaft is not rescuing everyone',()=>{
+test('q010 individual rescue actions survive saving at the current choice; opening the shaft is not rescuing everyone',()=>{
  const g=prepareQuest('q010');choose(g,'shaft');assert.equal(g.dispatch({type:'choose',id:'all'}),false);
- choose(g,'near','book','pause');g.load(g.save());g.run(data.quests.q010.model.entryScript);drain(g);
+ choose(g,'near','book');g.load(g.save());
  assert.equal(g.dispatch({type:'choose',id:'all'}),false);const before=g.save();
  choose(g,'partial');assert.equal(g.state.quests.q010.outcome,'partial');
  g.load(before);choose(g,'deep','all','testimony');assert.equal(g.state.quests.q010.outcome,'informed');
 });
 test('legacy q015 water and copying choices retain their original outcomes',()=>{
- const old=()=>{const g=prepareQuest('q015');choose(g,'pause');delete g.state.flags.flow.q015;g.run('q015.flow.visit');drain(g);return g;};
+ const old=()=>prepareQuest('q015',{legacy:true});
  const a=old();choose(a,'catch','complete');assert.equal(a.state.quests.q015.outcome,'informed');
  const b=old();choose(b,'copy');const before=b.save();assert.equal(b.dispatch({type:'choose',id:'complete'}),false);assert.equal(b.save(),before);
  choose(b,'missing');assert.equal(b.state.quests.q015.outcome,'missing');
@@ -41,7 +41,7 @@ test('q068 transferring people without their raft creates a distinct loss',()=>{
 test('q169 delivery refusal cannot be softened without the recipient’s words; a lie has a later response',()=>{
  const g=prepareQuest('q169');choose(g,'deliver','return');assert.equal(g.dispatch({type:'choose',id:'soft'}),false);
  choose(g,'lie');assert.equal(g.state.quests.q169.stage,'active');assert.equal(g.state.flags.flow.q169.ringHeld,true);
- choose(g,'pause');g.load(g.save());g.run('q169.flow.visit');drain(g);choose(g,'admit');
+ g.load(g.save());choose(g,'admit');
  assert.equal(g.state.quests.q169.outcome,'corrected');assert.equal(g.state.flags.flow.q169.ringHeld,false);
 });
 test('finale reads prior choices and revises a disclosed residential map before sharing',()=>{

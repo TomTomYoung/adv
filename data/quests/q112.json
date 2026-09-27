@@ -235,7 +235,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q112.scene.supply",
+        "action": "oil",
+        "option": "oil_supplies",
+        "shortage": "q112.scene.supply.oil.shortage",
+        "resume": "q112.scene.supply.oil.resume",
+        "cost": {
+          "torch": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q112.visit"
+    ]
   },
   "scripts": {
     "q112.scene.entry": {
@@ -310,11 +325,6 @@
                   "script": "q112.end.lighten"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -372,9 +382,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "oil_supplies",
+              "text": "予備灯油1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q112.scene.supply.oil.shortage"
+                }
+              ]
             }
           ]
         }
@@ -426,11 +457,6 @@
                   "script": "q112.end.lighten"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -543,104 +569,153 @@
     "q112.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q112.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q112"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q112.outcome"
-              },
-              "cases": [
+              "equals": "q112.scene.supply.oil.resume",
+              "commands": [
                 {
-                  "equals": "delegate",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "地上班が救助を引き継いだ。リオは救助費の精算より先に、帰ってきた三人の名前を確かめた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "lighten",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "装備は残したが三人は上がった。リオは置いてきた荷を、人を置いた数のようには数えなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "supply",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "中継灯を使い、三人と装備を運び出した。最後に消す灯だけは、リオが戻って確かめた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "relay",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "リオの灯を目印に援軍が下りた。置いた灯は、戻る約束を示すものになった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q112.scene.supply.oil.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q112.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q112.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q112.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "delegate",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上班が救助を引き継いだ。リオは救助費の精算より先に、帰ってきた三人の名前を確かめた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lighten",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "装備は残したが三人は上がった。リオは置いてきた荷を、人を置いた数のようには数えなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supply",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "中継灯を使い、三人と装備を運び出した。最後に消す灯だけは、リオが戻って確かめた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "relay",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "リオの灯を目印に援軍が下りた。置いた灯は、戻る約束を示すものになった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q112.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q112.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q112.scene.supply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "signal",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q112.scene.signal"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q112.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "supply",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q112.scene.supply"
-                    }
-                  ]
-                },
-                {
-                  "equals": "signal",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q112.scene.signal"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q112.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q112.scene.supply.oil.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q112",
+          "value": "q112.scene.supply.oil.resume"
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q112.scene.supply.oil.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q112",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q112.scene.supply"
         }
       ]
     }
