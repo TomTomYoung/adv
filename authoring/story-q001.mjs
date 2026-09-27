@@ -34,7 +34,7 @@ s.sceneFlow={outage:[{
  events:[{id:'q001-B-rookie',triggers:['round_start','before_end'],
   condition:or({op:'gte',left:ref('battle.round'),right:2},{op:'in',left:ref('battle.pendingResult'),right:['win','escape','repel']}),
   commands:[
-   {op:'scene.cast',cast:[{character:'elder',display:{position:'left'}},{character:'rookie',display:{position:'right',flip:true}}]},
+   {op:'scene.cast',transition:{enter:400,move:300,easing:'ease-out'},cast:[{character:'elder',display:{position:'left'}},{character:'rookie',display:{position:'right',flip:true}}]},
    {op:'say',character:'rookie',text:'怖いです。今も。でも、二人とも、ここにいるから。……その人を、離して！'},
    {op:'story.action',quest:'q001',action:'outage_call'},
    portable(25),{op:'battle.end'}
@@ -115,3 +115,4 @@ s.sceneDialogue={
  ]
 };
 export default s.done();
+

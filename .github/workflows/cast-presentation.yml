@@ -1,0 +1,32 @@
+name: Validate cast presentation in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tools/browser-cast-smoke.mjs'
+      - '.github/workflows/cast-presentation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cast-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+      - name: Verify native cast animations and script waits
+        run: node tools/browser-cast-smoke.mjs
+      - name: Keep animation checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cast-presentation-checkpoints
+          path: /tmp/adv-cast-browser
+          if-no-files-found: ignore

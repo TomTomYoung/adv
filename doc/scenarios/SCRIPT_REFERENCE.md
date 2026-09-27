@@ -223,7 +223,7 @@ map_discoveredは立体マップを参照するとき `{"op":"map_discovered","m
 
 ## 実装との照合用一覧
 
-57命令：`event.checkpoint.begin` / `event.checkpoint.commit` / `dungeon.restriction.set` / `dungeon.restriction.clear` / `story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `scene.cast` / `scene.cast.clear` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
+58命令：`event.checkpoint.begin` / `event.checkpoint.commit` / `dungeon.restriction.set` / `dungeon.restriction.clear` / `story.journey` / `fire.portable.set` / `story.init` / `story.scene` / `story.action` / `jump` / `say` / `narrate` / `choice` / `if` / `switch` / `call` / `return` / `set` / `add` / `flag.set` / `random.set` / `random.branch` / `item.give` / `item.take` / `gold.change` / `actor.heal` / `actor.damage` / `actor.restore_mp` / `party.heal_all` / `party.join` / `party.leave` / `status.apply` / `status.remove` / `map.teleport` / `map.reveal` / `facing.set` / `object.state.set` / `event.mark_done` / `battle.start` / `battle.end` / `quest.accept` / `quest.evidence` / `quest.complete` / `scene.background` / `scene.cast` / `scene.cast.clear` / `wait` / `audio.bgm` / `audio.se` / `rest` / `town.return` / `ending.set` / `light.refill` / `effect.play` / `screen.set` / `screen.clear` / `job.change` / `job.action`。
 
 31式演算子：`object_state` / `record_count` / `eq` / `ne` / `gt` / `gte` / `lt` / `lte` / `and` / `or` / `not` / `exists` / `in` / `contains` / `add` / `sub` / `mul` / `div` / `mod` / `min` / `max` / `floor` / `ceil` / `round` / `abs` / `clamp` / `has_item` / `has_member` / `has_status` / `event_done` / `map_discovered`。
 
@@ -256,3 +256,9 @@ story.scenesのcastには同じdisplayを記述でき、castModeで表示形式�
 ## 全滅時のイベント区間の巻き戻し
 
 `event.checkpoint.begin` は区間ID・クエスト・開始場面・迷宮と、戻すフラグ・変数・配置物・イベント記録・封印の発生元を指定します。`event.checkpoint.commit` は区間IDを指定し、成功時に巻き戻し対象から外します。物語状態は自動記録し、全滅では宣言した範囲だけを復元します。同じ開始会話を再開しても初回の記録を上書きしません。[仕様と例](EVENT_CHECKPOINTS.md)。
+
+## 人物の時間演出とウェイト（2026-09-27）
+
+`scene.cast` / `scene.cast.clear` の任意 `transition` で `enter`・`exit`・`move`・`change` を各0〜10000ms、`easing` をlinear/ease-in/ease-out/ease-in-out、`wait` を真偽値で指定します。displayには不透明度 `opacity`（0〜1）と角度 `angle`（−360〜360度）を追加しました。未指定の時間は0です。
+
+`{"op":"wait","duration":300}` は300msの間を置きます。`effect.play` の `wait: true` は既存効果の終了を待ちます。いずれも戦闘内イベントで利用できます。待機は決定キーで飛ばさず、保存再開では位置を保持して一度だけ継続します。[人物演出の完全な例・寿命・保存仕様](../ui/CHARACTER_STAGING.md)を参照してください。

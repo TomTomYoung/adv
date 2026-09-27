@@ -1,3 +1,4 @@
+import {CAST_EASINGS} from '../src/core/cast.js';
 import {DUNGEON_RESTRICTIONS} from '../src/core/dungeon-restrictions.js';
 import {FIELD_SIGNALS,FIELD_REPEATS} from '../src/core/field-signals.js';
 import {cellPlacementSchema,cellTypesSchema,edgeTypesSchema,cellEventsSchema,cellPatchSchema} from './cell-layer-schema.mjs';
@@ -13,9 +14,12 @@ const string={type:'string',minLength:1},integer={type:'integer',minimum:0},bool
 const obj=(properties,required=Object.keys(properties),additionalProperties=false)=>({type:'object',properties,required,additionalProperties});
 const variants=[];
 const command=(names,properties={},required=Object.keys(properties))=>{for(const name of names.split(' '))variants.push(obj({op:{const:name},...properties},['op',...required]));};
-const castDisplay=obj({position:{enum:['left','center','right']},x:{type:'number',minimum:0,maximum:100},y:{type:'number',minimum:-25,maximum:50},scale:{type:'number',minimum:.5,maximum:1.5},flip:boolean,layer:{type:'integer',minimum:0,maximum:99},asset:string},[]);
-command('scene.cast',{mode:{enum:['stage','cards']},cast:{type:'array',maxItems:8,items:obj({character:string,display:castDisplay},['character'])}},['cast']);
-command('scene.cast.clear');
+const castDisplay=obj({position:{enum:['left','center','right']},x:{type:'number',minimum:0,maximum:100},y:{type:'number',minimum:-25,maximum:50},scale:{type:'number',minimum:.5,maximum:1.5},flip:boolean,opacity:{type:'number',minimum:0,maximum:1},angle:{type:'number',minimum:-360,maximum:360},layer:{type:'integer',minimum:0,maximum:99},asset:string},[]);
+const milliseconds={type:'integer',minimum:0,maximum:10000};
+const castTransition=obj({enter:milliseconds,exit:milliseconds,move:milliseconds,change:milliseconds,easing:{enum:CAST_EASINGS},wait:boolean},[]);
+command('scene.cast',{transition:castTransition,mode:{enum:['stage','cards']},cast:{type:'array',maxItems:8,items:obj({character:string,display:castDisplay},['character'])}},['cast']);
+command('scene.cast.clear',{transition:castTransition},[]);
+command('wait',{duration:milliseconds});
 const checkpointStrings={type:'array',uniqueItems:true,items:string};
 command('event.checkpoint.begin',{id:string,quest:string,scene:string,dungeon:string,flags:checkpointStrings,vars:checkpointStrings,objects:checkpointStrings,eventKeys:checkpointStrings,restrictionSources:checkpointStrings},['id','quest','scene','dungeon']);
 command('event.checkpoint.commit',{id:string});
@@ -38,7 +42,7 @@ command('map.teleport',{map:string,x:integer,y:integer,z:{type:'integer'},facing
 command('object.state.set',{map:string,object:string,state:string},['map','object','state']);command('event.mark_done',{event:string});
 command('battle.end');
 command('battle.start',{id:string,encounter:string,on_win:commands,on_lose:commands,on_escape:commands,on_interrupt:commands,events:{type:'array',minItems:1,items:obj({id:string,triggers:{type:'array',minItems:1,uniqueItems:true,items:{enum:BATTLE_EVENT_PHASES}},condition:value,commands},['id','triggers','commands'])}},['encounter','on_win','on_lose','on_escape']);command('quest.accept',{quest:string});command('quest.evidence',{quest:string,key:string,text:string});command('quest.complete',{quest:string,outcome:string});
-command('scene.background audio.bgm',{asset:string});command('audio.se',{asset:string,volume:{type:'number',minimum:0,maximum:1},delay:{type:'number',minimum:0,maximum:5000}},['asset']);command('effect.play',{effect:string,target:{type:'string',pattern:'^(scene|screen|party|actor:[a-z][a-z0-9_]*|enemy:enemy_[0-7])$'},delay:{type:'number',minimum:0,maximum:5000}},['effect']);command('screen.set',{layer:{type:'string',pattern:'^[a-z][a-z0-9_]{0,31}$'},color:{type:'string',pattern:'^#[0-9a-fA-F]{6}$'},opacity:{type:'number',minimum:0,maximum:.65},shade:boolean},['layer','color','opacity']);command('screen.clear',{layer:string});command('rest',{cost:integer,ratio:{type:'number',minimum:0,maximum:1}},[]);command('town.return light.refill');command('ending.set',{title:string,text:string});
+command('scene.background audio.bgm',{asset:string});command('audio.se',{asset:string,volume:{type:'number',minimum:0,maximum:1},delay:{type:'number',minimum:0,maximum:5000}},['asset']);command('effect.play',{wait:boolean,effect:string,target:{type:'string',pattern:'^(scene|screen|party|actor:[a-z][a-z0-9_]*|enemy:enemy_[0-7])$'},delay:{type:'number',minimum:0,maximum:5000}},['effect']);command('screen.set',{layer:{type:'string',pattern:'^[a-z][a-z0-9_]{0,31}$'},color:{type:'string',pattern:'^#[0-9a-fA-F]{6}$'},opacity:{type:'number',minimum:0,maximum:.65},shade:boolean},['layer','color','opacity']);command('screen.clear',{layer:string});command('rest',{cost:integer,ratio:{type:'number',minimum:0,maximum:1}},[]);command('town.return light.refill');command('ending.set',{title:string,text:string});
 command('job.change',{actor:string,job:string});command('job.action',{actor:string,ability:string});
 if(variants.length!==COMMANDS.size)throw Error('Schema/command registry mismatch');
 const expressionVariants=[obj({ref:string}),obj({format:{type:'string'},values:{type:'object',additionalProperties:value}})];
@@ -110,3 +114,4 @@ await write('edge-types.schema.json',{title:'エッジ種プリセット',...edg
 await write('cell-types.schema.json',{$defs:{},title:'セル種プリセット',...cellTypesSchema});
 await write('cell-events.schema.json',{$defs:{value:definitions.value,expression:definitions.expression},title:'セル進入イベント',...cellEventsSchema(value)});
 await write('cell-layers-authoring.schema.json',{title:'セルレイヤー原稿',...obj({schemaVersion:{const:1},presets:cellTypesSchema,edgePresets:edgeTypesSchema,events:cellEventsSchema(value),scripts:{type:'object',additionalProperties:obj({commands:{type:'array',items:{$ref:'#/$defs/command'}}})},maps:{type:'object',additionalProperties:cellPlacementSchema}})});
+

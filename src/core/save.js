@@ -8,7 +8,7 @@ import {authoredCellLayers} from './cell-layers.js';
 import {validateInspections} from './inspection.js';
 import {cellEntryId} from './cell-layers.js';
 import {validateFieldReactions} from './field-signals.js';
-import {castValid} from './cast.js';
+import {castValid,castCueValid,transitionDuration} from './cast.js';
 import {gearErrors} from './equipment.js';
 import {carriedErrors} from './inventory.js';
 import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js';
@@ -159,6 +159,8 @@ export function validateSave(save,data){
   }
   if(s.presentation.message!==undefined&&(!isRecord(s.presentation.message)||typeof s.presentation.message.text!=='string'||typeof s.presentation.message.speaker!=='string'))fail('メッセージ本文不正');
   if(s.waiting?.type==='choice'&&((s.waiting.text!==undefined&&typeof s.waiting.text!=='string')||(s.waiting.speaker!==undefined&&typeof s.waiting.speaker!=='string')))fail('選択肢の本文不正');
+  if(s.presentation.sequence!==undefined&&(!Number.isSafeInteger(s.presentation.sequence)||s.presentation.sequence<1))fail('演出番号不正');
+  if(s.presentation.castCue!==undefined&&(!castCueValid(s.presentation.castCue,data)||!Number.isSafeInteger(s.presentation.sequence)||s.presentation.castCue.id>s.presentation.sequence))fail('人物切替演出不正');
   if(s.presentation.cast!==undefined&&!castValid(s.presentation.cast,data))fail('人物演出不正');
   for(const message of [s.presentation.message,s.waiting])if(message?.speakerId!==undefined&&(typeof message.speakerId!=='string'||!Object.hasOwn(data.characters,message.speakerId)))fail('発話人物不正');
   if(!layersValid(s.presentation.layers))fail('画面レイヤー不正');
@@ -198,8 +200,17 @@ export function validateSave(save,data){
   if(!integer(s.nextScope,1,1e9))fail('スクリプトスコープ不正');
   for(const frame of s.vm){try{if(!isRecord(frame)||!Array.isArray(frame.path)||!isRecord(frame.local)||!integer(frame.scope,1,s.nextScope-1)||typeof frame.branch!=='boolean'||frame.path.some(p=>typeof p!=='string'&&!Number.isInteger(p))||frame.path.some(p=>['__proto__','constructor','prototype'].includes(p)))throw Error();const commands=commandsAt(data,frame);if(!integer(frame.index,0,commands.length))throw Error();}catch{fail('スクリプト位置不正');}}
   if(s.waiting!==null){
-    if(!isRecord(s.waiting)||!['text','choice','battle','command','battle_result'].includes(s.waiting.type))fail('待機状態不正');
+    if(!isRecord(s.waiting)||!['text','choice','battle','command','battle_result','presentation'].includes(s.waiting.type))fail('待機状態不正');
     else if(s.waiting.type==='text'&&(!s.vm.length||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'))fail('会話不正');
+    else if(s.waiting.type==='presentation'){
+      try{
+        const w=s.waiting,f=s.vm.at(-1),c=commandsAt(data,f)[f.index-1];
+        const kind=c.op==='wait'?'wait':['scene.cast','scene.cast.clear'].includes(c.op)&&c.transition?.wait?'cast':c.op==='effect.play'&&c.wait?'effect':null;
+        const duration=kind==='wait'?c.duration:kind==='cast'?transitionDuration(c.transition):c.delay!==undefined?c.delay+data.effects[c.effect]?.duration:null;
+        if(kind==='effect'&&(w.duration<data.effects[c.effect]?.duration||w.duration>5000+data.effects[c.effect]?.duration))fail('効果の待機時間不正');
+        if(!kind||w.kind!==kind||w.id!==s.presentation.sequence||!integer(w.id,1,Number.MAX_SAFE_INTEGER)||!integer(w.duration,1,15000)||duration!==null&&w.duration!==duration||Object.keys(w).some(k=>!['type','kind','id','duration'].includes(k)))fail('演出待機位置不正');
+      }catch{fail('演出待機位置不正');}
+    }
     else if(s.waiting.type==='command'){
       const w=s.waiting;
       if(s.vm.length||s.battle||!['interact','inspect','retreat','portable','environment','result'].includes(w.command)||(w.command!=='result'&&s.mode!=='dungeon')||(w.target!==undefined&&typeof w.target!=='string')||(!['result','retreat'].includes(w.command)&&typeof w.origin!=='string')||(w.command==='result'&&typeof w.text!=='string')||Object.keys(w).some(k=>!['type','command','target','text','origin'].includes(k)))fail('コマンドの確認状態不正');
@@ -226,7 +237,7 @@ export function validateSave(save,data){
       if(b.event){
         const a=b.event,event=events[a.index],frame=s.vm[a.depth],c=b.continuations;
         if((a.phase==='before_end')!==(b.pendingResult!==null))fail('戦闘イベントの終了待ち不整合');
-        if(!event||event.id!==a.id||!b.firedEvents.includes(a.id)||!event.triggers.includes(a.phase)||!integer(a.depth,1,s.vm.length-1)||!frame||frame.script!==c.frame.script||JSON.stringify(frame.path)!==JSON.stringify([...c.frame.path,c.index,'events',a.index,'commands'])||!['text','choice'].includes(s.waiting?.type))fail('戦闘イベントの継続位置不正');
+        if(!event||event.id!==a.id||!b.firedEvents.includes(a.id)||!event.triggers.includes(a.phase)||!integer(a.depth,1,s.vm.length-1)||!frame||frame.script!==c.frame.script||JSON.stringify(frame.path)!==JSON.stringify([...c.frame.path,c.index,'events',a.index,'commands'])||!['text','choice','presentation'].includes(s.waiting?.type))fail('戦闘イベントの継続位置不正');
       }else if(s.waiting?.type!=='battle'||b.pendingResult!==null)fail('戦闘待機不正');
     }catch{fail('戦闘イベント状態不正');}
   }else if(s.waiting?.type==='battle')fail('戦闘がありません');
@@ -234,3 +245,4 @@ export function validateSave(save,data){
   errors.push(...validateDungeonState(data,s),...validateDungeonRestrictions(data,s),...validateEventCheckpoints(data,s));
   return [...new Set(errors)];
 }
+

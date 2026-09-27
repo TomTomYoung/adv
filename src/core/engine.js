@@ -22,7 +22,7 @@ import {freshFieldReactions,signalFieldChange} from './field-signals.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
 import {startBattle,endBattle,battleAction} from './battle.js';
-import {runScript,advanceScript,chooseOption,pump} from './script.js';
+import {runScript,advanceScript,chooseOption,pump,finishPresentation} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
 import {actorStats,initializeJob,knownSkills,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
@@ -153,7 +153,7 @@ export class GameEngine {
   }
   defeat(){
     const rolledBack=rollbackEventCheckpoints(this);
-    delete this.state.presentation.cast;delete this.state.presentation.message;
+    delete this.state.presentation.cast;delete this.state.presentation.castCue;delete this.state.presentation.message;
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
     this.state.vm=[];this.state.waiting=null;this.state.battleResult=null;this.#arriveTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
     this.notify('隊は救助されました。所持金の一部を救援費に充て、町で目覚めました。依頼は再挑戦できます。');
@@ -250,6 +250,7 @@ export class GameEngine {
   perform(intent){
     const type=intent?.type;if(typeof type!=='string')return false;
     this.state.notice='';
+    if(type==='presentation.complete')return finishPresentation(this,intent);
     if(type==='advance')return this.state.waiting?.type==='battle_result'?advanceBattleResult(this):this.state.waiting?.type==='command'?advanceCommand(this):advanceScript(this);
     if(type==='choose')return this.state.waiting?.type==='command'?chooseCommand(this,intent.id):chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
@@ -367,6 +368,7 @@ export class GameEngine {
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.state=clone(save.state);this.state.carried??={};this.feedback=freshFeedback();return true;
+    this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();return true;
   }
 }
+
