@@ -47,7 +47,7 @@ export function commandTargets(engine,command='interact'){
     const reason=object.kind==='exit'?dungeonRestrictionReason(state,'return'):'';
     const done=object.once&&state.events[`${state.location.map}/${object.id}`],enabled=!reason&&!done&&(object.condition===undefined||engine.value(object.condition));
     const args={object:object.id,map:state.location.map},info=inspectScript(engine,object.script,args);
-    add(`object:${object.id}`,object.name,reason||(done?'調査済み。':object.name),[{label:'調べる',enabled,reason:reason||(done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。'),consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done,reason]),script:done?null:object.script,args});
+    add(`object:${object.id}`,object.name,reason||(done?'調査済み。':''),[{label:'調べる',enabled,reason:reason||(done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。'),consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done,reason]),script:done?null:object.script,args});
   }
   if(manual){
     const l=state.location,[dx,dy]=faces[l.facing];
@@ -80,7 +80,7 @@ export function commandDialog(engine){
   if(wait.command==='retreat'){const reason=dungeonRestrictionReason(engine.state,'return_mark');return {type:'choice',text:reason||`帰還印で町へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:!reason,requirement:reason},cancel]};}
   const targets=wait.origin!==inspectionOrigin(engine.state)?[]:commandTargets(engine,wait.command),target=targets.find(t=>t.id===wait.target);
   if(!target)return {type:'choice',text:targets.length?'何を調べる？':'今は調べられるものがない。',options:[...targets.map(t=>({id:key(['target',t.id]),text:t.name,enabled:true,target:t.id})),cancel]};
-  return {type:'choice',text:`${target.name}\n\n${target.text}`,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
+  return {type:'choice',text:target.text?`${target.name}\n\n${target.text}`:target.name,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
 }
 function remember(engine,target,executing=false){
   if(!target.script||executing||!target.actions.some(a=>a.enabled))engine.state.inspections[target.record]=target.signature;
