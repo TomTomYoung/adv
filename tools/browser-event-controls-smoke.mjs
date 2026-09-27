@@ -72,7 +72,9 @@ try{
     // A long event list must scroll without translating any movement hit area.
     await page.evaluate(()=>{reset();g.dispatch({type:'travel',dungeon:'kagaribi'});show();});await settle();
     const manyBefore=await pad.boundingBox();
-    await page.evaluate(()=>{g.run('browser_many_choices');show();});await page.keyboard.press('Enter');await settle();
+    await page.evaluate(()=>{g.run('browser_many_choices');show();});await settle();
+    for(let fuel=100;await page.evaluate(()=>g.state.waiting?.type==='text');fuel--){assert.ok(fuel>0);await page.keyboard.press('Enter');}
+    await settle();
     assert.equal(await page.evaluate(()=>g.state.waiting.type),'choice');
     for(let i=0;i<17;i++)await page.keyboard.press('ArrowDown');
     assert.equal(await page.locator(':focus').getAttribute('data-focus'),'choice:option_17');
