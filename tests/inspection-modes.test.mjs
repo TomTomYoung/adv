@@ -57,6 +57,10 @@ test('multiple objects have equal standing and choosing a single free action run
  const g=start(undefined,[note(),note('other',{x:2,y:0,edge:undefined})]);g.data.maps.region_1_f1.objects[1].y=1;
  assert.ok(open(g));assert.equal(commandDialog(g).text,'何を調べる？');target(g,'object:other');assert.equal(g.state.waiting.type,'text');assert.equal(g.state.events['region_1_f1/other'],1);assert.equal(g.state.events['region_1_f1/note'],undefined);
 });
+test('inspection detail does not repeat an object name when it has no description',()=>{
+ const name='骨の荷札：地下水道の引き揚げ場',g=start(undefined,[note('note',{name})]);
+ assert.ok(open(g,'inspect'));target(g,'object:note');assert.equal(commandDialog(g).text,name);
+});
 test('unavailable reasons can be reread manually and newly enabled actions become candidates',()=>{
  const g=start(undefined,[note('note',{visibleWhen:true,condition:{ref:'flags.allowed'}})]);g.state.flags.allowed=false;
  assert.ok(open(g));assert.equal(commandDialog(g).options[0].enabled,false);pick(g,o=>o.id==='cancel');assert.equal(commandTargets(g).length,0);
