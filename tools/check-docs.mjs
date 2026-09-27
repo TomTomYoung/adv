@@ -1,5 +1,6 @@
 import {docPath,relocateDoc,currentMarkdown,docGroups} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
+import {questRouteSummary} from './quest-route-summary.mjs';
 import {questPageBundle} from './quest-page.mjs';
 import {questPageIndex} from './quest-page-details.mjs';
 import {eventCatalog} from './event-catalog.mjs';
@@ -58,6 +59,8 @@ check(await fs.readFile(path.join(folder,'scenarios/quests/README.md'),'utf8')==
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
 check(await fs.readFile(path.join(folder,docPath('LOCATION_CATALOG.md')),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
 for(const q of Object.values(data.quests)){
+ const section=catalog.split(`## ${q.id} `)[1]?.split('\n## ')[0]??'';
+ check(section.includes(questRouteSummary(data,q)),`QUEST_CATALOG: ${q.id} route summary differs; review authoring/quest-route-notes.json, then run npm run build:catalog`);
  const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,docPath(file)),'utf8'):catalog;
  for(const line of questPlaces(data,q))check(source.includes(relocateDoc(line,file??'QUEST_CATALOG.md')),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);
  if(file){
