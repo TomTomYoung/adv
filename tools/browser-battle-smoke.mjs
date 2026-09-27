@@ -137,7 +137,9 @@ try{
     assert.equal(await p.evaluate(()=>g.state.waiting.type),'choice');
     const choiceSave=await p.evaluate(()=>g.save());for(let i=0;i<12;i++)await p.mouse.click(point.x,point.y);
     assert.equal(await p.evaluate(()=>g.save()),choiceSave);await capture('10-battle-event');
-    await p.keyboard.press('Enter');assert.equal(await p.locator('.battle-menu-title').textContent(),'行動？');
+    // Disabled-pad clicks may blur focus; explicitly choose the visible option,
+    // rather than implicitly activating the previous-page control on small screens.
+    await p.locator('[data-focus="choice:ready"]').click();assert.equal(await p.locator('.battle-menu-title').textContent(),'行動？');
     checks.push(`${width}x${height}${coarse?' touch':''}: same exploration/battle bounds, forward centre/corners inert after entry, attack/first target share coordinates, cancellation free, one attack per confirmation, battle intro text/choice safe`);
     await context.close();
   }
