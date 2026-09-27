@@ -14,7 +14,7 @@
 
 [battle/README.md](battle/README.md)：職業、仲間、魔物、戦闘・探索バランス。
 
-[ui/README.md](ui/README.md)：[UI基本哲学](ui/BASIC_PHILOSOPHY.md)、画面の設計方針、共通キー、調査、戦闘コマンド、メッセージ、人物演出・SE。
+[ui/README.md](ui/README.md)：[UI基本哲学](ui/BASIC_PHILOSOPHY.md)と[参考理論](ui/THEORY_REFERENCES.md)、画面の設計方針、共通キー、調査、戦闘コマンド、メッセージ、人物演出・SE。
 
 [authoring/README.md](authoring/README.md)：設定編集HTML、編集先JSON、Pages URL。
 

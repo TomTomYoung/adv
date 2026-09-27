@@ -4,6 +4,8 @@
 
 最初に[UI基本哲学](BASIC_PHILOSOPHY.md)を読み、判断・情報・操作の対応と、画面遷移で守る条件を確認してください。[根本方針と現状](PHILOSOPHY_AND_STATUS.md)で実装への適用と現在の状態を確認します。
 
+[THEORY_REFERENCES.md](THEORY_REFERENCES.md)：UI基本哲学の参考理論。モードエラー、OOUI、段階的開示、設計原則、概念モデルとシグニファイア、フィッツ・ヒックの法則、フォーカス管理の出典・適用例・注意点。
+
 [KEYBOARD_CONTROLS.md](KEYBOARD_CONTROLS.md)：探索の直接移動と調査、選択画面の決定・キャンセル・方向選択、フォーカスの引き継ぎ、広場・探索へ戻る順序。
 
 [INSPECTION.md](INSPECTION.md)：便利調べる・任意調べる、消費時の選択、既読の判定、エッジ上のたいまつ。
