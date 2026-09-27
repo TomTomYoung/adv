@@ -261,7 +261,7 @@ export class GameView {
     }else{
       const actions=node('div','battle-actions'),basic=new Set(['attack','guard']);
       const label=this.battleMenu==='skills'?'スキル':this.battleMenu==='items'?'アイテム':'行動';actions.setAttribute('aria-label',label);
-      if(this.battleMenu)commands.append(node('h3','battle-menu-title',label));
+      commands.append(node('h3','battle-menu-title',this.battleMenu?label:'行動？'));
       const appendSkill=s=>{const focus=`skill:${s.id}`,b=button(`${s.name}${s.cost?' '+s.cost:s.mp?' MP'+s.mp:''}`,()=>chooseAction('skill',s.id,s.target,s.name,focus),'',!s.enabled);b.dataset.focus=focus;b.title=s.reason||s.description||s.name;actions.append(b);};
       if(this.battleMenu==='skills')for(const s of m.battle.skills.filter(s=>!basic.has(s.id)))appendSkill(s);
       else if(this.battleMenu==='items')for(const item of m.battle.items){const focus=`battle-item:${item.id}`,b=button(`${item.name} ×${item.count}`,()=>chooseAction('item',item.id,item.target??'ally',item.name,focus),'',item.enabled===false);b.dataset.focus=focus;actions.append(b);}

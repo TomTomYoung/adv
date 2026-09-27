@@ -1,9 +1,10 @@
-name: Validate dungeon event controls in Chromium
+name: Validate dungeon and battle controls in Chromium
 on:
   pull_request:
     paths:
       - 'src/view/**'
       - 'tools/browser-event-controls-smoke.mjs'
+      - 'tools/browser-battle-smoke.mjs'
       - '.github/workflows/event-controls.yml'
   workflow_dispatch:
 permissions:
@@ -23,10 +24,14 @@ jobs:
           npx playwright install --with-deps chromium --only-shell
       - name: Verify fixed movement coordinates and event choices
         run: node tools/browser-event-controls-smoke.mjs
+      - name: Verify battle entry and attack target coordinates
+        run: node tools/browser-battle-smoke.mjs
       - name: Keep viewport checkpoints
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dungeon-event-controls-checkpoints
-          path: /tmp/adv-event-controls-browser
+          path: |
+            /tmp/adv-event-controls-browser
+            /tmp/adv-battle-browser
           if-no-files-found: ignore
