@@ -116,3 +116,40 @@ test('identical consecutive long messages each start at page one',()=>{
   try{while(!c.view.canChoose())c.view.advanceText();c.view.advanceText();assert.equal(c.view.page,0);assert.equal(c.view.model.dialog.text,text);}
   finally{c.cleanup();}
 });
+
+test('entering q001 keeps all four movement buttons disabled until the event finishes',()=>{
+  const g=newGame();g.accept('q001');g.dispatch({type:'quest.travel',id:'q001'});g.teleport('kagaribi_f1',3,1,'west');
+  const c=setup(g);
+  try{
+    c.root.querySelector('.movement-pad .forward').click();
+    assert.equal(g.state.stories.q001.scene,'entry');assert.equal(g.state.waiting.type,'text');
+    const saved=g.save(),count=c.intents.length;
+    for(let i=0;i<12;i++)for(const b of c.root.querySelectorAll('.movement-pad button'))b.click();
+    assert.equal(c.root.querySelectorAll('.movement-pad button:disabled').length,4);
+    assert.equal(g.save(),saved);assert.equal(c.intents.length,count);
+    assert.ok(c.root.querySelector('.scene-dungeon-controls .scene-message-actions .continue'));
+    for(let fuel=100;g.state.waiting?.type==='text';fuel--){assert.ok(fuel>0);c.key('Enter');}
+    assert.equal(g.state.waiting.type,'choice');
+    assert.ok(c.root.querySelector('.scene-dungeon-controls .choices'));
+    assert.ok(c.document.activeElement.dataset.focus.startsWith('choice:'));
+    const choosing=g.save();c.key('ArrowDown');assert.equal(g.save(),choosing);
+    c.dispatch({type:'choose',id:'talk'});
+    for(let fuel=100;g.state.waiting?.type==='text';fuel--){assert.ok(fuel>0);c.key('Enter');}
+    assert.equal(g.state.waiting,null);assert.equal(c.root.querySelectorAll('.movement-pad button:not(:disabled)').length,4);
+    c.key('ArrowRight');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});
+  }finally{c.cleanup();}
+});
+
+test('presentation waits reserve a disabled movement pad without an advance button',()=>{
+  const d=structuredClone(data);d.scripts.pad_wait={commands:[{op:'wait',duration:200},{op:'say',text:'演出終了。'}]};
+  const g=new GameEngine(d);drain(g);g.dispatch({type:'travel',dungeon:'kagaribi'});g.run('pad_wait');const c=setup(g);
+  try{
+    assert.equal(c.root.querySelectorAll('.movement-pad button:disabled').length,4);
+    assert.equal(c.root.querySelector('.scene-message-actions').children.length,0);
+    const saved=g.save();c.key('Enter');assert.equal(g.save(),saved);
+    c.dispatch({type:'presentation.complete',id:g.state.waiting.id,session:g.feedback.session});
+    assert.ok(c.root.querySelector('.scene-dungeon-controls .continue'));
+    assert.equal(c.root.querySelectorAll('.movement-pad button:disabled').length,4);
+    c.key('Enter');assert.equal(c.root.querySelectorAll('.movement-pad button:not(:disabled)').length,4);
+  }finally{c.cleanup();}
+});

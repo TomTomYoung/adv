@@ -1,0 +1,32 @@
+name: Validate dungeon event controls in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/view/**'
+      - 'tools/browser-event-controls-smoke.mjs'
+      - '.github/workflows/event-controls.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  event-controls-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+      - name: Verify fixed movement coordinates and event choices
+        run: node tools/browser-event-controls-smoke.mjs
+      - name: Keep viewport checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dungeon-event-controls-checkpoints
+          path: /tmp/adv-event-controls-browser
+          if-no-files-found: ignore
