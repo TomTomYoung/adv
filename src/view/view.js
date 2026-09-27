@@ -221,7 +221,7 @@ export class GameView {
   }
   movementPad(commands,locked=false){
     const movement=node('div','movement-pad');movement.setAttribute('aria-label','移動');
-    for(const c of commands.movement){const b=button(c.label,()=>this.act(c.intent),c.direction,locked||!c.enabled);b.dataset.focus=`move:${c.direction}`;movement.append(b);}
+    for(const c of commands.movement){const b=button(c.label,()=>this.act(c.intent),c.direction,locked||!c.enabled);b.dataset.focus=`move:${c.direction}`;b.setAttribute('aria-label',c.label);b.title=c.label;movement.append(b);}
     return movement;
   }
   dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.rewardPhase){section.dataset.rewardPhase=d.rewardPhase;section.classList.add(`reward-${d.rewardPhase}`);}if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}

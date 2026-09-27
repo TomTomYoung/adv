@@ -57,7 +57,15 @@ try{
     assert.ok(await page.locator(':focus').evaluate(e=>Boolean(e.closest('.message-window'))));
     assert.equal(await page.evaluate(()=>g.save()),choiceSave);
     await page.screenshot({path:path.join(output,`q001-${width}x${height}.png`)});
-    await page.locator('[data-focus="choice:talk"]').click();
+    // Long labels can exceed a small scrolling pane. Click their visible part,
+    // exactly as a pointer user does, rather than the clipped full-box center.
+    const choicePoint=await page.locator('[data-focus="choice:talk"]').evaluate(e=>{
+      e.scrollIntoView({block:'start'});const b=e.getBoundingClientRect(),r=e.closest('.scene-message-actions').getBoundingClientRect();
+      const top=Math.max(b.top,r.top),bottom=Math.min(b.bottom,r.bottom);
+      if(bottom-top<44)throw new Error(`Choice has only ${bottom-top}px of visible hit area`);
+      return {x:(Math.max(b.left,r.left)+Math.min(b.right,r.right))/2,y:(top+bottom)/2};
+    });
+    await page.mouse.click(choicePoint.x,choicePoint.y);
     for(let fuel=100;await page.evaluate(()=>g.state.waiting?.type==='text');fuel--){assert.ok(fuel>0);await page.keyboard.press('Enter');}
     assert.equal(await pad.locator('button:enabled').count(),4);await samePad();
     await page.keyboard.press('ArrowRight');assert.equal(await page.evaluate(()=>g.state.location.facing),'north');
@@ -68,7 +76,7 @@ try{
     assert.equal(await page.evaluate(()=>g.state.waiting.type),'choice');
     for(let i=0;i<17;i++)await page.keyboard.press('ArrowDown');
     assert.equal(await page.locator(':focus').getAttribute('data-focus'),'choice:option_17');
-    assert.ok(await page.locator('.scene-message-actions').evaluate(e=>e.scrollTop>0));
+    assert.ok(await page.locator('.scene-message-actions').evaluate(e=>e.scrollTop>0&&e.clientHeight>=44));
     const manyAfter=await pad.boundingBox();for(const k of ['x','y','width','height'])assert.ok(Math.abs(manyBefore[k]-manyAfter[k])<1,`${width}: list changed pad ${k}`);
     assert.ok(await page.locator(':focus').evaluate(e=>{const b=e.getBoundingClientRect(),r=e.closest('.scene-message-actions').getBoundingClientRect();return b.bottom>r.top&&b.top<r.bottom;}));
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
