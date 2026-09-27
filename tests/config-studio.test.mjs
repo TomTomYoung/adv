@@ -65,7 +65,14 @@ test('command builder adds consumption by named item and preserves nested choice
  const select=root.querySelectorAll('select').filter(s=>s.getAttribute('aria-label')==='追加する処理').at(-1);select.value='item.take';select.dispatchEvent({type:'change'});root.querySelectorAll('button').filter(b=>b.textContent==='処理を追加').at(-1).click();const commands=app.current().value.commands;assert.deepEqual(commands.slice(0,-1),before);assert.equal(commands.at(-1).op,'item.take');assert.ok(app.context.names('items')[commands.at(-1).item]);assert.equal(commands.at(-1).count,1);
 });
 test('representative domain screens render every collection and tab without dirtying any JSON',async t=>{
- const {app}=await ui(t,'jobs.json');for(const file of ['jobs.json','entities.json','locations.json','presentation.json','dungeon-art.json','cell-layers.json','connected-maps.json','kagaribi-content.json','terrain-content.json','voxel-content.json','catalog-q011-q020.json',...editors.filter(e=>e.family==='dungeon').map(e=>e.file),'quests/q001.events.json','quests/q100.events.json','quests/q200.events.json']){
+ const {app}=await ui(t,'jobs.json');for(const file of ['battle-rewards.json','jobs.json','entities.json','locations.json','presentation.json','dungeon-art.json','cell-layers.json','connected-maps.json','kagaribi-content.json','terrain-content.json','voxel-content.json','catalog-q011-q020.json',...editors.filter(e=>e.family==='dungeon').map(e=>e.file),'quests/q001.events.json','quests/q100.events.json','quests/q200.events.json']){
   await app.open(file);for(const group of collections(entry(file),app.workspace.value(file))){await app.selectCollection(group.key);for(const row of app.rows().slice(0,1)){await app.selectRecord(row.key);for(let i=0;i<5;i++){app.tab=i;app.renderDetail();}}}
  }assert.deepEqual(app.workspace.changed(),[]);
+});
+
+test('monster chest editor names each monster and validates its item and probability before export',async t=>{
+ const {app,root}=await ui(t,'battle-rewards.json');await app.selectRecord('waterwheel_beaver');assert.match(root.textContent,/水車ビーバー/);
+ const original=structuredClone(app.workspace.value('battle-rewards.json'));enter(field(root,['drops','waterwheel_beaver','chance']),'0.5');await app.reviewChanges();assert.equal(app.workspace.output.length,1);original.drops.waterwheel_beaver.chance=.5;assert.deepEqual(JSON.parse(app.workspace.output[0].text),original);
+ enter(field(root,['drops','waterwheel_beaver','chance']),'1.1');await app.reviewChanges();assert.equal(app.workspace.output,null);
+ const validate=createValidator(readJSON);for(const change of [v=>delete v.drops.guard_1,v=>v.drops.unknown={item:'potion',chance:.5},v=>v.drops.guard_1.item='missing']){const bad=structuredClone(original);change(bad);assert.ok((await validate(entry('battle-rewards.json'),bad)).length);}
 });

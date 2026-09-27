@@ -8,7 +8,7 @@ import {activeActor} from '../src/core/battle.js';
 import {dungeonInterior,locationRoot} from '../src/core/world.js';
 export const data=await loadContent(file=>fs.readFile(path.resolve(import.meta.dirname,'..',file),'utf8').then(JSON.parse));
 export function newGame(seed=42){const engine=new GameEngine(data,seed);drain(engine);return engine;}
-export function drain(engine){let fuel=1000;while(engine.state.waiting?.type==='text'||engine.state.waiting?.type==='command'&&engine.state.waiting.command==='result'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
+export function drain(engine){let fuel=1000;while(['text','battle_result'].includes(engine.state.waiting?.type)||engine.state.waiting?.type==='command'&&engine.state.waiting.command==='result'){assert.ok(--fuel);engine.dispatch({type:'advance'});}}
 // Select the same physical object a test intends to inspect when several
 // nearby objects now share the message window. Never choose story decisions.
 export function inspect(engine,objectId){

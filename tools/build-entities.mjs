@@ -14,9 +14,9 @@ export async function applyEntityExpansion(){
   const damage=(name,mp,formula='physical',element='physical',target='enemy')=>({name,mp,target,description:`${target==='all_enemies'?'敵全体':'敵1体'}へ${name}。MP${mp}。`,effects:[{type:'damage',formula,element}]});
   Object.assign(skills,{
     pierce:damage('貫通突き',4,'pierce'),ice:damage('氷の符',4,'fire','ice'),lightning:damage('雷の符',4,'fire','lightning'),
-    group_heal:{name:'薬草の霧',mp:8,target:'all_allies',description:'生存する味方全員を小回復。',effects:[{type:'heal',formula:'group_heal'}]},
+    group_heal:{fieldUse:true,name:'薬草の霧',mp:8,target:'all_allies',description:'生存する味方全員を小回復。',effects:[{type:'heal',formula:'group_heal'}]},
     party_guard:{name:'盾の壁',mp:5,target:'all_allies',description:'次の敵一巡まで味方全員の被害を半減。重ね掛け不可。',effects:[{type:'guard'}]},
-    inspire:{name:'気付けの節',mp:8,target:'ally',description:'MP8で、生存する味方1人のMPを5回復。',effects:[{type:'restore_mp',amount:5}]},
+    inspire:{fieldUse:true,name:'気付けの節',mp:8,target:'ally',description:'MP8で、生存する味方1人のMPを5回復。',effects:[{type:'restore_mp',amount:5}]},
     water_tail:damage('水車の尾',3,'heavy','water'),gate_slam:damage('水門落とし',3,'heavy'),drill_thrust:damage('螺旋突進',4,'pierce'),shell_roll:damage('殻の体当たり',0),
     wax_flame:damage('蜜蝋の火',4,'fire','fire'),saw_cut:damage('引き鋸',3,'heavy'),iris_ray:damage('虹彩光線',4,'fire','light'),glass_shards:damage('硝子の刃',3,'heavy'),type_needles:damage('活字の針',3,'heavy'),
     ink_sip:{name:'墨すすり',mp:2,target:'enemy',description:'相手1人のMPを4減らす。',effects:[{type:'drain_mp',amount:4}]},

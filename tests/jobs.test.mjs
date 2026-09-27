@@ -8,8 +8,8 @@ import {addBuff,buffStats,buffResistance,tickBuffs} from '../src/core/buffs.js';
 import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
-const resources=g=>structuredClone({actors:g.state.actors,inventory:g.state.inventory,gold:g.state.gold,level:g.state.level,xp:g.state.xp,rng:g.state.rng,steps:g.state.steps,light:g.state.light,battle:g.state.battle,discovered:g.state.discovered});
-function atLevel(g,level){g.award(0,data.system.xpBase*(level-1)*level-g.state.xp);assert.equal(g.state.level,level);}
+const resources=g=>structuredClone({actors:g.state.actors,inventory:g.state.inventory,gold:g.state.gold,level:g.state.actors.ada.level,xp:g.state.actors.ada.xp,rng:g.state.rng,steps:g.state.steps,light:g.state.light,battle:g.state.battle,discovered:g.state.discovered});
+function atLevel(g,level){g.award(0,data.system.xpBase*(level-1)*level-g.state.actors.ada.xp);assert.equal(g.state.actors.ada.level,level);}
 function setup(job,level=10){const g=newGame(17);if(job!=='warrior')assert.ok(g.dispatch({type:'job.change',actor:'ada',job}));atLevel(g,level);g.state.members=['ada','nio','sera','il','berg'];g.healAll();return g;}
 function actAs(g,id){g.state.battle.acted=[];let left=5;while(activeActor(g)!==id&&left-->0)g.state.battle.acted.push(activeActor(g));assert.equal(activeActor(g),id);}
 function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
@@ -17,7 +17,7 @@ function equipSkill(g,id){const spec=data.skills[id];let item=spec.equippedItem;
 
 for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/10/30・全習得技能・装備・保存`,()=>{
   for(const level of [1,5,10,30]){
-    const g=setup(job.id,level);assert.equal(g.state.actors.ada.job,job.id);assert.equal(g.state.actors.berg.growthHistory.knight??0,level-1);
+    const g=setup(job.id,level);assert.equal(g.state.actors.ada.job,job.id);assert.equal(g.state.actors.berg.growthHistory.knight??0,0);
     for(const [key,rate] of Object.entries(job.growth))assert.equal(g.stats('ada')[key],data.actors.ada.stats[key]+Math.floor(rate*(level-1)+1e-9));
     const learned=new Set(g.skills('ada'));assert.ok(learned.has('attack')&&learned.has('guard'));
     for(const grant of job.grants)if(grant.api==='battle.skill')assert.equal(learned.has(grant.skill),level>=grant.level);

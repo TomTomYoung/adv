@@ -61,9 +61,9 @@ test('field skills enforce job, living party membership, MP and target reach bef
 });
 test('lamplighter repels kuragari without kills, victory rewards or player escape, and relights the torch',()=>{
   const g=begin(true);g.state.members=['ada'];action(g,'extinguish');place(g,'kagaribi_f2',2,1);g.state.steps=g.data.system.encounterCheckSteps-1;g.random=()=>0;g.dispatch({type:'move',direction:'forward'});
-  const reward={gold:g.state.gold,xp:g.state.xp},hp=g.state.battle.enemies[0].hp;assert.equal(activeActor(g),'ada');assert.ok(hp>=1000);
+  const reward={gold:g.state.gold,xp:g.state.actors.ada.xp},hp=g.state.battle.enemies[0].hp;assert.equal(activeActor(g),'ada');assert.ok(hp>=1000);
   assert.ok(battleSkillPlan(g,'ada','repel_kuragari','ada').ok);roundtrip(g);
-  assert.ok(g.dispatch({type:'battle',action:'skill',skill:'repel_kuragari',target:'ada'}));assert.equal(g.state.battle,null);assert.equal(g.state.records.repels,1);assert.equal(g.state.records.wins,0);assert.equal(g.state.records.escapes,0);assert.equal(g.state.records.kills.kuragari,undefined);assert.deepEqual({gold:g.state.gold,xp:g.state.xp},reward);assert.equal(flame(g).effect,'ward');roundtrip(g);
+  assert.ok(g.dispatch({type:'battle',action:'skill',skill:'repel_kuragari',target:'ada'}));assert.equal(g.state.battle,null);assert.equal(g.state.records.repels,1);assert.equal(g.state.records.wins,0);assert.equal(g.state.records.escapes,0);assert.equal(g.state.records.kills.kuragari,undefined);assert.deepEqual({gold:g.state.gold,xp:g.state.actors.ada.xp},reward);assert.equal(flame(g).effect,'ward');roundtrip(g);
   g.startBattle('kagaribi_roaming',{win:[],escape:[],lose:[]});assert.equal(battleSkillPlan(g,'ada','repel_kuragari','ada').ok,false);
 });
 test('escaping kuragari does not recursively restart the same battle in one input',()=>{

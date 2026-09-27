@@ -25,7 +25,7 @@ export const worldDocs = new Set([
 ]);
 export const battleDocs = new Set([
   'BALANCE_PLAN.md', 'COMPANION_CATALOG.md', 'JOB_SYSTEM.md',
-  'MONSTER_CATALOG.md'
+  'MONSTER_CATALOG.md', 'PROGRESSION_AND_REWARDS.md'
 ]);
 export const authoringDocs = new Set([
   'CONFIG_EDITORS.md', 'CONFIG_EDITOR_SOURCES.md', 'CONFIG_EDITOR_URLS.md'

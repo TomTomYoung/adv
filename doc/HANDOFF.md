@@ -1,8 +1,10 @@
 # 実装引き継ぎ
 
-確認日: 2026-09-27。作品版1.22.0、今回の基点master `4c7b395`（PR #51反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
+確認日: 2026-09-27。作品版1.23.0、今回の基点master `cbb72bd`（PR #52反映済み）。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)、今回の文書整理は[監査記録](development/DOCUMENTATION_AUDIT.md)を参照してください。
 
 ## 完了していること
+
+1.23.0でキャラ個別経験値へ変更しました。生存する出撃メンバーだけが経験値・職業成長を獲得し、酒場の待機者は成長しません。戦闘勝利はメッセージウィンドウでリザルト→各人のレベルアップ→宝箱抽選・発見→品物取得の順に決定送りします。途中保存でも再抽選・二重付与せず、最後に勝利後のシナリオへ戻ります。魔物59定義の品・確率はconfig/battle-rewards.jsonが正本で、対応編集HTMLも追加しました。解毒・回復・清浄の祈り等を人物ページから戦闘外で使用できます。[仕様](battle/PROGRESSION_AND_REWARDS.md)。旧内容版セーブの移行は行いません。
 
 戦闘演出の改善案1・2・3を実装しました。敵の予備動作→130ms後の命中を共通化し、効果音・反動・ダメージ数字を同期します。斬撃・打撃・刺突は別の軌跡を使い、強打は表示姿勢を50ms保持します。軽減設定、スマートフォンの着弾先、かばう・全体攻撃・とどめ・中断を扱います。[演出定義](ui/EFFECT_CATALOG.md)。戦闘計算・入力待ち・セーブ形式は変更しません。
 
@@ -28,7 +30,7 @@
 
 ## 正本と生成
 
-JSON原稿225件は `config/`（クエスト配置200、迷宮13、直下12）にあります。原稿別HTMLと統合編集はJSONを読み込み、検証後に全文をコピーします。GitHub認証・API書込み・自動反映は実装しません。ゲームの配布データは `data/`、JavaScriptの物語原稿は `authoring/` です。[編集元の一覧](authoring/CONFIG_EDITOR_SOURCES.md)を先に確認してください。
+JSON原稿226件は `config/`（クエスト配置200、迷宮13、直下13）にあります。原稿別HTMLと統合編集はJSONを読み込み、検証後に全文をコピーします。GitHub認証・API書込み・自動反映は実装しません。ゲームの配布データは `data/`、JavaScriptの物語原稿は `authoring/` です。[編集元の一覧](authoring/CONFIG_EDITOR_SOURCES.md)を先に確認してください。
 
 q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、他のv1.1原稿は `authoring/stories-v11-1.mjs` と `stories-v11-2.mjs`。配置・調査処理は `config/quests/`、セル・エッジは `config/cell-layers.json`、接続と仕掛けは迷宮ごとのJSONへ書きます。
 
@@ -43,6 +45,8 @@ q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004�
 シナリオの地の文・概要・結末は常体、台詞は人物の口調を保持します。ビューは描画と操作意図の通知を担当し、ゲーム判定・費用・状態変更はCoreへ置きます。
 
 通常ロードは2Dです。旧3Dと潮汐の原稿・試験は保存し、区画の通水属性から流体計算を暗黙に追加しません。旧内容版のセーブは移行せず、読込エラーで新規開始します。
+
+今回の検証は782試験、226編集原稿、64現行文書の検査が成功しました。両ビューの操作はDOM模擬環境で確認済み、実ブラウザの見た目・音声とドロップ経済バランスは未確認です。
 
 ## 次工程
 

@@ -2,7 +2,7 @@
 
 更新日: 2026-09-25。作品版1.20.0用。マップ編集を8タブに整理し、セル種30種類とエッジ種4種類を配置できます。
 
-入口は[設定一覧](../../config/index.html)。公開先は[Pages URL一覧](CONFIG_EDITOR_URLS.md)に全225件を掲載しています。[編集対象JSONの一覧](CONFIG_EDITOR_SOURCES.md)で、操作ごとの出力先・生成済みデータとの区別を確認できます。
+入口は[設定一覧](../../config/index.html)。公開先は[Pages URL一覧](CONFIG_EDITOR_URLS.md)に全226件を掲載しています。[編集対象JSONの一覧](CONFIG_EDITOR_SOURCES.md)で、操作ごとの出力先・生成済みデータとの区別を確認できます。
 
 ## 迷宮から始めるマップ編集
 
@@ -23,7 +23,7 @@
 
 接続編集は「接続を下書きに反映」で確定し、未反映の接続がある間はJSON出力を止めます。取消しても先に作成したマップは残り、「戻す」で取り消せます。出力時は接続口、扉面、重複、入口からの接続をゲームと共通の規則で検証します。共有設定の変更は他迷宮の接続も確認します。全経路の到達可能性や進行条件の通し実行までは代替しません。
 
-設定一覧の先頭は「マップ編集」「セル種の管理」「道具・商品の編集」です。旧開口と3D原稿は互換原稿の折りたたみへ移しています。225件の原稿別編集ページは引き続き利用でき、検索で直接開けます。
+設定一覧の先頭は「マップ編集」「セル種の管理」「道具・商品の編集」です。旧開口と3D原稿は互換原稿の折りたたみへ移しています。226件の原稿別編集ページは引き続き利用でき、検索で直接開けます。
 
 ## 編集UIの仕様
 
@@ -66,12 +66,12 @@
 
 ## 実装と保守
 
-`npm run build:config` が225個のHTML、`config/shared/catalog.js`、参照索引 `config/shared/reference-catalog.js` を生成します。参照索引は名前・参照先・配置・正本位置の読み取り用データです。編集原稿の正本ではありません。原稿や生成済みのゲームデータを変えた後は再生成してください。
+`npm run build:config` が226個のHTML、`config/shared/catalog.js`、参照索引 `config/shared/reference-catalog.js` を生成します。参照索引は名前・参照先・配置・正本位置の読み取り用データです。編集原稿の正本ではありません。原稿や生成済みのゲームデータを変えた後は再生成してください。
 
 画面は `config/shared/studio.js`、分野別設定は `studio/profiles.js`、項目・条件・処理は `studio/forms.js`、配置図は `studio/map-view.js`、原稿管理は `studio/workspace.js`、参照検証は `studio/checks.js`、素材確認は `studio/preview.js` です。旧 `editor.js` は互換テスト用として残し、各HTMLの入口は新画面へ変更しています。
 
 照度の純粋計算を `src/core/light-geometry.js` に分離し、ゲームと配置図から共用します。計算内容は従来のままです。ゲームの状態を動かすモジュールを編集画面から読み込まないようにしています。
 
-`npm run check:config` は全225原稿・HTML・生成索引の一致を確認します。`tests/config-studio.test.mjs` は原稿間の編集・参照・保持・出力、分野別UIを検証します。`node tools/browser-config-smoke.mjs` はPlaywrightとChromiumで `/adv/` 配下の検索、イベントのエッジ配置、セルの塗り替え、技能消費、3ファイル出力、コピー、Undo、入力エラー、1440／900／390／320px幅を確認します。実行ファイルは必要に応じて `ADV_BROWSER_EXECUTABLE` で指定します。
+`npm run check:config` は全226原稿・HTML・生成索引の一致を確認します。`tests/config-studio.test.mjs` は原稿間の編集・参照・保持・出力、分野別UIを検証します。`node tools/browser-config-smoke.mjs` はPlaywrightとChromiumで `/adv/` 配下の検索、イベントのエッジ配置、セルの塗り替え、技能消費、3ファイル出力、コピー、Undo、入力エラー、1440／900／390／320px幅を確認します。実行ファイルは必要に応じて `ADV_BROWSER_EXECUTABLE` で指定します。
 
 くぼみ6種類は「くぼみ」分類から選べます。深さ（m）、底の見えない指定、水面高さ（m）を地点の例外でも編集できます。[表示確認ページ](../../depression-preview.html)と[くぼみの仕様](../dungeons/FLOOR_DEPRESSIONS.md)を参照してください。

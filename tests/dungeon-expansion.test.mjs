@@ -136,7 +136,7 @@ test('market toll and barter open routes persistently, merchant purchases and es
 test('a future native skill can be borrowed and level-up while borrowing neither duplicates it nor corrupts saves',()=>{
   const g=newGame();g.dispatch({type:'job.change',actor:'ada',job:'monk'});g.dispatch({type:'travel',region:5});const book=spec(g,'library').books.find(b=>b.skill==='breathe');at(g,book);
   assert.ok(act(g,'library','borrow',book.id,{actor:'ada',sealed:'guard'}));roundtrip(g);assert.equal(g.skills('ada').filter(id=>id==='breathe').length,1);
-  g.award(0,data.system.xpBase*5*6);assert.ok(g.state.level>=5);roundtrip(g);assert.equal(g.skills('ada').filter(id=>id==='breathe').length,1);
+  g.award(0,data.system.xpBase*5*6);assert.ok(g.state.actors.ada.level>=5);roundtrip(g);assert.equal(g.skills('ada').filter(id=>id==='breathe').length,1);
   assert.ok(act(g,'library','return',book.id,{actor:'ada'}));assert.ok(g.skills('ada').includes('guard'));assert.ok(g.skills('ada').includes('breathe'));roundtrip(g);
 });
 

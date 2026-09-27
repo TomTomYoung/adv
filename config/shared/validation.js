@@ -27,6 +27,7 @@ export function createDefinitions(read=browserRead){
     const script=await schema('script'),scripts=script.properties.scripts,defs=script.$defs;
     const map=await schema('map'),mapValues=dict(map);
     let shape;
+    if(family==='rewards')shape=obj({drops:dict(obj({item:str,chance:{type:'number',minimum:0,maximum:1}}))});
     if(family==='maps')shape=obj({schemaVersion:{const:1},maps:mapValues,retiredMaps:array(str),retiredScriptFiles:array(str)});
     if(family==='bundle')shape=obj({maps:mapValues,scripts,items:dict(item),enemies:dict(enemy),encounters:dict(encounter),statuses:dict(status),shopGoods:goods,mapOpenings:array(point),mapKnown:dict(array(str))},entry.file==='dungeon-content.json'?['maps','scripts','items','enemies','encounters','statuses','shopGoods','mapOpenings','mapKnown']:['maps','scripts','items','enemies','encounters']);
     if(family==='voxel')shape=obj({maps:mapValues,scripts});
@@ -61,6 +62,11 @@ export function createValidator(read=browserRead){
       }
     }
     walk(value);
+    if(entry.family==='rewards'){
+      const enemies=await read('data/enemies.json'),items=await read('data/items.json');
+      for(const id of Object.keys(enemies))if(!Object.hasOwn(value.drops,id))fail(['drops',id],'魔物の宝箱設定が必要です。');
+      for(const [id,drop] of Object.entries(value.drops)){if(!Object.hasOwn(enemies,id))fail(['drops',id],'未知の魔物です。');if(!Object.hasOwn(items,drop.item))fail(['drops',id,'item'],'未知のアイテムです。');}
+    }
     if(entry.family==='quest'){
       for(const [i,e] of value.events.entries())if(!Object.hasOwn(value.scripts,e.script)&&!e.script.startsWith(entry.id+'.'))fail(['events',i,'script'],'同じクエストのスクリプトを指定してください。');
     }

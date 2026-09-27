@@ -13742,6 +13742,596 @@ export const referenceData={
       "id": "q200.flow.visit"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_1",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_1_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_2",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_2_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_3",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_3_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_4",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_4_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_5",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_5_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_6",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_6_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_7",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_7_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_8",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_8_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_9",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_9_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_10",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "guard_10_elite",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterwheel_beaver",
+        "item"
+      ],
+      "kind": "items",
+      "id": "rope"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "sluice_crocodile",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "drill_mole",
+        "item"
+      ],
+      "kind": "items",
+      "id": "blasting_charge"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ceramic_armadillo",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "candle_bee",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "saw_mantis",
+        "item"
+      ],
+      "kind": "items",
+      "id": "hard_thorn"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kaleidoscope_owl",
+        "item"
+      ],
+      "kind": "items",
+      "id": "focus"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "glass_jellyfish",
+        "item"
+      ],
+      "kind": "items",
+      "id": "antidote"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "type_porcupine",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "book_silverfish",
+        "item"
+      ],
+      "kind": "items",
+      "id": "quiet_spores"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "vault_mouse",
+        "item"
+      ],
+      "kind": "items",
+      "id": "iron_sword"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "patchwork_bagworm",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "bone_whale",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "anchor_squid",
+        "item"
+      ],
+      "kind": "items",
+      "id": "rope"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "battery_hermit",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "derail_centipede",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "iris_butterfly",
+        "item"
+      ],
+      "kind": "items",
+      "id": "quiet_spores"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "compass_magpie",
+        "item"
+      ],
+      "kind": "items",
+      "id": "focus"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "moon_wolf",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "jackknife",
+        "item"
+      ],
+      "kind": "items",
+      "id": "dagger"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "moor_wolf",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "valley_drake",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "carrion_ghoul",
+        "item"
+      ],
+      "kind": "items",
+      "id": "antidote"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "thorn_stag",
+        "item"
+      ],
+      "kind": "items",
+      "id": "hard_thorn"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "debt_golem",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "iron_moth",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "last_fort_guard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "mail"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "moss_crawler",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "watchbox_mimic",
+        "item"
+      ],
+      "kind": "items",
+      "id": "iron_sword"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "stone_eater",
+        "item"
+      ],
+      "kind": "items",
+      "id": "blasting_charge"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "footstep_stalker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mirror_fang",
+        "item"
+      ],
+      "kind": "items",
+      "id": "focus"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "battlefield_bonebeast",
+        "item"
+      ],
+      "kind": "items",
+      "id": "spear"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kuragari",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "valley_hexer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "antidote"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "water_darter",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "water_predator",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "water_giant",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "salt_eater",
+        "item"
+      ],
+      "kind": "items",
+      "id": "antidote"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -20341,6 +20931,27 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_item"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "level_up",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "field_reveal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "level_up",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_complete"
     },
     {
       "file": "presentation.json",
@@ -28510,6 +29121,7 @@ export const referenceData={
     }
   ],
   "generatedFrom": [
+    "config/battle-rewards.json",
     "config/catalog-q011-q020.json",
     "config/cell-layers.json",
     "config/connected-maps.json",
@@ -32733,6 +33345,9 @@ export const referenceData={
       },
       "light": {
         "name": "light"
+      },
+      "level_up": {
+        "name": "level_up"
       }
     },
     "eventCues": {
@@ -53920,6 +54535,13 @@ export const referenceData={
       "path": [
         "cues",
         "light"
+      ]
+    },
+    "cues/level_up": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "level_up"
       ]
     },
     "items/blasting_charge": {

@@ -17,7 +17,7 @@ function outage(){
 const checkpoint=g=>{const s=g.save();assert.deepEqual(validateSave(JSON.parse(s),g.data),[]);g.load(s);assert.equal(g.save(),s);};
 
 test('q001 fights one full round, saves rookie speech, interrupts without rewards and resumes on the same cell',()=>{
- const g=outage(),loc=structuredClone(g.state.location),gold=g.state.gold,xp=g.state.xp,r=structuredClone(g.state.records);
+ const g=outage(),loc=structuredClone(g.state.location),gold=g.state.gold,xp=g.state.actors.ada.xp,r=structuredClone(g.state.records);
  checkpoint(g);assert.equal(fireContext(data,g.state).run.portable.fuel,0);
  const hp=g.state.members.reduce((n,id)=>n+g.state.actors[id].hp,0);
  for(let n=0;n<10&&!g.state.battle.event;n++)assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));
@@ -31,7 +31,7 @@ test('q001 fights one full round, saves rookie speech, interrupts without reward
  assert.equal(g.state.stories.q001.values.newOil,0);assert.equal(g.state.stories.q001.values.oilUsed,2);
  assert.equal(fireContext(data,g.state).run.portable.fuel,25);
  assert.equal(g.state.records.interruptions,r.interruptions+1);assert.equal(g.state.records.wins,r.wins);
- assert.equal(g.state.gold,gold);assert.equal(g.state.xp,xp);checkpoint(g);drain(g);checkpoint(g);
+ assert.equal(g.state.gold,gold);assert.equal(g.state.actors.ada.xp,xp);checkpoint(g);drain(g);checkpoint(g);
  assert.equal(g.state.stories.q001.values.oilUsed,2);
 });
 

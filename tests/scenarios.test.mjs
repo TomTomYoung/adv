@@ -55,9 +55,9 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
   const saved=g.save();g.load(saved);assert.equal(g.save(),saved,'checkpoint round trip');
   if(g.state.quests[q.id].stage==='completed'){
    ends.add(g.state.quests[q.id].outcome);assert.equal(g.state.vm.length,0);
-   const earned={gold:g.state.gold,xp:g.state.xp,completed:g.state.vars.completed};
+   const earned={gold:g.state.gold,xp:g.state.actors.ada.xp,completed:g.state.vars.completed};
    g.run(visit(q.id));drain(g);
-   assert.deepEqual({gold:g.state.gold,xp:g.state.xp,completed:g.state.vars.completed},earned);
+   assert.deepEqual({gold:g.state.gold,xp:g.state.actors.ada.xp,completed:g.state.vars.completed},earned);
    continue;
   }
   // Defeat can leave a scene to be resumed at its map hub.

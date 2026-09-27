@@ -9,7 +9,7 @@ export const effectSchema={oneOf:[
 ]};
 export const recordSchemas={
  item:obj({id:str,name:str,description:{type:'string'},type:{enum:['consumable','material','equipment','key','dungeon_tool']},field:bool,consumed:bool,script:str,battleSkill:str,slot:{enum:['weapon','armor','charm']},equipmentType:str,stats,resist:dict(num)},['name']),
- skill:obj({name:str,description:{type:'string'},mp:uint,hp:uint,target,maxTargets:{type:'integer',minimum:1},materials:dict(uint),requiresWeapon:arr(str),requiresAnalyzed:bool,effects:arr(effectSchema),selfEffects:arr(effectSchema),fireEffect:str,priority:num},['name','mp','target','effects']),
+ skill:obj({fieldUse:bool,name:str,description:{type:'string'},mp:uint,hp:uint,target,maxTargets:{type:'integer',minimum:1},materials:dict(uint),requiresWeapon:arr(str),requiresAnalyzed:bool,effects:arr(effectSchema),selfEffects:arr(effectSchema),fireEffect:str,priority:num},['name','mp','target','effects']),
  monster:obj({id:str,name:str,description:{type:'string'},region:{type:'integer',minimum:1,maximum:10},sprite:str,stats,resist:dict(num),rewards:obj({gold:uint,xp:uint}),skill:str,skills:arr(str),ai:arr(obj({priority:num,condition:expression,skill:str,target:{enum:['random','weakest','self']}},['priority','skill','target'])),statusImmune:arr(str)},['name','sprite','stats']),
  actor:obj({id:str,name:str,description:{type:'string'},portrait:str,stats,growth:stats,skills:arr(str),equipment:obj({weapon:{type:['string','null']},armor:{type:['string','null']},charm:{type:['string','null']}}),statusImmune:arr(str)},['id','name','stats']),
  stock:obj({item:str,price:uint},['item','price']),
