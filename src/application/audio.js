@@ -1,6 +1,7 @@
 // Browser audio adapter; the game and the view exchange only data and labels.
+import {feedbackDelay} from '../feedback-timing.js';
 export class GameAudio {
-  constructor({createAudio=url=>new Audio(url),onChange=()=>{},schedule=setTimeout,cancel=clearTimeout}={}){
+  constructor({createAudio=url=>new Audio(url),onChange=()=>{},schedule=(fn,delay)=>setTimeout(fn,delay),cancel=id=>clearTimeout(id)}={}){
     this.schedule=schedule;this.cancel=cancel;this.effectTimers=new Set();this.effectGains=new WeakMap();this.seVolume=1;this.feedbackKey=null;this.preloaded=new Map();this.createAudio=createAudio;this.onChange=onChange;this.enabled=false;this.volume=.5;this.music=null;this.audio=null;this.pending=null;this.generation=0;this.state='off';this.effectKey=null;this.effects=new Set();
   }
   setState(state){if(this.state!==state){this.state=state;this.onChange(this.label());}}
@@ -17,7 +18,7 @@ export class GameAudio {
     if(model.feedback){
       const key=`${model.feedback.session}/${model.feedback.revision}`;
       if(key!==this.feedbackKey){this.feedbackKey=key;this.stopEffects();
-        if(this.enabled&&this.volume>0&&this.seVolume>0)for(const event of model.feedback.events){if(!event.sound?.url)continue;const play=()=>this.playEffect(event.sound.url,event.sound.gain??1);if(event.at>0){let timer;timer=this.schedule(()=>{this.effectTimers.delete(timer);play();},event.at);this.effectTimers.add(timer);}else play();}
+        if(this.enabled&&this.volume>0&&this.seVolume>0)for(const event of model.feedback.events){if(!event.sound?.url)continue;const play=()=>this.playEffect(event.sound.url,event.sound.gain??1),delay=feedbackDelay(model.feedback,event.at);if(delay>0){let timer;timer=this.schedule(()=>{this.effectTimers.delete(timer);play();},delay);this.effectTimers.add(timer);}else play();}
       }
     }else{
       const key=model.se?`${model.se.url}/${model.se.revision}`:null;

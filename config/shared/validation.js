@@ -35,7 +35,7 @@ export function createDefinitions(read=browserRead){
     if(family==='entities')shape=obj({version:str,source:str,examples:str,monsters:array({...enemy,properties:{...enemy.properties,region:{type:'integer',minimum:1,maximum:10},skill:str},required:[...enemy.required,'region','skill']}),actors:dict(actor)});
     if(family==='presentation'){
       const sound=obj({name:str,use:str,instrument:str,gain:{type:'number',minimum:0,maximum:1},notes:array(obj({pitch:{type:'integer',minimum:0,maximum:127},start:{type:'number',minimum:0},seconds:{type:'number',exclusiveMinimum:0},velocity:{type:'integer',minimum:0,maximum:127}}))});
-      const cue=obj({effects:array(str),sound:str,target:str,gap:{type:'number',minimum:0}},['effects','target']);
+      const cue=obj({effects:array(str),sound:str,target:str,gap:{type:'number',minimum:0},battle:obj({impact:{type:'number',minimum:0,maximum:1000},anticipation:str},['impact'])},['effects','target']);
       shape=obj({version:str,sounds:dict(sound),effects:await schema('effects'),cues:dict(cue),bindings:dict(dict(str)),ambient:{type:'object'}});
     }
     if(family==='catalog')shape={...array(obj({id:str,title:str,brief:str,past:str,progression:str,outcomes:dict(outcome),nodes:array(obj({id:str,options:array(obj({text:str,to:str},['text']))},['id']))})),minItems:10,maxItems:10};
@@ -77,7 +77,7 @@ export function createValidator(read=browserRead){
       }
     }
     if(entry.family==='jobs')for(const [actor,job] of Object.entries(value.initialJobs))if(!Object.hasOwn(value.jobs,job))fail(['initialJobs',actor],'職業IDがjobsにありません。');
-    if(entry.family==='presentation')for(const [id,c] of Object.entries(value.cues)){for(const effect of c.effects)if(!Object.hasOwn(value.effects,effect))fail(['cues',id,'effects'],'効果がありません: '+effect);if(c.sound&&!Object.hasOwn(value.sounds,c.sound))fail(['cues',id,'sound'],'SEがありません: '+c.sound);}
+    if(entry.family==='presentation')for(const [id,c] of Object.entries(value.cues)){for(const effect of [...c.effects,...(c.battle?.anticipation?[c.battle.anticipation]:[])])if(!Object.hasOwn(value.effects,effect))fail(['cues',id,'effects'],'効果がありません: '+effect);if(c.sound&&!Object.hasOwn(value.sounds,c.sound))fail(['cues',id,'sound'],'SEがありません: '+c.sound);}
     if(entry.family==='cells')for(const [id,preset] of Object.entries(value.presets))if(!reliefParametersValid(preset.parameters))fail(['presets',id,'parameters'],'くぼみの深さ・水面高さを確認してください。水面は底より上に設定します。');
     if(entry.family==='cells')for(const [id,map] of Object.entries(value.maps)){
       for(const [symbol,preset] of Object.entries(map.legend))if(!Object.hasOwn(value.presets,preset))fail(['maps',id,'legend',symbol],'セル種がありません。');

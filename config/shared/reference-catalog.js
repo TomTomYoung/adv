@@ -19614,7 +19614,7 @@ export const referenceData={
         0
       ],
       "kind": "effects",
-      "id": "slash_arc"
+      "id": "strike_pierce"
     },
     {
       "file": "presentation.json",
@@ -19625,7 +19625,7 @@ export const referenceData={
         1
       ],
       "kind": "effects",
-      "id": "skew"
+      "id": "recoil_pierce"
     },
     {
       "file": "presentation.json",
@@ -19636,6 +19636,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "pierce",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -19673,6 +19684,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "fire",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "ice",
         "effects",
         0
@@ -19700,6 +19722,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_ice"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "ice",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -19737,6 +19770,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "lightning",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "heal",
         "effects",
         0
@@ -19753,6 +19797,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_heal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "heal",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -19795,6 +19850,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_guard"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "guard",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -19884,6 +19950,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "mana",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "encounter",
         "effects",
         0
@@ -19910,7 +19987,7 @@ export const referenceData={
         0
       ],
       "kind": "effects",
-      "id": "slash_arc"
+      "id": "strike_slash"
     },
     {
       "file": "presentation.json",
@@ -19921,7 +19998,7 @@ export const referenceData={
         1
       ],
       "kind": "effects",
-      "id": "hit_shake"
+      "id": "recoil_slash"
     },
     {
       "file": "presentation.json",
@@ -19937,12 +20014,23 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "attack",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "power",
         "effects",
         0
       ],
       "kind": "effects",
-      "id": "impact_burst"
+      "id": "strike_blunt"
     },
     {
       "file": "presentation.json",
@@ -19953,7 +20041,7 @@ export const referenceData={
         1
       ],
       "kind": "effects",
-      "id": "heavy_shake"
+      "id": "recoil_blunt"
     },
     {
       "file": "presentation.json",
@@ -19964,6 +20052,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_heavy"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "power",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -20001,12 +20100,23 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "venom",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "cut",
         "effects",
         0
       ],
       "kind": "effects",
-      "id": "slash_arc"
+      "id": "strike_slash"
     },
     {
       "file": "presentation.json",
@@ -20033,12 +20143,23 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "cut",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "roll",
         "effects",
         0
       ],
       "kind": "effects",
-      "id": "impact_burst"
+      "id": "strike_blunt"
     },
     {
       "file": "presentation.json",
@@ -20060,6 +20181,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_heavy"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "roll",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -20097,6 +20229,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "drain",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "cleanse",
         "effects",
         0
@@ -20124,6 +20267,17 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_heal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "cleanse",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
     },
     {
       "file": "presentation.json",
@@ -29933,6 +30087,27 @@ export const referenceData={
       },
       "field_poison": {
         "name": "毒の紫色化"
+      },
+      "strike_slash": {
+        "name": "鋭い斬撃"
+      },
+      "strike_blunt": {
+        "name": "打撃の集中火花"
+      },
+      "strike_pierce": {
+        "name": "貫く直線"
+      },
+      "recoil_slash": {
+        "name": "斬撃の押し戻し"
+      },
+      "recoil_blunt": {
+        "name": "重打の反動と静止"
+      },
+      "recoil_pierce": {
+        "name": "刺突の押し込み"
+      },
+      "enemy_advance": {
+        "name": "敵の引きと踏み込み"
       }
     },
     "sounds": {
@@ -53430,6 +53605,55 @@ export const referenceData={
       "path": [
         "effects",
         "field_poison"
+      ]
+    },
+    "effects/strike_slash": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "strike_slash"
+      ]
+    },
+    "effects/strike_blunt": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "strike_blunt"
+      ]
+    },
+    "effects/strike_pierce": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "strike_pierce"
+      ]
+    },
+    "effects/recoil_slash": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "recoil_slash"
+      ]
+    },
+    "effects/recoil_blunt": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "recoil_blunt"
+      ]
+    },
+    "effects/recoil_pierce": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "recoil_pierce"
+      ]
+    },
+    "effects/enemy_advance": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "enemy_advance"
       ]
     },
     "cues/step": {

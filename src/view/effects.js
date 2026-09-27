@@ -1,16 +1,21 @@
 // Visual-only player. Timelines never advance the game or call the engine.
-export function motionFrames(frames){return frames.map(f=>({offset:f.at,transform:`translate(${f.x??0}px,${f.y??0}px) rotate(${f.rotate??0}deg) skew(${f.skewX??0}deg,${f.skewY??0}deg) scale(${f.scaleX??1},${f.scaleY??1})`,opacity:f.opacity??1}));}
+import {strikePieces,strikeAngle} from './battle-effects.js';
+import {feedbackDelay} from '../feedback-timing.js';
+export function motionFrames(frames,angle=0){const r=angle*Math.PI/180;return frames.map(f=>({offset:f.at,transform:`translate(${(f.x??0)*Math.cos(r)-(f.y??0)*Math.sin(r)}px,${(f.x??0)*Math.sin(r)+(f.y??0)*Math.cos(r)}px) rotate(${f.rotate??0}deg) skew(${f.skewX??0}deg,${f.skewY??0}deg) scale(${f.scaleX??1},${f.scaleY??1})`,opacity:f.opacity??1}));}
 export function spriteFrames(track){return [...Array.from({length:track.frames},(_,i)=>({offset:i/track.frames,backgroundPosition:`${-(i%track.columns)*track.cell}px ${-Math.floor(i/track.columns)*track.cell}px`,opacity:1})),{offset:1,backgroundPosition:`${-((track.frames-1)%track.columns)*track.cell}px ${-Math.floor((track.frames-1)/track.columns)*track.cell}px`,opacity:0}];}
 export class EffectsRenderer {
-  constructor(root){this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.mediaChange=()=>this.stop();this.media?.addEventListener('change',this.mediaChange);}
+  constructor(root){this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.motions=new Map();this.numbers=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.mediaChange=()=>this.stop();this.media?.addEventListener('change',this.mediaChange);}
   destroy(){this.stop();this.media?.removeEventListener('change',this.mediaChange);}
   stop(){for(const timer of this.timers)clearTimeout(timer);this.timers.clear();for(const a of this.animations)a.cancel();this.animations.clear();for(const f of this.cleanups)f();this.cleanups.clear();}
   capture(){this.stop();this.cache.clear();for(const element of this.root.querySelectorAll('[data-fx]')){const rect=element.getBoundingClientRect();this.cache.set(element.dataset.fx,{rect,image:element.tagName==='IMG'?element.src:null});}}
   anchor(target){
     const key=target.key==='screen'?'screen':target.key==='party'?'party':target.key;
-    const element=[...this.root.querySelectorAll('[data-fx]')].find(e=>e.dataset.fx===key),prior=this.cache.get(key);
-    if(element)return {element,rect:element.getBoundingClientRect(),image:element.tagName==='IMG'?element.src:target.image};
-    if(prior&&(target.image||prior.image))return {...prior,image:target.image??prior.image};
+    let element=[...this.root.querySelectorAll('[data-fx]')].find(e=>e.dataset.fx===key);
+    if(element&&!element.getBoundingClientRect().width)element=null;
+    element??=[...this.root.querySelectorAll('[data-fx-fallback]')].find(e=>e.dataset.fxFallback===key&&e.getBoundingClientRect().width>0);
+    const prior=this.cache.get(key);
+    if(element)return {element,rect:element.getBoundingClientRect(),image:element.tagName==='IMG'?element.src:element.dataset.fxFallback?null:target.image};
+    if(prior?.rect.width>0&&(target.image||prior.image))return {...prior,image:target.image??prior.image};
     const scene=this.root.querySelector('[data-fx="scene"]')??this.root.querySelector('.main-panel')??this.root;
     const rect=scene.getBoundingClientRect();if(target.image)return {rect:{left:rect.left+rect.width/2-80,top:rect.top+rect.height/2-80,width:160,height:160},image:target.image};
     return {element:scene,rect};
@@ -25,23 +30,53 @@ export class EffectsRenderer {
   animate(element,frames,duration,clean=()=>{},easing='linear'){
     if(!element?.animate){clean();return;}
     const a=element.animate(frames,{duration,iterations:1,easing,fill:'none'});this.animations.add(a);a.finished.catch(()=>{}).finally(()=>{this.animations.delete(a);clean();});
+    return a;
   }
-  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const image=document.createElement('img');image.src=anchor.image;image.alt='';g.element.append(image);return g;}
+  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const image=document.createElement('img');image.src=anchor.image;image.alt='';const style=anchor.element&&globalThis.getComputedStyle?.(anchor.element);if(style){image.style.objectFit=style.objectFit;image.style.objectPosition=style.objectPosition;image.style.borderRadius=style.borderRadius;}g.element.append(image);return g;}
   hide(element){if(!element||element.tagName!=='IMG')return ()=>{};let entry=this.hidden.get(element);if(!entry){entry={count:0,visibility:element.style.visibility};this.hidden.set(element,entry);}entry.count++;element.style.visibility='hidden';let done=false;const clean=()=>{if(done)return;done=true;if(--entry.count===0){element.style.visibility=entry.visibility;this.hidden.delete(element);}this.cleanups.delete(clean);};this.cleanups.add(clean);return clean;}
   tint(anchor,color,opacity,duration,shade=false){const g=this.layer(anchor.rect);g.element.style.background=shade?`radial-gradient(ellipse at center,transparent 20%,${color} 100%)`:color;this.animate(g.element,[{opacity:0},{opacity,offset:.3},{opacity:0}],duration,g.clean);}
-  play(effect,target,assets,mode='full'){
+  strike(anchor,track,duration,source){
+    const size=Math.max(64,Math.min(180,Math.max(anchor.rect.width,anchor.rect.height)*.95));
+    const g=this.layer({left:anchor.rect.left+anchor.rect.width/2-size/2,top:anchor.rect.top+anchor.rect.height/2-size/2,width:size,height:size},`fx-strike fx-strike-${track.pattern}`);
+    if(track.pattern==='pierce')g.element.style.transform=`rotate(${strikeAngle(anchor.rect,source?.rect)}deg)`;
+    const parts=strikePieces(track.pattern,track.color);let remaining=parts.length;
+    for(const part of parts){const e=document.createElement('div');e.className='fx-strike-piece';e.style.clipPath=part.shape;e.style.background=part.color;g.element.append(e);this.animate(e,part.frames,duration,()=>{if(--remaining===0)g.clean();});}
+  }
+  damage(target,mode){
+    if(!(target.damage>0)||mode==='off')return;
+    const a=this.anchor(target),width=100,height=32;
+    // Keep numbers inside the viewport, including the top-row portraits on phones.
+    const left=Math.max(0,Math.min((globalThis.innerWidth??Infinity)-width,a.rect.left+a.rect.width/2-width/2));
+    const slots=this.numbers.get(target.key)??new Set();let slot=0;while(slots.has(slot))slot++;slots.add(slot);this.numbers.set(target.key,slots);
+    const top=Math.max(4,a.rect.top+a.rect.height*.25)+slot*22;
+    const g=this.layer({left,top,width,height},'fx-damage');g.element.textContent=String(target.damage);
+    let cleaned=false;
+    const clean=()=>{if(cleaned)return;cleaned=true;g.clean();slots.delete(slot);if(!slots.size&&this.numbers.get(target.key)===slots)this.numbers.delete(target.key);this.cleanups.delete(clean);};this.cleanups.add(clean);
+    const reduced=mode==='reduced'||this.media?.matches;
+    this.animate(g.element,reduced?[{opacity:1},{opacity:1,offset:.75},{opacity:0}]:[
+      {opacity:1,transform:'translateY(0) scale(1.12)'},{offset:.2,opacity:1,transform:'translateY(-6px) scale(1)'},
+      {offset:.75,opacity:1,transform:'translateY(-14px) scale(1)'},{opacity:0,transform:'translateY(-18px) scale(1)'}],620,clean);
+  }
+  play(effect,target,assets,mode='full',source){
     const anchor=this.anchor(target),duration=effect.duration;
     if(mode==='off')return;
     if(mode==='reduced'||this.media?.matches){this.tint(anchor,'#dab47a',.1,220);return;}
     for(const track of effect.tracks){
       if(track.kind==='motion'){
+        if(!anchor.image&&target.key.startsWith('actor:')){this.tint(anchor,'#f5b567',.12,duration);continue;}
+        this.motions.get(target.key)?.();
         const g=anchor.image?this.ghost(anchor):null,restore=g?this.hide(anchor.element):()=>{};
-        this.animate(g?.element??anchor.element,motionFrames(track.frames),duration,()=>{g?.clean();restore();});
+        let animation;
+        const clean=()=>{g?.clean();restore();if(this.motions.get(target.key)===cancel)this.motions.delete(target.key);this.cleanups.delete(cancel);};
+        const cancel=()=>{animation?.cancel();clean();};this.motions.set(target.key,cancel);this.cleanups.add(cancel);
+        animation=this.animate(g?.element??anchor.element,motionFrames(track.frames,track.directed?strikeAngle(anchor.rect,source?.rect):0),duration,clean);
       }else if(track.kind==='split'){
         if(!anchor.image){this.tint(anchor,'#dab47a',.12,duration);continue;}
         const restore=this.hide(anchor.element);let remaining=2;
         const clips=track.axis==='diagonal'?['polygon(0 0,100% 0,0 100%)','polygon(100% 0,100% 100%,0 100%)']:['polygon(0 0,50% 0,50% 100%,0 100%)','polygon(50% 0,100% 0,100% 100%,50% 100%)'];
         for(let i=0;i<2;i++){const g=this.ghost(anchor),sign=i===0?-1:1;g.element.style.clipPath=clips[i];this.animate(g.element,[{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${sign*track.distance}px,${track.axis==='diagonal'?sign*track.distance:0}px) rotate(${sign*track.rotate}deg)`,opacity:0}],duration,()=>{g.clean();if(--remaining===0)restore();});}
+      }else if(track.kind==='strike'){
+        this.strike(anchor,track,duration,source);
       }else if(track.kind==='sprite'){
         const g=this.layer({left:anchor.rect.left+anchor.rect.width/2,top:anchor.rect.top+anchor.rect.height/2,width:track.cell,height:track.cell},'fx-sprite');
         Object.assign(g.element.style,{backgroundImage:`url("${assets[track.asset]}")`,backgroundRepeat:'no-repeat',transform:`translate(-50%,-50%) scale(${track.scale??1})`});this.animate(g.element,spriteFrames(track),duration,g.clean,'steps(1,end)');
@@ -51,6 +86,16 @@ export class EffectsRenderer {
   present(model,mode='full'){
     for(const effect of Object.values(model.effects??{}))for(const track of effect.tracks)if(track.kind==='sprite'){const url=model.effectAssets[track.asset];if(url&&!this.sheets.has(url)){const image=new Image();image.src=url;this.sheets.set(url,image);}}
     const key=model.feedback?`${model.feedback.session}/${model.feedback.revision}`:null;if(key===this.key)return;this.key=key;
-    for(const event of model.feedback?.events??[])for(const id of event.effects){const effect=model.effects[id];if(!effect)continue;for(const target of event.targets){const play=()=>this.play(effect,target,model.effectAssets,mode);if(event.at>0){let timer;timer=setTimeout(()=>{this.timers.delete(timer);play();},event.at);this.timers.add(timer);}else play();}}
+    for(const event of model.feedback?.events??[]){
+      const play=()=>{
+        const source=event.source?this.anchor(event.source):null;
+        for(const target of event.targets){
+          for(const id of event.effects){const effect=model.effects[id];if(effect)this.play(effect,target,model.effectAssets,mode,source);}
+          this.damage(target,mode);
+        }
+      };
+      const delay=feedbackDelay(model.feedback,event.at);
+      if(delay>0){let timer;timer=setTimeout(()=>{this.timers.delete(timer);play();},delay);this.timers.add(timer);}else play();
+    }
   }
 }

@@ -9,9 +9,19 @@ export function describeTarget(engine,key='scene'){
   if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name};}
   return {key};
 }
-export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],at=engine.feedback.clock,gain=1}){
+export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1}){
   const f=engine.feedback;if(f.events.length>=64)throw Error('一度の演出数が多すぎます');
-  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),at:Math.min(5000,Math.max(0,at)),gain});
+  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),...(source?{source:describeTarget(engine,source)}:{}),at:Math.min(5000,Math.max(0,at)),gain});
+}
+// Battle results are already resolved. This schedules presentation only; no waits or RNG.
+export function playBattleCue(engine,id,source,targets,hostile=false){
+  const cue=engine.data.presentation?.cues[id];if(!cue)return;
+  const start=engine.feedback.clock,impact=start+(cue.battle?.impact??0);
+  if(hostile&&source.key.startsWith('enemy:')&&cue.battle?.anticipation){
+    emitFeedback(engine,{effects:[cue.battle.anticipation],targets:[source],at:start});
+  }
+  emitFeedback(engine,{effects:cue.effects,sound:cue.sound,source,targets,at:impact});
+  engine.feedback.clock=Math.min(5000,impact+(cue.gap??0));
 }
 export function playCue(engine,id,targets){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;
