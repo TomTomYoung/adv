@@ -53,7 +53,7 @@ export class SceneView extends GameView{
     paging.append(previous,counter);body.append(viewport,paging);window.append(body);
     const actions=description?null:make('div','scene-message-actions');
     if(actions){
-      if(this.model.commands&&!this.model.battle){
+      if(this.model.commands){
         const controls=make('div','scene-dungeon-controls');controls.setAttribute('aria-label','イベント操作');
         controls.append(this.movementPad(this.model.commands,true),actions);window.append(controls);
       }else window.append(actions);
