@@ -18,6 +18,14 @@ export class SceneView extends GameView{
   inputScope(){if(!this.blocksGameInput()&&!this.model.dialog&&this.model.town)return this.root.querySelector('.scene-dock')??super.inputScope();return super.inputScope();}
   openPanel(tab){this.inventoryAction=null;if(tab==='map'){this.openMap();return;}this.tab=tab;this.render(this.model);}
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
+  commandWindow(parent,commands){
+    super.commandWindow(parent,commands);
+    if(!commands)return;
+    const window=parent.lastElementChild,actions=window.querySelector('.explore-actions');
+    window.classList.add('scene-dungeon-controls');
+    // Only actions scroll; the movement pad keeps its screen position.
+    for(const extra of [...window.children].filter(e=>e!==actions&&!e.classList.contains('movement-pad')))actions.append(extra);
+  }
   handleKey(event){
     if(super.handleKey(event))return true;
     const panel=this.root.querySelector('.scene-window');
@@ -43,7 +51,13 @@ export class SceneView extends GameView{
     const viewport=make('div','scene-text-viewport'),text=make('p','story-text'),paging=make('div','scene-paging');viewport.append(text);
     const previous=button('前のページ',()=>this.setPage(this.page-1)),counter=make('span','scene-page-count');previous.dataset.focus='message:previous';
     paging.append(previous,counter);body.append(viewport,paging);window.append(body);
-    const actions=description?null:make('div','scene-message-actions');if(actions)window.append(actions);
+    const actions=description?null:make('div','scene-message-actions');
+    if(actions){
+      if(this.model.commands&&!this.model.battle){
+        const controls=make('div','scene-dungeon-controls');controls.setAttribute('aria-label','イベント操作');
+        controls.append(this.movementPad(this.model.commands,true),actions);window.append(controls);
+      }else window.append(actions);
+    }
     parent.append(window);this.messageNodes={dialog:d,window,body,viewport,text,paging,previous,counter,actions,measureKey:null};this.refreshMessage();
   }
   refreshMessage(){
@@ -148,4 +162,3 @@ export class SceneView extends GameView{
     parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
   }
 }
-

@@ -211,14 +211,18 @@ export class GameView {
   commandWindow(parent,commands){
     if(!commands)return;
     const window=node('section','command-window explore-controls');window.setAttribute('aria-label',commands.title);
-    const movement=node('div','movement-pad');
-    for(const c of commands.movement)movement.append(button(c.label,()=>this.act(c.intent),c.direction,!c.enabled));
+    const movement=this.movementPad(commands);
     const actions=node('div','explore-actions');
     for(const c of commands.actions){const b=button(c.label,()=>this.act(c.intent),c.id==='interact'?'primary':'',!c.enabled);b.dataset.focus=`command:${c.id}`;if(c.reason)b.title=c.reason;actions.append(b);}
     window.append(movement,actions);
     for(const reason of commands.restrictions??[])window.append(node('p','muted dungeon-restriction',reason));
     if(this.explorationInput())window.append(node('p','muted exploration-hint',this.keyHint()));
     parent.append(window);
+  }
+  movementPad(commands,locked=false){
+    const movement=node('div','movement-pad');movement.setAttribute('aria-label','移動');
+    for(const c of commands.movement){const b=button(c.label,()=>this.act(c.intent),c.direction,locked||!c.enabled);b.dataset.focus=`move:${c.direction}`;b.setAttribute('aria-label',c.label);b.title=c.label;movement.append(b);}
+    return movement;
   }
   dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.rewardPhase){section.dataset.rewardPhase=d.rewardPhase;section.classList.add(`reward-${d.rewardPhase}`);}if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
@@ -297,4 +301,3 @@ export class GameView {
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
   }
 }
-
