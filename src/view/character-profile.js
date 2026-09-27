@@ -7,7 +7,7 @@ const stats={hp:'最大HP',mp:'最大MP',str:'力',vit:'防御',agi:'素早さ',
 function refocus(view,key){focusButton([...view.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key&&!e.disabled));}
 export function characterCard(view,actor,key,selected,fn){
   const card=button('',key,fn);card.className='character-card'+(actor.hp<=0?' fallen':'');card.setAttribute('aria-pressed',String(selected));
-  const body=make('span','character-card-values');body.append(make('span','character-card-name',actor.name),make('span','',`HP ${actor.hp}/${actor.maxHp}`),make('span','',`MP ${actor.mp}/${actor.maxMp}`));
+  const body=make('span','character-card-values');body.append(make('span','character-card-name',`${actor.name} Lv.${actor.level}`),make('span','',`HP ${actor.hp}/${actor.maxHp}`),make('span','',`MP ${actor.mp}/${actor.maxMp}`));
   card.append(view.portrait(actor,'character-card-portrait'),body);return card;
 }
 function profile(view,actor,m,{context,page='overview',jobs=false,onPage}){
@@ -18,9 +18,10 @@ function profile(view,actor,m,{context,page='overview',jobs=false,onPage}){
   }
   panel.append(tabs);const content=make('div','profile-content');content.dataset.scroll=`profile:${context}:${actor.id}:${page}`;panel.append(content);
   if(page==='overview'){
-    const head=make('div','profile-heading'),text=make('div');text.append(make('h3','',actor.name),make('p','profile-job',actor.class),make('p','',actor.role));head.append(view.portrait(actor,'profile-portrait'),text);content.append(head);
+    const head=make('div','profile-heading'),text=make('div');text.append(make('h3','',`${actor.name}　Lv.${actor.level}`),make('p','profile-job',actor.class),make('p','',actor.role));head.append(view.portrait(actor,'profile-portrait'),text);content.append(head);
     if(actor.bio)content.append(make('p','profile-bio',actor.bio));
     content.append(make('p','profile-vitals',`HP ${actor.hp}/${actor.maxHp}　MP ${actor.mp}/${actor.maxMp}`));
+    content.append(make('p','profile-experience',`累積経験値 ${actor.xp}　${actor.nextXp===null?'最高レベル':`次のレベルまで ${actor.nextXp-actor.xp}`}`));
     const parameters=make('dl','profile-parameters');for(const [key,value] of Object.entries(actor.stats??{}))parameters.append(make('dt','',m.statNames?.[key]??stats[key]??key),make('dd','',String(value)));content.append(parameters);
     if(actor.statuses?.length)content.append(make('p','requirement',actor.statuses.join('・')));
     if(buffLabels(actor).length)content.append(make('p','',buffLabels(actor).join(' / ')));
@@ -37,7 +38,12 @@ function profile(view,actor,m,{context,page='overview',jobs=false,onPage}){
     const entries=[...(actor.skills??[]).filter(s=>(s.category??'skills')===page).map(s=>({...s,battle:true})),...(actor.fieldAbilities??[]).filter(s=>(s.category??'skills')===page)];
     if(!entries.length)content.append(make('p','empty',`習得している${page==='magic'?'魔法':'スキル'}はありません。`));
     for(const ability of entries){const row=make('article','profile-entry');row.append(make('h4','',`${ability.name}　MP${ability.mp??0}`),make('p','',ability.description));
-      if(ability.battle)row.append(make('small','muted','戦闘時に使用'));
+      if(ability.battle){
+        if(ability.fieldUse){
+          row.append(make('small','muted','戦闘中・戦闘外で使用'));
+          for(const target of ability.fieldTargets??[]){const use=button(`${target.name}に使う`,`profile:${context}:use:${ability.id}:${target.id}`,()=>view.act({type:'field.skill',actor:actor.id,skill:ability.id,target:target.id}),!target.enabled);use.title=target.reason;row.append(use);if(target.reason)row.append(make('small','requirement',`${target.name}：${target.reason}`));}
+        }else row.append(make('small','muted','戦闘時に使用'));
+      }
       else{row.append(button('使う',`profile:${context}:use:${ability.id}`,()=>view.act({type:'job.action',actor:actor.id,ability:ability.id}),!ability.enabled));if(ability.reason)row.append(make('small','requirement',ability.reason));}
       content.append(row);
     }

@@ -1,3 +1,4 @@
+import {beginBattleResult} from './battle-results.js';
 import {wetResistance,wetAfterSkill} from './wet.js';
 import {canRepel,kindlePortable} from './systems/fire-network.js';
 import {dungeonBattleStart,dungeonBattleRound,dungeonBattleEnd,dungeonAbilityReason,dungeonEffectActive,dungeonBuffs,dungeonDamageScale} from './dungeons.js';
@@ -12,7 +13,7 @@ import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
 import {describeTarget,playBattleCue} from './feedback.js';
 export function startBattle(engine,id,continuations,options={}){
-  if(engine.state.battle)throw new Error('戦闘は重複して開始できません');
+  if(engine.state.battle||engine.state.battleResult)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
   consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
@@ -42,8 +43,7 @@ export function endBattle(engine,result,skipEvents=false){
   }
   if(result!=='interrupted')engine.eventCue(result==='win'?'victory':'escape');
   if(result==='win'){
-    const gold=b.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=b.enemies.reduce((n,e)=>n+e.rewards.xp,0);
-    engine.award(gold,xp);engine.notify(`勝利しました。${gold}G・${xp}EXP。`);
+    beginBattleResult(engine,b);return;
   }else if(result==='repel')engine.notify('くらがりは火を恐れ、通路の奥へ逃げ去りました。携帯松明にくらがり除けの火が灯っています。');
   else if(result==='interrupted')engine.notify('戦闘が終了した。');
   else engine.notify('戦闘から離脱しました。依頼の決着はついていません。');
@@ -78,25 +78,25 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   if(skill.requiresAnalyzed&&targets.some(t=>!b.analyzed.includes(t.instance)))return fail('先にこの敵を魔物解析してください。');
   return {ok:true,skill,targets};
 }
-function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null){
+export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null){
   let damageTotal=0;
   const b=engine.state.battle,s=engine.state;
   const sourceStats=enemySource?enemyStats(engine,source):engine.stats(source.id);
   const targetStats=target.instance?enemyStats(engine,target):engine.stats(target.id);
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
-  if(!dungeonEffectActive(engine.data,s,'skill',skillId)){b.log.push(`${skill.name}の効果は境界に遮られました。`);return;}
+  if(!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
   for(const effect of skill.effects){
     if(effect.type==='guard'){
       if(target.instance)target.guard=true;else if(!b.guards.includes(target.id))b.guards.push(target.id);
-      b.log.push(`${targetName}は守りを固めた。`);continue;
+      (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
     }
-    if(effect.type==='buff'){if(dungeonEffectActive(engine.data,s,'buff',effect.buff)){addBuff(engine,effect.buff,target,source,skillId);b.log.push(`${targetName}：${engine.data.buffs[effect.buff].name}。`);}continue;}
+    if(effect.type==='buff'){if(dungeonEffectActive(engine.data,s,'buff',effect.buff)){addBuff(engine,effect.buff,target,source,skillId);(b?.log??s.log).push(`${targetName}：${engine.data.buffs[effect.buff].name}。`);}continue;}
     if(effect.type==='cover'){
       b.covers=b.covers.filter(c=>c.sourceActor!==source.id);
       b.covers.push({target:unitKey(target),sourceActor:source.id,sourceJob:source.job,sourceSkill:skillId,remaining:1});
-      b.log.push(`${engine.data.actors[source.id].name}は${targetName}をかばう。`);continue;
+      (b?.log??s.log).push(`${engine.data.actors[source.id].name}は${targetName}をかばう。`);continue;
     }
-    if(effect.type==='analyze'){if(!b.analyzed.includes(target.instance))b.analyzed.push(target.instance);b.log.push(`${targetName}の能力と耐性を記録した。`);continue;}
+    if(effect.type==='analyze'){if(!b.analyzed.includes(target.instance))b.analyzed.push(target.instance);(b?.log??s.log).push(`${targetName}の能力と耐性を記録した。`);continue;}
     const context={source:{...source,stats:sourceStats},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
@@ -105,19 +105,19 @@ function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
-      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);b.log.push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
+      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
     }
     if(effect.type==='heal'){
       const multiplier=effect.itemHealing||itemId==='potion'?(powers.itemHealing??1):itemId?1:(powers.healingPower??1);
       const amount=Math.floor(raw*multiplier*(effect.scale??1)),restored=Math.min(targetStats.hp-target.hp,amount);
-      target.hp+=restored;b.log.push(`${targetName}のHPが${restored}回復。`);
+      target.hp+=restored;(b?.log??s.log).push(`${targetName}のHPが${restored}回復。`);
     }
-    if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;b.log.push(`${targetName}のMPが${spent}減少。`);}
-    if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,Math.floor(raw));target.mp+=restored;b.log.push(`${targetName}のMPが${restored}回復。`);}
+    if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;(b?.log??s.log).push(`${targetName}のMPが${spent}減少。`);}
+    if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,Math.floor(raw));target.mp+=restored;(b?.log??s.log).push(`${targetName}のMPが${restored}回復。`);}
     if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&target.hp>0&&!(target.statusImmune??engine.data.actors[target.id]?.statusImmune??[]).includes(effect.status)&&engine.random()<(effect.chance??1)&&!target.statuses.includes(effect.status)){
-      target.statuses.push(effect.status);b.log.push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
+      target.statuses.push(effect.status);(b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
     }
-    if(effect.type==='cleanse')target.statuses=[];
+    if(effect.type==='cleanse')target.statuses=effect.status?target.statuses.filter(id=>id!==effect.status):[];
   }
   return damageTotal;
 }

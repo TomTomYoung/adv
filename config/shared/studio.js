@@ -46,6 +46,7 @@ export class ConfigStudio {
  recordName(record=this.current()?.value,key=this.current()?.key,kind=this.group().kind){
   if(kind==='system')return record?.name??systemNames[record?.use]??'仕掛け';
   if(kind==='art')return this.context.name('dungeons',record?.dungeon);
+  if(kind==='drop')return this.context.name('enemies',key);
   if(kind==='stock')return this.context.name('items',record?.item);
   if(kind==='cellmap'||kind==='map')return record?.name??this.context.name('maps',key);
   if(kind==='script')return record?.commands?.find(c=>typeof c.text==='string')?.text?.slice(0,42)??'処理 '+key;
@@ -90,7 +91,7 @@ export class ConfigStudio {
   const list=el('div','','record-buttons');this.list.append(list);const draw=()=>{clear(list);for(const row of rows){const v=row.value;if(!`${this.recordName(v,row.key)} ${v?.description??''} ${v?.id??row.key}`.toLowerCase().includes(this.search.toLowerCase()))continue;
    const b=button('',()=>this.selectRecord(row.key),'record-button');b.setAttribute('aria-pressed',String(this.current()?.key===row.key));b.append(el('span',this.recordName(v,row.key)),el('small',this.rowSummary(v,group.kind)));list.append(b);
   }};draw();
-  if(!['cellmap','art','story'].includes(group.kind)&&this.entry.family!=='voxel')this.list.append(button(group.kind==='map'?'マップを追加':'新規作成',()=>this.addRecord()));
+  if(!['cellmap','art','story','drop'].includes(group.kind)&&this.entry.family!=='voxel')this.list.append(button(group.kind==='map'?'マップを追加':'新規作成',()=>this.addRecord()));
   if(['monster','actor','job','skill','stock'].includes(group.kind)){
    const table=el('table','','compare-table'),head=el('tr');const keys=['monster','actor','job'].includes(group.kind)?['hp','mp','str','vit','agi','int']:group.kind==='skill'?['mp','target']:['price'];head.append(el('th','名前'));for(const k of keys)head.append(el('th',label(k)));const thead=el('thead');thead.append(head);table.append(thead);const body=el('tbody');
    for(const row of rows){const tr=el('tr'),cell=el('td');cell.append(button(this.recordName(row.value,row.key),()=>this.selectRecord(row.key)));tr.append(cell);for(const k of keys)tr.append(el('td',enumLabel(row.value?.stats?.[k]??row.value?.[k]??'—')));body.append(tr);}table.append(body);const disclosure=el('details');disclosure.append(el('summary','一覧で比較'),table);this.list.append(disclosure);
@@ -123,7 +124,7 @@ export class ConfigStudio {
   }
   if(group.kind==='event'||group.kind==='cellEvent')this.renderLinkedScript(value);
   if(group.kind==='map'&&value.voxels)this.renderVoxelControls(location,value);
-  if(group.mode!=='single'&&!['story','art','cellmap','map'].includes(group.kind))this.detail.append(button('この項目を複製',()=>this.addRecord(true)),button('この項目を削除',()=>{if(!this.guard()||!this.confirm(this.recordName()+'を削除しますか？参照が残る場合は出力時に表示します。'))return;this.workspace.set(this.entry.file,row.path,undefined,this.recordName()+'を削除');this.recordId=this.rows()[0]?.key;this.refresh();},'danger'));
+  if(group.mode!=='single'&&!['story','art','cellmap','map','drop'].includes(group.kind))this.detail.append(button('この項目を複製',()=>this.addRecord(true)),button('この項目を削除',()=>{if(!this.guard()||!this.confirm(this.recordName()+'を削除しますか？参照が残る場合は出力時に表示します。'))return;this.workspace.set(this.entry.file,row.path,undefined,this.recordName()+'を削除');this.recordId=this.rows()[0]?.key;this.refresh();},'danger'));
  }
  renderLinkedScript(value){
   if(!value?.script)return;const owner=this.context.base.scriptOwners[value.script];const local=this.workspace.value(this.entry.file).scripts?.[value.script];

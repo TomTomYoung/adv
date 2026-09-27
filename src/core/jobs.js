@@ -1,7 +1,7 @@
+import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {dungeonInterior} from './world.js';
 import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
-import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
 export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry']);
@@ -25,7 +25,7 @@ export function actorStats(data,state,id,battle=true){
       // Round once, after summing fractional growth across jobs.
       stats[key]+=(Math.floor(growth+1e-9)+(job.stats[key]??0));
     }
-  }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(state.level-1);
+  }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(actor.level-1);
   for(const [slot,item] of Object.entries(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item,id,slot)))stats[key]=(stats[key]??0)+amount;
   for(const key of STAT_KEYS)stats[key]=Math.max(key==='hp'?1:0,Math.floor(stats[key]));
   const environmental=dungeonActorStats(data,state,id,stats);
@@ -33,10 +33,6 @@ export function actorStats(data,state,id,battle=true){
 }
 export function initializeJob(data,actor){
   actor.job=data.actors[actor.id].initialJob;actor.growthHistory={};
-}
-export function recordGrowth(data,state,count){
-  if(!data.jobs||!count)return;
-  for(const actor of Object.values(state.actors))actor.growthHistory[actor.job]=(actor.growthHistory[actor.job]??0)+count;
 }
 export function canEquip(data,state,id,itemId,jobId=state.actors[id]?.job){
   const item=data.items[itemId];if(!item?.slot)return false;
@@ -70,12 +66,12 @@ export function baseGrantsFor(data,state,id){
 export const grantsFor=(data,state,id)=>dungeonGrants(data,state,id,baseGrantsFor(data,state,id));
 export function knownSkills(data,state,id){
   if(!data.jobs)return [...data.actors[id].skills];
-  return grantsFor(data,state,id).filter(g=>g.api==='battle.skill'&&state.level>=g.level).map(g=>g.skill);
+  return grantsFor(data,state,id).filter(g=>g.api==='battle.skill'&&state.actors[id].level>=g.level).map(g=>g.skill);
 }
 export function permission(data,state,id,skill,api){
   if(dungeonAbilityReason(data,state,skill,api))return null;
   const spec=api==='battle.skill'?data.skills[skill]:data.fieldAbilities[skill];
-  return grantsFor(data,state,id).find(g=>g.skill===skill&&g.api===api&&g.target===spec?.target&&g.lifetime==='equipped'&&state.level>=g.level)??null;
+  return grantsFor(data,state,id).find(g=>g.skill===skill&&g.api===api&&g.target===spec?.target&&g.lifetime==='equipped'&&state.actors[id].level>=g.level)??null;
 }
 export function costProblem(data,state,id,spec){
   const a=state.actors[id];if(!a||a.hp<=0)return '倒れている仲間は使用できません。';

@@ -30,6 +30,7 @@ export function skillDefinitionErrors(data,skill){
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
+  if(skill.fieldUse!==undefined&&(typeof skill.fieldUse!=='boolean'||skill.fieldUse&&(!['self','ally','all_allies'].includes(skill.target)||!skill.effects?.length||skill.effects.some(e=>!['heal','cleanse','restore_mp'].includes(e.type))||skill.selfEffects?.length)))fail('戦闘外使用の効果・対象不正');
   if(skill.maxTargets!==undefined&&!integer(skill.maxTargets,1,8))fail('対象数不正');
   if(skill.selection!==undefined&&skill.selection!=='lowest_hp_ratio')fail('対象選択不正');
   if(skill.requiresAnalyzed!==undefined&&typeof skill.requiresAnalyzed!=='boolean')fail('解析条件不正');
@@ -102,7 +103,7 @@ export function validateJobState(data,state){
   for(const [id,a] of Object.entries(state.actors)){
     if(!isRecord(a)||!own(data.jobs,a.job)||!isRecord(a.growthHistory)){fail('職業・成長履歴不正');continue;}
     let count=0;for(const [job,n] of Object.entries(a.growthHistory)){if(job!=='legacy'&&!own(data.jobs,job)||!integer(n,0,data.system.maxLevel-1))fail('職業成長履歴不正');count+=n;}
-    if(count!==state.level-1)fail('職業成長回数がレベルと一致しません');
+    if(count!==a.level-1)fail('職業成長回数がレベルと一致しません');
     for(const [slot,item] of Object.entries(a.equipment??{}))if(!data.jobs[a.job].equipment[slot]?.includes(data.items[item]?.equipmentType))fail('職業に適合しない装備です');
   }
   const b=state.battle;if(!b)return errors;
@@ -110,7 +111,7 @@ export function validateJobState(data,state){
   const enemyKeys=b.enemies.map(e=>`enemy:${e?.instance}`),actorKeys=state.members.map(id=>`actor:${id}`),targets=new Set([...enemyKeys,...actorKeys]);
   const source=(record)=>{
     const actor=state.actors[record.sourceActor],job=data.jobs[record.sourceJob],skill=data.skills[record.sourceSkill];
-    return actor&&state.members.includes(record.sourceActor)&&actor.job===record.sourceJob&&job&&grantsFor(data,state,record.sourceActor).some(g=>g.skill===record.sourceSkill&&g.api==='battle.skill'&&g.level<=state.level)&&skill;
+    return actor&&state.members.includes(record.sourceActor)&&actor.job===record.sourceJob&&job&&grantsFor(data,state,record.sourceActor).some(g=>g.skill===record.sourceSkill&&g.api==='battle.skill'&&g.level<=actor.level)&&skill;
   };
   const seen=new Set();
   for(const record of b.buffs){

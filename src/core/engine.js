@@ -25,16 +25,19 @@ import {startBattle,endBattle,battleAction} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
-import {actorStats,initializeJob,recordGrowth,knownSkills,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
+import {actorStats,initializeJob,knownSkills,changeJob,fieldAction,partyEffect,purchasePrice} from './jobs.js';
+import {awardExperience} from './progression.js';
+import {advanceBattleResult} from './battle-results.js';
+import {useFieldSkill} from './field-skills.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
 export class GameEngine {
   constructor(data, seed = 20260909) {
     this.data=data;this.feedback=freshFeedback();
-    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,xp:0,level:1,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
+    this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,battleResult:null,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const [item,count] of Object.entries(this.state.inventory))if(data.items[item]?.slot)addGear(this.state,item,count);
-    for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
+    for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,level:1,xp:0,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     this.state.carried={};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
@@ -69,10 +72,10 @@ export class GameEngine {
     for(const id of this.state.members){const actor=this.state.actors[id],stats=this.stats(id);actor.hp=Math.max(actor.hp,Math.ceil(stats.hp*ratio));actor.mp=Math.max(actor.mp,Math.ceil(stats.mp*ratio));actor.statuses=[];}
   }
   award(gold,xp){
-    this.state.gold=Math.max(0,this.state.gold+gold);this.state.xp+=xp;
-    const old=this.state.level;
-    while(this.state.level<this.data.system.maxLevel && this.state.xp>=this.data.system.xpBase*this.state.level*(this.state.level+1)) this.state.level++;
-    if(old!==this.state.level){recordGrowth(this.data,this.state,this.state.level-old);this.healAll();this.notify(`隊のレベルが${this.state.level}になりました。`);}
+    this.state.gold=Math.max(0,Math.min(1e9,this.state.gold+gold));
+    const levels=awardExperience(this,xp);
+    for(const row of levels)this.log(`${this.data.actors[row.actor].name}はレベル${row.level}になった。`);
+    return levels;
   }
   unlocked(quest){return !quest.requires || Boolean(this.value(quest.requires));}
   give(item,count){
@@ -152,7 +155,7 @@ export class GameEngine {
     const rolledBack=rollbackEventCheckpoints(this);
     delete this.state.presentation.cast;delete this.state.presentation.message;
     this.state.gold=Math.floor(this.state.gold*(1-this.data.system.defeatGoldRate));
-    this.state.vm=[];this.state.waiting=null;this.#arriveTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
+    this.state.vm=[];this.state.waiting=null;this.state.battleResult=null;this.#arriveTown(false,true);this.eventCue('defeat');this.healAll(this.data.system.recoveryRatio);
     this.notify('隊は救助されました。所持金の一部を救援費に充て、町で目覚めました。依頼は再挑戦できます。');
     return rolledBack;
   }
@@ -247,7 +250,7 @@ export class GameEngine {
   perform(intent){
     const type=intent?.type;if(typeof type!=='string')return false;
     this.state.notice='';
-    if(type==='advance')return this.state.waiting?.type==='command'?advanceCommand(this):advanceScript(this);
+    if(type==='advance')return this.state.waiting?.type==='battle_result'?advanceBattleResult(this):this.state.waiting?.type==='command'?advanceCommand(this):advanceScript(this);
     if(type==='choose')return this.state.waiting?.type==='command'?chooseCommand(this,intent.id):chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
@@ -288,6 +291,7 @@ export class GameEngine {
     }
     if(type==='job.change')return this.changeJob(intent.actor,intent.job);
     if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
+    if(type==='field.skill')return useFieldSkill(this,intent.actor,intent.skill,intent.target);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
     if(type==='party.order')return reorderParty(this,intent.group,intent.actor,intent.direction);
     if(type==='unequip')return this.unequip(intent.actor,intent.slot);

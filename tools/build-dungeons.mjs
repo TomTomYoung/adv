@@ -1,3 +1,4 @@
+import {buildBattleRewards} from './build-battle-rewards.mjs';
 import {buildCellLayers} from './build-cell-layers.mjs';
 import {buildWorld} from './build-world.mjs';
 import {buildConnectedMaps} from './build-connected-maps.mjs';
@@ -59,6 +60,7 @@ export async function buildDungeons(){
   await buildConnectedMaps(root,definitions,game);
   await write('data/game.json',game);
   const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
+  await buildBattleRewards(root);
   await buildWorld(root);
   await buildCellLayers(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);

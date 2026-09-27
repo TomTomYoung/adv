@@ -37,7 +37,7 @@ export class SceneView extends GameView{
     if(key!==this.messageKey){this.messageKey=key;if(!revealsChoices){this.page=0;this.pages=messagePages(d.text);}}
     this.lastDialog=d;
     const description=d.type==='description',window=make('section',description?'scene-description':'story-window message-window scene-message');
-    window.setAttribute('aria-label','メッセージウィンドウ');
+    window.setAttribute('aria-label','メッセージウィンドウ');if(d.rewardPhase){window.dataset.rewardPhase=d.rewardPhase;window.classList.add(`reward-${d.rewardPhase}`);}
     const body=make('div','scene-message-body');
     if(d.fieldScene?.title||d.scene?.title)body.append(make('p','story-place',d.fieldScene?.title??d.scene.title));
     if(!description)body.append(make('span','eyebrow',d.speaker||(d.type==='choice'?'あなたの判断':'灯の下で')));
@@ -92,7 +92,7 @@ export class SceneView extends GameView{
       const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;if(id==='map'){b.dataset.focus='map:toolbar';b.setAttribute('aria-label','地図を拡大');b.setAttribute('aria-haspopup','dialog');}toolbar.append(b);
     }
     toolbar.append(button('記録',()=>this.ui.menu()),this.soundButton(),button('遊び方',()=>this.ui.help()));header.append(place,toolbar);hud.append(header);
-    const status=make('div','scene-status');status.append(make('span','',`隊 Lv.${model.level} / ${model.gold} G`));
+    const status=make('div','scene-status');status.append(make('span','',`${model.gold} G`));
     if(model.tracked){const q=button(`${model.tracked.title}：${model.tracked.destination?.label??''}`,()=>this.openPanel('journal'),'scene-objective');status.append(q);}hud.append(status);
     if(model.battle){
       const holder=make('div');super.battle(holder,model);

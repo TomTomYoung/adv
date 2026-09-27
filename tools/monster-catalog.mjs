@@ -84,6 +84,7 @@ export function monsterCatalog(data) {
       if(e.id==='salt_eater')out.push('塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](WATERWAYS_SALT_MINE.md)。','');
       if(e.id.startsWith('water_'))out.push('旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。','');
       out.push(`基礎能力：${stats(e.stats)}。報酬：${e.rewards.gold}G / ${e.rewards.xp}EXP。`,
+        `宝箱：${e.drop?.chance?`${data.items[e.drop.item].name} 1個 / ${e.drop.chance*100}％`:'なし（確率0）'}。`,
         `属性倍率：${Object.entries(e.resist??{}).map(([key,n])=>`${key} ${n}`).join(' / ')||'すべて既定値'}。`,'','AIの選択順：','');
       for(const [i,rule] of [...e.ai].sort((a,b)=>b.priority-a.priority).entries()){
         const skill=data.skills[rule.skill];

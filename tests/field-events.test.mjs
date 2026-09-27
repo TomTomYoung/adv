@@ -68,11 +68,11 @@ test('multiple step events on one cell resume in order across a battle event and
   ['step_after',[{op:'add',target:'vars.stepCount',value:1},{op:'narrate',text:'next step event'}]]
  ])d.maps.region_2_f1.objects.push({id,name:id,kind:'decision',trigger:'enter',x:2,y:1,script:script(`test.${id}`,commands)});
  auto('after_battle',{ref:'flags.battleFinished'},[{op:'narrate',text:'condition after battle'}]);
- const gold=g.state.gold,xp=g.state.xp;move(g,'forward');assert.equal(g.state.waiting.text,'battle event');checkpoint(g);
+ const gold=g.state.gold,xp=g.state.actors.ada.xp;move(g,'forward');assert.equal(g.state.waiting.text,'battle event');checkpoint(g);
  assert.equal(g.dispatch({type:'move',direction:'forward'}),false);
  g.dispatch({type:'advance'});assert.equal(g.state.battle,null);assert.equal(g.state.waiting.text,'next step event');checkpoint(g);
  g.dispatch({type:'advance'});assert.equal(g.state.waiting.text,'condition after battle');drain(g);checkpoint(g);
- assert.equal(g.state.vars.stepCount,1);assert.equal(g.state.gold,gold);assert.equal(g.state.xp,xp);assert.equal(g.state.records.interruptions,1);
+ assert.equal(g.state.vars.stepCount,1);assert.equal(g.state.gold,gold);assert.equal(g.state.actors.ada.xp,xp);assert.equal(g.state.records.interruptions,1);
 });
 
 test('step event takes priority over random encounters and rejects repeat execution when once is set',()=>{

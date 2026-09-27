@@ -5,7 +5,7 @@ import {GameEngine} from '../src/core/engine.js';
 import {loadContent} from '../src/core/loader.js';
 import {projectGame} from '../src/application/projection.js';
 const root=path.resolve(import.meta.dirname,'..'),data=await loadContent(file=>fs.readFile(path.join(root,file),'utf8').then(JSON.parse));
-const g=new GameEngine(data),drain=()=>{while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});},act=intent=>assert.ok(g.dispatch(intent));drain();
+const g=new GameEngine(data),drain=()=>{while(['text','battle_result'].includes(g.state.waiting?.type))g.dispatch({type:'advance'});},act=intent=>assert.ok(g.dispatch(intent));drain();
 const fixtures={town:projectGame(g)};
 act({type:'location.move',id:'hikarigaeri_guild'});act({type:'accept',id:'q001'});fixtures.guild=projectGame(g);act({type:'accept',id:'q002'});
 act({type:'location.move',id:'hikarigaeri_square'});act({type:'location.move',id:'hikarigaeri_shop'});fixtures.shop=projectGame(g);

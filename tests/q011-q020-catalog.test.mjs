@@ -118,6 +118,6 @@ test('old choices and paused revisits complete with the old result and do not aw
   const g=oldQuest(id);choose(g,route[0],'pause');g.load(g.save());g.run(data.quests[id].model.entryScript);drain(g);
   assert.equal(state(g,id).catalogRevision,undefined);choose(g,...route.slice(1));const outcome=g.state.quests[id].outcome;
   assert.equal(g.state.journal.at(-1).text,data.quests[id].legacyOutcomes[outcome].text);
-  const earned={gold:g.state.gold,xp:g.state.xp,count:g.state.vars.completed};g.run(data.quests[id].model.entryScript);drain(g);assert.deepEqual({gold:g.state.gold,xp:g.state.xp,count:g.state.vars.completed},earned);
+  const earned={gold:g.state.gold,xp:g.state.actors.ada.xp,count:g.state.vars.completed};g.run(data.quests[id].model.entryScript);drain(g);assert.deepEqual({gold:g.state.gold,xp:g.state.actors.ada.xp,count:g.state.vars.completed},earned);
  }
 });

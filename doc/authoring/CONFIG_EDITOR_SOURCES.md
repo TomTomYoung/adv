@@ -1,6 +1,8 @@
 # 編集対象JSONと正本の対応
 
-更新日: 2026-09-25。設定編集UIの対象は `config/` 配下の225原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全225件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](../README.md)。
+更新日: 2026-09-25。設定編集UIの対象は `config/` 配下の226原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全226件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](../README.md)。
+
+魔物別宝箱の正本は [battle-rewards.json](../../config/battle-rewards.json)、編集画面は [battle-rewards.html](../../config/battle-rewards.html) です。各魔物の品と0〜1の確率を編集し、build:dungeonsでdata/enemies.jsonへ反映します。
 
 ## 統合マップ画面の出力先
 

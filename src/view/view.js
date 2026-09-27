@@ -96,7 +96,7 @@ export class GameView {
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
     brand.lastChild.append(node('h1','',model.title),node('p','',model.subtitle));
     const toolbar=node('div','toolbar');toolbar.append(button('手帳',()=>{this.tab='journal';this.render(model);}),button('記録',()=>this.ui.menu()),this.soundButton());header.append(brand,toolbar);this.root.append(header);
-    const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`隊 Lv.${model.level}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
+    const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`${model.gold} G`,`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
     const allTabs=model.mode==='town'?[['location',model.town?.interior?'詰所':'町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
@@ -218,7 +218,7 @@ export class GameView {
     if(this.explorationInput())window.append(node('p','muted exploration-hint',this.keyHint()));
     parent.append(window);
   }
-  dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
+  dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.rewardPhase){section.dataset.rewardPhase=d.rewardPhase;section.classList.add(`reward-${d.rewardPhase}`);}if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
       const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
@@ -290,7 +290,7 @@ export class GameView {
     for(const entry of [...m.journal].reverse()){const row=node('article','journal-entry');row.append(node('span','eyebrow',entry.type==='evidence'?'手掛かり':'決着'),node('h3','',entry.title),node('p','',entry.text));section.append(row);}parent.append(section);
   }
   sidebar(parent,m){
-    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=m.mode==='town'?button('',()=>this.openCharacter(a.id),`party-row ${a.hp<=0?'fallen':''}`):node('div',`party-row ${a.hp<=0?'fallen':''}`);row.dataset.focus=`character:${a.id}`;row.dataset.fxFallback=`actor:${a.id}`;const avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
+    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=m.mode==='town'?button('',()=>this.openCharacter(a.id),`party-row ${a.hp<=0?'fallen':''}`):node('div',`party-row ${a.hp<=0?'fallen':''}`);row.dataset.focus=`character:${a.id}`;row.dataset.fxFallback=`actor:${a.id}`;const avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name} Lv.${a.level}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
     if(m.dungeon)parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','メインクエスト'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief));this.questDestination(tracked,m.tracked);parent.append(tracked);}
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}

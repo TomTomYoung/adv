@@ -7,6 +7,7 @@ export function collections(entry,value){
  case 'maps':case 'voxel':return [collection('maps',entry.family==='voxel'?'旧3Dマップ（通常配信外）':'マップと配置物','map'),...(value.scripts?[collection('scripts','処理','script')]:[])];
  case 'cells':return [collection('maps','セルの配置図','cellmap'),collection('presets','セル種','cell'),collection('edgePresets','エッジ種','edge'),collection('events','セル進入イベント','cellEvent'),collection('scripts','セルの処理','script')];
  case 'locations':return [collection(null,'町の場所・施設','location')];
+ case 'rewards':return [collection('drops','魔物別の宝箱','drop')];
  case 'entities':return [collection('monsters','魔物の比較・編集','monster','array'),collection('actors','仲間の比較・編集','actor')];
  case 'jobs':return [collection('jobs','職業の比較・編集','job'),collection('skills','戦闘技能','skill'),collection('fieldAbilities','探索特技','ability'),collection('items','道具・装備','item'),collection('buffs','強化・弱体','buff'),collection('equipmentPatches','既存装備の調整','equipment'),collection('formulas','計算式','expression'),single('initialJobs','仲間の初期職業','assignments'),collection('shopGoods','店の商品','stock','array'),single('profile','共通の職業設定','profile'),single('skillCues','技能と演出の対応','bindings')];
  case 'presentation':return [collection('effects','効果の編集・再生','effect'),collection('sounds','音符の編集・試聴','sound'),collection('cues','効果と音の組み合わせ','cue'),single('bindings','操作と演出の対応','bindings'),single('ambient','常時表示','ambient')];
@@ -26,7 +27,8 @@ export const groups={
  actor:[['基本',['name','description','portrait']],['能力値',['stats','growth']],['技能・装備',['skills','equipment','statusImmune']]],
  job:[['基本',['name','role','limitation']],['成長・能力',['growth','stats']],['習得・装備',['grants','equipment']],['常時効果',['passives']]],
  item:[['基本',['name','description','type']],['使用',['field','battleSkill','script','consumed']],['装備',['slot','equipmentType','stats','resist']]],
- skill:[['基本',['name','description','target']],['消費・条件',['mp','hp','materials','requiresWeapon','requiresAnalyzed','maxTargets']],['効果',['effects','selfEffects','fireEffect','priority']]],
+ drop:[['宝箱',['item','chance']]],
+ skill:[['基本',['name','description','target','fieldUse']],['消費・条件',['mp','hp','materials','requiresWeapon','requiresAnalyzed','maxTargets']],['効果',['effects','selfEffects','fireEffect','priority']]],
  ability:[['基本',['name','description','api','target','modes']],['消費',['mp','hp','materials']],['効果',['output','radius','effect','cue']]],
  map:[['基本',['name','region','floor','dungeon','background','music']],['入口・遭遇',['entrance','encounter','encounterRate','encounterPool']],['配置物',['objects']],['旧3Dの面と経路',['voxels']]],
  location:[['基本',['name','description','background']],['接続',['parent','links','dungeons']],['施設・人物',['shop','party','quests','services','cast']]],
@@ -38,6 +40,7 @@ export const groups={
  cue:[['効果・音',['effects','sound','target','gap']]],
 };
 export const editableScope={
+ rewards:'魔物ごとの宝箱の品と確率（0〜1）。0は抽選なし、1は必ず当選します。',
  quest:'このクエストの配置・起動条件・調査用の会話と処理。本筋がJavaScript原稿にある場合、その本文は参照専用です。',
  dungeon:'この迷宮の入口・所属マップ・仕掛け・接続・条件付きイベント。セルと配置イベントはそれぞれの正本へ出力します。',
  maps:'マップの基本情報と配置物。通行・外観はcell-layers.jsonへ出力します。',

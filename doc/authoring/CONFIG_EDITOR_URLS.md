@@ -1,12 +1,14 @@
 # 設定編集HTMLのGitHub Pages URL一覧
 
-更新日: 2026-09-25。統合マップ編集と原稿別編集HTML全225件への直接リンクです。
+更新日: 2026-09-25。統合マップ編集と原稿別編集HTML全226件への直接リンクです。
 
 [設定一覧・検索画面](https://tomtomyoung.github.io/adv/config/index.html)
 
 公開先: https://tomtomyoung.github.io/adv/config/index.html
 
 使い方・検証範囲・JSONの反映方法は[設定JSONの編集画面](CONFIG_EDITORS.md)を参照してください。各リンクはGitHub Pages上の編集画面を開きます。変更を公開するには、対応JSONへの貼り付けとGitHubへの反映を行います。
+
+[魔物別の宝箱・ドロップ確率](https://tomtomyoung.github.io/adv/config/battle-rewards.html)
 
 ## 通常の作業入口
 
