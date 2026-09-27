@@ -50,10 +50,11 @@ try{
     assert.equal(await page.evaluate(()=>g.save()),saved);
     for(let fuel=100;await page.evaluate(()=>g.state.waiting?.type==='text');fuel--){assert.ok(fuel>0);await page.keyboard.press('Enter');}
     await settle();assert.equal(await page.evaluate(()=>g.state.waiting.type),'choice');await samePad();
+    assert.ok(await page.locator(':focus').getAttribute('data-focus').then(k=>k.startsWith('choice:')));
     const choiceSave=await page.evaluate(()=>g.save());for(let i=0;i<12;i++)await page.mouse.click(point.x,point.y);
     assert.equal(await page.evaluate(()=>g.save()),choiceSave);
     await page.keyboard.press('ArrowDown');
-    assert.ok(await page.locator(':focus').getAttribute('data-focus').then(k=>k.startsWith('choice:')));
+    assert.ok(await page.locator(':focus').evaluate(e=>Boolean(e.closest('.message-window'))));
     assert.equal(await page.evaluate(()=>g.save()),choiceSave);
     await page.screenshot({path:path.join(output,`q001-${width}x${height}.png`)});
     await page.locator('[data-focus="choice:talk"]').click();
