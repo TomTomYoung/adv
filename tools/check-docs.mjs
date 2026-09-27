@@ -1,6 +1,7 @@
 import {docPath,relocateDoc,currentMarkdown,docGroups} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
+import {questPageIndex} from './quest-page-details.mjs';
 import {eventCatalog} from './event-catalog.mjs';
 import {characterCatalog} from './character-catalog.mjs';
 import {monsterCatalog} from './monster-catalog.mjs';
@@ -53,13 +54,15 @@ check(await fs.readFile(path.join(folder,docPath('CHARACTERS.md')),'utf8')===rel
 check(await fs.readFile(path.join(folder,docPath('MONSTER_CATALOG.md')),'utf8')===relocateDoc(monsterCatalog(data),'MONSTER_CATALOG.md'),'MONSTER_CATALOG: generated AI, images or encounter references differ');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
 const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'utf8');
+check(await fs.readFile(path.join(folder,'scenarios/quests/README.md'),'utf8')===relocateDoc(questPageIndex(data),'scenarios/quests/README.md'),'quest page index differs');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
 check(await fs.readFile(path.join(folder,docPath('LOCATION_CATALOG.md')),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
 for(const q of Object.values(data.quests)){
  const file=questPages[q.id],source=file?await fs.readFile(path.join(folder,docPath(file)),'utf8'):catalog;
  for(const line of questPlaces(data,q))check(source.includes(relocateDoc(line,file??'QUEST_CATALOG.md')),`${file??'QUEST_CATALOG'}: ${q.id} placement reference differs`);
  if(file){
-  check(catalog.includes(`](${file})`),`QUEST_CATALOG: missing ${q.id} dedicated-page link`);
+  check(!current.includes(`doc/scenarios/${file}`),`${file}: obsolete output outside quests folder`);
+  check(catalog.includes(relocateDoc(`](${file})`,'QUEST_CATALOG.md')),`QUEST_CATALOG: missing ${q.id} dedicated-page link`);
   for(const [name,expected] of Object.entries(questPageBundle(data,q.id)))check(await fs.readFile(path.join(folder,docPath(name)),'utf8')===relocateDoc(expected,name),`${name}: implementation or map differs; review edits before npm run build:catalog`);
  }
 }

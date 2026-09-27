@@ -10,7 +10,7 @@
 
 [world/README.md](world/README.md)：町の施設・場所のID、町と物語の移動。
 
-[scenarios/README.md](scenarios/README.md)：200クエスト、q001・q002専用ページ、人物、イベント、JSON命令。
+[scenarios/README.md](scenarios/README.md)：200クエスト、q001〜q010個別ページ、人物、イベント、JSON命令。
 
 [battle/README.md](battle/README.md)：職業、仲間、魔物、戦闘・探索バランス。
 

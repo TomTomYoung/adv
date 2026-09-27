@@ -3,7 +3,7 @@ import path from 'node:path';
 
 // Generators compose links relative to doc/; relocate only at the write boundary.
 export const scenarioDocs = new Set([
-  'QUEST_CATALOG.md', 'QUEST_Q001.md', 'QUEST_Q002.md',
+  'QUEST_CATALOG.md',
   'QUEST_EVENTS.md', 'SCENARIO_DESIGN.md', 'SCENARIO_MODEL_V11.md',
   'EXPLORATION_AND_PROSE.md', 'EVENT_CHECKPOINTS.md', 'EVENT_SYSTEM.md', 'EVENT_CATALOG.md',
   'SCRIPT_REFERENCE.md', 'CHARACTERS.md'
@@ -33,10 +33,12 @@ export const authoringDocs = new Set([
 export const developmentDocs = new Set([
   'PROGRESS.md', 'DOCUMENTATION_AUDIT.md', 'DATA_SNAPSHOT.json'
 ]);
-export const docGroups = {scenarios:scenarioDocs,ui:uiDocs,dungeons:dungeonsDocs,world:worldDocs,battle:battleDocs,authoring:authoringDocs,development:developmentDocs};
+export const questDocs = new Set(Array.from({length:10},(_,i)=>`QUEST_Q${String(i+1).padStart(3,'0')}.md`));
+export const docGroups = {scenarios:scenarioDocs,'scenarios/quests':questDocs,ui:uiDocs,dungeons:dungeonsDocs,world:worldDocs,battle:battleDocs,authoring:authoringDocs,development:developmentDocs};
 const aliases = {'DUNGEON_SYSTEMS_1_7.md':'dungeons/DUNGEON_SYSTEMS.md','EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','scenarios/EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','DUNGEON_REVISION_1_9.md':'legacy/2026-09-25/DUNGEON_REVISION_1_9.md','DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md','ui/DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md'};
 export function docPath(name) {
   if (aliases[name]) return aliases[name];
+  if (name.startsWith('scenarios/')&&questDocs.has(name.slice('scenarios/'.length))) return `scenarios/quests/${name.slice('scenarios/'.length)}`;
   if (name.startsWith('quest-maps/')) return `scenarios/${name}`;
   for (const [folder,names] of Object.entries(docGroups)) if (names.has(name)) return `${folder}/${name}`;
   return name;

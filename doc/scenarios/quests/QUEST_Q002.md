@@ -1,6 +1,6 @@
 # q002 骨の荷札：マップとイベント
 
-[クエストカタログへ戻る](QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
+[個別ページ一覧](README.md) ／ [クエストカタログへ戻る](../QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
 作品版 1.24.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
@@ -57,65 +57,65 @@ flowchart TD
 
 ## マップとイベント配置
 
-![灯守の地下水道・上層・入口操作室の座標とイベントID](quest-maps/q002-region_1_f1.svg)
+![灯守の地下水道・上層・入口操作室の座標とイベントID](../quest-maps/q002-region_1_f1.svg)
 
-図の全セルは [region_1_f1.json](../../data/maps/region_1_f1.json) と一致する。
+図の全セルは [region_1_f1.json](../../../data/maps/region_1_f1.json) と一致する。
 
-![灯守の地下水道・上層・第一水路の座標とイベントID](quest-maps/q002-region_1_canal_a.svg)
+![灯守の地下水道・上層・第一水路の座標とイベントID](../quest-maps/q002-region_1_canal_a.svg)
 
-図の全セルは [region_1_canal_a.json](../../data/maps/region_1_canal_a.json) と一致する。
+図の全セルは [region_1_canal_a.json](../../../data/maps/region_1_canal_a.json) と一致する。
 
-![灯守の地下水道・上層・荷揚げ場の座標とイベントID](quest-maps/q002-region_1_landing.svg)
+![灯守の地下水道・上層・荷揚げ場の座標とイベントID](../quest-maps/q002-region_1_landing.svg)
 
-図の全セルは [region_1_landing.json](../../data/maps/region_1_landing.json) と一致する。
+図の全セルは [region_1_landing.json](../../../data/maps/region_1_landing.json) と一致する。
 
 図 A (5, 1)：`q002-S-entry` / `q002-S-box` / `q002-S-tags` / `q002-S-recovery` / `q002-S-recovered` / `q002-P-decision` / `q002-F-entry-tags-guard_1`。
 
 ## 本編イベントの順序と実移動
 
-[q002-S-entry](#q002--entry--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+[q002-S-entry](#q002--entry--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `lift` → `q002-S-box`。行為 `entry_lift`。同じ地点で作業・受け渡しを確定する。
 
 選択 `tags` → `q002-S-tags`。行為 `entry_tags`。戦闘に勝った後に作業を確定する。
 
-選択 `school` → `q002-S-school`。行為 `entry_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
+選択 `school` → `q002-S-school`。行為 `entry_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
 
-[q002-S-box](#q002--box--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+[q002-S-box](#q002--box--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
-選択 `school` → `q002-S-school`。行為 `box_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
+選択 `school` → `q002-S-school`。行為 `box_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
 
 選択 `tags` → `q002-E-contract`。行為 `box_tags`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-tags](#q002--tags--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+[q002-S-tags](#q002--tags--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `deliver` → `q002-E-contract`。行為 `tags_deliver`。同じ地点で作業・受け渡しを確定する。
 
-選択 `inspect` → `q002-S-school`。行為 `tags_inspect` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
+選択 `inspect` → `q002-S-school`。行為 `tags_inspect` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
 
-[q002-S-school](#q002--school--医学校の標本室)：医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+[q002-S-school](#q002--school--医学校の標本室)：医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
-選択 `recover` → `q002-S-recovery`。行為 `school_recover` で出発し、灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json) に実際に到着して自動続行する。同行：運搬人。
+選択 `recover` → `q002-S-recovery`。行為 `school_recover` で出発し、灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して自動続行する。同行：運搬人。
 
 選択 `return` → `q002-S-returned`。行為 `school_return`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-returned](#q002--returned--医学校の標本室)：医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+[q002-S-returned](#q002--returned--医学校の標本室)：医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 選択 `finish` → `q002-E-compromise`。行為 `returned_finish`。同じ地点で作業・受け渡しを確定する。
 
-選択 `consent` → `q002-S-hearing`。行為 `returned_consent` で出発し、保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../data/locations.json) に実際に到着して自動続行する。同行：運搬人。
+選択 `consent` → `q002-S-hearing`。行為 `returned_consent` で出発し、保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：運搬人。
 
-[q002-S-hearing](#q002--hearing--保険審査所)：保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../data/locations.json)。
+[q002-S-hearing](#q002--hearing--保険審査所)：保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../../data/locations.json)。
 
 選択 `file` → `q002-E-informed`。行為 `hearing_file`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-recovery](#q002--recovery--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+[q002-S-recovery](#q002--recovery--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `lift` → `q002-S-recovered`。行為 `recovery_lift`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-recovered](#q002--recovered--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+[q002-S-recovered](#q002--recovered--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
-選択 `return` → `q002-S-returned`。行為 `recovered_return` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json) に実際に到着して自動続行する。同行：運搬人。
+選択 `return` → `q002-S-returned`。行為 `recovered_return` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：運搬人。
 
 最初に縄1個で箱を引き揚げていれば、標本室でそのまま返却できる。箱を浅瀬に残して照会した場合は運搬人と現地へ戻り、骨と箱を集めて再び標本室へ運ぶ。荷札だけ渡す contract、標本返却で止める compromise、同意と証拠を揃える informed を分ける。
 
@@ -127,7 +127,7 @@ flowchart TD
 
 骨の荷札：地下水道の引き揚げ場。実行ID `q002_decision`、スクリプト `q002.v11.visit`、起動 `interact`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"journey"},"right":null},{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"completed"},{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"active"},{"op":"or","args":[{"op":"not","arg":{"op":"exists","value":{"ref":"stories.q002"}}},{"op":"eq","left":{"ref":"stories.q002.values.partyAt"},"right":"landing"}]}]}]}]}`。操作条件：`true`。
 
@@ -139,13 +139,13 @@ flowchart TD
 
 地下水路へ落ちた骨箱から人骨が流れ出ている。運送人のベルトは、箱に付いていた荷札だけを回収してほしいと依頼した。
 
-モデル: 1.1。実装: [JSON](../../data/quests/q002.json)。場面 8、結末 3。物語状態の改訂 2。
+モデル: 1.1。実装: [JSON](../../../data/quests/q002.json)。場面 8、結末 3。物語状態の改訂 2。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。骨の荷札：地下水道の引き揚げ場。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。骨の荷札：地下水道の引き揚げ場。現地イベント。
 
-参照施設: `school` → 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+参照施設: `school` → 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
-参照施設: `office` → 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../data/locations.json)。
+参照施設: `office` → 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../../data/locations.json)。
 
 固定された過去: ベルトは、生存している保険加入者を失踪者として届け出た一味から依頼を受け、医学校の貸出標本を遺体に見せかけようとした。標本を入れた箱には失踪者の名前へ書き換えた荷札が付き、骨には医学校の管理番号が残っている。ベルトは箱を地下水路へ落としたため、偽装の証拠となる荷札だけを先に回収しようとしている。運搬人は事情を知っているが、仕事を失うのを恐れて黙っている。
 
@@ -177,7 +177,7 @@ flowchart TD
 
 イベントID: `q002-S-entry`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -217,7 +217,7 @@ flowchart TD
 
 選択 `school`: 浅瀬の骨に刻まれた管理番号を写し、医学校へ照会する
 
-出発: `entry_school`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+出発: `entry_school`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`school`](#q002--school--医学校の標本室) へ進み、到着時の処理を確定します。
 
@@ -237,7 +237,7 @@ flowchart TD
 
 イベントID: `q002-S-box`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -245,7 +245,7 @@ flowchart TD
 
 選択 `school`: 骨の管理番号と荷札の宛名を控え、医学校へ照会する
 
-出発: `box_school`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+出発: `box_school`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`school`](#q002--school--医学校の標本室) へ進み、到着時の処理を確定します。
 
@@ -261,7 +261,7 @@ flowchart TD
 
 イベントID: `q002-S-tags`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -275,7 +275,7 @@ flowchart TD
 
 選択 `inspect`: 荷札の書き直された跡を調べ、骨の管理番号を確かめる
 
-出発: `tags_inspect`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+出発: `tags_inspect`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`school`](#q002--school--医学校の標本室) へ進み、到着時の処理を確定します。
 
@@ -285,7 +285,7 @@ flowchart TD
 
 イベントID: `q002-S-school`。
 
-場面の現在地: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+場面の現在地: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 登場: 運搬人・標本係。
 
@@ -295,7 +295,7 @@ flowchart TD
 
 選択条件: `{"op":"eq","left":{"ref":"stories.q002.values.boxAt"},"right":"water"}`
 
-出発: `school_recover`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `school_recover`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 出発の条件: `{"op":"eq","left":{"ref":"stories.q002.values.boxAt"},"right":"water"}`
 
@@ -317,7 +317,7 @@ flowchart TD
 
 イベントID: `q002-S-returned`。
 
-場面の現在地: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+場面の現在地: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 登場: 運搬人・標本係。
 
@@ -331,7 +331,7 @@ flowchart TD
 
 選択 `consent`: 運搬人へ不利益を説明し、本人の同意を得て審査所へ同行する
 
-出発: `returned_consent`。移動先: 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../data/locations.json)。
+出発: `returned_consent`。移動先: 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../../data/locations.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`hearing`](#q002--hearing--保険審査所) へ進み、到着時の処理を確定します。
 
@@ -341,7 +341,7 @@ flowchart TD
 
 イベントID: `q002-S-hearing`。
 
-場面の現在地: 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../data/locations.json)。
+場面の現在地: 保険審査所 (`hikarigaeri_insurance`)。[ロケーション定義](../../../data/locations.json)。
 
 登場: 運搬人・保険審査員。
 
@@ -363,7 +363,7 @@ flowchart TD
 
 イベントID: `q002-S-recovery`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 運搬人。
 
@@ -381,7 +381,7 @@ flowchart TD
 
 イベントID: `q002-S-recovered`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 運搬人。
 
@@ -389,7 +389,7 @@ flowchart TD
 
 選択 `return`: 骨箱を運んで医学校の標本室へ戻る
 
-出発: `recovered_return`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../data/locations.json)。
+出発: `recovered_return`。移動先: 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`returned`](#q002--returned--医学校の標本室) へ進み、到着時の処理を確定します。
 
@@ -1557,6 +1557,6 @@ flowchart TD
 
 ## 編集元と再生成
 
-本編は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、配置は [config/quests/q002.events.json](../../config/quests/q002.events.json)、2D地形は [config/connected-maps.json](../../config/connected-maps.json)、接続・給排水は [config/dungeons/region_1.json](../../config/dungeons/region_1.json)、町は [config/locations.json](../../config/locations.json) が正本。実装の全文は [data/quests/q002.json](../../data/quests/q002.json)。
+本編は [authoring/story-q002.mjs](../../../authoring/story-q002.mjs)、配置は [config/quests/q002.events.json](../../../config/quests/q002.events.json)、2D地形は [config/connected-maps.json](../../../config/connected-maps.json)、接続・給排水は [config/dungeons/region_1.json](../../../config/dungeons/region_1.json)、町は [config/locations.json](../../../config/locations.json) が正本。実装の全文は [data/quests/q002.json](../../../data/quests/q002.json)。
 
 `npm run build:catalog` でカタログ・専用ページ・配置図を一緒に生成する。本文を改稿する場合は原稿へ反映し、`npm run build:scenarios` でゲームデータから再生成する。`npm run build:docs` 単独は本文を保持し、`npm run check:docs` は専用ページと配置図を配布データへ照合する。

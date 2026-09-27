@@ -6,11 +6,9 @@
 
 ## 本文と人物
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：全200本・629結末の索引。q001・q002は専用ページへリンク、q003〜q020は全文、q021〜q200は概要・進行・結末。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：全200本・629結末の索引。q001〜q010は個別ページへリンク、q011〜q020は全文、q021〜q200は概要・進行・結末。
 
-[QUEST_Q001.md](QUEST_Q001.md)：帰らない灯番。8場面・2結末、巡灯路の配置図、強制戦闘・戦闘中イベント、5本の実移動。
-
-[QUEST_Q002.md](QUEST_Q002.md)：骨の荷札。8場面・3結末、入口から荷揚げ場までの3マップ、標本室・審査所との6本の移動行為、証拠・同意・受け渡し。
+[quests/README.md](quests/README.md)：q001〜q010の個別ページ一覧。本文・選択後の処理・イベントID・場所・分岐・結末を集約。q003〜q010には人物と証拠の所在、行為ごとの条件・費用・状態変化、資材不足時の再開、編集時の確認事項も掲載します。
 
 [CHARACTERS.md](CHARACTERS.md)：36人のNPC・肖像、依頼人索引。仲間の編成は [COMPANION_CATALOG.md](../battle/COMPANION_CATALOG.md)。
 

@@ -20,7 +20,7 @@
 
 ## q002の実際の場所
 
-依頼の正本は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、イベントの正本は [config/quests/q002.events.json](../../config/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](../scenarios/QUEST_Q002.md)へまとめています。
+依頼の正本は [authoring/story-q002.mjs](../../authoring/story-q002.mjs)、イベントの正本は [config/quests/q002.events.json](../../config/quests/q002.events.json) です。8場面・3結末、物語状態の改訂2です。全文・座標図・3マップの経路・イベントIDは[q002専用ページ](../scenarios/quests/QUEST_Q002.md)へまとめています。
 
 引き揚げ場は灯守の地下水道 `region_1` / `region_1_landing` の (5, 1)、イベント `q002_decision` です。岸と浅瀬の作業は同じ現地イベントの範囲で扱います。標本室は `hikarigaeri_medical_specimens`、審査所は `hikarigaeri_insurance` を参照します。対応は `story.worldPlaces` に置き、各場面の `place` から引きます。
 

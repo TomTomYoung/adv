@@ -20,3 +20,10 @@ test('cross-folder links gain ui prefix without altering external links, anchors
   const source='[view](VIEW_CONTRACT.md#viewmodel) [external](https://example.test/VIEW_CONTRACT.md) [anchor](#viewmodel)\n```md\n[view](VIEW_CONTRACT.md)\n```';
   assert.equal(relocateDoc(source,'SCRIPT_REFERENCE.md'),'[view](../ui/VIEW_CONTRACT.md#viewmodel) [external](https://example.test/VIEW_CONTRACT.md) [anchor](#viewmodel)\n```md\n[view](VIEW_CONTRACT.md)\n```');
 });
+test('quest pages retain their identity in a nested folder and rebase catalog, data, maps and sibling links',()=>{
+  assert.equal(docPath('QUEST_Q001.md'),'scenarios/quests/QUEST_Q001.md');
+  assert.equal(docPath('scenarios/QUEST_Q002.md'),'scenarios/quests/QUEST_Q002.md');
+  assert.equal(relocateDoc('[page](QUEST_Q010.md)','QUEST_CATALOG.md'),'[page](quests/QUEST_Q010.md)');
+  assert.equal(relocateDoc('[catalog](QUEST_CATALOG.md#q003-逆流する鐘) [data](../data/quests/q003.json) [map](quest-maps/q001-kagaribi_f1.svg) [next](QUEST_Q004.md)','QUEST_Q003.md'),
+    '[catalog](../QUEST_CATALOG.md#q003-逆流する鐘) [data](../../../data/quests/q003.json) [map](../quest-maps/q001-kagaribi_f1.svg) [next](QUEST_Q004.md)');
+});

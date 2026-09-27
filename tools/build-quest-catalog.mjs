@@ -4,6 +4,7 @@ import path from 'node:path';
 import {loadContent} from '../src/core/loader.js';
 import {questCatalog,questPages} from './quest-catalog.mjs';
 import {questPageBundle} from './quest-page.mjs';
+import {questPageIndex} from './quest-page-details.mjs';
 import {locationCatalog} from './location-catalog.mjs';
 
 const root=path.resolve(import.meta.dirname,'..');
@@ -16,4 +17,5 @@ for(const id of Object.keys(questPages))for(const [file,content] of Object.entri
   await fs.mkdir(path.dirname(target),{recursive:true});
   await fs.writeFile(target,relocateDoc(content,file));
 }
-console.log('CATALOG: q001–q002 dedicated pages and event maps; q003–q020 scripts in the 200-quest catalog');
+await fs.writeFile(path.join(root,'doc/scenarios/quests/README.md'),relocateDoc(questPageIndex(data),'scenarios/quests/README.md'));
+console.log('CATALOG: q001–q010 dedicated pages in scenarios/quests; q011–q020 scripts in the 200-quest catalog');

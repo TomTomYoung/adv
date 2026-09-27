@@ -1,5 +1,6 @@
 import {catalogContentHash,questCatalog,questEventId,questPages} from './quest-catalog.mjs';
 import {describePlace} from './location-catalog.mjs';
+import {detailedQuestPageBundle} from './quest-page-details.mjs';
 
 const code=v=>'`'+v+'`';
 const slug=text=>text.toLowerCase().replace(/[^\p{L}\p{N}\p{M}\s_-]/gu,'').trim().replace(/\s/g,'-');
@@ -11,10 +12,10 @@ const sceneLink=(q,node)=>`[${questEventId(q,'S',node.id)}](#${slug(`${q.id} / $
 // IDs use source keys, not array positions. Inserting a scene never renumbers an event.
 export function questPageEvents(q){
   const entries=[
-    ...q.model.graph.map(n=>({id:questEventId(q,'S',n.id),kind:'scene',source:n.id,place:q.story.worldPlaces[q.story.scenes[n.id].place]})),
+    ...q.model.graph.map(n=>({id:questEventId(q,'S',n.id),kind:'scene',source:n.id,place:q.story.worldPlaces?.[q.story.scenes[n.id].place]})),
     ...q.events.map(e=>({id:questEventId(q,'P',e.id),kind:'placement',source:e.id,points:e.points})),
     ...q.model.graph.flatMap(n=>{
-      const unit=q.model.narrative.units.find(u=>u.id===n.id),place=q.story.worldPlaces[q.story.scenes[n.id].place];
+      const unit=q.model.narrative.units.find(u=>u.id===n.id),place=q.story.worldPlaces?.[q.story.scenes[n.id].place];
       const battles=[];
       function walk(commands, key){
         for(const c of commands){
@@ -105,6 +106,7 @@ export function questMapSvg(data,q,map){
 }
 
 export function questPageBundle(data,id){
+  if (questPages[id]&&data.quests[id].number>=3) return detailedQuestPageBundle(data,id,questPageEvents(data.quests[id]));
   if(id==='q002')return q002PageBundle(data);
   if(id!=='q001'||!questPages[id])throw Error(`No dedicated page configuration for ${id}`);
   const q=data.quests[id],events=questPageEvents(q),out=[];
@@ -113,7 +115,7 @@ export function questPageBundle(data,id){
   const maps=mapIds.map(id=>data.maps[id]);
   const files={};
   add(`# ${q.id} ${q.title}：マップとイベント`);
-  add(`[クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)`);
+  add(`[個別ページ一覧](scenarios/quests/README.md) ／ [クエストカタログへ戻る](QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)`);
   add(`作品版 ${data.game.version}。配布JSONから生成した作者向けページ。真相と結末を含む。`);
   add(`<!-- quest-page-source:${catalogContentHash(data)} -->`);
   add(`本編は${q.model.graph.length}場面、${Object.keys(q.outcomes).length}結末。ダンジョン内の必須経路は${maps.map(m=>code(m.id)).join('・')}の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。`);
@@ -160,7 +162,7 @@ export function questPageBundle(data,id){
     }
   }
   add('新人が入口から巡灯路へ駆けつける救助は、戦闘中イベント `q001-B-rookie` から物語行為 `outage_call` を実行する。帰路の消灯会話を送り終えると `q001-F-kuragari` がくらがりとの戦闘を開始する。1ラウンド終了後（第2ラウンド開始時）に新人が発言し、送ると新品油を1つ消費してくらがり除けの携帯松明を25歩分点灯し、`battle.end` で戦闘を強制終了する。`on_interrupt` から `q001-S-rescue` の現地会話へ進む。探索隊の座標は変えない。');
-  add('第1ラウンドで倒す・逃げる・火で撃退する場合も、その終了確定前に同じ新人イベントを1度だけ実行する。勝利や逃走としては記録せず、強制終了を記録し、戦闘報酬は与えない。新人到着前の全滅は通常の敗北・町への帰還となり、救助や油の消費は確定しない。再訪して同じ場面から再挑戦できる。戦闘中のセリフでも保存・再開できる。');
+  add('第1ラウンドで倒す・逃げる・火で撃退する場合も、その終了確定前に同じ新人イベントを1度だけ実行する。勝利や逃走としては記録せず、強制終了を記録し、戦闘報酬は与えない。新人到着前の全滅は町への帰還と共通チェックポイントによる巻戻しとなり、老人遭遇からの封印・帰路・壁灯・消灯済みフラグを取り消す。救助や油の消費は確定せず、再訪時は老人との遭遇からやり直す。救援成功後は区間を確定し、その後の全滅では戻さない。[共通チェックポイント](EVENT_CHECKPOINTS.md)を参照。戦闘中のセリフでも保存・再開できる。');
   add('探索隊の往路・老人の介助・救助後の入口への移動・詰所への帰還は、出発を選んだ後にプレイヤーが実際に移動する。命令と配置の一覧は [EVENT_CATALOG.md](EVENT_CATALOG.md)、セルごとの明るさは [FIELD_LIGHTING.md](FIELD_LIGHTING.md) を参照する。');
   add('配置点のIDが同じでも本編場面は異なる。入口は初回の `q001-S-entry` と帰路の `q001-S-gate`、巡灯路は往路の `q001-S-dark`・`q001-S-empty` と帰路の `q001-S-outage`・`q001-S-rescue` が共用する。座標に来るだけで全場面が順番に発生するわけではなく、保存中の場面・移動行為と到着条件に従う。');
   add('## 配置イベントと操作条件');
@@ -251,7 +253,7 @@ function q002PageBundle(data){
   const events=questPageEvents(q), journeys=Object.entries(q.story.actions).filter(([,a])=>a.journey);
   const out=[], files={},add=text=>out.push(text,'');
   add(`# ${q.id} ${q.title}：マップとイベント`);
-  add('[クエストカタログへ戻る](QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)');
+  add('[個別ページ一覧](scenarios/quests/README.md) ／ [クエストカタログへ戻る](QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)');
   add(`作品版 ${data.game.version}。配布JSONから生成した作者向けページ。真相と結末を含む。`);
   add(`<!-- quest-page-source:${catalogContentHash(data)} -->`);
   add(`本編は${q.model.graph.length}場面・${Object.keys(q.outcomes).length}結末、物語状態の改訂${q.story.revision}。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。${journeys.length}本の移動行為は出発後に実際の場所へ到着して確定する。`);

@@ -4,7 +4,7 @@
 
 [設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/authoring/CONFIG_EDITORS.md)。
 
-作品版1.21.0。町11か所・ダンジョン室内2か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/QUEST_Q002.md)。
+作品版1.21.0。町11か所・ダンジョン室内2か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/quests/QUEST_Q002.md)。
 
 ## 遊ぶ
 
@@ -87,7 +87,7 @@ node --test tests/*.test.mjs
 
 `authoring/structures-1.mjs`〜`5.mjs` は既存100件の個別進行、`structures-additional.mjs` は追加篇10件の改稿です。`authoring/quests.txt` と `authoring/scenarios-01.mjs`〜`10.mjs` は基礎原稿・旧進行の互換用生成にも使います。生成済みJSONを同梱しているため、遊ぶ際の生成は不要です。
 
-q001の原稿は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q003〜q010は `authoring/stories-v11-*.mjs`、人物設定は `authoring/characters.mjs` です。`npm run build:characters` は旧AIPaint素材を再生成し、新しい画像生成肖像への参照を維持します。画像生成用の英語・日本語プロンプトは `assets/source/characters/imagegen-prompts.json` に保存しています。
+q001の原稿は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-*.mjs`、人物設定は `authoring/characters.mjs` です。`npm run build:characters` は旧AIPaint素材を再生成し、新しい画像生成肖像への参照を維持します。画像生成用の英語・日本語プロンプトは `assets/source/characters/imagegen-prompts.json` に保存しています。
 
 全200件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 

@@ -1,6 +1,6 @@
 # q004 二枚目の通行証：実移動
 
-更新日: 2026-09-26。作品版1.21.0、物語revision 2。正本は [story-q004.mjs](../../authoring/story-q004.mjs)、現地イベントは [q004.events.json](../../config/quests/q004.events.json)。全文と各選択の処理は [クエストカタログ](QUEST_CATALOG.md)に生成する。
+更新日: 2026-09-26。作品版1.21.0、物語revision 2。正本は [story-q004.mjs](../../authoring/story-q004.mjs)、現地イベントは [q004.events.json](../../config/quests/q004.events.json)。全文・行為条件・状態変化は [q004個別ページ](quests/QUEST_Q004.md)に生成する。
 
 ## 場所
 
@@ -24,6 +24,6 @@
 
 ## 中断と保存
 
-会話はその場で中断・再開でき、移動途中と室内も保存できる。旧内容版は移行せず、新規開始する。`window` という場面別名は同版内の再開参照として保持する。旧来の2つの手掛かりイベントは削除し、公開受付・地上審査所・留置室での処理に統合した。
+共通の中断選択肢は廃止済み。罰金不足では作業別の不足・再開経路から補給へ戻り、再訪して同じ作業場面から続ける。会話中・移動途中・室内は通常の保存位置から再開できる。旧内容版は移行せず、新規開始する。`window` という場面別名は同版内の再開参照として保持する。旧来の2つの手掛かりイベントは削除し、公開受付・地上審査所・留置室での処理に統合した。
 
 検証は [waterway-checkpoint.test.mjs](../../tests/waterway-checkpoint.test.mjs)、[物語状態](../../tests/story-state.test.mjs)、[シナリオ回帰](../../tests/q003-q010-catalog.test.mjs)を参照する。

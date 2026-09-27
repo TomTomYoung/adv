@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {data} from './helpers.mjs';
-import {questCatalog} from '../tools/quest-catalog.mjs';
+import {questCatalog,questPages} from '../tools/quest-catalog.mjs';
 import {questPageBundle,questPageEvents} from '../tools/quest-page.mjs';
 
-for(const id of ['q001','q002'])test(`${id} is extracted once, retaining every scene and ending and leaving a catalog link`,()=>{
+for(const id of Object.keys(questPages))test(`${id} is extracted once, retaining every scene and ending and leaving a catalog link`,()=>{
   const catalog=questCatalog(data,'2026-09-17'),q=data.quests[id];
   const page=questPageBundle(data,id)[`QUEST_${id.toUpperCase()}.md`];
   const section=catalog.split(`## ${id} `)[1].split('\n## ')[0];
@@ -68,4 +68,25 @@ test('q002 documents the connected route, all six journeys, exact map JSON and n
   assert.ok(page.includes('目的セルへの進入で recovery が自動開始'));
   for(const id of ['hikarigaeri_medical_specimens','hikarigaeri_insurance','witnessConsent','tagsAt','ledgerAt'])assert.ok(page.includes(id));
   assert.ok(!page.includes('「目的地で続きを進める」を選んで'));
+});
+
+test('q003–q010 detail pages preserve all state and placement definitions without inventing physical travel',async()=>{
+  for(const id of Object.keys(questPages).slice(2)){
+    const q=data.quests[id],page=questPageBundle(data,id)[questPages[id]],events=questPageEvents(q);
+    assert.equal(new Set(events.map(e=>e.id)).size,events.length);
+    for(const e of events)assert.ok(page.includes(e.id),e.id);
+    const embedded=title=>JSON.parse(page.split(`<summary>${title}</summary>`)[1].match(/```json\n([\s\S]*?)\n```/)[1]);
+    assert.deepEqual(embedded('物語の場所・状態・行為・結末条件の全定義'),q.story);
+    assert.deepEqual(embedded('クエスト専用の全配置と条件'),q.events);
+    for(const [key,a] of Object.entries(q.story.actions)){
+      assert.ok(page.includes(`### 行為 ${key}`),key);
+      assert.ok(page.includes(JSON.stringify(a.requires??true)),key);
+    }
+    for(const r of q.model.interruptionRoutes??[])for(const key of ['from','shortage','resume'])assert.ok(page.includes(r[key]));
+    assert.equal(page.includes('worldPlaces と story.journey は未定義'),!q.story.worldPlaces);
+    for(const [,map,jsonText] of page.matchAll(/### (\w+) の全マップJSON[\s\S]*?```json\n([\s\S]*?)\n```/g)){
+      const raw=JSON.parse(await fs.readFile(new URL(`../data/maps/${map}.json`,import.meta.url),'utf8'));
+      assert.deepEqual(JSON.parse(jsonText),raw);
+    }
+  }
 });

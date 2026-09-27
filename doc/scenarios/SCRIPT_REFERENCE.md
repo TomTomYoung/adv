@@ -145,7 +145,7 @@ battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行し�
 
 イベント内で使える命令は `say`・`narrate`・`choice`・`if`・`switch`・`set`・`add`・`flag.set`・`story.action`・`fire.portable.set`・`battle.end`・`effect.play`・`audio.se`・`screen.set`・`screen.clear`。会話・選択待ちの間は戦闘操作を受けず、そのまま保存できる。イベント末尾では戦闘または保留中の通常終了処理を再開する。
 
-`battle.end` は戦闘中イベント専用。イベントの残りを破棄し、戦闘を `interrupted` として強制終了して `on_interrupt` を実行する。eventsを定義したbattle.startではon_interrupt配列も必須。勝利報酬は与えず、`records.interruptions` を増やす。`record_count` のmetricにもinterruptionsを指定できる。実際のq001のID・条件・接続は [EVENT_CATALOG.md](EVENT_CATALOG.md) と [QUEST_Q001.md](QUEST_Q001.md) を参照する。
+`battle.end` は戦闘中イベント専用。イベントの残りを破棄し、戦闘を `interrupted` として強制終了して `on_interrupt` を実行する。eventsを定義したbattle.startではon_interrupt配列も必須。勝利報酬は与えず、`records.interruptions` を増やす。`record_count` のmetricにもinterruptionsを指定できる。実際のq001のID・条件・接続は [EVENT_CATALOG.md](EVENT_CATALOG.md) と [QUEST_Q001.md](quests/QUEST_Q001.md) を参照する。
 
 回復のratioは「現在値へ加算」ではなく「最大値の何割以上にするか」です。通常回復はactor.healを使ってください。restでお金が足りない場合は回復せず通知し、その後のコマンドへ進みます。料金不足で別の会話にする場合はifでgoldを確認します。
 

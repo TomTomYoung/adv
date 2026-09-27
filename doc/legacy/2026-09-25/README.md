@@ -12,6 +12,6 @@
 
 [DUNGEON_SYSTEMS_1_7.md](DUNGEON_SYSTEMS_1_7.md)：1.7.0導入時の移行・検証説明を含む原文。現行は[固有システム](../../dungeons/DUNGEON_SYSTEMS.md)。
 
-[DUNGEON_REVISION_1_9.md](DUNGEON_REVISION_1_9.md)：1.9.0の改訂履歴。現行q001は[専用ページ](../../scenarios/QUEST_Q001.md)。
+[DUNGEON_REVISION_1_9.md](DUNGEON_REVISION_1_9.md)：1.9.0の改訂履歴。現行q001は[専用ページ](../../scenarios/quests/QUEST_Q001.md)。
 
 [DUNGEON_RENDER_REVIEW.md](DUNGEON_RENDER_REVIEW.md)：過去の水面・床材・装置の描画修正と当時の画像・検証値。

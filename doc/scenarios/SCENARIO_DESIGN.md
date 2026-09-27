@@ -32,7 +32,7 @@ npm run build:scenarios
 
 基礎データと互換用スクリプト、追加篇、個別構造、v1.1とカタログ改稿、ダンジョン、スキーマの順に生成します。最後に配布JSONから統合カタログを生成し、他の文書を更新します。
 
-q001は `story-q001.mjs`、q002は `story-q002.mjs`、q003〜q010は `stories-v11-*.mjs`、q011〜q020は `catalog-q011-q020.json/.mjs`、その他は `structures-*.mjs` と `scenarios-*.mjs` が主な編集先です。詳細は[HANDOFF.md](../HANDOFF.md)へ記載します。
+q001は `story-q001.mjs`、q002は `story-q002.mjs`、q004は `story-q004.mjs`、残るq003〜q010は `stories-v11-*.mjs`、q011〜q020は `catalog-q011-q020.json/.mjs`、その他は `structures-*.mjs` と `scenarios-*.mjs` が主な編集先です。詳細は[HANDOFF.md](../HANDOFF.md)へ記載します。
 
 [QUEST_CATALOG.md](QUEST_CATALOG.md)をユーザーが改稿した場合は、内容を確認して正本へ反映してから再生成します。文書更新だけの依頼でカタログ本文を配布JSONへ強制的に戻してはいけません。
 
@@ -44,11 +44,11 @@ q001は `story-q001.mjs`、q002は `story-q002.mjs`、q003〜q010は `stories-v1
 
 ## 改稿全文の統合
 
-q001の[専用ページ](QUEST_Q001.md)とq002の[専用ページ](QUEST_Q002.md)に本文・選択後の応答・条件・結末・マップデータ・イベント配置を掲載し、q003〜q020の全文は[QUEST_CATALOG.md](QUEST_CATALOG.md)の各項目に掲載します。q021〜q200は概要と進行・結末一覧です。二つの旧全文文書は廃止し、中間生成器によるカタログ出力も止めました。
+q001〜q010の[個別ページ](quests/README.md)に本文・選択後の応答・条件・結末・マップデータ・イベント配置を掲載し、q011〜q020の全文は[QUEST_CATALOG.md](QUEST_CATALOG.md)の各項目に掲載します。q021〜q200は概要と進行・結末一覧です。二つの旧全文文書は廃止し、中間生成器によるカタログ出力も止めました。
 
 npm run build:catalog は、最終生成済みのdata/を読み、現在の場面をmodel.narrative.unitsから特定し、実行するscriptsの本文・選択・分岐・戦闘後の継続を掲載します。物語の初期所在、固定された過去、作者向け制約、結末と報酬も同じJSONから生成します。対応していない命令は黙って省略せず生成エラーにします。
 
-npm run build:catalog はq001・q002の専用ページと座標付きSVGも生成します。イベントIDは場面・配置物・結末の元キーから生成し、クエスト内で一意にします。check:docsは専用ページとSVGも配布データに照合します。
+npm run build:catalog はq001〜q010の個別ページと一覧、q001・q002の座標付きSVGも生成します。個別ページは `doc/scenarios/quests/` に格納します。q003〜q010の解説は `authoring/quest-page-notes.mjs`、実装詳細は配布JSONから生成します。イベントIDは場面・配置物・結末の元キーから生成し、クエスト内で一意にします。check:docsは専用ページとSVGも配布データに照合します。
 
 npm run build:docs はカタログと専用ページの本文を保持します。利用者がカタログを改稿した場合は先に正本へ取り込みます。check:docsは生成時の実装指紋と現在のJSONを照合し、古い実装のカタログを検出します。
 
