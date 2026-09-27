@@ -375,7 +375,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q120.scene.road",
+        "action": "cart",
+        "option": "cart_supplies",
+        "shortage": "q120.scene.road.cart.shortage",
+        "resume": "q120.scene.road.cart.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q120.visit"
+    ]
   },
   "scripts": {
     "q120.scene.entry": {
@@ -412,11 +427,6 @@
                   "script": "q120.scene.road"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -693,9 +703,58 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "cart_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q120.leg"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q120.leg"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q120.scene.road.cart.shortage"
+                }
+              ]
             }
           ]
         }
@@ -756,77 +815,126 @@
     "q120.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q120.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q120"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q120.outcome"
-              },
-              "cases": [
+              "equals": "q120.scene.road.cart.resume",
+              "commands": [
                 {
-                  "equals": "enter",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "巡礼団は入場した。先着組も後着組も写真に残した。老婆は若者の旗を取り上げず、持ち方だけを直した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "outside",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "門は閉じていた。翌朝の入場券を受け取り、今夜は門外で祈った。写真の背景は違っても、最後尾まで写っていた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q120.scene.road.cart.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q120.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q120.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q120.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "enter",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "巡礼団は入場した。先着組も後着組も写真に残した。老婆は若者の旗を取り上げず、持ち方だけを直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "outside",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "門は閉じていた。翌朝の入場券を受け取り、今夜は門外で祈った。写真の背景は違っても、最後尾まで写っていた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q120.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q120.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "road",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q120.scene.road"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q120.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "road",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q120.scene.road"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q120.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q120.scene.road.cart.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q120",
+          "value": "q120.scene.road.cart.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q120.scene.road.cart.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q120",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q120.scene.road"
         }
       ]
     }

@@ -420,7 +420,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q150.scene.stage",
+        "action": "company",
+        "option": "company_supplies",
+        "shortage": "q150.scene.stage.company.shortage",
+        "resume": "q150.scene.stage.company.resume",
+        "cost": {
+          "gold": 40
+        }
+      },
+      {
+        "from": "q150.flow.company",
+        "action": "agree",
+        "option": "agree_supplies",
+        "shortage": "q150.flow.company.agree.shortage",
+        "resume": "q150.flow.company.agree.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q150.visit",
+      "q150.flow.visit"
+    ]
   },
   "scripts": {
     "q150.scene.entry": {
@@ -463,11 +489,6 @@
                   "script": "q150.scene.stage"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -581,9 +602,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "company_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.shortage"
+                }
+              ]
             }
           ]
         }
@@ -722,100 +768,128 @@
     "q150.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q150.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q150"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q150.outcome"
-              },
-              "cases": [
+              "equals": "q150.scene.stage.company.resume",
+              "commands": [
                 {
-                  "equals": "porter",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "thief",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "singer",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "company",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "none",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q150.flow.company.agree.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q150.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q150.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "porter",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "thief",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "singer",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "none",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q150.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stage",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.scene.stage"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q150.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "stage",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q150.scene.stage"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q150.scene.entry"
                 }
               ]
             }
@@ -863,11 +937,6 @@
                   "script": "q150.flow.accident"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -947,11 +1016,6 @@
                   "script": "q150.flow.end.none"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1013,11 +1077,6 @@
                   "script": "q150.flow.end.none"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1079,11 +1138,6 @@
                   "script": "q150.flow.contracts"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1193,11 +1247,6 @@
                   "script": "q150.flow.end.none"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1256,9 +1305,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "agree_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1397,135 +1471,71 @@
     "q150.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q150.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q150"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q150.outcome"
-              },
-              "cases": [
+              "equals": "q150.scene.stage.company.resume",
+              "commands": [
                 {
-                  "equals": "porter",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "thief",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "singer",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "company",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "none",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q150.flow.company.agree.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q150"
+                  "ref": "quests.q150.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q150.visit"
-                }
-              ],
-              "else": [
-                {
                   "op": "switch",
                   "value": {
-                    "ref": "flags.flow.q150.node"
+                    "ref": "quests.q150.outcome"
                   },
                   "cases": [
                     {
-                      "equals": "entry",
+                      "equals": "porter",
                       "commands": [
                         {
-                          "op": "jump",
-                          "script": "q150.flow.entry"
+                          "op": "say",
+                          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
                         }
                       ]
                     },
                     {
-                      "equals": "accident",
+                      "equals": "thief",
                       "commands": [
                         {
-                          "op": "jump",
-                          "script": "q150.flow.accident"
+                          "op": "say",
+                          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
                         }
                       ]
                     },
                     {
-                      "equals": "repair",
+                      "equals": "singer",
                       "commands": [
                         {
-                          "op": "jump",
-                          "script": "q150.flow.repair"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "audience",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q150.flow.audience"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contracts",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q150.flow.contracts"
+                          "op": "say",
+                          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
                         }
                       ]
                     },
@@ -1533,22 +1543,174 @@
                       "equals": "company",
                       "commands": [
                         {
-                          "op": "jump",
-                          "script": "q150.flow.company"
+                          "op": "say",
+                          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "none",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
                         }
                       ]
                     }
                   ],
-                  "default": [
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q150"
+                    },
+                    "right": true
+                  },
+                  "then": [
                     {
                       "op": "jump",
-                      "script": "q150.flow.entry"
+                      "script": "q150.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q150.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "accident",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.accident"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repair",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.repair"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "audience",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.audience"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contracts",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.contracts"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "company",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.company"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q150.flow.entry"
+                        }
+                      ]
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q150.scene.stage.company.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": "q150.scene.stage.company.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q150.scene.stage.company.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q150.scene.stage"
+        }
+      ]
+    },
+    "q150.flow.company.agree.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": "q150.flow.company.agree.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q150.flow.company.agree.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q150.flow.company"
         }
       ]
     }

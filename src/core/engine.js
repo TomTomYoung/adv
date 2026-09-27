@@ -99,6 +99,7 @@ export class GameEngine {
     const ending=storyEnding(this,id,outcome);if(!ending)throw new Error(`不明な結末: ${id}/${outcome}`);
     if(ending.requires!==undefined&&!this.value(ending.requires))throw new Error(`結末の条件を満たしていません: ${id}/${outcome}`);
     qs.stage='completed';qs.outcome=outcome;
+    if(this.state.flags.questResume?.[id])this.state.flags.questResume[id]=null;
     this.state.vars.completed=(this.state.vars.completed??0)+1;
     const key=`region_${q.region}`;this.state.vars[key]=(this.state.vars[key]??0)+1;
     this.award(ending.gold,ending.xp);this.eventCue('complete');
@@ -371,4 +372,3 @@ export class GameEngine {
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();return true;
   }
 }
-

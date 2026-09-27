@@ -21,7 +21,7 @@ export function questCatalog(data,date,{questId}={}){
     `<!-- quest-catalog-source:${catalogContentHash(data)} -->`,'',
     'q001の[専用ページ](QUEST_Q001.md)とq002の[専用ページ](QUEST_Q002.md)に全文・マップデータ・イベント配置を掲載します。q003〜q020の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は従来の概要・進行一覧・結末を掲載します。作者向けのため真相と結末を含みます。','',
     'q001〜q010はモデルv1.1と状態モデルadv-story-state/1、q011〜q020はモデルv1.0のcatalog1改稿です。過去の命令列や別名を現行場面として重複掲載しません。条件はJSON式をそのまま記載し、選択の表示条件と成立条件、行為の条件、結末の条件を区別します。','',
-    '物語行為の詳細な所在・介助・費用・不変条件は各実装JSONのstoryを参照してください。「行為」は成立時に一括確定します。中断は場面を保持し、戦闘後の作業と支払いは勝利した場合だけ確定します。','',
+    '物語行為の詳細な所在・介助・費用・不変条件は各実装JSONのstoryを参照してください。「行為」は成立時に一括確定します。共通の中断選択肢はありません。資材不足は作業別の不足・再開経路へ分岐し、戦闘後の作業と支払いは勝利した場合だけ確定します。','',
     '[人物一覧](CHARACTERS.md) ／ [状態モデル](SCENARIO_MODEL_V11.md) ／ [シナリオ設計と編集手順](SCENARIO_DESIGN.md)','',
     '現在の実装から明示的に更新するコマンドは npm run build:catalog です。カタログへ直接加えた改稿は、先にauthoringの正本へ反映してから再生成してください。npm run build:docs は本文を上書きしません。',''];
   const add=text=>out.push(text,'');
@@ -44,7 +44,7 @@ export function questCatalog(data,date,{questId}={}){
             add(`選択 ${code(o.id)}: ${o.text}`);
             if(o.requirement)add(`必要事項: ${o.requirement}。`);
             condition('表示条件',o.visibleWhen);condition('選択条件',o.condition);
-            if(!o.commands.length)add('中断して現在の場面を保持します。');
+            if(!o.commands.length)add('会話を終え、探索へ戻ります。');
             commands(q,o.commands,{inChoice:true});
           }
           break;
@@ -58,7 +58,11 @@ export function questCatalog(data,date,{questId}={}){
           for(const [key,label] of [['on_win','勝利後'],['on_escape','逃走後'],['on_lose','敗北後'],['on_interrupt','強制終了後']]){if(c[key]){add(`［${label}］`);commands(q,c[key],{inChoice:true});}}
           add('［戦闘の継続ここまで］');break;
         case 'battle.end':add('戦闘を強制終了し、on_interruptへ移る。勝利報酬は発生しない。');break;
-        case 'jump':add(`進行先: ${target(q,c.script)}。`);break;
+        case 'jump':{
+          const interruption=q.model.interruptionRoutes?.find(r=>r.shortage===c.script);
+          if(interruption){commands(q,q.scripts[c.script].commands);add(`不足時は未着手のまま会話を終了。再訪時は ${code(interruption.resume)} を経て ${target(q,interruption.from)} から再開します。`);}
+          else add(`進行先: ${target(q,c.script)}。`);break;
+        }
         case 'story.journey':{
           const a=q.story.actions[c.action],place=q.story.worldPlaces[a.journey.to];
           add(`出発: ${code(c.action)}。移動先: ${describePlace(data,place)}。`);condition('出発の条件',a.requires);

@@ -14,10 +14,12 @@ const visit=id=>data.quests[id].model.entryScript??`${id}.visit`;
 const scene=(g,id)=>g.state.stories?.[id]?.scene??g.state.flags.flow?.[id]?.node??g.state.flags.quest?.[id]?.node;
 const options=g=>g.state.waiting?.type==='choice'?commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options:[];
 const enabled=(g,o)=>(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.visibleWhen===undefined||g.value(o.visibleWhen))&&(o.condition===undefined||g.value(o.condition));
-function start(id,{rich=true,walk=true}={}){
+function start(id,{rich=true,walk=true,absent=null,join=null}={}){
  const g=newGame(1907);
  if(rich){g.award(0,data.system.xpBase*24*25);g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;g.healAll();}
  if(data.quests[id].number<=100)for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
+ if(absent)assert.ok(g.dispatch({type:'party',action:'leave',actor:absent}));
+ if(join)assert.ok(g.dispatch({type:'party',action:'join',actor:join}));
  assert.ok(g.dispatch({type:'accept',id}));
  if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true});else{const d=data.quests[id].story,p=d?.worldPlaces?.[d.scenes.entry.place];if(p?.kind==='dungeon')g.teleport(p.map,p.x,p.y);g.run(visit(id));drain(g);}
  return g;
@@ -47,7 +49,7 @@ const key=(g,id)=>canonical({story:g.state.stories?.[id],flags:g.state.flags.que
 for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending, reachable map, save/resume and no repeat reward`,()=>{
  const g=start(q.id),queue=[structuredClone(g.state)],seen=new Set(),ends=new Set();let visited=0;
  if(q.id==='q165'){
-  choose(g,'pause');g.dispatch({type:'retreat'});assert.ok(g.dispatch({type:'party',action:'leave',actor:'il'}));exploreSpot(g,q.locations[0],{heal:true});queue.push(structuredClone(g.state));
+  queue.push(structuredClone(start(q.id,{absent:'il'}).state));
  }
  for(let i=0;i<queue.length;i++){
   g.state=structuredClone(queue[i]);const signature=key(g,q.id);if(seen.has(signature))continue;seen.add(signature);
@@ -71,13 +73,13 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
    }else{g.run(visit(q.id));drain(g);}
   }
   assert.equal(g.state.waiting?.type,'choice');
-  const available=options(g).filter(o=>o.id!=='pause'&&enabled(g,o));
+  const available=options(g).filter(o=>enabled(g,o));
   assert.ok(available.length,`${q.id}: a live route at ${scene(g,q.id)}`);
   const checkpoint=structuredClone(g.state),currentScene=scene(g,q.id);
-  if(options(g).some(o=>o.id==='pause')){
-   choose(g,'pause');assert.equal(g.state.vm.length,0);g.load(g.save());g.run(visit(q.id));drain(g);
-   assert.equal(scene(g,q.id),currentScene,'pause retains current scene');
-  }
+  assert.ok(!options(g).some(o=>o.id==='pause'));
+  g.state.gold=0;for(const item of Object.keys(g.state.inventory))g.state.inventory[item]=0;
+  assert.ok(options(g).some(o=>enabled(g,o)),`${q.id}/${currentScene}: route without resources`);
+  g.state=structuredClone(checkpoint);
   for(const o of available){
    g.state=structuredClone(checkpoint);choose(g,o.id);
    if(g.state.battle){
@@ -91,11 +93,11 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
  assert.deepEqual([...ends].sort(),Object.keys(q.outcomes).sort(),`${q.id}: reachable endings`);
 });
 
-test('all quests offer an initial route and can be paused with no money or supplies',()=>{
+test('all quests offer an initial route and can be saved with no money or supplies',()=>{
  for(const q of Object.values(data.quests)){
   const g=start(q.id,{walk:false});g.state.gold=0;g.state.inventory=q.id==='q001'?{kagaribi_torch:1,kagaribi_ember:0}:{};
   assert.ok(options(g).some(o=>o.id!=='pause'&&enabled(g,o)),q.id);
-  choose(g,'pause');g.load(g.save());g.run(visit(q.id));drain(g);assert.equal(g.state.waiting.type,'choice');
+  g.load(g.save());assert.equal(g.state.waiting.type,'choice');
  }
 });
 
@@ -173,7 +175,7 @@ test('literal false visibility and eligibility never become an unconditional cho
  assert.equal(projectGame(g).dialog.options.find(o=>o.id==='disabled').enabled,false);
  assert.equal(g.dispatch({type:'choose',id:'hidden'}),false);assert.equal(g.dispatch({type:'choose',id:'disabled'}),false);
  assert.ok(g.dispatch({type:'choose',id:'leave'}));
- d.scripts.visibility.commands[0].options.pop();assert.ok(validateContent(d).some(e=>e.includes('常に選べる')));
+ d.scripts.visibility.commands[0].options.pop();assert.ok(validateContent(d).some(e=>e.includes('選べる可能性')));
 });
 test('outcome requirements are checked before stage and reward changes',()=>{
  const d=structuredClone(data);d.quests.q121.outcomes.together.requires={op:'gte',left:{op:'record_count',metric:'kills',id:'moor_wolf',sinceQuest:'q121'},right:1};
@@ -198,8 +200,8 @@ test('q002 recovers the tags only after winning at the actual waterway site',()=
 });
 test('party absence and survival are read from the live roster',()=>{
  const g=start('q164',{walk:false});assert.ok(enabled(g,options(g).find(o=>o.id==='secret')));
- choose(g,'pause');assert.ok(g.dispatch({type:'party',action:'join',actor:'ren'}));g.run('q164.visit');drain(g);
- assert.equal(g.dispatch({type:'choose',id:'secret'}),false);choose(g,'explain');assert.equal(g.state.quests.q164.outcome,'explain');
+ const joined=start('q164',{walk:false,join:'ren'});
+ assert.equal(joined.dispatch({type:'choose',id:'secret'}),false);choose(joined,'explain');assert.equal(joined.state.quests.q164.outcome,'explain');
  for(const mode of ['absent','fallen','alive']){
   const h=start('q161',{walk:false});if(mode==='absent')h.state.members=h.state.members.filter(id=>id!=='sera');if(mode==='fallen')h.state.actors.sera.hp=0;
   choose(h,'wish');assert.equal(Boolean(enabled(h,options(h).find(o=>o.id==='sera'))),mode==='alive');choose(h,'clinic');assert.equal(h.state.quests.q161.outcome,'heal');

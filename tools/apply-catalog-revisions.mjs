@@ -29,7 +29,6 @@ export async function applyCatalogRevisions(root){
     const requirement=[o.requirement,...Object.entries(o.cost??{}).map(([k,v])=>`${{gold:'G',rope:'縄'}[k]??k} ${v}消費`),...(encounter?['戦闘（作業と支払いは勝利時に確定）']:[])].filter(Boolean).join('・');
     return {id:o.id,text:o.text,...(terms.length?{condition:and(...terms)}:{}),requirement,commands};
    });
-   options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
    q.scripts[sid(n.id)]={commands:[{op:'set',target:state('node'),value:n.id},...render(n.text),{op:'choice',options}]};
   }
   q.scripts[sid('start')]={commands:[...Object.entries(initial).map(([k,value])=>({op:'set',target:state(k),value})),jump('entry')]};

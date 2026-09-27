@@ -396,7 +396,23 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q068.flow.raft",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q068.flow.raft.rope.shortage",
+        "resume": "q068.flow.raft.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q068.visit",
+      "q068.flow.visit"
+    ]
   },
   "scripts": {
     "q068.clue_a": {
@@ -820,24 +836,43 @@
     "q068.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q068.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q068"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q068.aftermath"
+              "equals": "q068.flow.raft.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.raft.rope.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q068.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q068.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q068.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q068.review"
+                }
+              ]
             }
           ]
         }
@@ -889,11 +924,6 @@
                   "script": "q068.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -972,9 +1002,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q068.flow.raft.rope.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1071,11 +1122,6 @@
                   "script": "q068.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1203,122 +1249,171 @@
     "q068.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q068.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q068"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q068.outcome"
-              },
-              "cases": [
+              "equals": "q068.flow.raft.rope.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "船は軽くなり、筏も残った。船長は重さだけで荷を呼ばなくなる。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "船は進んだ。離れた筏を追うため、救難船は後から戻る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "城の回収は延びた。人を数える時間だけは確保できた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "cargo",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "全員が船へ乗った。綱を失った筏は荷と共に流れ、生活道具の補給を港へ頼むことになった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q068.flow.raft.rope.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q068"
+                  "ref": "quests.q068.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q068.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q068.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "船は軽くなり、筏も残った。船長は重さだけで荷を呼ばなくなる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "船は進んだ。離れた筏を追うため、救難船は後から戻る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "城の回収は延びた。人を数える時間だけは確保できた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cargo",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "全員が船へ乗った。綱を失った筏は荷と共に流れ、生活道具の補給を港へ頼むことになった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q068.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q068"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q068.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q068.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q068.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "raft",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q068.flow.raft"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "secured",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q068.flow.secured"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q068.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "raft",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q068.flow.raft"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "secured",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q068.flow.secured"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q068.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q068.flow.raft.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q068",
+          "value": "q068.flow.raft.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q068.flow.raft.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q068",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q068.flow.raft"
         }
       ]
     }

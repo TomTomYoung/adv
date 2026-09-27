@@ -3,13 +3,13 @@ import {data,newGame,drain,fight,exploreSpot,goWorldLocation,leaveDungeonOnFoot}
 import {storyCanAct} from '../src/core/story.js';
 import {commandsAt} from '../src/core/script.js';
 import {processFieldEvents} from '../src/core/field-events.js';
-export function prepareQuest(id){
+export function prepareQuest(id,{legacy=false}={}){
  const g=newGame(1907);g.award(0,data.system.xpBase*24*25);g.healAll();
  for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number&&q.number<=100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;
  assert.ok(g.accept(id));if(id==='q001')g.dispatch({type:'travel',dungeon:'kagaribi'});
  const d=data.quests[id].story,point=d?.worldPlaces?.[d.scenes.entry.place];if(point?.kind==='dungeon')g.teleport(point.map,point.x,point.y);
- processFieldEvents(g);if(!g.state.waiting)g.run(data.quests[id].model.entryScript??`${id}.visit`);drain(g);return g;
+ if(legacy)g.run(`${id}.flow.visit`);else{processFieldEvents(g);if(!g.state.waiting)g.run(data.quests[id].model.entryScript??`${id}.visit`);}drain(g);return g;
 }
 // Actual town choices and dungeon steps, shared by route search and campaigns.
 export function finishJourney(g){
@@ -30,7 +30,7 @@ export function routeTo(id,outcome){
   const key=JSON.stringify({story:g.state.stories?.[id],flow:g.state.flags.flow?.[id],old:g.state.flags.quest?.[id],outcome:g.state.quests[id].outcome});
   if(seen.has(key))continue;seen.add(key);
   if(g.state.quests[id].stage==='completed'){if(g.state.quests[id].outcome===outcome)return entry.path;continue;}
-  const options=commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options.filter(o=>o.id!=='pause'&&(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.condition===undefined||g.value(o.condition))&&(o.visibleWhen===undefined||g.value(o.visibleWhen)));
+  const options=commandsAt(data,g.state.vm.at(-1))[g.state.waiting.index].options.filter(o=>(!o.storyAction||storyCanAct(g,o.storyAction.quest,o.storyAction.action))&&(o.condition===undefined||g.value(o.condition))&&(o.visibleWhen===undefined||g.value(o.visibleWhen)));
   for(const o of options){
    g.state=structuredClone(entry.state);assert.ok(g.dispatch({type:'choose',id:o.id}));drain(g);if(g.state.battle)fight(g);finishJourney(g);if(g.state.battle)fight(g);
    queue.push({state:structuredClone(g.state),path:[...entry.path,o.id]});

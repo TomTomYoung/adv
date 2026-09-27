@@ -38,7 +38,7 @@ export function projectGame(engine){
   }
   if(s.waiting?.type==='choice'&&!s.battle&&s.vm.every(f=>f.index>=commandsAt(d,f).length)){
     const command=commandsAt(d,s.vm.at(-1))[s.waiting.index];
-    const cancel=command.options.find(o=>['pause','leave'].includes(o.id)&&o.commands.length===0&&!o.storyAction&&dialog.options.some(v=>v.id===o.id&&v.enabled));
+    const cancel=command.options.find(o=>o.id==='leave'&&o.commands.length===0&&!o.storyAction&&dialog.options.some(v=>v.id===o.id&&v.enabled));
     if(cancel)dialog.cancelId=cancel.id;
   }
   if(s.waiting?.type==='command'){const prompt=commandDialog(engine);dialog={...prompt,options:prompt.options?.map(({id,text,enabled,requirement})=>({id,text,enabled,requirement}))};if(prompt.type==='choice')dialog.cancelId='cancel';else dialog.cancelAdvance=true;}

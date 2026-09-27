@@ -259,7 +259,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q118.scene.entry",
+        "action": "line",
+        "option": "line_supplies",
+        "shortage": "q118.scene.entry.line.shortage",
+        "resume": "q118.scene.entry.line.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q118.visit"
+    ]
   },
   "scripts": {
     "q118.scene.entry": {
@@ -368,9 +383,60 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "line_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q118.line"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q118.line"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q118.scene.entry.line.shortage"
+                }
+              ]
             }
           ]
         }
@@ -452,11 +518,6 @@
                   "script": "q118.end.notes"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -543,86 +604,135 @@
     "q118.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q118.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q118"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q118.outcome"
-              },
-              "cases": [
+              "equals": "q118.scene.entry.line.resume",
+              "commands": [
                 {
-                  "equals": "rescue",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "測量隊は戻った。ソラが一度合図を見落とすと、新人は笑わず、もう一度大きく示した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "help",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "位置情報を使って応援班が救出した。二人は次の訓練で合図を揃える約束をした。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "notes",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "資料は回収したが、人の救助は後続班に残った。ソラと新人は、できた仕事と残る仕事を別々に報告した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q118.scene.entry.line.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q118.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q118.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q118.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "rescue",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "測量隊は戻った。ソラが一度合図を見落とすと、新人は笑わず、もう一度大きく示した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "help",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "位置情報を使って応援班が救出した。二人は次の訓練で合図を揃える約束をした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "notes",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "資料は回収したが、人の救助は後続班に残った。ソラと新人は、できた仕事と残る仕事を別々に報告した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q118.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q118.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "river",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q118.scene.river"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q118.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "river",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q118.scene.river"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q118.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q118.scene.entry.line.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q118",
+          "value": "q118.scene.entry.line.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q118.scene.entry.line.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q118",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q118.scene.entry"
         }
       ]
     }

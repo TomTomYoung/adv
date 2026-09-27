@@ -254,7 +254,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q193.scene.consent",
+        "action": "clinic",
+        "option": "clinic_supplies",
+        "shortage": "q193.scene.consent.clinic.shortage",
+        "resume": "q193.scene.consent.clinic.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q193.visit"
+    ]
   },
   "scripts": {
     "q193.scene.entry": {
@@ -292,11 +307,6 @@
                   "script": "q193.end.local"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -391,9 +401,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "clinic_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q193.scene.consent.clinic.shortage"
+                }
+              ]
             }
           ]
         }
@@ -480,82 +511,101 @@
     "q193.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q193.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q193"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q193.outcome"
-              },
-              "cases": [
+              "equals": "q193.scene.consent.clinic.resume",
+              "commands": [
                 {
-                  "equals": "migrate",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "出る人を送り、残る人の安全も尊重した。ルネは帰省の日を長老と決めてから境を越えた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "clinic",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "往復できる治療小屋が開いた。谷の安全は残り、光の戻った護符を預ける小箱が入口に置かれた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "local",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "祈りが効いたことにはせず、食事と介助を助けた。外の治療を望む声は未解決のまま引き継いだ。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q193.scene.consent.clinic.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q193.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q193.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q193.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "migrate",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "出る人を送り、残る人の安全も尊重した。ルネは帰省の日を長老と決めてから境を越えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clinic",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "往復できる治療小屋が開いた。谷の安全は残り、光の戻った護符を預ける小箱が入口に置かれた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "local",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "祈りが効いたことにはせず、食事と介助を助けた。外の治療を望む声は未解決のまま引き継いだ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q193.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q193.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q193.scene.consent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q193.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "consent",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q193.scene.consent"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q193.scene.entry"
                 }
               ]
             }
@@ -623,6 +673,36 @@
               "text": "今は境界の外側にいる。境界石を越えた区画で、術の制限がどう変わるかを調べられる。"
             }
           ]
+        }
+      ]
+    },
+    "q193.scene.consent.clinic.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q193",
+          "value": "q193.scene.consent.clinic.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q193.scene.consent.clinic.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q193",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q193.scene.consent"
         }
       ]
     }

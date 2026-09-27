@@ -293,7 +293,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q122.scene.entry",
+        "action": "lure",
+        "option": "lure_supplies",
+        "shortage": "q122.scene.entry.lure.shortage",
+        "resume": "q122.scene.entry.lure.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q122.visit"
+    ]
   },
   "scripts": {
     "q122.scene.entry": {
@@ -398,9 +413,60 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lure_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q122.lure"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q122.lure"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q122.scene.entry.lure.shortage"
+                }
+              ]
             }
           ]
         }
@@ -504,11 +570,6 @@
                   "script": "q122.end.cancel"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -579,11 +640,6 @@
                   "script": "q122.end.cancel"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -670,95 +726,144 @@
     "q122.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q122.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q122"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q122.outcome"
-              },
-              "cases": [
+              "equals": "q122.scene.entry.lure.resume",
+              "commands": [
                 {
-                  "equals": "kill",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "槍兵は戦利品を持ち帰った。レクは武勇を遮らず、卓の端へ退路の地図を置いた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "guide",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "谷は空いた。移転先を見張る仕事が残り、槍兵は地図の余白に次の当番を書いた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "cancel",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "レクは別隊を募ると決めた。あなたが確かめたことと、まだ試していないことを分けて伝えた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q122.scene.entry.lure.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q122.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q122.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q122.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "kill",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "槍兵は戦利品を持ち帰った。レクは武勇を遮らず、卓の端へ退路の地図を置いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guide",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "谷は空いた。移転先を見張る仕事が残り、槍兵は地図の余白に次の当番を書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cancel",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "レクは別隊を募ると決めた。あなたが確かめたことと、まだ試していないことを分けて伝えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q122.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q122.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "nest",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q122.scene.nest"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "escape",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q122.scene.escape"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q122.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "nest",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q122.scene.nest"
-                    }
-                  ]
-                },
-                {
-                  "equals": "escape",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q122.scene.escape"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q122.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q122.scene.entry.lure.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q122",
+          "value": "q122.scene.entry.lure.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q122.scene.entry.lure.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q122",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q122.scene.entry"
         }
       ]
     }

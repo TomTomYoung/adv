@@ -882,7 +882,22 @@
       "adapter": "adv-story-state/1",
       "revision": "2026-09-13",
       "scope": "quest-episode"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q002.v11.entry",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q002.v11.entry.lift.shortage",
+        "resume": "q002.v11.entry.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q002.v11.visit"
+    ]
   },
   "scripts": {
     "q002.v11.entry": {
@@ -975,9 +990,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.v11.entry.lift.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1033,11 +1069,6 @@
                   "script": "q002.v11.end.contract"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1093,11 +1124,6 @@
                   "action": "tags_inspect"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1167,11 +1193,6 @@
                   "script": "q002.v11.returned"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1227,11 +1248,6 @@
                   "action": "returned_consent"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1323,11 +1339,6 @@
                   "script": "q002.v11.end.informed"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1367,11 +1378,6 @@
                   "script": "q002.v11.recovered"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1407,11 +1413,6 @@
                   "action": "recovered_return"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1474,151 +1475,200 @@
     "q002.v11.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": false,
-          "then": [],
-          "else": [
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q002"
+          },
+          "cases": [
+            {
+              "equals": "q002.v11.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q002.v11.entry.lift.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
             {
               "op": "if",
-              "condition": {
-                "op": "eq",
-                "left": {
-                  "ref": "quests.q002.stage"
-                },
-                "right": "completed"
-              },
-              "then": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q002.outcome"
-                  },
-                  "cases": [
-                    {
-                      "equals": "informed",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "標本番号、書き換えられた荷札、失踪届、保険請求書が一つの偽装として審査所へ提出された。不正請求は止まり、標本は医学校へ返却された。運搬人は同意して証言したが、ベルトからの仕事を失った。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "ベルトは荷札を受け取り、浅瀬の骨箱は回収されなかった。後日、荷札は別の標本箱に付け直され、失踪者の遺体として保険審査へ提出された。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
-                        {
-                          "op": "say",
-                          "text": "箱と骨は医学校へ戻り、盗まれた標本の管理番号も確認された。しかし荷札と失踪届の関係、保険請求への関与までは立証されず、不正の追及は別の仕事として残った。"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": []
-                }
-              ],
+              "condition": false,
+              "then": [],
               "else": [
                 {
-                  "op": "story.init",
-                  "quest": "q002"
-                },
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "stories.q002.scene"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q002.stage"
+                    },
+                    "right": "completed"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q002.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "標本番号、書き換えられた荷札、失踪届、保険請求書が一つの偽装として審査所へ提出された。不正請求は止まり、標本は医学校へ返却された。運搬人は同意して証言したが、ベルトからの仕事を失った。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ベルトは荷札を受け取り、浅瀬の骨箱は回収されなかった。後日、荷札は別の標本箱に付け直され、失踪者の遺体として保険審査へ提出された。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "箱と骨は医学校へ戻り、盗まれた標本の管理番号も確認された。しかし荷札と失踪届の関係、保険請求への関与までは立証されず、不正の追及は別の仕事として残った。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q002"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q002.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "box",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.box"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "tags",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.tags"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "school",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.school"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "returned",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.returned"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "hearing",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.hearing"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "recovery",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.recovery"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "recovered",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q002.v11.recovered"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q002.v11.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "box",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.box"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "tags",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.tags"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "school",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.school"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "returned",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.returned"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "hearing",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.hearing"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "recovery",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.recovery"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "recovered",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q002.v11.recovered"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q002.v11.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q002.v11.entry.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q002",
+          "value": "q002.v11.entry.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q002.v11.entry.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q002",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q002.v11.entry"
         }
       ]
     }

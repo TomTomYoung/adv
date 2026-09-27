@@ -245,7 +245,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q103.scene.joint",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q103.scene.joint.food.shortage",
+        "resume": "q103.scene.joint.food.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q103.visit"
+    ]
   },
   "scripts": {
     "q103.scene.entry": {
@@ -283,11 +298,6 @@
                   "script": "q103.end.stop"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -339,11 +349,6 @@
                   "script": "q103.end.stop"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -384,11 +389,6 @@
                   "script": "q103.scene.inn"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -446,9 +446,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "food_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.joint.food.shortage"
+                }
+              ]
             }
           ]
         }
@@ -535,104 +556,153 @@
     "q103.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q103.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q103"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q103.outcome"
-              },
-              "cases": [
+              "equals": "q103.scene.joint.food.resume",
+              "commands": [
                 {
-                  "equals": "stop",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "write",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "joint",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q103.scene.joint.food.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q103.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q103.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q103.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "write",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q103.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "inn",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.inn"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "elder",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.elder"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.joint"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q103.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "inn",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q103.scene.inn"
-                    }
-                  ]
-                },
-                {
-                  "equals": "elder",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q103.scene.elder"
-                    }
-                  ]
-                },
-                {
-                  "equals": "joint",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q103.scene.joint"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q103.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q103.scene.joint.food.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": "q103.scene.joint.food.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q103.scene.joint.food.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q103.scene.joint"
         }
       ]
     }

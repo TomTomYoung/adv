@@ -347,7 +347,23 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q035.flow.patient",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q035.flow.patient.food.shortage",
+        "resume": "q035.flow.patient.food.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q035.visit",
+      "q035.flow.visit"
+    ]
   },
   "scripts": {
     "q035.clue_a": {
@@ -771,24 +787,43 @@
     "q035.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q035.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q035"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q035.aftermath"
+              "equals": "q035.flow.patient.food.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.patient.food.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q035.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q035.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q035.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q035.review"
+                }
+              ]
             }
           ]
         }
@@ -840,11 +875,6 @@
                   "script": "q035.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -913,9 +943,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "food_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q035.flow.patient.food.shortage"
+                }
+              ]
             }
           ]
         }
@@ -956,11 +1007,6 @@
                   "script": "q035.flow.end.compromise"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -1088,122 +1134,171 @@
     "q035.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q035.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q035"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q035.outcome"
-              },
-              "cases": [
+              "equals": "q035.flow.patient.food.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "施しの行先は明らかになった。患者には見られずに食事を受ける権利も残る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "食事の行先は分かった。患者は見世物を避けて別の地下室へ移る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "人々は必要な分を届けるようになった。誰が食べるかは尋ねない。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "meal",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q035.flow.patient.food.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q035"
+                  "ref": "quests.q035.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q035.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q035.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "施しの行先は明らかになった。患者には見られずに食事を受ける権利も残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "食事の行先は分かった。患者は見世物を避けて別の地下室へ移る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "人々は必要な分を届けるようになった。誰が食べるかは尋ねない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q035.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q035"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q035.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q035.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q035.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "patient",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q035.flow.patient"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "consent",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q035.flow.consent"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q035.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "patient",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q035.flow.patient"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "consent",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q035.flow.consent"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q035.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q035.flow.patient.food.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q035",
+          "value": "q035.flow.patient.food.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q035.flow.patient.food.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q035",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q035.flow.patient"
         }
       ]
     }

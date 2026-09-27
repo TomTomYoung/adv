@@ -216,7 +216,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q159.scene.entry",
+        "action": "solo",
+        "option": "solo_supplies",
+        "shortage": "q159.scene.entry.solo.shortage",
+        "resume": "q159.scene.entry.solo.resume",
+        "cost": {
+          "rope": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q159.visit"
+    ]
   },
   "scripts": {
     "q159.scene.entry": {
@@ -282,9 +297,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "solo_supplies",
+              "text": "補修用の縄2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q159.scene.entry.solo.shortage"
+                }
+              ]
             }
           ]
         }
@@ -314,11 +350,6 @@
                   "script": "q159.scene.right"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -359,11 +390,6 @@
                   "script": "q159.end.refund"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -450,95 +476,144 @@
     "q159.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q159.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q159"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q159.outcome"
-              },
-              "cases": [
+              "equals": "q159.scene.entry.solo.resume",
+              "commands": [
                 {
-                  "equals": "joint",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "回収品を分け、二重販売への要求は取り下げなかった。若手は次の地図を売る前に用途を説明した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "solo",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "資材を使って一隊で回収した。分配は得たが、余分な費用と地図売りへの請求も記録に残った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "refund",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "今の回収は見送った。将来の探索権と、誤った独占契約への返金要求を分けて保管した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q159.scene.entry.solo.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q159.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q159.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q159.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "回収品を分け、二重販売への要求は取り下げなかった。若手は次の地図を売る前に用途を説明した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "solo",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "資材を使って一隊で回収した。分配は得たが、余分な費用と地図売りへの請求も記録に残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "refund",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "今の回収は見送った。将来の探索権と、誤った独占契約への返金要求を分けて保管した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q159.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q159.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "left",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q159.scene.left"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "right",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q159.scene.right"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q159.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "left",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q159.scene.left"
-                    }
-                  ]
-                },
-                {
-                  "equals": "right",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q159.scene.right"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q159.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q159.scene.entry.solo.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q159",
+          "value": "q159.scene.entry.solo.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q159.scene.entry.solo.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q159",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q159.scene.entry"
         }
       ]
     }

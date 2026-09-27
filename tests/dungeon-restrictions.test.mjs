@@ -23,13 +23,13 @@ function elder(){
 }
 function outage(){const g=elder();assert.ok(g.dispatch({type:'choose',id:'support'}));drain(g);finishJourney(g);assert.equal(g.state.battle.encounter,'kuragari_hunt');return g;}
 
-test('q001 seals on meeting the elder, survives pause/reload and the walk home, then clears at event battle end',()=>{
- const g=elder();checkpoint(g);assert.ok(g.dispatch({type:'choose',id:'pause'}));
+test('q001 seals on meeting the elder, survives saving at the decision and the walk home, then clears at event battle end',()=>{
+ const g=elder();checkpoint(g);assert.equal(g.dispatch({type:'choose',id:'pause'}),false);
  assert.match(dungeonRestrictionReason(g.state,'return'),/封印/);
  const before=resources(g);
  for(const intent of [{type:'retreat'},{type:'player.command',id:'retreat'}])assert.equal(g.dispatch(intent),false);
  assert.equal(g.returnTown(),false);assert.equal(g.returnTown(true),false);assert.deepEqual(resources(g),before);
- checkpoint(g);assert.ok(g.dispatch({type:'story.resume',quest:'q001'}));drain(g);assert.equal(g.state.dungeonRestrictions.length,1);
+ checkpoint(g);assert.equal(g.dispatch({type:'story.resume',quest:'q001'}),false);assert.equal(g.state.dungeonRestrictions.length,1);
  assert.ok(g.dispatch({type:'choose',id:'support'}));assert.ok(g.state.journey);checkpoint(g);
  assert.match(dungeonRestrictionReason(g.state,'return_mark'),/封印/);finishJourney(g);
  assert.ok(g.state.battle);checkpoint(g);
@@ -50,7 +50,7 @@ for(const result of ['win','escape','repel'])test(`q001 ${result} keeps the seal
 });
 
 test('ordinary battles preserve q001 seals but defeat rolls the event back to the elder',()=>{
- const g=elder();g.dispatch({type:'choose',id:'pause'});
+ const g=elder();assert.ok(g.dispatch({type:'choose',id:'support'}));
  g.startBattle('wild_pair_1',{win:[],escape:[],lose:[]});g.finishBattle('win');assert.equal(g.state.dungeonRestrictions.length,1);
  g.defeat();assert.equal(g.state.mode,'town');assert.equal(g.state.dungeonRestrictions.length,0);checkpoint(g);
  assert.equal(g.state.stories.q001.scene,'old');assert.equal(g.state.journey,null);

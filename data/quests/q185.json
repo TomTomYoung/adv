@@ -176,7 +176,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q185.scene.entry",
+        "action": "boat",
+        "option": "boat_supplies",
+        "shortage": "q185.scene.entry.boat.shortage",
+        "resume": "q185.scene.entry.boat.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q185.visit"
+    ]
   },
   "scripts": {
     "q185.scene.entry": {
@@ -269,9 +284,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "boat_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q185.scene.entry.boat.shortage"
+                }
+              ]
             }
           ]
         }
@@ -358,77 +398,126 @@
     "q185.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q185.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q185"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q185.outcome"
-              },
-              "cases": [
+              "equals": "q185.scene.entry.boat.resume",
+              "commands": [
                 {
-                  "equals": "families",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "boat",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "early",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q185.scene.entry.boat.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q185.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q185.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "families",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "boat",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "early",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q185.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.scene.entry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q185.scene.entry"
                     }
                   ]
                 }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q185.scene.entry"
-                }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q185.scene.entry.boat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q185",
+          "value": "q185.scene.entry.boat.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q185.scene.entry.boat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q185",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q185.scene.entry"
         }
       ]
     }

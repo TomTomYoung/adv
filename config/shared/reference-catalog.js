@@ -42526,6 +42526,69 @@ export const referenceData={
     "flags.quest.q200.a",
     "flags.quest.q200.b",
     "flags.quest.q200.node",
+    "flags.questResume.q002",
+    "flags.questResume.q004",
+    "flags.questResume.q005",
+    "flags.questResume.q006",
+    "flags.questResume.q010",
+    "flags.questResume.q011",
+    "flags.questResume.q012",
+    "flags.questResume.q016",
+    "flags.questResume.q022",
+    "flags.questResume.q026",
+    "flags.questResume.q029",
+    "flags.questResume.q032",
+    "flags.questResume.q035",
+    "flags.questResume.q036",
+    "flags.questResume.q042",
+    "flags.questResume.q046",
+    "flags.questResume.q052",
+    "flags.questResume.q056",
+    "flags.questResume.q062",
+    "flags.questResume.q066",
+    "flags.questResume.q068",
+    "flags.questResume.q069",
+    "flags.questResume.q072",
+    "flags.questResume.q076",
+    "flags.questResume.q082",
+    "flags.questResume.q086",
+    "flags.questResume.q092",
+    "flags.questResume.q094",
+    "flags.questResume.q096",
+    "flags.questResume.q103",
+    "flags.questResume.q104",
+    "flags.questResume.q106",
+    "flags.questResume.q108",
+    "flags.questResume.q112",
+    "flags.questResume.q114",
+    "flags.questResume.q118",
+    "flags.questResume.q120",
+    "flags.questResume.q121",
+    "flags.questResume.q122",
+    "flags.questResume.q126",
+    "flags.questResume.q127",
+    "flags.questResume.q128",
+    "flags.questResume.q129",
+    "flags.questResume.q130",
+    "flags.questResume.q131",
+    "flags.questResume.q132",
+    "flags.questResume.q135",
+    "flags.questResume.q139",
+    "flags.questResume.q143",
+    "flags.questResume.q147",
+    "flags.questResume.q149",
+    "flags.questResume.q150",
+    "flags.questResume.q159",
+    "flags.questResume.q161",
+    "flags.questResume.q162",
+    "flags.questResume.q171",
+    "flags.questResume.q179",
+    "flags.questResume.q183",
+    "flags.questResume.q185",
+    "flags.questResume.q193",
+    "flags.questResume.q194",
+    "flags.questResume.q195",
+    "flags.questResume.q199",
     "flags.region_10_f1_door_open",
     "flags.region_10_f2_door_open",
     "flags.region_1_f1_door_open",
@@ -43793,6 +43856,14 @@ export const referenceData={
       "name": "骨の荷札",
       "file": "data/quests/q002.json"
     },
+    "q002.v11.entry.lift.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q002.json"
+    },
+    "q002.v11.entry.lift.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q002.json"
+    },
     "q003.v11.entry": {
       "name": "鐘が鳴るたび、ソラは鎖を押さえる。「鳴り続けたら、誰も聞かなくなる」。低い通路に",
       "file": "data/quests/q003.json"
@@ -43921,6 +43992,30 @@ export const referenceData={
       "name": "二枚目の通行証",
       "file": "data/quests/q004.json"
     },
+    "q004.v11.duplicate.fine.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.duplicate.fine.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.consent.fine.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.consent.fine.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.window.fine.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q004.json"
+    },
+    "q004.v11.window.fine.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q004.json"
+    },
     "q005.clue_a": {
       "name": "泥は工房の休業日にも増え、上流側ほど甘い香りがする。",
       "file": "data/quests/q005.json"
@@ -44013,6 +44108,14 @@ export const referenceData={
       "name": "甘い排水",
       "file": "data/quests/q005.json"
     },
+    "q005.v11.entry.burn.shortage": {
+      "name": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q005.json"
+    },
+    "q005.v11.entry.burn.resume": {
+      "name": "予備灯油1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q005.json"
+    },
     "q006.clue_a": {
       "name": "箱へ結ばれた縄は切れずにほどかれ、工事頭専用の結びが残っている。",
       "file": "data/quests/q006.json"
@@ -44099,6 +44202,38 @@ export const referenceData={
     },
     "q006.v11.visit": {
       "name": "沈んだ給金箱",
+      "file": "data/quests/q006.json"
+    },
+    "q006.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q006.json"
+    },
+    "q006.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q006.json"
+    },
+    "q006.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q006.json"
+    },
+    "q006.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q006.json"
+    },
+    "q006.flow.entry.lift.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q006.json"
+    },
+    "q006.flow.entry.lift.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q006.json"
+    },
+    "q006.v11.entry.lift.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q006.json"
+    },
+    "q006.v11.entry.lift.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q006.json"
     },
     "q007.clue_a": {
@@ -44445,6 +44580,14 @@ export const referenceData={
       "name": "上層の水門には横道へ流れ込む水路が接続している。住民の避難方法を考える前に、この",
       "file": "data/quests/q010.json"
     },
+    "q010.flow.rescue.deep.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q010.json"
+    },
+    "q010.flow.rescue.deep.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q010.json"
+    },
     "q011.clue_a": {
       "name": "裾に見えた部分には矢印の浮き彫りが残っている。",
       "file": "data/quests/q011.json"
@@ -44523,6 +44666,38 @@ export const referenceData={
     },
     "dungeon.scene.region_2.v1": {
       "name": "入口脇の脆い塩壁には道具を差し込める亀裂がある。遭難者を案内する前に、ここから通",
+      "file": "data/quests/q011.json"
+    },
+    "q011.flow.entry.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q011.json"
+    },
+    "q011.flow.entry.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q011.json"
+    },
+    "q011.flow.sign.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q011.json"
+    },
+    "q011.flow.sign.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q011.json"
+    },
+    "q011.catalog1.entry.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q011.json"
+    },
+    "q011.catalog1.entry.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q011.json"
+    },
+    "q011.catalog1.sign.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q011.json"
+    },
+    "q011.catalog1.sign.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q011.json"
     },
     "q012.clue_a": {
@@ -44607,6 +44782,22 @@ export const referenceData={
     },
     "q012.catalog1.visit": {
       "name": "三つのつるはし",
+      "file": "data/quests/q012.json"
+    },
+    "q012.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q012.json"
+    },
+    "q012.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q012.json"
+    },
+    "q012.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q012.json"
+    },
+    "q012.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q012.json"
     },
     "q013.clue_a": {
@@ -44935,6 +45126,70 @@ export const referenceData={
     },
     "q016.catalog1.visit": {
       "name": "無音の発破",
+      "file": "data/quests/q016.json"
+    },
+    "q016.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q016.json"
+    },
+    "q016.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q016.json"
+    },
+    "q016.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.entry.buy.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.entry.buy.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.shelter.buy.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.shelter.buy.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.move.cancel.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.flow.move.cancel.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.entry.buy.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.entry.buy.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.shelter.buy.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.shelter.buy.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.move.cancel.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q016.json"
+    },
+    "q016.catalog1.move.cancel.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q016.json"
     },
     "q017.clue_a": {
@@ -45365,6 +45620,22 @@ export const referenceData={
       "name": "緑の寝息",
       "file": "data/quests/q022.json"
     },
+    "q022.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q022.json"
+    },
+    "q022.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q022.json"
+    },
+    "q022.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q022.json"
+    },
+    "q022.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q022.json"
+    },
     "q023.clue_a": {
       "name": "指輪の内側には名前でなく、前年の根の周囲が刻まれている。",
       "file": "data/quests/q023.json"
@@ -45577,6 +45848,22 @@ export const referenceData={
       "name": "実らない約束",
       "file": "data/quests/q026.json"
     },
+    "q026.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q026.json"
+    },
+    "q026.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q026.json"
+    },
+    "q026.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q026.json"
+    },
+    "q026.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q026.json"
+    },
     "q027.clue_a": {
       "name": "安い香袋に花が集まり、金貨を置いても動かない。",
       "file": "data/quests/q027.json"
@@ -45741,6 +46028,14 @@ export const referenceData={
       "name": "赤い蜜の契約",
       "file": "data/quests/q029.json"
     },
+    "q029.flow.substitute.buy.shortage": {
+      "name": "15Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q029.json"
+    },
+    "q029.flow.substitute.buy.resume": {
+      "name": "15Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q029.json"
+    },
     "q030.clue_a": {
       "name": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げている。",
       "file": "data/quests/q030.json"
@@ -45901,6 +46196,22 @@ export const referenceData={
       "name": "片目の聖像",
       "file": "data/quests/q032.json"
     },
+    "q032.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q032.json"
+    },
+    "q032.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q032.json"
+    },
+    "q032.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q032.json"
+    },
+    "q032.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q032.json"
+    },
     "q033.clue_a": {
       "name": "裸の手は映り、外套を近づけた場所だけ鏡が白む。",
       "file": "data/quests/q033.json"
@@ -46057,6 +46368,14 @@ export const referenceData={
       "name": "鏡の向こうの施し",
       "file": "data/quests/q035.json"
     },
+    "q035.flow.patient.food.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q035.json"
+    },
+    "q035.flow.patient.food.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q035.json"
+    },
     "q036.clue_a": {
       "name": "七番目の息継ぎだけ、何度歌っても全く同じ長さだ。",
       "file": "data/quests/q036.json"
@@ -46107,6 +46426,22 @@ export const referenceData={
     },
     "q036.flow.visit": {
       "name": "七番目の歌声",
+      "file": "data/quests/q036.json"
+    },
+    "q036.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q036.json"
+    },
+    "q036.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q036.json"
+    },
+    "q036.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q036.json"
+    },
+    "q036.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q036.json"
     },
     "q037.clue_a": {
@@ -46429,6 +46764,22 @@ export const referenceData={
       "name": "砂時計の残業",
       "file": "data/quests/q042.json"
     },
+    "q042.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q042.json"
+    },
+    "q042.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q042.json"
+    },
+    "q042.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q042.json"
+    },
+    "q042.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q042.json"
+    },
     "q043.clue_a": {
       "name": "高価な赤字は残り、安い黒墨の追記だけが光っている。",
       "file": "data/quests/q043.json"
@@ -46635,6 +46986,22 @@ export const referenceData={
     },
     "q046.flow.visit": {
       "name": "迷子の索引",
+      "file": "data/quests/q046.json"
+    },
+    "q046.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q046.json"
+    },
+    "q046.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q046.json"
+    },
+    "q046.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q046.json"
+    },
+    "q046.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q046.json"
     },
     "q047.clue_a": {
@@ -46961,6 +47328,22 @@ export const referenceData={
       "name": "幽霊の競り札",
       "file": "data/quests/q052.json"
     },
+    "q052.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q052.json"
+    },
+    "q052.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q052.json"
+    },
+    "q052.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q052.json"
+    },
+    "q052.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q052.json"
+    },
     "q053.clue_a": {
       "name": "札の裏には何度も消した墨があり、同じ袋の紐は古く変色している。",
       "file": "data/quests/q053.json"
@@ -47167,6 +47550,22 @@ export const referenceData={
     },
     "q056.flow.visit": {
       "name": "閉店後の拍手",
+      "file": "data/quests/q056.json"
+    },
+    "q056.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q056.json"
+    },
+    "q056.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q056.json"
+    },
+    "q056.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q056.json"
+    },
+    "q056.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q056.json"
     },
     "q057.clue_a": {
@@ -47473,6 +47872,22 @@ export const referenceData={
       "name": "王の救命胴衣",
       "file": "data/quests/q062.json"
     },
+    "q062.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q062.json"
+    },
+    "q062.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q062.json"
+    },
+    "q062.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q062.json"
+    },
+    "q062.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q062.json"
+    },
     "q063.clue_a": {
       "name": "踏み板の脇に上下の擦過痕があり、壁との継ぎ目が滑る。",
       "file": "data/quests/q063.json"
@@ -47673,6 +48088,22 @@ export const referenceData={
       "name": "珊瑚の軍議",
       "file": "data/quests/q066.json"
     },
+    "q066.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q066.json"
+    },
+    "q066.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q066.json"
+    },
+    "q066.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q066.json"
+    },
+    "q066.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q066.json"
+    },
     "q067.clue_a": {
       "name": "同じ記号は会話中でなく、弁を動かすたびに増えている。",
       "file": "data/quests/q067.json"
@@ -47781,6 +48212,14 @@ export const referenceData={
       "name": "二つの錨",
       "file": "data/quests/q068.json"
     },
+    "q068.flow.raft.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q068.json"
+    },
+    "q068.flow.raft.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q068.json"
+    },
     "q069.clue_a": {
       "name": "払った鉄は宝庫でなく門の穴へ打ち込まれている。",
       "file": "data/quests/q069.json"
@@ -47831,6 +48270,22 @@ export const referenceData={
     },
     "q069.flow.visit": {
       "name": "海王の通行税",
+      "file": "data/quests/q069.json"
+    },
+    "q069.flow.entry.pay.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q069.json"
+    },
+    "q069.flow.entry.pay.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q069.json"
+    },
+    "q069.flow.work.single.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q069.json"
+    },
+    "q069.flow.work.single.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q069.json"
     },
     "q070.clue_a": {
@@ -47983,6 +48438,22 @@ export const referenceData={
     },
     "q072.flow.visit": {
       "name": "油の洗礼",
+      "file": "data/quests/q072.json"
+    },
+    "q072.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q072.json"
+    },
+    "q072.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q072.json"
+    },
+    "q072.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q072.json"
+    },
+    "q072.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q072.json"
     },
     "q073.clue_a": {
@@ -48199,6 +48670,22 @@ export const referenceData={
     },
     "q076.flow.visit": {
       "name": "鉄の子守歌",
+      "file": "data/quests/q076.json"
+    },
+    "q076.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q076.json"
+    },
+    "q076.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q076.json"
+    },
+    "q076.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q076.json"
+    },
+    "q076.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q076.json"
     },
     "q077.clue_a": {
@@ -48505,6 +48992,22 @@ export const referenceData={
       "name": "星売りの空瓶",
       "file": "data/quests/q082.json"
     },
+    "q082.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q082.json"
+    },
+    "q082.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q082.json"
+    },
+    "q082.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q082.json"
+    },
+    "q082.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q082.json"
+    },
     "q083.clue_a": {
       "name": "影の縁は丸くなく、手すりと梯子の形がある。",
       "file": "data/quests/q083.json"
@@ -48715,6 +49218,22 @@ export const referenceData={
     },
     "q086.flow.visit": {
       "name": "百年前の観測者",
+      "file": "data/quests/q086.json"
+    },
+    "q086.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q086.json"
+    },
+    "q086.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q086.json"
+    },
+    "q086.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q086.json"
+    },
+    "q086.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q086.json"
     },
     "q087.clue_a": {
@@ -49033,6 +49552,22 @@ export const referenceData={
       "name": "出口を持つ獣",
       "file": "data/quests/q092.json"
     },
+    "q092.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q092.json"
+    },
+    "q092.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q092.json"
+    },
+    "q092.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q092.json"
+    },
+    "q092.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q092.json"
+    },
     "q093.clue_a": {
       "name": "客は昔の話を覚え、名前を言う時だけ入口の鈴が鳴る。",
       "file": "data/quests/q093.json"
@@ -49133,6 +49668,22 @@ export const referenceData={
       "name": "帰還税",
       "file": "data/quests/q094.json"
     },
+    "q094.flow.entry.advance.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q094.json"
+    },
+    "q094.flow.entry.advance.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q094.json"
+    },
+    "q094.flow.budget.pay.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q094.json"
+    },
+    "q094.flow.budget.pay.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q094.json"
+    },
     "q095.clue_a": {
       "name": "英雄の装備は体格ごとに調整跡があり、同じ日に複数の署名がある。",
       "file": "data/quests/q095.json"
@@ -49231,6 +49782,38 @@ export const referenceData={
     },
     "q096.flow.visit": {
       "name": "忘れ物の隊列",
+      "file": "data/quests/q096.json"
+    },
+    "q096.decision.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q096.json"
+    },
+    "q096.decision.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q096.json"
+    },
+    "q096.review.informed.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q096.json"
+    },
+    "q096.review.informed.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q096.json"
+    },
+    "q096.flow.cache.replace.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q096.json"
+    },
+    "q096.flow.cache.replace.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q096.json"
+    },
+    "q096.flow.deep.fresh.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q096.json"
+    },
+    "q096.flow.deep.fresh.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q096.json"
     },
     "q097.clue_a": {
@@ -49549,6 +50132,14 @@ export const referenceData={
       "name": "一枚多い食券",
       "file": "data/quests/q103.json"
     },
+    "q103.scene.joint.food.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q103.json"
+    },
+    "q103.scene.joint.food.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q103.json"
+    },
     "q104.scene.entry": {
       "name": "晴れている。少年の空の棚から、瓶を置いていた丸い跡だけが消えていなかった。",
       "file": "data/quests/q104.json"
@@ -49583,6 +50174,14 @@ export const referenceData={
     },
     "q104.visit": {
       "name": "雨を売る少年",
+      "file": "data/quests/q104.json"
+    },
+    "q104.scene.found.buy.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q104.json"
+    },
+    "q104.scene.found.buy.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q104.json"
     },
     "q105.scene.entry": {
@@ -49639,6 +50238,22 @@ export const referenceData={
     },
     "q106.visit": {
       "name": "パン泥棒の影",
+      "file": "data/quests/q106.json"
+    },
+    "q106.scene.entry.seal.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q106.json"
+    },
+    "q106.scene.entry.seal.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q106.json"
+    },
+    "q106.scene.meal.eat.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q106.json"
+    },
+    "q106.scene.meal.eat.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q106.json"
     },
     "q107.scene.entry": {
@@ -49723,6 +50338,22 @@ export const referenceData={
     },
     "q108.flow.visit": {
       "name": "猫に付いた懸賞",
+      "file": "data/quests/q108.json"
+    },
+    "q108.scene.entry.shared.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q108.json"
+    },
+    "q108.scene.entry.shared.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q108.json"
+    },
+    "q108.flow.agreement.build.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q108.json"
+    },
+    "q108.flow.agreement.build.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q108.json"
     },
     "q109.scene.entry": {
@@ -49841,6 +50472,14 @@ export const referenceData={
       "name": "置いていく灯",
       "file": "data/quests/q112.json"
     },
+    "q112.scene.supply.oil.shortage": {
+      "name": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q112.json"
+    },
+    "q112.scene.supply.oil.resume": {
+      "name": "予備灯油1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q112.json"
+    },
     "q113.scene.entry": {
       "name": "オドの長い箱から根がのぞく。妻が予約していた苗木だという。案内人は、次の山行区間",
       "file": "data/quests/q113.json"
@@ -49899,6 +50538,30 @@ export const referenceData={
     },
     "q114.visit": {
       "name": "二人分の通行料",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.entry.pay.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.entry.pay.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.entry.exception.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.entry.exception.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.dismiss.agree.shortage": {
+      "name": "10Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q114.json"
+    },
+    "q114.scene.dismiss.agree.resume": {
+      "name": "10Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q114.json"
     },
     "q115.scene.entry": {
@@ -50009,6 +50672,14 @@ export const referenceData={
       "name": "聞こえない救難笛",
       "file": "data/quests/q118.json"
     },
+    "q118.scene.entry.line.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q118.json"
+    },
+    "q118.scene.entry.line.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q118.json"
+    },
     "q119.scene.entry": {
       "name": "ラナは豆を避けて包んだ食事を持って丘へ行く。受け取った男の背後に、武装した仲間が",
       "file": "data/quests/q119.json"
@@ -50061,6 +50732,14 @@ export const referenceData={
       "name": "最後尾の旗",
       "file": "data/quests/q120.json"
     },
+    "q120.scene.road.cart.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q120.json"
+    },
+    "q120.scene.road.cart.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q120.json"
+    },
     "q121.scene.entry": {
       "name": "バスクの猟帳には九十九の印がある。最後の印だけ、何度も消してある。「百にしたら、",
       "file": "data/quests/q121.json"
@@ -50089,6 +50768,14 @@ export const referenceData={
       "name": "百匹目の狼",
       "file": "data/quests/q121.json"
     },
+    "q121.scene.entry.fence.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q121.json"
+    },
+    "q121.scene.entry.fence.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q121.json"
+    },
     "q122.scene.entry": {
       "name": "レクは退路を三度確認した。槍兵が焦れて槍を鳴らす。討伐だけでなく、餌場を移す作戦",
       "file": "data/quests/q122.json"
@@ -50115,6 +50802,14 @@ export const referenceData={
     },
     "q122.visit": {
       "name": "逃げた竜殺し",
+      "file": "data/quests/q122.json"
+    },
+    "q122.scene.entry.lure.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q122.json"
+    },
+    "q122.scene.entry.lure.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q122.json"
     },
     "q123.scene.entry": {
@@ -50269,6 +50964,22 @@ export const referenceData={
       "name": "獲物のいない狩猟祭",
       "file": "data/quests/q126.json"
     },
+    "q126.scene.entry.food.shortage": {
+      "name": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q126.json"
+    },
+    "q126.scene.entry.food.resume": {
+      "name": "野営糧食2個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q126.json"
+    },
+    "q126.flow.food.provide.shortage": {
+      "name": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q126.json"
+    },
+    "q126.flow.food.provide.resume": {
+      "name": "野営糧食2個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q126.json"
+    },
     "q127.scene.entry": {
       "name": "傭兵の記録には、壊した泥人形の証文が隣の泥へ移ったとある。帳簿係は戦果の数字を直",
       "file": "data/quests/q127.json"
@@ -50291,6 +51002,14 @@ export const referenceData={
     },
     "q127.visit": {
       "name": "魔物の借金",
+      "file": "data/quests/q127.json"
+    },
+    "q127.scene.terms.release.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q127.json"
+    },
+    "q127.scene.terms.release.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q127.json"
     },
     "q128.scene.entry": {
@@ -50321,6 +51040,14 @@ export const referenceData={
       "name": "鎧を食う蛾",
       "file": "data/quests/q128.json"
     },
+    "q128.scene.test.replica.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q128.json"
+    },
+    "q128.scene.test.replica.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q128.json"
+    },
     "q129.scene.entry": {
       "name": "ノエは手袋を外さず地図を押さえる。副官は指揮を望むが、傷を暴いて昇進するのは避け",
       "file": "data/quests/q129.json"
@@ -50345,6 +51072,14 @@ export const referenceData={
       "name": "傷を見せない隊長",
       "file": "data/quests/q129.json"
     },
+    "q129.scene.entry.treat.shortage": {
+      "name": "傷薬1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、こ",
+      "file": "data/quests/q129.json"
+    },
+    "q129.scene.entry.treat.resume": {
+      "name": "傷薬1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q129.json"
+    },
     "q130.scene.entry": {
       "name": "弱い王を倒せば終わる、とテオは槍を回す。通路の奥では三つの小穴から別々の物音がし",
       "file": "data/quests/q130.json"
@@ -50367,6 +51102,22 @@ export const referenceData={
     },
     "q130.visit": {
       "name": "最弱の王",
+      "file": "data/quests/q130.json"
+    },
+    "q130.scene.entry.holes.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q130.json"
+    },
+    "q130.scene.entry.holes.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q130.json"
+    },
+    "q130.scene.crown.holes.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q130.json"
+    },
+    "q130.scene.crown.holes.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q130.json"
     },
     "q131.scene.entry": {
@@ -50405,6 +51156,14 @@ export const referenceData={
       "name": "逆向きの足跡",
       "file": "data/quests/q131.json"
     },
+    "q131.scene.room.both.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q131.json"
+    },
+    "q131.scene.room.both.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q131.json"
+    },
     "q132.scene.entry": {
       "name": "宝箱の底には小さな椅子と茶器がある。壁の覗き穴は外へ向いていた。",
       "file": "data/quests/q132.json"
@@ -50427,6 +51186,14 @@ export const referenceData={
     },
     "q132.visit": {
       "name": "宝箱の底の椅子",
+      "file": "data/quests/q132.json"
+    },
+    "q132.scene.isolate.seal.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q132.json"
+    },
+    "q132.scene.isolate.seal.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q132.json"
     },
     "q133.scene.entry": {
@@ -50503,6 +51270,22 @@ export const referenceData={
     },
     "q135.visit": {
       "name": "水底の朝食",
+      "file": "data/quests/q135.json"
+    },
+    "q135.scene.entry.lift.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q135.json"
+    },
+    "q135.scene.entry.lift.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q135.json"
+    },
+    "q135.scene.reply.lift.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q135.json"
+    },
+    "q135.scene.reply.lift.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q135.json"
     },
     "q136.scene.entry": {
@@ -50629,6 +51412,14 @@ export const referenceData={
       "name": "ふたつの出口",
       "file": "data/quests/q139.json"
     },
+    "q139.scene.air.tools.shortage": {
+      "name": "補修用の縄2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q139.json"
+    },
+    "q139.scene.air.tools.resume": {
+      "name": "補修用の縄2個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q139.json"
+    },
     "q140.scene.entry": {
       "name": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休",
       "file": "data/quests/q140.json"
@@ -50729,6 +51520,14 @@ export const referenceData={
       "name": "辛くない火吹き料理",
       "file": "data/quests/q143.json"
     },
+    "q143.scene.entry.hire.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q143.json"
+    },
+    "q143.scene.entry.hire.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q143.json"
+    },
     "q144.scene.entry": {
       "name": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名",
       "file": "data/quests/q144.json"
@@ -50825,6 +51624,14 @@ export const referenceData={
       "name": "一番遅い配達",
       "file": "data/quests/q147.json"
     },
+    "q147.scene.entry.car.shortage": {
+      "name": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q147.json"
+    },
+    "q147.scene.entry.car.resume": {
+      "name": "30Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q147.json"
+    },
     "q148.scene.entry": {
       "name": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。",
       "file": "data/quests/q148.json"
@@ -50875,6 +51682,14 @@ export const referenceData={
     },
     "q149.visit": {
       "name": "売らない剣",
+      "file": "data/quests/q149.json"
+    },
+    "q149.scene.user.pay.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q149.json"
+    },
+    "q149.scene.user.pay.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q149.json"
     },
     "q150.scene.entry": {
@@ -50955,6 +51770,22 @@ export const referenceData={
     },
     "q150.flow.visit": {
       "name": "大道芸人の弟子",
+      "file": "data/quests/q150.json"
+    },
+    "q150.scene.stage.company.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q150.json"
+    },
+    "q150.scene.stage.company.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q150.json"
+    },
+    "q150.flow.company.agree.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q150.json"
+    },
+    "q150.flow.company.agree.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q150.json"
     },
     "q151.scene.entry": {
@@ -51189,6 +52020,14 @@ export const referenceData={
       "name": "二重に売れた地図",
       "file": "data/quests/q159.json"
     },
+    "q159.scene.entry.solo.shortage": {
+      "name": "補修用の縄2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q159.json"
+    },
+    "q159.scene.entry.solo.resume": {
+      "name": "補修用の縄2個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q159.json"
+    },
     "q160.scene.entry": {
       "name": "書記セルの拍手だけが大きい。拍手が途切れた一拍に、舞台裏から「家族を返してほしけ",
       "file": "data/quests/q160.json"
@@ -51237,6 +52076,14 @@ export const referenceData={
       "name": "治さない傷",
       "file": "data/quests/q161.json"
     },
+    "q161.scene.entry.record.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q161.json"
+    },
+    "q161.scene.entry.record.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q161.json"
+    },
     "q162.scene.entry": {
       "name": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人",
       "file": "data/quests/q162.json"
@@ -51263,6 +52110,14 @@ export const referenceData={
     },
     "q162.visit": {
       "name": "騎士の盾を借りる",
+      "file": "data/quests/q162.json"
+    },
+    "q162.scene.entry.rope.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q162.json"
+    },
+    "q162.scene.entry.rope.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q162.json"
     },
     "q163.scene.entry": {
@@ -51581,6 +52436,14 @@ export const referenceData={
       "name": "足音を持ち帰る",
       "file": "data/quests/q171.json"
     },
+    "q171.scene.watch.ward.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q171.json"
+    },
+    "q171.scene.watch.ward.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q171.json"
+    },
     "q172.scene.entry": {
       "name": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。",
       "file": "data/quests/q172.json"
@@ -51809,6 +52672,14 @@ export const referenceData={
       "name": "墓を増やす庭",
       "file": "data/quests/q179.json"
     },
+    "q179.scene.houses.cut.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q179.json"
+    },
+    "q179.scene.houses.cut.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q179.json"
+    },
     "q180.scene.entry": {
       "name": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ば",
       "file": "data/quests/q180.json"
@@ -51905,6 +52776,14 @@ export const referenceData={
       "name": "勝者の洗濯場",
       "file": "data/quests/q183.json"
     },
+    "q183.scene.support.goods.shortage": {
+      "name": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q183.json"
+    },
+    "q183.scene.support.goods.resume": {
+      "name": "野営糧食2個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q183.json"
+    },
     "q184.scene.entry": {
       "name": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づ",
       "file": "data/quests/q184.json"
@@ -51947,6 +52826,14 @@ export const referenceData={
     },
     "q185.visit": {
       "name": "橋を落とさない理由",
+      "file": "data/quests/q185.json"
+    },
+    "q185.scene.entry.boat.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q185.json"
+    },
+    "q185.scene.entry.boat.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q185.json"
     },
     "q186.scene.entry": {
@@ -52157,6 +53044,14 @@ export const referenceData={
       "name": "境界石の内と外で、祈りの届き方を確かめる。治療へ向かう道を作るなら、どこで術を使",
       "file": "data/quests/q193.json"
     },
+    "q193.scene.consent.clinic.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q193.json"
+    },
+    "q193.scene.consent.clinic.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q193.json"
+    },
     "q194.scene.entry": {
       "name": "巨大獣の背の家々を商人が買った。売られたのは建物で、人ではない。獣は塩の道を巡る",
       "file": "data/quests/q194.json"
@@ -52185,6 +53080,14 @@ export const referenceData={
       "name": "入口の安全な足場から、建物をつなぐ道を見渡す。契約に記された土地が動くとき、住民",
       "file": "data/quests/q194.json"
     },
+    "q194.scene.talk.buy.shortage": {
+      "name": "120Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、こ",
+      "file": "data/quests/q194.json"
+    },
+    "q194.scene.talk.buy.resume": {
+      "name": "120Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q194.json"
+    },
     "q195.scene.entry": {
       "name": "畑の菌は旧魔王の炉の灰で育っていた。炉が止まってから作物が弱った。設計図には、捕",
       "file": "data/quests/q195.json"
@@ -52211,6 +53114,22 @@ export const referenceData={
     },
     "q195.visit": {
       "name": "魔王の畑",
+      "file": "data/quests/q195.json"
+    },
+    "q195.scene.fuel.convert.shortage": {
+      "name": "60Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q195.json"
+    },
+    "q195.scene.fuel.convert.resume": {
+      "name": "60Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q195.json"
+    },
+    "q195.scene.deliver.one.shortage": {
+      "name": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q195.json"
+    },
+    "q195.scene.deliver.one.resume": {
+      "name": "野営糧食1個を使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q195.json"
     },
     "q196.scene.entry": {
@@ -52367,6 +53286,14 @@ export const referenceData={
     },
     "q199.visit": {
       "name": "帰らない依頼人",
+      "file": "data/quests/q199.json"
+    },
+    "q199.scene.future.tower.shortage": {
+      "name": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q199.json"
+    },
+    "q199.scene.future.tower.resume": {
+      "name": "40Gを使う作業の続きだ。準備を確かめよう。",
       "file": "data/quests/q199.json"
     },
     "q200.scene.entry": {

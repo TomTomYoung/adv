@@ -7,6 +7,7 @@ import {validateSave} from '../src/core/save.js';
 import {validateContent} from '../src/core/validation.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {setDungeonRestriction} from '../src/core/dungeon-restrictions.js';
+import {beginEventCheckpoint} from '../src/core/event-checkpoints.js';
 import {fireContext} from '../src/core/systems/fire-network.js';
 
 const seal={dungeon:'kagaribi',action:'return_mark',source:'unrelated.trap',reason:'別の罠の封印。'};
@@ -54,12 +55,11 @@ test('ordinary defeat without an event checkpoint returns to town with the exist
 
 for(const stage of ['elder','return_walk','kuragari'])test(`q001 defeat during ${stage} rolls back only the event and physically revisits the elder`,()=>{
  const g=elder();
- if(stage==='elder')g.dispatch({type:'choose',id:'pause'});
- else{g.dispatch({type:'choose',id:'support'});if(stage==='kuragari')finishJourney(g);else walk(g,13,2,{maintain:true});}
+ if(stage!=='elder'){g.dispatch({type:'choose',id:'support'});if(stage==='kuragari')finishJourney(g);else walk(g,13,2,{maintain:true});}
  const storyBefore=structuredClone(g.state.eventCheckpoints[0].story);
  setDungeonRestriction(g,seal);g.state.flags.otherQuest={kept:true};g.state.objects['kagaribi_f1/q001_empty_west']='lit';
  g.give('potion',-1);g.state.gold-=7;const potion=g.state.inventory.potion,gold=g.state.gold,steps=g.state.steps;
- if(!g.state.battle)g.startBattle('wild_pair_1',{win:[],escape:[],lose:[]});saveAndLoad(g);loseBattle(g);assertReset(g);
+ if(stage==='elder'){saveAndLoad(g);g.defeat();}else{if(!g.state.battle)g.startBattle('wild_pair_1',{win:[],escape:[],lose:[]});saveAndLoad(g);loseBattle(g);}assertReset(g);
  assert.equal(g.state.inventory.potion,potion);assert.equal(g.state.gold,Math.floor(gold*(1-data.system.defeatGoldRate)));assert.equal(g.state.steps,steps);
  assert.deepEqual(g.state.flags.otherQuest,{kept:true});assert.equal(g.state.objects['kagaribi_f1/q001_empty_west'],'lit');assert.deepEqual(g.state.dungeonRestrictions,[seal]);
  assert.deepEqual(g.state.stories.q001.knowledge,storyBefore.knowledge);assert.deepEqual(g.state.stories.q001.events,storyBefore.events);
@@ -79,9 +79,10 @@ test('q001 can fail twice and still repeats the outage, while defeat after the r
 
 test('fatal field trap after the elder uses the same rollback, including a save in the opening conversation',()=>{
  const initial=elder(),g=new GameEngine(structuredClone(data));g.load(initial.save());
- // Return to the opening narration without replacing the checkpoint baseline.
- const baseline=JSON.stringify(g.state.eventCheckpoints[0]);g.dispatch({type:'choose',id:'pause'});g.dispatch({type:'story.resume',quest:'q001'});saveAndLoad(g);
- assert.equal(JSON.stringify(g.state.eventCheckpoints[0]),baseline);drain(g);g.dispatch({type:'choose',id:'pause'});
+ // Re-entering the checkpoint command keeps its original pre-effect snapshot.
+ const baseline=JSON.stringify(g.state.eventCheckpoints[0]),origin=g.state.eventCheckpoints[0].origin;
+ beginEventCheckpoint(g,g.data.scripts[origin.script].commands[origin.index],origin,origin.index);saveAndLoad(g);
+ assert.equal(JSON.stringify(g.state.eventCheckpoints[0]),baseline);assert.ok(g.dispatch({type:'choose',id:'support'}));
  g.data.scripts.fatal_trap={commands:[{op:'actor.damage',target:'party',amount:100000},{op:'flag.set',key:'mustNotContinue',value:true}]};
  g.map().objects.push({id:'fatal_trap',name:'落下罠',kind:'trap',trigger:'enter',x:13,y:2,script:'fatal_trap'});
  while(g.state.location.facing!=='north')g.dispatch({type:'move',direction:'right'});
@@ -96,7 +97,9 @@ test('rolled-back battle discards its old lose continuation and rookie conversat
 });
 
 test('the checkpoint DSL works for another quest, restores declared values and prior seals, and commits idempotently',()=>{
- const base=prepareQuest('q002'),g=new GameEngine(structuredClone(data));g.load(base.save());g.dispatch({type:'choose',id:'pause'});
+ const g=new GameEngine(structuredClone(data));drain(g);g.accept('q002');
+ const landing=g.data.quests.q002.story.worldPlaces.landing;g.teleport(landing.map,landing.x,landing.y);
+ g.data.scripts.checkpoint_setup={commands:[{op:'story.init',quest:'q002'},{op:'story.scene',quest:'q002',scene:'entry'}]};g.run('checkpoint_setup');
  const prior={dungeon:'region_1',action:'return_mark',source:'another.sequence',reason:'元からある封印。'};
  setDungeonRestriction(g,prior);g.state.flags.example={value:'before'};g.state.vars.example=3;
  const begin={op:'event.checkpoint.begin',id:'another.sequence',quest:'q002',scene:'entry',dungeon:'region_1',flags:['example.value'],vars:['example'],eventKeys:['example/event'],restrictionSources:['another.sequence']};
@@ -118,6 +121,6 @@ test('invalid checkpoint definitions and tampered snapshots are rejected without
  for(const patch of [{quest:'missing'},{scene:'missing'},{dungeon:'region_1'},{flags:['constructor.value']},{flags:['example','example.value']},{vars:['gold','gold']},{objects:['kagaribi_f1/missing']},{eventKeys:['__proto__']},{restrictionSources:['']}]){
   const d=structuredClone(data);d.scripts.bad_checkpoint={commands:[{...begin,...patch}]};assert.ok(validateContent(d).some(e=>e.includes('チェックポイント')));
  }
- const d=structuredClone(data),other=new GameEngine(d);other.load(save);other.dispatch({type:'choose',id:'pause'});
- d.scripts.overlap_checkpoint={commands:[{...begin,id:'overlap'}]};assert.throws(()=>other.run('overlap_checkpoint'),/復元対象/);
+ const d=structuredClone(data),other=new GameEngine(d);other.load(save);
+ d.scripts.overlap_checkpoint={commands:[{...begin,id:'overlap'}]};assert.throws(()=>beginEventCheckpoint(other,d.scripts.overlap_checkpoint.commands[0],{script:'overlap_checkpoint',path:[]},0),/復元対象/);
 });

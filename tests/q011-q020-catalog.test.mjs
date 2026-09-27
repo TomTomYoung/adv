@@ -1,14 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {structureHash} from './narration-helpers.mjs';
-import {createHash} from 'node:crypto';
 import {data,drain,fight} from './helpers.mjs';
 import {prepareQuest} from './structure-routes.mjs';
 import {projectGame} from '../src/application/projection.js';
 const choose=(g,...ids)=>{for(const id of ids){assert.ok(g.dispatch({type:'choose',id}),id);drain(g);if(g.state.battle)fight(g);}};
 const state=(g,id)=>g.state.flags.flow[id];
-const oldQuest=id=>{const g=prepareQuest(id);choose(g,'pause');delete g.state.flags.flow[id];g.run(`${id}.flow.visit`);drain(g);return g;};
+const oldQuest=id=>prepareQuest(id,{legacy:true});
 
 test('q011-q020 catalog constraints stay author metadata and each current entry uses its new route',()=>{
  for(let n=11;n<=20;n++){
@@ -107,15 +105,14 @@ test('q020 fighting the two guards does not repair supports or settle the monito
  const s=state(g,'q020');assert.equal(s.guardsDefeated,true);assert.equal(s.exitOpen,true);assert.equal(s.entranceBraced,false);assert.equal(s.roleEnded,false);assert.equal(s.crownAt,'keeper');assert.equal(s.formerAt,'dangerTunnel');
 });
 
-test('pre-catalog q011-q020 command structure remains exact while narration changes to plain form',async()=>{
+test('pre-catalog script entry identifiers remain available after removing shared pause choices',async()=>{
  const old=JSON.parse(await fs.readFile(new URL('fixtures/scripts-q011-q020-before-catalog-sha256.json',import.meta.url)));
- const before=JSON.parse(await fs.readFile(new URL('fixtures/pre-1.11-structure.json',import.meta.url)));
- for(const id of Object.keys(old))assert.equal(structureHash(data.scripts[id]),before.scripts[id],id);
+ for(const id of Object.keys(old)){assert.ok(data.scripts[id],id);assert.doesNotMatch(JSON.stringify(data.scripts[id]),/ここで中断し/);}
 });
 
-test('old choices and paused revisits complete with the old result and do not award twice',()=>{
+test('old choices saved midway complete with the old result and do not award twice',()=>{
  for(const [id,route] of [['q011',['brush','guide']],['q015',['copy','missing']],['q018',['copy','dissolve']],['q020',['relieve','recruit']]]){
-  const g=oldQuest(id);choose(g,route[0],'pause');g.load(g.save());g.run(data.quests[id].model.entryScript);drain(g);
+  const g=oldQuest(id);choose(g,route[0]);g.load(g.save());
   assert.equal(state(g,id).catalogRevision,undefined);choose(g,...route.slice(1));const outcome=g.state.quests[id].outcome;
   assert.equal(g.state.journal.at(-1).text,data.quests[id].legacyOutcomes[outcome].text);
   const earned={gold:g.state.gold,xp:g.state.actors.ada.xp,count:g.state.vars.completed};g.run(data.quests[id].model.entryScript);drain(g);assert.deepEqual({gold:g.state.gold,xp:g.state.actors.ada.xp,count:g.state.vars.completed},earned);

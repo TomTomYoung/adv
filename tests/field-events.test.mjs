@@ -12,14 +12,15 @@ const move=(g,direction)=>assert.ok(g.dispatch({type:'move',direction}));
 const choose=(g,id)=>{assert.ok(g.dispatch({type:'choose',id}));drain(g);};
 const checkpoint=g=>{const s=g.save();assert.deepEqual(validateSave(JSON.parse(s),g.data),[]);g.load(s);assert.equal(g.save(),s);};
 
-test('rookie starts on the occupied entrance cell, never on facing it or pressing inspect; pause and load do not restart it',()=>{
+test('rookie starts on the occupied entrance cell, never on facing it or pressing inspect; saving does not restart it and the decision cannot be skipped',()=>{
  const g=newGame();g.accept('q001');g.dispatch({type:'quest.travel',id:'q001'});
  assert.equal(g.state.stories.q001,undefined);g.teleport('kagaribi_f1',3,1,'west');
  assert.ok(g.dispatch({type:'interact'}));drain(g);assert.equal(g.state.stories.q001,undefined);
  move(g,'forward');assert.equal(g.state.location.x,2);assert.equal(g.state.stories.q001.scene,'entry');assert.equal(g.state.waiting.type,'text');
- assert.equal(g.state.events['kagaribi_f1/q001_decision'],1);checkpoint(g);drain(g);choose(g,'pause');
- assert.equal(g.state.waiting,null);checkpoint(g);move(g,'left');move(g,'right');assert.equal(g.state.waiting,null);
- move(g,'back');move(g,'forward');assert.equal(g.state.waiting.type,'text');assert.equal(g.state.events['kagaribi_f1/q001_decision'],2);
+ assert.equal(g.state.events['kagaribi_f1/q001_decision'],1);checkpoint(g);drain(g);assert.equal(g.dispatch({type:'choose',id:'pause'}),false);
+ checkpoint(g);assert.equal(g.dispatch({type:'move',direction:'left'}),false);
+ assert.equal(g.state.events['kagaribi_f1/q001_decision'],1);choose(g,'talk');
+ move(g,'back');move(g,'forward');assert.equal(g.state.waiting,null);assert.equal(g.state.events['kagaribi_f1/q001_decision'],1);
 });
 
 test('elder starts by stepping onto 13,3; facing the event at 13,2 cannot commit arrival',()=>{

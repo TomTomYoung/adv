@@ -236,7 +236,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q179.scene.houses",
+        "action": "cut",
+        "option": "cut_supplies",
+        "shortage": "q179.scene.houses.cut.shortage",
+        "resume": "q179.scene.houses.cut.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q179.visit"
+    ]
   },
   "scripts": {
     "q179.scene.entry": {
@@ -268,11 +283,6 @@
                   "script": "q179.scene.houses"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -389,9 +399,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "cut_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses.cut.shortage"
+                }
+              ]
             }
           ]
         }
@@ -478,86 +509,135 @@
     "q179.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q179.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q179"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q179.outcome"
-              },
-              "cases": [
+              "equals": "q179.scene.houses.cut.resume",
+              "commands": [
                 {
-                  "equals": "starve",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "burn",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "damage",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q179.scene.houses.cut.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q179.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q179.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "starve",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "burn",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "damage",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q179.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "houses",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.scene.houses"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q179.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "houses",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q179.scene.houses"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q179.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q179.scene.houses.cut.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q179",
+          "value": "q179.scene.houses.cut.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q179.scene.houses.cut.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q179",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q179.scene.houses"
         }
       ]
     }

@@ -101,7 +101,9 @@ export function validateContent(data){
       if(c.op==='choice'){
         if(!Array.isArray(c.options)||!c.options.length){fail(at,'選択肢が必要です');return;}
         const ids=new Set();for(const option of c.options){if(!option.id||ids.has(option.id))fail(at,'選択肢IDがないか重複しています');ids.add(option.id);if(option.storyAction&&!data.quests[option.storyAction.quest]?.story?.actions[option.storyAction.action])fail(at,'物語選択の参照不正');if(typeof option.text!=='string')fail(at,'選択肢本文がありません');if(option.condition)expression(option.condition,at);if(option.visibleWhen)expression(option.visibleWhen,at);commands(option.commands,at,depth+1,inBattleEvent);}
-        if(!c.options.some(o=>o.condition===undefined&&o.visibleWhen===undefined))fail(at,'常に選べる選択肢を1つ以上設けてください');
+        if(!c.options.some(o=>o.condition!==false&&o.visibleWhen!==false))fail(at,'選べる可能性のある選択肢が必要です');
+        // Conditional choices may cover disjoint reachable states. Scenario route tests
+        // verify an enabled route in every reached scene, also without resources.
       }
       if(c.op==='if'){commands(c.then,`${at}.then`,depth+1,inBattleEvent);commands(c.else,`${at}.else`,depth+1,inBattleEvent);}
       if(c.op==='switch'){for(const item of c.cases??[])commands(item.commands,at,depth+1,inBattleEvent);commands(c.default,at,depth+1,inBattleEvent);}

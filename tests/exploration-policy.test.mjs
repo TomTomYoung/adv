@@ -23,8 +23,8 @@ test('q001 departures keep physical position; wrong-site interaction cannot skip
 });
 
 test('q001 scene reentry and remote script attempts cannot refill fire or trigger the outage',()=>{
- const g=prepareQuest('q001');choose(g,'pause');const fire=fireContext(data,g.state).run.portable;fire.fuel=12;
- assert.ok(g.dispatch({type:'story.resume',quest:'q001'}));drain(g);assert.equal(fireContext(data,g.state).run.portable.fuel,12);
+ const g=prepareQuest('q001');const fire=fireContext(data,g.state).run.portable;fire.fuel=12;
+ checkpoint(g);assert.equal(g.dispatch({type:'story.resume',quest:'q001'}),false);assert.equal(fireContext(data,g.state).run.portable.fuel,12);
  choose(g,'talk');const before=structuredClone(fireContext(data,g.state).run.portable),journey=structuredClone(g.state.journey);
  g.run('q001.v11.outage');drain(g);assert.deepEqual(fireContext(data,g.state).run.portable,before);
  assert.deepEqual(g.state.journey,journey);assert.notEqual(g.state.objects['kagaribi_f1/q001_last_lamp'],'extinguished');checkpoint(g);

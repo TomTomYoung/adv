@@ -15,12 +15,28 @@ const stable=v=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fro
 const hash=v=>createHash('sha256').update(JSON.stringify(stable(v))).digest('hex');
 const old={...await read('tests/fixtures/quest-events-1.8.0.json'),...await read('tests/fixtures/quest-events-1.9.0.json')};
 
-test('unmigrated quest logic and map objects remain exact apart from narration and documented journeys',async()=>{
+test('unmigrated quest effects remain exact apart from narration, journeys and explicit interruption routes',async()=>{
  const before=await read('tests/fixtures/pre-1.11-structure.json');
+ // Reverse only the documented 1.24 choice/entry additions for this old
+ // structural baseline; the real current routes are exercised separately.
+ const quests=structuredClone(data.quests),scripts={...data.scripts};
+ for(const q of Object.values(quests)){
+  const routes=q.model.interruptionRoutes??[];
+  for(const r of routes){delete q.scripts[r.shortage];delete q.scripts[r.resume];}
+  for(const id of q.model.interruptionEntries??[])q.scripts[id].commands=q.scripts[id].commands[0].default;
+  for(const [id,script] of Object.entries(q.scripts)){
+   const walk=v=>{if(Array.isArray(v)){v.forEach(walk);return;}if(!v||typeof v!=='object')return;
+    if(v.op==='choice'){v.options=v.options.filter(o=>!routes.some(r=>r.from===id&&r.option===o.id));
+     if(/^q\d+\.(flow|catalog1|v11|scene)\./.test(id)&&!['q001.v11.outage','q001.v11.rescue'].includes(id))v.options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});}
+    Object.values(v).forEach(walk);
+   };walk(script.commands);scripts[id]=script;
+  }
+  delete q.model.interruptionRoutes;delete q.model.interruptionEntries;
+ }
  // New reusable terrain event, not a migrated quest script. Its behavior is covered by cell-catalog.test.mjs.
  assert.deepEqual(data.scripts['cell.poison_step'].commands,[{op:'actor.damage',target:'party',amount:3},{op:'narrate',text:'毒の沼地を踏んだ。'}]);
- for(const [id,q] of Object.entries(data.quests))if(q.number>10)assert.equal(structureHash(q),before.quests[id],id);
- for(const [id,script] of Object.entries(data.scripts))if(id!=='cell.poison_step'&&!id.startsWith('q001.')&&!id.startsWith('q003.')&&!id.startsWith('q004.')&&!/^(?:region_[123]_f[12]\.stairs|kagaribi_f[123]\.(?:up|down)|voxel\.)/.test(id))assert.equal(structureHash(script),before.scripts[id],id);
+ for(const [id,q] of Object.entries(quests))if(q.number>10)assert.equal(structureHash(q),before.quests[id],id);
+ for(const [id,script] of Object.entries(scripts))if(before.scripts[id]&&id!=='cell.poison_step'&&!id.startsWith('q001.')&&!id.startsWith('q003.')&&!id.startsWith('q004.')&&!/^(?:region_[123]_f[12]\.stairs|kagaribi_f[123]\.(?:up|down)|voxel\.)/.test(id))assert.equal(structureHash(script),before.scripts[id],id);
  for(const [map,objects] of Object.entries(before.objects)){
   if(['region_1_f1','region_1_f2','waterworks_shaft'].includes(map))continue;
   const replacedStairs=['kagaribi_f1','kagaribi_f2','kagaribi_f3','region_2_f1','region_2_f2','region_3_f1','region_3_f2'].includes(map);

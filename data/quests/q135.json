@@ -205,7 +205,32 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q135.scene.entry",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q135.scene.entry.lift.shortage",
+        "resume": "q135.scene.entry.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q135.scene.reply",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q135.scene.reply.lift.shortage",
+        "resume": "q135.scene.reply.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q135.visit"
+    ]
   },
   "scripts": {
     "q135.scene.entry": {
@@ -271,9 +296,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry.lift.shortage"
+                }
+              ]
             }
           ]
         }
@@ -342,9 +388,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply.lift.shortage"
+                }
+              ]
             }
           ]
         }
@@ -431,86 +498,174 @@
     "q135.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q135.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q135"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q135.outcome"
-              },
-              "cases": [
+              "equals": "q135.scene.entry.lift.resume",
+              "commands": [
                 {
-                  "equals": "stop",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "lift",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "break",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q135.scene.entry.lift.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q135.scene.reply.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply.lift.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q135.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q135.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lift",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "break",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q135.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.scene.reply"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q135.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "reply",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q135.scene.reply"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q135.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q135.scene.entry.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": "q135.scene.entry.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q135.scene.entry.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q135.scene.entry"
+        }
+      ]
+    },
+    "q135.scene.reply.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": "q135.scene.reply.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q135.scene.reply.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q135.scene.reply"
         }
       ]
     }

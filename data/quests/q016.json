@@ -608,7 +608,94 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q016.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q016.decision.informed.shortage",
+        "resume": "q016.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q016.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q016.review.informed.shortage",
+        "resume": "q016.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q016.flow.entry",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q016.flow.entry.buy.shortage",
+        "resume": "q016.flow.entry.buy.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q016.flow.shelter",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q016.flow.shelter.buy.shortage",
+        "resume": "q016.flow.shelter.buy.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q016.flow.move",
+        "action": "cancel",
+        "option": "cancel_supplies",
+        "shortage": "q016.flow.move.cancel.shortage",
+        "resume": "q016.flow.move.cancel.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q016.catalog1.entry",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q016.catalog1.entry.buy.shortage",
+        "resume": "q016.catalog1.entry.buy.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q016.catalog1.shelter",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q016.catalog1.shelter.buy.shortage",
+        "resume": "q016.catalog1.shelter.buy.resume",
+        "cost": {
+          "gold": 20
+        }
+      },
+      {
+        "from": "q016.catalog1.move",
+        "action": "cancel",
+        "option": "cancel_supplies",
+        "shortage": "q016.catalog1.move.cancel.shortage",
+        "resume": "q016.catalog1.move.cancel.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q016.visit",
+      "q016.flow.visit",
+      "q016.catalog1.visit"
+    ]
   },
   "scripts": {
     "q016.clue_a": {
@@ -779,6 +866,70 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.decision.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -987,6 +1138,94 @@
               "id": "leave",
               "text": "まだ決めず、調査を続ける",
               "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q016.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q016.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.review.informed.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1086,24 +1325,106 @@
     "q016.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q016.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q016"
           },
-          "then": [
+          "cases": [
             {
-              "op": "jump",
-              "script": "q016.aftermath"
+              "equals": "q016.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.move.cancel.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.move.cancel.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "jump",
-              "script": "q016.review"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q016.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q016.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q016.review"
+                }
+              ]
             }
           ]
         }
@@ -1191,9 +1512,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.entry.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1252,9 +1598,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.shelter.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1313,9 +1684,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "cancel_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.move.cancel.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1417,107 +1813,189 @@
     "q016.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q016.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q016"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q016.outcome"
-              },
-              "cases": [
+              "equals": "q016.decision.informed.resume",
+              "commands": [
                 {
-                  "equals": "informed",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "採掘は遅くても進んだ。助手は初めて配合表へ自分の名を書く。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "contract",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "坑道は一気に延びた。避難者は食器を捨てて、さらに奥へ移る。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "compromise",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "帳尻は合った。発破師は音だけで出来を決めないと約束する。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q016.decision.informed.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q016.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.move.cancel.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.move.cancel.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q016"
+                  "ref": "quests.q016.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q016.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q016.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "採掘は遅くても進んだ。助手は初めて配合表へ自分の名を書く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "坑道は一気に延びた。避難者は食器を捨てて、さらに奥へ移る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "帳尻は合った。発破師は音だけで出来を決めないと約束する。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q016.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q016"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q016.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q016.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "shelter",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.flow.shelter"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "move",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.flow.move"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q016.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "shelter",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q016.flow.shelter"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "move",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q016.flow.move"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q016.flow.entry"
                     }
                   ]
                 }
@@ -1661,9 +2139,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.entry.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1755,9 +2258,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "buy_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.shelter.buy.shortage"
+                }
+              ]
             }
           ]
         }
@@ -1886,9 +2414,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "cancel_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.move.cancel.shortage"
+                }
+              ]
             }
           ]
         }
@@ -2058,146 +2611,468 @@
     "q016.catalog1.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "and",
-            "args": [
-              {
-                "op": "not",
-                "arg": {
-                  "op": "eq",
-                  "left": {
-                    "ref": "flags.flow.q016.catalogRevision"
-                  },
-                  "right": 1
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q016"
+          },
+          "cases": [
+            {
+              "equals": "q016.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.decision.informed.resume"
                 }
-              },
-              {
-                "op": "or",
+              ]
+            },
+            {
+              "equals": "q016.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.review.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.flow.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.move.cancel.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.entry.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.entry.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.shelter.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.shelter.buy.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q016.catalog1.move.cancel.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q016.catalog1.move.cancel.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "and",
                 "args": [
                   {
-                    "op": "exists",
-                    "value": {
-                      "ref": "flags.flow.q016.node"
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q016.catalogRevision"
+                      },
+                      "right": 1
                     }
                   },
                   {
-                    "op": "eq",
-                    "left": {
-                      "ref": "flags.legacyQuestRoutes.q016"
-                    },
-                    "right": true
-                  },
-                  {
+                    "op": "or",
+                    "args": [
+                      {
+                        "op": "exists",
+                        "value": {
+                          "ref": "flags.flow.q016.node"
+                        }
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.legacyQuestRoutes.q016"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "quests.q016.stage"
+                        },
+                        "right": "completed"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q016.flow.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
                     "op": "eq",
                     "left": {
                       "ref": "quests.q016.stage"
                     },
                     "right": "completed"
-                  }
-                ]
-              }
-            ]
-          },
-          "then": [
-            {
-              "op": "jump",
-              "script": "q016.flow.visit"
-            }
-          ],
-          "else": [
-            {
-              "op": "if",
-              "condition": {
-                "op": "eq",
-                "left": {
-                  "ref": "quests.q016.stage"
-                },
-                "right": "completed"
-              },
-              "then": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "quests.q016.outcome"
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "informed",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q016.outcome"
+                      },
+                      "cases": [
                         {
-                          "op": "say",
-                          "text": "避難区画の住民と寝台を、補強済みで二方向へ逃げられる区画へ移した。助手は保管していた火薬を倉へ戻して無断変更を申告し、少量の標準火薬による試験発破を行った。振動を測ってから採掘を再開し、助手は配合表と作業記録へ自分の名を書いた。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "contract",
-                      "commands": [
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "避難区画の住民と寝台を、補強済みで二方向へ逃げられる区画へ移した。助手は保管していた火薬を倉へ戻して無断変更を申告し、少量の標準火薬による試験発破を行った。振動を測ってから採掘を再開し、助手は配合表と作業記録へ自分の名を書いた。"
+                            }
+                          ]
+                        },
                         {
-                          "op": "say",
-                          "text": "火薬を盗んだ証拠のない魔物を倒し、別の標準火薬を装填して発破した。坑道は一気に延びたが、図面にない避難区画へ強い振動が届いた。住民は割れた食器と寝台を残し、さらに奥の未補強区画へ逃れた。"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "compromise",
-                      "commands": [
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "火薬を盗んだ証拠のない魔物を倒し、別の標準火薬を装填して発破した。坑道は一気に延びたが、図面にない避難区画へ強い振動が届いた。住民は割れた食器と寝台を残し、さらに奥の未補強区画へ逃れた。"
+                            }
+                          ]
+                        },
                         {
-                          "op": "say",
-                          "text": "助手の湿式封止材を20Gで工事用資材として買い上げ、耐火容器の標準火薬を倉へ戻して帳簿を訂正した。利得目的の盗難ではなかったと確認された。避難区画の住民は移らず、発破と採掘は停止したままになった。"
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "助手の湿式封止材を20Gで工事用資材として買い上げ、耐火容器の標準火薬を倉へ戻して帳簿を訂正した。利得目的の盗難ではなかったと確認された。避難区画の住民は移らず、発破と採掘は停止したままになった。"
+                            }
+                          ]
                         }
-                      ]
+                      ],
+                      "default": []
                     }
                   ],
-                  "default": []
-                }
-              ],
-              "else": [
-                {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q016.node"
-                  },
-                  "cases": [
+                  "else": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q016.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.catalog1.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "shelter",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.catalog1.shelter"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "move",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q016.catalog1.move"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
-                          "script": "q016.catalog1.entry"
+                          "script": "q016.catalog1.start"
                         }
                       ]
-                    },
-                    {
-                      "equals": "shelter",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q016.catalog1.shelter"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "move",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q016.catalog1.move"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q016.catalog1.start"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q016.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.decision"
+        }
+      ]
+    },
+    "q016.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.review"
+        }
+      ]
+    },
+    "q016.flow.entry.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.flow.entry.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.flow.entry.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.flow.entry"
+        }
+      ]
+    },
+    "q016.flow.shelter.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.flow.shelter.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.flow.shelter.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.flow.shelter"
+        }
+      ]
+    },
+    "q016.flow.move.cancel.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.flow.move.cancel.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.flow.move.cancel.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.flow.move"
+        }
+      ]
+    },
+    "q016.catalog1.entry.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.catalog1.entry.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.catalog1.entry.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.catalog1.entry"
+        }
+      ]
+    },
+    "q016.catalog1.shelter.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.catalog1.shelter.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.catalog1.shelter.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.catalog1.shelter"
+        }
+      ]
+    },
+    "q016.catalog1.move.cancel.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": "q016.catalog1.move.cancel.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q016.catalog1.move.cancel.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q016",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q016.catalog1.move"
         }
       ]
     }

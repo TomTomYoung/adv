@@ -255,7 +255,33 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q126.scene.entry",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q126.scene.entry.food.shortage",
+        "resume": "q126.scene.entry.food.resume",
+        "cost": {
+          "ration": 2
+        }
+      },
+      {
+        "from": "q126.flow.food",
+        "action": "provide",
+        "option": "provide_supplies",
+        "shortage": "q126.flow.food.provide.shortage",
+        "resume": "q126.flow.food.provide.resume",
+        "cost": {
+          "ration": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q126.visit",
+      "q126.flow.visit"
+    ]
   },
   "scripts": {
     "q126.scene.entry": {
@@ -423,9 +449,60 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "food_supplies",
+              "text": "野営糧食2個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q126.food"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 2
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q126.food"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 2
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.scene.entry.food.shortage"
+                }
+              ]
             }
           ]
         }
@@ -512,73 +589,101 @@
     "q126.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q126.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q126"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q126.outcome"
-              },
-              "cases": [
+              "equals": "q126.scene.entry.food.resume",
+              "commands": [
                 {
-                  "equals": "hunt",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "track",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "show",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q126.scene.entry.food.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q126.flow.food.provide.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.food.provide.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q126.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q126.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q126.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "hunt",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "track",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q126.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q126.scene.entry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q126.scene.entry"
                     }
                   ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q126.scene.entry"
                 }
               ]
             }
@@ -650,11 +755,6 @@
                   "script": "q126.flow.end.show"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -712,9 +812,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "provide_supplies",
+              "text": "野営糧食2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.food.provide.shortage"
+                }
+              ]
             }
           ]
         }
@@ -755,11 +876,6 @@
                   "script": "q126.flow.end.show"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -800,11 +916,6 @@
                   "script": "q126.flow.end.show"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -891,122 +1002,210 @@
     "q126.flow.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q126.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q126"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q126.outcome"
-              },
-              "cases": [
+              "equals": "q126.scene.entry.food.resume",
+              "commands": [
                 {
-                  "equals": "hunt",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "track",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "show",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q126.scene.entry.food.resume"
                 }
-              ],
-              "default": []
+              ]
+            },
+            {
+              "equals": "q126.flow.food.provide.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q126.flow.food.provide.resume"
+                }
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
               "op": "if",
               "condition": {
                 "op": "eq",
                 "left": {
-                  "ref": "flags.legacyQuestRoutes.q126"
+                  "ref": "quests.q126.stage"
                 },
-                "right": true
+                "right": "completed"
               },
               "then": [
                 {
-                  "op": "jump",
-                  "script": "q126.visit"
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q126.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "hunt",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "得た肉を屋台で分けた。コルは一番遅い帰還札を受け取ってから鐘を鳴らした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "track",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "木標への到達は討伐として数えなかった。子供と熟練者が別の部門で走り、屋台には手配した食材が並んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "参加者は追い方を実演した。コルは来年の規則案を残し、最後の演者が戻ったところで鐘を鳴らした。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
                 }
               ],
               "else": [
                 {
-                  "op": "switch",
-                  "value": {
-                    "ref": "flags.flow.q126.node"
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q126"
+                    },
+                    "right": true
                   },
-                  "cases": [
+                  "then": [
                     {
-                      "equals": "entry",
-                      "commands": [
+                      "op": "jump",
+                      "script": "q126.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q126.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q126.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "food",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q126.flow.food"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rules",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q126.flow.rules"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "last",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q126.flow.last"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
                         {
                           "op": "jump",
                           "script": "q126.flow.entry"
                         }
                       ]
-                    },
-                    {
-                      "equals": "food",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q126.flow.food"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "rules",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q126.flow.rules"
-                        }
-                      ]
-                    },
-                    {
-                      "equals": "last",
-                      "commands": [
-                        {
-                          "op": "jump",
-                          "script": "q126.flow.last"
-                        }
-                      ]
-                    }
-                  ],
-                  "default": [
-                    {
-                      "op": "jump",
-                      "script": "q126.flow.entry"
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q126.scene.entry.food.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q126",
+          "value": "q126.scene.entry.food.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q126.scene.entry.food.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q126",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q126.scene.entry"
+        }
+      ]
+    },
+    "q126.flow.food.provide.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q126",
+          "value": "q126.flow.food.provide.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q126.flow.food.provide.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q126",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q126.flow.food"
         }
       ]
     }

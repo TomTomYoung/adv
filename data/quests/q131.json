@@ -259,7 +259,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q131.scene.room",
+        "action": "both",
+        "option": "both_supplies",
+        "shortage": "q131.scene.room.both.shortage",
+        "resume": "q131.scene.room.both.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q131.visit"
+    ]
   },
   "scripts": {
     "q131.scene.entry": {
@@ -302,11 +317,6 @@
                   "script": "q131.scene.lost"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -336,11 +346,6 @@
                   "script": "q131.scene.entry"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -409,9 +414,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "both_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.room.both.shortage"
+                }
+              ]
             }
           ]
         }
@@ -452,11 +478,6 @@
                   "script": "q131.end.school"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -569,113 +590,162 @@
     "q131.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q131.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q131"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q131.outcome"
-              },
-              "cases": [
+              "equals": "q131.scene.room.both.resume",
+              "commands": [
                 {
-                  "equals": "person",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "sample",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "all",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "school",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q131.scene.room.both.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q131.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q131.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "person",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sample",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "all",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "school",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q131.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lost",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.lost"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "room",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.room"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "credit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.credit"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q131.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "lost",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q131.scene.lost"
-                    }
-                  ]
-                },
-                {
-                  "equals": "room",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q131.scene.room"
-                    }
-                  ]
-                },
-                {
-                  "equals": "credit",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q131.scene.credit"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q131.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q131.scene.room.both.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q131",
+          "value": "q131.scene.room.both.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q131.scene.room.both.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q131",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q131.scene.room"
         }
       ]
     }

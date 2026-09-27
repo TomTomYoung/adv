@@ -93,7 +93,6 @@ export async function buildScenarios(){
   };
   for(const node of spec.nodes){
    const options=node.options.map(option);
-   options.push({id:'pause',text:'ここで中断し、同じ場面から再開する',commands:[]});
    scripts[sid(node.id)]={commands:[{op:'set',target:state('node'),value:node.id},...render(node.text),{op:'choice',options}]};
   }
   for(const [end,out] of Object.entries(outcomes))scripts[`${id}.end.${end}`]={commands:[{op:'if',condition:eq(ref(`quests.${id}.stage`),'active'),then:[say(out.text),{op:'quest.complete',quest:id,outcome:end}],else:[]}]};

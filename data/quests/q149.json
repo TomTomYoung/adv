@@ -202,7 +202,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q149.scene.user",
+        "action": "pay",
+        "option": "pay_supplies",
+        "shortage": "q149.scene.user.pay.shortage",
+        "resume": "q149.scene.user.pay.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q149.visit"
+    ]
   },
   "scripts": {
     "q149.scene.entry": {
@@ -251,11 +266,6 @@
                   "script": "q149.end.withdraw"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -325,9 +335,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "pay_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.user.pay.shortage"
+                }
+              ]
             }
           ]
         }
@@ -414,86 +449,135 @@
     "q149.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q149.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q149"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q149.outcome"
-              },
-              "cases": [
+              "equals": "q149.scene.user.pay.resume",
+              "commands": [
                 {
-                  "equals": "collector",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "user",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "withdraw",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q149.scene.user.pay.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q149.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q149.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "collector",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdraw",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q149.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.scene.user"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q149.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "user",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q149.scene.user"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q149.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q149.scene.user.pay.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q149",
+          "value": "q149.scene.user.pay.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q149.scene.user.pay.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q149",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q149.scene.user"
         }
       ]
     }

@@ -249,7 +249,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q129.scene.entry",
+        "action": "treat",
+        "option": "treat_supplies",
+        "shortage": "q129.scene.entry.treat.shortage",
+        "resume": "q129.scene.entry.treat.resume",
+        "cost": {
+          "potion": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q129.visit"
+    ]
   },
   "scripts": {
     "q129.scene.entry": {
@@ -314,9 +329,30 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "treat_supplies",
+              "text": "傷薬1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "potion",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "potion",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q129.scene.entry.treat.shortage"
+                }
+              ]
             }
           ]
         }
@@ -461,11 +497,6 @@
                   "script": "q129.end.retreat"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -552,86 +583,135 @@
     "q129.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q129.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q129"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q129.outcome"
-              },
-              "cases": [
+              "equals": "q129.scene.entry.treat.resume",
+              "commands": [
                 {
-                  "equals": "captain",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "砦は確保された。退任を決めるのはノエ自身に残ったが、補給庫の鍵は副官へ預けた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "deputy",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "副官の計画として戦果が記録された。ノエは勲章でなく、長年自分だけが持った補給庫の鍵を渡した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "retreat",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "作戦は完了しなかった。後退をまとめた仕事は消さず、次の指揮系統を部隊で確認した。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q129.scene.entry.treat.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q129.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q129.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q129.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "captain",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "砦は確保された。退任を決めるのはノエ自身に残ったが、補給庫の鍵は副官へ預けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deputy",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "副官の計画として戦果が記録された。ノエは勲章でなく、長年自分だけが持った補給庫の鍵を渡した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retreat",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "作戦は完了しなかった。後退をまとめた仕事は消さず、次の指揮系統を部隊で確認した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q129.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q129.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "plan",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q129.scene.plan"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q129.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "plan",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q129.scene.plan"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q129.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q129.scene.entry.treat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q129",
+          "value": "q129.scene.entry.treat.resume"
+        },
+        {
+          "op": "say",
+          "text": "傷薬1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q129.scene.entry.treat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q129",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "傷薬1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q129.scene.entry"
         }
       ]
     }

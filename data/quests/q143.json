@@ -197,7 +197,22 @@
       "id": "game-scenario-model",
       "version": "1.0",
       "source": "https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3"
-    }
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q143.scene.entry",
+        "action": "hire",
+        "option": "hire_supplies",
+        "shortage": "q143.scene.entry.hire.shortage",
+        "resume": "q143.scene.entry.hire.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q143.visit"
+    ]
   },
   "scripts": {
     "q143.scene.entry": {
@@ -264,9 +279,34 @@
               ]
             },
             {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
+              "id": "hire_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q143.scene.entry.hire.shortage"
+                }
+              ]
             }
           ]
         }
@@ -307,11 +347,6 @@
                   "script": "q143.end.taste"
                 }
               ]
-            },
-            {
-              "id": "pause",
-              "text": "ここで中断し、同じ場面から再開する",
-              "commands": []
             }
           ]
         }
@@ -398,86 +433,135 @@
     "q143.visit": {
       "commands": [
         {
-          "op": "if",
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "quests.q143.stage"
-            },
-            "right": "completed"
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q143"
           },
-          "then": [
+          "cases": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "quests.q143.outcome"
-              },
-              "cases": [
+              "equals": "q143.scene.entry.hire.resume",
+              "commands": [
                 {
-                  "equals": "fire",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "代役が火を吹き、客は食べる前に笑った。休暇中の精霊は客席へ座り、料理を注文した。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "taste",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "料理の味で常連が付き始めた。休んでいる精霊だけが、炎のない皿へ文句を付けた。"
-                    }
-                  ]
-                },
-                {
-                  "equals": "shift",
-                  "commands": [
-                    {
-                      "op": "say",
-                      "text": "助手が演出の休み時間を説明した。忙しいが続けられる仕事になり、精霊は客席で自分の料理を食べた。"
-                    }
-                  ]
+                  "op": "jump",
+                  "script": "q143.scene.entry.hire.resume"
                 }
-              ],
-              "default": []
+              ]
             }
           ],
-          "else": [
+          "default": [
             {
-              "op": "switch",
-              "value": {
-                "ref": "flags.quest.q143.node"
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q143.stage"
+                },
+                "right": "completed"
               },
-              "cases": [
+              "then": [
                 {
-                  "equals": "entry",
-                  "commands": [
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q143.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "fire",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "代役が火を吹き、客は食べる前に笑った。休暇中の精霊は客席へ座り、料理を注文した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "taste",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "料理の味で常連が付き始めた。休んでいる精霊だけが、炎のない皿へ文句を付けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shift",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "助手が演出の休み時間を説明した。忙しいが続けられる仕事になり、精霊は客席で自分の料理を食べた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q143.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q143.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "roles",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q143.scene.roles"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
                     {
                       "op": "jump",
                       "script": "q143.scene.entry"
                     }
                   ]
-                },
-                {
-                  "equals": "roles",
-                  "commands": [
-                    {
-                      "op": "jump",
-                      "script": "q143.scene.roles"
-                    }
-                  ]
-                }
-              ],
-              "default": [
-                {
-                  "op": "jump",
-                  "script": "q143.scene.entry"
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    "q143.scene.entry.hire.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q143",
+          "value": "q143.scene.entry.hire.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q143.scene.entry.hire.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q143",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q143.scene.entry"
         }
       ]
     }

@@ -23,7 +23,7 @@ test('wall collision does not spend steps or light, doors/cache persist without 
   const door=g.map().objects.find(o=>o.id==='door');assert.equal(g.walkable(g.map(),door.x,door.y),false);const [dx,dy]=[[1,0],[-1,0],[0,1],[0,-1]].find(([dx,dy])=>g.walkable(g.map(),door.x+dx,door.y+dy));walk(g,door.x+dx,door.y+dy,{heal:true});const face=dx===1?'west':dx===-1?'east':dy===1?'north':'south';while(g.state.location.facing!==face)g.dispatch({type:'move',direction:'right'});g.dispatch({type:'interact'});drain(g);const gold=g.state.gold;assert.equal(g.state.objects['region_1_f1/door'],'open');assert.equal(g.walkable(g.map(),door.x,door.y),true);const saved=g.save();g.load(saved);g.dispatch({type:'interact'});drain(g);assert.equal(g.state.gold,gold);
 });
 test('information stays hidden until observed, choosing disabled options has no effect',()=>{
-  const g=newGame();g.dispatch({type:'accept',id:'q001'});assert.equal(JSON.stringify(projectGame(g)).includes(data.quests.q001.model.world.truth),false);exploreSpot(g,data.quests.q001.locations.find(l=>l.role==='decision'),{heal:true});const before=g.save();assert.equal(g.dispatch({type:'choose',id:'informed'}),false);assert.equal(g.save(),before);g.dispatch({type:'choose',id:'pause'});drain(g);
+  const g=newGame();g.dispatch({type:'accept',id:'q001'});assert.equal(JSON.stringify(projectGame(g)).includes(data.quests.q001.model.world.truth),false);exploreSpot(g,data.quests.q001.locations.find(l=>l.role==='decision'),{heal:true});const before=g.save();assert.equal(g.dispatch({type:'choose',id:'informed'}),false);assert.equal(g.save(),before);assert.equal(g.dispatch({type:'choose',id:'pause'}),false);
 });
 
 
