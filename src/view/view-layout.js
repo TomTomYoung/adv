@@ -7,8 +7,10 @@ export function replaceView(previous,layout,root,dispatch,ui){
   if(previous){
     for(const key of ['tab','shopItem','profileActor','profilePage','partySelection','partyPages','bagActor','dungeonFilter','query','filter','selectedTarget','selectedAlly'])next[key]=previous[key];
     next.effects.key=previous.effects.key;
+    next.castRenderer.key=previous.castRenderer.key;next.castRenderer.session=previous.castRenderer.session;
     previous.destroy();
   }
   root.dataset.view=normalizeLayout(layout);
   return next;
 }
+

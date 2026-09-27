@@ -1,3 +1,4 @@
+import {SceneCastRenderer} from './scene-cast.js';
 import {renderCharacter,renderParty} from './character-profile.js';
 import {renderBag,renderShop,cancelInventoryAction} from './inventory-view.js';
 import {mapSection} from './minimap.js';
@@ -12,8 +13,8 @@ const button=(text,callback,className='',disabled=false)=>{const b=node('button'
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
-  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
-  destroy(){this.closeMap({restore:false});this.effects.destroy();}
+  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.castRenderer=new SceneCastRenderer();this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
+  destroy(){this.closeMap({restore:false});this.effects.destroy();this.castRenderer.destroy();}
   advanceText(){this.act({type:'advance'});}
   blocksGameInput(){return Boolean(this.mapOverlay);}
   openMap(){
@@ -117,6 +118,7 @@ export class GameView {
     else if(this.tab==='bag')this.bag(main,model);
     else if(this.tab==='shop')this.shop(main,model);
     else this.journal(main,model);
+    if(!model.dialog?.scene)this.castRenderer.reset();
     this.sidebar(side,model);
     if(model.notice&&model.notice!==model.dialog?.text){const notice=node('div','notice',model.notice);notice.setAttribute('role','status');this.root.append(notice);}
     const footer=node('footer','footer');footer.append(node('span','',model.mode==='dungeon'?this.keyHint():'依頼を受ける → 迷宮へ向かう → 足元と正面を調べる → 帰還する'),button('遊び方',()=>this.ui.help()));this.root.append(footer);
@@ -221,11 +223,10 @@ export class GameView {
   dialog(parent,d){const section=node('section','story-window message-window');section.setAttribute('aria-label','メッセージウィンドウ');if(d.rewardPhase){section.dataset.rewardPhase=d.rewardPhase;section.classList.add(`reward-${d.rewardPhase}`);}if(d.fieldScene){section.append(node('h3','',d.fieldScene.title));appendDungeonArt(section,d.fieldScene.art,d.fieldScene.title,'dungeon-art scene-art');}
     if(d.scene){
       section.append(node('p','story-place',d.scene.title));
-      const cast=node('div','story-cast');cast.setAttribute('aria-label','この場面の登場人物');
-      for(const c of d.scene.cast){const card=node('figure','story-person'+(c.remote?' remote':''));if(!this.model?.town?.cast.some(person=>person.id===c.id)){const img=node('img');img.src=c.portrait;img.alt=c.name;img.width=896;img.height=1024;img.decoding='async';card.append(img);}card.append(node('figcaption','',c.name+(c.remote?'（声）':'')));cast.append(card);}
-      section.append(cast);
+      this.castRenderer.render(section,{...d.scene,mode:'cards'},this.model.castCue,this.ui.effectsMode?.()??'full',this.model.feedback?.session).className='story-cast';
     }
-    if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.advanceText(),'primary continue'));}
+    if(d.type==='presentation'){section.append(node('span','eyebrow',d.speaker||''),node('p','story-text',d.text??''));}
+    else if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.advanceText(),'primary continue'));}
     else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.dataset.focus=`choice:${o.id}`;b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
   }
   battle(parent,m){
@@ -296,3 +297,4 @@ export class GameView {
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}
   }
 }
+

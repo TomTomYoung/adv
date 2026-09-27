@@ -5,7 +5,8 @@ import {emitFeedback,setScreenLayer} from './feedback.js';
 import {clone,setPath,pathParts} from './expression.js';
 import {resumeBattleEvent,interruptBattle} from './battle-events.js';
 import {signalFieldChange} from './field-signals.js';
-export const COMMANDS=new Set(['event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+import {setCast,beginPresentationWait} from './cast.js';
+export const COMMANDS=new Set(['event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -17,11 +18,16 @@ export function pushBranch(engine,frame,index,path){
 }
 export function runScript(engine,id,args={}){
   if(!engine.data.scripts[id])throw new Error(`不明なスクリプト: ${id}`);
-  if(!engine.state.vm.length){delete engine.state.presentation.message;delete engine.state.presentation.cast;}
+  if(!engine.state.vm.length){delete engine.state.presentation.message;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;}
   engine.state.vm.push({script:id,path:[],index:0,scope:engine.state.nextScope++,branch:false,local:{args:clone(args)}});pump(engine);
 }
 export function advanceScript(engine){
   if(engine.state.waiting?.type!=='text')return false;
+  engine.state.waiting=null;pump(engine);return true;
+}
+export function finishPresentation(engine,intent){
+  const w=engine.state.waiting;
+  if(w?.type!=='presentation'||intent.id!==w.id||intent.session!==engine.feedback.session)return false;
   engine.state.waiting=null;pump(engine);return true;
 }
 export function chooseOption(engine,id){
@@ -116,12 +122,12 @@ export function pump(engine){
       case 'quest.accept':engine.accept(c.quest);break;
       case 'quest.evidence':engine.evidence(c.quest,c.key,c.text);break;
       case 'quest.complete':engine.complete(c.quest,c.outcome);break;
-      case 'scene.cast':state.presentation.cast={mode:c.mode??'stage',cast:clone(c.cast)};break;
-      case 'scene.cast.clear':delete state.presentation.cast;break;
+      case 'scene.cast':case 'scene.cast.clear':setCast(engine,c);break;
+      case 'wait':beginPresentationWait(engine,c.duration);break;
       case 'scene.background':state.presentation.background=c.asset;break;
       case 'audio.bgm':state.presentation.music=c.asset;break;
       case 'audio.se':emitFeedback(engine,{sound:c.asset,at:c.delay??engine.feedback.clock,gain:c.volume??1});break;
-      case 'effect.play':emitFeedback(engine,{effects:[c.effect],targets:[c.target??'scene'],at:c.delay??engine.feedback.clock});break;
+      case 'effect.play':{const at=c.delay??engine.feedback.clock;emitFeedback(engine,{effects:[c.effect],targets:[c.target??'scene'],at});if(c.wait)beginPresentationWait(engine,at+engine.data.effects[c.effect].duration,'effect');break;}
       case 'screen.set':case 'screen.clear':setScreenLayer(engine,c);break;
       case 'rest':{
         if(state.gold<(c.cost??0)){engine.notify('宿代が足りません。施療所で応急手当を受けられます。');break;}
@@ -134,5 +140,5 @@ export function pump(engine){
     if(['item.give','item.take','party.join','party.leave','quest.accept','quest.complete','story.action','event.mark_done'].includes(c.op))signalFieldChange(engine.data,state,'state');
     if(['light.refill','party.heal_all','rest'].includes(c.op))signalFieldChange(engine.data,state,'light');
   }
-  if(!state.vm.length)delete state.presentation.cast;
+  if(!state.vm.length){delete state.presentation.cast;delete state.presentation.castCue;}
 }

@@ -1,6 +1,6 @@
 import {checkpointCommandValid} from './event-checkpoints.js';
 import {restrictionValid} from './dungeon-restrictions.js';
-import {castValid} from './cast.js';
+import {castValid,transitionValid,durationValid} from './cast.js';
 import {validateCellLayers} from './cell-layers.js';
 import {validateWorld} from './world.js';
 import {BATTLE_EVENT_PHASES} from './battle-events.js';
@@ -47,7 +47,7 @@ export function validateContent(data){
       if(c.op==='event.checkpoint.commit')checkpointCommits.push({id:c.id,at});
       if(c.op.startsWith('dungeon.restriction.')&&!restrictionValid(data,c,c.op==='dungeon.restriction.set'))fail(at,'迷宮の封印・禁止命令が不正です');
       if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
-      if(inBattleEvent&&!['event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
+      if(inBattleEvent&&!['event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','wait','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
         reference(data.encounters,c.encounter,at);
         if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
@@ -81,6 +81,9 @@ export function validateContent(data){
       if(c.op==='fire.portable.set'&&(!Number.isInteger(c.fuel)||c.fuel<0||c.fuel>100000||c.fuel>0&&!Object.values(data.dungeons??{}).some(d=>Object.values(d.systems).some(s=>s.use==='fire_network'&&s.effects[c.effect]))))fail(at,'携行松明の効果・燃料が不正です');
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
       if(['say','narrate'].includes(c.op)&&c.character!==undefined)reference(data.characters,c.character,at);
+      if(['scene.cast','scene.cast.clear'].includes(c.op)&&!transitionValid(c.transition))fail(at,'人物演出の時間・補間設定不正');
+      if(c.op==='wait'&&!durationValid(c.duration))fail(at,'ウェイトは0〜10000msの整数です');
+      if(c.op==='effect.play'&&c.wait!==undefined&&typeof c.wait!=='boolean')fail(at,'waitは真偽値です');
       if(c.op==='scene.cast'&&!castValid({mode:c.mode??'stage',cast:c.cast},data))fail(at,'人物演出の配置・参照不正');
       if(c.op==='scene.background')reference(data.assets.images,c.asset,at);
       if(c.op==='audio.bgm')reference(data.assets.audio,c.asset,at);
@@ -155,3 +158,4 @@ export function validateContent(data){
   errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression),...validateConditionalFieldEvents(data,expression));
   return errors;
 }
+

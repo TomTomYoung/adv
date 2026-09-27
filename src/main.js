@@ -1,3 +1,4 @@
+import {PresentationClock} from './application/presentation-clock.js';
 import {restoreGame} from './application/restore.js';
 import {loadContent} from './core/loader.js';
 import {GameEngine} from './core/engine.js';
@@ -11,7 +12,8 @@ import {GameAudio} from './application/audio.js';
 import {applyTheme,THEME_DEFAULT} from './view/theme.js';
 const root=document.querySelector('#app'),dialog=document.querySelector('#system-dialog'),statusElement=document.querySelector('#system-status');
 const systemControls=new SystemControls(dialog,()=>view?.inputScope(),()=>settings.keyBindings.bindings);
-dialog.addEventListener('close',()=>view?.resumeExploration());
+dialog.addEventListener('close',()=>{view?.resumeExploration();syncPresentationClock();});
+document.addEventListener('visibilitychange',()=>syncPresentationClock());
 const PREFIX='lantern-archive:v1:';
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const btn=(text,fn)=>{const b=make('button',text);b.type='button';b.addEventListener('click',fn);return b;};
@@ -21,7 +23,7 @@ function status(text){statusElement.textContent=text;clearTimeout(statusTimer);s
 function storageRead(key){try{return localStorage.getItem(PREFIX+key);}catch{status('このブラウザでは自動保存を使えません。「記録」からファイルへ書き出してください。');return null;}}
 function storageWrite(key,value){try{localStorage.setItem(PREFIX+key,value);return true;}catch{status('保存できませんでした。保存領域を確認するか、記録ファイルを書き出してください。');return false;}}
 function download(name,text){const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));const a=make('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-function modal(title,parent=null){systemControls.open(title,parent);syncSystemPlacement();}
+function modal(title,parent=null){systemControls.open(title,parent);syncSystemPlacement();syncPresentationClock();}
 function syncSystemPlacement(){
   const stage=root.querySelector('.scene-stage');dialog.classList.toggle('scene-system-dialog',Boolean(stage));statusElement.classList.toggle('scene-system-status',Boolean(stage));
   if(!stage)return;
@@ -37,7 +39,9 @@ function toggleSound(){
   storageWrite('settings',JSON.stringify(settings));view.updateSound(sound.label());
   if(settings.sound)status('探索・戦闘BGMを再生します。音量は「記録」で調整できます。');
 }
-function render(){lastModel=projectGame(engine);lastModel.feedback.startedAt=performance.now();view.render(lastModel);syncSystemPlacement();syncAudio();}
+const presentationClock=new PresentationClock(intent=>dispatch(intent));
+function syncPresentationClock(){presentationClock.sync(lastModel?.presentationWait,dialog.open||document.hidden);}
+function render(){lastModel=projectGame(engine);lastModel.feedback.startedAt=performance.now();view.render(lastModel);syncSystemPlacement();syncAudio();syncPresentationClock();}
 function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)storageWrite('auto',engine.save());if(changed||engine.feedback.events.length||engine.state.notice)render();return changed;}catch(error){status(`操作を完了できませんでした：${error.message}`);return false;}}
 function restore(text){const result=restoreGame(data,text);engine=result.engine;storageWrite('auto',engine.save());dialog.close();render();status(result.message);}
 function menu(){
@@ -79,3 +83,4 @@ try{
   document.addEventListener('keydown',event=>{if(!systemControls.handleKey(event))handleGameKey(event,{view,model:lastModel,dispatch,bindings:settings.keyBindings.bindings});});
   addEventListener('resize',syncSystemPlacement);addEventListener('scroll',syncSystemPlacement,{passive:true});
 }catch(error){root.replaceChildren();const message=make('div',`起動できませんでした。\n${error.message}\n\nHTTPサーバーまたはGitHub Pagesで開き、data/以下のファイルが揃っているか確認してください。`);message.className='fatal';message.setAttribute('role','alert');root.append(message);}
+

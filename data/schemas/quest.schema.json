@@ -704,6 +704,44 @@
             "op": {
               "const": "scene.cast"
             },
+            "transition": {
+              "type": "object",
+              "properties": {
+                "enter": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "exit": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "move": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "change": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "easing": {
+                  "enum": [
+                    "linear",
+                    "ease-in",
+                    "ease-out",
+                    "ease-in-out"
+                  ]
+                },
+                "wait": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
             "mode": {
               "enum": [
                 "stage",
@@ -748,6 +786,16 @@
                       "flip": {
                         "type": "boolean"
                       },
+                      "opacity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "angle": {
+                        "type": "number",
+                        "minimum": -360,
+                        "maximum": 360
+                      },
                       "layer": {
                         "type": "integer",
                         "minimum": 0,
@@ -780,10 +828,66 @@
           "properties": {
             "op": {
               "const": "scene.cast.clear"
+            },
+            "transition": {
+              "type": "object",
+              "properties": {
+                "enter": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "exit": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "move": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "change": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                },
+                "easing": {
+                  "enum": [
+                    "linear",
+                    "ease-in",
+                    "ease-out",
+                    "ease-in-out"
+                  ]
+                },
+                "wait": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
             }
           },
           "required": [
             "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "wait"
+            },
+            "duration": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "op",
+            "duration"
           ],
           "additionalProperties": false
         },
@@ -1996,6 +2100,9 @@
             "op": {
               "const": "effect.play"
             },
+            "wait": {
+              "type": "boolean"
+            },
             "effect": {
               "type": "string",
               "minLength": 1
@@ -2792,6 +2899,16 @@
                         },
                         "flip": {
                           "type": "boolean"
+                        },
+                        "opacity": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "angle": {
+                          "type": "number",
+                          "minimum": -360,
+                          "maximum": 360
                         },
                         "layer": {
                           "type": "integer",

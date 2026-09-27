@@ -1,6 +1,5 @@
 import {mapSection} from './minimap.js';
 import {GameView} from './view.js';
-import {appendSceneCast} from './scene-cast.js';
 import {messagePages,pageAtOffset} from './message-pages.js';
 import {captureFocus} from './focus.js';
 const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
@@ -55,6 +54,7 @@ export class SceneView extends GameView{
       n.paging.querySelector('.continue')?.remove();if(!this.canChoose()){const next=button('次のページ',()=>this.advanceText(),'continue');next.dataset.focus='message:next';n.paging.append(next);}return;
     }
     n.actions.replaceChildren();
+    if(n.dialog.type==='presentation'){n.paging.hidden=true;return;}
     if(this.canChoose()&&n.dialog.type==='choice'){
       const choices=make('div','choices');choices.setAttribute('aria-label','選択肢');
       for(const o of n.dialog.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice');b.disabled=!o.enabled;b.dataset.focus=`choice:${o.id}`;b.append(make('span','',o.text));if(o.requirement)b.append(make('small','',o.requirement));choices.append(b);}n.actions.append(choices);
@@ -110,7 +110,7 @@ export class SceneView extends GameView{
       }
     }
     if(!this.messageNodes){this.messageKey=null;this.page=0;this.pages=[''];}
-    appendSceneCast(world,model.dialog?.scene??(model.town?{mode:'stage',cast:model.town.cast.map(c=>({...c,display:{x:c.x,...c.display}}))}:null));
+    this.castRenderer.render(world,model.dialog?.scene??(model.town?{mode:'stage',cast:model.town.cast.map(c=>({...c,display:{x:c.x,...c.display}}))}:null),model.castCue,this.ui.effectsMode?.()??'full',model.feedback?.session);
     this.compactParty(hud,model);
     if(model.dungeon&&!model.battle){const map=make('div','scene-minimap');this.mapPanel(map,model);hud.append(map);}
     if(model.notice&&model.notice!==model.dialog?.text){const notice=make('div','scene-notice',model.notice);notice.setAttribute('role','status');hud.append(notice);}
@@ -148,3 +148,4 @@ export class SceneView extends GameView{
     parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
   }
 }
+

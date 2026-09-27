@@ -3,7 +3,7 @@ import {xpThreshold} from '../core/progression.js';
 import {abilityCategory,personalItems} from './character-profile.js';
 import {rosterOrder,partyOrderPlan} from '../core/party-order.js';
 import {projectInventory} from './inventory-projection.js';
-import {projectCast} from './cast-projection.js';
+import {projectCast,projectCastDefinition} from './cast-projection.js';
 import {playerCommands,commandDialog} from '../core/player-commands.js';
 import {projectWorld} from './world-projection.js';
 import {dungeonEntryReason} from '../core/quest-navigation.js';
@@ -31,6 +31,7 @@ export function projectGame(engine){
 
   const quests=Object.values(d.quests).map(q=>({id:q.id,...projectQuestNavigation(d,s,q),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
+  if(s.waiting?.type==='presentation')dialog={...clone(s.presentation.message??{text:'',speaker:''}),type:'presentation'};
   if(['text','battle_result'].includes(s.waiting?.type))dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker,...(s.waiting.speakerId?{speakerId:s.waiting.speakerId}:{})};
   if(s.waiting?.type==='choice'){
     const c=commandsAt(d,s.vm.at(-1))[s.waiting.index];dialog={type:'choice',text:s.waiting.text??'どうする？',speaker:s.waiting.speaker??'',...(s.waiting.speakerId?{speakerId:s.waiting.speakerId}:{}),options:c.options.filter(o=>o.visibleWhen===undefined||engine.value(o.visibleWhen)).map(o=>({id:o.id,text:o.text,requirement:o.requirement??'',enabled:(o.condition===undefined||Boolean(engine.value(o.condition)))&&(!o.storyAction||storyCanAct(engine,o.storyAction.quest,o.storyAction.action))}))};
@@ -60,6 +61,8 @@ export function projectGame(engine){
   const atmosphere=map?[{color:shade?.color??'#000000',opacity:shade?.opacity??0,shade:true},{color:'#000000',opacity:.65*(1-(terrain.lighting?.current??8)/8),shade:false,lighting:true}]:[];
   atmosphere.push(...Object.values(clone(s.presentation.layers??{})));
   return {
+    presentationWait:s.waiting?.type==='presentation'?{...clone(s.waiting),session:engine.feedback.session}:null,
+    castCue:s.presentation.castCue&&s.presentation.castCue.id!==engine.restoredCastCueId?{...clone(s.presentation.castCue),from:projectCastDefinition(d,s.presentation.castCue.from),session:engine.feedback.session}:null,
     commands:playerCommands(engine),...projectWorld(engine,dialog),feedback,effects:clone(d.effects??{}),effectAssets:clone(d.assets.images),atmosphere,
     title:d.game.title,subtitle:d.game.subtitle,mode:s.mode,steps:s.steps,gold:s.gold,completed:Object.values(s.quests).filter(q=>q.stage==='completed').length,total:quests.length,light,lightMax,lightLabel:fire?'携帯松明':'灯油',
     party,roster,jobs:jobCatalog(engine),statNames:clone(d.jobProfile?.statNames??{}),tavern:{name:d.game.tavern?.name??'帰り火亭',description:d.game.tavern?.description??'',maxParty:d.system.maxParty,editable},quests,regions:clone(d.regions),dungeons:d.dungeons?Object.values(d.dungeons).sort((a,b)=>a.region-b.region||Object.keys(a.systems).length-Object.keys(b.systems).length).map(v=>({id:v.id,canEnter:canEnter(v.id),art:projectArt(d,v.art?.wall),name:v.name,description:v.description,preview:dungeonPreview(d,v),region:v.region,mapCount:v.maps.length,recommendedLevel:v.recommendedLevel,color:d.regions.find(r=>r.id===v.region)?.color??'#c6ae77'})):null,tracked:quests.find(q=>q.id===s.trackedQuest&&q.stage==='active')??null,services:clone(d.game.services),

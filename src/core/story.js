@@ -59,7 +59,7 @@ export function initStory(engine,id){
 export function enterStoryScene(engine,id,scene){
   const d=definition(engine.data,id),s=engine.state.stories?.[id];if(!s)throw Error('物語が初期化されていません');
   if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
-  assertScene(d,s,engine.state,id,scene);s.scene=scene;delete engine.state.presentation.cast;
+  assertScene(d,s,engine.state,id,scene);s.scene=scene;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;
 }
 export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false}={}){
   const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id];
@@ -221,3 +221,4 @@ export function journeyErrors(data,state){
   for(const who of ['party',...a.journey.companions])if(s.values[q.story.entities[who].holder]!=='transit')return ['移動中の人物の所在が不正です'];
   return [];
 }
+
