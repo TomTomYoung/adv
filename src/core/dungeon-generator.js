@@ -1,3 +1,5 @@
+import {featureAlgorithms, generateFeatureMask, generateTerrainTopology, terrainAlgorithms} from './dungeon-terrain.js';
+
 const DIRECTIONS = [
   [1, 0],
   [-1, 0],
@@ -94,6 +96,10 @@ export function normalizeDungeonLayout(layout = {}) {
   const extraLoops = rangeValue(layout.extraLoops, { min: 0, max: 1 });
   validateRange('extraLoops', extraLoops, 0, 64);
 
+  const terrainAlgorithm = layout.terrain?.algorithm ?? 'classic';
+  if (!terrainAlgorithms.includes(terrainAlgorithm)) throw new Error(`unsupported terrain algorithm: ${terrainAlgorithm}`);
+  const terrain = {algorithm: terrainAlgorithm, options: clone(layout.terrain?.options ?? {})};
+
   const bulges = {
     count: rangeValue(layout.bulges?.count, mode === 'bulges' ? { min: 3, max: 5 } : { min: 0, max: 0 }),
     positions: Array.isArray(layout.bulges?.positions) && layout.bulges.positions.length
@@ -104,9 +110,14 @@ export function normalizeDungeonLayout(layout = {}) {
       : [{ id: 'side_alcove', weight: 1 }],
     addedArea: rangeValue(layout.bulges?.addedArea, { min: 1, max: 4 }),
     minSpacing: layout.bulges?.minSpacing ?? 3,
+    featureAlgorithm: layout.bulges?.featureAlgorithm ?? 'primitive',
+    shapeOptions: clone(layout.bulges?.shapeOptions ?? {}),
+    promoteToRoomArea: layout.bulges?.promoteToRoomArea ?? 12,
   };
   validateRange('bulges.count', bulges.count, 0, 64);
-  validateRange('bulges.addedArea', bulges.addedArea, 1, 6);
+  validateRange('bulges.addedArea', bulges.addedArea, 1, 225);
+  if (!featureAlgorithms.includes(bulges.featureAlgorithm)) throw new Error(`unsupported bulge feature algorithm: ${bulges.featureAlgorithm}`);
+  if (!Number.isInteger(bulges.promoteToRoomArea) || bulges.promoteToRoomArea < 4 || bulges.promoteToRoomArea > 225) throw new Error('bulges.promoteToRoomArea must be an integer in 4..225');
   if (!Number.isInteger(bulges.minSpacing) || bulges.minSpacing < 0 || bulges.minSpacing > 20) {
     throw new Error('bulges.minSpacing must be an integer in 0..20');
   }
@@ -126,7 +137,10 @@ export function normalizeDungeonLayout(layout = {}) {
     wallThickness: layout.rooms?.wallThickness ?? 1,
     entrances: rangeValue(layout.rooms?.entrances, { min: 1, max: 2 }),
     directRoomLinks: Boolean(layout.rooms?.directRoomLinks),
+    featureAlgorithm: layout.rooms?.featureAlgorithm ?? 'primitive',
+    shapeOptions: clone(layout.rooms?.shapeOptions ?? {}),
   };
+  if (!featureAlgorithms.includes(rooms.featureAlgorithm)) throw new Error(`unsupported room feature algorithm: ${rooms.featureAlgorithm}`);
   validateRange('rooms.count', rooms.count, 0, 32);
   validateRange('rooms.width', rooms.width, 3, 15);
   validateRange('rooms.height', rooms.height, 3, 15);
@@ -153,6 +167,7 @@ export function normalizeDungeonLayout(layout = {}) {
     height,
     corridorWidth,
     extraLoops,
+    terrain,
     bulges,
     rooms,
   };
@@ -275,10 +290,11 @@ function bulgeSeedOptions(candidate, anchor) {
   return options;
 }
 
-function growBulge(candidate, anchor, area, rng) {
+function growBulge(candidate, anchor, area, rng, bulgeOptions) {
   const seeds = bulgeSeedOptions(candidate, anchor);
   if (!seeds.length) return null;
   const first = randomItem(rng, seeds);
+  const promoteRequested = area >= bulgeOptions.promoteToRoomArea;
   const chosen = [first];
   const chosenKeys = new Set([keyOf(first.x, first.y)]);
 
@@ -289,19 +305,22 @@ function growBulge(candidate, anchor, area, rng) {
       for (const [dx, dy] of DIRECTIONS) {
         const x = cell.x + dx;
         const y = cell.y + dy;
-        const key = keyOf(x, y);
-        if (chosenKeys.has(key) || seen.has(key)) continue;
-        seen.add(key);
+        const cellKey = keyOf(x, y);
+        if (chosenKeys.has(cellKey) || seen.has(cellKey)) continue;
+        seen.add(cellKey);
         if (x <= 0 || y <= 0 || x >= candidate.width - 1 || y >= candidate.height - 1) continue;
-        if (candidate.grid[y][x] !== '#') continue;
-        let foreignFloor = false;
-        for (const [adx, ady] of DIRECTIONS) {
-          const nx = x + adx;
-          const ny = y + ady;
-          if ((nx === anchor.x && ny === anchor.y) || chosenKeys.has(keyOf(nx, ny))) continue;
-          if (inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.') foreignFloor = true;
+        if (!promoteRequested) {
+          if (candidate.grid[y][x] !== '#') continue;
+          let foreignFloor = false;
+          for (const [adx, ady] of DIRECTIONS) {
+            const nx = x + adx;
+            const ny = y + ady;
+            if ((nx === anchor.x && ny === anchor.y) || chosenKeys.has(keyOf(nx, ny))) continue;
+            if (inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.') foreignFloor = true;
+          }
+          if (foreignFloor) continue;
         }
-        if (!foreignFloor) frontier.push({ x, y });
+        frontier.push({ x, y });
       }
     }
     if (!frontier.length) break;
@@ -311,10 +330,56 @@ function growBulge(candidate, anchor, area, rng) {
   }
 
   if (!chosen.length) return null;
-  for (const cell of chosen) carve(candidate, cell.x, cell.y, 'b');
-  return chosen;
-}
+  const minX = Math.max(1, Math.min(...chosen.map(cell => cell.x)) - 2);
+  const minY = Math.max(1, Math.min(...chosen.map(cell => cell.y)) - 2);
+  const maxX = Math.min(candidate.width - 2, Math.max(...chosen.map(cell => cell.x)) + 2);
+  const maxY = Math.min(candidate.height - 2, Math.max(...chosen.map(cell => cell.y)) + 2);
+  const localWidth = maxX - minX + 1;
+  const localHeight = maxY - minY + 1;
+  const baseMask = Array.from({ length: localHeight }, () => Array(localWidth).fill(false));
+  for (const cell of chosen) baseMask[cell.y - minY][cell.x - minX] = true;
+  const preferred = { x: first.x - minX, y: first.y - minY };
+  const enhanced = generateFeatureMask({
+    width: localWidth,
+    height: localHeight,
+    baseMask,
+    algorithm: bulgeOptions.featureAlgorithm,
+    options: bulgeOptions.shapeOptions,
+    preferred,
+  }, rng);
+  const enhancedCells = [];
+  for (let y = 0; y < enhanced.length; y += 1) {
+    for (let x = 0; x < enhanced[y].length; x += 1) {
+      if (!enhanced[y][x]) continue;
+      const gx = minX + x;
+      const gy = minY + y;
+      if (gx <= 0 || gy <= 0 || gx >= candidate.width - 1 || gy >= candidate.height - 1) continue;
+      if (!promoteRequested && candidate.grid[gy][gx] !== '#') continue;
+      enhancedCells.push({ x: gx, y: gy });
+    }
+  }
 
+  let finalCells = chosen;
+  if (promoteRequested) {
+    if (enhancedCells.length >= bulgeOptions.promoteToRoomArea) finalCells = enhancedCells;
+  } else {
+    const enhancedKeys = new Set(enhancedCells.map(cell => keyOf(cell.x, cell.y)));
+    const touchesForeign = enhancedCells.some(cell => DIRECTIONS.some(([dx, dy]) => {
+      const nx = cell.x + dx;
+      const ny = cell.y + dy;
+      if (nx === anchor.x && ny === anchor.y) return false;
+      return inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.' && !enhancedKeys.has(keyOf(nx, ny));
+    }));
+    if (!touchesForeign && enhancedCells.length >= Math.min(3, chosen.length)) finalCells = enhancedCells;
+  }
+
+  const promoted = finalCells.length >= bulgeOptions.promoteToRoomArea;
+  for (const cell of finalCells) {
+    candidate.grid[cell.y][cell.x] = '.';
+    candidate.region[cell.y][cell.x] = promoted ? 'r' : 'b';
+  }
+  return { cells: finalCells, promoted };
+}
 function addBulges(candidate, layout, seed, candidateIndex) {
   const rng = rngFor(seed, candidateIndex, 'bulges');
   const desired = randomInt(rng, layout.bulges.count.min, layout.bulges.count.max);
@@ -329,8 +394,9 @@ function addBulges(candidate, layout, seed, candidateIndex) {
     if (usedAnchors.some(other => manhattan(anchor, other) < layout.bulges.minSpacing)) continue;
     const area = randomInt(rng, layout.bulges.addedArea.min, layout.bulges.addedArea.max);
     const shape = weightedItem(rng, layout.bulges.shapes, { id: 'side_alcove', weight: 1 });
-    const cells = growBulge(candidate, anchor, area, rng);
-    if (!cells) continue;
+    const grown = growBulge(candidate, anchor, area, rng, layout.bulges);
+    if (!grown) continue;
+    const {cells, promoted} = grown;
     usedAnchors.push(anchor);
     candidate.bulges.push({
       id: `bulge_${candidate.bulges.length + 1}`,
@@ -338,7 +404,28 @@ function addBulges(candidate, layout, seed, candidateIndex) {
       position: anchor.kind,
       anchor: { x: anchor.x, y: anchor.y },
       cells,
+      promotedToRoom: promoted,
+      generator: layout.bulges.featureAlgorithm,
     });
+    if (promoted) {
+      const minX = Math.min(...cells.map(cell => cell.x));
+      const maxX = Math.max(...cells.map(cell => cell.x));
+      const minY = Math.min(...cells.map(cell => cell.y));
+      const maxY = Math.max(...cells.map(cell => cell.y));
+      const centerPoint = {x: Math.round((minX + maxX) / 2), y: Math.round((minY + maxY) / 2)};
+      const center = nearestRoomCell({cells}, centerPoint);
+      candidate.rooms.push({
+        id: `room_${candidate.rooms.length + 1}`,
+        shape: 'promoted_bulge',
+        source: 'bulge',
+        generator: layout.bulges.featureAlgorithm,
+        origin: {x: minX, y: minY},
+        width: maxX - minX + 1,
+        height: maxY - minY + 1,
+        center: {...center},
+        cells,
+      });
+    }
   }
 
   if (candidate.bulges.length < layout.bulges.count.min) {
@@ -513,6 +600,14 @@ function placeRooms(candidate, layout, seed, candidateIndex) {
     mask = rotateMask(mask, turns);
     width = mask[0].length;
     height = mask.length;
+    mask = generateFeatureMask({
+      width,
+      height,
+      baseMask: mask,
+      algorithm: layout.rooms.featureAlgorithm,
+      options: layout.rooms.shapeOptions,
+      preferred: {x: Math.floor(width / 2), y: Math.floor(height / 2)},
+    }, rng);
     const localCells = maskCells(mask);
     if (localCells.length < layout.rooms.minArea) continue;
     if (width + 2 >= candidate.width || height + 2 >= candidate.height) continue;
@@ -522,12 +617,13 @@ function placeRooms(candidate, layout, seed, candidateIndex) {
     };
     if (!roomFits(candidate, localCells, origin, Math.max(1, layout.rooms.wallThickness))) continue;
     const cells = localCells.map(cell => ({ x: origin.x + cell.x, y: origin.y + cell.y }));
-    for (const cell of cells) carve(candidate, cell.x, cell.y, 'r');
+    for (const cell of cells) { carve(candidate, cell.x, cell.y, 'r'); candidate.region[cell.y][cell.x] = 'r'; }
     const centerPoint = { x: origin.x + Math.floor(width / 2), y: origin.y + Math.floor(height / 2) };
     const center = nearestRoomCell({ cells }, centerPoint);
     candidate.rooms.push({
       id: `room_${candidate.rooms.length + 1}`,
       shape: shape.id,
+      generator: layout.rooms.featureAlgorithm,
       rotation,
       origin,
       width,
@@ -609,7 +705,7 @@ function countFloors(candidate) {
   return count;
 }
 
-export function validateGeneratedCandidate(candidate, expectedMode = candidate.mode) {
+export function validateGeneratedCandidate(candidate, expectedMode = candidate.mode, {strictMode = true} = {}) {
   const errors = [];
   const start = firstFloor(candidate);
   if (!start) return { ok: false, errors: ['candidate has no walkable cell'], reachable: 0, floorCount: 0 };
@@ -624,7 +720,7 @@ export function validateGeneratedCandidate(candidate, expectedMode = candidate.m
     if (mapCell(candidate, 0, y) === '.' || mapCell(candidate, candidate.width - 1, y) === '.') errors.push('outer boundary must remain wall');
   }
 
-  if (expectedMode === 'corridors') {
+  if (strictMode && expectedMode === 'corridors') {
     if (candidate.rooms.length) errors.push('corridors mode contains rooms');
     if (candidate.bulges.length) errors.push('corridors mode contains bulges');
     for (let y = 0; y < candidate.height - 1; y += 1) {
@@ -634,8 +730,8 @@ export function validateGeneratedCandidate(candidate, expectedMode = candidate.m
       }
     }
   }
-  if (expectedMode === 'bulges' && !candidate.bulges.length) errors.push('bulges mode contains no bulge');
-  if (expectedMode === 'rooms' && !candidate.rooms.length) errors.push('rooms mode contains no room');
+  if (strictMode && expectedMode === 'bulges' && !candidate.bulges.length) errors.push('bulges mode contains no bulge');
+  if (strictMode && expectedMode === 'rooms' && !candidate.rooms.length) errors.push('rooms mode contains no room');
 
   return {
     ok: errors.length === 0,
@@ -651,7 +747,8 @@ function finalizeCandidate(candidate, layout, seed, candidateIndex) {
   const endpointA = farthestFloor(candidate, first);
   const endpointB = farthestFloor(candidate, endpointA);
   const output = {
-    generatorVersion: 'adv-grid/1-prototype',
+    generatorVersion: 'adv-grid/2-prototype',
+    terrainAlgorithm: layout.terrain.algorithm,
     seed,
     candidateIndex,
     mode: layout.mode,
@@ -665,7 +762,7 @@ function finalizeCandidate(candidate, layout, seed, candidateIndex) {
     bulges: candidate.bulges,
     warnings: candidate.warnings,
   };
-  const validation = validateGeneratedCandidate(output, layout.mode);
+  const validation = validateGeneratedCandidate(output, layout.mode, {strictMode: layout.terrain.algorithm === 'classic'});
   output.validation = validation;
   output.metrics = {
     floorCount: validation.floorCount,
@@ -681,7 +778,26 @@ export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout 
   const normalized = normalizeDungeonLayout(layout);
   if (!Number.isInteger(candidateIndex) || candidateIndex < 0) throw new Error('candidateIndex must be a non-negative integer');
   const candidate = blankCandidate(normalized);
-  if (normalized.mode === 'rooms') {
+  const topology = generateTerrainTopology({
+    width: normalized.width,
+    height: normalized.height,
+    algorithm: normalized.terrain.algorithm,
+    options: normalized.terrain.options,
+  }, rngFor(seed, candidateIndex, 'terrain'));
+  if (topology) {
+    for (let y = 0; y < topology.mask.length; y += 1) {
+      for (let x = 0; x < topology.mask[y].length; x += 1) if (topology.mask[y][x]) carve(candidate, x, y, 'c');
+    }
+    for (const source of topology.rooms ?? []) {
+      const cells = source.cells.map(cell => ({...cell}));
+      for (const cell of cells) candidate.region[cell.y][cell.x] = 'r';
+      candidate.rooms.push({...source, id: `room_${candidate.rooms.length + 1}`, cells});
+    }
+    if (normalized.mode === 'bulges') addBulges(candidate, normalized, seed, candidateIndex);
+    if (normalized.mode === 'rooms' && normalized.rooms.count.max > 0 && normalized.terrain.algorithm !== 'bsp') {
+      placeRooms(candidate, normalized, seed, candidateIndex);
+    }
+  } else if (normalized.mode === 'rooms') {
     placeRooms(candidate, normalized, seed, candidateIndex);
   } else {
     generateCorridors(candidate, normalized, seed, candidateIndex);
@@ -691,9 +807,11 @@ export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout 
 }
 
 export const dungeonGeneratorCapabilities = Object.freeze({
-  generatorVersion: 'adv-grid/1-prototype',
+  generatorVersion: 'adv-grid/2-prototype',
   modes: ['corridors', 'bulges', 'rooms'],
   corridorWidths: [1],
+  terrainAlgorithms: [...terrainAlgorithms],
+  featureAlgorithms: [...featureAlgorithms],
   roomShapes: [...ROOM_SHAPES],
   implemented: [
     'deterministic seed and candidate index',
@@ -701,6 +819,9 @@ export const dungeonGeneratorCapabilities = Object.freeze({
     'local corridor bulges',
     'room placement and corridor connection',
     'rectangle/square/L/T/cross/chamfered/roundish/custom-mask room masks',
+    'optional asymmetric mask mutation, random boundary dropout, repeated boolean composition, and noise blending',
+    'optional fBm/domain-warp noise, cellular automata, random walk, BSP, and Voronoi terrain generators',
+    'bulges and rooms share feature shaping; large bulges can be promoted to room regions',
     'entry and farthest goal selection',
     'connectivity and corridor 2x2 validation',
   ],
