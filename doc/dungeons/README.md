@@ -24,6 +24,8 @@
 
 [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)：共通部品・正本・責務・拡張方法。
 
+[DUNGEON_GENERATION.md](DUNGEON_GENERATION.md)：ランダム生成の設計。階層別の通路・こぶ・小部屋、セル・エッジ・物体・素材・仕掛け・魔物、競合排除、候補比較と原稿出力。生成機能は未実装。
+
 [DUNGEON_RESTRICTIONS.md](DUNGEON_RESTRICTIONS.md)：トラップ・イベントによる帰還印封印と帰還禁止、発生元別の解除・保存。
 
 [KAGARIBI_DUNGEON.md](KAGARIBI_DUNGEON.md)：火・種火、通常魔物とくらがり、q001イベント戦闘。

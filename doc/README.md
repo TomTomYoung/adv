@@ -4,6 +4,8 @@
 
 原稿を編集する場合は[統合マップ編集](../config/map.html)と[編集仕様・正本の案内](authoring/README.md)へ進みます。ゲーム用JSONは原稿から生成します。
 
+2026-10-01: [ダンジョンのランダム生成仕様](dungeons/DUNGEON_GENERATION.md)を追加しました。階層別設定、組合せの不成立を排除する検証、候補比較と原稿出力の設計です。生成機能は未実装です。
+
 ## 分野別の入口
 
 [dungeons/README.md](dungeons/README.md)：セル・共有エッジ、地形と通行、照明、2D接続、水没、各ダンジョンの仕掛け。[ダンジョンカタログ](dungeons/DUNGEON_CATALOG.md)から13迷宮の専用ページへ進めます。
