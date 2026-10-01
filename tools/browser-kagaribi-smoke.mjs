@@ -33,6 +33,11 @@ try{
   }
   await page.evaluate(()=>{arrange('kagaribi_crossroads',8,1,'north');g.state.flags.kagaribi={cargoGate:true,postStaffed:true};g.dispatch({type:'location.enter',id:'kagaribi_post'});show();});
   await page.getByRole('button',{name:/燃料の補給窓口/}).click();await page.evaluate(()=>settle());
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  for(let n=0;!await page.evaluate(()=>view.canChoose());n++){
+   assert.ok(n<20,'purchase text pagination must terminate');
+   await page.getByRole('button',{name:/^次のページ/}).click();
+  }
   const before=await page.evaluate(()=>({gold:g.state.gold,torch:g.state.inventory.torch,fuel:g.state.dungeons.active.systems.fires.portable.fuel,run:g.state.dungeons.active.run}));
   await page.screenshot({path:path.join(output,`post-choice-${width}.png`)});
   // The accessible name also includes the displayed purchase requirement.
