@@ -70,7 +70,7 @@ export function monsterCatalog(data) {
     '旧内容版のセーブは移行しません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
     '## 編集元','',
     '[config/entities.json](../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。','',
-    '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',
+    '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',
     '[build-content.mjs](../tools/build-content.mjs)：地域の迷宮獣・守護者。[build-scenarios.mjs](../tools/build-scenarios.mjs)と `authoring/scenarios-*.mjs`：依頼ごとの追加敵。通常遭遇の原稿は[編集先の対応](CONFIG_EDITOR_SOURCES.md)、画像IDと実ファイルの対応は[data/assets.json](../data/assets.json)を確認してください。','',
     ];
   for(const [title,list] of groups){

@@ -6,6 +6,7 @@ export function validateConnections(data,d,s){
   const errors=[],ids=new Set(),endpoints=new Set();if(!Array.isArray(s.links)||!s.links.length)return ['接続が必要です'];
   for(const l of s.links){
     if(!identifier(l.id)||ids.has(l.id)||!l.name||!['door','watertight_door','stairs'].includes(l.kind))errors.push('接続ID・種類が不正です');ids.add(l.id);
+    if(l.requirement!==undefined&&(typeof l.requirement!=='string'||!l.requirement.trim()||l.condition===undefined))errors.push('条件付き接続の説明が不正です');
     if(l.a?.map===l.b?.map)errors.push('別マップ同士を接続してください');
     for(const p of [l.a,l.b]){
       if(!validPoint(data,d,p)||data.maps[p.map]?.voxels){errors.push('2D接続口の足場が不正です');continue;}

@@ -21,7 +21,7 @@ export function additionalDungeonSystems(authoring=false){
   const market=system('market_pacts',{closeAt:int(1,20),maxAlarm:int(1,100),escortSteps:int(1,1000),escortRate:{type:'number',exclusiveMinimum:0,maximum:1},escortEnemyScale:{type:'number',exclusiveMinimum:0,maximum:1},guardEncounter:str,offers:arr(obj({...named,kind:{enum:['toll','barter','buy','escort']},gold:int(0,1000000),cost:materials,output:materials,tiles:arr(patch),description:str}),1),guards:arr(obj({...named,alarm:int(1,100)}),1)});
   const power=system('power_grid',{capacity:int(1,100),repairsPerRun:int(1,100),guardEncounter:str,controls:arr(obj(named),1),devices:arr(obj({...named,kind:{enum:['door','guardian','elevator','repair']},circuit:str,power:int(1,100),salvage:materials,tiles:patches,destination},[...Object.keys(named),'kind','circuit','power','salvage']),1)});
   const endpoint=obj({...point,side:{enum:['north','east','south','west']},facing:{enum:['north','east','south','west']}},Object.keys(point));
-  const connections=system('map_connections',{links:arr(obj({id:str,name:str,kind:{enum:['door','watertight_door','stairs']},a:endpoint,b:endpoint}),1)});
+  const connections=system('map_connections',{links:arr(obj({id:str,name:str,kind:{enum:['door','watertight_door','stairs']},a:endpoint,b:endpoint,condition:{$ref:'#/$defs/value'},requirement:str},['id','name','kind','a','b']),1)});
   const compartments=system('compartment_water',{zones:arr(obj({map:str,control:str,initiallyFlooded:bool}),1),controls:arr(obj(named),1)});
   return [plant,warp,shift,vector,suppression,library,air,market,power,connections,compartments];
 }

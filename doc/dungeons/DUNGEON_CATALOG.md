@@ -138,7 +138,7 @@ Notionの [地理・場所](https://app.notion.com/p/3dac3c1966b3814999bedf4b234
 
 ## 配布データの構成
 
-篝火の迷宮 (kagaribi)：3マップ。部品：fires=fire_network / connections=map_connections。現地調査：灯を受け渡す準備 → q001。
+篝火の迷宮 (kagaribi)：9マップ。部品：fires=fire_network / connections=map_connections。現地調査：灯を受け渡す準備 → q001。
 
 巨獣上の移動集落 (moving_village)：1マップ。部品：terrain=terrain_shift。現地調査：暮らしを揺らす足場 → q194。
 

@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [クエストカタログへ戻る](../QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.24.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:c4354a9d88896a8c343371ff855309e8f9cbf3a46b03b860b89db3c9bfe2f760 -->
+<!-- quest-page-source:312f3c438ef56fb531091b7ba0147a794bdaeab14c00d5dc5442b63083f8cc49 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -41,7 +41,7 @@ flowchart TD
   post["灯番詰所 / q001-S-post / q001-E-informed / q001-E-compromise"]
   entrance["B1入口 (1, 1) / kagaribi_f1"]
   route["B1巡灯路・支道 / q001-S-entry〜gate"]
-  deeper["B2 (1, 1) / kagaribi_f2 / q001対象外"]
+  deeper["B2 (1, 1) / kagaribi_oilstore / q001対象外"]
   square <--> guild
   guild <--> post
   square <-->|迷宮へ入る・入口階段で戻る| entrance
@@ -51,7 +51,7 @@ flowchart TD
 
 受注は `hikarigaeri_guild` の依頼掲示板。受注中の依頼の「迷宮の入口へ向かう（篝火の迷宮）」は町のどの施設からでも使え、迷宮入口 `kagaribi_f1` (1, 1) へ入る。帰路は入口の `kagaribi.exit` を調べて広場へ戻り、組合、詰所の順に訪れる。詰所への実到着で自動的に `q001-S-post` に進む。
 
-B1 (13, 7) の `connections/floor_1_2` は `kagaribi_f2` (1, 1) に接続する。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../../../data/dungeons.json) を参照する。
+B1 (13, 7) の `connections/patrol_oilstore` は `kagaribi_oilstore` (1, 1) に接続する。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../../../data/dungeons.json) を参照する。
 
 ## 本編イベントの順序と実移動
 
@@ -831,15 +831,15 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
   "encounterPool": [
     {
       "encounter": "kagaribi_roaming",
-      "weight": 40
+      "weight": 50
     },
     {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 30
+      "encounter": "kagaribi_wax",
+      "weight": 35
     },
     {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 30
+      "encounter": "kagaribi_pests",
+      "weight": 15
     }
   ],
   "dungeon": "kagaribi",
@@ -1162,7 +1162,10 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
     "parent": "hikarigaeri_guild",
     "description": "灯番組合の奥にある詰所。リネが巡灯の記録と帰還者の名前を確かめる。",
     "background": "location_guild",
-    "links": []
+    "links": [],
+    "services": [
+      "kagaribi_memorial"
+    ]
   }
 }
 ```
@@ -1182,38 +1185,273 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
     "use": "map_connections",
     "links": [
       {
-        "id": "floor_1_2",
-        "name": "未探索区画への階段",
-        "kind": "stairs",
+        "id": "patrol_oilstore",
+        "name": "油蔵への搬送通路",
+        "kind": "door",
         "a": {
           "map": "kagaribi_f1",
           "x": 13,
           "y": 7,
-          "facing": "west"
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_oilstore",
+          "x": 1,
+          "y": 1,
+          "side": "west"
+        },
+        "condition": {
+          "op": "ne",
+          "left": {
+            "ref": "quests.q001.stage"
+          },
+          "right": "active"
+        },
+        "requirement": "捜索と帰還報告を終えてから、油蔵への巡回を始めよう。"
+      },
+      {
+        "id": "oilstore_crossroads",
+        "name": "油樽の搬送路",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_oilstore",
+          "x": 15,
+          "y": 9,
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_crossroads",
+          "x": 1,
+          "y": 1,
+          "side": "west"
+        }
+      },
+      {
+        "id": "cargo_shortcut",
+        "name": "入口へ戻る搬送門",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_f1",
+          "x": 3,
+          "y": 7,
+          "side": "south"
+        },
+        "b": {
+          "map": "kagaribi_crossroads",
+          "x": 1,
+          "y": 9,
+          "side": "west"
+        },
+        "condition": {
+          "op": "and",
+          "args": [
+            {
+              "op": "ne",
+              "left": {
+                "ref": "quests.q001.stage"
+              },
+              "right": "active"
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "flags.kagaribi.cargoGate"
+              },
+              "right": true
+            }
+          ]
+        },
+        "requirement": "搬送門は閉じている。油蔵の荷車を直し、詰所側から掛け金を外せる。"
+      },
+      {
+        "id": "floor_1_2",
+        "name": "煤けた回廊への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_crossroads",
+          "x": 15,
+          "y": 7
         },
         "b": {
           "map": "kagaribi_f2",
           "x": 1,
-          "y": 1,
-          "facing": "east"
+          "y": 1
         }
       },
       {
-        "id": "floor_2_3",
-        "name": "未探索区画への階段",
-        "kind": "stairs",
+        "id": "soot_relay",
+        "name": "中継広間への巡回路",
+        "kind": "door",
         "a": {
           "map": "kagaribi_f2",
           "x": 13,
-          "y": 7,
-          "facing": "west"
+          "y": 1,
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_relay",
+          "x": 1,
+          "y": 1,
+          "side": "west"
+        }
+      },
+      {
+        "id": "soot_kilns",
+        "name": "炭焼き場への作業戸",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_f2",
+          "x": 5,
+          "y": 3,
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_kilns",
+          "x": 1,
+          "y": 1,
+          "side": "west"
+        }
+      },
+      {
+        "id": "kiln_escape",
+        "name": "炭焼き場の搬出口",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_kilns",
+          "x": 7,
+          "y": 1,
+          "side": "north"
+        },
+        "b": {
+          "map": "kagaribi_relay",
+          "x": 15,
+          "y": 1,
+          "side": "east"
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.kagaribi.kilnGate"
+          },
+          "right": true
+        },
+        "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+      },
+      {
+        "id": "relay_shortcut",
+        "name": "中継篝火の連絡門",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_f2",
+          "x": 3,
+          "y": 1,
+          "side": "north"
+        },
+        "b": {
+          "map": "kagaribi_relay",
+          "x": 1,
+          "y": 9,
+          "side": "west"
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.kagaribi.relayGate"
+          },
+          "right": true
+        },
+        "requirement": "広間側で中継篝火を灯し、連絡門の巻上げ機を動かそう。"
+      },
+      {
+        "id": "floor_2_3",
+        "name": "最後の巡回路への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_relay",
+          "x": 15,
+          "y": 9
+        },
+        "b": {
+          "map": "kagaribi_last_patrol",
+          "x": 1,
+          "y": 1
+        }
+      },
+      {
+        "id": "last_altar",
+        "name": "深火の祭壇への回廊",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_last_patrol",
+          "x": 15,
+          "y": 9,
+          "side": "east"
         },
         "b": {
           "map": "kagaribi_f3",
           "x": 1,
           "y": 1,
-          "facing": "east"
+          "side": "north"
         }
+      },
+      {
+        "id": "last_ossuary",
+        "name": "納骨堂への脇戸",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_last_patrol",
+          "x": 15,
+          "y": 1,
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_ossuary",
+          "x": 1,
+          "y": 1,
+          "side": "west"
+        }
+      },
+      {
+        "id": "ossuary_altar",
+        "name": "納骨堂奥の石扉",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_ossuary",
+          "x": 15,
+          "y": 9,
+          "side": "east"
+        },
+        "b": {
+          "map": "kagaribi_f3",
+          "x": 13,
+          "y": 5,
+          "side": "east"
+        }
+      },
+      {
+        "id": "altar_shortcut",
+        "name": "最後の巡回路への帰路",
+        "kind": "door",
+        "a": {
+          "map": "kagaribi_last_patrol",
+          "x": 1,
+          "y": 9,
+          "side": "south"
+        },
+        "b": {
+          "map": "kagaribi_f3",
+          "x": 1,
+          "y": 7,
+          "side": "west"
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.kagaribi.altarGate"
+          },
+          "right": true
+        },
+        "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
       }
     ]
   },

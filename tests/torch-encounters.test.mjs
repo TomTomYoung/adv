@@ -15,7 +15,7 @@ const step=g=>assert.ok(g.dispatch({type:'move',direction:'forward'}));
 test('ordinary and entrance flames exclude kuragari but allow normal monsters',()=>{
   for(const effect of ['ordinary','ward']){
     const g=make(effect);g.random=()=>0;processFieldEvents(g);assert.equal(g.state.battle,null);
-    step(g);assert.equal(g.state.battle.encounter,'kagaribi_roaming');assert.equal(g.state.battle.enemyScale??1,1);
+    step(g);assert.equal(g.state.battle.encounter,data.maps.kagaribi_f2.encounterPool[0].encounter);assert.equal(g.state.battle.enemyScale??1,1);
   }
 });
 test('darkness has a separate chance and a 100 percent kuragari pool, with exact threshold',()=>{

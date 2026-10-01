@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.24.0。配布中の敵は59定義、遭遇編成は82定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.25.0。配布中の敵は66定義、遭遇編成は91定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：13定義。
+[依頼に追加した敵](#依頼に追加した敵)：20定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -27,7 +27,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 [config/entities.json](../../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。
 
-[kagaribi-content.json](../../config/kagaribi-content.json)：くらがり。[dungeon-content.json](../../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。
+[kagaribi-content.json](../../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。
 
 [build-content.mjs](../../tools/build-content.mjs)：地域の迷宮獣・守護者。[build-scenarios.mjs](../../tools/build-scenarios.mjs)と `authoring/scenarios-*.mjs`：依頼ごとの追加敵。通常遭遇の原稿は[編集先の対応](../authoring/CONFIG_EDITOR_SOURCES.md)、画像IDと実ファイルの対応は[data/assets.json](../../data/assets.json)を確認してください。
 
@@ -38,7 +38,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="くらがり">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・炉守りの亡霊。
 
 通常点灯の守りが届かないときは7成功歩ごとに基本22％で歩行抽選し、現状の候補はくらがり100％です。普通の火で通常魔物まで消えることはなく、通常遭遇の完全抑止は深火の効果です。q001の帰路の指定地点の消灯は独立したイベント戦闘です。撃退・救助による強制終了と撃破を区別します。[火と遭遇仕様](../dungeons/KAGARIBI_DUNGEON.md)。
 
@@ -83,7 +83,7 @@ valley_roamers：境渡りの呪詠み×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の小魚">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -105,7 +105,7 @@ water_small：水路の小魚×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の牙魚">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -127,7 +127,7 @@ water_predator：水路の牙魚×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="大水喰い">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター・燭蝋スライム。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -149,7 +149,7 @@ water_giant：大水喰い×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="ソルトイーター">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・燭蝋スライム。
 
 塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](../dungeons/WATERWAYS_SALT_MINE.md)。
 
@@ -193,7 +193,7 @@ AIの選択順：
 遭遇と参照先：
 
 wild_waterwheel_beaver：水車ビーバー×1。逃走可。
-通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み30 / 篝火の迷宮・消えた灯の回廊 (kagaribi_f2)、重み30 / 篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み30 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
@@ -224,7 +224,7 @@ AIの選択順：
 遭遇と参照先：
 
 wild_sluice_crocodile：水門ワニ×1。逃走可。
-通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み30 / 篝火の迷宮・消えた灯の回廊 (kagaribi_f2)、重み30 / 篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み30 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
@@ -476,7 +476,7 @@ wild_pair_5：活字ヤマアラシ×1・書庫シミ×1。逃走可。
 <img src="../../assets/images/monsters/vault_mouse.webp" width="160" alt="金庫ネズミ">
 
 画像ID：monster_vault_mouse。実ファイル：[assets/images/monsters/vault_mouse.webp](../../assets/images/monsters/vault_mouse.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：煤ネズミ。
 
 発想：ネズミ＋金庫。参照：M013。地域分類：眠れる地下市場。
 
@@ -660,7 +660,7 @@ wild_pair_8：蓄電ヤドカリ×1・脱線ムカデ×1。逃走可。
 <img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="虹彩チョウ">
 
 画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：鉄喰い蛾。
+画像共有：鉄喰い蛾・灯蛾。
 
 発想：チョウ＋虹彩絞り。参照：M050。地域分類：星欠けの地下観測所。
 
@@ -826,7 +826,7 @@ story_122：谷の飛竜×1。逃走可。
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="腐肉鬼">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：解毒薬 1個 / 12.5％。
@@ -870,7 +870,7 @@ story_125：荊角獣×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="借証の泥人形">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・砦の守護獣・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -892,7 +892,7 @@ story_127：借証の泥人形×1。逃走可。
 <img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="鉄喰い蛾">
 
 画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：虹彩チョウ。
+画像共有：虹彩チョウ・灯蛾。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -914,7 +914,7 @@ story_128：鉄喰い蛾×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="砦の守護獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：鎖帷子 1個 / 3.125％。
@@ -936,7 +936,7 @@ story_129：砦の守護獣×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="苔冠の小魔">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -958,7 +958,7 @@ story_130：苔冠の小魔×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="詰所の擬態箱">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：鉄の剣 1個 / 6.25％。
@@ -980,7 +980,7 @@ story_132：詰所の擬態箱×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="石喰い獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・灰積みゴーレム。
 
 基礎能力：HP 85 / MP 8 / STR 22 / VIT 10 / AGI 12 / INT 20。報酬：19G / 29EXP。
 宝箱：発破薬 1個 / 6.25％。
@@ -1002,7 +1002,7 @@ story_166：石喰い獣×1。逃走可。
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="足跡の追跡者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・くらがり・炉守りの亡霊。
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1046,7 +1046,7 @@ story_175：鏡牙獣×1。逃走可。
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="戦場の骸骨獣">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・赤錆の番兵・鎖引き骸骨。
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：旅の槍 1個 / 3.125％。
@@ -1063,6 +1063,166 @@ AIの選択順：
 story_190：戦場の骸骨獣×1。逃走可。
 戦闘開始命令：1スクリプト。q190.scene.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+### 煤ネズミ (kagaribi_soot_rat)
+
+<img src="../../assets/images/monsters/vault_mouse.webp" width="160" alt="煤ネズミ">
+
+画像ID：monster_vault_mouse。実ファイル：[assets/images/monsters/vault_mouse.webp](../../assets/images/monsters/vault_mouse.webp)。
+画像共有：金庫ネズミ。
+
+基礎能力：HP 27 / MP 0 / STR 8 / VIT 3 / AGI 8 / INT 3。報酬：4G / 9EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_roaming：煤ネズミ×1。逃走可。
+通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み50 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み50。
+
+kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
+通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+
+### 燭蝋スライム (kagaribi_wax_slime)
+
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="燭蝋スライム">
+
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+
+基礎能力：HP 31 / MP 0 / STR 9 / VIT 4 / AGI 4 / INT 5。報酬：5G / 11EXP。
+宝箱：傷薬 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_wax：燭蝋スライム×1。逃走可。
+通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み35 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み35 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み35。
+
+kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
+通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+
+### 灯蛾 (kagaribi_ember_moth)
+
+<img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="灯蛾">
+
+画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
+画像共有：虹彩チョウ・鉄喰い蛾。
+
+基礎能力：HP 42 / MP 8 / STR 11 / VIT 5 / AGI 12 / INT 10。報酬：7G / 17EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度10、条件式 {"op":"gte","left":{"ref":"self.mp"},"right":4}：灯火の術 (fire)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_moths：灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み35 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み50。
+
+kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
+通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み15。
+
+### 赤錆の番兵 (kagaribi_ash_guard)
+
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="赤錆の番兵">
+
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・鎖引き骸骨。
+
+基礎能力：HP 57 / MP 0 / STR 13 / VIT 8 / AGI 5 / INT 5。報酬：10G / 21EXP。
+宝箱：野営糧食 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_guards：赤錆の番兵×1。逃走可。
+通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み35 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み35。
+
+kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
+通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み15。
+
+### 灰積みゴーレム (kagaribi_cinder_golem)
+
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="灰積みゴーレム">
+
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
+
+基礎能力：HP 70 / MP 0 / STR 14 / VIT 10 / AGI 3 / INT 5。報酬：12G / 25EXP。
+宝箱：傷薬 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_golem：灰積みゴーレム×1。逃走可。
+通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み35 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み50 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み35 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み35。
+
+kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
+通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+
+### 鎖引き骸骨 (kagaribi_chain_bone)
+
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="鎖引き骸骨">
+
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵。
+
+基礎能力：HP 68 / MP 0 / STR 15 / VIT 9 / AGI 7 / INT 7。報酬：12G / 26EXP。
+宝箱：補修用の縄 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_bones：鎖引き骸骨×1。逃走可。
+通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み50 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み50 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み50。
+
+kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
+通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+
+### 炉守りの亡霊 (kagaribi_kiln_warden)
+
+<img src="../../assets/images/monsters/wraith.webp" width="160" alt="炉守りの亡霊">
+
+画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+
+基礎能力：HP 95 / MP 8 / STR 16 / VIT 9 / AGI 8 / INT 14。報酬：20G / 48EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度10、条件式 {"op":"gte","left":{"ref":"self.mp"},"right":4}：灯火の術 (fire)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_kiln_guard：炉守りの亡霊×1。逃走可。
+戦闘開始命令：1スクリプト。kagaribi.kiln_hunt。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
 ## 地域の迷宮獣と守護者
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
@@ -1070,7 +1230,7 @@ story_190：戦場の骸骨獣×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の迷宮獣">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 基礎能力：HP 31 / MP 8 / STR 10 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1093,15 +1253,12 @@ guard_1：灯守の地下水道の迷宮獣×2。逃走可。
 boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q010.decision・q010.review・q010.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
-kagaribi_roaming：灯守の地下水道の迷宮獣×1。逃走可。
-通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み40 / 篝火の迷宮・消えた灯の回廊 (kagaribi_f2)、重み40 / 篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み40。
-
 ### 灯守の地下水道の守護者 (guard_1_elite)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の守護者">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 基礎能力：HP 74 / MP 20 / STR 13 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1124,7 +1281,7 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の迷宮獣">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣。
+画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨。
 
 基礎能力：HP 40 / MP 8 / STR 12 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1152,7 +1309,7 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の守護者">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣。
+画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨。
 
 基礎能力：HP 96 / MP 20 / STR 15 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1175,7 +1332,7 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の迷宮獣">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1203,7 +1360,7 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の守護者">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
 
 基礎能力：HP 118 / MP 20 / STR 17 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1226,7 +1383,7 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="鏡沈みの礼拝堂の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1254,7 +1411,7 @@ boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="鏡沈みの礼拝堂の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 139 / MP 20 / STR 19 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1277,7 +1434,7 @@ boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="灰時計の書庫の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 67 / MP 8 / STR 18 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1305,7 +1462,7 @@ boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="灰時計の書庫の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 161 / MP 20 / STR 21 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1328,7 +1485,7 @@ boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1�
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の迷宮獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 76 / MP 8 / STR 20 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1359,7 +1516,7 @@ market_enforcers：眠れる地下市場の迷宮獣×2。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の守護者">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 182 / MP 20 / STR 23 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1433,7 +1590,7 @@ boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1�
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の迷宮獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1464,7 +1621,7 @@ machine_sentry：鉄胎の機関廟の迷宮獣×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の守護者">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
 
 基礎能力：HP 226 / MP 20 / STR 27 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1487,7 +1644,7 @@ boss_8：鉄胎の機関廟の守護者×1・鉄胎の機関廟の迷宮獣×1�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="星欠けの地下観測所の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1515,7 +1672,7 @@ boss_9：星欠けの地下観測所の守護者×1・星欠けの地下観測�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="星欠けの地下観測所の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
 
 基礎能力：HP 247 / MP 20 / STR 29 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：野営糧食 1個 / 12.5％。

@@ -55,6 +55,7 @@ export async function buildDungeons(){
   await write('data/dungeons.json',definitions);
   game.version='1.9.0';game.dungeonVersion=1;
   game.migrations={};
+  for(const service of content.services??[]){const index=game.services.findIndex(s=>s.id===service.id);if(index<0)game.services.push(service);else game.services[index]=service;}
   game.files.databases.dungeons='data/dungeons.json';
   game.files.maps=[...new Set([...game.files.maps,...Object.keys({...content.maps,...extra.maps,...voxel.maps}).map(id=>`data/maps/${id}.json`)])];
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];
