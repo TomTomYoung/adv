@@ -1,0 +1,308 @@
+{
+  "recipeVersion": 1,
+  "generatorVersion": "adv-grid/1-proposed",
+  "seed": 20261001,
+  "dungeon": {
+    "id": "trial_lantern_ruins",
+    "name": "試作・灯の遺構",
+    "region": 1
+  },
+  "defaults": {
+    "layout": {
+      "mode": "corridors",
+      "width": 25,
+      "height": 21,
+      "corridorWidth": 1,
+      "mainPathSteps": {"min": 18, "max": 48},
+      "branches": {"min": 2, "max": 5},
+      "deadEnds": {"min": 2, "max": 5},
+      "extraLoops": {"min": 0, "max": 1},
+      "maxStraightSteps": 8,
+      "bulges": {
+        "count": {"min": 0, "max": 0},
+        "positions": ["along_corridor", "dead_end"],
+        "shapes": [{"id": "side_alcove", "weight": 1}],
+        "addedArea": {"min": 1, "max": 4},
+        "length": {"min": 1, "max": 3},
+        "protrusion": {"min": 1, "max": 2},
+        "sides": "one",
+        "minSpacing": 3
+      },
+      "rooms": {
+        "count": {"min": 0, "max": 0},
+        "shapes": [{"id": "rectangle", "weight": 1}],
+        "width": {"min": 3, "max": 7},
+        "height": {"min": 3, "max": 7},
+        "minArea": 9,
+        "minNeckWidth": 1,
+        "rotations": [0, 90, 180, 270],
+        "mirror": false,
+        "wallThickness": 1,
+        "entrances": {"min": 1, "max": 2},
+        "directRoomLinks": false,
+        "pillars": {"min": 0, "max": 0}
+      }
+    },
+    "cells": {
+      "baseFloor": "stone_floor",
+      "baseWall": "stone_wall",
+      "patches": []
+    },
+    "edges": {
+      "placements": []
+    },
+    "objects": [
+      {
+        "template": "chest_fixed",
+        "count": {"min": 1, "max": 2},
+        "areas": ["dead_end"],
+        "minDistanceFromEntry": 5,
+        "minSpacing": 4,
+        "blocking": false,
+        "rewards": {
+          "gold": {"min": 5, "max": 15},
+          "draws": 1,
+          "items": [{"item": "potion", "weight": 1, "quantity": 1}]
+        }
+      }
+    ],
+    "appearance": {
+      "floor": [{"material": "dungeon:kagaribi:floor", "weight": 1}],
+      "wall": [{"material": "dungeon:kagaribi:wall", "weight": 1}],
+      "edge": [{"material": "dungeon:kagaribi:wall", "weight": 1}],
+      "device": [{"material": "dungeon:kagaribi:device", "weight": 1}],
+      "localIllumination": 2
+    },
+    "mechanisms": [],
+    "encounters": {
+      "checkSteps": 7,
+      "rate": 0.12,
+      "pool": [
+        {"encounter": "kagaribi_roaming", "weight": 60},
+        {"encounter": "kagaribi_wax", "weight": 40}
+      ],
+      "fixed": [],
+      "mechanismPools": {}
+    }
+  },
+  "floors": [
+    {
+      "id": "patrol",
+      "number": 1,
+      "name": "巡回通路",
+      "maps": [{"id": "patrol_main"}],
+      "layout": {"mode": "corridors"},
+      "cells": {"baseFloor": "stone_floor", "baseWall": "stone_wall"},
+      "edges": {
+        "placements": [
+          {
+            "preset": "stone_partition",
+            "areas": ["wall_boundary"],
+            "count": {"min": 1, "max": 2},
+            "preserveOpenings": true
+          }
+        ]
+      },
+      "appearance": {"localIllumination": 0},
+      "mechanisms": [
+        {
+          "id": "patrol_fire",
+          "template": "fire_route",
+          "use": "fire_network",
+          "scopeMaps": ["patrol_main"],
+          "parameters": {
+            "portableCapacity": 90,
+            "fuelItem": "torch",
+            "fixtures": {"min": 2, "max": 3},
+            "maxSupplyDistance": 24
+          }
+        }
+      ],
+      "encounters": {
+        "checkSteps": 6,
+        "rate": 0.1,
+        "mechanismPools": {
+          "patrol_fire": [{"encounter": "kuragari_hunt", "weight": 1}]
+        }
+      }
+    },
+    {
+      "id": "store_passage",
+      "number": 2,
+      "name": "待避所のある通路",
+      "maps": [{"id": "store_main"}],
+      "layout": {
+        "mode": "bulges",
+        "bulges": {
+          "count": {"min": 3, "max": 5},
+          "positions": ["along_corridor", "dead_end"],
+          "shapes": [
+            {"id": "side_alcove", "weight": 2},
+            {"id": "end_pocket", "weight": 1}
+          ]
+        }
+      },
+      "cells": {
+        "baseFloor": "earth_floor",
+        "baseWall": "rock_wall",
+        "patches": [
+          {
+            "preset": "wet_stone_floor",
+            "areas": ["bulge"],
+            "count": {"min": 1, "max": 2},
+            "area": {"min": 1, "max": 2}
+          }
+        ]
+      },
+      "edges": {
+        "placements": [
+          {
+            "preset": "wood_partition",
+            "areas": ["wall_boundary"],
+            "count": {"min": 2, "max": 3},
+            "preserveOpenings": true
+          }
+        ]
+      },
+      "objects": [
+        {
+          "template": "chest_fixed",
+          "count": {"min": 2, "max": 3},
+          "areas": ["bulge"],
+          "minDistanceFromEntry": 5,
+          "minSpacing": 3,
+          "blocking": false,
+          "rewards": {
+            "gold": {"min": 10, "max": 25},
+            "draws": 1,
+            "items": [
+              {"item": "potion", "weight": 3, "quantity": 1},
+              {"item": "antidote", "weight": 1, "quantity": 1}
+            ]
+          }
+        }
+      ],
+      "appearance": {
+        "floor": [{"material": "dungeon:region_2:floor", "weight": 1}],
+        "wall": [{"material": "dungeon:region_2:wall", "weight": 1}],
+        "edge": [{"material": "dungeon:region_2:wall", "weight": 1}],
+        "device": [{"material": "dungeon:region_2:device", "weight": 1}],
+        "localIllumination": 3
+      },
+      "mechanisms": [],
+      "encounters": {
+        "checkSteps": 8,
+        "rate": 0.12,
+        "pool": [
+          {"encounter": "wild_drill_mole", "weight": 60},
+          {"encounter": "wild_ceramic_armadillo", "weight": 40}
+        ],
+        "mechanismPools": {}
+      }
+    },
+    {
+      "id": "garden_rooms",
+      "number": 3,
+      "name": "小部屋の庭園",
+      "maps": [{"id": "garden_main"}],
+      "layout": {
+        "mode": "rooms",
+        "width": 35,
+        "height": 29,
+        "rooms": {
+          "count": {"min": 3, "max": 5},
+          "shapes": [
+            {"id": "rectangle", "weight": 3},
+            {"id": "l_shape", "weight": 2},
+            {"id": "chamfered", "weight": 1}
+          ],
+          "width": {"min": 5, "max": 9},
+          "height": {"min": 5, "max": 9},
+          "minArea": 15,
+          "mirror": true,
+          "pillars": {"min": 0, "max": 1}
+        }
+      },
+      "cells": {"baseFloor": "earth_floor", "baseWall": "stone_wall"},
+      "edges": {
+        "placements": [
+          {
+            "preset": "stone_partition",
+            "areas": ["room_perimeter"],
+            "count": {"min": 2, "max": 4},
+            "preserveOpenings": true
+          }
+        ]
+      },
+      "objects": [
+        {
+          "template": "chest_fixed",
+          "count": {"min": 2, "max": 3},
+          "areas": ["room"],
+          "minDistanceFromEntry": 6,
+          "minSpacing": 4,
+          "blocking": false,
+          "rewards": {
+            "gold": {"min": 15, "max": 30},
+            "draws": 1,
+            "items": [{"item": "potion", "weight": 1, "quantity": 2}]
+          }
+        }
+      ],
+      "appearance": {
+        "floor": [{"material": "dungeon:region_3:floor", "weight": 1}],
+        "wall": [{"material": "dungeon:region_3:wall", "weight": 1}],
+        "edge": [{"material": "dungeon:region_3:wall", "weight": 1}],
+        "device": [{"material": "dungeon:region_3:device", "weight": 1}],
+        "localIllumination": 4
+      },
+      "mechanisms": [
+        {
+          "id": "garden_plants",
+          "template": "garden_optional_bridge",
+          "use": "plant_garden",
+          "scopeMaps": ["garden_main"],
+          "parameters": {
+            "plots": {"min": 2, "max": 3},
+            "areas": ["room"],
+            "seedItem": "bridge_seed",
+            "soilItem": "garden_soil",
+            "guaranteedSupplyBeforePlots": true,
+            "mandatoryRouteUsesBridge": false
+          }
+        }
+      ],
+      "encounters": {
+        "rate": 0.1,
+        "pool": [
+          {"encounter": "wild_candle_bee", "weight": 60},
+          {"encounter": "wild_saw_mantis", "weight": 40}
+        ],
+        "mechanismPools": {}
+      }
+    }
+  ],
+  "connections": {
+    "mode": "linear_stairs",
+    "floorOrder": ["patrol", "store_passage", "garden_rooms"],
+    "entryFloor": "patrol",
+    "goalFloor": "garden_rooms",
+    "safeRadiusAtArrival": 1,
+    "returnPolicy": "walk_to_entry"
+  },
+  "validation": {
+    "party": [
+      {"actor": "ada", "job": "warrior", "level": 5},
+      {"actor": "nio", "job": "scout", "level": 5},
+      {"actor": "sera", "job": "priest", "level": 5}
+    ],
+    "health": "full",
+    "equipment": "actor_initial",
+    "gold": 100,
+    "inventory": {"potion": 5, "antidote": 2, "torch": 4},
+    "capacityPolicy": "runtime_rules",
+    "reserves": {"extraTravelSteps": 12, "battlesPerSupplyLeg": 2, "roundsPerBattle": 5},
+    "requireAllMandatoryTargets": true,
+    "unknownCombination": "reject"
+  }
+}
