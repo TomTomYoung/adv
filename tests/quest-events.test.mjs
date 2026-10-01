@@ -40,7 +40,9 @@ test('unmigrated quest effects remain exact apart from narration, journeys and e
  for(const [map,objects] of Object.entries(before.objects)){
   if(['region_1_f1','region_1_f2','waterworks_shaft'].includes(map))continue;
   const replacedStairs=['kagaribi_f1','kagaribi_f2','kagaribi_f3','region_2_f1','region_2_f2','region_3_f1','region_3_f2'].includes(map);
-  const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest));
+  // 1.25 adds a route sign and the altar-side shortcut; their interactions are covered by kagaribi-expansion.test.mjs.
+  const added={kagaribi_f2:['route_sign'],kagaribi_f3:['altar_latch']};
+  const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest)&&!added[map]?.includes(o.id));
   assert.equal(current.length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q003_')&&!id.startsWith('q004_')&&!(replacedStairs&&['stairs','up','down'].includes(id))).length,map);
   for(const object of current)assert.equal(structureHash(object),objects[object.id],`${map}/${object.id}`);
  }

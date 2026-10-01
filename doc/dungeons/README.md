@@ -1,8 +1,10 @@
 # 探索・ダンジョン
 
+2026-10-01: [篝火の迷宮の拡張](KAGARIBI_EXPANSION.md)。3層9区画、近道、詰所補給と4件の小事件。
+
 2026-09-26: [水路拡張と地下関所](WATERWAY_EXPANSION.md)を実装済み。
 
-確認日: 2026-09-25。作品版1.20.0。[文書全体へ戻る](../README.md)。
+確認日: 2026-10-01。作品版1.25.0。[文書全体へ戻る](../README.md)。
 
 [CELL_LAYERS.md](CELL_LAYERS.md)：セル種30種類・共有エッジ4種類と地点ごとの上書き。
 
@@ -12,7 +14,7 @@
 
 [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：四辺の通行・境界、退避3Dと拡張の区別。
 
-[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：33件の2Dマップ、接続口・水密扉・区画給排水。
+[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：39件の2Dマップ、条件付き接続口・水密扉・区画給排水。
 
 [FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離減衰・遮光・画面とミニマップの照度。
 

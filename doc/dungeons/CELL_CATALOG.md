@@ -243,9 +243,9 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.24.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.25.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
-2D 33マップ、3D 0マップ、計33マップ。2Dの通行可は3038セル、通行不可は3687セルです。
+2D 39マップ、3D 0マップ、計39マップ。2Dの通行可は3559セル、通行不可は4288セルです。
 
 ### セル種プリセット
 
@@ -353,7 +353,7 @@ npm run check:docs
 
 [kagaribi_f1](../../data/maps/kagaribi_f1.json) 篝火の迷宮・灯番の巡回路：2D、通行可60・通行不可75。
 
-[kagaribi_f2](../../data/maps/kagaribi_f2.json) 篝火の迷宮・消えた灯の回廊：2D、通行可57・通行不可78。
+[kagaribi_f2](../../data/maps/kagaribi_f2.json) 篝火の迷宮・煤けた回廊：2D、通行可57・通行不可78。
 
 [kagaribi_f3](../../data/maps/kagaribi_f3.json) 篝火の迷宮・深火の祭壇：2D、通行可57・通行不可78。
 
@@ -377,17 +377,29 @@ npm run check:docs
 
 [region_1_gatehouse](../../data/maps/region_1_gatehouse.json) 灯守の地下水道・下層・奥の水門詰所：2D、通行可45・通行不可54。
 
+[kagaribi_oilstore](../../data/maps/kagaribi_oilstore.json) 篝火の迷宮・油蔵：2D、通行可105・通行不可82。
+
+[kagaribi_crossroads](../../data/maps/kagaribi_crossroads.json) 篝火の迷宮・交差路の詰所前：2D、通行可99・通行不可88。
+
+[kagaribi_kilns](../../data/maps/kagaribi_kilns.json) 篝火の迷宮・旧炭焼き場：2D、通行可84・通行不可103。
+
+[kagaribi_relay](../../data/maps/kagaribi_relay.json) 篝火の迷宮・中継篝火の広間：2D、通行可87・通行不可100。
+
+[kagaribi_last_patrol](../../data/maps/kagaribi_last_patrol.json) 篝火の迷宮・最後の巡回路：2D、通行可61・通行不可126。
+
+[kagaribi_ossuary](../../data/maps/kagaribi_ossuary.json) 篝火の迷宮・帰らずの納骨堂：2D、通行可85・通行不可102。
+
 ### セル上のイベント種別
 
-マップ固有とクエストから投影した map.objects は計509定義、8種、配置座標は508か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
+マップ固有とクエストから投影した map.objects は計526定義、8種、配置座標は525か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
 
-`chest`：20定義。進入時0／調べる20、blocking指定0、safe指定20、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
+`chest`：21定義。進入時0／調べる21、blocking指定0、safe指定21、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
 
-`clue`：197定義。進入時0／調べる197、blocking指定0、safe指定192、once指定0。配置例：`q006_clue_a` region_1_f2 (4,3) ／ `q008_clue_a` region_1_f2 (6,3)。
+`clue`：206定義。進入時0／調べる206、blocking指定0、safe指定195、once指定0。配置例：`q006_clue_a` region_1_f2 (4,3) ／ `q008_clue_a` region_1_f2 (6,3)。
 
-`decision`：205定義。進入時3／調べる202、blocking指定0、safe指定201、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
+`decision`：208定義。進入時3／調べる205、blocking指定0、safe指定204、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
 
-`door`：20定義。進入時0／調べる20、blocking指定20、safe指定20、once指定0。配置例：`door` region_1_f1 (9,3) ／ `door` region_1_f2 (9,3)。
+`door`：24定義。進入時0／調べる24、blocking指定20、safe指定24、once指定0。配置例：`door` region_1_f1 (9,3) ／ `door` region_1_f2 (9,3)。
 
 `exit`：13定義。進入時0／調べる13、blocking指定0、safe指定13、once指定0。配置例：`exit` region_1_f1 (1,1) ／ `exit` region_2_f1 (1,1)。
 
@@ -407,7 +419,7 @@ npm run check:docs
 
 部品 `fires` / `fire_network` 有効。
 
-火台9か所。`entry` kagaribi_f1 (1,1) ／ `calm` kagaribi_f1 (8,5) ／ `crossroads` kagaribi_f1 (9,7) ／ `landing` kagaribi_f2 (1,1) ／ `lure` kagaribi_f2 (7,3) ／ `refuge` kagaribi_f2 (11,7) ／ `deep_landing` kagaribi_f3 (1,1) ／ `last` kagaribi_f3 (7,3) ／ `origin` kagaribi_f3 (7,7)。
+火台16か所。`entry` kagaribi_f1 (1,1) ／ `calm` kagaribi_f1 (8,5) ／ `crossroads` kagaribi_f1 (9,7) ／ `landing` kagaribi_f2 (1,1) ／ `lure` kagaribi_f2 (7,3) ／ `refuge` kagaribi_f2 (11,7) ／ `deep_landing` kagaribi_f3 (1,1) ／ `last` kagaribi_f3 (7,3) ／ `origin` kagaribi_f3 (7,7) ／ `oilstore_lamp` kagaribi_oilstore (3,5) ／ `crossroads_main` kagaribi_crossroads (8,5) ／ `kiln_bait` kagaribi_kilns (9,5) ／ `kiln_calm` kagaribi_kilns (3,5) ／ `relay_main` kagaribi_relay (7,5) ／ `last_patrol_main` kagaribi_last_patrol (7,7) ／ `ossuary_lamp` kagaribi_ossuary (11,5)。
 
 火の効果 `ordinary` 普通の火：くらがり除けあり、通常遭遇率×1、敵倍率×1、優先度0。
 
@@ -421,9 +433,31 @@ npm run check:docs
 
 部品 `connections` / `map_connections` 有効。
 
-接続 `floor_1_2` 未探索区画への階段：stairs、kagaribi_f1 (13,7) ↔ kagaribi_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+接続 `patrol_oilstore` 油蔵への搬送通路：door、kagaribi_f1 (13,7) ↔ kagaribi_oilstore (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
-接続 `floor_2_3` 未探索区画への階段：stairs、kagaribi_f2 (13,7) ↔ kagaribi_f3 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+接続 `oilstore_crossroads` 油樽の搬送路：door、kagaribi_oilstore (15,9) ↔ kagaribi_crossroads (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `cargo_shortcut` 入口へ戻る搬送門：door、kagaribi_f1 (3,7) ↔ kagaribi_crossroads (1,9)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_1_2` 煤けた回廊への階段：stairs、kagaribi_crossroads (15,7) ↔ kagaribi_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `soot_relay` 中継広間への巡回路：door、kagaribi_f2 (13,1) ↔ kagaribi_relay (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `soot_kilns` 炭焼き場への作業戸：door、kagaribi_f2 (5,3) ↔ kagaribi_kilns (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `kiln_escape` 炭焼き場の搬出口：door、kagaribi_kilns (7,1) ↔ kagaribi_relay (15,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `relay_shortcut` 中継篝火の連絡門：door、kagaribi_f2 (3,1) ↔ kagaribi_relay (1,9)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_2_3` 最後の巡回路への階段：stairs、kagaribi_relay (15,9) ↔ kagaribi_last_patrol (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `last_altar` 深火の祭壇への回廊：door、kagaribi_last_patrol (15,9) ↔ kagaribi_f3 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `last_ossuary` 納骨堂への脇戸：door、kagaribi_last_patrol (15,1) ↔ kagaribi_ossuary (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `ossuary_altar` 納骨堂奥の石扉：door、kagaribi_ossuary (15,9) ↔ kagaribi_f3 (13,5)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `altar_shortcut` 最後の巡回路への帰路：door、kagaribi_last_patrol (1,9) ↔ kagaribi_f3 (1,7)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 巨獣上の移動集落 (moving_village)
 

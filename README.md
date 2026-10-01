@@ -4,7 +4,7 @@
 
 [設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/authoring/CONFIG_EDITORS.md)。
 
-作品版1.21.0。町11か所・ダンジョン室内2か所・13ダンジョン・33件の2Dマップを接続し、メッセージ内のシナリオ選択肢とプレイヤーコマンドを分離しています。[現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md) ／ [q002 骨の荷札](doc/scenarios/quests/QUEST_Q002.md)。
+作品版1.25.0。町11か所・ダンジョン室内3か所・13ダンジョン・39件の2Dマップを接続しています。篝火の迷宮は3層9区画へ拡張し、火の整備、近道の開通、詰所への補給、4件の小事件を追加しました。[篝火の迷宮の拡張](doc/dungeons/KAGARIBI_EXPANSION.md) ／ [現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md)。
 
 ## 遊ぶ
 

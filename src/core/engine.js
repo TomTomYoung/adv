@@ -259,7 +259,7 @@ export class GameEngine {
     if(type==='location.move')return this.moveLocation(intent.id);
     if(type==='location.enter')return this.enterLocation(intent.id);
     if(type==='location.exit')return this.exitLocation();
-    if(dungeonInterior(this.data,this.state)&&['accept','travel','quest.travel','service','party','party.order','job.change'].includes(type))return false;
+    if(dungeonInterior(this.data,this.state)&&['accept','travel','quest.travel','party','party.order','job.change'].includes(type))return false;
     if(type==='story.resume')return resumeWorldStory(this,intent.quest);
     if(type==='quest.event')return openQuestEvent(this,intent.quest,intent.id);
     if(type==='dungeon.action')return dungeonAction(this,intent);
@@ -288,6 +288,7 @@ export class GameEngine {
     }
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;
+      if(dungeonInterior(this.data,this.state)&&service.interior!==true)return false;
       if(this.data.game.world&&!townLocation(this.data,this.state)?.services?.includes(service.id))return false;
       this.run(service.script);return true;
     }

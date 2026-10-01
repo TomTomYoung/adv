@@ -5,6 +5,13 @@ on:
       - 'src/view/**'
       - 'tools/browser-event-controls-smoke.mjs'
       - 'tools/browser-battle-smoke.mjs'
+      - 'tools/browser-kagaribi-smoke.mjs'
+      - 'config/kagaribi-content.json'
+      - 'config/dungeons/kagaribi.json'
+      - 'config/cell-layers.json'
+      - 'config/locations.json'
+      - 'src/core/**'
+      - 'src/application/**'
       - '.github/workflows/event-controls.yml'
   workflow_dispatch:
 permissions:
@@ -26,6 +33,8 @@ jobs:
         run: node tools/browser-event-controls-smoke.mjs
       - name: Verify battle entry and attack target coordinates
         run: node tools/browser-battle-smoke.mjs
+      - name: Verify expanded Kagaribi districts and outpost services
+        run: node tools/browser-kagaribi-smoke.mjs
       - name: Keep viewport checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -34,4 +43,5 @@ jobs:
           path: |
             /tmp/adv-event-controls-browser
             /tmp/adv-battle-browser
+            /tmp/adv-kagaribi-browser
           if-no-files-found: ignore

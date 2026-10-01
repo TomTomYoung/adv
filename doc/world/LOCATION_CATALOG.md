@@ -88,7 +88,7 @@
 
 親: 灯番組合 (hikarigaeri_guild)。子: なし。追加の移動先: なし。
 
-機能: 会話・調査。
+機能: 古い帰還記録を照合する。
 
 背景: [location_guild](../../assets/images/locations/guild.webp)。
 
@@ -173,3 +173,15 @@
 参照場面: q004「二枚目の通行証」 / filing。
 
 参照場面: q004「二枚目の通行証」 / escort。
+
+## 交差路の灯番詰所 (kagaribi_post)
+
+油樽の荷札と巡回図を掛けた詰所。交代の灯番が勤務簿を引き継ぎ、搬送路が復旧すると燃料を補給できる。
+
+親: ダンジョン内の戸口。子: なし。追加の移動先: なし。
+
+機能: 当直と交代を確認する / 燃料の補給窓口 / 巡回記録を読む。
+
+背景: [location_checkpoint](../../assets/images/locations/checkpoint.webp)。
+
+入退室地点: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (8, 1)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。

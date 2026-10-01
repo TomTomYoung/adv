@@ -27,7 +27,7 @@ function hazard({once=false,condition=true,commands}={}){
 }
 
 test('all current maps resolve explicit presets and preserve the existing passage projection',()=>{
-  assert.equal(data.game.cellLayerVersion,1);assert.equal(Object.keys(data.maps).length,33);
+  assert.equal(data.game.cellLayerVersion,1);assert.equal(Object.keys(data.maps).length,39);
   for(const m of Object.values(data.maps))for(let y=0;y<m.tiles.length;y++)for(let x=0;x<m.tiles[y].length;x++)assert.equal(authoredCellLayers(data,m,x,y).passage,m.tiles[y][x]);
   assert.deepEqual(validateContent(data),[]);
 });

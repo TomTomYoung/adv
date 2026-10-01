@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "kagaribi",
   "name": "篝火の迷宮",
-  "description": "灯帰りの町が生まれるきっかけとなった迷宮。灯番の巡回区画の奥には、消えた火と未探索の通路が続く。",
+  "description": "灯番の巡回路、油蔵と詰所、消えた中継篝火、深火の祭壇へ続く三層九区画。灯と近道を整備して、次の探索の足場を作る。",
   "region": 1,
   "recommendedLevel": 1,
   "profile": "classic",
@@ -14,7 +14,13 @@
   },
   "maps": [
     "kagaribi_f1",
+    "kagaribi_oilstore",
+    "kagaribi_crossroads",
     "kagaribi_f2",
+    "kagaribi_kilns",
+    "kagaribi_relay",
+    "kagaribi_last_patrol",
+    "kagaribi_ossuary",
     "kagaribi_f3"
   ],
   "systems": {
@@ -185,6 +191,83 @@
           "radius": 2,
           "capacity": null,
           "initiallyLit": true
+        },
+        {
+          "id": "oilstore_lamp",
+          "name": "油蔵の守り火",
+          "map": "kagaribi_oilstore",
+          "x": 3,
+          "y": 5,
+          "effect": "ward",
+          "radius": 3,
+          "initiallyLit": true,
+          "capacity": null
+        },
+        {
+          "id": "crossroads_main",
+          "name": "交差路の中継篝火",
+          "map": "kagaribi_crossroads",
+          "x": 8,
+          "y": 5,
+          "effect": "ward",
+          "radius": 5,
+          "initiallyLit": false,
+          "capacity": null
+        },
+        {
+          "id": "kiln_bait",
+          "name": "炭焼き場の赤鉄火台",
+          "map": "kagaribi_kilns",
+          "x": 9,
+          "y": 5,
+          "effect": "lure",
+          "radius": 4,
+          "initiallyLit": false,
+          "capacity": 80
+        },
+        {
+          "id": "kiln_calm",
+          "name": "職人の青銅火台",
+          "map": "kagaribi_kilns",
+          "x": 3,
+          "y": 5,
+          "effect": "calm",
+          "radius": 3,
+          "initiallyLit": false,
+          "capacity": 80
+        },
+        {
+          "id": "relay_main",
+          "name": "広間の中継篝火",
+          "map": "kagaribi_relay",
+          "x": 7,
+          "y": 5,
+          "effect": "ward",
+          "radius": 6,
+          "initiallyLit": false,
+          "capacity": null
+        },
+        {
+          "id": "last_patrol_main",
+          "name": "巡回路の中継篝火",
+          "map": "kagaribi_last_patrol",
+          "x": 7,
+          "y": 7,
+          "effect": "ward",
+          "radius": 5,
+          "initiallyLit": false,
+          "capacity": null
+        },
+        {
+          "id": "ossuary_lamp",
+          "name": "名札の前の灯",
+          "map": "kagaribi_ossuary",
+          "x": 11,
+          "y": 5,
+          "effect": "calm",
+          "radius": 3,
+          "initiallyLit": false,
+          "capacity": 80
         }
       ]
     },
@@ -192,42 +275,412 @@
       "use": "map_connections",
       "links": [
         {
-          "id": "floor_1_2",
-          "name": "未探索区画への階段",
-          "kind": "stairs",
+          "id": "patrol_oilstore",
+          "name": "油蔵への搬送通路",
+          "kind": "door",
           "a": {
             "map": "kagaribi_f1",
             "x": 13,
             "y": 7,
-            "facing": "west"
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_oilstore",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          },
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "active"
+          },
+          "requirement": "捜索と帰還報告を終えてから、油蔵への巡回を始めよう。"
+        },
+        {
+          "id": "oilstore_crossroads",
+          "name": "油樽の搬送路",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_oilstore",
+            "x": 15,
+            "y": 9,
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_crossroads",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "cargo_shortcut",
+          "name": "入口へ戻る搬送門",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_f1",
+            "x": 3,
+            "y": 7,
+            "side": "south"
+          },
+          "b": {
+            "map": "kagaribi_crossroads",
+            "x": 1,
+            "y": 9,
+            "side": "west"
+          },
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "ne",
+                "left": {
+                  "ref": "quests.q001.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.cargoGate"
+                },
+                "right": true
+              }
+            ]
+          },
+          "requirement": "搬送門は閉じている。油蔵の荷車を直し、詰所側から掛け金を外せる。"
+        },
+        {
+          "id": "floor_1_2",
+          "name": "煤けた回廊への階段",
+          "kind": "stairs",
+          "a": {
+            "map": "kagaribi_crossroads",
+            "x": 15,
+            "y": 7
           },
           "b": {
             "map": "kagaribi_f2",
             "x": 1,
-            "y": 1,
-            "facing": "east"
+            "y": 1
           }
         },
         {
-          "id": "floor_2_3",
-          "name": "未探索区画への階段",
-          "kind": "stairs",
+          "id": "soot_relay",
+          "name": "中継広間への巡回路",
+          "kind": "door",
           "a": {
             "map": "kagaribi_f2",
             "x": 13,
-            "y": 7,
-            "facing": "west"
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_relay",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "soot_kilns",
+          "name": "炭焼き場への作業戸",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_f2",
+            "x": 5,
+            "y": 3,
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_kilns",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "kiln_escape",
+          "name": "炭焼き場の搬出口",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_kilns",
+            "x": 7,
+            "y": 1,
+            "side": "north"
+          },
+          "b": {
+            "map": "kagaribi_relay",
+            "x": 15,
+            "y": 1,
+            "side": "east"
+          },
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.kilnGate"
+            },
+            "right": true
+          },
+          "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+        },
+        {
+          "id": "relay_shortcut",
+          "name": "中継篝火の連絡門",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_f2",
+            "x": 3,
+            "y": 1,
+            "side": "north"
+          },
+          "b": {
+            "map": "kagaribi_relay",
+            "x": 1,
+            "y": 9,
+            "side": "west"
+          },
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.relayGate"
+            },
+            "right": true
+          },
+          "requirement": "広間側で中継篝火を灯し、連絡門の巻上げ機を動かそう。"
+        },
+        {
+          "id": "floor_2_3",
+          "name": "最後の巡回路への階段",
+          "kind": "stairs",
+          "a": {
+            "map": "kagaribi_relay",
+            "x": 15,
+            "y": 9
+          },
+          "b": {
+            "map": "kagaribi_last_patrol",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "id": "last_altar",
+          "name": "深火の祭壇への回廊",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_last_patrol",
+            "x": 15,
+            "y": 9,
+            "side": "east"
           },
           "b": {
             "map": "kagaribi_f3",
             "x": 1,
             "y": 1,
-            "facing": "east"
+            "side": "north"
           }
+        },
+        {
+          "id": "last_ossuary",
+          "name": "納骨堂への脇戸",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_last_patrol",
+            "x": 15,
+            "y": 1,
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_ossuary",
+            "x": 1,
+            "y": 1,
+            "side": "west"
+          }
+        },
+        {
+          "id": "ossuary_altar",
+          "name": "納骨堂奥の石扉",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_ossuary",
+            "x": 15,
+            "y": 9,
+            "side": "east"
+          },
+          "b": {
+            "map": "kagaribi_f3",
+            "x": 13,
+            "y": 5,
+            "side": "east"
+          }
+        },
+        {
+          "id": "altar_shortcut",
+          "name": "最後の巡回路への帰路",
+          "kind": "door",
+          "a": {
+            "map": "kagaribi_last_patrol",
+            "x": 1,
+            "y": 9,
+            "side": "south"
+          },
+          "b": {
+            "map": "kagaribi_f3",
+            "x": 1,
+            "y": 7,
+            "side": "west"
+          },
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGate"
+            },
+            "right": true
+          },
+          "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
         }
       ]
     }
   },
   "source": "https://app.notion.com/p/3dac3c1966b38057b740df426b57da09",
-  "fieldEvents": []
+  "fieldEvents": [
+    {
+      "id": "restored_crossroads_main",
+      "title": "交差路の火の復旧",
+      "watch": [
+        "move",
+        "light",
+        "object"
+      ],
+      "repeat": "once",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.crossroads_main.lit"
+        },
+        "right": true
+      },
+      "points": [
+        {
+          "map": "kagaribi_crossroads",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_crossroads",
+          "x": 9,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_crossroads",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_crossroads",
+          "x": 8,
+          "y": 6
+        },
+        {
+          "map": "kagaribi_crossroads",
+          "x": 8,
+          "y": 4
+        }
+      ],
+      "action": {
+        "type": "script",
+        "script": "kagaribi.restored.crossroads_main"
+      }
+    },
+    {
+      "id": "restored_relay_main",
+      "title": "中継篝火の復旧",
+      "watch": [
+        "move",
+        "light",
+        "object"
+      ],
+      "repeat": "once",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.relay_main.lit"
+        },
+        "right": true
+      },
+      "points": [
+        {
+          "map": "kagaribi_relay",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_relay",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_relay",
+          "x": 6,
+          "y": 5
+        },
+        {
+          "map": "kagaribi_relay",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "map": "kagaribi_relay",
+          "x": 7,
+          "y": 4
+        }
+      ],
+      "action": {
+        "type": "script",
+        "script": "kagaribi.restored.relay_main"
+      }
+    },
+    {
+      "id": "restored_last_patrol_main",
+      "title": "最後の巡回灯の復旧",
+      "watch": [
+        "move",
+        "light",
+        "object"
+      ],
+      "repeat": "once",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.last_patrol_main.lit"
+        },
+        "right": true
+      },
+      "points": [
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 7,
+          "y": 7
+        },
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 7,
+          "y": 6
+        }
+      ],
+      "action": {
+        "type": "script",
+        "script": "kagaribi.restored.last_patrol_main"
+      }
+    }
+  ]
 }

@@ -128,7 +128,13 @@ export function validateContent(data){
   for(const [id,e] of Object.entries(data.encounters)){if(!e.enemies?.length)fail(id,'敵が必要です');for(const enemy of e.enemies??[])reference(data.enemies,enemy,id);}
   for(const [id,item] of Object.entries(data.items)){if(item.script)reference(data.scripts,item.script,id);if(item.battleSkill)reference(data.skills,item.battleSkill,id);}
   for(const good of data.shops.goods){reference(data.items,good.item,'shop');if(!Number.isInteger(good.price)||good.price<0)fail('shop','価格不正');}
-  for(const service of data.game.services)reference(data.scripts,service.script,'services');
+  const serviceIds=new Set();
+  for(const service of data.game.services){
+    reference(data.scripts,service.script,'services');
+    if(!service.id||serviceIds.has(service.id)||service.interior!==undefined&&typeof service.interior!=='boolean')fail('services','施設サービスのID・室内許可が不正です');
+    serviceIds.add(service.id);
+  }
+  for(const d of Object.values(data.dungeons??{}))for(const s of Object.values(d.systems))if(s.use==='map_connections')for(const link of s.links??[])if(link.condition!==undefined)expression(link.condition,`${d.id}/${link.id}`);
   for(const region of data.regions)reference(data.maps,region.entrance,'region');
   for(const [id,map] of Object.entries(data.maps)){
     if(id!==map.id||!Array.isArray(map.tiles)||!map.tiles.length){fail(id,'マップ構造不正');continue;}
@@ -160,4 +166,3 @@ export function validateContent(data){
   errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression),...validateConditionalFieldEvents(data,expression));
   return errors;
 }
-

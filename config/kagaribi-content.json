@@ -37,16 +37,6 @@
           "script": "kagaribi.exit"
         },
         {
-          "id": "down",
-          "x": 13,
-          "y": 7,
-          "name": "未探索区画への階段",
-          "kind": "stairs",
-          "trigger": "interact",
-          "safe": true,
-          "script": "kagaribi_f1.down"
-        },
-        {
           "id": "history",
           "x": 3,
           "y": 1,
@@ -121,15 +111,15 @@
       "encounterPool": [
         {
           "encounter": "kagaribi_roaming",
-          "weight": 40
+          "weight": 50
         },
         {
-          "encounter": "wild_waterwheel_beaver",
-          "weight": 30
+          "encounter": "kagaribi_wax",
+          "weight": 35
         },
         {
-          "encounter": "wild_sluice_crocodile",
-          "weight": 30
+          "encounter": "kagaribi_pests",
+          "weight": 15
         }
       ]
     },
@@ -137,7 +127,7 @@
       "id": "kagaribi_f2",
       "region": 1,
       "floor": 2,
-      "name": "篝火の迷宮・消えた灯の回廊",
+      "name": "篝火の迷宮・煤けた回廊",
       "tiles": [
         "###############",
         "#.....#.......#",
@@ -156,42 +146,32 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_roaming",
+      "encounter": "kagaribi_moths",
       "encounterRate": 0.22,
       "objects": [
         {
-          "id": "up",
+          "id": "route_sign",
+          "name": "煤けた回廊の道標",
           "x": 1,
-          "y": 1,
-          "name": "上層への階段",
-          "kind": "stairs",
-          "trigger": "interact",
-          "safe": true,
-          "script": "kagaribi_f2.up"
-        },
-        {
-          "id": "down",
-          "x": 13,
           "y": 7,
-          "name": "未探索区画への階段",
-          "kind": "stairs",
+          "kind": "clue",
           "trigger": "interact",
-          "safe": true,
-          "script": "kagaribi_f2.down"
+          "script": "kagaribi.note.route_sign",
+          "safe": false
         }
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_roaming",
-          "weight": 40
+          "encounter": "kagaribi_moths",
+          "weight": 50
         },
         {
-          "encounter": "wild_waterwheel_beaver",
-          "weight": 30
+          "encounter": "kagaribi_guards",
+          "weight": 35
         },
         {
-          "encounter": "wild_sluice_crocodile",
-          "weight": 30
+          "encounter": "kagaribi_patrol_pair",
+          "weight": 15
         }
       ]
     },
@@ -218,19 +198,9 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_roaming",
+      "encounter": "kagaribi_bones",
       "encounterRate": 0.22,
       "objects": [
-        {
-          "id": "up",
-          "x": 1,
-          "y": 1,
-          "name": "上層への階段",
-          "kind": "stairs",
-          "trigger": "interact",
-          "safe": true,
-          "script": "kagaribi_f3.up"
-        },
         {
           "id": "legend",
           "x": 7,
@@ -239,20 +209,445 @@
           "kind": "clue",
           "trigger": "interact",
           "script": "kagaribi.legend"
+        },
+        {
+          "id": "altar_latch",
+          "name": "帰路の石の掛け金",
+          "x": 1,
+          "y": 7,
+          "kind": "door",
+          "trigger": "interact",
+          "script": "kagaribi.altar_latch",
+          "edge": "west",
+          "safe": true
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_bones",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_golem",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_deep_pair",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_oilstore": {
+      "id": "kagaribi_oilstore",
+      "region": 1,
+      "floor": 1,
+      "name": "篝火の迷宮・油蔵",
+      "tiles": [
+        "#################",
+        "#.....###.......#",
+        "#.....###.......#",
+        "#.....###.......#",
+        "#.#.#######.#####",
+        "#...............#",
+        "#...............#",
+        "#.....###.......#",
+        "#.....###.......#",
+        "#.....###.......#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_roaming",
+      "encounterRate": 0.22,
+      "objects": [
+        {
+          "id": "manifest",
+          "name": "途切れた油樽の記録",
+          "x": 3,
+          "y": 1,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.oil_manifest"
+        },
+        {
+          "id": "cart",
+          "name": "溝にはまった荷車",
+          "x": 11,
+          "y": 5,
+          "kind": "decision",
+          "trigger": "interact",
+          "script": "kagaribi.cart",
+          "safe": true
+        },
+        {
+          "id": "tools",
+          "name": "搬送用の工具箱",
+          "x": 3,
+          "y": 9,
+          "kind": "chest",
+          "trigger": "interact",
+          "script": "kagaribi.tools",
+          "safe": true
+        },
+        {
+          "id": "relief",
+          "name": "油蔵で待つ交代要員",
+          "x": 11,
+          "y": 1,
+          "kind": "decision",
+          "trigger": "interact",
+          "script": "kagaribi.relief",
+          "safe": true
         }
       ],
       "encounterPool": [
         {
           "encounter": "kagaribi_roaming",
-          "weight": 40
+          "weight": 50
         },
         {
-          "encounter": "wild_waterwheel_beaver",
-          "weight": 30
+          "encounter": "kagaribi_wax",
+          "weight": 35
         },
         {
-          "encounter": "wild_sluice_crocodile",
-          "weight": 30
+          "encounter": "kagaribi_pests",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_crossroads": {
+      "id": "kagaribi_crossroads",
+      "region": 1,
+      "floor": 1,
+      "name": "篝火の迷宮・交差路の詰所前",
+      "tiles": [
+        "#################",
+        "#...............#",
+        "#...###...###...#",
+        "#...###...###...#",
+        "#...###...###...#",
+        "#...............#",
+        "#...###...###...#",
+        "#...###...###...#",
+        "#...###...###...#",
+        "#...............#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_roaming",
+      "encounterRate": 0.22,
+      "objects": [
+        {
+          "id": "cargo_latch",
+          "name": "搬送門の掛け金",
+          "x": 1,
+          "y": 9,
+          "kind": "door",
+          "trigger": "interact",
+          "script": "kagaribi.cargo_latch",
+          "edge": "west",
+          "safe": true
+        },
+        {
+          "id": "crossroads_note",
+          "name": "交差路の中継篝火の足場",
+          "x": 8,
+          "y": 5,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.note.crossroads_note",
+          "safe": true
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_roaming",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_wax",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_pests",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_kilns": {
+      "id": "kagaribi_kilns",
+      "region": 1,
+      "floor": 2,
+      "name": "篝火の迷宮・旧炭焼き場",
+      "tiles": [
+        "#################",
+        "#...............#",
+        "#.#####.#######.#",
+        "#.#...#.#...###.#",
+        "#.#...#.#...###.#",
+        "#...............#",
+        "#.#...###...###.#",
+        "#.#...###...###.#",
+        "#.#############.#",
+        "#...............#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_golem",
+      "encounterRate": 0.27,
+      "objects": [
+        {
+          "id": "kiln_latch",
+          "name": "搬出口の掛け金",
+          "x": 7,
+          "y": 1,
+          "kind": "door",
+          "trigger": "interact",
+          "script": "kagaribi.kiln_latch",
+          "edge": "north",
+          "safe": true
+        },
+        {
+          "id": "hunt",
+          "name": "炉守りの討伐書付",
+          "x": 9,
+          "y": 5,
+          "kind": "decision",
+          "trigger": "interact",
+          "script": "kagaribi.kiln_hunt",
+          "safe": true
+        },
+        {
+          "id": "marks",
+          "name": "炭焼き職人の火台の記録",
+          "x": 3,
+          "y": 5,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.kiln_marks"
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_golem",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_moths",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_patrol_pair",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_relay": {
+      "id": "kagaribi_relay",
+      "region": 1,
+      "floor": 2,
+      "name": "篝火の迷宮・中継篝火の広間",
+      "tiles": [
+        "#################",
+        "#...............#",
+        "#.#####.#######.#",
+        "#.###.......###.#",
+        "#.###.......###.#",
+        "#...............#",
+        "#.###.......###.#",
+        "#.###.......###.#",
+        "#.#####.#######.#",
+        "#...............#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_moths",
+      "encounterRate": 0.22,
+      "objects": [
+        {
+          "id": "relay_latch",
+          "name": "連絡門の巻上げ機",
+          "x": 1,
+          "y": 9,
+          "kind": "door",
+          "trigger": "interact",
+          "script": "kagaribi.relay_latch",
+          "edge": "west",
+          "safe": true
+        },
+        {
+          "id": "relay_note",
+          "name": "中継広間の灯番の休息所",
+          "x": 7,
+          "y": 5,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.note.relay_note",
+          "safe": true
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_moths",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_guards",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_patrol_pair",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_last_patrol": {
+      "id": "kagaribi_last_patrol",
+      "region": 1,
+      "floor": 3,
+      "name": "篝火の迷宮・最後の巡回路",
+      "tiles": [
+        "#################",
+        "#...............#",
+        "#.#.###########.#",
+        "#.#.....#######.#",
+        "#.#####.#######.#",
+        "#.#####.#######.#",
+        "#.#####.#######.#",
+        "#.#####.......#.#",
+        "#.###########.#.#",
+        "#...............#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_bones",
+      "encounterRate": 0.22,
+      "objects": [
+        {
+          "id": "last_note",
+          "name": "最後の巡回記号",
+          "x": 7,
+          "y": 7,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.note.last_note",
+          "safe": true
+        },
+        {
+          "id": "old_tools",
+          "name": "新旧の道具が混ざる箱",
+          "x": 3,
+          "y": 3,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.note.old_tools",
+          "safe": false
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_bones",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_golem",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_deep_pair",
+          "weight": 15
+        }
+      ]
+    },
+    "kagaribi_ossuary": {
+      "id": "kagaribi_ossuary",
+      "region": 1,
+      "floor": 3,
+      "name": "篝火の迷宮・帰らずの納骨堂",
+      "tiles": [
+        "#################",
+        "#...............#",
+        "#.#.#######.###.#",
+        "#.#...###.....#.#",
+        "#.#...###.....#.#",
+        "#.#...###.....#.#",
+        "#.#.#######.###.#",
+        "#...............#",
+        "#.#############.#",
+        "#...............#",
+        "#################"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_bones",
+      "encounterRate": 0.22,
+      "objects": [
+        {
+          "id": "inscription",
+          "name": "帰還日が空欄の帳面",
+          "x": 11,
+          "y": 3,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.note.inscription",
+          "safe": false
+        },
+        {
+          "id": "nameplate",
+          "name": "名札の残る石棚",
+          "x": 11,
+          "y": 5,
+          "kind": "clue",
+          "trigger": "interact",
+          "script": "kagaribi.nameplate"
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_bones",
+          "weight": 50
+        },
+        {
+          "encounter": "kagaribi_golem",
+          "weight": 35
+        },
+        {
+          "encounter": "kagaribi_deep_pair",
+          "weight": 15
         }
       ]
     }
@@ -268,44 +663,32 @@
     "kagaribi_f1.down": {
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f2",
-          "x": 1,
-          "y": 1,
-          "facing": "east"
+          "op": "narrate",
+          "text": "階段の接続口から隣の区画へ進む。"
         }
       ]
     },
     "kagaribi_f2.up": {
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f1",
-          "x": 13,
-          "y": 7,
-          "facing": "west"
+          "op": "narrate",
+          "text": "階段の接続口から隣の区画へ進む。"
         }
       ]
     },
     "kagaribi_f2.down": {
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f3",
-          "x": 1,
-          "y": 1,
-          "facing": "east"
+          "op": "narrate",
+          "text": "階段の接続口から隣の区画へ進む。"
         }
       ]
     },
     "kagaribi_f3.up": {
       "commands": [
         {
-          "op": "map.teleport",
-          "map": "kagaribi_f2",
-          "x": 13,
-          "y": 7,
-          "facing": "west"
+          "op": "narrate",
+          "text": "階段の接続口から隣の区画へ進む。"
         }
       ]
     },
@@ -317,7 +700,7 @@
         },
         {
           "op": "narrate",
-          "text": "地図の明るい部分は、灯番たちがすでに踏査した巡回区画。奥には、まだ道の記されていない区画が残る。入口の篝火から受け取った松明の火を確かめ、火が弱まる前に補充すること。"
+          "text": "地図の明るい部分は、灯番たちがすでに踏査した巡回区画。奥には、まだ道の記されていない区画が残る。入口の篝火から受け取った松明の火を確かめ、火が弱まる前に補充すること。 巡回図の続きには、油蔵と交差路の詰所、消えた中継篝火、最後の巡回路が記されている。油樽の搬送門は詰所側から、連絡門は広間側から開けられる。"
         }
       ]
     },
@@ -326,6 +709,1057 @@
         {
           "op": "narrate",
           "text": "迷宮の最奥から種火を持ち帰れば、死者を生き返らせられるという。この祭壇の火が伝承の種火なのか、その先に真の最奥があるのか、確かな記録は残っていない。火を採って持ち帰ることはできる。伝承が真実かどうかは、まだわからない。"
+        }
+      ]
+    },
+    "kagaribi.restored.crossroads_main": {
+      "commands": [
+        {
+          "op": "flag.set",
+          "key": "kagaribi.crossroads_mainSeen",
+          "value": true
+        },
+        {
+          "op": "map.reveal",
+          "radius": 6
+        },
+        {
+          "op": "narrate",
+          "text": "篝火の光が交差路へ伸びた。油樽を運んだ轍が、入口へ戻る搬送門と詰所の戸口を結んでいる。"
+        }
+      ]
+    },
+    "kagaribi.restored.relay_main": {
+      "commands": [
+        {
+          "op": "flag.set",
+          "key": "kagaribi.relay_mainSeen",
+          "value": true
+        },
+        {
+          "op": "map.reveal",
+          "radius": 6
+        },
+        {
+          "op": "narrate",
+          "text": "高い篝火の炎が広間の梁を照らした。壁沿いに連絡門の鎖が走り、南東には下層への階段が口を開けている。"
+        }
+      ]
+    },
+    "kagaribi.restored.last_patrol_main": {
+      "commands": [
+        {
+          "op": "flag.set",
+          "key": "kagaribi.last_patrol_mainSeen",
+          "value": true
+        },
+        {
+          "op": "map.reveal",
+          "radius": 6
+        },
+        {
+          "op": "narrate",
+          "text": "火が残った石柱を照らした。崩れた床の向こうに古い台座が見える。現在の巡回記号はここで途切れている。"
+        }
+      ]
+    },
+    "kagaribi.oil_manifest": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "戻らない油樽。詰所の補給記録は昨日で止まっている。倉内の轍は南東の搬出口へ続き、途中に荷車が傾いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "accept",
+              "text": "搬送路を確かめる",
+              "commands": [
+                {
+                  "op": "flag.set",
+                  "key": "kagaribi.oilRequested",
+                  "value": true
+                },
+                {
+                  "op": "narrate",
+                  "text": "油蔵の荷車を調べ、通れる状態へ戻そう。"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "探索へ戻る",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.cart": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.cartCleared"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "車輪は溝を抜け、荷台の油樽も固定されている。搬送門は交差路の詰所側から開けられる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "荷車の車輪が床板の継ぎ目に落ちている。油樽を支える縄が一本あれば、荷台を傾けずに引き出せそうだ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "repair",
+                  "text": "縄を1本使い、荷車を引き出す",
+                  "commands": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.oilRequested",
+                      "value": true
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.cartCleared",
+                      "value": true
+                    },
+                    {
+                      "op": "item.give",
+                      "item": "torch",
+                      "count": 3
+                    },
+                    {
+                      "op": "gold.change",
+                      "amount": 30
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "荷車を引き出し、樽を積み直した。運搬人から松明3本と30Gを受け取った。交差路側で搬送門を開ければ、町からの補給が再開する。"
+                    }
+                  ],
+                  "condition": {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                },
+                {
+                  "id": "supplies",
+                  "text": "資材の調達先を確かめる",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "油蔵の工具箱に予備の縄がある。使い切った場合は町の旅道具店で購入できる。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.tools": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.toolsTaken"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "工具箱には空の縄掛けが残っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "flag.set",
+              "key": "kagaribi.toolsTaken",
+              "value": true
+            },
+            {
+              "op": "item.give",
+              "item": "rope",
+              "count": 1
+            },
+            {
+              "op": "item.give",
+              "item": "torch",
+              "count": 2
+            },
+            {
+              "op": "narrate",
+              "text": "工具箱から予備の縄1本と松明2本を受け取った。油樽の搬送路を復旧するための備品だ。"
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.relief": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.reliefAssigned"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "交代の灯番は、開いた搬送門を通って詰所へ向かった。現地で引き継ぎを確認しよう。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "交代の来ない詰所。交代要員は油蔵で足止めされている。「搬送門が開けば、詰所へ入って当直を休ませられる」"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "send",
+                  "text": "搬送門の開通を伝え、交代を頼む",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.reliefAssigned",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "交代の灯番は油樽の運搬人とともに出発した。交差路の詰所で、引き継ぎを確認しよう。"
+                    }
+                  ],
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.cargoGate"
+                    },
+                    "right": true
+                  }
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.cargo_latch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.cargoGate"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "掛け金は外れている。両側から通行できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "門の内側に掛け金がある。先に油蔵の荷車を引き出せば、油樽を通せる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "掛け金を外して近道を開く",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.cargoGate",
+                      "value": true
+                    },
+                    {
+                      "op": "audio.se",
+                      "asset": "se_door"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "扉が開いた。次の探索でも、この近道を使える。"
+                    }
+                  ],
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.cartCleared"
+                    },
+                    "right": true
+                  }
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.kiln_latch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.kilnGate"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "掛け金は外れている。両側から通行できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "炭焼き場の搬出口だ。中継広間への退路を先に開けられる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "掛け金を外して近道を開く",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.kilnGate",
+                      "value": true
+                    },
+                    {
+                      "op": "audio.se",
+                      "asset": "se_door"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "扉が開いた。次の探索でも、この近道を使える。"
+                    }
+                  ],
+                  "condition": true
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.relay_latch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.relayGate"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "掛け金は外れている。両側から通行できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "巻上げ機の歯に煤が詰まっている。広間の中継篝火を灯せば、作業台の目盛りまで明るく見える。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "掛け金を外して近道を開く",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.relayGate",
+                      "value": true
+                    },
+                    {
+                      "op": "audio.se",
+                      "asset": "se_door"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "扉が開いた。次の探索でも、この近道を使える。"
+                    }
+                  ],
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.relay_main.lit"
+                    },
+                    "right": true
+                  }
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.altar_latch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGate"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "掛け金は外れている。両側から通行できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "古い石の掛け金がある。持ち上げれば、最後の巡回路の下り口近くへ戻れる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "掛け金を外して近道を開く",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.altarGate",
+                      "value": true
+                    },
+                    {
+                      "op": "audio.se",
+                      "asset": "se_door"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "扉が開いた。次の探索でも、この近道を使える。"
+                    }
+                  ],
+                  "condition": true
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.post_supply": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.cargoGate"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.postStaffed"
+                },
+                "right": true
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "搬送路と交代勤務が戻り、詰所に燃料が届いている。松明は1本6G。購入だけでは携帯松明へ補充されない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "buy",
+                  "text": "松明を1本購入する（6G）",
+                  "commands": [
+                    {
+                      "op": "gold.change",
+                      "amount": -6
+                    },
+                    {
+                      "op": "item.give",
+                      "item": "torch",
+                      "count": 1
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "松明を1本購入した。旅支度か火の操作から燃料として使える。"
+                    }
+                  ],
+                  "condition": {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "gte",
+                        "left": {
+                          "ref": "gold"
+                        },
+                        "right": 6
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "torch",
+                          "count": 99
+                        }
+                      }
+                    ]
+                  },
+                  "requirement": "6Gと、松明を入れる空きが必要。"
+                },
+                {
+                  "id": "leave",
+                  "text": "詰所へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "補給は止まっている。油蔵の荷車を直して搬送門を開け、油蔵で待つ交代要員へ連絡しよう。詰所で引き継ぎを終えれば、燃料を購入できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.post_watch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.postStaffed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "当直を終えた灯番は休んでいる。交代要員が帳面を受け取り、次の巡回を支えている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.reliefAssigned"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "flag.set",
+                  "key": "kagaribi.postStaffed",
+                  "value": true
+                },
+                {
+                  "op": "gold.change",
+                  "amount": 20
+                },
+                {
+                  "op": "narrate",
+                  "text": "交代要員と勤務簿を照合し、引き継ぎを終えた。疲れた灯番が椅子に腰を下ろす。連絡の礼として20Gを受け取った。詰所の補給窓口が開いた。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "narrate",
+                  "text": "当直の灯番は勤務簿を閉じられずにいる。「次の者は油蔵で足止めされているはずだ。道を通し、こちらへ来るよう伝えてほしい」"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.records": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "巡回記録：第一層は油蔵と交差路の詰所。第二層は煤けた回廊の東端から中継広間へ続く。炭焼き場の搬出口は短いが、強い魔物がいる。第三層は最後の巡回路から祭壇へ通じ、納骨堂は脇道にある。"
+        },
+        {
+          "op": "narrate",
+          "text": "普通の火はくらがりを遠ざけるが、通常の魔物は現れる。火台のそばでも携帯松明の燃料は減る。残量25歩と8歩の警告を聞いたら、補充と引き返す道を確かめること。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "老人と新人の帰還記録の横に、今回の巡回先が書き足されている。二人の救助に使われた入口区画から、先の道へ仕事がつながっている。"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.cargoGate"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "搬送路：荷車と搬送門の復旧を確認した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "搬送路：油蔵の荷車を直し、交差路側から搬送門を開ける。"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.postStaffed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "勤務交代：引き継ぎが済み、詰所で燃料を購入できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "勤務交代：油蔵の交代要員へ連絡し、詰所で当直を確認する。"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.huntWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "炉守り：討伐済み。報酬箱を回収した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "炉守り：炭焼き場の搬出口を開け、赤鉄火台に呼び寄せの火を灯して合図する。"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.memorialDone"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "名札：町で記録を照合し、家族へ返した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "名札：納骨堂の石棚を調べ、町の灯番詰所で帰還記録と照合する。"
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.kiln_hunt": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.huntWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "赤い火に寄っていた炉守りは倒れた。古い窯の中から聞こえていた鎖の音も止んでいる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "赤い火に寄るもの。煤の下に、灯番が残した討伐の書付がある。「赤鉄火台へ呼び寄せの火を灯せば、炉守りが窯から出る。搬出口を開けてから合図せよ」。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "lure",
+                  "text": "赤い火の前で合図し、炉守りを誘い出す",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "火のそばで鉄輪を鳴らした。炭の山が崩れ、炉守りが姿を現す。"
+                    },
+                    {
+                      "op": "battle.start",
+                      "encounter": "kagaribi_kiln_guard",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "kagaribi.huntWon",
+                          "value": true
+                        },
+                        {
+                          "op": "gold.change",
+                          "amount": 40
+                        },
+                        {
+                          "op": "item.give",
+                          "item": "torch",
+                          "count": 3
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "炉守りを倒し、書付に指定された報酬箱を開いた。40Gと松明3本を受け取った。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "炉守りは窯の奥へ退いた。搬出口は開いている。準備を整えれば、もう一度誘い出せる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "condition": {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.kagaribi.kilnGate"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.kiln_bait.lit"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.kiln_bait.effect"
+                        },
+                        "right": "lure"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.kiln_marks": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "窯口には赤い火、職人の作業机には青銅の火台がある。職人は「鎮めの火」を携え、獣が集まる作業道を抜けていたらしい。種火は別の台座や携帯松明へ移せる。"
+        }
+      ]
+    },
+    "kagaribi.note.crossroads_note": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "油樽の轍が交差する。消えた中継篝火に燃料を入れれば、詰所と搬送門まで光が届く。"
+        }
+      ]
+    },
+    "kagaribi.note.relay_note": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "灯番が休んでいた広間。中央の中継篝火は消えている。点火すれば、壁沿いの連絡門と下層への階段を確かめられる。"
+        }
+      ]
+    },
+    "kagaribi.note.last_note": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "ここが最後の巡回記号だ。周囲の台座には古い型と新しい型が混在している。中継篝火へ点火し、帰路の目印を残せる。"
+        }
+      ]
+    },
+    "kagaribi.note.old_tools": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "新しい油瓶と古い火鋏が一つの箱にしまわれている。ここを整備した者たちも、さらに奥の台座の用途までは記していない。"
+        }
+      ]
+    },
+    "kagaribi.note.inscription": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "石棚には名札を外した跡が並ぶ。死者を戻す火を求めて潜った者の記録と、帰った日付だけが空欄の帳面が残っている。"
+        }
+      ]
+    },
+    "kagaribi.note.route_sign": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "東へ回れば中継広間。北側の作業戸からは旧炭焼き場へ抜けられる。近道だが、窯の周りには強い魔物が集まる。"
+        }
+      ]
+    },
+    "kagaribi.nameplate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.nameplateTaken"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "名札のあった石棚には、空の火入れを置いた丸い跡が残っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "石棚の名札に「イサク」と読める名がある。隣の帳面には「種火を持ち帰る」とだけ記され、帰還の日付はない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "take",
+                  "text": "名札を預かり、町で記録を確かめる",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "kagaribi.nameplateTaken",
+                      "value": true
+                    },
+                    {
+                      "op": "item.give",
+                      "item": "kagaribi_nameplate",
+                      "count": 1
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "煤けた灯番の名札を預かった。灯帰りの灯番詰所へ持ち帰ろう。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.memorial": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.memorialDone"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "イサクの名札は、家族に残された空の火入れのそばへ返された。帰還記録には、確かめられた事実だけが追記されている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "has_item",
+                "item": "kagaribi_nameplate"
+              },
+              "then": [
+                {
+                  "op": "narrate",
+                  "text": "持ち帰られた空の火入れ。リネが古い帰還簿を開き、イサクの娘を呼んだ。娘は煤のない空の火入れを机に置く。「これは父の荷物だけが戻ったときのものです。火が入っていたかは、誰も見ていません」"
+                },
+                {
+                  "op": "choice",
+                  "options": [
+                    {
+                      "id": "return",
+                      "text": "名札を返し、見つけた場所と記録を伝える",
+                      "commands": [
+                        {
+                          "op": "item.take",
+                          "item": "kagaribi_nameplate",
+                          "count": 1
+                        },
+                        {
+                          "op": "flag.set",
+                          "key": "kagaribi.memorialDone",
+                          "value": true
+                        },
+                        {
+                          "op": "gold.change",
+                          "amount": 35
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "名札と記録を家族へ返し、調査の礼として35Gを受け取った。納骨堂の記録も空の火入れも、蘇生の成否を証明してはいない。祭壇に残る火との関係は、まだ分からない。"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "leave",
+                      "text": "いったん記録を閉じる",
+                      "commands": []
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "op": "narrate",
+                  "text": "古い帰還簿には、種火を求めて潜った者の名が残っている。納骨堂に名札や記録があれば、ここで照合できる。"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -342,6 +1776,12 @@
       "name": "種火の火入れ",
       "description": "篝火の迷宮で採った種火を一つ保持します。消えた台座や携帯松明に移せます。火の効果は篝火の迷宮で働きます。",
       "type": "dungeon_tool"
+    },
+    "kagaribi_nameplate": {
+      "id": "kagaribi_nameplate",
+      "name": "煤けた灯番の名札",
+      "description": "納骨堂に残された名札。町の灯番詰所で帰還記録と照合できる。",
+      "type": "key"
     }
   },
   "enemies": {
@@ -374,6 +1814,240 @@
           "target": "weakest"
         }
       ]
+    },
+    "kagaribi_soot_rat": {
+      "id": "kagaribi_soot_rat",
+      "name": "煤ネズミ",
+      "sprite": "monster_vault_mouse",
+      "stats": {
+        "hp": 27,
+        "mp": 0,
+        "str": 8,
+        "vit": 3,
+        "agi": 8,
+        "int": 3
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 4,
+        "xp": 9
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_wax_slime": {
+      "id": "kagaribi_wax_slime",
+      "name": "燭蝋スライム",
+      "sprite": "slime",
+      "stats": {
+        "hp": 31,
+        "mp": 0,
+        "str": 9,
+        "vit": 4,
+        "agi": 4,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 5,
+        "xp": 11
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_ember_moth": {
+      "id": "kagaribi_ember_moth",
+      "name": "灯蛾",
+      "sprite": "monster_iris_butterfly",
+      "stats": {
+        "hp": 42,
+        "mp": 8,
+        "str": 11,
+        "vit": 5,
+        "agi": 12,
+        "int": 10
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 7,
+        "xp": 17
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "fire",
+          "target": "random",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "self.mp"
+            },
+            "right": 4
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_ash_guard": {
+      "id": "kagaribi_ash_guard",
+      "name": "赤錆の番兵",
+      "sprite": "skeleton",
+      "stats": {
+        "hp": 57,
+        "mp": 0,
+        "str": 13,
+        "vit": 8,
+        "agi": 5,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 10,
+        "xp": 21
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_cinder_golem": {
+      "id": "kagaribi_cinder_golem",
+      "name": "灰積みゴーレム",
+      "sprite": "construct",
+      "stats": {
+        "hp": 70,
+        "mp": 0,
+        "str": 14,
+        "vit": 10,
+        "agi": 3,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 12,
+        "xp": 25
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_chain_bone": {
+      "id": "kagaribi_chain_bone",
+      "name": "鎖引き骸骨",
+      "sprite": "skeleton",
+      "stats": {
+        "hp": 68,
+        "mp": 0,
+        "str": 15,
+        "vit": 9,
+        "agi": 7,
+        "int": 7
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 12,
+        "xp": 26
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_kiln_warden": {
+      "id": "kagaribi_kiln_warden",
+      "name": "炉守りの亡霊",
+      "sprite": "wraith",
+      "stats": {
+        "hp": 95,
+        "mp": 8,
+        "str": 16,
+        "vit": 9,
+        "agi": 8,
+        "int": 14
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 20,
+        "xp": 48
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "fire",
+          "target": "random",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "self.mp"
+            },
+            "right": 4
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
     }
   },
   "encounters": {
@@ -387,11 +2061,115 @@
     },
     "kagaribi_roaming": {
       "id": "kagaribi_roaming",
-      "text": "篝火に映る影が動く。巡回路の魔物が現れた。",
+      "text": "火の照らす通路から、魔物が現れた。",
       "escape": true,
       "enemies": [
-        "guard_1"
+        "kagaribi_soot_rat"
+      ]
+    },
+    "kagaribi_wax": {
+      "id": "kagaribi_wax",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_wax_slime"
+      ]
+    },
+    "kagaribi_moths": {
+      "id": "kagaribi_moths",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_ember_moth"
+      ]
+    },
+    "kagaribi_guards": {
+      "id": "kagaribi_guards",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_ash_guard"
+      ]
+    },
+    "kagaribi_golem": {
+      "id": "kagaribi_golem",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_cinder_golem"
+      ]
+    },
+    "kagaribi_bones": {
+      "id": "kagaribi_bones",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_chain_bone"
+      ]
+    },
+    "kagaribi_kiln_guard": {
+      "id": "kagaribi_kiln_guard",
+      "text": "赤い火に誘われ、炉守りが窯の奥から現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_kiln_warden"
+      ]
+    },
+    "kagaribi_pests": {
+      "id": "kagaribi_pests",
+      "text": "火の届く通路で、二体の魔物が道を塞いだ。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_soot_rat",
+        "kagaribi_wax_slime"
+      ]
+    },
+    "kagaribi_patrol_pair": {
+      "id": "kagaribi_patrol_pair",
+      "text": "火の届く通路で、二体の魔物が道を塞いだ。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_ember_moth",
+        "kagaribi_ash_guard"
+      ]
+    },
+    "kagaribi_deep_pair": {
+      "id": "kagaribi_deep_pair",
+      "text": "火の届く通路で、二体の魔物が道を塞いだ。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_chain_bone",
+        "kagaribi_cinder_golem"
       ]
     }
-  }
+  },
+  "services": [
+    {
+      "id": "kagaribi_watch",
+      "label": "当直と交代を確認する",
+      "detail": "油蔵の交代要員と勤務を引き継ぐ。",
+      "script": "kagaribi.post_watch",
+      "interior": true
+    },
+    {
+      "id": "kagaribi_supply",
+      "label": "燃料の補給窓口",
+      "detail": "搬送門の開通と勤務交代後、松明1本6G。",
+      "script": "kagaribi.post_supply",
+      "interior": true
+    },
+    {
+      "id": "kagaribi_records",
+      "label": "巡回記録を読む",
+      "detail": "各層の経路と火の扱いを確認する。",
+      "script": "kagaribi.records",
+      "interior": true
+    },
+    {
+      "id": "kagaribi_memorial",
+      "label": "古い帰還記録を照合する",
+      "detail": "納骨堂で見つけた名札と、遺族に残された火入れ。",
+      "script": "kagaribi.memorial"
+    }
+  ]
 }

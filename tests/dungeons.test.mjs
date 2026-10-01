@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {inspect,data,newGame,drain,pathTo} from './helpers.mjs';
+import {inspect,data,newGame,drain,pathTo,navigateMaps} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {fireContext,fireEnvironment} from '../src/core/systems/fire-network.js';
 import {dungeonActionPlan,dungeonEncounter} from '../src/core/dungeons.js';
@@ -17,7 +17,7 @@ const roundtrip=g=>{assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[
 const mutable=()=>{const g=begin();g.data=structuredClone(g.data);return g;};
 
 test('13 independent dungeon definitions retain 10 regions and all 200 quests',()=>{
-  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,33);
+  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,39);
   const g=begin();assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).effect,'ward');assert.equal(flame(g).fuel,90);
   assert.ok(fireEnvironment(fireContext(data,g.state)).protected);assert.ok(g.state.discovered.kagaribi_f1.includes('13,3'));assert.ok(!g.state.discovered.kagaribi_f2?.includes('13,7'));
   assert.equal(projectGame(g).dungeons.find(d=>d.id==='kagaribi').name,'篝火の迷宮');roundtrip(g);
@@ -73,13 +73,13 @@ test('escaping kuragari does not recursively restart the same battle in one inpu
 test('normal encounter strength is calculated from active fires and survives battle save/replay',()=>{
   const g=mutable();place(g,'kagaribi_f1',8,5);action(g,'ignite','calm');g.data.system.encounterCheckSteps=1;g.map().encounterRate=1;g.data.jobs.scout.passives.encounterRate=1;g.random=()=>0;
   g.dispatch({type:'move',direction:'forward'});assert.equal(g.state.battle.enemyScale,.6);
-  const enemy=g.state.battle.enemies[0];assert.equal(enemy.stats.hp,Math.round(data.enemies[enemy.id].stats.hp*.6));assert.equal(data.enemies[enemy.id].stats.hp,31);
+  const enemy=g.state.battle.enemies[0];assert.equal(enemy.stats.hp,Math.round(data.enemies[enemy.id].stats.hp*.6));assert.equal(data.enemies[enemy.id].stats.hp,27);
   roundtrip(g);const saved=g.save(),copy=new GameEngine(g.data);copy.load(saved);g.dispatch({type:'battle',action:'skill',skill:'guard'});copy.dispatch({type:'battle',action:'skill',skill:'guard'});assert.equal(g.save(),copy.save());
 });
 test('every floor and the deep seed can be reached using actual movement and stairs',()=>{
   const g=begin(true);g.state.inventory.torch=99;
   g.random=()=>0.999999;const walk=(x,y)=>{for(const [nx,ny] of pathTo(g,x,y)){const l=g.state.location,wanted=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==wanted)g.dispatch({type:'move',direction:'right'});if(flame(g).fuel<30)action(g,'refuel');assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.battle,null);}};
-  for(const next of ['kagaribi_f2','kagaribi_f3']){walk(13,7);inspect(g);drain(g);assert.equal(g.state.location.map,next);roundtrip(g);}
+  for(const next of ['kagaribi_f2','kagaribi_f3']){navigateMaps(g,next);if(!flame(g).lit)action(g,'ignite');else if(flame(g).fuel<30)action(g,'refuel');assert.equal(g.state.location.map,next);roundtrip(g);}
   walk(7,7);assert.ok(action(g,'collect','origin'));assert.equal(fireContext(g.data,g.state).run.ember.effect,'deep');g.returnTown();assert.equal(g.state.inventory.kagaribi_ember,1);assert.equal(g.state.inventory.kagaribi_torch,0);roundtrip(g);
   g.dispatch({type:'travel',dungeon:'kagaribi'});assert.equal(fireContext(data,g.state).run.ember.effect,'deep');assert.equal(g.state.inventory.kagaribi_torch,1);
 });

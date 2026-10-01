@@ -33,7 +33,7 @@ export function pathTo(engine,x,y){const loc=engine.state.location,map=engine.ma
   for(let i=0;i<queue.length;i++){const [cx,cy]=queue[i];if(cx===x&&cy===y){found=true;break;}for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const key=`${cx+dx},${cy+dy}`;if(engine.walkable(map,cx+dx,cy+dy)&&!seen.has(key)){seen.set(key,[cx,cy]);queue.push([cx+dx,cy+dy]);}}}
   assert.ok(found,`Path to ${x},${y}`);const steps=[];let p=[x,y];while(p){steps.push(p);p=seen.get(p.join(','));}return steps.reverse().slice(1);
 }
-export function walk(engine,x,y,{heal=false,maintain=false,settleDestination=true}={}){for(const [nx,ny] of pathTo(engine,x,y)){if(maintain)maintainParty(engine);const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y,wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));assert.ok(engine.dispatch({type:'move',direction:'forward'}));if(heal)engine.healAll();if(!settleDestination&&nx===x&&ny===y)drain(engine);else settle(engine);assert.equal(engine.state.mode,'dungeon','party survived route');}}
+export function walk(engine,x,y,{heal=false,maintain=false,settleDestination=true,beforeStep=null}={}){for(const [nx,ny] of pathTo(engine,x,y)){beforeStep?.(engine);if(maintain)maintainParty(engine);const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y,wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));assert.ok(engine.dispatch({type:'move',direction:'forward'}));if(heal)engine.healAll();if(!settleDestination&&nx===x&&ny===y)drain(engine);else settle(engine);assert.equal(engine.state.mode,'dungeon','party survived route');}}
 export function maintainParty(g){
   for(const id of g.state.members){const actor=g.state.actors[id];if(actor.statuses.includes('poison')&&g.state.inventory.antidote>0){g.dispatch({type:'item',item:'antidote',actor:id});drain(g);}if(actor.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0){g.dispatch({type:'item',item:'potion',actor:id});drain(g);}}
   const needsFood=g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.55)||g.state.actors.sera.mp<4;
@@ -95,7 +95,7 @@ export function goWorldLocation(g,destination){
 export function navigateMaps(engine,target,options={}){
   const d=engine.data.dungeons[engine.state.dungeons.active.id],links=d.systems.connections.links;
   const route=new Map([[engine.state.location.map,null]]),queue=[engine.state.location.map];
-  for(let i=0;i<queue.length;i++)for(const link of links)for(const [from,to] of [[link.a,link.b],[link.b,link.a]])if(from.map===queue[i]&&!route.has(to.map)){route.set(to.map,{from,to,link});queue.push(to.map);}
+  for(let i=0;i<queue.length;i++)for(const link of links)for(const [from,to] of [[link.a,link.b],[link.b,link.a]])if(from.map===queue[i]&&!route.has(to.map)&&(link.condition===undefined||engine.value(link.condition))){route.set(to.map,{from,to,link});queue.push(to.map);}
   assert.ok(route.has(target),`Connected route to ${target}`);
   const edges=[];for(let next=route.get(target);next;next=route.get(next.from.map))edges.unshift(next);
   for(const {from,to,link} of edges){

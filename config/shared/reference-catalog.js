@@ -5,7 +5,7 @@ export const referenceData={
       "schemaVersion": 1,
       "id": "kagaribi",
       "name": "篝火の迷宮",
-      "description": "灯帰りの町が生まれるきっかけとなった迷宮。灯番の巡回区画の奥には、消えた火と未探索の通路が続く。",
+      "description": "灯番の巡回路、油蔵と詰所、消えた中継篝火、深火の祭壇へ続く三層九区画。灯と近道を整備して、次の探索の足場を作る。",
       "region": 1,
       "recommendedLevel": 1,
       "profile": "classic",
@@ -17,7 +17,13 @@ export const referenceData={
       },
       "maps": [
         "kagaribi_f1",
+        "kagaribi_oilstore",
+        "kagaribi_crossroads",
         "kagaribi_f2",
+        "kagaribi_kilns",
+        "kagaribi_relay",
+        "kagaribi_last_patrol",
+        "kagaribi_ossuary",
         "kagaribi_f3"
       ],
       "systems": {
@@ -188,6 +194,83 @@ export const referenceData={
               "radius": 2,
               "capacity": null,
               "initiallyLit": true
+            },
+            {
+              "id": "oilstore_lamp",
+              "name": "油蔵の守り火",
+              "map": "kagaribi_oilstore",
+              "x": 3,
+              "y": 5,
+              "effect": "ward",
+              "radius": 3,
+              "initiallyLit": true,
+              "capacity": null
+            },
+            {
+              "id": "crossroads_main",
+              "name": "交差路の中継篝火",
+              "map": "kagaribi_crossroads",
+              "x": 8,
+              "y": 5,
+              "effect": "ward",
+              "radius": 5,
+              "initiallyLit": false,
+              "capacity": null
+            },
+            {
+              "id": "kiln_bait",
+              "name": "炭焼き場の赤鉄火台",
+              "map": "kagaribi_kilns",
+              "x": 9,
+              "y": 5,
+              "effect": "lure",
+              "radius": 4,
+              "initiallyLit": false,
+              "capacity": 80
+            },
+            {
+              "id": "kiln_calm",
+              "name": "職人の青銅火台",
+              "map": "kagaribi_kilns",
+              "x": 3,
+              "y": 5,
+              "effect": "calm",
+              "radius": 3,
+              "initiallyLit": false,
+              "capacity": 80
+            },
+            {
+              "id": "relay_main",
+              "name": "広間の中継篝火",
+              "map": "kagaribi_relay",
+              "x": 7,
+              "y": 5,
+              "effect": "ward",
+              "radius": 6,
+              "initiallyLit": false,
+              "capacity": null
+            },
+            {
+              "id": "last_patrol_main",
+              "name": "巡回路の中継篝火",
+              "map": "kagaribi_last_patrol",
+              "x": 7,
+              "y": 7,
+              "effect": "ward",
+              "radius": 5,
+              "initiallyLit": false,
+              "capacity": null
+            },
+            {
+              "id": "ossuary_lamp",
+              "name": "名札の前の灯",
+              "map": "kagaribi_ossuary",
+              "x": 11,
+              "y": 5,
+              "effect": "calm",
+              "radius": 3,
+              "initiallyLit": false,
+              "capacity": 80
             }
           ]
         },
@@ -195,44 +278,414 @@ export const referenceData={
           "use": "map_connections",
           "links": [
             {
-              "id": "floor_1_2",
-              "name": "未探索区画への階段",
-              "kind": "stairs",
+              "id": "patrol_oilstore",
+              "name": "油蔵への搬送通路",
+              "kind": "door",
               "a": {
                 "map": "kagaribi_f1",
                 "x": 13,
                 "y": 7,
-                "facing": "west"
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_oilstore",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              },
+              "condition": {
+                "op": "ne",
+                "left": {
+                  "ref": "quests.q001.stage"
+                },
+                "right": "active"
+              },
+              "requirement": "捜索と帰還報告を終えてから、油蔵への巡回を始めよう。"
+            },
+            {
+              "id": "oilstore_crossroads",
+              "name": "油樽の搬送路",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_oilstore",
+                "x": 15,
+                "y": 9,
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_crossroads",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "cargo_shortcut",
+              "name": "入口へ戻る搬送門",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_f1",
+                "x": 3,
+                "y": 7,
+                "side": "south"
+              },
+              "b": {
+                "map": "kagaribi_crossroads",
+                "x": 1,
+                "y": 9,
+                "side": "west"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "ne",
+                    "left": {
+                      "ref": "quests.q001.stage"
+                    },
+                    "right": "active"
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.cargoGate"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "搬送門は閉じている。油蔵の荷車を直し、詰所側から掛け金を外せる。"
+            },
+            {
+              "id": "floor_1_2",
+              "name": "煤けた回廊への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_crossroads",
+                "x": 15,
+                "y": 7
               },
               "b": {
                 "map": "kagaribi_f2",
                 "x": 1,
-                "y": 1,
-                "facing": "east"
+                "y": 1
               }
             },
             {
-              "id": "floor_2_3",
-              "name": "未探索区画への階段",
-              "kind": "stairs",
+              "id": "soot_relay",
+              "name": "中継広間への巡回路",
+              "kind": "door",
               "a": {
                 "map": "kagaribi_f2",
                 "x": 13,
-                "y": 7,
-                "facing": "west"
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_relay",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "soot_kilns",
+              "name": "炭焼き場への作業戸",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_f2",
+                "x": 5,
+                "y": 3,
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_kilns",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "kiln_escape",
+              "name": "炭焼き場の搬出口",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_kilns",
+                "x": 7,
+                "y": 1,
+                "side": "north"
+              },
+              "b": {
+                "map": "kagaribi_relay",
+                "x": 15,
+                "y": 1,
+                "side": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.kilnGate"
+                },
+                "right": true
+              },
+              "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+            },
+            {
+              "id": "relay_shortcut",
+              "name": "中継篝火の連絡門",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_f2",
+                "x": 3,
+                "y": 1,
+                "side": "north"
+              },
+              "b": {
+                "map": "kagaribi_relay",
+                "x": 1,
+                "y": 9,
+                "side": "west"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.relayGate"
+                },
+                "right": true
+              },
+              "requirement": "広間側で中継篝火を灯し、連絡門の巻上げ機を動かそう。"
+            },
+            {
+              "id": "floor_2_3",
+              "name": "最後の巡回路への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_relay",
+                "x": 15,
+                "y": 9
+              },
+              "b": {
+                "map": "kagaribi_last_patrol",
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "id": "last_altar",
+              "name": "深火の祭壇への回廊",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_last_patrol",
+                "x": 15,
+                "y": 9,
+                "side": "east"
               },
               "b": {
                 "map": "kagaribi_f3",
                 "x": 1,
                 "y": 1,
-                "facing": "east"
+                "side": "north"
               }
+            },
+            {
+              "id": "last_ossuary",
+              "name": "納骨堂への脇戸",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_last_patrol",
+                "x": 15,
+                "y": 1,
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_ossuary",
+                "x": 1,
+                "y": 1,
+                "side": "west"
+              }
+            },
+            {
+              "id": "ossuary_altar",
+              "name": "納骨堂奥の石扉",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_ossuary",
+                "x": 15,
+                "y": 9,
+                "side": "east"
+              },
+              "b": {
+                "map": "kagaribi_f3",
+                "x": 13,
+                "y": 5,
+                "side": "east"
+              }
+            },
+            {
+              "id": "altar_shortcut",
+              "name": "最後の巡回路への帰路",
+              "kind": "door",
+              "a": {
+                "map": "kagaribi_last_patrol",
+                "x": 1,
+                "y": 9,
+                "side": "south"
+              },
+              "b": {
+                "map": "kagaribi_f3",
+                "x": 1,
+                "y": 7,
+                "side": "west"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.altarGate"
+                },
+                "right": true
+              },
+              "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
             }
           ]
         }
       },
       "source": "https://app.notion.com/p/3dac3c1966b38057b740df426b57da09",
-      "fieldEvents": []
+      "fieldEvents": [
+        {
+          "id": "restored_crossroads_main",
+          "title": "交差路の火の復旧",
+          "watch": [
+            "move",
+            "light",
+            "object"
+          ],
+          "repeat": "once",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.crossroads_main.lit"
+            },
+            "right": true
+          },
+          "points": [
+            {
+              "map": "kagaribi_crossroads",
+              "x": 8,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_crossroads",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_crossroads",
+              "x": 7,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_crossroads",
+              "x": 8,
+              "y": 6
+            },
+            {
+              "map": "kagaribi_crossroads",
+              "x": 8,
+              "y": 4
+            }
+          ],
+          "action": {
+            "type": "script",
+            "script": "kagaribi.restored.crossroads_main"
+          }
+        },
+        {
+          "id": "restored_relay_main",
+          "title": "中継篝火の復旧",
+          "watch": [
+            "move",
+            "light",
+            "object"
+          ],
+          "repeat": "once",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.relay_main.lit"
+            },
+            "right": true
+          },
+          "points": [
+            {
+              "map": "kagaribi_relay",
+              "x": 7,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_relay",
+              "x": 8,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_relay",
+              "x": 6,
+              "y": 5
+            },
+            {
+              "map": "kagaribi_relay",
+              "x": 7,
+              "y": 6
+            },
+            {
+              "map": "kagaribi_relay",
+              "x": 7,
+              "y": 4
+            }
+          ],
+          "action": {
+            "type": "script",
+            "script": "kagaribi.restored.relay_main"
+          }
+        },
+        {
+          "id": "restored_last_patrol_main",
+          "title": "最後の巡回灯の復旧",
+          "watch": [
+            "move",
+            "light",
+            "object"
+          ],
+          "repeat": "once",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.persistent.kagaribi.systems.fires.fixtures.last_patrol_main.lit"
+            },
+            "right": true
+          },
+          "points": [
+            {
+              "map": "kagaribi_last_patrol",
+              "x": 7,
+              "y": 7
+            },
+            {
+              "map": "kagaribi_last_patrol",
+              "x": 8,
+              "y": 7
+            },
+            {
+              "map": "kagaribi_last_patrol",
+              "x": 7,
+              "y": 6
+            }
+          ],
+          "action": {
+            "type": "script",
+            "script": "kagaribi.restored.last_patrol_main"
+          }
+        }
+      ]
     },
     "moving_village": {
       "schemaVersion": 1,
@@ -14332,6 +14785,76 @@ export const referenceData={
       "id": "antidote"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_soot_rat",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_wax_slime",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_ember_moth",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_ash_guard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_cinder_golem",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_chain_bone",
+        "item"
+      ],
+      "kind": "items",
+      "id": "rope"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_kiln_warden",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -19119,18 +19642,6 @@ export const referenceData={
         "script"
       ],
       "kind": "scripts",
-      "id": "kagaribi_f1.down"
-    },
-    {
-      "file": "kagaribi-content.json",
-      "path": [
-        "maps",
-        "kagaribi_f1",
-        "objects",
-        2,
-        "script"
-      ],
-      "kind": "scripts",
       "id": "kagaribi.history"
     },
     {
@@ -19155,7 +19666,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
+      "id": "kagaribi_wax"
     },
     {
       "file": "kagaribi-content.json",
@@ -19167,7 +19678,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "kagaribi_pests"
     },
     {
       "file": "kagaribi-content.json",
@@ -19197,7 +19708,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -19209,19 +19720,7 @@ export const referenceData={
         "script"
       ],
       "kind": "scripts",
-      "id": "kagaribi_f2.up"
-    },
-    {
-      "file": "kagaribi-content.json",
-      "path": [
-        "maps",
-        "kagaribi_f2",
-        "objects",
-        1,
-        "script"
-      ],
-      "kind": "scripts",
-      "id": "kagaribi_f2.down"
+      "id": "kagaribi.note.route_sign"
     },
     {
       "file": "kagaribi-content.json",
@@ -19233,7 +19732,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -19245,7 +19744,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
+      "id": "kagaribi_guards"
     },
     {
       "file": "kagaribi-content.json",
@@ -19257,7 +19756,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "kagaribi_patrol_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -19287,7 +19786,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -19296,18 +19795,6 @@ export const referenceData={
         "kagaribi_f3",
         "objects",
         0,
-        "script"
-      ],
-      "kind": "scripts",
-      "id": "kagaribi_f3.up"
-    },
-    {
-      "file": "kagaribi-content.json",
-      "path": [
-        "maps",
-        "kagaribi_f3",
-        "objects",
-        1,
         "script"
       ],
       "kind": "scripts",
@@ -19318,12 +19805,24 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_f3",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.altar_latch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f3",
         "encounterPool",
         0,
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -19335,7 +19834,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
+      "id": "kagaribi_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -19347,55 +19846,865 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "kagaribi_deep_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_roaming"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.oil_manifest"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.cart"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.tools"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.relief"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_roaming"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_wax"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_pests"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_roaming"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.cargo_latch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.note.crossroads_note"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_roaming"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_wax"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_pests"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.kiln_latch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.kiln_hunt"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.kiln_marks"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_moths"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_patrol_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_moths"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.relay_latch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.note.relay_note"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_moths"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_guards"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_patrol_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_bones"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.note.last_note"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.note.old_tools"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_bones"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_deep_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_bones"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.note.inscription"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.nameplate"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_bones"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_deep_pair"
     },
     {
       "file": "kagaribi-content.json",
       "path": [
         "scripts",
-        "kagaribi_f1.down",
+        "kagaribi.cart",
         "commands",
         0,
-        "map"
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "item"
       ],
-      "kind": "maps",
-      "id": "kagaribi_f2"
+      "kind": "items",
+      "id": "rope"
     },
     {
       "file": "kagaribi-content.json",
       "path": [
         "scripts",
-        "kagaribi_f2.up",
+        "kagaribi.cart",
         "commands",
         0,
-        "map"
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        3,
+        "item"
       ],
-      "kind": "maps",
-      "id": "kagaribi_f1"
+      "kind": "items",
+      "id": "torch"
     },
     {
       "file": "kagaribi-content.json",
       "path": [
         "scripts",
-        "kagaribi_f2.down",
+        "kagaribi.cart",
         "commands",
         0,
-        "map"
+        "else",
+        1,
+        "options",
+        0,
+        "condition",
+        "item"
       ],
-      "kind": "maps",
-      "id": "kagaribi_f3"
+      "kind": "items",
+      "id": "rope"
     },
     {
       "file": "kagaribi-content.json",
       "path": [
         "scripts",
-        "kagaribi_f3.up",
+        "kagaribi.tools",
         "commands",
         0,
-        "map"
+        "else",
+        1,
+        "item"
       ],
-      "kind": "maps",
-      "id": "kagaribi_f2"
+      "kind": "items",
+      "id": "rope"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.tools",
+        "commands",
+        0,
+        "else",
+        2,
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.cargo_latch",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "asset"
+      ],
+      "kind": "audio",
+      "id": "se_door"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_latch",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "asset"
+      ],
+      "kind": "audio",
+      "id": "se_door"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.relay_latch",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "asset"
+      ],
+      "kind": "audio",
+      "id": "se_door"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_latch",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "asset"
+      ],
+      "kind": "audio",
+      "id": "se_door"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_supply",
+        "commands",
+        0,
+        "then",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_supply",
+        "commands",
+        0,
+        "then",
+        1,
+        "options",
+        0,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_hunt",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_kiln_guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_hunt",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "on_win",
+        2,
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.nameplate",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "kagaribi_nameplate"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.memorial",
+        "commands",
+        0,
+        "else",
+        0,
+        "condition",
+        "item"
+      ],
+      "kind": "items",
+      "id": "kagaribi_nameplate"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.memorial",
+        "commands",
+        0,
+        "else",
+        0,
+        "then",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "kagaribi_nameplate"
     },
     {
       "file": "kagaribi-content.json",
@@ -19422,6 +20731,184 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_soot_rat",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_vault_mouse"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_rat",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_wax_slime",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_wax_slime",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ember_moth",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_iris_butterfly"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ember_moth",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "fire"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ember_moth",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ash_guard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "skeleton"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ash_guard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_cinder_golem",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_cinder_golem",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_chain_bone",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "skeleton"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_chain_bone",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_warden",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "wraith"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_warden",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "fire"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_warden",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -19439,7 +20926,179 @@ export const referenceData={
         0
       ],
       "kind": "enemies",
-      "id": "guard_1"
+      "id": "kagaribi_soot_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_wax",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_wax_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_moths",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ember_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_guards",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ash_guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_golem",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_cinder_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_bones",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_chain_bone"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_kiln_guard",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_kiln_warden"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_pests",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_pests",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_wax_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_patrol_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ember_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_patrol_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ash_guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_deep_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_chain_bone"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_deep_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_cinder_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "services",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.post_watch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "services",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.post_supply"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "services",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.records"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "services",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.memorial"
     },
     {
       "file": "locations.json",
@@ -19850,6 +21509,35 @@ export const referenceData={
       ],
       "kind": "images",
       "id": "location_insurance"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "kagaribi_post",
+        "background"
+      ],
+      "kind": "images",
+      "id": "location_checkpoint"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "kagaribi_post",
+        "dungeonEntrance",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "kagaribi_post",
+        "dungeonEntrance",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
     },
     {
       "file": "presentation.json",
@@ -21785,13 +23473,67 @@ export const referenceData={
         1
       ],
       "kind": "maps",
-      "id": "kagaribi_f2"
+      "id": "kagaribi_oilstore"
     },
     {
       "file": "dungeons/kagaribi.json",
       "path": [
         "maps",
         2
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        3
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        4
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        5
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        6
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        7
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        8
       ],
       "kind": "maps",
       "id": "kagaribi_f3"
@@ -21952,6 +23694,90 @@ export const referenceData={
       "file": "dungeons/kagaribi.json",
       "path": [
         "systems",
+        "fires",
+        "fixtures",
+        9,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_oilstore"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        10,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        11,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        12,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        13,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        14,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "fires",
+        "fixtures",
+        15,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
         "connections",
         "links",
         0,
@@ -21972,7 +23798,7 @@ export const referenceData={
         "map"
       ],
       "kind": "maps",
-      "id": "kagaribi_f2"
+      "id": "kagaribi_oilstore"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -21985,7 +23811,7 @@ export const referenceData={
         "map"
       ],
       "kind": "maps",
-      "id": "kagaribi_f2"
+      "id": "kagaribi_oilstore"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -21998,7 +23824,482 @@ export const referenceData={
         "map"
       ],
       "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
       "id": "kagaribi_f3"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        11,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        11,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f3"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        12,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        12,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f3"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "points",
+        1,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "points",
+        2,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "points",
+        3,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "points",
+        4,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        0,
+        "action",
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.restored.crossroads_main"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "points",
+        1,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "points",
+        2,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "points",
+        3,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "points",
+        4,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        1,
+        "action",
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.restored.relay_main"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        2,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        2,
+        "points",
+        1,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        2,
+        "points",
+        2,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "fieldEvents",
+        2,
+        "action",
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.restored.last_patrol_main"
     },
     {
       "file": "dungeons/moving_village.json",
@@ -29365,9 +31666,15 @@ export const referenceData={
     "data/job-profile.json",
     "data/jobs.json",
     "data/locations.json",
+    "data/maps/kagaribi_crossroads.json",
     "data/maps/kagaribi_f1.json",
     "data/maps/kagaribi_f2.json",
     "data/maps/kagaribi_f3.json",
+    "data/maps/kagaribi_kilns.json",
+    "data/maps/kagaribi_last_patrol.json",
+    "data/maps/kagaribi_oilstore.json",
+    "data/maps/kagaribi_ossuary.json",
+    "data/maps/kagaribi_relay.json",
     "data/maps/moving_village_f1.json",
     "data/maps/prayerless_valley_f1.json",
     "data/maps/region_10_f1.json",
@@ -30112,6 +32419,9 @@ export const referenceData={
       },
       "blasting_charge": {
         "name": "発破薬"
+      },
+      "kagaribi_nameplate": {
+        "name": "煤けた灯番の名札"
       }
     },
     "enemies": {
@@ -30350,6 +32660,34 @@ export const referenceData={
       "salt_eater": {
         "name": "ソルトイーター",
         "sprite": "slime"
+      },
+      "kagaribi_soot_rat": {
+        "name": "煤ネズミ",
+        "sprite": "monster_vault_mouse"
+      },
+      "kagaribi_wax_slime": {
+        "name": "燭蝋スライム",
+        "sprite": "slime"
+      },
+      "kagaribi_ember_moth": {
+        "name": "灯蛾",
+        "sprite": "monster_iris_butterfly"
+      },
+      "kagaribi_ash_guard": {
+        "name": "赤錆の番兵",
+        "sprite": "skeleton"
+      },
+      "kagaribi_cinder_golem": {
+        "name": "灰積みゴーレム",
+        "sprite": "construct"
+      },
+      "kagaribi_chain_bone": {
+        "name": "鎖引き骸骨",
+        "sprite": "skeleton"
+      },
+      "kagaribi_kiln_warden": {
+        "name": "炉守りの亡霊",
+        "sprite": "wraith"
       }
     },
     "encounters": {
@@ -30598,6 +32936,33 @@ export const referenceData={
       },
       "salt_eater_feeding": {
         "name": "salt_eater_feeding"
+      },
+      "kagaribi_wax": {
+        "name": "kagaribi_wax"
+      },
+      "kagaribi_moths": {
+        "name": "kagaribi_moths"
+      },
+      "kagaribi_guards": {
+        "name": "kagaribi_guards"
+      },
+      "kagaribi_golem": {
+        "name": "kagaribi_golem"
+      },
+      "kagaribi_bones": {
+        "name": "kagaribi_bones"
+      },
+      "kagaribi_kiln_guard": {
+        "name": "kagaribi_kiln_guard"
+      },
+      "kagaribi_pests": {
+        "name": "kagaribi_pests"
+      },
+      "kagaribi_patrol_pair": {
+        "name": "kagaribi_patrol_pair"
+      },
+      "kagaribi_deep_pair": {
+        "name": "kagaribi_deep_pair"
       }
     },
     "statuses": {
@@ -31281,6 +33646,9 @@ export const referenceData={
       },
       "hikarigaeri_pass_registry": {
         "name": "通行資格審査所"
+      },
+      "kagaribi_post": {
+        "name": "交差路の灯番詰所"
       }
     },
     "edgeTypes": {
@@ -33619,7 +35987,7 @@ export const referenceData={
     },
     "kagaribi_f2": {
       "id": "kagaribi_f2",
-      "name": "篝火の迷宮・消えた灯の回廊",
+      "name": "篝火の迷宮・煤けた回廊",
       "width": 15,
       "height": 9,
       "dungeon": "kagaribi",
@@ -33794,6 +36162,96 @@ export const referenceData={
         "path": [
           "maps",
           "region_1_gatehouse"
+        ]
+      }
+    },
+    "kagaribi_oilstore": {
+      "id": "kagaribi_oilstore",
+      "name": "篝火の迷宮・油蔵",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_oilstore.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_oilstore"
+        ]
+      }
+    },
+    "kagaribi_crossroads": {
+      "id": "kagaribi_crossroads",
+      "name": "篝火の迷宮・交差路の詰所前",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_crossroads.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_crossroads"
+        ]
+      }
+    },
+    "kagaribi_kilns": {
+      "id": "kagaribi_kilns",
+      "name": "篝火の迷宮・旧炭焼き場",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_kilns.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_kilns"
+        ]
+      }
+    },
+    "kagaribi_relay": {
+      "id": "kagaribi_relay",
+      "name": "篝火の迷宮・中継篝火の広間",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_relay.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_relay"
+        ]
+      }
+    },
+    "kagaribi_last_patrol": {
+      "id": "kagaribi_last_patrol",
+      "name": "篝火の迷宮・最後の巡回路",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_last_patrol.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_last_patrol"
+        ]
+      }
+    },
+    "kagaribi_ossuary": {
+      "id": "kagaribi_ossuary",
+      "name": "篝火の迷宮・帰らずの納骨堂",
+      "width": 17,
+      "height": 11,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_ossuary.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_ossuary"
         ]
       }
     }
@@ -41723,6 +44181,9 @@ export const referenceData={
     "dungeons.active.systems.mirrors.uses",
     "dungeons.active.systems.return_flow.stacks",
     "dungeons.active.systems.terrain.changes",
+    "dungeons.persistent.kagaribi.systems.fires.fixtures.kiln_bait.effect",
+    "dungeons.persistent.kagaribi.systems.fires.fixtures.kiln_bait.lit",
+    "dungeons.persistent.kagaribi.systems.fires.fixtures.relay_main.lit",
     "dungeons.persistent.region_1.systems.water.controls.upper_gate",
     "dungeons.persistent.region_2.systems.walls.broken",
     "dungeons.persistent.region_3.systems.garden.plants.bridge_1.age",
@@ -42022,6 +44483,21 @@ export const referenceData={
     "flags.flow.q200.homeConsent",
     "flags.flow.q200.intent",
     "flags.flow.q200.node",
+    "flags.kagaribi.altarGate",
+    "flags.kagaribi.cargoGate",
+    "flags.kagaribi.cartCleared",
+    "flags.kagaribi.crossroads_mainSeen",
+    "flags.kagaribi.huntWon",
+    "flags.kagaribi.kilnGate",
+    "flags.kagaribi.last_patrol_mainSeen",
+    "flags.kagaribi.memorialDone",
+    "flags.kagaribi.nameplateTaken",
+    "flags.kagaribi.oilRequested",
+    "flags.kagaribi.postStaffed",
+    "flags.kagaribi.relayGate",
+    "flags.kagaribi.relay_mainSeen",
+    "flags.kagaribi.reliefAssigned",
+    "flags.kagaribi.toolsTaken",
     "flags.legacyQuestRoutes.q005",
     "flags.legacyQuestRoutes.q006",
     "flags.legacyQuestRoutes.q007",
@@ -43713,19 +46189,19 @@ export const referenceData={
       "file": "config/kagaribi-content.json"
     },
     "kagaribi_f1.down": {
-      "name": "kagaribi_f1.down",
+      "name": "階段の接続口から隣の区画へ進む。",
       "file": "config/kagaribi-content.json"
     },
     "kagaribi_f2.up": {
-      "name": "kagaribi_f2.up",
+      "name": "階段の接続口から隣の区画へ進む。",
       "file": "config/kagaribi-content.json"
     },
     "kagaribi_f2.down": {
-      "name": "kagaribi_f2.down",
+      "name": "階段の接続口から隣の区画へ進む。",
       "file": "config/kagaribi-content.json"
     },
     "kagaribi_f3.up": {
-      "name": "kagaribi_f3.up",
+      "name": "階段の接続口から隣の区画へ進む。",
       "file": "config/kagaribi-content.json"
     },
     "kagaribi.history": {
@@ -43734,6 +46210,102 @@ export const referenceData={
     },
     "kagaribi.legend": {
       "name": "迷宮の最奥から種火を持ち帰れば、死者を生き返らせられるという。この祭壇の火が伝承",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.restored.crossroads_main": {
+      "name": "篝火の光が交差路へ伸びた。油樽を運んだ轍が、入口へ戻る搬送門と詰所の戸口を結んで",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.restored.relay_main": {
+      "name": "高い篝火の炎が広間の梁を照らした。壁沿いに連絡門の鎖が走り、南東には下層への階段",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.restored.last_patrol_main": {
+      "name": "火が残った石柱を照らした。崩れた床の向こうに古い台座が見える。現在の巡回記号はこ",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.oil_manifest": {
+      "name": "戻らない油樽。詰所の補給記録は昨日で止まっている。倉内の轍は南東の搬出口へ続き、",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.cart": {
+      "name": "kagaribi.cart",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.tools": {
+      "name": "kagaribi.tools",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.relief": {
+      "name": "kagaribi.relief",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.cargo_latch": {
+      "name": "kagaribi.cargo_latch",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.kiln_latch": {
+      "name": "kagaribi.kiln_latch",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.relay_latch": {
+      "name": "kagaribi.relay_latch",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.altar_latch": {
+      "name": "kagaribi.altar_latch",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.post_supply": {
+      "name": "kagaribi.post_supply",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.post_watch": {
+      "name": "kagaribi.post_watch",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.records": {
+      "name": "巡回記録：第一層は油蔵と交差路の詰所。第二層は煤けた回廊の東端から中継広間へ続く",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.kiln_hunt": {
+      "name": "kagaribi.kiln_hunt",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.kiln_marks": {
+      "name": "窯口には赤い火、職人の作業机には青銅の火台がある。職人は「鎮めの火」を携え、獣が",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.crossroads_note": {
+      "name": "油樽の轍が交差する。消えた中継篝火に燃料を入れれば、詰所と搬送門まで光が届く。",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.relay_note": {
+      "name": "灯番が休んでいた広間。中央の中継篝火は消えている。点火すれば、壁沿いの連絡門と下",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.last_note": {
+      "name": "ここが最後の巡回記号だ。周囲の台座には古い型と新しい型が混在している。中継篝火へ",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.old_tools": {
+      "name": "新しい油瓶と古い火鋏が一つの箱にしまわれている。ここを整備した者たちも、さらに奥",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.inscription": {
+      "name": "石棚には名札を外した跡が並ぶ。死者を戻す火を求めて潜った者の記録と、帰った日付だ",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.note.route_sign": {
+      "name": "東へ回れば中継広間。北側の作業戸からは旧炭焼き場へ抜けられる。近道だが、窯の周り",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.nameplate": {
+      "name": "kagaribi.nameplate",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.memorial": {
+      "name": "kagaribi.memorial",
       "file": "config/kagaribi-content.json"
     },
     "prayerless_valley.exit": {
@@ -53552,6 +56124,174 @@ export const referenceData={
         "kagaribi.legend"
       ]
     },
+    "kagaribi.restored.crossroads_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.crossroads_main"
+      ]
+    },
+    "kagaribi.restored.relay_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.relay_main"
+      ]
+    },
+    "kagaribi.restored.last_patrol_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.last_patrol_main"
+      ]
+    },
+    "kagaribi.oil_manifest": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.oil_manifest"
+      ]
+    },
+    "kagaribi.cart": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.cart"
+      ]
+    },
+    "kagaribi.tools": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.tools"
+      ]
+    },
+    "kagaribi.relief": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.relief"
+      ]
+    },
+    "kagaribi.cargo_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.cargo_latch"
+      ]
+    },
+    "kagaribi.kiln_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_latch"
+      ]
+    },
+    "kagaribi.relay_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.relay_latch"
+      ]
+    },
+    "kagaribi.altar_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_latch"
+      ]
+    },
+    "kagaribi.post_supply": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_supply"
+      ]
+    },
+    "kagaribi.post_watch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_watch"
+      ]
+    },
+    "kagaribi.records": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.records"
+      ]
+    },
+    "kagaribi.kiln_hunt": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_hunt"
+      ]
+    },
+    "kagaribi.kiln_marks": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_marks"
+      ]
+    },
+    "kagaribi.note.crossroads_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.crossroads_note"
+      ]
+    },
+    "kagaribi.note.relay_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.relay_note"
+      ]
+    },
+    "kagaribi.note.last_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.last_note"
+      ]
+    },
+    "kagaribi.note.old_tools": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.old_tools"
+      ]
+    },
+    "kagaribi.note.inscription": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.inscription"
+      ]
+    },
+    "kagaribi.note.route_sign": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.route_sign"
+      ]
+    },
+    "kagaribi.nameplate": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.nameplate"
+      ]
+    },
+    "kagaribi.memorial": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.memorial"
+      ]
+    },
     "voxel.shaft.exit.v1": {
       "file": "voxel-content.json",
       "path": [
@@ -54764,11 +57504,67 @@ export const referenceData={
         "kagaribi_ember"
       ]
     },
+    "items/kagaribi_nameplate": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "items",
+        "kagaribi_nameplate"
+      ]
+    },
     "enemies/kuragari": {
       "file": "kagaribi-content.json",
       "path": [
         "enemies",
         "kuragari"
+      ]
+    },
+    "enemies/kagaribi_soot_rat": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_rat"
+      ]
+    },
+    "enemies/kagaribi_wax_slime": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_wax_slime"
+      ]
+    },
+    "enemies/kagaribi_ember_moth": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ember_moth"
+      ]
+    },
+    "enemies/kagaribi_ash_guard": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ash_guard"
+      ]
+    },
+    "enemies/kagaribi_cinder_golem": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_cinder_golem"
+      ]
+    },
+    "enemies/kagaribi_chain_bone": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_chain_bone"
+      ]
+    },
+    "enemies/kagaribi_kiln_warden": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_warden"
       ]
     },
     "encounters/kuragari_hunt": {
@@ -54783,6 +57579,69 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_roaming"
+      ]
+    },
+    "encounters/kagaribi_wax": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_wax"
+      ]
+    },
+    "encounters/kagaribi_moths": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_moths"
+      ]
+    },
+    "encounters/kagaribi_guards": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_guards"
+      ]
+    },
+    "encounters/kagaribi_golem": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_golem"
+      ]
+    },
+    "encounters/kagaribi_bones": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_bones"
+      ]
+    },
+    "encounters/kagaribi_kiln_guard": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_kiln_guard"
+      ]
+    },
+    "encounters/kagaribi_pests": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_pests"
+      ]
+    },
+    "encounters/kagaribi_patrol_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_patrol_pair"
+      ]
+    },
+    "encounters/kagaribi_deep_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_deep_pair"
       ]
     },
     "sounds/se_step": {
@@ -58948,6 +61807,174 @@ export const referenceData={
         "kagaribi.legend"
       ]
     },
+    "scripts/kagaribi.restored.crossroads_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.crossroads_main"
+      ]
+    },
+    "scripts/kagaribi.restored.relay_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.relay_main"
+      ]
+    },
+    "scripts/kagaribi.restored.last_patrol_main": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.restored.last_patrol_main"
+      ]
+    },
+    "scripts/kagaribi.oil_manifest": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.oil_manifest"
+      ]
+    },
+    "scripts/kagaribi.cart": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.cart"
+      ]
+    },
+    "scripts/kagaribi.tools": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.tools"
+      ]
+    },
+    "scripts/kagaribi.relief": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.relief"
+      ]
+    },
+    "scripts/kagaribi.cargo_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.cargo_latch"
+      ]
+    },
+    "scripts/kagaribi.kiln_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_latch"
+      ]
+    },
+    "scripts/kagaribi.relay_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.relay_latch"
+      ]
+    },
+    "scripts/kagaribi.altar_latch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_latch"
+      ]
+    },
+    "scripts/kagaribi.post_supply": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_supply"
+      ]
+    },
+    "scripts/kagaribi.post_watch": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.post_watch"
+      ]
+    },
+    "scripts/kagaribi.records": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.records"
+      ]
+    },
+    "scripts/kagaribi.kiln_hunt": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_hunt"
+      ]
+    },
+    "scripts/kagaribi.kiln_marks": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.kiln_marks"
+      ]
+    },
+    "scripts/kagaribi.note.crossroads_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.crossroads_note"
+      ]
+    },
+    "scripts/kagaribi.note.relay_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.relay_note"
+      ]
+    },
+    "scripts/kagaribi.note.last_note": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.last_note"
+      ]
+    },
+    "scripts/kagaribi.note.old_tools": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.old_tools"
+      ]
+    },
+    "scripts/kagaribi.note.inscription": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.inscription"
+      ]
+    },
+    "scripts/kagaribi.note.route_sign": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.note.route_sign"
+      ]
+    },
+    "scripts/kagaribi.nameplate": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.nameplate"
+      ]
+    },
+    "scripts/kagaribi.memorial": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.memorial"
+      ]
+    },
     "scripts/voxel.shaft.exit.v1": {
       "file": "voxel-content.json",
       "path": [
@@ -59067,6 +62094,48 @@ export const referenceData={
         "region_1_gatehouse"
       ]
     },
+    "maps/kagaribi_oilstore": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_oilstore"
+      ]
+    },
+    "maps/kagaribi_crossroads": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads"
+      ]
+    },
+    "maps/kagaribi_kilns": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns"
+      ]
+    },
+    "maps/kagaribi_relay": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay"
+      ]
+    },
+    "maps/kagaribi_last_patrol": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_last_patrol"
+      ]
+    },
+    "maps/kagaribi_ossuary": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary"
+      ]
+    },
     "locations/hikarigaeri_square": {
       "file": "locations.json",
       "path": [
@@ -59143,6 +62212,12 @@ export const referenceData={
       "file": "locations.json",
       "path": [
         "hikarigaeri_pass_registry"
+      ]
+    },
+    "locations/kagaribi_post": {
+      "file": "locations.json",
+      "path": [
+        "kagaribi_post"
       ]
     },
     "cellTypes/stone_floor": {
