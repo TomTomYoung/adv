@@ -605,7 +605,7 @@ function placeRooms(candidate, layout, seed, candidateIndex) {
     };
     if (!roomFits(candidate, localCells, origin, Math.max(1, layout.rooms.wallThickness))) continue;
     const cells = localCells.map(cell => ({ x: origin.x + cell.x, y: origin.y + cell.y }));
-    for (const cell of cells) carve(candidate, cell.x, cell.y, 'r');
+    for (const cell of cells) { carve(candidate, cell.x, cell.y, 'r'); candidate.region[cell.y][cell.x] = 'r'; }
     const centerPoint = { x: origin.x + Math.floor(width / 2), y: origin.y + Math.floor(height / 2) };
     const center = nearestRoomCell({ cells }, centerPoint);
     candidate.rooms.push({
