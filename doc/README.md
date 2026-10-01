@@ -1,12 +1,12 @@
 # adv ドキュメント
 
-確認日: 2026-09-25。作品版1.20.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[引き継ぎ](HANDOFF.md)から確認してください。
+確認日: 2026-10-01。作品版1.25.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[引き継ぎ](HANDOFF.md)から確認してください。
 
 原稿を編集する場合は[統合マップ編集](../config/map.html)と[編集仕様・正本の案内](authoring/README.md)へ進みます。ゲーム用JSONは原稿から生成します。
 
 ## 分野別の入口
 
-[dungeons/README.md](dungeons/README.md)：セル・共有エッジ、地形と通行、照明、2D接続、水没、各ダンジョンの仕掛け。
+[dungeons/README.md](dungeons/README.md)：セル・共有エッジ、地形と通行、照明、2D接続、水没、各ダンジョンの仕掛け。[ダンジョンカタログ](dungeons/DUNGEON_CATALOG.md)から13迷宮の専用ページへ進めます。
 
 [world/README.md](world/README.md)：町の施設・場所のID、町と物語の移動。
 

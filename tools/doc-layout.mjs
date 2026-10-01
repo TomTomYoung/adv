@@ -18,7 +18,7 @@ export const dungeonsDocs = new Set([
   'CELL_CATALOG.md', 'CELL_LAYERS.md', 'CONNECTED_2D_MAPS.md',
   'DUNGEON_ART_AND_SCENARIOS.md', 'DUNGEON_CATALOG.md', 'DUNGEON_SYSTEMS.md',
   'DUNGEON_RESTRICTIONS.md', 'DUNGEON_SYSTEM_DESIGN.md', 'FIELD_LIGHTING.md', 'KAGARIBI_DUNGEON.md',
-  'KAGARIBI_EXPANSION.md', 'MAP_CELLS_AND_BOUNDARIES.md', 'VOXEL_TERRAIN_AND_WATER.md', 'WATERWAYS_SALT_MINE.md'
+  'KAGARIBI_EXPANSION.md', 'WATERWAY_EXPANSION.md', 'MAP_CELLS_AND_BOUNDARIES.md', 'VOXEL_TERRAIN_AND_WATER.md', 'WATERWAYS_SALT_MINE.md'
 ]);
 export const worldDocs = new Set([
   'WORLD_LOCATIONS.md', 'LOCATION_CATALOG.md'
@@ -34,7 +34,8 @@ export const developmentDocs = new Set([
   'PROGRESS.md', 'DOCUMENTATION_AUDIT.md', 'DATA_SNAPSHOT.json'
 ]);
 export const questDocs = new Set(Array.from({length:10},(_,i)=>`QUEST_Q${String(i+1).padStart(3,'0')}.md`));
-export const docGroups = {scenarios:scenarioDocs,'scenarios/quests':questDocs,ui:uiDocs,dungeons:dungeonsDocs,world:worldDocs,battle:battleDocs,authoring:authoringDocs,development:developmentDocs};
+export const dungeonDetailDocs = new Set(['kagaribi.md',...Array.from({length:10},(_,i)=>`region_${i+1}.md`),'prayerless_valley.md','moving_village.md']);
+export const docGroups = {scenarios:scenarioDocs,'scenarios/quests':questDocs,ui:uiDocs,dungeons:dungeonsDocs,'dungeons/details':dungeonDetailDocs,world:worldDocs,battle:battleDocs,authoring:authoringDocs,development:developmentDocs};
 const aliases = {'DUNGEON_SYSTEMS_1_7.md':'dungeons/DUNGEON_SYSTEMS.md','EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','scenarios/EXPLORATION_AND_PROSE_1_11.md':'scenarios/EXPLORATION_AND_PROSE.md','DUNGEON_REVISION_1_9.md':'legacy/2026-09-25/DUNGEON_REVISION_1_9.md','DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md','ui/DUNGEON_RENDER_REVIEW.md':'legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md'};
 export function docPath(name) {
   if (aliases[name]) return aliases[name];

@@ -1,12 +1,20 @@
 # 複数ダンジョンと固有システムの設計
 
-更新日: 2026-09-25。作品版1.20.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
+更新日: 2026-10-01。作品版1.25.0の実装済み構成と拡張方法です。現在の一覧は[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)へ記載します。
 
 ## 編集するデータ
 
 正本は `config/dungeons/*.json`。ダンジョンID、表示名、所属地域、入口、マップ一覧、`systems` を定義します。`npm run build:dungeons` が `data/dungeons.json` とマップ・アイテム・遭遇・スクリプト等を生成します。
 
 現在は[統合マップ編集](../../config/map.html)と[原稿別編集](../authoring/CONFIG_EDITORS.md)で、配置・仕掛け・条件・処理を編集し、検証後にJSON全文を出力できます。JSONの直接編集も可能です。JSON Schemaと編集器は形式・値・参照を検査し、生成後のロード検証で全体整合を確認します。YAML入力と任意JavaScriptの実行には対応しません。
+
+## カタログと専用ページの更新
+
+[カタログ](DUNGEON_CATALOG.md)から全13迷宮の[専用ページ](details/README.md)へ進めます。専用ページは概要、区画の経路、固有の仕組みと数値、設備、通常遭遇、室内、配置済みクエストと現地調査、保存状態、編集元をまとめています。
+
+文章の正本は [authoring/dungeon-page-notes.json](../../authoring/dungeon-page-notes.json)、構成は [tools/dungeon-pages.mjs](../../tools/dungeon-pages.mjs) です。数値・座標・区画・接続・クエスト配置は現在の配布データから読みます。文章だけなら `npm run build:docs`、ゲーム設定も変更した場合は対応する配布データの生成後に文書を更新します。`npm run build:dungeons` は文書の再生成も実行します。
+
+新しい迷宮は配布定義と解説原稿の両方へ追加します。新しい部品を導入した場合は生成器に数値の説明を追加してください。`npm run check:docs` は各ページの生成結果、相互リンクとフォルダ索引、配布データの集計を検査し、GitHub Actionsでも実行します。生成済みページの直接編集は再生成で上書きされます。
 
 ## 共通部品
 

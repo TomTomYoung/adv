@@ -12,6 +12,7 @@ import {eventCatalog} from './event-catalog.mjs';
 import {characterCatalog} from './character-catalog.mjs';
 import {monsterCatalog} from './monster-catalog.mjs';
 import {locationCatalog} from './location-catalog.mjs';
+import {dungeonPageBundle} from './dungeon-pages.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
 const data=await loadContent(read),engine=new GameEngine(data),version=data.game.version,date=new Date().toISOString().slice(0,10);
@@ -33,7 +34,7 @@ const actors=['# 仲間一覧と酒場の編成','',`更新日: ${date}。作品
 for(const [id,a] of Object.entries(data.actors))actors.push(`### ${a.name} (${id})`,'',`![${a.name}](../${data.assets.images[a.portrait]})`,'',a.bio,`人物の役割：${a.class}／${a.role}。初期職：${data.jobs[a.initialJob].name}。`,`初期能力：${stats(engine.stats(id))}。`,`初期戦闘技能：${names(engine.skills(id))}。`,'');
 actors.push('## 編集と保存','','人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。');await fs.writeFile(path.join(folder,docPath('COMPANION_CATALOG.md')),relocateDoc(actors.join('\n')+'\n','COMPANION_CATALOG.md'));
 await fs.writeFile(path.join(folder,docPath('MONSTER_CATALOG.md')),relocateDoc(monsterCatalog(data),'MONSTER_CATALOG.md'));
-const dungeons=['## 配布データの構成',''];for(const dungeon of Object.values(data.dungeons))dungeons.push(`${dungeon.name} (${dungeon.id})：${dungeon.maps.length}マップ。部品：${Object.entries(dungeon.systems).map(([id,s])=>`${id}=${s.use}${s.enabled===false?'（無効）':''}`).join(' / ')}。現地調査：${questEvents(data).filter(e=>e.dungeon===dungeon.id&&e.note).map(s=>`${s.title} → ${s.quest}`).join(' / ')||'なし'}。`,'');await section('DUNGEON_CATALOG.md','dungeons',dungeons.join('\n'));
+for(const [name,source] of Object.entries(dungeonPageBundle(data,{date}))){const file=path.join(folder,docPath(name));await fs.mkdir(path.dirname(file),{recursive:true});await fs.writeFile(file,relocateDoc(source,name));}
 await section('SCRIPT_REFERENCE.md','commands',`## 実装との照合用一覧\n\n${COMMANDS.size}命令：${[...COMMANDS].map(v=>'`'+v+'`').join(' / ')}。\n\n${EXPRESSION_OPS.size}式演算子：${[...EXPRESSION_OPS].map(v=>'`'+v+'`').join(' / ')}。`);
 await section('CELL_CATALOG.md','cell-inventory',cellCatalogInventory(data));
 const observations=[];
