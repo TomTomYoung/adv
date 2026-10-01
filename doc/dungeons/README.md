@@ -18,7 +18,9 @@
 
 [FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離減衰・遮光・画面とミニマップの照度。
 
-[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの一覧と編集元。
+[DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの概要と専用ページへの入口。
+
+[details/README.md](details/README.md)：迷宮ごとの専用ページ。区画・経路・設備・通常遭遇・関連クエスト・保存状態・編集元。
 
 [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)：共通部品・正本・責務・拡張方法。
 
