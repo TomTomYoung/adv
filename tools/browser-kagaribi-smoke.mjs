@@ -31,7 +31,10 @@ try{
    checkpoint=`${width}: ${label}`;console.log(checkpoint);
    await page.evaluate(([map,x,y,facing])=>arrange(map,x,y,facing),[map,x,y,facing]);
    if(label==='relay')await page.evaluate(()=>{g.dispatch({type:'dungeon.action',system:'fires',action:'ignite',target:'relay_main'});settle();});
-   await page.waitForFunction(()=>document.fonts.status==='loaded'&&[...document.images].every(i=>i.complete));
+   // Mobile CSS hides some lazy portraits; those never start loading.
+   await page.waitForFunction(()=>document.fonts.status==='loaded'&&[...document.images].filter(i=>{
+    const r=i.getBoundingClientRect();return r.width>0&&r.height>0&&r.bottom>0&&r.right>0&&r.top<innerHeight&&r.left<innerWidth;
+   }).every(i=>i.complete&&i.naturalWidth>0));
    await page.screenshot({path:path.join(output,`${label}-${width}.png`)});
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'horizontal overflow');
   }
