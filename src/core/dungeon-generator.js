@@ -294,6 +294,7 @@ function growBulge(candidate, anchor, area, rng, bulgeOptions) {
   const seeds = bulgeSeedOptions(candidate, anchor);
   if (!seeds.length) return null;
   const first = randomItem(rng, seeds);
+  const promoteRequested = area >= bulgeOptions.promoteToRoomArea;
   const chosen = [first];
   const chosenKeys = new Set([keyOf(first.x, first.y)]);
 
@@ -304,19 +305,22 @@ function growBulge(candidate, anchor, area, rng, bulgeOptions) {
       for (const [dx, dy] of DIRECTIONS) {
         const x = cell.x + dx;
         const y = cell.y + dy;
-        const key = keyOf(x, y);
-        if (chosenKeys.has(key) || seen.has(key)) continue;
-        seen.add(key);
+        const cellKey = keyOf(x, y);
+        if (chosenKeys.has(cellKey) || seen.has(cellKey)) continue;
+        seen.add(cellKey);
         if (x <= 0 || y <= 0 || x >= candidate.width - 1 || y >= candidate.height - 1) continue;
-        if (candidate.grid[y][x] !== '#') continue;
-        let foreignFloor = false;
-        for (const [adx, ady] of DIRECTIONS) {
-          const nx = x + adx;
-          const ny = y + ady;
-          if ((nx === anchor.x && ny === anchor.y) || chosenKeys.has(keyOf(nx, ny))) continue;
-          if (inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.') foreignFloor = true;
+        if (!promoteRequested) {
+          if (candidate.grid[y][x] !== '#') continue;
+          let foreignFloor = false;
+          for (const [adx, ady] of DIRECTIONS) {
+            const nx = x + adx;
+            const ny = y + ady;
+            if ((nx === anchor.x && ny === anchor.y) || chosenKeys.has(keyOf(nx, ny))) continue;
+            if (inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.') foreignFloor = true;
+          }
+          if (foreignFloor) continue;
         }
-        if (!foreignFloor) frontier.push({ x, y });
+        frontier.push({ x, y });
       }
     }
     if (!frontier.length) break;
@@ -326,16 +330,15 @@ function growBulge(candidate, anchor, area, rng, bulgeOptions) {
   }
 
   if (!chosen.length) return null;
-  let finalCells = chosen;
   const minX = Math.max(1, Math.min(...chosen.map(cell => cell.x)) - 2);
   const minY = Math.max(1, Math.min(...chosen.map(cell => cell.y)) - 2);
   const maxX = Math.min(candidate.width - 2, Math.max(...chosen.map(cell => cell.x)) + 2);
   const maxY = Math.min(candidate.height - 2, Math.max(...chosen.map(cell => cell.y)) + 2);
   const localWidth = maxX - minX + 1;
   const localHeight = maxY - minY + 1;
-  const baseMask = Array.from({length: localHeight}, () => Array(localWidth).fill(false));
+  const baseMask = Array.from({ length: localHeight }, () => Array(localWidth).fill(false));
   for (const cell of chosen) baseMask[cell.y - minY][cell.x - minX] = true;
-  const preferred = {x: first.x - minX, y: first.y - minY};
+  const preferred = { x: first.x - minX, y: first.y - minY };
   const enhanced = generateFeatureMask({
     width: localWidth,
     height: localHeight,
@@ -350,24 +353,33 @@ function growBulge(candidate, anchor, area, rng, bulgeOptions) {
       if (!enhanced[y][x]) continue;
       const gx = minX + x;
       const gy = minY + y;
-      if (candidate.grid[gy][gx] !== '#') continue;
-      enhancedCells.push({x: gx, y: gy});
+      if (gx <= 0 || gy <= 0 || gx >= candidate.width - 1 || gy >= candidate.height - 1) continue;
+      if (!promoteRequested && candidate.grid[gy][gx] !== '#') continue;
+      enhancedCells.push({ x: gx, y: gy });
     }
   }
-  const enhancedKeys = new Set(enhancedCells.map(cell => keyOf(cell.x, cell.y)));
-  const touchesForeign = enhancedCells.some(cell => DIRECTIONS.some(([dx, dy]) => {
-    const nx = cell.x + dx;
-    const ny = cell.y + dy;
-    if (nx === anchor.x && ny === anchor.y) return false;
-    return inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.' && !enhancedKeys.has(keyOf(nx, ny));
-  }));
-  if (!touchesForeign && enhancedCells.length >= Math.min(3, chosen.length)) finalCells = enhancedCells;
+
+  let finalCells = chosen;
+  if (promoteRequested) {
+    if (enhancedCells.length >= bulgeOptions.promoteToRoomArea) finalCells = enhancedCells;
+  } else {
+    const enhancedKeys = new Set(enhancedCells.map(cell => keyOf(cell.x, cell.y)));
+    const touchesForeign = enhancedCells.some(cell => DIRECTIONS.some(([dx, dy]) => {
+      const nx = cell.x + dx;
+      const ny = cell.y + dy;
+      if (nx === anchor.x && ny === anchor.y) return false;
+      return inside(candidate.grid, nx, ny) && candidate.grid[ny][nx] === '.' && !enhancedKeys.has(keyOf(nx, ny));
+    }));
+    if (!touchesForeign && enhancedCells.length >= Math.min(3, chosen.length)) finalCells = enhancedCells;
+  }
 
   const promoted = finalCells.length >= bulgeOptions.promoteToRoomArea;
-  for (const cell of finalCells) carve(candidate, cell.x, cell.y, promoted ? 'r' : 'b');
-  return {cells: finalCells, promoted};
+  for (const cell of finalCells) {
+    candidate.grid[cell.y][cell.x] = '.';
+    candidate.region[cell.y][cell.x] = promoted ? 'r' : 'b';
+  }
+  return { cells: finalCells, promoted };
 }
-
 function addBulges(candidate, layout, seed, candidateIndex) {
   const rng = rngFor(seed, candidateIndex, 'bulges');
   const desired = randomInt(rng, layout.bulges.count.min, layout.bulges.count.max);
