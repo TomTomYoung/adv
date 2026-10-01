@@ -34,7 +34,9 @@ try{
   await page.evaluate(()=>{arrange('kagaribi_crossroads',8,1,'north');g.state.flags.kagaribi={cargoGate:true,postStaffed:true};g.dispatch({type:'location.enter',id:'kagaribi_post'});show();});
   await page.getByRole('button',{name:/燃料の補給窓口/}).click();await page.evaluate(()=>settle());
   const before=await page.evaluate(()=>({gold:g.state.gold,torch:g.state.inventory.torch,fuel:g.state.dungeons.active.systems.fires.portable.fuel,run:g.state.dungeons.active.run}));
-  await page.getByRole('button',{name:'松明を1本購入する（6G）',exact:true}).click();await page.evaluate(()=>settle());
+  await page.screenshot({path:path.join(output,`post-choice-${width}.png`)});
+  // The accessible name also includes the displayed purchase requirement.
+  await page.getByRole('button',{name:/^松明を1本購入する（6G）/}).click();await page.evaluate(()=>settle());
   const after=await page.evaluate(()=>({gold:g.state.gold,torch:g.state.inventory.torch,fuel:g.state.dungeons.active.systems.fires.portable.fuel,run:g.state.dungeons.active.run}));
   assert.deepEqual(after,{...before,gold:before.gold-6,torch:before.torch+1});
   await page.screenshot({path:path.join(output,`post-${width}.png`)});
