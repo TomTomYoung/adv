@@ -35,7 +35,7 @@ export function installGeneratedDungeon(data,candidate,{
     music:sourceMap.music,
     encounter:sourceMap.encounter,
     encounterRate:encounters?sourceMap.encounterRate:0,
-    encounterPool:encounters?clone(sourceMap.encounterPool??[]):[],
+    encounterPool:clone(sourceMap.encounterPool??[{encounter:sourceMap.encounter,weight:1}]),
     objects:[{
       id:'generated_goal',
       x:candidate.goal.x,
