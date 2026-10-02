@@ -60,6 +60,28 @@ try{
 
   await page.goto(`http://127.0.0.1:${server.address().port}/adv/dungeon-generation-preview.html`);
   await page.waitForFunction(()=>Boolean(window.dungeonGenerationPreview?.current));
+  for(const width of [1280,900,390]){
+    await page.setViewportSize({width,height:900});
+    assert.equal(await page.locator('#controlsPane').evaluate(e=>e.scrollWidth<=e.clientWidth),true,`controls overflow at ${width}px`);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`page overflow at ${width}px`);
+  }
+  await page.setViewportSize({width:1280,height:900});
+  const labels=await page.locator('.placement-card').allTextContents();
+  assert.ok(labels.every(text=>/配置するセル種/.test(text)&&/配置対象/.test(text)&&/配置密度/.test(text)&&/まとまり最大/.test(text)));
+  await page.evaluate(()=>{
+    for(const check of document.querySelectorAll('[data-party-id]'))check.checked=['berg','luka'].includes(check.dataset.partyId);
+    document.querySelector('[data-party-level="berg"]').value='5';
+    document.querySelector('[data-party-level="luka"]').value='7';
+    document.querySelector('#encounterEnabled').value='true';
+    document.querySelector('#encounterRate').value='0.5';
+    document.querySelector('#enemyPreset1').value='guard_1';
+    document.querySelector('#enemyCount1').value='2';
+    document.querySelector('#enemyPreset2').value='guard_1_elite';
+    document.querySelector('#enemyCount2').value='1';
+    document.querySelector('#enemyCount3').value='0';
+    document.querySelector('#encounterRate').dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.waitForFunction(()=>window.dungeonGenerationPreview?.payload?.party?.length===2&&window.dungeonGenerationPreview?.payload?.encounter?.enemies?.length===3);
   await page.getByRole('button',{name:'2画面',exact:true}).click();
   await page.waitForFunction(()=>window.dungeonGenerationPreview?.engineSync?.error||
     window.dungeonGenerationPreview?.engineSync?.loadedCandidate===window.dungeonGenerationPreview?.payload?.candidateIndex);
@@ -72,6 +94,20 @@ try{
   assert.equal(firstSync.ready,true);
   assert.equal(firstSync.loaded,firstSync.candidate);
   assert.equal(firstSync.sameTiles,true);
+  const configured=await page.evaluate(()=>{
+    const frame=document.querySelector('#engineFrame').contentWindow,p=frame.generatedPlaytest;
+    const encounter=p.engine.data.encounters[p.engine.map().encounter];
+    return {
+      members:[...p.engine.state.members],
+      levels:Object.fromEntries(p.engine.state.members.map(id=>[id,p.engine.state.actors[id].level])),
+      enemies:[...encounter.enemies],
+      rate:p.engine.map().encounterRate,
+    };
+  });
+  assert.deepEqual(configured.members,['berg','luka']);
+  assert.deepEqual(configured.levels,{berg:5,luka:7});
+  assert.deepEqual(configured.enemies,['guard_1','guard_1','guard_1_elite']);
+  assert.equal(configured.rate,0.5);
   assert.equal(await page.locator('#previewPane').isVisible(),true);
   assert.equal(await page.locator('#enginePane').isVisible(),true);
   const initialCandidate=await page.evaluate(()=>window.dungeonGenerationPreview.payload.candidateIndex);
@@ -95,7 +131,16 @@ try{
   assert.equal(await page.locator('#previewPane').isVisible(),true);
   assert.equal(await page.locator('#enginePane').isVisible(),false);
   await page.getByRole('button',{name:'2画面',exact:true}).click();
+  await page.getByRole('button',{name:'選択魔物で戦闘',exact:true}).click();
+  await page.waitForFunction(()=>window.dungeonGenerationPreview?.engineSync?.battleStarted||window.dungeonGenerationPreview?.engineSync?.error);
+  const battleConfig=await page.evaluate(()=>{
+    const p=window.dungeonGenerationPreview,frame=document.querySelector('#engineFrame').contentWindow;
+    return {error:p.engineSync.error,encounter:frame.generatedPlaytest?.engine?.state?.battle?.encounter,count:frame.generatedPlaytest?.engine?.state?.battle?.enemies?.length};
+  });
+  assert.equal(battleConfig.error,null,JSON.stringify(battleConfig));
+  assert.equal(battleConfig.encounter,'generated_preview.encounter');
+  assert.equal(battleConfig.count,3);
   await page.screenshot({path:path.join(output,'generated-linked-split.png'),fullPage:true});
   assert.deepEqual(errors,[]);
-  console.log('GENERATED ENGINE PLAYTEST: actual GameEngine movement, cell passage, poison event, SceneView/textured canvas, linked preview/play modes and synchronized split screen passed');
+  console.log('GENERATED ENGINE PLAYTEST: real engine movement/cells, responsive grouped controls, party levels, configured enemies, forced battle, linked preview/play modes and synchronized split screen passed');
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

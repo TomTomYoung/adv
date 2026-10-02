@@ -11,7 +11,7 @@ const $=id=>document.getElementById(id);
 const root=$('app'),status=$('generator-status');
 applyTheme(THEME_DEFAULT);
 const baseData=await loadContent();
-let data,engine,view,candidate,dispatch,currentPayload=null;
+let data,engine,view,candidate,dispatch,currentPayload=null,installed=null;
 const ui={
   status:text=>setStatus(text,true),
   menu:()=>setStatus('このページは生成試遊専用です。通常セーブは行いません。'),
@@ -98,6 +98,8 @@ async function regenerate(externalPayload=null){
       cells:cellSpec(),
       sourceDungeonId:$('sourceDungeon').value,
       encounters:$('encounters').checked,
+      party:baseData.game.initial.members.map(id=>({id,level:1})),
+      encounter:{enabled:$('encounters').checked,rate:.22,enemies:[]},
     };
     candidate=generateDungeonCandidate({
       seed:currentPayload.seed,
@@ -106,16 +108,17 @@ async function regenerate(externalPayload=null){
       cells:currentPayload.cells,
       cellTypes:data.cellTypes,
     });
-    const installed=installGeneratedDungeon(data,candidate,{
+    installed=installGeneratedDungeon(data,candidate,{
       sourceDungeonId:currentPayload.sourceDungeonId??'kagaribi',
       encounters:Boolean(currentPayload.encounters),
+      encounter:currentPayload.encounter??null,
     });
     const errors=validateGeneratedPlaytestData(data);
     if(errors.length)throw new Error('動的データ検証: '+errors.slice(0,4).join(' / '));
     view?.destroy();
     engine=new GameEngine(data,currentPayload.seed);
     clearStartup(engine);
-    prepareGeneratedPlaytestEngine(engine,installed);
+    prepareGeneratedPlaytestEngine(engine,installed,{party:currentPayload.party??null});
     dispatch=intent=>{
       const changed=engine.dispatch(intent);
       if(changed||engine.state.notice||engine.feedback.events.length)render();
@@ -133,8 +136,20 @@ async function regenerate(externalPayload=null){
 $('regenerate').addEventListener('click',()=>regenerate());
 $('next').addEventListener('click',()=>{$('candidate').value=String(number('candidate')+1);regenerate();});
 window.addEventListener('message',event=>{
-  if(event.origin!==location.origin||event.data?.type!=='adv:dungeon-generation:load'||!event.data.payload)return;
-  regenerate(event.data.payload);
+  if(event.origin!==location.origin)return;
+  if(event.data?.type==='adv:dungeon-generation:load'&&event.data.payload){regenerate(event.data.payload);return;}
+  if(event.data?.type==='adv:dungeon-generation:start-battle'){
+    try{
+      if(!engine||!installed)throw new Error('試遊エンジンが準備できていません');
+      if(engine.state.waiting||engine.state.battle)throw new Error('会話・戦闘中は新しい戦闘を開始できません');
+      engine.startBattle(installed.encounterId,{win:[],escape:[],lose:[]},{});
+      render();
+      if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:battle-started',encounter:installed.encounterId},location.origin);
+    }catch(error){
+      setStatus(error.message,true);
+      if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:error',message:error.message},location.origin);
+    }
+  }
 });
 document.addEventListener('keydown',event=>{
   if(!view||!engine)return;
