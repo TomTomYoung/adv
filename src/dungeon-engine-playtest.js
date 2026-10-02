@@ -124,8 +124,10 @@ async function regenerate(externalPayload=null){
     view=new SceneView(root,dispatch,ui);
     render();
     setStatus(`GameEngineロード済み / ${candidate.generatorVersion} / 床${candidate.metrics.walkableCount??candidate.metrics.floorCount} / セル種${Object.keys(candidate.cellSummary??{}).length}`);
+    if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:loaded',candidateIndex:currentPayload.candidateIndex},location.origin);
   }catch(error){
     console.error(error);setStatus(error.message,true);
+    if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:error',message:error.message},location.origin);
   }
 }
 $('regenerate').addEventListener('click',()=>regenerate());

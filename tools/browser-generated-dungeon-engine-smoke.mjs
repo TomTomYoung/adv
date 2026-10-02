@@ -61,21 +61,33 @@ try{
   await page.goto(`http://127.0.0.1:${server.address().port}/adv/dungeon-generation-preview.html`);
   await page.waitForFunction(()=>Boolean(window.dungeonGenerationPreview?.current));
   await page.getByRole('button',{name:'2画面',exact:true}).click();
-  await page.waitForFunction(()=>{
-    const frame=document.querySelector('#engineFrame')?.contentWindow;
-    return Boolean(frame?.generatedPlaytest?.engine?.state?.mode==='dungeon'&&
-      frame.generatedPlaytest.payload?.candidateIndex===window.dungeonGenerationPreview.payload.candidateIndex&&
-      JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(window.dungeonGenerationPreview.current.tiles));
+  await page.waitForFunction(()=>window.dungeonGenerationPreview?.engineSync?.error||
+    window.dungeonGenerationPreview?.engineSync?.loadedCandidate===window.dungeonGenerationPreview?.payload?.candidateIndex);
+  const firstSync=await page.evaluate(()=>{
+    const p=window.dungeonGenerationPreview,frame=document.querySelector('#engineFrame')?.contentWindow;
+    return {error:p.engineSync.error,ready:p.engineSync.ready,loaded:p.engineSync.loadedCandidate,candidate:p.payload.candidateIndex,
+      sameTiles:Boolean(frame?.generatedPlaytest)&&JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles)};
   });
+  assert.equal(firstSync.error,null,JSON.stringify(firstSync));
+  assert.equal(firstSync.ready,true);
+  assert.equal(firstSync.loaded,firstSync.candidate);
+  assert.equal(firstSync.sameTiles,true);
   assert.equal(await page.locator('#previewPane').isVisible(),true);
   assert.equal(await page.locator('#enginePane').isVisible(),true);
   const initialCandidate=await page.evaluate(()=>window.dungeonGenerationPreview.payload.candidateIndex);
   await page.getByRole('button',{name:'次の候補',exact:true}).click();
   await page.waitForFunction(previous=>{
-    const frame=document.querySelector('#engineFrame')?.contentWindow,p=window.dungeonGenerationPreview;
-    return p?.payload?.candidateIndex===previous+1&&frame?.generatedPlaytest?.payload?.candidateIndex===p.payload.candidateIndex&&
-      JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles);
+    const p=window.dungeonGenerationPreview;
+    return p?.engineSync?.error||p?.payload?.candidateIndex===previous+1&&p.engineSync.loadedCandidate===p.payload.candidateIndex;
   },initialCandidate);
+  const nextSync=await page.evaluate(()=>{
+    const p=window.dungeonGenerationPreview,frame=document.querySelector('#engineFrame')?.contentWindow;
+    return {error:p.engineSync.error,loaded:p.engineSync.loadedCandidate,candidate:p.payload.candidateIndex,
+      sameTiles:Boolean(frame?.generatedPlaytest)&&JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles)};
+  });
+  assert.equal(nextSync.error,null,JSON.stringify(nextSync));
+  assert.equal(nextSync.loaded,nextSync.candidate);
+  assert.equal(nextSync.sameTiles,true);
   await page.getByRole('button',{name:'試遊',exact:true}).click();
   assert.equal(await page.locator('#previewPane').isVisible(),false);
   assert.equal(await page.locator('#enginePane').isVisible(),true);

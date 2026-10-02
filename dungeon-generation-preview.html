@@ -79,6 +79,8 @@ const ctx = canvas.getContext('2d');
 let current;
 let player=null;
 let labMode='preview';
+let engineReady=false;
+const engineSync={ready:false,loadedCandidate:null,error:null};
 const labLayout=$('labLayout');
 const engineFrame=$('engineFrame');
 let collapsed=new Set();
@@ -224,7 +226,8 @@ function playtestPayload(){
   };
 }
 function syncEngine(){
-  if(!current||!engineFrame?.contentWindow)return;
+  if(!current||!engineReady||!engineFrame?.contentWindow)return;
+  engineSync.error=null;
   engineFrame.contentWindow.postMessage({type:'adv:dungeon-generation:load',payload:playtestPayload()},location.origin);
 }
 function setLabMode(mode){
@@ -236,7 +239,18 @@ function setLabMode(mode){
   if(mode!=='preview')syncEngine();
 }
 for(const button of document.querySelectorAll('[data-lab-mode]'))button.addEventListener('click',()=>setLabMode(button.dataset.labMode));
-engineFrame.addEventListener('load',()=>syncEngine());
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==engineFrame.contentWindow)return;
+  if(event.data?.type==='adv:dungeon-generation:ready'){
+    engineReady=true;engineSync.ready=true;syncEngine();return;
+  }
+  if(event.data?.type==='adv:dungeon-generation:loaded'){
+    engineSync.loadedCandidate=event.data.candidateIndex;engineSync.error=null;return;
+  }
+  if(event.data?.type==='adv:dungeon-generation:error'){
+    engineSync.error=event.data.message??'試遊ロード失敗';
+  }
+});
 
 function render(){
   const status=$('status');
@@ -252,7 +266,7 @@ function render(){
     status.classList.remove('error');
     status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / セル種 ${Object.keys(current.cellSummary??{}).length} / ${current.generatorVersion}`;
     updateWalkStatus('入口から開始');
-    window.dungeonGenerationPreview={current,payload:playtestPayload(),syncEngine,setLabMode};
+    window.dungeonGenerationPreview={current,payload:playtestPayload(),syncEngine,setLabMode,engineSync};
     if(labMode!=='preview')syncEngine();
   }catch(error){
     status.classList.add('error');status.textContent=error.message;
