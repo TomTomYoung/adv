@@ -8,9 +8,14 @@ const panelNames={profile:'キャラクタープロフィール',bag:'旅支度'
 const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], summary';
 
 export class SceneView extends GameView{
-  constructor(...args){super(...args);this.messageKey=null;this.page=0;this.pages=[''];this.sceneKey=null;this.fontsChanged=()=>{const snapshot=captureFocus(this.root);if(this.measureMessage(true))this.finishInput(snapshot);};document.fonts?.addEventListener('loadingdone',this.fontsChanged);}
+  constructor(...args){super(...args);this.messageKey=null;this.page=0;this.pages=[''];this.sceneKey=null;this.windowsHidden=false;this.fontsChanged=()=>{const snapshot=captureFocus(this.root);if(this.measureMessage(true))this.finishInput(snapshot);};document.fonts?.addEventListener('loadingdone',this.fontsChanged);}
   destroy(){this.resizeObserver?.disconnect();globalThis.cancelAnimationFrame?.(this.measureFrame);document.fonts?.removeEventListener('loadingdone',this.fontsChanged);super.destroy();}
   blocksGameInput(){return super.blocksGameInput()||Boolean(this.root.querySelector('.scene-window'));}
+  explorationDefault(){return this.windowsHidden?this.root.querySelector('[data-focus="dungeon-window-toggle"]')??super.explorationDefault():super.explorationDefault();}
+  toggleDungeonWindows(){
+    if(!this.model?.dungeon||this.model.busy||this.model.dialog||this.model.battle||this.tab!=='explore')return false;
+    this.windowsHidden=!this.windowsHidden;this.render(this.model);return true;
+  }
   canChoose(){return this.page===this.pages.length-1;}
   advanceText(){if(!this.canChoose())this.setPage(this.page+1);else if(this.messageNodes?.dialog.type!=='description')super.advanceText();}
   setPage(page){this.page=Math.max(0,Math.min(page,this.pages.length-1));this.refreshMessage();this.finishInput(captureFocus(this.root));}
@@ -93,10 +98,11 @@ export class SceneView extends GameView{
     this.sceneKey=key;this.model=model;
     const allowed=[...(model.mode==='town'?['profile']:[]),'bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
     if(!allowed.includes(this.tab))this.tab=model.mode==='town'?'location':'explore';
+    if(model.mode!=='dungeon'||model.busy||model.dialog||model.battle||this.tab!=='explore')this.windowsHidden=false;
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     this.renderedTab=this.tab;
     this.ui.cancelFeedback?.();this.effects.capture();this.root.replaceChildren();this.messageNodes=null;
-    const stage=make('main','scene-stage');stage.dataset.mode=model.mode;stage.dataset.state=model.battle?'battle':model.dialog?'dialog':'idle';stage.setAttribute('aria-label',model.title);this.root.append(stage);
+    const stage=make('main','scene-stage');stage.dataset.mode=model.mode;stage.dataset.state=model.battle?'battle':model.dialog?'dialog':'idle';stage.classList.toggle('scene-windows-hidden',Boolean(model.dungeon&&this.windowsHidden));stage.setAttribute('aria-label',model.title);this.root.append(stage);
     const world=make('div','scene-world');world.dataset.fx='screen';stage.append(world);
     const hud=make('div','scene-hud'),dock=make('div','scene-dock');stage.append(hud,dock);
     const header=make('header','scene-header'),place=make('div','scene-place');
@@ -105,7 +111,12 @@ export class SceneView extends GameView{
     for(const [id,label] of [['journal','手帳'],['bag','旅支度'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
       const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;if(id==='map'){b.dataset.focus='map:toolbar';b.setAttribute('aria-label','地図を拡大');b.setAttribute('aria-haspopup','dialog');}toolbar.append(b);
     }
-    toolbar.append(button('記録',()=>this.ui.menu()),this.soundButton(),button('遊び方',()=>this.ui.help()));header.append(place,toolbar);hud.append(header);
+    toolbar.append(button('記録',()=>this.ui.menu()),this.soundButton(),button('遊び方',()=>this.ui.help()));
+    if(model.dungeon){
+      const toggle=button(this.windowsHidden?'ウィンドウを戻す':'ウィンドウを消す',()=>this.toggleDungeonWindows(),'scene-window-toggle');
+      toggle.dataset.focus='dungeon-window-toggle';toggle.setAttribute('aria-pressed',String(this.windowsHidden));toolbar.append(toggle);
+    }
+    header.append(place,toolbar);hud.append(header);
     const status=make('div','scene-status');status.append(make('span','',`${model.gold} G`));
     if(model.tracked){const q=button(`${model.tracked.title}：${model.tracked.destination?.label??''}`,()=>this.openPanel('journal'),'scene-objective');status.append(q);}hud.append(status);
     if(model.battle){

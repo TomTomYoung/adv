@@ -56,6 +56,19 @@ for(const layout of ['scene','classic']){
       c.key('ArrowRight');assert.deepEqual(c.intents.at(-1),{type:'move',direction:'right'});
     }finally{c.cleanup();}
   });
+  test(`${layout}: holding Shift changes lateral turn keys into crab-walk movement without changing facing`,()=>{
+    const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});g.teleport('kagaribi_f1',1,1,'east');const c=setup(layout,g);
+    try{
+      const steps=g.state.steps;
+      assert.ok(c.key('ArrowRight',{shiftKey:true}).defaultPrevented);
+      assert.deepEqual(c.intents.at(-1),{type:'move',direction:'strafe_right'});
+      assert.deepEqual({x:g.state.location.x,y:g.state.location.y,facing:g.state.location.facing},{x:1,y:2,facing:'east'});
+      assert.ok(c.key('a',{shiftKey:true}).defaultPrevented);
+      assert.deepEqual(c.intents.at(-1),{type:'move',direction:'strafe_left'});
+      assert.deepEqual({x:g.state.location.x,y:g.state.location.y,facing:g.state.location.facing},{x:1,y:1,facing:'east'});
+      assert.equal(g.state.steps,steps+2);
+    }finally{c.cleanup();}
+  });
   test(`${layout}: idle confirm always inspects despite stale command focus, and choices suspend movement`,()=>{
     const g=newGame();g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(layout,g);
     try{

@@ -84,6 +84,27 @@ try{
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     await page.screenshot({path:path.join(output,`choices-${width}x${height}.png`)});
     await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>g.state.waiting.text),'選択 18');
+
+    // Shift + lateral input performs true crab-walk movement through GameEngine,
+    // and the top-right toggle hides/restores only the lower exploration windows.
+    await page.evaluate(()=>{reset();g.dispatch({type:'travel',dungeon:'kagaribi'});g.teleport('kagaribi_f1',1,1,'east');show();});await settle();
+    const strafeBefore=await page.evaluate(()=>({...g.state.location,steps:g.state.steps}));
+    await page.keyboard.press('Shift+ArrowRight');await settle();
+    const strafeAfter=await page.evaluate(()=>({...g.state.location,steps:g.state.steps}));
+    assert.deepEqual({x:strafeAfter.x,y:strafeAfter.y,facing:strafeAfter.facing},{x:1,y:2,facing:'east'});
+    assert.equal(strafeAfter.steps,strafeBefore.steps+1);
+    await page.getByRole('button',{name:'ウィンドウを消す',exact:true}).click();await settle();
+    assert.equal(await page.locator('.scene-stage').evaluate(e=>e.classList.contains('scene-windows-hidden')),true);
+    assert.equal(await page.locator('.scene-dock').isVisible(),false);
+    assert.equal(await page.getByRole('button',{name:'ウィンドウを戻す',exact:true}).isVisible(),true);
+    await page.keyboard.press('Shift+ArrowLeft');await settle();
+    assert.deepEqual(await page.evaluate(()=>({x:g.state.location.x,y:g.state.location.y,facing:g.state.location.facing})),{x:1,y:1,facing:'east'});
+    assert.equal(await page.locator('.scene-dock').isVisible(),false);
+    await page.evaluate(()=>{g.run('browser_many_choices');show();});await settle();
+    assert.equal(await page.locator('.scene-dock').isVisible(),true);
+    assert.equal(await page.locator('.scene-stage').evaluate(e=>e.classList.contains('scene-windows-hidden')),false);
+    assert.equal(await page.getByRole('button',{name:'ウィンドウを消す',exact:true}).isVisible(),true);
+    checks.push(`${width}x${height}${coarse?' touch':''}: Shift crab-walk keeps facing, lower windows hide/restore, events force windows visible`);
     checks.push(`${width}x${height}${coarse?' touch':''}: q001 forward coordinate spam inert, pad fixed, all 18 choices reachable, keyboard movement restored`);
     await context.close();
   }

@@ -57,10 +57,10 @@ export function changeBinding(bindings,id,slot,code){
   const next=copyBindings(bindings);next[id][slot]=code;const error=validateBindings(next);
   return error?{ok:false,error}:{ok:true,bindings:next};
 }
-export function keyAction(event,bindings=DEFAULT_BINDINGS){
-  if(event.ctrlKey||event.metaKey||event.altKey||event.shiftKey||event.isComposing||['Process','Dead'].includes(event.key))return null;
+export function keyAction(event,bindings=DEFAULT_BINDINGS,{allowShift=false}={}){
+  if(event.ctrlKey||event.metaKey||event.altKey||event.shiftKey&&!allowShift||event.isComposing||['Process','Dead'].includes(event.key))return null;
   const code=eventCode(event);if(code==='Escape')return 'cancel';
   return KEY_ACTIONS.find(a=>bindings[a.id]?.includes(code))?.id??null;
 }
 export const bindingLabel=(bindings,id)=>bindings[id].filter(Boolean).map(keyLabel).join(' / ');
-export const inputHint=(bindings=DEFAULT_BINDINGS,exploring=false)=>`${bindingLabel(bindings,'confirm')} ${exploring?'調べる':'決定'} · ${['up','down','left','right'].map(id=>bindingLabel(bindings,id)).join(' ')} ${exploring?'移動・方向転換':'選択'} · ${bindingLabel(bindings,'cancel')}${bindings.cancel.includes('Escape')?'':' / Esc'} 戻る`;
+export const inputHint=(bindings=DEFAULT_BINDINGS,exploring=false)=>`${bindingLabel(bindings,'confirm')} ${exploring?'調べる':'決定'} · ${['up','down','left','right'].map(id=>bindingLabel(bindings,id)).join(' ')} ${exploring?'移動・方向転換':'選択'}${exploring?' · Shift＋左/右 カニ歩き':''} · ${bindingLabel(bindings,'cancel')}${bindings.cancel.includes('Escape')?'':' / Esc'} 戻る`;
