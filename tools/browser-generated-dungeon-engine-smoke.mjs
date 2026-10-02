@@ -57,6 +57,45 @@ try{
   assert.ok(poison?.ok);assert.ok(poison.waiting||poison.log.some(line=>line.includes('毒')));
   assert.ok(poison.afterHp.some((hp,i)=>hp<poison.beforeHp[i]));
   await page.screenshot({path:path.join(output,'generated-engine.png'),fullPage:true});
+
+  await page.goto(`http://127.0.0.1:${server.address().port}/adv/dungeon-generation-preview.html`);
+  await page.waitForFunction(()=>Boolean(window.dungeonGenerationPreview?.current));
+  await page.getByRole('button',{name:'2画面',exact:true}).click();
+  await page.waitForFunction(()=>window.dungeonGenerationPreview?.engineSync?.error||
+    window.dungeonGenerationPreview?.engineSync?.loadedCandidate===window.dungeonGenerationPreview?.payload?.candidateIndex);
+  const firstSync=await page.evaluate(()=>{
+    const p=window.dungeonGenerationPreview,frame=document.querySelector('#engineFrame')?.contentWindow;
+    return {error:p.engineSync.error,ready:p.engineSync.ready,loaded:p.engineSync.loadedCandidate,candidate:p.payload.candidateIndex,
+      sameTiles:Boolean(frame?.generatedPlaytest)&&JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles)};
+  });
+  assert.equal(firstSync.error,null,JSON.stringify(firstSync));
+  assert.equal(firstSync.ready,true);
+  assert.equal(firstSync.loaded,firstSync.candidate);
+  assert.equal(firstSync.sameTiles,true);
+  assert.equal(await page.locator('#previewPane').isVisible(),true);
+  assert.equal(await page.locator('#enginePane').isVisible(),true);
+  const initialCandidate=await page.evaluate(()=>window.dungeonGenerationPreview.payload.candidateIndex);
+  await page.getByRole('button',{name:'次の候補',exact:true}).click();
+  await page.waitForFunction(previous=>{
+    const p=window.dungeonGenerationPreview;
+    return p?.engineSync?.error||p?.payload?.candidateIndex===previous+1&&p.engineSync.loadedCandidate===p.payload.candidateIndex;
+  },initialCandidate);
+  const nextSync=await page.evaluate(()=>{
+    const p=window.dungeonGenerationPreview,frame=document.querySelector('#engineFrame')?.contentWindow;
+    return {error:p.engineSync.error,loaded:p.engineSync.loadedCandidate,candidate:p.payload.candidateIndex,
+      sameTiles:Boolean(frame?.generatedPlaytest)&&JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles)};
+  });
+  assert.equal(nextSync.error,null,JSON.stringify(nextSync));
+  assert.equal(nextSync.loaded,nextSync.candidate);
+  assert.equal(nextSync.sameTiles,true);
+  await page.getByRole('button',{name:'試遊',exact:true}).click();
+  assert.equal(await page.locator('#previewPane').isVisible(),false);
+  assert.equal(await page.locator('#enginePane').isVisible(),true);
+  await page.getByRole('button',{name:'仮確認',exact:true}).click();
+  assert.equal(await page.locator('#previewPane').isVisible(),true);
+  assert.equal(await page.locator('#enginePane').isVisible(),false);
+  await page.getByRole('button',{name:'2画面',exact:true}).click();
+  await page.screenshot({path:path.join(output,'generated-linked-split.png'),fullPage:true});
   assert.deepEqual(errors,[]);
-  console.log('GENERATED ENGINE PLAYTEST: actual GameEngine movement, cell passage, poison event, SceneView and textured dungeon canvas passed');
+  console.log('GENERATED ENGINE PLAYTEST: actual GameEngine movement, cell passage, poison event, SceneView/textured canvas, linked preview/play modes and synchronized split screen passed');
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

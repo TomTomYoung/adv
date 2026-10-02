@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ダンジョン生成テスト — 灯帰りの迷宮</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101a20;color:#e0e7e4;font:15px/1.55 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:20px}h1{font-size:24px;margin:0 0 8px}h2{font-size:18px}p{margin:8px 0}.panel{background:#17242b;border:1px solid #405158;border-radius:8px;padding:14px}.layout{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.controls label{display:grid;gap:4px}.wide{grid-column:1/-1}input,select,button{font:inherit;color:inherit;background:#22343c;border:1px solid #66777e;border-radius:5px;padding:8px}button{cursor:pointer}button:hover{border-color:#e8c783}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}canvas{display:block;width:100%;min-height:420px;background:#091015;border:1px solid #405158;border-radius:6px;image-rendering:pixelated}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:14px;height:14px;border:1px solid #82939a}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.stat{background:#0f1b21;border-radius:5px;padding:8px}.stat b{display:block;font-size:18px}#status{min-height:1.5em;color:#e8c783}.error{color:#ffb3aa!important}details{margin-top:14px}pre{white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;background:#091015;padding:10px;border-radius:5px}.note{color:#aebbc0;font-size:13px}@media(max-width:800px){main{padding:10px}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}canvas{min-height:320px}}
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101a20;color:#e0e7e4;font:15px/1.55 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:20px}h1{font-size:24px;margin:0 0 8px}h2{font-size:18px}p{margin:8px 0}.panel{background:#17242b;border:1px solid #405158;border-radius:8px;padding:14px}.layout{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:14px}.layout.mode-preview #enginePane{display:none}.layout.mode-play #previewPane{display:none}.layout.mode-split{grid-template-columns:minmax(260px,320px) minmax(0,1fr) minmax(0,1fr)}.lab-modes{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.lab-modes button[aria-pressed="true"]{border-color:#e8c783;background:#33454d}.engine-panel{padding:0;overflow:hidden;min-height:680px}.engine-panel iframe{display:block;width:100%;height:760px;border:0;background:#081016}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.controls label{display:grid;gap:4px}.wide{grid-column:1/-1}input,select,button{font:inherit;color:inherit;background:#22343c;border:1px solid #66777e;border-radius:5px;padding:8px}button{cursor:pointer}button:hover{border-color:#e8c783}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}canvas{display:block;width:100%;min-height:420px;background:#091015;border:1px solid #405158;border-radius:6px;image-rendering:pixelated}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:14px;height:14px;border:1px solid #82939a}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.stat{background:#0f1b21;border-radius:5px;padding:8px}.stat b{display:block;font-size:18px}#status{min-height:1.5em;color:#e8c783}.error{color:#ffb3aa!important}details{margin-top:14px}pre{white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;background:#091015;padding:10px;border-radius:5px}.note{color:#aebbc0;font-size:13px}@media(max-width:1100px){.layout.mode-split{grid-template-columns:1fr 1fr}.layout.mode-split #controlsPane{grid-column:1/-1}}@media(max-width:800px){main{padding:10px}.layout,.layout.mode-split{grid-template-columns:1fr}.layout.mode-split #controlsPane{grid-column:auto}.stats{grid-template-columns:1fr 1fr}canvas{min-height:320px}.engine-panel iframe{height:680px}}
 </style>
 </head>
 <body>
 <main>
 <h1>ダンジョン生成テスト</h1>
 <p>仕様書の最初の実装確認用です。同じ seed と候補番号なら同じ地形を生成します。通路幅1を基礎に、従来迷路・fBmノイズ・セルオートマトン・ランダムウォーク・BSP・Voronoiと、部屋／こぶの形状加工を組み合わせて確認できます。</p>
-<div class="layout">
-<section class="panel">
+<nav class="lab-modes" aria-label="確認モード"><button type="button" data-lab-mode="preview" aria-pressed="true">仮確認</button><button type="button" data-lab-mode="play" aria-pressed="false">試遊</button><button type="button" data-lab-mode="split" aria-pressed="false">2画面</button></nav>
+<div class="layout mode-preview" id="labLayout">
+<section class="panel" id="controlsPane">
 <h2>生成条件</h2>
 <div class="controls">
 <label class="wide">形状モード<select id="mode"><option value="corridors">通路のみ</option><option value="bulges">通路＋こぶ</option><option value="rooms" selected>小部屋あり</option></select></label>
@@ -54,13 +55,16 @@
 <p id="status" role="status"></p>
 <p class="note">すべて任意です。基本図形に非対称化、セル欠損、union/subtract/xor等の反復ブーリアン、fBmノイズ合成を重ねられます。大きなこぶは指定面積以上で部屋領域へ昇格します。セル・エッジ・宝箱・仕掛け・敵編成は次段階です。</p>
 </section>
-<section class="panel">
+<section class="panel" id="previewPane">
 <canvas id="map" width="800" height="620" aria-label="生成されたダンジョン"></canvas>
 <div class="legend"><span><i class="swatch" style="background:#d8d6c8"></i>通路</span><span><i class="swatch" style="background:#c6975a"></i>こぶ</span><span><i class="swatch" style="background:#8eb184"></i>小部屋</span><span><i class="swatch" style="background:#8fd3ff"></i>入口</span><span><i class="swatch" style="background:#ffcb73"></i>目的地</span></div>
 <div class="stats"><div class="stat">床<b id="floorCount">-</b></div><div class="stat">最長経路<b id="routeSteps">-</b></div><div class="stat">こぶ<b id="bulgeCount">-</b></div><div class="stat">部屋<b id="roomCount">-</b></div></div>
 <div class="buttons" aria-label="歩行操作"><button data-move="0,-1">↑</button><button data-move="-1,0">←</button><button data-move="0,1">↓</button><button data-move="1,0">→</button><button id="resetWalk">入口へ戻る</button></div>
 <p id="walkStatus" class="note">生成後、矢印キー/WASDまたはボタンで歩けます。</p>
 <p id="cellInfo" class="note"></p>
+</section>
+<section class="panel engine-panel" id="enginePane">
+<iframe id="engineFrame" title="生成ダンジョン実エンジン試遊" src="dungeon-engine-playtest.html"></iframe>
 </section>
 </div>
 <details><summary>生成結果JSON</summary><pre id="json"></pre></details>
@@ -74,6 +78,11 @@ const canvas = $('map');
 const ctx = canvas.getContext('2d');
 let current;
 let player=null;
+let labMode='preview';
+let engineReady=false;
+const engineSync={ready:false,loadedCandidate:null,error:null};
+const labLayout=$('labLayout');
+const engineFrame=$('engineFrame');
 let collapsed=new Set();
 const cellSource = await fetch('./config/cell-layers.json').then(response => {
   if(!response.ok) throw new Error('セル種定義を読み込めません');
@@ -206,6 +215,43 @@ function draw(candidate){
   }
 }
 
+function playtestPayload(){
+  return {
+    seed:number('seed'),
+    candidateIndex:number('candidate'),
+    layout:layoutFromForm(),
+    cells:cellSpecFromForm(),
+    sourceDungeonId:'kagaribi',
+    encounters:false,
+  };
+}
+function syncEngine(){
+  if(!current||!engineReady||!engineFrame?.contentWindow)return;
+  engineSync.error=null;
+  engineFrame.contentWindow.postMessage({type:'adv:dungeon-generation:load',payload:playtestPayload()},location.origin);
+}
+function setLabMode(mode){
+  if(!['preview','play','split'].includes(mode))mode='preview';
+  labMode=mode;
+  labLayout.className='layout mode-'+mode;
+  for(const button of document.querySelectorAll('[data-lab-mode]'))button.setAttribute('aria-pressed',String(button.dataset.labMode===mode));
+  try{localStorage.setItem('adv:dungeon-generation:lab-mode',mode);}catch{}
+  if(mode!=='preview')syncEngine();
+}
+for(const button of document.querySelectorAll('[data-lab-mode]'))button.addEventListener('click',()=>setLabMode(button.dataset.labMode));
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==engineFrame.contentWindow)return;
+  if(event.data?.type==='adv:dungeon-generation:ready'){
+    engineReady=true;engineSync.ready=true;syncEngine();return;
+  }
+  if(event.data?.type==='adv:dungeon-generation:loaded'){
+    engineSync.loadedCandidate=event.data.candidateIndex;engineSync.error=null;return;
+  }
+  if(event.data?.type==='adv:dungeon-generation:error'){
+    engineSync.error=event.data.message??'試遊ロード失敗';
+  }
+});
+
 function render(){
   const status=$('status');
   try{
@@ -220,6 +266,8 @@ function render(){
     status.classList.remove('error');
     status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / セル種 ${Object.keys(current.cellSummary??{}).length} / ${current.generatorVersion}`;
     updateWalkStatus('入口から開始');
+    window.dungeonGenerationPreview={current,payload:playtestPayload(),syncEngine,setLabMode,engineSync};
+    if(labMode!=='preview')syncEngine();
   }catch(error){
     status.classList.add('error');status.textContent=error.message;
   }
@@ -283,6 +331,7 @@ window.addEventListener('keydown',event=>{
 });
 
 window.addEventListener('resize',()=>current&&draw(current));
+try{setLabMode(localStorage.getItem('adv:dungeon-generation:lab-mode')??'preview');}catch{setLabMode('preview');}
 render();
 </script>
 </body>

@@ -11,7 +11,7 @@ const $=id=>document.getElementById(id);
 const root=$('app'),status=$('generator-status');
 applyTheme(THEME_DEFAULT);
 const baseData=await loadContent();
-let data,engine,view,candidate,dispatch;
+let data,engine,view,candidate,dispatch,currentPayload=null;
 const ui={
   status:text=>setStatus(text,true),
   menu:()=>setStatus('このページは生成試遊専用です。通常セーブは行いません。'),
@@ -75,7 +75,7 @@ function cellSpec(){
 function render(){
   const model=projectGame(engine);
   view.render(model);
-  window.generatedPlaytest={data,engine,view,candidate,model,dispatch,regenerate,render};
+  window.generatedPlaytest={data,engine,view,candidate,model,dispatch,regenerate,render,payload:currentPayload};
 }
 function clearStartup(engine){
   engine.state.vm=[];
@@ -87,21 +87,33 @@ function clearStartup(engine){
   delete engine.state.presentation.cast;
   delete engine.state.presentation.castCue;
 }
-async function regenerate(){
+async function regenerate(externalPayload=null){
   try{
     setStatus('生成・エンジンロード中…');
     data=structuredClone(baseData);
-    candidate=generateDungeonCandidate({
-      seed:number('seed'),candidateIndex:number('candidate'),layout:generationLayout(),cells:cellSpec(),cellTypes:data.cellTypes,
-    });
-    const installed=installGeneratedDungeon(data,candidate,{
+    currentPayload=externalPayload??{
+      seed:number('seed'),
+      candidateIndex:number('candidate'),
+      layout:generationLayout(),
+      cells:cellSpec(),
       sourceDungeonId:$('sourceDungeon').value,
       encounters:$('encounters').checked,
+    };
+    candidate=generateDungeonCandidate({
+      seed:currentPayload.seed,
+      candidateIndex:currentPayload.candidateIndex,
+      layout:currentPayload.layout,
+      cells:currentPayload.cells,
+      cellTypes:data.cellTypes,
+    });
+    const installed=installGeneratedDungeon(data,candidate,{
+      sourceDungeonId:currentPayload.sourceDungeonId??'kagaribi',
+      encounters:Boolean(currentPayload.encounters),
     });
     const errors=validateGeneratedPlaytestData(data);
     if(errors.length)throw new Error('動的データ検証: '+errors.slice(0,4).join(' / '));
     view?.destroy();
-    engine=new GameEngine(data,number('seed'));
+    engine=new GameEngine(data,currentPayload.seed);
     clearStartup(engine);
     prepareGeneratedPlaytestEngine(engine,installed);
     dispatch=intent=>{
@@ -112,15 +124,22 @@ async function regenerate(){
     view=new SceneView(root,dispatch,ui);
     render();
     setStatus(`GameEngineロード済み / ${candidate.generatorVersion} / 床${candidate.metrics.walkableCount??candidate.metrics.floorCount} / セル種${Object.keys(candidate.cellSummary??{}).length}`);
+    if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:loaded',candidateIndex:currentPayload.candidateIndex},location.origin);
   }catch(error){
     console.error(error);setStatus(error.message,true);
+    if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:error',message:error.message},location.origin);
   }
 }
-$('regenerate').addEventListener('click',regenerate);
+$('regenerate').addEventListener('click',()=>regenerate());
 $('next').addEventListener('click',()=>{$('candidate').value=String(number('candidate')+1);regenerate();});
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.data?.type!=='adv:dungeon-generation:load'||!event.data.payload)return;
+  regenerate(event.data.payload);
+});
 document.addEventListener('keydown',event=>{
   if(!view||!engine)return;
   if(event.target?.closest('#generator-controls'))return;
   handleGameKey(event,{view,model:view.model,dispatch,modalOpen:false});
 });
 await regenerate();
+if(window.parent!==window)window.parent.postMessage({type:'adv:dungeon-generation:ready'},location.origin);
