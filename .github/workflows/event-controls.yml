@@ -12,6 +12,9 @@ on:
       - 'config/locations.json'
       - 'src/core/**'
       - 'src/application/**'
+      - 'dungeon-engine-playtest.html'
+      - 'src/dungeon-engine-playtest.js'
+      - 'tools/browser-generated-dungeon-engine-smoke.mjs'
       - '.github/workflows/event-controls.yml'
   workflow_dispatch:
 permissions:
@@ -35,6 +38,8 @@ jobs:
         run: node tools/browser-battle-smoke.mjs
       - name: Verify expanded Kagaribi districts and outpost services
         run: node tools/browser-kagaribi-smoke.mjs
+      - name: Verify generated dungeon through the actual game engine
+        run: node tools/browser-generated-dungeon-engine-smoke.mjs
       - name: Keep viewport checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -44,4 +49,5 @@ jobs:
             /tmp/adv-event-controls-browser
             /tmp/adv-battle-browser
             /tmp/adv-kagaribi-browser
+            /tmp/adv-generated-engine-browser
           if-no-files-found: ignore
