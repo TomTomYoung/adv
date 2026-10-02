@@ -22,6 +22,14 @@
 <label>ベジェ枝数<input id="corridorBranches" type="number" value="7" min="0" max="32" step="1"></label>
 <label class="wide">基礎地形アルゴリズム<select id="terrainAlgorithm"><option value="classic" selected>従来方式</option><option value="noise_fbm">Perlin系 fBm + domain warp</option><option value="cellular">セルオートマトン洞窟</option><option value="random_walk">ランダムウォーク洞窟</option><option value="bsp">BSP区画＋部屋</option><option value="voronoi">Voronoi領域</option></select></label>
 <label class="wide">部屋・こぶ生成<select id="featureAlgorithm"><option value="primitive" selected>基本図形</option><option value="boolean">ブーリアン合成</option><option value="noise">ノイズ形状</option><option value="cellular">セルオートマトン形状</option><option value="random_walk">ランダムウォーク形状</option><option value="voronoi">Voronoi形状</option></select></label>
+<label class="wide">基本床<select id="baseFloor"></select></label>
+<label class="wide">基本壁<select id="baseWall"></select></label>
+<label>セル1<select id="patchPreset1"></select></label><label>密度1<input id="patchDensity1" type="number" value="0.10" min="0" max="0.5" step="0.01"></label>
+<label>配置1<select id="patchArea1"><option value="any_floor">床全体</option><option value="corridor">通路</option><option value="room">部屋</option><option value="bulge">こぶ</option><option value="dead_end">行き止まり</option><option value="wall">壁</option></select></label><label>クラスタ1<input id="patchCluster1" type="number" value="5" min="1" max="20"></label>
+<label>セル2<select id="patchPreset2"></select></label><label>密度2<input id="patchDensity2" type="number" value="0.06" min="0" max="0.5" step="0.01"></label>
+<label>配置2<select id="patchArea2"><option value="corridor">通路</option><option value="room">部屋</option><option value="any_floor">床全体</option><option value="dead_end">行き止まり</option><option value="bulge">こぶ</option><option value="wall">壁</option></select></label><label>クラスタ2<input id="patchCluster2" type="number" value="4" min="1" max="20"></label>
+<label>セル3<select id="patchPreset3"></select></label><label>密度3<input id="patchDensity3" type="number" value="0.05" min="0" max="0.5" step="0.01"></label>
+<label>配置3<select id="patchArea3"><option value="room">部屋</option><option value="any_floor">床全体</option><option value="corridor">通路</option><option value="dead_end">行き止まり</option><option value="bulge">こぶ</option><option value="wall">壁</option></select></label><label>クラスタ3<input id="patchCluster3" type="number" value="3" min="1" max="20"></label>
 <label>seed<input id="seed" type="number" value="20261002" step="1"></label>
 <label>候補番号<input id="candidate" type="number" value="0" min="0" step="1"></label>
 <label>幅<input id="width" type="number" value="35" min="5" max="50"></label>
@@ -50,19 +58,60 @@
 <canvas id="map" width="800" height="620" aria-label="生成されたダンジョン"></canvas>
 <div class="legend"><span><i class="swatch" style="background:#d8d6c8"></i>通路</span><span><i class="swatch" style="background:#c6975a"></i>こぶ</span><span><i class="swatch" style="background:#8eb184"></i>小部屋</span><span><i class="swatch" style="background:#8fd3ff"></i>入口</span><span><i class="swatch" style="background:#ffcb73"></i>目的地</span></div>
 <div class="stats"><div class="stat">床<b id="floorCount">-</b></div><div class="stat">最長経路<b id="routeSteps">-</b></div><div class="stat">こぶ<b id="bulgeCount">-</b></div><div class="stat">部屋<b id="roomCount">-</b></div></div>
+<div class="buttons" aria-label="歩行操作"><button data-move="0,-1">↑</button><button data-move="-1,0">←</button><button data-move="0,1">↓</button><button data-move="1,0">→</button><button id="resetWalk">入口へ戻る</button></div>
+<p id="walkStatus" class="note">生成後、矢印キー/WASDまたはボタンで歩けます。</p>
+<p id="cellInfo" class="note"></p>
 </section>
 </div>
 <details><summary>生成結果JSON</summary><pre id="json"></pre></details>
 </main>
 <script type="module">
 import {generateDungeonCandidate} from './src/core/dungeon-generator.js';
+import {generatedCellAt, generatedCellIdAt} from './src/core/dungeon-cell-painter.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('map');
 const ctx = canvas.getContext('2d');
 let current;
+let player=null;
+let collapsed=new Set();
+const cellSource = await fetch('./config/cell-layers.json').then(response => {
+  if(!response.ok) throw new Error('セル種定義を読み込めません');
+  return response.json();
+});
+const cellTypes = cellSource.presets;
+const standaloneEntries = Object.entries(cellTypes).filter(([,preset])=>!preset.parameters?.binding);
+const fillSelect=(id,filter,preferred)=>{
+  const select=$(id);select.textContent='';
+  for(const [value,preset] of standaloneEntries.filter(([,p])=>filter(p))){
+    const option=document.createElement('option');option.value=value;option.textContent=`${preset.name} [${value}]`;select.append(option);
+  }
+  if([...select.options].some(option=>option.value===preferred))select.value=preferred;
+};
+fillSelect('baseFloor',preset=>preset.passage==='.' && preset.visual?.floor!==false,'stone_floor');
+fillSelect('baseWall',preset=>preset.passage==='#' && preset.visual?.wall===true,'stone_wall');
+for(const [id,preferred] of [['patchPreset1','shallow_water'],['patchPreset2','ice_floor'],['patchPreset3','deep_depression_water']]){
+  fillSelect(id,()=>true,preferred);
+}
 
 function number(id){ return Number($(id).value); }
+function cellSpecFromForm(){
+  const patches=[];
+  for(const i of [1,2,3]){
+    const density=number('patchDensity'+i);
+    if(!(density>0))continue;
+    patches.push({
+      preset:$('patchPreset'+i).value,
+      areas:[$('patchArea'+i).value],
+      density,
+      cluster:{min:1,max:number('patchCluster'+i)},
+      minDistanceFromEntry:2,
+      preserveCriticalRoute:true,
+    });
+  }
+  return {baseFloor:$('baseFloor').value,baseWall:$('baseWall').value,patches};
+}
+
 function layoutFromForm(){
   const mode = $('mode').value;
   const featureAlgorithm=$('featureAlgorithm').value;
@@ -109,6 +158,23 @@ function layoutFromForm(){
   };
 }
 
+function cellColor(cell,region){
+  if(!cell)return '#26343a';
+  if(cell.visual?.wall)return '#26343a';
+  if(cell.parameters?.bottomless)return '#071018';
+  if(cell.parameters?.floor_depth>=1)return '#28485b';
+  if(cell.parameters?.water_depth===2)return '#346f8c';
+  if(cell.parameters?.water_depth===1)return '#4b92ad';
+  if(cell.parameters?.slippery)return '#8ac7d5';
+  if(cell.parameters?.fragile)return '#9b7f69';
+  if(cell.visual?.surface==='poison')return '#647f3f';
+  if(cell.visual?.surface==='earth')return '#8c7353';
+  if(cell.visual?.surface==='wood')return '#8b6745';
+  if(region==='r')return '#8eb184';
+  if(region==='b')return '#c6975a';
+  return '#d8d6c8';
+}
+
 function draw(candidate){
   const dpr = Math.max(1, window.devicePixelRatio || 1);
   const cssWidth = Math.max(320, canvas.clientWidth);
@@ -122,10 +188,11 @@ function draw(candidate){
   const ox=(cssWidth-cell*candidate.width)/2, oy=(cssHeight-cell*candidate.height)/2;
   ctx.fillStyle='#091015';ctx.fillRect(0,0,cssWidth,cssHeight);
   for(let y=0;y<candidate.height;y++)for(let x=0;x<candidate.width;x++){
-    if(candidate.tiles[y][x]!=='#'){
-      const type=candidate.regions[y][x];
-      ctx.fillStyle=type==='r'?'#8eb184':type==='b'?'#c6975a':'#d8d6c8';
-    }else ctx.fillStyle='#26343a';
+    const collapsedHere=collapsed.has(x+','+y);
+    if(!collapsedHere){
+      const cell=generatedCellAt(candidate,cellTypes,x,y);
+      ctx.fillStyle=cellColor(cell,candidate.regions[y][x]);
+    }else ctx.fillStyle='#11181c';
     ctx.fillRect(ox+x*cell,oy+y*cell,Math.ceil(cell),Math.ceil(cell));
   }
   const marker=(point,color,label)=>{
@@ -133,12 +200,17 @@ function draw(candidate){
     if(cell>=10){ctx.fillStyle='#081016';ctx.font=`bold ${Math.max(9,cell*.58)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,ox+(point.x+.5)*cell,oy+(point.y+.52)*cell)}
   };
   marker(candidate.entry,'#8fd3ff','E');marker(candidate.goal,'#ffcb73','G');
+  if(player){
+    ctx.beginPath();ctx.arc(ox+(player.x+.5)*cell,oy+(player.y+.5)*cell,Math.max(3,cell*.28),0,Math.PI*2);
+    ctx.fillStyle='#ffffff';ctx.fill();ctx.strokeStyle='#081016';ctx.lineWidth=Math.max(1,cell*.08);ctx.stroke();
+  }
 }
 
 function render(){
   const status=$('status');
   try{
-    current=generateDungeonCandidate({seed:number('seed'),candidateIndex:number('candidate'),layout:layoutFromForm()});
+    current=generateDungeonCandidate({seed:number('seed'),candidateIndex:number('candidate'),layout:layoutFromForm(),cells:cellSpecFromForm(),cellTypes});
+    player={...current.entry};collapsed=new Set();
     draw(current);
     $('floorCount').textContent=current.metrics.floorCount;
     $('routeSteps').textContent=current.metrics.routeSteps;
@@ -146,7 +218,8 @@ function render(){
     $('roomCount').textContent=current.metrics.roomCount;
     $('json').textContent=JSON.stringify(current,null,2);
     status.classList.remove('error');
-    status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / ${current.generatorVersion}`;
+    status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / セル種 ${Object.keys(current.cellSummary??{}).length} / ${current.generatorVersion}`;
+    updateWalkStatus('入口から開始');
   }catch(error){
     status.classList.add('error');status.textContent=error.message;
   }
@@ -155,7 +228,7 @@ function render(){
 $('generate').addEventListener('click',render);
 $('next').addEventListener('click',()=>{$('candidate').value=String(number('candidate')+1);render()});
 $('seedNext').addEventListener('click',()=>{$('seed').value=String(number('seed')+1);$('candidate').value='0';render()});
-for(const id of ['terrainAlgorithm','corridorAlgorithm','corridorCurvature','corridorBranches','featureAlgorithm','asymmetry','dropout','booleanOps','noiseBlend'])$(id).addEventListener('change',render);
+for(const id of ['terrainAlgorithm','corridorAlgorithm','corridorCurvature','corridorBranches','featureAlgorithm','asymmetry','dropout','booleanOps','noiseBlend','baseFloor','baseWall','patchPreset1','patchDensity1','patchArea1','patchCluster1','patchPreset2','patchDensity2','patchArea2','patchCluster2','patchPreset3','patchDensity3','patchArea3','patchCluster3'])$(id).addEventListener('change',render);
 $('mode').addEventListener('change',()=>{
   const mode=$('mode').value;
   if(mode==='corridors'){$('width').value='25';$('height').value='21'}
@@ -163,6 +236,52 @@ $('mode').addEventListener('change',()=>{
   if(mode==='rooms'){$('width').value='35';$('height').value='29'}
   render();
 });
+
+function liveCell(x,y){
+  if(!current||x<0||y<0||x>=current.width||y>=current.height)return null;
+  if(collapsed.has(x+','+y))return {id:'collapsed',name:'崩落後の穴',description:'崩れた床。',passage:'#',parameters:{}};
+  return generatedCellAt(current,cellTypes,x,y);
+}
+function updateWalkStatus(prefix=''){
+  if(!current||!player)return;
+  const cell=liveCell(player.x,player.y);
+  const goal=player.x===current.goal.x&&player.y===current.goal.y;
+  const eventText=cell?.events?.length?` / イベント ${cell.events.join(', ')}（表示のみ）`:'';
+  $('walkStatus').textContent=`${prefix}${prefix?' / ':''}現在 ${player.x},${player.y}${goal?' / 目的地到達':''}${eventText}`;
+  $('cellInfo').textContent=cell?`${cell.name} [${cell.id}] / passage=${cell.passage} / ${cell.description??''}`:'';
+}
+function stepOnce(dx,dy){
+  const nx=player.x+dx,ny=player.y+dy;
+  const target=liveCell(nx,ny);
+  if(!target||target.passage!=='.'){updateWalkStatus(target?`通行不可: ${target.name}`:'範囲外');return false;}
+  const previous={...player};
+  const previousCell=liveCell(previous.x,previous.y);
+  player={x:nx,y:ny};
+  if(previousCell?.parameters?.fragile)collapsed.add(previous.x+','+previous.y);
+  return true;
+}
+function movePlayer(dx,dy){
+  if(!current||!player)return;
+  if(!stepOnce(dx,dy)){draw(current);return;}
+  let guard=50;
+  while(guard-->0){
+    const here=liveCell(player.x,player.y);
+    if(!here?.parameters?.slippery)break;
+    if(!stepOnce(dx,dy))break;
+  }
+  updateWalkStatus();
+  draw(current);
+}
+for(const button of document.querySelectorAll('[data-move]'))button.addEventListener('click',()=>{
+  const [dx,dy]=button.dataset.move.split(',').map(Number);movePlayer(dx,dy);
+});
+$('resetWalk').addEventListener('click',()=>{if(current){player={...current.entry};collapsed=new Set();updateWalkStatus('入口へ戻りました');draw(current);}});
+window.addEventListener('keydown',event=>{
+  if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;
+  const map={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};
+  const delta=map[event.key];if(!delta)return;event.preventDefault();movePlayer(delta[0],delta[1]);
+});
+
 window.addEventListener('resize',()=>current&&draw(current));
 render();
 </script>
