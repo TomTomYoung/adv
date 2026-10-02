@@ -57,6 +57,33 @@ try{
   assert.ok(poison?.ok);assert.ok(poison.waiting||poison.log.some(line=>line.includes('毒')));
   assert.ok(poison.afterHp.some((hp,i)=>hp<poison.beforeHp[i]));
   await page.screenshot({path:path.join(output,'generated-engine.png'),fullPage:true});
+
+  await page.goto(`http://127.0.0.1:${server.address().port}/adv/dungeon-generation-preview.html`);
+  await page.waitForFunction(()=>Boolean(window.dungeonGenerationPreview?.current));
+  await page.getByRole('button',{name:'2画面',exact:true}).click();
+  await page.waitForFunction(()=>{
+    const frame=document.querySelector('#engineFrame')?.contentWindow;
+    return Boolean(frame?.generatedPlaytest?.engine?.state?.mode==='dungeon'&&
+      frame.generatedPlaytest.payload?.candidateIndex===window.dungeonGenerationPreview.payload.candidateIndex&&
+      JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(window.dungeonGenerationPreview.current.tiles));
+  });
+  assert.equal(await page.locator('#previewPane').isVisible(),true);
+  assert.equal(await page.locator('#enginePane').isVisible(),true);
+  const initialCandidate=await page.evaluate(()=>window.dungeonGenerationPreview.payload.candidateIndex);
+  await page.getByRole('button',{name:'次の候補',exact:true}).click();
+  await page.waitForFunction(previous=>{
+    const frame=document.querySelector('#engineFrame')?.contentWindow,p=window.dungeonGenerationPreview;
+    return p?.payload?.candidateIndex===previous+1&&frame?.generatedPlaytest?.payload?.candidateIndex===p.payload.candidateIndex&&
+      JSON.stringify(frame.generatedPlaytest.candidate.tiles)===JSON.stringify(p.current.tiles);
+  },initialCandidate);
+  await page.getByRole('button',{name:'試遊',exact:true}).click();
+  assert.equal(await page.locator('#previewPane').isVisible(),false);
+  assert.equal(await page.locator('#enginePane').isVisible(),true);
+  await page.getByRole('button',{name:'仮確認',exact:true}).click();
+  assert.equal(await page.locator('#previewPane').isVisible(),true);
+  assert.equal(await page.locator('#enginePane').isVisible(),false);
+  await page.getByRole('button',{name:'2画面',exact:true}).click();
+  await page.screenshot({path:path.join(output,'generated-linked-split.png'),fullPage:true});
   assert.deepEqual(errors,[]);
-  console.log('GENERATED ENGINE PLAYTEST: actual GameEngine movement, cell passage, poison event, SceneView and textured dungeon canvas passed');
+  console.log('GENERATED ENGINE PLAYTEST: actual GameEngine movement, cell passage, poison event, SceneView/textured canvas, linked preview/play modes and synchronized split screen passed');
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

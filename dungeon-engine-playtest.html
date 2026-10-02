@@ -12,11 +12,12 @@
 #generator-grid{display:grid;grid-template-columns:repeat(4,minmax(105px,1fr));gap:6px;margin-top:8px}
 #generator-grid label{display:grid;gap:2px}#generator-grid input,#generator-grid select,#generator-controls button{font:inherit;color:inherit;background:#22343c;border:1px solid #66777e;border-radius:4px;padding:5px}
 #generator-actions{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}#generator-status{max-width:440px}
-#app{min-height:100vh}.scene-stage{min-height:100vh}
+#app{min-height:100vh}.scene-stage{min-height:100vh}body.embedded #generator-controls{display:none}body.embedded #app,body.embedded .scene-stage{min-height:100vh}
 @media(max-width:700px){#generator-grid{grid-template-columns:repeat(2,minmax(110px,1fr))}}
 </style>
 </head>
 <body>
+<script>if(new URLSearchParams(location.search).get('embedded')==='1')document.body.classList.add('embedded');</script>
 <details id="generator-controls" open>
 <summary>ランダム生成・実エンジン試遊設定</summary>
 <div id="generator-grid">
@@ -34,7 +35,7 @@
 <label>セル4<select id="patch4"></select></label><label>密度4<input id="density4" type="number" min="0" max=".4" step=".01" value=".07"></label>
 <label>遭遇<input id="encounters" type="checkbox"></label>
 </div>
-<div id="generator-actions"><button id="regenerate" type="button">生成してエンジンへロード</button><button id="next" type="button">次の候補</button><span id="generator-status" role="status"></span><a href="dungeon-generation-preview.html">配置図へ</a></div>
+<div id="generator-actions"><button id="regenerate" type="button">生成してエンジンへロード</button><button id="next" type="button">次の候補</button><span id="generator-status" role="status"></span><a href="dungeon-generation-preview.html">統合確認へ</a></div>
 </details>
 <div id="app" data-view="scene"></div>
 <script type="module" src="src/dungeon-engine-playtest.js"></script>
