@@ -17,6 +17,9 @@
 <h2>生成条件</h2>
 <div class="controls">
 <label class="wide">形状モード<select id="mode"><option value="corridors">通路のみ</option><option value="bulges">通路＋こぶ</option><option value="rooms" selected>小部屋あり</option></select></label>
+<label class="wide">通路生成<select id="corridorAlgorithm"><option value="maze" selected>直交迷路</option><option value="bezier_grid">ベジェ誘導4近傍</option></select></label>
+<label>ベジェ曲率<input id="corridorCurvature" type="number" value="0.65" min="0" max="1.5" step="0.05"></label>
+<label>ベジェ枝数<input id="corridorBranches" type="number" value="7" min="0" max="32" step="1"></label>
 <label class="wide">基礎地形アルゴリズム<select id="terrainAlgorithm"><option value="classic" selected>従来方式</option><option value="noise_fbm">Perlin系 fBm + domain warp</option><option value="cellular">セルオートマトン洞窟</option><option value="random_walk">ランダムウォーク洞窟</option><option value="bsp">BSP区画＋部屋</option><option value="voronoi">Voronoi領域</option></select></label>
 <label class="wide">部屋・こぶ生成<select id="featureAlgorithm"><option value="primitive" selected>基本図形</option><option value="boolean">ブーリアン合成</option><option value="noise">ノイズ形状</option><option value="cellular">セルオートマトン形状</option><option value="random_walk">ランダムウォーク形状</option><option value="voronoi">Voronoi形状</option></select></label>
 <label>seed<input id="seed" type="number" value="20261002" step="1"></label>
@@ -79,6 +82,7 @@ function layoutFromForm(){
     height:number('height'),
     corridorWidth:1,
     extraLoops:{min:1,max:2},
+    corridors:{algorithm:$('corridorAlgorithm').value,branchCount:{min:number('corridorBranches'),max:number('corridorBranches')},curvature:number('corridorCurvature'),sampleDensity:6,turnPenalty:.1},
     terrain:{algorithm:$('terrainAlgorithm').value,options:{noise:{warp:number('noiseWarp'),octaves:5,scale:.16,threshold:-.08,centerBias:.45},cellular:{fill:.47,steps:5},randomWalk:{fill:.42},bsp:{depth:4,minLeaf:6},voronoi:{fill:.58,sites:12}}},
     bulges:{
       count:mode==='bulges'?{min:number('bulgeMin'),max:number('bulgeMax')}:{min:0,max:0},
@@ -142,7 +146,7 @@ function render(){
     $('roomCount').textContent=current.metrics.roomCount;
     $('json').textContent=JSON.stringify(current,null,2);
     status.classList.remove('error');
-    status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / ${current.generatorVersion}`;
+    status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / ${current.generatorVersion}`;
   }catch(error){
     status.classList.add('error');status.textContent=error.message;
   }
@@ -151,7 +155,7 @@ function render(){
 $('generate').addEventListener('click',render);
 $('next').addEventListener('click',()=>{$('candidate').value=String(number('candidate')+1);render()});
 $('seedNext').addEventListener('click',()=>{$('seed').value=String(number('seed')+1);$('candidate').value='0';render()});
-for(const id of ['terrainAlgorithm','featureAlgorithm','asymmetry','dropout','booleanOps','noiseBlend'])$(id).addEventListener('change',render);
+for(const id of ['terrainAlgorithm','corridorAlgorithm','corridorCurvature','corridorBranches','featureAlgorithm','asymmetry','dropout','booleanOps','noiseBlend'])$(id).addEventListener('change',render);
 $('mode').addEventListener('change',()=>{
   const mode=$('mode').value;
   if(mode==='corridors'){$('width').value='25';$('height').value='21'}
