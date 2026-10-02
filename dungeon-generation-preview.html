@@ -5,56 +5,139 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ダンジョン生成テスト — 灯帰りの迷宮</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101a20;color:#e0e7e4;font:15px/1.55 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:20px}h1{font-size:24px;margin:0 0 8px}h2{font-size:18px}p{margin:8px 0}.panel{background:#17242b;border:1px solid #405158;border-radius:8px;padding:14px}.layout{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:14px}.layout.mode-preview #enginePane{display:none}.layout.mode-play #previewPane{display:none}.layout.mode-split{grid-template-columns:minmax(260px,320px) minmax(0,1fr) minmax(0,1fr)}.lab-modes{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.lab-modes button[aria-pressed="true"]{border-color:#e8c783;background:#33454d}.engine-panel{padding:0;overflow:hidden;min-height:680px}.engine-panel iframe{display:block;width:100%;height:760px;border:0;background:#081016}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.controls label{display:grid;gap:4px}.wide{grid-column:1/-1}input,select,button{font:inherit;color:inherit;background:#22343c;border:1px solid #66777e;border-radius:5px;padding:8px}button{cursor:pointer}button:hover{border-color:#e8c783}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}canvas{display:block;width:100%;min-height:420px;background:#091015;border:1px solid #405158;border-radius:6px;image-rendering:pixelated}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:14px;height:14px;border:1px solid #82939a}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.stat{background:#0f1b21;border-radius:5px;padding:8px}.stat b{display:block;font-size:18px}#status{min-height:1.5em;color:#e8c783}.error{color:#ffb3aa!important}details{margin-top:14px}pre{white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;background:#091015;padding:10px;border-radius:5px}.note{color:#aebbc0;font-size:13px}@media(max-width:1100px){.layout.mode-split{grid-template-columns:1fr 1fr}.layout.mode-split #controlsPane{grid-column:1/-1}}@media(max-width:800px){main{padding:10px}.layout,.layout.mode-split{grid-template-columns:1fr}.layout.mode-split #controlsPane{grid-column:auto}.stats{grid-template-columns:1fr 1fr}canvas{min-height:320px}.engine-panel iframe{height:680px}}
+:root{color-scheme:dark}*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;background:#101a20;color:#e0e7e4;font:15px/1.55 system-ui,sans-serif}
+main{max-width:1600px;margin:auto;padding:18px}h1{font-size:24px;margin:0 0 8px}h2{font-size:18px;margin:0 0 10px}p{margin:8px 0}
+.panel{min-width:0;background:#17242b;border:1px solid #405158;border-radius:8px;padding:14px;overflow:hidden}
+.layout{display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr);gap:14px;align-items:start}
+.layout.mode-preview #enginePane{display:none}.layout.mode-play #previewPane{display:none}
+.layout.mode-split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.layout.mode-split #controlsPane{grid-column:1/-1}
+.lab-modes{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.lab-modes button[aria-pressed="true"]{border-color:#e8c783;background:#33454d}
+.engine-panel{padding:0;overflow:hidden;min-height:680px}.engine-panel iframe{display:block;width:100%;height:780px;border:0;background:#081016}
+.setting-section{border:1px solid #34464e;border-radius:7px;background:#122028;margin:0 0 10px;overflow:hidden}
+.setting-section>summary{cursor:pointer;font-weight:700;padding:10px 12px;background:#1c2c34;list-style-position:inside}
+.setting-body{padding:10px 12px;min-width:0}.section-note{color:#aebbc0;font-size:12px;margin:0 0 10px}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;min-width:0}.field{display:grid;gap:4px;min-width:0}.wide{grid-column:1/-1}
+.field>span,.field-title{font-size:13px;color:#d3dcda}.field input,.field select,.controls input,.controls select{width:100%;min-width:0;max-width:100%}
+input,select,button{font:inherit;color:inherit;background:#22343c;border:1px solid #66777e;border-radius:5px;padding:8px}button{cursor:pointer}button:hover{border-color:#e8c783}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.buttons button{width:auto}
+.placement-list{display:grid;gap:8px;margin-top:10px}.placement-card{min-width:0;border:1px solid #3f535b;border-radius:6px;padding:9px;background:#17262d}
+.placement-card h3{font-size:14px;margin:0 0 4px}.placement-card .placement-summary{font-size:12px;color:#aebbc0;margin:0 0 8px;overflow-wrap:anywhere}
+.placement-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.25fr) minmax(84px,.7fr) minmax(84px,.7fr);gap:7px;min-width:0}
+.party-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:7px}
+.party-card{display:grid;grid-template-columns:auto minmax(0,1fr) 78px;align-items:center;gap:8px;min-width:0;border:1px solid #3f535b;border-radius:6px;padding:8px;background:#17262d}
+.party-card input[type=checkbox]{width:auto}.party-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.party-level{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4px;font-size:12px}.party-level input{min-width:0;width:100%}
+.enemy-list{display:grid;gap:8px}.enemy-card{display:grid;grid-template-columns:78px minmax(0,1fr) 90px;align-items:end;gap:8px;min-width:0;border:1px solid #3f535b;border-radius:6px;padding:8px;background:#17262d}
+.enemy-card strong{align-self:center}.enemy-card label{display:grid;gap:4px;min-width:0}.enemy-card select,.enemy-card input{width:100%;min-width:0}
+#battleStatus{font-size:12px;color:#e8c783;min-height:1.2em}
+canvas{display:block;width:100%;min-height:420px;background:#091015;border:1px solid #405158;border-radius:6px;image-rendering:pixelated}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:14px;height:14px;border:1px solid #82939a}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.stat{background:#0f1b21;border-radius:5px;padding:8px}.stat b{display:block;font-size:18px}
+#status{min-height:1.5em;color:#e8c783}.error{color:#ffb3aa!important}details.result{margin-top:14px}pre{white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;background:#091015;padding:10px;border-radius:5px}.note{color:#aebbc0;font-size:13px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.layout.mode-split{grid-template-columns:1fr 1fr}.layout.mode-split #controlsPane{grid-column:1/-1}}
+@media(max-width:800px){main{padding:10px}.layout,.layout.mode-split{grid-template-columns:1fr}.layout.mode-split #controlsPane{grid-column:auto}.controls{grid-template-columns:1fr}.wide{grid-column:auto}.placement-fields{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}canvas{min-height:320px}.engine-panel iframe{height:680px}}
+@media(max-width:460px){.placement-fields,.enemy-card{grid-template-columns:1fr}.party-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
 <h1>ダンジョン生成テスト</h1>
-<p>仕様書の最初の実装確認用です。同じ seed と候補番号なら同じ地形を生成します。通路幅1を基礎に、従来迷路・fBmノイズ・セルオートマトン・ランダムウォーク・BSP・Voronoiと、部屋／こぶの形状加工を組み合わせて確認できます。</p>
+<p>生成条件を一か所で管理し、配置図の仮確認と実GameEngine試遊へ同じ候補を送ります。</p>
 <nav class="lab-modes" aria-label="確認モード"><button type="button" data-lab-mode="preview" aria-pressed="true">仮確認</button><button type="button" data-lab-mode="play" aria-pressed="false">試遊</button><button type="button" data-lab-mode="split" aria-pressed="false">2画面</button></nav>
 <div class="layout mode-preview" id="labLayout">
 <section class="panel" id="controlsPane">
-<h2>生成条件</h2>
+<h2>生成・試遊設定</h2>
+
+<details class="setting-section" open>
+<summary>地形の骨格</summary>
+<div class="setting-body">
+<p class="section-note">ダンジョン全体の形、通路、seed、候補番号を決めます。</p>
 <div class="controls">
-<label class="wide">形状モード<select id="mode"><option value="corridors">通路のみ</option><option value="bulges">通路＋こぶ</option><option value="rooms" selected>小部屋あり</option></select></label>
-<label class="wide">通路生成<select id="corridorAlgorithm"><option value="maze" selected>直交迷路</option><option value="bezier_grid">ベジェ誘導4近傍</option></select></label>
-<label>ベジェ曲率<input id="corridorCurvature" type="number" value="0.65" min="0" max="1.5" step="0.05"></label>
-<label>ベジェ枝数<input id="corridorBranches" type="number" value="7" min="0" max="32" step="1"></label>
-<label class="wide">基礎地形アルゴリズム<select id="terrainAlgorithm"><option value="classic" selected>従来方式</option><option value="noise_fbm">Perlin系 fBm + domain warp</option><option value="cellular">セルオートマトン洞窟</option><option value="random_walk">ランダムウォーク洞窟</option><option value="bsp">BSP区画＋部屋</option><option value="voronoi">Voronoi領域</option></select></label>
-<label class="wide">部屋・こぶ生成<select id="featureAlgorithm"><option value="primitive" selected>基本図形</option><option value="boolean">ブーリアン合成</option><option value="noise">ノイズ形状</option><option value="cellular">セルオートマトン形状</option><option value="random_walk">ランダムウォーク形状</option><option value="voronoi">Voronoi形状</option></select></label>
-<label class="wide">基本床<select id="baseFloor"></select></label>
-<label class="wide">基本壁<select id="baseWall"></select></label>
-<label>セル1<select id="patchPreset1"></select></label><label>密度1<input id="patchDensity1" type="number" value="0.10" min="0" max="0.5" step="0.01"></label>
-<label>配置1<select id="patchArea1"><option value="any_floor">床全体</option><option value="corridor">通路</option><option value="room">部屋</option><option value="bulge">こぶ</option><option value="dead_end">行き止まり</option><option value="wall">壁</option></select></label><label>クラスタ1<input id="patchCluster1" type="number" value="5" min="1" max="20"></label>
-<label>セル2<select id="patchPreset2"></select></label><label>密度2<input id="patchDensity2" type="number" value="0.06" min="0" max="0.5" step="0.01"></label>
-<label>配置2<select id="patchArea2"><option value="corridor">通路</option><option value="room">部屋</option><option value="any_floor">床全体</option><option value="dead_end">行き止まり</option><option value="bulge">こぶ</option><option value="wall">壁</option></select></label><label>クラスタ2<input id="patchCluster2" type="number" value="4" min="1" max="20"></label>
-<label>セル3<select id="patchPreset3"></select></label><label>密度3<input id="patchDensity3" type="number" value="0.05" min="0" max="0.5" step="0.01"></label>
-<label>配置3<select id="patchArea3"><option value="room">部屋</option><option value="any_floor">床全体</option><option value="corridor">通路</option><option value="dead_end">行き止まり</option><option value="bulge">こぶ</option><option value="wall">壁</option></select></label><label>クラスタ3<input id="patchCluster3" type="number" value="3" min="1" max="20"></label>
-<label>seed<input id="seed" type="number" value="20261002" step="1"></label>
-<label>候補番号<input id="candidate" type="number" value="0" min="0" step="1"></label>
-<label>幅<input id="width" type="number" value="35" min="5" max="50"></label>
-<label>高さ<input id="height" type="number" value="29" min="5" max="50"></label>
-<label>こぶ 最小<input id="bulgeMin" type="number" value="3" min="1" max="12"></label>
-<label>こぶ 最大<input id="bulgeMax" type="number" value="5" min="1" max="12"></label>
-<label>こぶ面積 最小<input id="bulgeAreaMin" type="number" value="2" min="1" max="225"></label>
-<label>こぶ面積 最大<input id="bulgeAreaMax" type="number" value="8" min="1" max="225"></label>
-<label>部屋扱い閾値<input id="promoteArea" type="number" value="12" min="4" max="225"></label>
-<label>部屋 最小<input id="roomMin" type="number" value="4" min="1" max="12"></label>
-<label>部屋 最大<input id="roomMax" type="number" value="6" min="1" max="12"></label>
-<label><span>左右非対称化</span><input id="asymmetry" type="checkbox"></label>
-<label>非対称強度<input id="asymmetryStrength" type="number" value="0.7" min="0" max="1" step="0.05"></label>
-<label><span>ランダムセル欠損</span><input id="dropout" type="checkbox"></label>
-<label>欠損率<input id="dropoutRate" type="number" value="0.08" min="0" max="0.45" step="0.01"></label>
-<label><span>ブーリアン反復</span><input id="booleanOps" type="checkbox"></label>
-<label>ブーリアン回数<input id="booleanCount" type="number" value="3" min="1" max="12"></label>
-<label><span>ノイズ合成</span><input id="noiseBlend" type="checkbox"></label>
-<label>ノイズwarp<input id="noiseWarp" type="number" value="1.0" min="0" max="4" step="0.1"></label>
+<label class="field"><span>seed</span><input id="seed" type="number" value="20261002" step="1"></label>
+<label class="field"><span>候補番号</span><input id="candidate" type="number" value="0" min="0" step="1"></label>
+<label class="field"><span>形状モード</span><select id="mode"><option value="corridors">通路のみ</option><option value="bulges">通路＋こぶ</option><option value="rooms" selected>小部屋あり</option></select></label>
+<label class="field"><span>基礎地形</span><select id="terrainAlgorithm"><option value="classic" selected>従来方式</option><option value="noise_fbm">Perlin系 fBm + domain warp</option><option value="cellular">セルオートマトン洞窟</option><option value="random_walk">ランダムウォーク洞窟</option><option value="bsp">BSP区画＋部屋</option><option value="voronoi">Voronoi領域</option></select></label>
+<label class="field"><span>通路生成</span><select id="corridorAlgorithm"><option value="maze" selected>直交迷路</option><option value="bezier_grid">ベジェ誘導4近傍</option></select></label>
+<label class="field"><span>ベジェ曲率</span><input id="corridorCurvature" type="number" value="0.65" min="0" max="1.5" step="0.05"></label>
+<label class="field"><span>ベジェ枝数</span><input id="corridorBranches" type="number" value="7" min="0" max="32" step="1"></label>
+<label class="field"><span>幅</span><input id="width" type="number" value="35" min="5" max="50"></label>
+<label class="field"><span>高さ</span><input id="height" type="number" value="29" min="5" max="50"></label>
 </div>
+</div>
+</details>
+
+<details class="setting-section" open>
+<summary>セル配置</summary>
+<div class="setting-body">
+<p class="section-note">まず全体へ基本床・基本壁を敷き、その上へ追加レイヤーを重ねます。各カードに「何を・どこへ・どの程度」が表示されます。</p>
+<div class="controls">
+<label class="field"><span>基本床</span><select id="baseFloor"></select></label>
+<label class="field"><span>基本壁</span><select id="baseWall"></select></label>
+</div>
+<div class="placement-list">
+<article class="placement-card"><h3>追加レイヤー 1</h3><p class="placement-summary" id="patchSummary1"></p><div class="placement-fields">
+<label class="field"><span>配置するセル種</span><select id="patchPreset1"></select></label><label class="field"><span>配置対象</span><select id="patchArea1"><option value="any_floor">床全体（通路・部屋・こぶ）</option><option value="corridor">通路だけ</option><option value="room">部屋だけ</option><option value="bulge">こぶだけ</option><option value="dead_end">行き止まり</option><option value="wall">壁セル</option></select></label><label class="field"><span>配置密度</span><input id="patchDensity1" type="number" value="0.10" min="0" max="0.5" step="0.01"></label><label class="field"><span>まとまり最大</span><input id="patchCluster1" type="number" value="5" min="1" max="20"></label>
+</div></article>
+<article class="placement-card"><h3>追加レイヤー 2</h3><p class="placement-summary" id="patchSummary2"></p><div class="placement-fields">
+<label class="field"><span>配置するセル種</span><select id="patchPreset2"></select></label><label class="field"><span>配置対象</span><select id="patchArea2"><option value="corridor">通路だけ</option><option value="room">部屋だけ</option><option value="any_floor">床全体（通路・部屋・こぶ）</option><option value="dead_end">行き止まり</option><option value="bulge">こぶだけ</option><option value="wall">壁セル</option></select></label><label class="field"><span>配置密度</span><input id="patchDensity2" type="number" value="0.06" min="0" max="0.5" step="0.01"></label><label class="field"><span>まとまり最大</span><input id="patchCluster2" type="number" value="4" min="1" max="20"></label>
+</div></article>
+<article class="placement-card"><h3>追加レイヤー 3</h3><p class="placement-summary" id="patchSummary3"></p><div class="placement-fields">
+<label class="field"><span>配置するセル種</span><select id="patchPreset3"></select></label><label class="field"><span>配置対象</span><select id="patchArea3"><option value="room">部屋だけ</option><option value="dead_end">行き止まり</option><option value="any_floor">床全体（通路・部屋・こぶ）</option><option value="corridor">通路だけ</option><option value="bulge">こぶだけ</option><option value="wall">壁セル</option></select></label><label class="field"><span>配置密度</span><input id="patchDensity3" type="number" value="0.05" min="0" max="0.5" step="0.01"></label><label class="field"><span>まとまり最大</span><input id="patchCluster3" type="number" value="3" min="1" max="20"></label>
+</div></article>
+<article class="placement-card"><h3>追加レイヤー 4</h3><p class="placement-summary" id="patchSummary4"></p><div class="placement-fields">
+<label class="field"><span>配置するセル種</span><select id="patchPreset4"></select></label><label class="field"><span>配置対象</span><select id="patchArea4"><option value="room">部屋だけ</option><option value="any_floor">床全体（通路・部屋・こぶ）</option><option value="corridor">通路だけ</option><option value="dead_end">行き止まり</option><option value="bulge">こぶだけ</option><option value="wall">壁セル</option></select></label><label class="field"><span>配置密度</span><input id="patchDensity4" type="number" value="0.07" min="0" max="0.5" step="0.01"></label><label class="field"><span>まとまり最大</span><input id="patchCluster4" type="number" value="4" min="1" max="20"></label>
+</div></article>
+</div>
+</div>
+</details>
+
+<details class="setting-section" open>
+<summary>味方編成</summary>
+<div class="setting-body">
+<p class="section-note">試遊開始時の実パーティです。参加チェックとレベルを指定します。最大人数はゲーム本体の上限を使います。</p>
+<div id="partyEditor" class="party-grid"></div>
+</div>
+</details>
+
+<details class="setting-section" open>
+<summary>魔物・遭遇</summary>
+<div class="setting-body">
+<p class="section-note">ここで選んだ魔物編成を試遊マップの実遭遇定義へ差し込みます。遭遇OFFでも「選択魔物で戦闘」で即テストできます。</p>
+<div class="controls">
+<label class="field"><span>歩行中の遭遇</span><select id="encounterEnabled"><option value="false">無効</option><option value="true">有効</option></select></label>
+<label class="field"><span>1回の判定あたり遭遇率</span><input id="encounterRate" type="number" value="0.22" min="0" max="1" step="0.01"></label>
+</div>
+<div class="enemy-list">
+<div class="enemy-card"><strong>出現枠 1</strong><label><span>魔物</span><select id="enemyPreset1"></select></label><label><span>個体数</span><input id="enemyCount1" type="number" value="1" min="0" max="4"></label></div>
+<div class="enemy-card"><strong>出現枠 2</strong><label><span>魔物</span><select id="enemyPreset2"></select></label><label><span>個体数</span><input id="enemyCount2" type="number" value="1" min="0" max="4"></label></div>
+<div class="enemy-card"><strong>出現枠 3</strong><label><span>魔物</span><select id="enemyPreset3"></select></label><label><span>個体数</span><input id="enemyCount3" type="number" value="0" min="0" max="4"></label></div>
+</div>
+<div class="buttons"><button id="startBattle" type="button">選択魔物で戦闘</button></div><p id="battleStatus"></p>
+</div>
+</details>
+
+<details class="setting-section">
+<summary>形状詳細</summary>
+<div class="setting-body">
+<p class="section-note">こぶ・部屋の数、非対称化、欠損、ブーリアン、ノイズ加工を調整します。</p>
+<div class="controls">
+<label class="field wide"><span>部屋・こぶ生成</span><select id="featureAlgorithm"><option value="primitive" selected>基本図形</option><option value="boolean">ブーリアン合成</option><option value="noise">ノイズ形状</option><option value="cellular">セルオートマトン形状</option><option value="random_walk">ランダムウォーク形状</option><option value="voronoi">Voronoi形状</option></select></label>
+<label class="field"><span>こぶ 最小</span><input id="bulgeMin" type="number" value="3" min="1" max="12"></label><label class="field"><span>こぶ 最大</span><input id="bulgeMax" type="number" value="5" min="1" max="12"></label>
+<label class="field"><span>こぶ面積 最小</span><input id="bulgeAreaMin" type="number" value="2" min="1" max="225"></label><label class="field"><span>こぶ面積 最大</span><input id="bulgeAreaMax" type="number" value="8" min="1" max="225"></label>
+<label class="field"><span>部屋扱い閾値</span><input id="promoteArea" type="number" value="12" min="4" max="225"></label>
+<label class="field"><span>部屋 最小</span><input id="roomMin" type="number" value="4" min="1" max="12"></label><label class="field"><span>部屋 最大</span><input id="roomMax" type="number" value="6" min="1" max="12"></label>
+<label class="field"><span>左右非対称化</span><input id="asymmetry" type="checkbox"></label><label class="field"><span>非対称強度</span><input id="asymmetryStrength" type="number" value="0.7" min="0" max="1" step="0.05"></label>
+<label class="field"><span>ランダムセル欠損</span><input id="dropout" type="checkbox"></label><label class="field"><span>欠損率</span><input id="dropoutRate" type="number" value="0.08" min="0" max="0.45" step="0.01"></label>
+<label class="field"><span>ブーリアン反復</span><input id="booleanOps" type="checkbox"></label><label class="field"><span>ブーリアン回数</span><input id="booleanCount" type="number" value="3" min="1" max="12"></label>
+<label class="field"><span>ノイズ合成</span><input id="noiseBlend" type="checkbox"></label><label class="field"><span>ノイズwarp</span><input id="noiseWarp" type="number" value="1.0" min="0" max="4" step="0.1"></label>
+</div>
+</div>
+</details>
+
 <div class="buttons"><button id="generate">生成</button><button id="next">次の候補</button><button id="seedNext">seed + 1</button></div>
 <p id="status" role="status"></p>
-<p class="note">すべて任意です。基本図形に非対称化、セル欠損、union/subtract/xor等の反復ブーリアン、fBmノイズ合成を重ねられます。大きなこぶは指定面積以上で部屋領域へ昇格します。セル・エッジ・宝箱・仕掛け・敵編成は次段階です。</p>
 </section>
+
 <section class="panel" id="previewPane">
 <canvas id="map" width="800" height="620" aria-label="生成されたダンジョン"></canvas>
 <div class="legend"><span><i class="swatch" style="background:#d8d6c8"></i>通路</span><span><i class="swatch" style="background:#c6975a"></i>こぶ</span><span><i class="swatch" style="background:#8eb184"></i>小部屋</span><span><i class="swatch" style="background:#8fd3ff"></i>入口</span><span><i class="swatch" style="background:#ffcb73"></i>目的地</span></div>
@@ -63,276 +146,11 @@
 <p id="walkStatus" class="note">生成後、矢印キー/WASDまたはボタンで歩けます。</p>
 <p id="cellInfo" class="note"></p>
 </section>
-<section class="panel engine-panel" id="enginePane">
-<iframe id="engineFrame" title="生成ダンジョン実エンジン試遊" src="dungeon-engine-playtest.html"></iframe>
-</section>
+
+<section class="panel engine-panel" id="enginePane"><iframe id="engineFrame" title="生成ダンジョン実エンジン試遊" src="dungeon-engine-playtest.html"></iframe></section>
 </div>
-<details><summary>生成結果JSON</summary><pre id="json"></pre></details>
+<details class="result"><summary>生成結果JSON</summary><pre id="json"></pre></details>
 </main>
-<script type="module">
-import {generateDungeonCandidate} from './src/core/dungeon-generator.js';
-import {generatedCellAt, generatedCellIdAt} from './src/core/dungeon-cell-painter.js';
-
-const $ = id => document.getElementById(id);
-const canvas = $('map');
-const ctx = canvas.getContext('2d');
-let current;
-let player=null;
-let labMode='preview';
-let engineReady=false;
-const engineSync={ready:false,loadedCandidate:null,error:null};
-const labLayout=$('labLayout');
-const engineFrame=$('engineFrame');
-let collapsed=new Set();
-const cellSource = await fetch('./config/cell-layers.json').then(response => {
-  if(!response.ok) throw new Error('セル種定義を読み込めません');
-  return response.json();
-});
-const cellTypes = cellSource.presets;
-const standaloneEntries = Object.entries(cellTypes).filter(([,preset])=>!preset.parameters?.binding);
-const fillSelect=(id,filter,preferred)=>{
-  const select=$(id);select.textContent='';
-  for(const [value,preset] of standaloneEntries.filter(([,p])=>filter(p))){
-    const option=document.createElement('option');option.value=value;option.textContent=`${preset.name} [${value}]`;select.append(option);
-  }
-  if([...select.options].some(option=>option.value===preferred))select.value=preferred;
-};
-fillSelect('baseFloor',preset=>preset.passage==='.' && preset.visual?.floor!==false,'stone_floor');
-fillSelect('baseWall',preset=>preset.passage==='#' && preset.visual?.wall===true,'stone_wall');
-for(const [id,preferred] of [['patchPreset1','shallow_water'],['patchPreset2','ice_floor'],['patchPreset3','deep_depression_water']]){
-  fillSelect(id,()=>true,preferred);
-}
-
-function number(id){ return Number($(id).value); }
-function cellSpecFromForm(){
-  const patches=[];
-  for(const i of [1,2,3]){
-    const density=number('patchDensity'+i);
-    if(!(density>0))continue;
-    patches.push({
-      preset:$('patchPreset'+i).value,
-      areas:[$('patchArea'+i).value],
-      density,
-      cluster:{min:1,max:number('patchCluster'+i)},
-      minDistanceFromEntry:2,
-      preserveCriticalRoute:true,
-    });
-  }
-  return {baseFloor:$('baseFloor').value,baseWall:$('baseWall').value,patches};
-}
-
-function layoutFromForm(){
-  const mode = $('mode').value;
-  const featureAlgorithm=$('featureAlgorithm').value;
-  const shapeOptions={
-    asymmetry:{enabled:$('asymmetry').checked,strength:number('asymmetryStrength')},
-    dropout:{enabled:$('dropout').checked,rate:number('dropoutRate')},
-    booleanOps:{enabled:$('booleanOps').checked,count:number('booleanCount')},
-    noiseBlend:{enabled:$('noiseBlend').checked,op:'xor',warp:number('noiseWarp'),octaves:4,scale:.22,threshold:-.08},
-    noise:{warp:number('noiseWarp'),octaves:4,scale:.22,threshold:-.08},
-    cellular:{fill:.48,steps:4},
-    randomWalk:{fill:.48},
-    voronoi:{fill:.58,sites:8},
-  };
-  return {
-    mode,
-    width:number('width'),
-    height:number('height'),
-    corridorWidth:1,
-    extraLoops:{min:1,max:2},
-    corridors:{algorithm:$('corridorAlgorithm').value,branchCount:{min:number('corridorBranches'),max:number('corridorBranches')},curvature:number('corridorCurvature'),sampleDensity:6,turnPenalty:.1},
-    terrain:{algorithm:$('terrainAlgorithm').value,options:{noise:{warp:number('noiseWarp'),octaves:5,scale:.16,threshold:-.08,centerBias:.45},cellular:{fill:.47,steps:5},randomWalk:{fill:.42},bsp:{depth:4,minLeaf:6},voronoi:{fill:.58,sites:12}}},
-    bulges:{
-      count:mode==='bulges'?{min:number('bulgeMin'),max:number('bulgeMax')}:{min:0,max:0},
-      positions:['along_corridor','dead_end'],
-      shapes:[{id:'side_alcove',weight:2},{id:'end_pocket',weight:1}],
-      addedArea:{min:number('bulgeAreaMin'),max:number('bulgeAreaMax')},
-      minSpacing:3,
-      promoteToRoomArea:number('promoteArea'),
-      featureAlgorithm,
-      shapeOptions,
-    },
-    rooms:{
-      count:mode==='rooms'?{min:number('roomMin'),max:number('roomMax')}:{min:0,max:0},
-      shapes:[
-        {id:'rectangle',weight:3},
-        {id:'l_shape',weight:2},
-        {id:'t_shape',weight:1},
-        {id:'cross',weight:1},
-        {id:'chamfered',weight:2},
-        {id:'roundish',weight:1},
-      ],
-      width:{min:5,max:11},height:{min:5,max:11},minArea:8,wallThickness:1,mirror:true,entrances:{min:1,max:2},featureAlgorithm,shapeOptions,
-    },
-  };
-}
-
-function cellColor(cell,region){
-  if(!cell)return '#26343a';
-  if(cell.visual?.wall)return '#26343a';
-  if(cell.parameters?.bottomless)return '#071018';
-  if(cell.parameters?.floor_depth>=1)return '#28485b';
-  if(cell.parameters?.water_depth===2)return '#346f8c';
-  if(cell.parameters?.water_depth===1)return '#4b92ad';
-  if(cell.parameters?.slippery)return '#8ac7d5';
-  if(cell.parameters?.fragile)return '#9b7f69';
-  if(cell.visual?.surface==='poison')return '#647f3f';
-  if(cell.visual?.surface==='earth')return '#8c7353';
-  if(cell.visual?.surface==='wood')return '#8b6745';
-  if(region==='r')return '#8eb184';
-  if(region==='b')return '#c6975a';
-  return '#d8d6c8';
-}
-
-function draw(candidate){
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  const cssWidth = Math.max(320, canvas.clientWidth);
-  const cssHeight = Math.max(320, Math.round(cssWidth * candidate.height / candidate.width));
-  canvas.style.height = `${cssHeight}px`;
-  canvas.width = Math.round(cssWidth*dpr);
-  canvas.height = Math.round(cssHeight*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.imageSmoothingEnabled = false;
-  const cell = Math.min(cssWidth/candidate.width, cssHeight/candidate.height);
-  const ox=(cssWidth-cell*candidate.width)/2, oy=(cssHeight-cell*candidate.height)/2;
-  ctx.fillStyle='#091015';ctx.fillRect(0,0,cssWidth,cssHeight);
-  for(let y=0;y<candidate.height;y++)for(let x=0;x<candidate.width;x++){
-    const collapsedHere=collapsed.has(x+','+y);
-    if(!collapsedHere){
-      const cell=generatedCellAt(candidate,cellTypes,x,y);
-      ctx.fillStyle=cellColor(cell,candidate.regions[y][x]);
-    }else ctx.fillStyle='#11181c';
-    ctx.fillRect(ox+x*cell,oy+y*cell,Math.ceil(cell),Math.ceil(cell));
-  }
-  const marker=(point,color,label)=>{
-    ctx.fillStyle=color;ctx.fillRect(ox+point.x*cell,oy+point.y*cell,Math.ceil(cell),Math.ceil(cell));
-    if(cell>=10){ctx.fillStyle='#081016';ctx.font=`bold ${Math.max(9,cell*.58)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,ox+(point.x+.5)*cell,oy+(point.y+.52)*cell)}
-  };
-  marker(candidate.entry,'#8fd3ff','E');marker(candidate.goal,'#ffcb73','G');
-  if(player){
-    ctx.beginPath();ctx.arc(ox+(player.x+.5)*cell,oy+(player.y+.5)*cell,Math.max(3,cell*.28),0,Math.PI*2);
-    ctx.fillStyle='#ffffff';ctx.fill();ctx.strokeStyle='#081016';ctx.lineWidth=Math.max(1,cell*.08);ctx.stroke();
-  }
-}
-
-function playtestPayload(){
-  return {
-    seed:number('seed'),
-    candidateIndex:number('candidate'),
-    layout:layoutFromForm(),
-    cells:cellSpecFromForm(),
-    sourceDungeonId:'kagaribi',
-    encounters:false,
-  };
-}
-function syncEngine(){
-  if(!current||!engineReady||!engineFrame?.contentWindow)return;
-  engineSync.error=null;
-  engineFrame.contentWindow.postMessage({type:'adv:dungeon-generation:load',payload:playtestPayload()},location.origin);
-}
-function setLabMode(mode){
-  if(!['preview','play','split'].includes(mode))mode='preview';
-  labMode=mode;
-  labLayout.className='layout mode-'+mode;
-  for(const button of document.querySelectorAll('[data-lab-mode]'))button.setAttribute('aria-pressed',String(button.dataset.labMode===mode));
-  try{localStorage.setItem('adv:dungeon-generation:lab-mode',mode);}catch{}
-  if(mode!=='preview')syncEngine();
-}
-for(const button of document.querySelectorAll('[data-lab-mode]'))button.addEventListener('click',()=>setLabMode(button.dataset.labMode));
-window.addEventListener('message',event=>{
-  if(event.origin!==location.origin||event.source!==engineFrame.contentWindow)return;
-  if(event.data?.type==='adv:dungeon-generation:ready'){
-    engineReady=true;engineSync.ready=true;syncEngine();return;
-  }
-  if(event.data?.type==='adv:dungeon-generation:loaded'){
-    engineSync.loadedCandidate=event.data.candidateIndex;engineSync.error=null;return;
-  }
-  if(event.data?.type==='adv:dungeon-generation:error'){
-    engineSync.error=event.data.message??'試遊ロード失敗';
-  }
-});
-
-function render(){
-  const status=$('status');
-  try{
-    current=generateDungeonCandidate({seed:number('seed'),candidateIndex:number('candidate'),layout:layoutFromForm(),cells:cellSpecFromForm(),cellTypes});
-    player={...current.entry};collapsed=new Set();
-    draw(current);
-    $('floorCount').textContent=current.metrics.floorCount;
-    $('routeSteps').textContent=current.metrics.routeSteps;
-    $('bulgeCount').textContent=current.metrics.bulgeCount;
-    $('roomCount').textContent=current.metrics.roomCount;
-    $('json').textContent=JSON.stringify(current,null,2);
-    status.classList.remove('error');
-    status.textContent=`生成成功 / 接続 ${current.validation.reachable}/${current.validation.floorCount} / 地形 ${current.terrainAlgorithm} / 通路 ${current.corridorAlgorithm} / セル種 ${Object.keys(current.cellSummary??{}).length} / ${current.generatorVersion}`;
-    updateWalkStatus('入口から開始');
-    window.dungeonGenerationPreview={current,payload:playtestPayload(),syncEngine,setLabMode,engineSync};
-    if(labMode!=='preview')syncEngine();
-  }catch(error){
-    status.classList.add('error');status.textContent=error.message;
-  }
-}
-
-$('generate').addEventListener('click',render);
-$('next').addEventListener('click',()=>{$('candidate').value=String(number('candidate')+1);render()});
-$('seedNext').addEventListener('click',()=>{$('seed').value=String(number('seed')+1);$('candidate').value='0';render()});
-for(const id of ['terrainAlgorithm','corridorAlgorithm','corridorCurvature','corridorBranches','featureAlgorithm','asymmetry','dropout','booleanOps','noiseBlend','baseFloor','baseWall','patchPreset1','patchDensity1','patchArea1','patchCluster1','patchPreset2','patchDensity2','patchArea2','patchCluster2','patchPreset3','patchDensity3','patchArea3','patchCluster3'])$(id).addEventListener('change',render);
-$('mode').addEventListener('change',()=>{
-  const mode=$('mode').value;
-  if(mode==='corridors'){$('width').value='25';$('height').value='21'}
-  if(mode==='bulges'){$('width').value='25';$('height').value='21'}
-  if(mode==='rooms'){$('width').value='35';$('height').value='29'}
-  render();
-});
-
-function liveCell(x,y){
-  if(!current||x<0||y<0||x>=current.width||y>=current.height)return null;
-  if(collapsed.has(x+','+y))return {id:'collapsed',name:'崩落後の穴',description:'崩れた床。',passage:'#',parameters:{}};
-  return generatedCellAt(current,cellTypes,x,y);
-}
-function updateWalkStatus(prefix=''){
-  if(!current||!player)return;
-  const cell=liveCell(player.x,player.y);
-  const goal=player.x===current.goal.x&&player.y===current.goal.y;
-  const eventText=cell?.events?.length?` / イベント ${cell.events.join(', ')}（表示のみ）`:'';
-  $('walkStatus').textContent=`${prefix}${prefix?' / ':''}現在 ${player.x},${player.y}${goal?' / 目的地到達':''}${eventText}`;
-  $('cellInfo').textContent=cell?`${cell.name} [${cell.id}] / passage=${cell.passage} / ${cell.description??''}`:'';
-}
-function stepOnce(dx,dy){
-  const nx=player.x+dx,ny=player.y+dy;
-  const target=liveCell(nx,ny);
-  if(!target||target.passage!=='.'){updateWalkStatus(target?`通行不可: ${target.name}`:'範囲外');return false;}
-  const previous={...player};
-  const previousCell=liveCell(previous.x,previous.y);
-  player={x:nx,y:ny};
-  if(previousCell?.parameters?.fragile)collapsed.add(previous.x+','+previous.y);
-  return true;
-}
-function movePlayer(dx,dy){
-  if(!current||!player)return;
-  if(!stepOnce(dx,dy)){draw(current);return;}
-  let guard=50;
-  while(guard-->0){
-    const here=liveCell(player.x,player.y);
-    if(!here?.parameters?.slippery)break;
-    if(!stepOnce(dx,dy))break;
-  }
-  updateWalkStatus();
-  draw(current);
-}
-for(const button of document.querySelectorAll('[data-move]'))button.addEventListener('click',()=>{
-  const [dx,dy]=button.dataset.move.split(',').map(Number);movePlayer(dx,dy);
-});
-$('resetWalk').addEventListener('click',()=>{if(current){player={...current.entry};collapsed=new Set();updateWalkStatus('入口へ戻りました');draw(current);}});
-window.addEventListener('keydown',event=>{
-  if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;
-  const map={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};
-  const delta=map[event.key];if(!delta)return;event.preventDefault();movePlayer(delta[0],delta[1]);
-});
-
-window.addEventListener('resize',()=>current&&draw(current));
-try{setLabMode(localStorage.getItem('adv:dungeon-generation:lab-mode')??'preview');}catch{setLabMode('preview');}
-render();
-</script>
+<script type="module" src="src/dungeon-generation-preview.js"></script>
 </body>
 </html>
