@@ -16,7 +16,11 @@ try{
   page.on('pageerror',e=>errors.push(e.message));
   page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('/favicon.ico'))errors.push(`${r.status()} ${r.url()}`);});
   await page.goto(`http://127.0.0.1:${server.address().port}/adv/dungeon-engine-playtest.html`);
-  await page.waitForFunction(()=>window.generatedPlaytest?.engine?.state?.mode==='dungeon');
+  await page.waitForFunction(()=>window.generatedPlaytest?.engine?.state?.mode==='dungeon'||document.querySelector('#generator-status')?.style.color==='rgb(255, 179, 170)');
+  if(!await page.evaluate(()=>Boolean(window.generatedPlaytest?.engine))){
+    const diagnostic=await page.evaluate(()=>({status:document.querySelector('#generator-status')?.textContent,errors:window.__playtestErrors??[]}));
+    throw new Error('generated playtest did not start: '+JSON.stringify({diagnostic,pageErrors:errors}));
+  }
   await page.locator('.dungeon-canvas').waitFor();
   await page.waitForTimeout(800);
   assert.equal(await page.evaluate(()=>generatedPlaytest.engine.map().id),'generated_preview_f1');
