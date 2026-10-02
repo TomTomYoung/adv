@@ -54,6 +54,19 @@ test('utility windows block movement, inspection and dialogue hotkeys, Escape re
   }finally{c.cleanup();}
 });
 
+test('dungeon window toggle hides the lower dock without game state changes and restores for events',()=>{
+  const d=structuredClone(data);d.scripts.window_toggle_test={commands:[{op:'say',text:'イベントでウィンドウを戻す。'}]};
+  const g=new GameEngine(d);drain(g);g.dispatch({type:'travel',dungeon:'kagaribi'});const c=setup(g);
+  try{
+    const saved=g.save(),toggle=named(c.root,'ウィンドウを消す');assert.ok(toggle);toggle.click();
+    assert.equal(c.view.windowsHidden,true);assert.ok(c.root.querySelector('.scene-stage').classList.contains('scene-windows-hidden'));
+    assert.equal(c.g.save(),saved);assert.equal(c.document.activeElement.dataset.focus,'dungeon-window-toggle');
+    g.run('window_toggle_test');c.view.render(projectGame(g));
+    assert.equal(c.view.windowsHidden,false);assert.ok(!c.root.querySelector('.scene-stage').classList.contains('scene-windows-hidden'));
+    assert.ok(c.root.querySelector('.message-window'));assert.ok(named(c.root,'ウィンドウを消す'));
+  }finally{c.cleanup();}
+});
+
 test('message paging preserves all Unicode text and sends advance only after the final page',()=>{
   const d=structuredClone(data),text='台帳には帰還した者の名が並ぶ。\n'.repeat(25)+'灯🕯️';
   assert.equal(messagePages(text).join(''),text);

@@ -8,13 +8,16 @@ export function handleGameKey(event,{view,model,dispatch,bindings=DEFAULT_BINDIN
   const cancel=()=>{event.preventDefault();view.tabNavigation=false;if(!closePicker(view.root))view.cancel?.();};
   if(eventCode(event)==='Escape'){cancel();return;}
   if(isEditing(activeElement))return;
-  const action=keyAction(event,bindings);
+  const exploring=view.explorationInput();
+  const action=keyAction(event,bindings,{allowShift:exploring&&event.shiftKey});
   if(action==='cancel'){cancel();return;}
   if(event.key==='Tab'&&scope?.classList.contains('button-picker')){const nodes=buttons(scope),index=nodes.indexOf(activeElement);event.preventDefault();focusButton(nodes[(index+(event.shiftKey?-1:1)+nodes.length)%nodes.length]);return;}
-  if(view.explorationInput()){
+  if(exploring){
     // Tab deliberately enters native button traversal, for extra commands/menus.
     if(event.key==='Tab')view.tabNavigation=true;
-    const direction={up:'forward',down:'back',left:'left',right:'right',forward:'forward',backward:'back',turnLeft:'left',turnRight:'right'}[action];
+    const normal={up:'forward',down:'back',left:'left',right:'right',forward:'forward',backward:'back',turnLeft:'left',turnRight:'right'};
+    const shifted={up:'forward',down:'back',left:'strafe_left',right:'strafe_right',forward:'forward',backward:'back',turnLeft:'strafe_left',turnRight:'strafe_right'};
+    const direction=(event.shiftKey?shifted:normal)[action];
     if(direction){event.preventDefault();view.tabNavigation=false;dispatch({type:'move',direction});return;}
     if(action==='inspectManual'||action==='inspect'||action==='confirm'&&!view.tabNavigation){
       event.preventDefault();if(!event.repeat)dispatch({type:'player.command',id:action==='inspectManual'?'inspect':'interact'});return;

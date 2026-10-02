@@ -164,9 +164,10 @@ export class GameEngine {
     if(this.state.mode!=='dungeon'||this.state.waiting)return false;
     const loc=this.state.location,face=DIRECTIONS.indexOf(loc.facing);
     if(direction==='left'||direction==='right'){loc.facing=DIRECTIONS[(face+(direction==='left'?3:1))%4];syncWorldStories(this);return true;}
-    if(!['forward','back'].includes(direction))return false;
-    const [dx,dy]=DELTAS[(face+(direction==='back'?2:0))%4],x=loc.x+dx,y=loc.y+dy;
-    const connection=connectionMove(this.data,this.state,DIRECTIONS[(face+(direction==='back'?2:0))%4]);
+    const moveOffset={forward:0,back:2,strafe_left:3,strafe_right:1}[direction];
+    if(moveOffset===undefined)return false;
+    const moveFace=(face+moveOffset)%4,[dx,dy]=DELTAS[moveFace],x=loc.x+dx,y=loc.y+dy;
+    const connection=connectionMove(this.data,this.state,DIRECTIONS[moveFace]);
     if(connection)return dungeonAction(this,connection);
     const map=this.map(),point={x,y,z:loc.z??0};
     if(map.voxels){const terrain=voxelMapState(this.data,this.state,map),reason=voxelOccupancyReason(map,terrain,point,{waterAccess:dungeonWaterAccess(this.data,this.state)})||(!faceRules(map,terrain,loc,point).passage?'境界の壁が閉じています。':'');if(reason){this.notify(reason);this.eventCue('bump');return false;}}
