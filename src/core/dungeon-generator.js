@@ -8,6 +8,7 @@ const DIRECTIONS = [
 ];
 
 const MODE_SET = new Set(['corridors', 'bulges', 'rooms']);
+const CORRIDOR_ALGORITHMS = new Set(['maze', 'bezier_grid']);
 const ROOM_SHAPES = new Set([
   'rectangle',
   'square',
@@ -96,6 +97,20 @@ export function normalizeDungeonLayout(layout = {}) {
   const extraLoops = rangeValue(layout.extraLoops, { min: 0, max: 1 });
   validateRange('extraLoops', extraLoops, 0, 64);
 
+  const corridorAlgorithm = layout.corridors?.algorithm ?? 'maze';
+  if (!CORRIDOR_ALGORITHMS.has(corridorAlgorithm)) throw new Error(`unsupported corridor algorithm: ${corridorAlgorithm}`);
+  const corridors = {
+    algorithm: corridorAlgorithm,
+    branchCount: rangeValue(layout.corridors?.branchCount, { min: 5, max: 9 }),
+    curvature: layout.corridors?.curvature ?? 0.65,
+    sampleDensity: layout.corridors?.sampleDensity ?? 5,
+    turnPenalty: layout.corridors?.turnPenalty ?? 0.12,
+  };
+  validateRange('corridors.branchCount', corridors.branchCount, 0, 64);
+  if (!Number.isFinite(corridors.curvature) || corridors.curvature < 0 || corridors.curvature > 1.5) throw new Error('corridors.curvature must be in 0..1.5');
+  if (!Number.isInteger(corridors.sampleDensity) || corridors.sampleDensity < 2 || corridors.sampleDensity > 16) throw new Error('corridors.sampleDensity must be an integer in 2..16');
+  if (!Number.isFinite(corridors.turnPenalty) || corridors.turnPenalty < 0 || corridors.turnPenalty > 4) throw new Error('corridors.turnPenalty must be in 0..4');
+
   const terrainAlgorithm = layout.terrain?.algorithm ?? 'classic';
   if (!terrainAlgorithms.includes(terrainAlgorithm)) throw new Error(`unsupported terrain algorithm: ${terrainAlgorithm}`);
   const terrain = {algorithm: terrainAlgorithm, options: clone(layout.terrain?.options ?? {})};
@@ -167,6 +182,7 @@ export function normalizeDungeonLayout(layout = {}) {
     height,
     corridorWidth,
     extraLoops,
+    corridors,
     terrain,
     bulges,
     rooms,
@@ -218,7 +234,7 @@ function createsTwoByTwo(candidate, x, y) {
   return false;
 }
 
-function generateCorridors(candidate, layout, seed, candidateIndex) {
+function generateMazeCorridors(candidate, layout, seed, candidateIndex) {
   const rng = rngFor(seed, candidateIndex, 'corridors');
   const maxX = candidate.width - 2;
   const maxY = candidate.height - 2;
@@ -256,6 +272,178 @@ function generateCorridors(candidate, layout, seed, candidateIndex) {
     const [wall] = walls.splice(index, 1);
     if (!createsTwoByTwo(candidate, wall.x, wall.y)) carve(candidate, wall.x, wall.y, 'c');
   }
+}
+
+
+function cubicBezierPoint(p0, p1, p2, p3, t) {
+  const u = 1 - t;
+  return {
+    x: (u ** 3) * p0.x + 3 * (u ** 2) * t * p1.x + 3 * u * (t ** 2) * p2.x + (t ** 3) * p3.x,
+    y: (u ** 3) * p0.y + 3 * (u ** 2) * t * p1.y + 3 * u * (t ** 2) * p2.y + (t ** 3) * p3.y,
+  };
+}
+
+function bezierControlPoints(candidate, start, end, rng, corridors) {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const length = Math.max(1, Math.hypot(dx, dy));
+  const nx = -dy / length;
+  const ny = dx / length;
+  const maxOffset = Math.min(length * 0.42, Math.min(candidate.width, candidate.height) * 0.32) * corridors.curvature;
+  const offset1 = (rng() * 2 - 1) * maxOffset;
+  const offset2 = (rng() * 2 - 1) * maxOffset;
+  const clampPoint = point => ({
+    x: Math.max(1, Math.min(candidate.width - 2, point.x)),
+    y: Math.max(1, Math.min(candidate.height - 2, point.y)),
+  });
+  return [
+    clampPoint({ x: start.x + dx / 3 + nx * offset1, y: start.y + dy / 3 + ny * offset1 }),
+    clampPoint({ x: start.x + dx * 2 / 3 + nx * offset2, y: start.y + dy * 2 / 3 + ny * offset2 }),
+  ];
+}
+
+function sampleBezier(candidate, start, end, rng, corridors) {
+  const [p1, p2] = bezierControlPoints(candidate, start, end, rng, corridors);
+  const steps = Math.max(12, Math.ceil(Math.hypot(end.x - start.x, end.y - start.y) * corridors.sampleDensity));
+  return Array.from({ length: steps + 1 }, (_, index) => cubicBezierPoint(start, p1, p2, end, index / steps));
+}
+
+function curveDistanceSq(point, samples) {
+  let best = Infinity;
+  for (const sample of samples) {
+    const dx = point.x - sample.x;
+    const dy = point.y - sample.y;
+    const distance = dx * dx + dy * dy;
+    if (distance < best) best = distance;
+  }
+  return best;
+}
+
+function directionOf(a, b) {
+  return { x: Math.sign(b.x - a.x), y: Math.sign(b.y - a.y) };
+}
+
+function sameDirection(a, b) {
+  return a && b && a.x === b.x && a.y === b.y;
+}
+
+function orthogonalPathToTarget(current, target, samples, previousDirection, turnPenalty) {
+  const path = [];
+  let cursor = { ...current };
+  let previous = previousDirection;
+  let guard = Math.abs(target.x - cursor.x) + Math.abs(target.y - cursor.y) + 4;
+  while ((cursor.x !== target.x || cursor.y !== target.y) && guard-- > 0) {
+    const options = [];
+    if (cursor.x !== target.x) options.push({ x: cursor.x + Math.sign(target.x - cursor.x), y: cursor.y });
+    if (cursor.y !== target.y) options.push({ x: cursor.x, y: cursor.y + Math.sign(target.y - cursor.y) });
+    options.sort((a, b) => {
+      const dirA = directionOf(cursor, a);
+      const dirB = directionOf(cursor, b);
+      const scoreA = curveDistanceSq(a, samples) + (previous && !sameDirection(previous, dirA) ? turnPenalty : 0);
+      const scoreB = curveDistanceSq(b, samples) + (previous && !sameDirection(previous, dirB) ? turnPenalty : 0);
+      return scoreA - scoreB || a.y - b.y || a.x - b.x;
+    });
+    const next = options[0];
+    previous = directionOf(cursor, next);
+    cursor = next;
+    path.push({ ...cursor });
+  }
+  return { path, previousDirection: previous };
+}
+
+function bezierGridPath(candidate, start, end, rng, corridors) {
+  const samples = sampleBezier(candidate, start, end, rng, corridors);
+  const waypoints = [];
+  for (const sample of samples) {
+    const point = {
+      x: Math.max(1, Math.min(candidate.width - 2, Math.round(sample.x))),
+      y: Math.max(1, Math.min(candidate.height - 2, Math.round(sample.y))),
+    };
+    if (!waypoints.length || point.x !== waypoints.at(-1).x || point.y !== waypoints.at(-1).y) waypoints.push(point);
+  }
+  const path = [{ ...start }];
+  let cursor = { ...start };
+  let previousDirection = null;
+  for (const waypoint of waypoints.slice(1)) {
+    const segment = orthogonalPathToTarget(cursor, waypoint, samples, previousDirection, corridors.turnPenalty);
+    for (const point of segment.path) {
+      if (point.x !== path.at(-1).x || point.y !== path.at(-1).y) path.push(point);
+    }
+    previousDirection = segment.previousDirection;
+    cursor = path.at(-1);
+  }
+  if (cursor.x !== end.x || cursor.y !== end.y) {
+    const segment = orthogonalPathToTarget(cursor, end, samples, previousDirection, corridors.turnPenalty);
+    for (const point of segment.path) if (point.x !== path.at(-1).x || point.y !== path.at(-1).y) path.push(point);
+  }
+  return path;
+}
+
+function carveBezierCorridor(candidate, path, { stopOnExisting = false, protectTwoByTwo = false } = {}) {
+  let carved = 0;
+  for (let index = 0; index < path.length; index += 1) {
+    const point = path[index];
+    if (index > 0 && stopOnExisting && candidate.grid[point.y][point.x] === '.') break;
+    if (candidate.grid[point.y][point.x] === '.') continue;
+    if (protectTwoByTwo && createsTwoByTwo(candidate, point.x, point.y)) break;
+    carve(candidate, point.x, point.y, 'c');
+    carved += 1;
+  }
+  return carved;
+}
+
+function floorCells(candidate) {
+  const cells = [];
+  for (let y = 1; y < candidate.height - 1; y += 1) {
+    for (let x = 1; x < candidate.width - 1; x += 1) if (candidate.grid[y][x] === '.') cells.push({ x, y });
+  }
+  return cells;
+}
+
+function generateBezierCorridors(candidate, layout, seed, candidateIndex) {
+  const rng = rngFor(seed, candidateIndex, 'bezier_grid_corridors');
+  const start = { x: 1, y: 1 };
+  const end = { x: candidate.width - 2, y: candidate.height - 2 };
+  carveBezierCorridor(candidate, bezierGridPath(candidate, start, end, rng, layout.corridors), { protectTwoByTwo: true });
+
+  const desired = randomInt(rng, layout.corridors.branchCount.min, layout.corridors.branchCount.max);
+  let added = 0;
+  let attempts = 0;
+  while (added < desired && attempts < Math.max(80, desired * 30)) {
+    attempts += 1;
+    const floors = floorCells(candidate);
+    if (!floors.length) break;
+    const branchStart = randomItem(rng, floors);
+    const branchEnd = {
+      x: randomInt(rng, 1, candidate.width - 2),
+      y: randomInt(rng, 1, candidate.height - 2),
+    };
+    if (candidate.grid[branchEnd.y][branchEnd.x] === '.' || manhattan(branchStart, branchEnd) < 6) continue;
+    const path = bezierGridPath(candidate, branchStart, branchEnd, rng, layout.corridors);
+    const carved = carveBezierCorridor(candidate, path, { stopOnExisting: true, protectTwoByTwo: true });
+    if (carved >= 3) added += 1;
+  }
+
+  const loops = randomInt(rng, layout.extraLoops.min, layout.extraLoops.max);
+  const walls = [];
+  for (let y = 1; y < candidate.height - 1; y += 1) {
+    for (let x = 1; x < candidate.width - 1; x += 1) {
+      if (candidate.grid[y][x] !== '#') continue;
+      const horizontal = candidate.grid[y][x - 1] === '.' && candidate.grid[y][x + 1] === '.';
+      const vertical = candidate.grid[y - 1][x] === '.' && candidate.grid[y + 1][x] === '.';
+      if ((horizontal || vertical) && !createsTwoByTwo(candidate, x, y)) walls.push({ x, y });
+    }
+  }
+  for (let index = 0; index < loops && walls.length; index += 1) {
+    const selected = randomInt(rng, 0, walls.length - 1);
+    const [wall] = walls.splice(selected, 1);
+    if (!createsTwoByTwo(candidate, wall.x, wall.y)) carve(candidate, wall.x, wall.y, 'c');
+  }
+}
+
+function generateCorridors(candidate, layout, seed, candidateIndex) {
+  if (layout.corridors.algorithm === 'bezier_grid') generateBezierCorridors(candidate, layout, seed, candidateIndex);
+  else generateMazeCorridors(candidate, layout, seed, candidateIndex);
 }
 
 function candidateBulgeAnchors(candidate, positions) {
@@ -572,7 +760,12 @@ function carveLine(candidate, from, to, region = 'c') {
   }
 }
 
-function connectPoints(candidate, a, b, rng) {
+function connectPoints(candidate, a, b, rng, corridors = { algorithm: 'maze' }) {
+  if (corridors.algorithm === 'bezier_grid') {
+    const path = bezierGridPath(candidate, a, b, rng, corridors);
+    carveBezierCorridor(candidate, path);
+    return;
+  }
   if (rng() < 0.5) {
     carveLine(candidate, a, { x: b.x, y: a.y });
     carveLine(candidate, { x: b.x, y: a.y }, b);
@@ -648,7 +841,7 @@ function placeRooms(candidate, layout, seed, candidateIndex) {
         if (!best || distance < best.distance) best = { fromRoom, toRoom, distance };
       }
     }
-    connectPoints(candidate, best.fromRoom.center, best.toRoom.center, rng);
+    connectPoints(candidate, best.fromRoom.center, best.toRoom.center, rng, layout.corridors);
     connected.push(best.toRoom);
     pending.splice(pending.indexOf(best.toRoom), 1);
   }
@@ -658,7 +851,7 @@ function placeRooms(candidate, layout, seed, candidateIndex) {
     const a = randomItem(rng, candidate.rooms);
     const others = candidate.rooms.filter(room => room !== a);
     const b = randomItem(rng, others);
-    connectPoints(candidate, a.center, b.center, rng);
+    connectPoints(candidate, a.center, b.center, rng, layout.corridors);
   }
 }
 
@@ -747,8 +940,9 @@ function finalizeCandidate(candidate, layout, seed, candidateIndex) {
   const endpointA = farthestFloor(candidate, first);
   const endpointB = farthestFloor(candidate, endpointA);
   const output = {
-    generatorVersion: 'adv-grid/2-prototype',
+    generatorVersion: 'adv-grid/3-prototype',
     terrainAlgorithm: layout.terrain.algorithm,
+    corridorAlgorithm: layout.corridors.algorithm,
     seed,
     candidateIndex,
     mode: layout.mode,
@@ -807,15 +1001,17 @@ export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout 
 }
 
 export const dungeonGeneratorCapabilities = Object.freeze({
-  generatorVersion: 'adv-grid/2-prototype',
+  generatorVersion: 'adv-grid/3-prototype',
   modes: ['corridors', 'bulges', 'rooms'],
   corridorWidths: [1],
+  corridorAlgorithms: [...CORRIDOR_ALGORITHMS],
   terrainAlgorithms: [...terrainAlgorithms],
   featureAlgorithms: [...featureAlgorithms],
   roomShapes: [...ROOM_SHAPES],
   implemented: [
     'deterministic seed and candidate index',
     'corridor-only generation',
+    'optional cubic Bezier-guided four-neighbor corridor rasterization without diagonal adjacency',
     'local corridor bulges',
     'room placement and corridor connection',
     'rectangle/square/L/T/cross/chamfered/roundish/custom-mask room masks',
