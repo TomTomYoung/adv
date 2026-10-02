@@ -1,6 +1,6 @@
 
-import {generateDungeonCandidate} from './src/core/dungeon-generator.js';
-import {generatedCellAt, generatedCellIdAt} from './src/core/dungeon-cell-painter.js';
+import {generateDungeonCandidate} from './core/dungeon-generator.js';
+import {generatedCellAt, generatedCellIdAt} from './core/dungeon-cell-painter.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('map');
