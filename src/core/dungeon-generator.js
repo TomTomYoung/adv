@@ -1,4 +1,5 @@
 import {featureAlgorithms, generateFeatureMask, generateTerrainTopology, terrainAlgorithms} from './dungeon-terrain.js';
+import {paintGeneratedCells} from './dungeon-cell-painter.js';
 
 const DIRECTIONS = [
   [1, 0],
@@ -968,7 +969,7 @@ function finalizeCandidate(candidate, layout, seed, candidateIndex) {
   return output;
 }
 
-export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout = {} } = {}) {
+export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout = {}, cells = null, cellTypes = null } = {}) {
   const normalized = normalizeDungeonLayout(layout);
   if (!Number.isInteger(candidateIndex) || candidateIndex < 0) throw new Error('candidateIndex must be a non-negative integer');
   const candidate = blankCandidate(normalized);
@@ -997,7 +998,24 @@ export function generateDungeonCandidate({ seed = 1, candidateIndex = 0, layout 
     generateCorridors(candidate, normalized, seed, candidateIndex);
     if (normalized.mode === 'bulges') addBulges(candidate, normalized, seed, candidateIndex);
   }
-  return finalizeCandidate(candidate, normalized, seed, candidateIndex);
+  const output = finalizeCandidate(candidate, normalized, seed, candidateIndex);
+  if (cells) {
+    if (!cellTypes) throw new Error('cellTypes catalog is required when cells generation is enabled');
+    const painted = paintGeneratedCells(output, cells, cellTypes, {seed, candidateIndex});
+    output.geometryTiles = output.tiles;
+    output.tiles = painted.tiles;
+    output.cells = painted.cells;
+    output.cellSummary = painted.cellSummary;
+    output.cellPatches = painted.cellPatches;
+    output.validation = validateGeneratedCandidate(output, normalized.mode, {strictMode: normalized.terrain.algorithm === 'classic'});
+    if (!output.validation.ok) throw new Error(output.validation.errors.join('; '));
+    output.metrics = {
+      ...output.metrics,
+      walkableCount: output.validation.floorCount,
+      mandatoryRouteSteps: painted.mandatoryRouteSteps,
+    };
+  }
+  return output;
 }
 
 export const dungeonGeneratorCapabilities = Object.freeze({
@@ -1012,6 +1030,7 @@ export const dungeonGeneratorCapabilities = Object.freeze({
     'deterministic seed and candidate index',
     'corridor-only generation',
     'optional cubic Bezier-guided four-neighbor corridor rasterization without diagonal adjacency',
+    'optional cell preset painting with route-preserving impassable patches and map.cells-compatible legend/rows output',
     'local corridor bulges',
     'room placement and corridor connection',
     'rectangle/square/L/T/cross/chamfered/roundish/custom-mask room masks',
