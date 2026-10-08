@@ -1,6 +1,6 @@
 # 巨獣上の移動集落
 
-更新日: 2026-10-01。作品版1.25.0。ID `moving_village`、推奨Lv.10、1区画。
+更新日: 2026-10-08。作品版1.25.0。ID `moving_village`、推奨Lv.10、1区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 

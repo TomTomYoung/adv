@@ -2459,6 +2459,14 @@
               "action"
             ]
           },
+          "interactionRange": {
+            "enum": [
+              "here",
+              "front",
+              "here-or-front"
+            ],
+            "description": "操作位置。未指定は同じセル。edge配置は指定セル・指定方向を優先する。"
+          },
           "script": {
             "type": "string",
             "minLength": 1
@@ -2517,6 +2525,23 @@
         ],
         "additionalProperties": false,
         "allOf": [
+          {
+            "if": {
+              "required": [
+                "interactionRange"
+              ]
+            },
+            "then": {
+              "properties": {
+                "trigger": {
+                  "enum": [
+                    "interact",
+                    "action"
+                  ]
+                }
+              }
+            }
+          },
           {
             "if": {
               "properties": {

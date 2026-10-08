@@ -1,7 +1,8 @@
 import {dungeonViews,dungeonAction,dungeonCell} from './dungeons.js';
 import {questEvents,questEventPlan,openQuestEvent,eventVisible} from './quest-events.js';
 import {processFieldEvents} from './field-events.js';
-import {closeTo,faces} from './systems/common.js';
+import {faces} from './systems/common.js';
+import {canInteractWithEvent} from './event-interaction.js';
 import {connectionSurfaces} from './systems/map-connections.js';
 import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection} from './inspection.js';
 import {interiorEntrances} from './world.js';
@@ -35,7 +36,7 @@ export function commandTargets(engine,command='interact'){
   if(!inspection)return targets;
   for(const location of interiorEntrances(data,state))add(`interior:${location.id}`,location.name,location.description,[{label:location.enterLabel??`${location.name}に入る`,enabled:true,consumes:false,explicit:true,intent:{type:'location.enter',id:location.id}}]);
   for(const event of questEvents(data)){
-    if(event.trigger!=='action'||!eventVisible(state,event)||!event.points.some(p=>closeTo(state,p))||event.dungeon&&event.dungeon!==state.dungeons?.active?.id)continue;
+    if(event.trigger!=='action'||!eventVisible(state,event)||!canInteractWithEvent(data,state,event)||event.dungeon&&event.dungeon!==state.dungeons?.active?.id)continue;
     const plan=questEventPlan(data,state,event.quest,event.id);
     // Unaccepted quest requirements must not reveal private scene information.
     if(!plan.ok&&state.quests[event.quest]?.stage==='available')continue;

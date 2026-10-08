@@ -3225,6 +3225,14 @@
               "interact"
             ]
           },
+          "interactionRange": {
+            "enum": [
+              "here",
+              "front",
+              "here-or-front"
+            ],
+            "description": "操作位置。interactのみ。edge配置は指定セル・指定方向を優先する。"
+          },
           "safe": {
             "type": "boolean"
           },
@@ -3258,7 +3266,26 @@
           "trigger",
           "script"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "interactionRange"
+              ]
+            },
+            "then": {
+              "properties": {
+                "trigger": {
+                  "enum": [
+                    "interact",
+                    "action"
+                  ]
+                }
+              }
+            }
+          }
+        ]
       }
     }
   },

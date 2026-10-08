@@ -1,6 +1,6 @@
 import {questEvents,questEventPlan,eventVisible} from '../core/quest-events.js';
 import {dungeonForMap} from '../core/dungeons.js';
-import {closeTo} from '../core/systems/common.js';
+import {canInteractWithEvent} from '../core/event-interaction.js';
 import {clone,evaluate} from '../core/expression.js';
 
 export const projectArt=(data,art)=>art?{url:data.assets.images[art.asset],rect:clone(art.rect)}:null;
@@ -15,7 +15,7 @@ export function projectDungeonEvents(engine,systems){
   if(!definition)return {systems,scenes:[],wall:null,floorArt:null};
   const device=projectArt(data,definition.art?.device);
   const decorated=systems.map(system=>({...system,art:['map_connections','compartment_water'].includes(system.kind)?null:device,cards:system.cards?.map(card=>({...card,art:['map_connections','compartment_water'].includes(system.kind)?null:projectArt(data,definition.art?.variants?.[card.artKey]??definition.art?.device)})),markers:system.markers?.map(marker=>({...marker,art:['vector','water','boundary','voxel_link','map_connection','water_control'].includes(marker.kind)?null:device}))}));
-  const events=questEvents(data).filter(e=>e.trigger==='action'&&eventVisible(state,e)&&(!e.dungeon||e.dungeon===definition.id)&&e.points.some(p=>closeTo(state,p))).map(e=>{
+  const events=questEvents(data).filter(e=>e.trigger==='action'&&eventVisible(state,e)&&(!e.dungeon||e.dungeon===definition.id)&&canInteractWithEvent(data,state,e)).map(e=>{
     const plan=questEventPlan(data,state,e.quest,e.id),recorded=e.note&&evaluate(e.note.when,state);
     return {name:e.title,art:device,text:`関連依頼：${data.quests[e.quest].title}${recorded?' ／ 観察を記録済み':''}`,actions:[{label:'現地を調査する',enabled:plan.ok,reason:plan.reason??'',intent:{type:'quest.event',quest:e.quest,id:e.id}}]};
   });

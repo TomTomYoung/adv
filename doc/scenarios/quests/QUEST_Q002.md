@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:7eb2f2a8b4f7008ab233cc426eb4318d6b67d1b99ece833a5bb4ca963081eef5 -->
+<!-- quest-page-source:3520776d78bf05b05b88533752b5489d587b1b594f0e74abbf0777933d9fb651 -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
@@ -28,7 +28,7 @@
 
 ## 町とマップの接続
 
-受注は灯番組合。受注中の依頼の「迷宮の入口へ向かう（灯守の地下水道）」で、町のどの施設からでも入口へ出発できる。最初の現地会話は荷揚げ場の足元・正面を「調べる」で開始する。q001の必須イベントとは起動方式が異なり、初回の q002_decision は interact。
+受注は灯番組合。受注中の依頼の「迷宮の入口へ向かう（灯守の地下水道）」で、町のどの施設からでも入口へ出発できる。最初の現地会話は荷揚げ場のイベントセルに立って「調べる」で開始する。q001の必須イベントとは起動方式が異なり、初回の q002_decision は interact。
 
 ```mermaid
 flowchart TD
@@ -474,7 +474,8 @@ flowchart TD
       "kind": "exit",
       "trigger": "interact",
       "safe": true,
-      "script": "region_1_f1.exit"
+      "script": "region_1_f1.exit",
+      "interactionRange": "here"
     },
     {
       "id": "cache",
@@ -485,7 +486,8 @@ flowchart TD
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f1.cache"
+      "script": "region_1_f1.cache",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "fountain",
@@ -496,7 +498,8 @@ flowchart TD
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f1.fountain"
+      "script": "region_1_f1.fountain",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "trap",
@@ -528,7 +531,8 @@ flowchart TD
           },
           "right": true
         }
-      }
+      },
+      "interactionRange": "front"
     }
   ],
   "entrance": {

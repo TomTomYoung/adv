@@ -96,20 +96,20 @@ for(const region of regions){for(let floor=1;floor<=2;floor++){
 }}
 const take=(map,ratio=0.5)=>map._cells.splice(Math.min(map._cells.length-1,Math.floor(map._cells.length*ratio)),1)[0];
 for(const region of regions){const r=region.id,first=maps[`region_${r}_f1`],second=maps[`region_${r}_f2`],stairs=take(first,0.9);
-  first.objects.push({id:'exit',x:1,y:1,name:'地上への階段',kind:'exit',trigger:'interact',safe:true,script:script(`${first.id}.exit`,[say('灯帰りの町へ戻りました。'),{op:'town.return'}])});
-  first.objects.push({id:'stairs',...stairs,name:'地下二層への階段',kind:'stairs',trigger:'interact',safe:true,script:script(`${first.id}.stairs`,[{op:'map.teleport',map:second.id,x:1,y:1,facing:'east'}])});
-  second.objects.push({id:'stairs',x:1,y:1,name:'地下一層への階段',kind:'stairs',trigger:'interact',safe:true,script:script(`${second.id}.stairs`,[{op:'map.teleport',map:first.id,...stairs,facing:'west'}])});
+  first.objects.push({id:'exit',x:1,y:1,name:'地上への階段',kind:'exit',trigger:'interact',interactionRange:'here',safe:true,script:script(`${first.id}.exit`,[say('灯帰りの町へ戻りました。'),{op:'town.return'}])});
+  first.objects.push({id:'stairs',...stairs,name:'地下二層への階段',kind:'stairs',trigger:'interact',interactionRange:'here',safe:true,script:script(`${first.id}.stairs`,[{op:'map.teleport',map:second.id,x:1,y:1,facing:'east'}])});
+  second.objects.push({id:'stairs',x:1,y:1,name:'地下一層への階段',kind:'stairs',trigger:'interact',interactionRange:'here',safe:true,script:script(`${second.id}.stairs`,[{op:'map.teleport',map:first.id,...stairs,facing:'west'}])});
   for(const map of [first,second]){
     const chest=take(map,0.03),fountain=take(map,0.48),trap=take(map,0.3);
     const leafIndex=map._cells.findLastIndex(({x,y})=>[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>map.tiles[y+dy]?.[x+dx]==='.').length===1&&[...map.objects,chest,fountain,trap].every(p=>Math.abs(p.x-x)+Math.abs(p.y-y)>1));
     const door=map._cells.splice(leafIndex>=0?leafIndex:map._cells.length-1,1)[0];
     // Reserve the square in front of the door so interact never competes with a quest/stair there.
     map._cells=map._cells.filter(p=>Math.abs(p.x-door.x)+Math.abs(p.y-door.y)>1);
-    map.objects.push({id:'cache',...chest,name:'補給の箱',kind:'chest',trigger:'interact',once:true,safe:true,script:script(`${map.id}.cache`,[{op:'item.give',item:'potion',count:2},{op:'item.give',item:'ration',count:1},{op:'item.give',item:`key_${r}`,count:1},say('箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。')])});
-    map.objects.push({id:'fountain',...fountain,name:'休息の泉',kind:'fountain',trigger:'interact',once:true,safe:true,script:script(`${map.id}.fountain`,[{op:'party.heal_all'},say('清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。')])});
+    map.objects.push({id:'cache',...chest,name:'補給の箱',kind:'chest',trigger:'interact',interactionRange:'here-or-front',once:true,safe:true,script:script(`${map.id}.cache`,[{op:'item.give',item:'potion',count:2},{op:'item.give',item:'ration',count:1},{op:'item.give',item:`key_${r}`,count:1},say('箱には傷薬二つ、糧食一つ、この地域の鍵が残されていました。')])});
+    map.objects.push({id:'fountain',...fountain,name:'休息の泉',kind:'fountain',trigger:'interact',interactionRange:'here-or-front',once:true,safe:true,script:script(`${map.id}.fountain`,[{op:'party.heal_all'},say('清い泉で傷を洗いました。隊は全回復し、灯も整いました。この泉は今回一度だけ使えます。')])});
     map.objects.push({id:'trap',...trap,name:'崩れた石床',kind:'trap',trigger:'enter',once:true,script:script(`${map.id}.trap`,[say('石床が崩れ、細い棘が靴を掠めました。'),{op:'actor.damage',target:'party',amount:4+r},{op:'status.apply',target:'nio',status:'poison'},say('ニオは毒を受けています。解毒薬かセラの術、町の施療所で治せます。')])});
     // A locked cache, rather than a mandatory chokepoint, keeps every quest reachable before obtaining the key.
-    map.objects.push({id:'door',...door,name:'封鎖された小部屋',kind:'door',trigger:'interact',blocking:true,initialState:'locked',safe:true,script:script(`${map.id}.door`,[{op:'if',condition:{op:'has_item',item:`key_${r}`},then:[{op:'object.state.set',map:map.id,object:'door',state:'open'},{op:'gold.change',amount:40+r*5},say('鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。')],else:[say('錠が掛かっています。補給箱に、この地域の鍵がありそうです。')]}])});
+    map.objects.push({id:'door',...door,name:'封鎖された小部屋',kind:'door',trigger:'interact',interactionRange:'front',blocking:true,initialState:'locked',safe:true,script:script(`${map.id}.door`,[{op:'if',condition:{op:'has_item',item:`key_${r}`},then:[{op:'object.state.set',map:map.id,object:'door',state:'open'},{op:'gold.change',amount:40+r*5},say('鍵を回し、封鎖を解きました。部屋に残された硬貨を回収します。')],else:[say('錠が掛かっています。補給箱に、この地域の鍵がありそうです。')]}])});
     // Event gates use nested flags, while object state remains an opaque map/object key for persistence.
     const doorObj=map.objects.at(-1);doorObj.condition={op:'not',arg:eq(ref(`flags.${map.id}_door_open`),true)};
     scripts[`${map.id}.door`].commands[0].then.unshift({op:'flag.set',key:`${map.id}_door_open`,value:true});

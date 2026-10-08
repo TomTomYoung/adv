@@ -127,7 +127,7 @@ export function questPageBundle(data,id){
     const file=`quest-maps/${q.id}-${map.id}.svg`;
     files[file]=questMapSvg(data,q,map);
     add(`![${map.name}の座標とイベントID](${file})`);
-    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは足元か正面から調べられる。`);
+    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントはinteractionRangeに従い、未指定なら配置セルに立って調べる。`);
     for(const g of mapGroups(q,map))add(`図 ${g.label} (${g.x}, ${g.y})：${g.ids.map(code).join(' / ')}。`);
   }
   const post=q.story.worldPlaces.post,postLocation=data.locations[post.location],guild=data.locations[postLocation.parent],square=data.locations[guild.parent],map=maps[0];
@@ -266,7 +266,7 @@ function q002PageBundle(data){
   add('## イベントIDの規則');
   add(`場面は ${code('q002-S-場面キー')}、配置は ${code('q002-P-配置キー')}、結末は ${code('q002-E-結末キー')}。選択肢は場面IDと選択キーの組で識別する。全${events.length}IDが一意。荷札回収の強制戦闘 ${code('q002-F-entry-tags-guard_1')} は文書用IDで、実行スクリプトは ${code('q002.v11.entry')} の選択 ${code('tags')}、遭遇は ${code('guard_1')}。q002に専用の戦闘中イベントはない。`);
   add('## 町とマップの接続');
-  add('受注は灯番組合。受注中の依頼の「迷宮の入口へ向かう（灯守の地下水道）」で、町のどの施設からでも入口へ出発できる。最初の現地会話は荷揚げ場の足元・正面を「調べる」で開始する。q001の必須イベントとは起動方式が異なり、初回の q002_decision は interact。');
+  add('受注は灯番組合。受注中の依頼の「迷宮の入口へ向かう（灯守の地下水道）」で、町のどの施設からでも入口へ出発できる。最初の現地会話は荷揚げ場のイベントセルに立って「調べる」で開始する。q001の必須イベントとは起動方式が異なり、初回の q002_decision は interact。');
   add('```mermaid\nflowchart TD\n  square["篝火広場"]\n  guild["灯番組合・受注"]\n  medical["医学校"]\n  school["標本室・照会と返却"]\n  office["保険審査所・証言と立証"]\n  entry["入口操作室・帰還階段"]\n  canal["第一水路・要排水"]\n  landing["荷揚げ場・骨箱と荷札"]\n  square <--> guild\n  square <--> medical\n  medical <--> school\n  square <--> office\n  square <--> entry\n  entry <-->|水密扉| canal\n  canal <-->|水密扉| landing\n```');
   add('入口操作室 (2, 1) の第一水路の給排水盤 upper_gate を「調べる」で開き、「給水を止めて排水」を選ぶ。入口側 (9, 1) の水密扉から第一水路 (1, 1) へ入り、反対側 (9, 1) から荷揚げ場 (1, 1) に出る。そこから骨箱の現場 (5, 1) まで歩く。全接続は往復可能。');
   add('帰路は同じ水路を戻り、入口操作室 (1, 1) の帰還階段を調べれば無料で広場へ帰れる。帰還コマンドではメッセージ内で費用を確認して町へ戻る。医学校から標本室、または広場から保険審査所へ入ると、移動中の物語が自動で続く。');

@@ -14,7 +14,7 @@ export function eventCatalog(data){
  add('# フィールドイベント・戦闘中イベント一覧');
  add(`作品版 ${data.game.version}。配布データから生成する実装一覧。[q001の位置・全文](QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](FIELD_LIGHTING.md)。`);
  add('## 実装した処理');
- add('1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のenter（セル進入）／auto（条件自動）／interact（調査）／action（個別操作）と、出現条件・操作条件・状態・一度限りの記録で起動を制御する。セル進入と物語の到着は正面ではなく足元の実座標で判定する。');
+ add('1. フィールドの会話・地の文・選択・条件分岐・物語行為・実移動待ち。配置のenter（セル進入）／auto（条件自動）／interact（調査）／action（個別操作）と、出現条件・操作条件・状態・一度限りの記録で起動を制御する。セル進入と物語の到着は正面ではなく足元の実座標で判定する。interact/actionの操作位置はinteractionRange（here / front / here-or-front）で指定し、省略時は同じセル。地図上の表示とは独立する。');
  add('2. フィールドの強制戦闘。`battle.start` が現在の命令位置を保存して指定encounterを開始する。勝利・敗北・逃走後はそれぞれ `on_win`・`on_lose`・`on_escape` へ進む。');
  add('3. 戦闘中のイベント。`events` の各IDを戦闘開始時 `start`、第2ラウンド以降の開始時 `round_start`、戦闘結果の確定前 `before_end` に判定する。条件成立した未実行イベントを定義順に1件ずつ実行し、各IDは1戦に1度だけ発火する。');
  add('4. 戦闘中の会話・選択中は戦闘操作を止める。イベントの末尾まで進めた場合は戦闘または保留中の通常終了処理を再開する。`battle.end` があれば強制終了し、`on_interrupt` からフィールドの会話へ戻れる。');

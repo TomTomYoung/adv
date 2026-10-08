@@ -3,7 +3,7 @@ import {edgeBetween} from './edge-layers.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
 import {reorderParty} from './party-order.js';
 import {collapseAfterLeaving} from './cell-behaviors.js';
-import {closeTo} from './systems/common.js';
+import {canInteractAt} from './event-interaction.js';
 import {finishInspection} from './inspection.js';
 import {openPlayerCommand,advanceCommand,chooseCommand} from './player-commands.js';
 import {freshGear,addGear,equipGear,unequipGear} from './equipment.js';
@@ -207,7 +207,7 @@ export class GameEngine {
   interactionObjects(){return this.triggerCandidates('interact');}
   nearbyObjects(){
     const loc=this.state.location;if(!loc)return [];
-    return this.map().objects.filter(o=>closeTo(this.state,{map:loc.map,...o})&&(o.edge||o.x===loc.x&&o.y===loc.y||!edgeBetween(this.data,this.map(),loc,o)?.visual.opaque&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:o.x,y:o.y,z:loc.z}).passage)));
+    return this.map().objects.filter(o=>canInteractAt(this.data,this.state,{map:loc.map,...o}));
   }
   triggerCandidates(kind){
     const loc=this.state.location;if(!loc)return [];
@@ -215,7 +215,7 @@ export class GameEngine {
     const at=this.objectAt(loc.x,loc.y),ahead=kind==='interact'&&!edgeBetween(this.data,this.map(),loc,{x:loc.x+dx,y:loc.y+dy})?.visual.opaque&&(!this.map().voxels||faceRules(this.map(),voxelMapState(this.data,this.state,this.map()),loc,{x:loc.x+dx,y:loc.y+dy,z:loc.z}).passage)?this.objectAt(loc.x+dx,loc.y+dy):[];
     // Closed doors in front take precedence over a reusable stair/fountain at the feet.
     const blockers=ahead.filter(o=>o.blocking&&this.objectState(o)!=='open');
-    return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>(!object.edge||closeTo(this.state,{map:loc.map,...object}))&&objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));
+    return [...new Set([...blockers,...at,...ahead.filter(o=>!blockers.includes(o))])].filter(object=>(kind!=='interact'||canInteractAt(this.data,this.state,{map:loc.map,...object}))&&objectVisible(this.state,this.map(),object)&&object.trigger===kind&&!(object.once&&this.state.events[`${loc.map}/${object.id}`])&&(object.condition===undefined||this.value(object.condition)));
   }
   trigger(kind,id){
     const loc=this.state.location;

@@ -1,4 +1,5 @@
 import {checkpointCommandValid} from './event-checkpoints.js';
+import {interactionRangeValid} from './event-interaction.js';
 import {restrictionValid} from './dungeon-restrictions.js';
 import {castValid,transitionValid,durationValid} from './cast.js';
 import {validateCellLayers} from './cell-layers.js';
@@ -145,6 +146,7 @@ export function validateContent(data){
       if(map.voxels?voxelAt(map,null,{x:object.x,y:object.y,z:object.z??0})!=='.':map.tiles[object.y]?.[object.x]!=='.')fail(id,`object座標不正: ${object.id}`);
       if(object.edge!==undefined&&(!['north','east','south','west'].includes(object.edge)||object.trigger!=='interact'||object.blocking))fail(id,'エッジ配置は有効な方向・interact・非blockingが必要です');
       if(!['enter','interact'].includes(object.trigger))fail(id,'トリガーが不正です');
+      if(!interactionRangeValid(object))fail(id,`操作位置が不正です: ${object.id}`);
       reference(data.scripts,object.script,id);for(const key of ['condition','visibleWhen'])if(object[key]!==undefined)expression(object[key],id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);

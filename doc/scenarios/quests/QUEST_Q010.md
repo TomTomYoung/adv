@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・5結末。
 
-<!-- quest-page-source:7eb2f2a8b4f7008ab233cc426eb4318d6b67d1b99ece833a5bb4ca963081eef5 -->
+<!-- quest-page-source:3520776d78bf05b05b88533752b5489d587b1b594f0e74abbf0777933d9fb651 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -1065,7 +1065,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
       "kind": "exit",
       "trigger": "interact",
       "safe": true,
-      "script": "region_1_f1.exit"
+      "script": "region_1_f1.exit",
+      "interactionRange": "here"
     },
     {
       "id": "cache",
@@ -1076,7 +1077,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f1.cache"
+      "script": "region_1_f1.cache",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "fountain",
@@ -1087,7 +1089,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f1.fountain"
+      "script": "region_1_f1.fountain",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "trap",
@@ -1119,7 +1122,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
           },
           "right": true
         }
-      }
+      },
+      "interactionRange": "front"
     }
   ],
   "entrance": {
@@ -1400,7 +1404,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f2.cache"
+      "script": "region_1_f2.cache",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "fountain",
@@ -1411,7 +1416,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
       "trigger": "interact",
       "once": true,
       "safe": true,
-      "script": "region_1_f2.fountain"
+      "script": "region_1_f2.fountain",
+      "interactionRange": "here-or-front"
     },
     {
       "id": "trap",
@@ -1443,7 +1449,8 @@ AI向け注釈: 以下の事実はq010を成立させる世界設定上の制約
           },
           "right": true
         }
-      }
+      },
+      "interactionRange": "front"
     }
   ],
   "entrance": {

@@ -1,6 +1,7 @@
 import {voxelAt} from './voxels.js';
 import {clone,evaluate} from './expression.js';
-import {closeTo,identifier,validPoint} from './systems/common.js';
+import {identifier,validPoint} from './systems/common.js';
+import {canInteractWithEvent,interactionRangeValid} from './event-interaction.js';
 import {FIELD_EVENT_TRIGGERS} from './field-events.js';
 
 export const questEvents=data=>Object.values(data.quests??{}).flatMap(q=>(q.events??[]).map(event=>({...event,quest:q.id})));
@@ -29,7 +30,7 @@ export function questEventPlan(data,state,quest,id){
   if(event.dungeon&&state.dungeons?.active?.id!==event.dungeon)return {ok:false,reason:'関連する迷宮で調査してください。'};
   if(event.condition!==undefined&&!evaluate(event.condition,state))return {ok:false,reason:event.requirement??'イベントの条件を満たしていません。'};
   if(event.once&&state.events[`quest/${quest}/${id}`])return {ok:false,reason:'このイベントは完了しています。'};
-  if(!event.points.some(p=>closeTo(state,p)))return {ok:false,reason:'調査地点の足元か正面で確認してください。'};
+  if(!canInteractWithEvent(data,state,event))return {ok:false,reason:event.points.some(p=>p.edge)?'設置されたセルで対象の面を向いてください。':event.interactionRange==='front'?'対象を正面の一マス先にして調べてください。':event.interactionRange==='here-or-front'?'対象の足元か正面で調べてください。':'イベントのセルまで移動して調べてください。'};
   return {ok:true,event};
 }
 export function openQuestEvent(engine,quest,id){
@@ -49,6 +50,7 @@ export function validateQuestEvents(data,expression){
       const id=`${q.id}/${event.id}`;
       if(!identifier(event.id)||ids.has(event.id))fail(id,'イベントIDが不正または重複しています');ids.add(event.id);
       if(typeof event.title!=='string'||!event.title||!FIELD_EVENT_TRIGGERS.includes(event.trigger))fail(id,'イベントの名前・起動方法が不正です');
+      if(!interactionRangeValid(event))fail(id,'操作位置はinteract/actionにhere・front・here-or-frontを指定してください');
       if(event.trigger==='auto'&&(event.once!==true||event.condition===undefined))fail(id,'自動条件イベントには once: true と condition が必要です');
       if(!q.scripts[event.script])fail(id,'イベントのスクリプトは同じクエスト内に定義してください');
       if(event.dungeon&&!data.dungeons?.[event.dungeon])fail(id,'関連ダンジョンがありません');

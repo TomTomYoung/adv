@@ -1,6 +1,6 @@
 # クエスト内イベントとマップへの投影
 
-更新日: 2026-09-25。作品版1.20.0。セル進入・条件自動・任意調査、2D区画の配置と共通メッセージへ接続しています。
+更新日: 2026-10-09。作品版1.20.0。セル進入・条件自動・任意調査、2D区画の配置と共通メッセージへ接続しています。
 
 エッジ配置にはpointsへ `edge: "north"` などを追加します。設置セルでその面を向いた場合にだけinteractまたはactionを実行できます。enter・auto・blockingとの併用は拒否します。[調査仕様](../ui/INSPECTION.md)。
 
@@ -22,7 +22,7 @@
 
 id はクエスト内で一意です。マップへ配置するイベントでは、そのまま object ID にも使います。title は表示名、points は map・x・y・任意の z を持つ配置先です。同一mapに同じIDを二重配置できません。異なる高さでも同じmapの別物体には別IDを付けます。
 
-trigger が enter または interact のイベントは、kind、script、safe、once、blocking、initialState、visibleWhen、condition をマップへ投影します。script は必ず同じクエストの scripts に定義します。role がある地点は追跡欄の locations へ生成されます。
+trigger が enter または interact のイベントは、kind、script、interactionRange、safe、once、blocking、initialState、visibleWhen、condition をマップへ投影します。script は必ず同じクエストの scripts に定義します。role がある地点は追跡欄の locations へ生成されます。
 
 visibleWhen は物体の出現条件です。偽なら表示・操作・通行妨害・遮蔽の対象になりません。condition は操作の有効条件です。visibleWhen が真で condition が偽なら、物体は存在しますがスクリプトは実行しません。false を直接指定しても条件を省略した扱いにはしません。
 
@@ -34,13 +34,31 @@ once は `state.events[map/object]` を参照します。状態は `state.object
 
 会話の表示条件と分岐は scripts 内の if／switch、選択肢の表示条件は visibleWhen、選択可否は condition と storyAction、要求表示は requirement、実行内容は commands に定義します。q001以外の既存命令列は、今回の改訂でも保持しています。
 
+## 操作できる位置
+
+`interact` / `action` のイベントとマップ配置物は、任意の `interactionRange` で操作位置を指定します。`trigger` は起動のきっかけ、`interactionRange` は実行できる位置です。
+
+値：`here`（省略時） / 実行できる位置：配置セルと同じmap・x・y・z。向きは問わない。
+
+値：`front` / 実行できる位置：向いている方向の一マス先。同じセルからは実行できない。
+
+値：`here-or-front` / 実行できる位置：同じセルか、正面の一マス先。
+
+`edge` のある地点は上記のセル距離ではなく、設置セルに立ってその面を向く既存の規則を優先します。正面セルへの操作は不透明な境界や閉じた立体区画の面を越えません。`enter` / `auto` に `interactionRange` を指定することはできず、従来の進入・条件判定を維持します。
+
+既存のクエスト内イベントは、省略時の `here` を採用します。会話の開始地点、手掛かり、現地調査まで実際に移動してから操作します。マップ固有の扉は `front`、宝箱・泉・目の前の人物や固定物は `here-or-front`、帰還口・階段・休息所などの地点は `here` を原稿と配布JSONに明記しています。壁灯と掛け金は `edge` を維持します。座標、ID、スクリプト、報酬、イベント回数の保存キーは変更しません。
+
+例：`{"id":"notice","name":"道標","x":3,"y":1,"kind":"clue","trigger":"interact","interactionRange":"here-or-front","script":"notice.read"}`。クエスト定義では同じ項目をeventsの各要素に置き、座標は従来どおりpointsへ指定します。
+
+`event-interaction.js` の共通判定を対象一覧、個別調査パネル、操作候補、実行直前に使います。地図や歩行画面の物体表示には操作距離を使わず、手前から印が見えても到達必須のイベントは実行できません。セーブの形式は変えず、再開後の新規操作に現在の配置規則を適用します。
+
 ## 条件成立で自動的に起動するイベント
 
 trigger が auto のイベントは condition と once: true を持ち、受注中かつ探索中に条件が成立すると自動実行します。points が空配列ならセル指定なし、座標を指定するとそのセルにいることも条件になります。会話・戦闘中は保留し、終了後に再判定します。マップ物体へは投影しません。詳細は[フィールド・戦闘イベント仕様](EVENT_SYSTEM.md)を参照してください。
 
 ## 調べるから起動する個別調査
 
-trigger が action のイベントはマップオブジェクトを追加せず、points の足元・正面で「調べる」の対象になります。複数の対象がある場合はメッセージウィンドウ内で選びます。Coreが `{type: quest.event, quest: qXXX, id: イベントID}` に相当する調査を実行します。Core は会話・戦闘・実行中の命令列、出現条件、有効条件、関連ダンジョン、地点と高さ、once を再検査してから script を実行します。
+trigger が action のイベントはマップオブジェクトを追加せず、points と interactionRange に一致する位置で「調べる」の対象になります。未指定なら同じセルが必要です。複数の対象がある場合はメッセージウィンドウ内で選びます。Coreが `{type: quest.event, quest: qXXX, id: イベントID}` に相当する調査を実行します。Core は会話・戦闘・実行中の命令列、出現条件、有効条件、関連ダンジョン、地点と高さ、once を再検査してから script を実行します。
 
 任意の note は text と when を持ちます。when が成立した記録だけを依頼一覧と手帳へ投影します。旧13調査の観察条件・本文・選択肢は同じクエストの scripts に入り、記録済みフラグは従来の `flags.dungeonNotes` を読みます。調査記録を救助や同意などの本筋の成立と取り違えません。
 
@@ -53,3 +71,5 @@ trigger が action のイベントはマップオブジェクトを追加せず�
 ## 検証
 
 `tests/quest-events.test.mjs` は1.8.0の改稿対象外スクリプト・オブジェクトの指紋、原稿と配布定義の一致、出現／操作条件の分離、once、状態の保存再読込、13記録の引継ぎ、不正な配置と外部スクリプト参照を検証します。既存の現地調査テストはクエストイベントの操作意図へ移し、13ダンジョンの実状態と旧会話の継続を確認します。
+
+`tests/event-interaction.test.mjs` は距離3種と省略時の既定値、候補と直接実行の一致、エッジ・境界・高さ、表示と操作の分離、保存再開、古い選択肢の拒否、原稿の分類を検証します。

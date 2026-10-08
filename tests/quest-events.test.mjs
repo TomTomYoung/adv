@@ -44,7 +44,8 @@ test('unmigrated quest effects remain exact apart from narration, journeys and e
   const added={kagaribi_f2:['route_sign'],kagaribi_f3:['altar_latch']};
   const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest)&&!added[map]?.includes(o.id));
   assert.equal(current.length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q003_')&&!id.startsWith('q004_')&&!(replacedStairs&&['stairs','up','down'].includes(id))).length,map);
-  for(const object of current)assert.equal(structureHash(object),objects[object.id],`${map}/${object.id}`);
+  // Only the new placement metadata is excluded from this historical script/state baseline.
+  for(const {interactionRange,...object} of current)assert.equal(structureHash(object),objects[object.id],`${map}/${object.id}`);
  }
 });
 
@@ -64,7 +65,7 @@ function objectGame({visibleWhen=true,condition=true,once=false}={}){
  const d=structuredClone(data),map='region_1_f1';
  for(const m of Object.values(d.maps))m.objects=m.objects.filter(o=>!o.quest);
  const p={map,x:2,y:1};
- d.quests.q001.events.push({id:'test_gate',title:'条件付きの灯',points:[p],kind:'door',trigger:'interact',blocking:true,initialState:'low',visibleWhen,condition,once,script:'q001.test_gate'});
+ d.quests.q001.events.push({id:'test_gate',title:'条件付きの灯',points:[p],kind:'door',trigger:'interact',interactionRange:'front',blocking:true,initialState:'low',visibleWhen,condition,once,script:'q001.test_gate'});
  d.quests.q001.scripts['q001.test_gate']={commands:[{op:'object.state.set',map,object:'test_gate',state:'empty'},{op:'narrate',text:'油が尽きた。'}]};
  d.scripts['q001.test_gate']=d.quests.q001.scripts['q001.test_gate'];projectQuestObjects(d);
  const g=new GameEngine(d);drain(g);g.dispatch({type:'travel',region:1});return {g,d,p};
