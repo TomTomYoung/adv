@@ -1,7 +1,7 @@
 import {clone,isRecord,pathParts} from './expression.js';
 import {commandsAt} from './script.js';
 import {storyStateErrors} from './story.js';
-import {atWorldPlace} from './world.js';
+import {atWorldPlace,resolveStoryWorldPlace} from './world.js';
 import {restrictionValid} from './dungeon-restrictions.js';
 
 const identifier=v=>typeof v==='string'&&/^[a-z][a-z0-9_.:-]{0,127}$/.test(v);
@@ -58,7 +58,7 @@ export function beginEventCheckpoint(engine,c,frame,index){
   // Resuming the opening conversation must keep the original pre-effect snapshot.
   if(existing){if(JSON.stringify(existing.origin)!==JSON.stringify(origin))throw Error('チェックポイントIDが重複しています');return;}
   const d=data.quests[c.quest].story,s=state.stories[c.quest];
-  if(state.quests[c.quest]?.stage!=='active'||state.journey||s?.scene!==c.scene||state.dungeons?.active?.id!==c.dungeon||!atWorldPlace(state,d.worldPlaces[d.scenes[c.scene].place]))throw Error('チェックポイントの開始地点・場面が違います');
+  if(state.quests[c.quest]?.stage!=='active'||state.journey||s?.scene!==c.scene||state.dungeons?.active?.id!==c.dungeon||!atWorldPlace(state,resolveStoryWorldPlace(d,s,d.scenes[c.scene].place)))throw Error('チェックポイントの開始地点・場面が違います');
   if(state.eventCheckpoints.some(saved=>conflicts(c,definition(data,saved))))throw Error('復元対象が重なるチェックポイントは同時に開始できません');
   state.eventCheckpoints.push({id:c.id,origin,story:clone(s),values:targets(c).map(p=>capture(state,p)),restrictions:clone(state.dungeonRestrictions.filter(r=>ownsRestriction(c,r)))});
 }
@@ -85,7 +85,7 @@ export function validateEventCheckpoints(data,state){
   for(const saved of list)try{
     if(!exact(saved,['id','origin','story','values','restrictions'])||ids.has(saved.id))throw Error();
     const c=definition(data,saved),d=data.quests[c.quest].story;
-    if(state.quests[c.quest]?.stage!=='active'||saved.story?.scene!==c.scene||storyStateErrors(d,saved.story,state,c.quest).length)throw Error();
+    if(state.quests[c.quest]?.stage!=='active'||saved.story?.scene!==c.scene||storyStateErrors(d,saved.story,state,c.quest,{data}).length)throw Error();
     const paths=targets(c);
     if(!Array.isArray(saved.values)||saved.values.length!==paths.length||saved.values.some((v,i)=>!exact(v,v?.present?['present','value']:['present'])||typeof v.present!=='boolean'||v.present&&(paths[i][0]==='objects'?typeof v.value!=='string':paths[i][0]==='events'?!Number.isSafeInteger(v.value)||v.value<0:false)))throw Error();
     if(!Array.isArray(saved.restrictions)||saved.restrictions.some(r=>!restrictionValid(data,r)||!exact(r,['dungeon','action','source','reason'])||!ownsRestriction(c,r))||new Set(saved.restrictions.map(r=>`${r.action}/${r.source}`)).size!==saved.restrictions.length)throw Error();

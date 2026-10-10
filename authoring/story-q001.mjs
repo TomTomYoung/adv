@@ -77,7 +77,8 @@ const route=connectWorld(s,{
 },4);
 route('entry_talk','dark',{depart:[see('rule','rookie'),see('gift','rookie')]});
 route('empty_follow','branch',{arrive:[see('position','elder'),set('partyTorch','low')]});
-route('old_support','dark',{companions:['elder'],arrive:[set('partyTorch','extinguished'),set('darkness','attacking')]});
+route('old_support','dark',{companions:['elder'],arrive:[set('partyTorch','extinguished'),set('darkness','attacking')],
+ arrival:{points:[{map:'kagaribi_f1',x:13,y:5,event:'q001_return_south'}],encounters:['kuragari_hunt']}});
 route('rescue_home','entry',{companions:['elder','rookie']});
 route('gate_report','post',{companions:['elder','rookie'],arrive:[set('reported'),set('routeClosed')]});
 // Blocking and speaking belong to the authored scene, never to the UI's heuristics.

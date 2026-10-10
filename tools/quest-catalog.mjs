@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {describePlace,questPlaces} from './location-catalog.mjs';
+import {describeJourneyArrival,describeStoryScenePlace,questPlaces} from './location-catalog.mjs';
 import {questRouteSummary} from './quest-route-summary.mjs';
 
 const json=value=>JSON.stringify(value);
@@ -70,9 +70,9 @@ export function questCatalog(data,date,{questId}={}){
           else add(`進行先: ${target(q,c.script)}。`);break;
         }
         case 'story.journey':{
-          const a=q.story.actions[c.action],place=q.story.worldPlaces[a.journey.to];
-          add(`出発: ${code(c.action)}。移動先: ${describePlace(data,place)}。`);condition('出発の条件',a.requires);
-          add(`この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [${code(a.to)}](#${slug(sceneTitle(q,q.model.graph.find(n=>n.id===a.to)))}) へ進み、到着時の処理を確定します。`);break;
+          const a=q.story.actions[c.action];
+          add(`出発: ${code(c.action)}。移動先: ${describeJourneyArrival(data,q,a)}。`);condition('出発の条件',a.requires);
+          add(`この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏む${a.journey.arrival?.encounters?.length?'か、指定された通常遭遇が当選する':''}と自動で [${code(a.to)}](#${slug(sceneTitle(q,q.model.graph.find(n=>n.id===a.to)))}) へ進み、到着時の処理を確定します。`);break;
         }
         case 'story.action':{
           const a=q.story.actions[c.action];if(!a)throw Error(`${q.id}: missing action ${c.action}`);
@@ -132,7 +132,7 @@ export function questCatalog(data,date,{questId}={}){
         add(`### ${sceneTitle(q,node)}`);add(`実装場面: ${code(unit.script)}。`);
         if(questId)add(`イベントID: ${code(questEventId(q,'S',node.id))}。`);
         const place=q.story?.worldPlaces?.[q.story.scenes[node.id]?.place];
-        if(place)add(`場面の現在地: ${describePlace(data,place)}。`);
+        if(place)add(`場面の現在地: ${describeStoryScenePlace(data,q,node.id)}。`);
         commands(q,script.commands);
     }
     for(const [id,o] of Object.entries(q.outcomes)){

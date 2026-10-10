@@ -15,7 +15,7 @@ import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js
 import {scaledEnemy} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock,dungeonWaterAccess} from './dungeons.js';
 import {storyStateErrors,storyEnding,journeyErrors} from './story.js';
-import {atWorldPlace,hasWorldConversation,savedWorldConversation} from './world.js';
+import {atWorldPlace,hasWorldConversation,savedWorldConversation,resolveStoryWorldPlace,storyArrivalEntryId} from './world.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
@@ -151,7 +151,11 @@ export function validateSave(save,data){
   }else if(s.location!==null)fail('町の位置不正');
   if(s.fieldEntry!==null){
     const e=s.fieldEntry,m=data.maps[e?.map];
-    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')))fail('フィールド入場イベントの記録不正');
+    const boundEntry=id=>Object.entries(s.stories??{}).some(([quest,story])=>Object.entries(story?.arrivals??{}).some(([place,binding])=>{
+      const point=binding?.point;
+      return id===storyArrivalEntryId(quest,place)&&point?.map===e.map&&point.x===e.x&&point.y===e.y&&(point.z??0)===(e.z??0);
+    }));
+    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')&&!boundEntry(id)))fail('フィールド入場イベントの記録不正');
   }
   if(data.game.world){
     if(s.mode==='town'?!data.locations?.[s.townLocation]:s.townLocation!==null)fail('町ロケーションの参照不正');
@@ -189,8 +193,8 @@ export function validateSave(save,data){
     else for(const [id,story] of Object.entries(s.stories)){
       const def=data.quests[id]?.story;
       if(!def){fail('不明な物語状態');continue;}
-      try{errors.push(...storyStateErrors(def,story,s,id,{scene:s.quests[id]?.stage==='active',world:true,legacyWorld:true}));}catch{fail('物語状態不正');}
-      if(def.worldPlaces&&s.waiting&&hasWorldConversation(data,s,id)&&!atWorldPlace(s,def.worldPlaces[def.scenes[story.scene]?.place])&&!savedWorldConversation(data,s,id))fail('会話と実際の現在地が一致しません');
+      try{errors.push(...storyStateErrors(def,story,s,id,{scene:s.quests[id]?.stage==='active',world:true,legacyWorld:true,data}));}catch{fail('物語状態不正');}
+      if(def.worldPlaces&&s.waiting&&hasWorldConversation(data,s,id)&&!atWorldPlace(s,resolveStoryWorldPlace(def,story,def.scenes[story.scene]?.place))&&!savedWorldConversation(data,s,id))fail('会話と実際の現在地が一致しません');
     }
     for(const [id,q] of Object.entries(data.quests))if(q.story&&s.quests[id]?.stage==='completed'&&!s.flags.legacyStoryRoutes?.[id])try{storyEnding({data,state:s},id,s.quests[id].outcome);}catch{fail('物語の結末条件不正');}
   }

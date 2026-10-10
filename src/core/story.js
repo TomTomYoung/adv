@@ -1,5 +1,5 @@
 import {placementValid} from './cast.js';
-import {atWorldPlace,worldPlaceName,worldStoryPlace,legacyWorldPlace,legacyWorldStoryPlace,continuesWorldConversation,finishWorldConversations} from './world.js';
+import {atWorldPlace,worldPlaceName,worldStoryPlace,legacyWorldPlace,legacyWorldStoryPlace,continuesWorldConversation,finishWorldConversations,resolveStoryWorldPlace,storyJourneyPlaces,storyJourneyArrival,bindStoryArrival,storyArrivalErrors,consumeStoryArrivalEntry} from './world.js';
 import {clone,evaluate,isRecord} from './expression.js';
 
 // Finite, authored story worlds. No quest IDs or narrative text belong here.
@@ -17,23 +17,25 @@ export function storyPlace(d,s,id,seen=new Set()){
   const holder=s.values[e.holder];
   return storyPlace(d,s,holder,seen);
 }
-export function storyStateErrors(d,s,state,id,{scene=false,world=false,legacyWorld=false}={}){
+export function storyStateErrors(d,s,state,id,{scene=false,world=false,legacyWorld=false,data}={}){
   const errors=[];
   if(!isRecord(s)||s.version!==d.version||!isRecord(s.values)||!Array.isArray(s.events)||!isRecord(s.knowledge))return [`${id}: 物語状態不正`];
   if((s.revision??1)!==(d.revision??1))errors.push(`${id}: 物語状態の改訂版が一致しません`);
   for(const [key,r] of Object.entries(d.registry))if(!fieldValid(s.values[key],r))errors.push(`${id}.${key}: 型・定義域違反`);
   for(const key of Object.keys(s.values))if(!own(d.registry,key))errors.push(`${id}.${key}: 未登録の状態`);
   if(new Set(s.events).size!==s.events.length||s.events.some(e=>!own(d.actions,e)))errors.push(`${id}: 行動履歴不正`);
+  errors.push(...storyArrivalErrors(d,s,data).map(error=>`${id}: ${error}`));
   for(const [who,known] of Object.entries(s.knowledge))if(!d.entities[who]||!Array.isArray(known)||new Set(known).size!==known.length||known.some(p=>!d.propositions[p]))errors.push(`${id}: 認識の参照不正`);
   for(const entity of Object.keys(d.entities))try{storyPlace(d,s,entity);}catch(e){errors.push(`${id}: ${e.message}`);}
   for(const invariant of d.invariants??[])try{if(!check(invariant.condition,state,id,s))errors.push(`${id}: ${invariant.id} — ${invariant.message}`);}catch(e){errors.push(`${id}: ${invariant.id}: ${e.message}`);}
   if(s.scene!==null&&!d.scenes[s.scene])errors.push(`${id}: 不明な場面`);
-  if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&state.journey?.quest!==id&&s.values[d.entities.party.holder]!==worldStoryPlace(state,d)&&(!legacyWorld||s.values[d.entities.party.holder]!==legacyWorldStoryPlace(state,d)))errors.push(`${id}: 探索隊の所在と実際の現在地が一致しません`);
+  if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&state.journey?.quest!==id&&s.values[d.entities.party.holder]!==worldStoryPlace(state,d,s)&&(!legacyWorld||s.values[d.entities.party.holder]!==legacyWorldStoryPlace(state,d,s)))errors.push(`${id}: 探索隊の所在と実際の現在地が一致しません`);
   if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&s.scene===null&&state.journey?.quest!==id)errors.push(`${id}: 移動記録または再開場面がありません`);
-  if(scene&&s.scene&&d.scenes[s.scene]&&(!d.worldPlaces||atWorldPlace(state,d.worldPlaces[d.scenes[s.scene].place])||legacyWorld&&s.values[d.entities.party.holder]===legacyWorldStoryPlace(state,d)&&legacyWorldPlace(state,d.worldPlaces[d.scenes[s.scene].place])))try{assertScene(d,s,state,id,s.scene);}catch(e){errors.push(e.message);}
+  const scenePlace=resolveStoryWorldPlace(d,s,d.scenes[s.scene]?.place);
+  if(scene&&s.scene&&d.scenes[s.scene]&&(!d.worldPlaces||atWorldPlace(state,scenePlace)||legacyWorld&&!s.arrivals?.[d.scenes[s.scene].place]&&s.values[d.entities.party.holder]===legacyWorldStoryPlace(state,d,s)&&legacyWorldPlace(state,scenePlace)))try{assertScene(d,s,state,id,s.scene);}catch(e){errors.push(e.message);}
   return errors;
 }
-function assertValid(d,s,state,id){const errors=storyStateErrors(d,s,state,id);if(errors.length)throw Error(errors.join('\n'));}
+function assertValid(d,s,state,id,data){const errors=storyStateErrors(d,s,state,id,{data});if(errors.length)throw Error(errors.join('\n'));}
 function assertScene(d,s,state,id,scene){
   const n=d.scenes[scene];if(!n||!check(n.requires,state,id,s))throw Error(`${id}/${scene}: 場面の入口条件を満たしていません`);
   const place=storyPlace(d,s,'party');
@@ -50,30 +52,31 @@ export function initStory(engine,id){
   if(engine.state.journey){engine.state.vm=[];engine.state.waiting=null;engine.notify('移動中だ。目的地に着いてから続きを進める。');return;}
   if(!engine.state.stories[id]){
     if(engine.state.quests[id].stage!=='active')throw Error('受注前に物語を開始できません');
-    if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes.entry.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('依頼の開始地点へ移動する必要がある。');return;}
+    if(d.worldPlaces&&!atWorldPlace(engine.state,resolveStoryWorldPlace(d,null,d.scenes.entry.place))){engine.state.vm=[];engine.state.waiting=null;engine.notify('依頼の開始地点へ移動する必要がある。');return;}
     const s={version:d.version,...(d.revision?{revision:d.revision}:{}),values:Object.fromEntries(Object.entries(d.registry).map(([k,r])=>[k,clone(r.initial)])),knowledge:clone(d.initialKnowledge??{}),events:[],scene:null};
-    assertValid(d,s,engine.state,id);engine.state.stories[id]=s;
+    assertValid(d,s,engine.state,id,engine.data);engine.state.stories[id]=s;
   }
-  assertValid(d,engine.state.stories[id],engine.state,id);
+  assertValid(d,engine.state.stories[id],engine.state,id,engine.data);
 }
 export function enterStoryScene(engine,id,scene){
   const d=definition(engine.data,id),s=engine.state.stories?.[id];if(!s)throw Error('物語が初期化されていません');
-  if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])&&!continuesWorldConversation(engine,id,scene)){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
+  if(d.worldPlaces&&!atWorldPlace(engine.state,resolveStoryWorldPlace(d,s,d.scenes[scene]?.place))&&!continuesWorldConversation(engine,id,scene)){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
   assertScene(d,s,engine.state,id,scene);s.scene=scene;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;
 }
-export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false,continuing=false}={}){
-  const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id];
+export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false,continuing=false,encounter}={}){
+  const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id],arrival;
   if(a?.journey){
     if(arrive){
-      if(state.journey?.quest!==id||state.journey.action!==actionId||!atWorldPlace(state,d.worldPlaces[a.journey.to]))throw Error('目的地のセル・施設へ到達する必要がある。');
+      arrival=storyJourneyArrival(data,state,id,actionId,encounter);
+      if(state.journey?.quest!==id||state.journey.action!==actionId||!arrival)throw Error('目的地のセル・施設へ到達する必要がある。');
       current=clone(current);current.scene=state.journey.from;
     }else if(!depart||state.journey)throw Error('移動中の行為を完了してください');
   }
-  if(d.worldPlaces&&!arrive&&!continuing&&!atWorldPlace(state,d.worldPlaces[d.scenes[current?.scene]?.place]))throw Error('この行為の場所にいません');
+  if(d.worldPlaces&&!arrive&&!continuing&&!atWorldPlace(state,resolveStoryWorldPlace(d,current,d.scenes[current?.scene]?.place)))throw Error('この行為の場所にいません');
   if(!current||!a)throw Error(`${id}/${actionId}: 未定義の行動`);
   if(state.quests[id].stage!=='active'||!a.from.includes(current.scene)||!check(a.requires,state,id,current))throw Error(`${id}/${actionId}: 行動の前提条件不成立`);
   if(a.once!==false&&current.events.includes(actionId))throw Error(`${id}/${actionId}: 完了済みの行動`);
-  assertValid(d,current,state,id);
+  assertValid(d,current,state,id,data);
   const s=clone(current),inventory=clone(state.inventory);let gold=state.gold;
   for(const [item,count] of Object.entries(a.cost??{})){
     if(item==='gold'){if(gold<count)throw Error('所持金が足りません');gold-=count;}
@@ -119,11 +122,12 @@ export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=fals
       if(storyPlace(d,s,who)!==storyPlace(d,s,'party'))throw Error('同行者が出発地点にいません');
     }
     for(const who of ['party',...a.journey.companions])s.values[d.entities[who].holder]='transit';
-    s.scene=null;assertValid(d,s,state,id);
+    s.scene=null;assertValid(d,s,state,id,data);
     return {story:s,gold,inventory,journey:{quest:id,action:actionId,from:current.scene}};
   }
   if(!s.events.includes(actionId))s.events.push(actionId);
-  assertValid(d,s,state,id);
+  if(arrival)bindStoryArrival(d,s,actionId,arrival);
+  assertValid(d,s,state,id,data);
   if(a.to){assertScene(d,s,state,id,a.to);s.scene=a.to;}
   if(a.ending&&!check(d.endings[a.ending],state,id,s))throw Error(`${id}/${a.ending}: 結末条件不成立`);
   return {story:s,gold,inventory};
@@ -198,21 +202,30 @@ export function beginStoryJourney(engine,id,action){
   engine.state.stories[id]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=p.journey;
   engine.state.vm=[];engine.state.waiting=null;
   finishWorldConversations(engine);
-  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ向かう。`);
+  const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,storyJourneyPlaces(d,p.story,action)[0])}へ向かう。`);
 }
-export function arriveStoryJourney(engine){
+export function arriveStoryJourney(engine,{encounter}={}){
   const j=engine.state.journey;if(!j)return false;
-  let p;try{p=storyActionPlan(engine.data,engine.state,j.quest,j.action,{arrive:true});}catch(e){engine.notify(e.message);return false;}
+  let p;try{p=storyActionPlan(engine.data,engine.state,j.quest,j.action,{arrive:true,encounter});}catch(e){engine.notify(e.message);return false;}
   engine.state.stories[j.quest]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=null;
   engine.state.vm=[];engine.state.waiting=null;
   const q=engine.data.quests[j.quest],unit=q.model.narrative.units.find(n=>n.id===p.story.scene);
+  consumeStoryArrivalEntry(engine.state,j.quest,q.story.scenes[p.story.scene].place);
   engine.run(unit.script);return true;
+}
+// Only the walking encounter pipeline calls this hook, after its random draw.
+// Authored battles keep their existing continuations and cannot re-enter it.
+export function encounterStoryJourney(engine,encounter){
+  const state=engine.state,j=state.journey,rule=engine.data.quests[j?.quest]?.story?.actions[j?.action]?.journey?.arrival;
+  if(!j||state.waiting||state.battle||state.vm.length||!rule?.encounters?.includes(encounter)||!storyJourneyArrival(engine.data,state,j.quest,j.action,encounter))return false;
+  return arriveStoryJourney(engine,{encounter});
 }
 export function resumeWorldStory(engine,id){
   const q=engine.data.quests[id],s=engine.state.stories?.[id];
   if(engine.state.quests[id]?.stage!=='active'||!q?.story?.worldPlaces)return false;
   if(engine.state.journey)return engine.state.journey.quest===id&&arriveStoryJourney(engine);
-  const scene=s?.scene??'entry';if(!atWorldPlace(engine.state,q.story.worldPlaces[q.story.scenes[scene].place]))return false;
+  const scene=s?.scene??'entry';if(!atWorldPlace(engine.state,resolveStoryWorldPlace(q.story,s,q.story.scenes[scene].place)))return false;
+  consumeStoryArrivalEntry(engine.state,id,q.story.scenes[scene].place);
   engine.run(q.model.entryScript);return true;
 }
 export function journeyErrors(data,state){

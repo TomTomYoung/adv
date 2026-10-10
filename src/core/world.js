@@ -1,5 +1,6 @@
 import {voxelAt} from './voxels.js';
 import {closeTo} from './systems/common.js';
+import {isRecord} from './expression.js';
 
 export const townRoot=data=>data.game.world?.townRoot;
 export const townLocation=(data,state)=>data.locations?.[state.townLocation];
@@ -15,6 +16,67 @@ export function atWorldPlace(state,place){
   if(place.kind==='town')return state.mode==='town'&&state.townLocation===place.location;
   return state.mode==='dungeon'&&closeTo(state,place,'here');
 }
+const arrivalPoint=place=>({map:place.map,x:place.x,y:place.y,...(place.z===undefined?{}:{z:place.z}),...(place.event===undefined?{}:{event:place.event})});
+const arrivalWorldPlace=(base,point)=>({kind:'dungeon',dungeon:base.dungeon,...point});
+const samePoint=(a,b)=>a?.map===b?.map&&a?.x===b?.x&&a?.y===b?.y&&(a?.z??0)===(b?.z??0)&&a?.event===b?.event;
+const pointValid=p=>isRecord(p)&&Object.keys(p).every(k=>['map','x','y','z','event'].includes(k))&&typeof p.map==='string'&&p.map.length>0&&Number.isSafeInteger(p.x)&&Number.isSafeInteger(p.y)&&(p.z===undefined||Number.isSafeInteger(p.z))&&(p.event===undefined||typeof p.event==='string'&&p.event.length>0);
+
+// A journey can bind its destination to the cell where it actually arrived.
+// Keep this in the story snapshot so save/load and event rollback share it.
+export function resolveStoryWorldPlace(definition,story,key){
+  const base=definition?.worldPlaces?.[key],binding=story?.arrivals?.[key];
+  return base&&binding?arrivalWorldPlace(base,binding.point):base;
+}
+export function storyJourneyPlaces(definition,story,action){
+  const journey=definition?.actions?.[action]?.journey;if(!journey)return [];
+  const base=journey.arrival?definition.worldPlaces?.[journey.to]:resolveStoryWorldPlace(definition,story,journey.to);
+  return base?[base,...(journey.arrival?.points??[]).map(point=>arrivalWorldPlace(base,point))]:[];
+}
+export function storyJourneyArrival(data,state,id,action,encounter){
+  const definition=data.quests[id]?.story,journey=definition?.actions?.[action]?.journey,story=state.stories[id];
+  if(!journey)return null;
+  const place=storyJourneyPlaces(definition,story,action).find(p=>atWorldPlace(state,p));
+  if(place)return {place};
+  const base=definition.worldPlaces?.[journey.to],location=state.location;
+  if(encounter===undefined||!journey.arrival?.encounters?.includes(encounter)||base?.kind!=='dungeon'||state.mode!=='dungeon'||state.dungeons?.active?.id!==base.dungeon||!data.dungeons[base.dungeon]?.maps.includes(location?.map))return null;
+  return {place:arrivalWorldPlace(base,arrivalPoint(location)),encounter};
+}
+export function bindStoryArrival(definition,story,action,arrival){
+  const journey=definition.actions[action].journey,base=definition.worldPlaces[journey.to];
+  if(!journey.arrival||samePoint(base,arrival.place)&&!story.arrivals?.[journey.to])return;
+  story.arrivals={...story.arrivals,[journey.to]:{action,point:arrivalPoint(arrival.place),...(arrival.encounter===undefined?{}:{encounter:arrival.encounter})}};
+}
+export const storyArrivalEntryId=(quest,place)=>`story-arrival/${quest}/${place}`;
+export function consumeStoryArrivalEntry(state,quest,place){
+  const entry=state.fieldEntry,point=state.stories[quest]?.arrivals?.[place]?.point;
+  if(!entry||!point||entry.map!==point.map||entry.x!==point.x||entry.y!==point.y||(entry.z??0)!==(point.z??0))return;
+  const id=storyArrivalEntryId(quest,place);if(!entry.fired.includes(id))entry.fired.push(id);
+}
+export function storyArrivalErrors(definition,story,data){
+  if(story.arrivals===undefined)return [];
+  if(!isRecord(story.arrivals))return ['物語の到着地点記録が不正です'];
+  const errors=[];
+  for(const [key,binding] of Object.entries(story.arrivals)){
+    const action=definition.actions?.[binding?.action],journey=action?.journey,base=definition.worldPlaces?.[key],rule=journey?.arrival;
+    if(!isRecord(binding)||Object.keys(binding).some(k=>!['action','point','encounter'].includes(k))||!rule||base?.kind!=='dungeon'||journey.to!==key||!story.events.includes(binding.action)||!pointValid(binding.point)){
+      errors.push('物語の到着地点・移動行為の参照が不正です');continue;
+    }
+    const place=arrivalWorldPlace(base,binding.point);
+    if(binding.encounter===undefined){
+      if(!storyJourneyPlaces(definition,null,binding.action).some(p=>samePoint(p,place)))errors.push('物語の到着地点が移動行為の候補にありません');
+    }else if(!rule.encounters?.includes(binding.encounter)||binding.point.event!==undefined)errors.push('物語の到着地点の遭遇条件が不正です');
+    if(data)errors.push(...worldPlaceErrors(data,place));
+  }
+  return errors;
+}
+function storyPlaceAt(state,definition,story,matches){
+  const scenePlace=definition.scenes?.[story?.scene]?.place;
+  // A random encounter can share a cell with another authored place. The
+  // active bound scene owns that cell until its conversation has finished.
+  const at=key=>(story?.arrivals?.[key]?atWorldPlace:matches)(state,resolveStoryWorldPlace(definition,story,key));
+  if(story?.arrivals?.[scenePlace]&&at(scenePlace))return scenePlace;
+  return Object.keys(definition.worldPlaces).find(at)??'transit';
+}
 // Same-version saves from before cell-only interaction may contain the old
 // derived party holder, or a conversation already opened from the front cell.
 // This proximity rule is only for validating and finishing those saved states.
@@ -22,8 +84,8 @@ export function legacyWorldPlace(state,place){
   if(!place)return false;
   return place.kind==='town'?atWorldPlace(state,place):state.mode==='dungeon'&&closeTo(state,place,'here-or-front');
 }
-export function legacyWorldStoryPlace(state,definition){
-  return Object.entries(definition.worldPlaces).find(([,p])=>legacyWorldPlace(state,p))?.[0]??'transit';
+export function legacyWorldStoryPlace(state,definition,story){
+  return storyPlaceAt(state,definition,story,legacyWorldPlace);
 }
 export function hasWorldConversation(data,state,id){
   const model=data.quests[id]?.model;
@@ -33,15 +95,16 @@ export function hasWorldConversation(data,state,id){
     (model?.entryScript===f?.script||model?.interruptionRoutes?.some(r=>r.shortage===f?.script||r.resume===f?.script)));
 }
 export function savedWorldConversation(data,state,id){
-  const d=data.quests[id]?.story,story=state.stories?.[id],scene=d?.scenes[story?.scene],place=d?.worldPlaces?.[scene?.place];
-  return Boolean(place&&state.waiting&&hasWorldConversation(data,state,id)&&legacyWorldPlace(state,place)&&
+  const d=data.quests[id]?.story,story=state.stories?.[id],scene=d?.scenes[story?.scene],place=resolveStoryWorldPlace(d,story,scene?.place);
+  const at=story?.arrivals?.[scene?.place]?atWorldPlace:legacyWorldPlace;
+  return Boolean(place&&state.waiting&&hasWorldConversation(data,state,id)&&at(state,place)&&
     (state.quests[id]?.stage!=='active'||story.values[d.entities.party.holder]===scene.place));
 }
 const restoredConversations=new WeakMap();
 const position=state=>JSON.stringify([state.mode,state.townLocation,state.location?.map,state.location?.x,state.location?.y,state.location?.z??0,state.location?.facing]);
 const placePosition=place=>JSON.stringify(place?.kind==='town'?['town',place.location]:['dungeon',place?.map,place?.x,place?.y,place?.z??0]);
 export function continuesWorldConversation(engine,id,scene=engine.state.stories[id]?.scene){
-  const restored=restoredConversations.get(engine),state=engine.state,d=engine.data.quests[id]?.story,place=d?.worldPlaces?.[d.scenes[scene]?.place];
+  const restored=restoredConversations.get(engine),state=engine.state,d=engine.data.quests[id]?.story,place=resolveStoryWorldPlace(d,state.stories[id],d?.scenes[scene]?.place);
   return Boolean(restored&&restored.state===state&&restored.origin===position(state)&&state.quests[id]?.stage==='active'&&!state.journey&&
     restored.places.get(id)===placePosition(place)&&hasWorldConversation(engine.data,state,id));
 }
@@ -51,7 +114,7 @@ export function restoreWorldConversations(engine){
   restoredConversations.delete(engine);
   const places=new Map();
   for(const [id,s] of Object.entries(engine.state.stories)){
-    const d=engine.data.quests[id]?.story,place=d?.worldPlaces?.[d.scenes[s.scene]?.place];
+    const d=engine.data.quests[id]?.story,place=resolveStoryWorldPlace(d,s,d?.scenes[s.scene]?.place);
     if(savedWorldConversation(engine.data,engine.state,id)&&!atWorldPlace(engine.state,place))places.set(id,placePosition(place));
   }
   if(places.size)restoredConversations.set(engine,{state:engine.state,origin:position(engine.state),places});
@@ -62,13 +125,13 @@ export function finishWorldConversations(engine){
 }
 // Between conversations the party follows the actual world position. NPCs stay
 // where they were left; declared journey companions travel with the party.
-export function worldStoryPlace(state,definition){
-  return Object.entries(definition.worldPlaces).find(([,p])=>atWorldPlace(state,p))?.[0]??'transit';
+export function worldStoryPlace(state,definition,story){
+  return storyPlaceAt(state,definition,story,atWorldPlace);
 }
 export function syncWorldStories(engine){
   for(const [id,s] of Object.entries(engine.state.stories)){
     const d=engine.data.quests[id]?.story;
-    if(d?.worldPlaces&&engine.state.quests[id].stage==='active'&&engine.state.journey?.quest!==id&&!continuesWorldConversation(engine,id))s.values[d.entities.party.holder]=worldStoryPlace(engine.state,d);
+    if(d?.worldPlaces&&engine.state.quests[id].stage==='active'&&engine.state.journey?.quest!==id&&!continuesWorldConversation(engine,id))s.values[d.entities.party.holder]=worldStoryPlace(engine.state,d,s);
   }
   const restored=restoredConversations.get(engine);
   if(restored&&![...restored.places.keys()].some(id=>continuesWorldConversation(engine,id)))restoredConversations.delete(engine);
@@ -119,6 +182,27 @@ export function validateWorld(data){
       for(const scene of Object.values(q.story.scenes))if(!q.story.worldPlaces[scene.place])fail(q.id,'場面の実在する場所が未定義です');
       for(const [id,a] of Object.entries(q.story.actions))if(a.journey){
         if(a.cost||a.ending||!q.story.worldPlaces[a.journey.to]||q.story.scenes[a.to]?.place!==a.journey.to||!Array.isArray(a.depart)||!Array.isArray(a.journey.companions)||a.journey.companions.some(e=>e==='party'||!q.story.entities[e]))fail(q.id,`${id}: 移動行為の定義が不正です`);
+        const rule=a.journey.arrival;
+        if(rule!==undefined){
+          const base=q.story.worldPlaces[a.journey.to];
+          if(!isRecord(rule)||Object.keys(rule).some(k=>!['points','encounters'].includes(k))||base?.kind!=='dungeon'||(!rule.points?.length&&!rule.encounters?.length)){
+            fail(q.id,`${id}: 移動行為の到着条件が不正です`);continue;
+          }
+          if(rule.points!==undefined){
+            if(!Array.isArray(rule.points)||!rule.points.length)fail(q.id,`${id}: 追加到着地点の一覧が不正です`);
+            else{
+              const points=[base];
+              for(const point of rule.points){
+                if(!pointValid(point)){fail(q.id,`${id}: 追加到着地点が不正です`);continue;}
+                const place=arrivalWorldPlace(base,point);
+                if(points.some(p=>p.map===place.map&&p.x===place.x&&p.y===place.y&&(p.z??0)===(place.z??0)))fail(q.id,`${id}: 到着地点が重複しています`);
+                points.push(place);
+                for(const error of worldPlaceErrors(data,place))fail(q.id,`${id}: ${error}`);
+              }
+            }
+          }
+          if(rule.encounters!==undefined&&(!Array.isArray(rule.encounters)||!rule.encounters.length||new Set(rule.encounters).size!==rule.encounters.length||rule.encounters.some(encounter=>typeof encounter!=='string'||!Object.hasOwn(data.encounters,encounter))))fail(q.id,`${id}: 到着する歩行遭遇の一覧が不正です`);
+        }
       }
     }
   }

@@ -14,7 +14,7 @@ import {voxelMapState,voxelAt,voxelKey,faceRules,voxelOccupancyReason,enterVoxel
 import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight,dungeonUseItem,dungeonDanger,dungeonEncounter,dungeonAction,dungeonTile,dungeonBlock,dungeonEffectActive,dungeonAbilityReason,dungeonWaterAccess,dungeonCell} from './dungeons.js';
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
-import {storyEnding,resumeWorldStory} from './story.js';
+import {storyEnding,resumeWorldStory,encounterStoryJourney} from './story.js';
 import {townRoot,townLocation,syncWorldStories,restoreWorldConversations,locationRoot,dungeonInterior,interiorEntrances} from './world.js';
 import {questEntryPlan} from './quest-navigation.js';
 import {processFieldEvents,recordFieldEntry} from './field-events.js';
@@ -200,7 +200,7 @@ export class GameEngine {
       const pool=environment.encounterPool??map.encounterPool;
       if(pool?.length){let roll=this.random()*pool.reduce((sum,e)=>sum+e.weight,0);encounter=pool.at(-1).encounter;for(const entry of pool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
       encounter=environment.encounter??encounter;
-      this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
+      if(!encounterStoryJourney(this,encounter))this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
     }
     return true;
   }

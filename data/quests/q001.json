@@ -79,6 +79,29 @@
       "dungeon": "kagaribi"
     },
     {
+      "id": "q001_return_south",
+      "title": "帰路の南側の曲がり角",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 5,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "enter",
+      "script": "q001.v11.visit",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "dungeon": "kagaribi"
+    },
+    {
       "id": "q001_elder",
       "title": "最後の灯の下の老人",
       "points": [
@@ -1371,6 +1394,11 @@
               "commands": [
                 {
                   "op": "scene.cast",
+                  "transition": {
+                    "enter": 400,
+                    "move": 300,
+                    "easing": "ease-out"
+                  },
                   "cast": [
                     {
                       "character": "elder",
@@ -1385,12 +1413,7 @@
                         "flip": true
                       }
                     }
-                  ],
-                  "transition": {
-                    "enter": 400,
-                    "move": 300,
-                    "easing": "ease-out"
-                  }
+                  ]
                 },
                 {
                   "op": "say",
@@ -2520,7 +2543,20 @@
           "to": "dark",
           "companions": [
             "elder"
-          ]
+          ],
+          "arrival": {
+            "points": [
+              {
+                "map": "kagaribi_f1",
+                "x": 13,
+                "y": 5,
+                "event": "q001_return_south"
+              }
+            ],
+            "encounters": [
+              "kuragari_hunt"
+            ]
+          }
         },
         "depart": []
       },

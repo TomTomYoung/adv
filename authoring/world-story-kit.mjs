@@ -6,12 +6,12 @@ export function connectWorld(s, places, revision) {
   s.story.worldPlaces=places;
   s.story.revision=revision;
   s.resetScripts=true;
-  return (key, to, {depart=[], arrive=[], companions=[]}={}) => {
+  return (key, to, {depart=[], arrive=[], companions=[], arrival}={}) => {
     const action=s.story.actions[key];
     if (!action || action.ending || s.story.scenes[action.to]?.place!==to)
       throw new Error(`${s.id}/${key}: journey target must match its destination scene`);
     if (action.cost) throw new Error(`${s.id}/${key}: split local payment from travel`);
-    action.journey={to,companions};
+    action.journey={to,companions,...(arrival?{arrival}:{})};
     action.depart=depart;
     action.effects=[move(['party',...companions].join(' '),'transit',to),...arrive];
   };

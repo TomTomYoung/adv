@@ -33,8 +33,8 @@ test('q001 shows the elder next, restores visited places for new events, and rem
  assert.deepEqual(markerIds(g),['q001_elder']);
  finishJourney(g);choose(g,'support');
  assert.equal(g.state.events['kagaribi_f1/q001_return'],1);
- assert.deepEqual(markerIds(g),['q001_return'],'the return journey has a new event on the visited corridor');
- roundtrip(g);assert.deepEqual(markerIds(g),['q001_return']);
+ assert.deepEqual(markerIds(g),['q001_return','q001_return_south'],'both routes offer the same return event, including the visited corridor');
+ roundtrip(g);assert.deepEqual(markerIds(g),['q001_return','q001_return_south']);
  finishJourney(g);assert.ok(g.state.battle);g.finishBattle('win');drain(g);choose(g,'home');
  assert.equal(g.state.events['kagaribi_f1/q001_decision'],1);
  assert.deepEqual(markerIds(g),['q001_decision'],'the rescued party still needs to reach the entrance');

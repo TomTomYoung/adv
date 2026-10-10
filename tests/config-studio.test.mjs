@@ -35,8 +35,10 @@ test('cell painting keeps local overrides and edge movement preserves event meta
  const w=new Workspace(read),c=new EditorContext(w,read);await w.load('quests/q001.events.json');await c.ensureMap('kagaribi_f1');
  w.set('cell-layers.json',['maps','kagaribi_f1','overrides','2,2'],{parameters:{illumination:5},future:'kept'},'fixture');paintCell(w,'kagaribi_f1',2,2,'stone_wall');
  assert.equal(projectMap(c,'kagaribi_f1').cells[2][2].passage,'#');assert.equal(w.value('cell-layers.json').maps.kagaribi_f1.overrides['2,2'].future,'kept');
- const target={file:'quests/q001.events.json',path:['events',3,'points',0],eventPath:['events',3],allowEdge:true};const before=structuredClone(w.value(target.file).events[3]);movePoint(w,c,target,'kagaribi_f1',3,1,'west');assert.deepEqual(w.value(target.file).events[3],{...before,points:[{...before.points[0],x:3,y:1,edge:'west'}]});
- assert.throws(()=>movePoint(w,c,{...target,path:['events',0,'points',0],eventPath:['events',0]},'kagaribi_f1',3,1,'north'),/エッジ/);
+ const file='quests/q001.events.json',events=w.value(file).events,wallIndex=events.findIndex(e=>e.id==='q001_empty_west'),decisionIndex=events.findIndex(e=>e.id==='q001_decision');
+ assert.ok(wallIndex>=0);assert.ok(decisionIndex>=0);
+ const target={file,path:['events',wallIndex,'points',0],eventPath:['events',wallIndex],allowEdge:true};const before=structuredClone(events[wallIndex]);movePoint(w,c,target,'kagaribi_f1',3,1,'west');assert.deepEqual(w.value(file).events[wallIndex],{...before,points:[{...before.points[0],x:3,y:1,edge:'west'}]});
+ assert.throws(()=>movePoint(w,c,{...target,path:['events',decisionIndex,'points',0],eventPath:['events',decisionIndex]},'kagaribi_f1',3,1,'north'),/エッジ/);
  assert.throws(()=>movePoint(w,c,target,'kagaribi_f1',999,1),/範囲外/);
 });
 test('new quest event includes an editable local script, one undo removes both',async()=>{

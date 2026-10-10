@@ -5,6 +5,33 @@ export function describePlace(data,p){
   const d=data.dungeons[p.dungeon],m=data.maps[p.map];
   return `${d.name} (${code(d.id)}) / ${m.name}・B${m.floor} (${code(m.id)}) / (${p.x}, ${p.y}${p.z===undefined?'':', '+p.z})${p.event?' / イベント '+code(p.event):''}。[ダンジョン定義](../data/dungeons.json)`;
 }
+export function storySceneArrivals(q,sceneId){
+  const actions=Object.entries(q.story?.actions??{}),place=q.story?.scenes?.[sceneId]?.place;
+  return actions.filter(([,action])=>{
+    if(!action.journey?.arrival||action.journey.to!==place)return false;
+    const pending=[action.to],seen=new Set();
+    while(pending.length){
+      const current=pending.shift();
+      if(current===sceneId)return true;
+      if(seen.has(current))continue;
+      seen.add(current);
+      for(const [,next] of actions)if(!next.journey&&next.from.includes(current)&&q.story.scenes[next.to]?.place===place)pending.push(next.to);
+    }
+    return false;
+  });
+}
+export function describeJourneyArrival(data,q,action){
+  const {journey}=action,place=q.story.worldPlaces[journey.to];
+  const points=[place,...(journey.arrival?.points??[]).map(p=>({kind:'dungeon',dungeon:data.maps[p.map].dungeon,...p}))];
+  const destinations=points.map(p=>describePlace(data,p));
+  if(journey.arrival?.encounters?.length)destinations.push(`移動中の通常歩行抽選で ${journey.arrival.encounters.map(code).join('・')} が当選した実遭遇セル`);
+  return destinations.join(' または ');
+}
+export function describeStoryScenePlace(data,q,sceneId){
+  const arrivals=storySceneArrivals(q,sceneId),scene=q.story.scenes[sceneId];
+  if(!arrivals.length)return describePlace(data,q.story.worldPlaces[scene.place]);
+  return arrivals.map(([id,action])=>`行為 ${code(id)} の実到着地点（${describeJourneyArrival(data,q,action)}）を保持し、その場で続行する`).join('。');
+}
 export function questPlaces(data,q){
   const lines=[];
   for(const e of q.events)for(const p of e.points)lines.push(`実配置: ${describePlace(data,{kind:'dungeon',dungeon:e.dungeon,...p,event:e.id})}。${e.title}。${e.trigger==='action'?'操作調査':'現地イベント'}。`);
