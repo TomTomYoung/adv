@@ -1,6 +1,5 @@
 import {heldCount} from '../core/inventory.js';
 import {fieldSkillPlan} from '../core/field-skills.js';
-import {dungeonEffectActive} from '../core/dungeons.js';
 
 // Display categories are explicit: MP costs, elements and healing alone do not
 // distinguish a spell from alchemy, breathing, songs or weapon techniques.
@@ -10,16 +9,9 @@ export const abilityCategory=(id,field=false)=>(field?magicAbilities:magicSkills
 export function projectFieldSkillTargets(engine,actorId,skillId){
   const {data:d,state:s}=engine,skill=d.skills[skillId];
   if(!skill.fieldUse)return [];
-  const effects=new Set(skill.effects.map(effect=>effect.type));
-  const member=id=>{const a=s.actors[id],stats=engine.stats(id);return {
-    id,name:d.actors[id].name,hp:a.hp,maxHp:stats.hp,mp:a.mp,maxMp:stats.mp,
-    vitals:[...(effects.has('heal')?[`HP ${a.hp}/${stats.hp}`]:[]),...(effects.has('restore_mp')?[`MP ${a.mp}/${stats.mp}`]:[])],
-    statuses:a.statuses.map(status=>d.statuses[status].name+(dungeonEffectActive(d,s,'status',status)?'':'（停止中）'))
-  };};
   return (skill.target==='ally'?s.members:[actorId]).map(id=>{
     const plan=fieldSkillPlan(engine,actorId,skillId,id);
-    return {id,name:skill.target==='all_allies'?'仲間全員':d.actors[id].name,enabled:plan.ok,reason:plan.reason??'',reasonScope:plan.reasonScope??null,
-      members:(skill.target==='all_allies'?s.members:[id]).map(member)};
+    return {id,name:skill.target==='all_allies'?'仲間全員':d.actors[id].name,enabled:plan.ok,reason:plan.reason??'',reasonScope:plan.reasonScope??null};
   });
 }
 export function personalItems(engine,actor){

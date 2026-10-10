@@ -65,8 +65,8 @@ try{
     const measurements=await spell(context,skill).evaluate(entry=>{
       const content=entry.closest('.profile-content'),list=entry.querySelector('.profile-field-targets'),bounds=element=>{const b=element.getBoundingClientRect();return {left:b.left,top:b.top,right:b.right,bottom:b.bottom,width:b.width,height:b.height};};
       return {viewport:{width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth},content:{...bounds(content),clientWidth:content.clientWidth,scrollWidth:content.scrollWidth,clientHeight:content.clientHeight,scrollHeight:content.scrollHeight,scrollTop:content.scrollTop},list:bounds(list),rows:[...list.children].map(row=>{
-        const button=row.querySelector('.profile-target-use'),details=row.querySelector('.profile-target-details'),style=getComputedStyle(row);
-        return {id:row.dataset.target,...bounds(row),availableWidth:row.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),details:bounds(details),button:{...bounds(button),disabled:button.disabled},border:style.borderTopWidth,borderColor:style.borderColor,background:style.backgroundColor,statuses:[...row.querySelectorAll('.profile-target-status')].map(status=>({text:status.textContent,opacity:getComputedStyle(status).opacity}))};
+        const button=row.querySelector('.profile-target-use'),style=getComputedStyle(row);
+        return {id:row.dataset.target,...bounds(row),children:row.childElementCount,text:row.textContent,button:{...bounds(button),text:button.textContent,disabled:button.disabled,opacity:Number(getComputedStyle(button).opacity)},border:style.borderTopWidth,background:style.backgroundColor};
       })};
     });
     const label=`${context}/${skill} ${measurements.viewport.width}x${measurements.viewport.height}`;
@@ -74,13 +74,15 @@ try{
     assert.ok(measurements.content.scrollWidth<=measurements.content.clientWidth+1,`${label}: profile overflows horizontally`);
     for(const [index,row] of measurements.rows.entries()){
       assert.ok(row.width>0&&row.left>=measurements.list.left-1&&row.right<=measurements.list.right+1,`${label}: ${row.id} leaves its list`);
-      assert.ok(parseFloat(row.border)>=1,`${label}: ${row.id} has no row boundary`);
+      assert.equal(row.children,1,`${label}: ${row.id} should contain only its name button`);
+      assert.equal(row.text,row.button.text,`${label}: ${row.id} has duplicate target details`);
+      assert.equal(parseFloat(row.border),0,`${label}: ${row.id} should not have a surrounding card boundary`);
+      assert.equal(row.background,'rgba(0, 0, 0, 0)',`${label}: ${row.id} should not have a surrounding card background`);
       assert.ok(row.button.width>=44&&row.button.height>=44,`${label}: ${row.id} action is ${row.button.width}x${row.button.height}`);
-      assert.ok(row.details.width>=Math.min(80,row.availableWidth)-1,`${label}: ${row.id} state column is too narrow to read (${row.details.width}px)`);
-      assert.ok((row.button.left>=row.details.right-1||row.button.top>=row.details.bottom-1)&&row.button.right<=row.right+1,`${label}: ${row.id} action overlaps its details`);
-      assert.ok(row.button.top>=row.top&&row.button.bottom<=row.bottom,`${label}: ${row.id} action leaves its row`);
-      assert.ok(row.statuses.every(status=>Number(status.opacity)>=.6),`${label}: disabled target state is dimmed`);
-      if(index)assert.ok(row.top>=measurements.rows[index-1].bottom,`${label}: target rows overlap`);
+      assert.ok(row.button.left>=row.left-1&&row.button.right<=row.right+1&&row.button.top>=row.top-1&&row.button.bottom<=row.bottom+1,`${label}: ${row.id} action leaves its row`);
+      if(row.button.disabled)assert.ok(row.button.opacity>0&&row.button.opacity<1,`${label}: ${row.id} disabled name is not dimmed`);
+      else assert.equal(row.button.opacity,1,`${label}: ${row.id} eligible name should retain its normal opacity`);
+      for(const previous of measurements.rows.slice(0,index))assert.ok(row.left>=previous.right-1||row.right<=previous.left+1||row.top>=previous.bottom-1||row.bottom<=previous.top+1,`${label}: ${row.id} overlaps ${previous.id} after wrapping`);
     }
     return measurements;
   }
@@ -97,17 +99,12 @@ try{
     assert.deepEqual(await rows(context).evaluateAll(elements=>elements.map(e=>e.dataset.target)),['ada','nio','sera','il','berg']);
     assert.deepEqual(await rows(context).evaluateAll(elements=>elements.filter(e=>!e.querySelector('button').disabled).map(e=>e.dataset.target)),['nio']);
     assert.equal(await spell(context).locator('.profile-field-reason').count(),0);
-    assert.equal(await spell(context).locator('[data-target="nio"] .profile-target-status').textContent(),'毒');
-    assert.equal(await spell(context).locator('[data-target="nio"] .profile-target-name').textContent(),'ニオ');
+    assert.deepEqual(await spell(context).locator('.profile-target-use').allTextContents(),['アダ','ニオ','セラ','イル','ベルグ']);
     assert.equal(await nioButton(context).getAttribute('aria-label'),'ニオに解毒を使う');
-    for(const id of ['ada','sera','il','berg']){
-      assert.equal(await spell(context).locator(`[data-target="${id}"] .profile-target-status`).textContent(),'毒ではありません。');
-    }
-    assert.equal(await spell(context).locator('.profile-target-reason').count(),0,'Healthy target state and reason should not repeat');
-    assert.equal(await spell(context).locator('.profile-target-vitals').count(),0,'Cleansing should show status, without unrelated HP/MP values');
-    const geometry=await measure(context),healthy=geometry.rows.find(row=>row.id==='ada'),affected=geometry.rows.find(row=>row.id==='nio');
-    assert.notEqual(affected.borderColor,healthy.borderColor,'Eligible target must have a distinct row boundary');
-    return geometry;
+    assert.equal(await spell(context).locator('.profile-target-use[aria-describedby]').count(),0,'Names should not reference absent target details');
+    assert.equal(await spell(context).locator('.profile-target-details,.profile-target-member,.profile-target-status,.profile-target-vitals,.profile-target-reason,.profile-field-target.available').count(),0,'Targets should not repeat party vitals, states, reasons or card highlights');
+    assert.doesNotMatch(await spell(context).textContent(),/現在MP/,'Caster MP should not repeat in every skill entry');
+    return measure(context);
   }
   // Both layouts use the same profile in town and the party panel in a dungeon.
   for(const layout of ['scene','classic'])for(const context of ['town','party']){
@@ -122,43 +119,43 @@ try{
     assert.deepEqual(after,expected,`${name}: only MP2 and Nio's poison should change`);
     assert.deepEqual(await rows(context).evaluateAll(elements=>elements.map(element=>element.dataset.target)),order,`${name}: target order changed after cure`);
     assert.equal(await nioButton(context).isDisabled(),true);
-    assert.equal(await spell(context).locator('.profile-field-target.available').count(),0);
-    assert.equal(await spell(context).locator('[data-target="nio"] .profile-target-status').textContent(),'毒ではありません。');
+    assert.deepEqual(await spell(context).locator('.profile-target-use').allTextContents(),['アダ','ニオ','セラ','イル','ベルグ']);
+    assert.equal(await spell(context).locator('.profile-target-use:not(:disabled)').count(),0);
+    assert.ok(await nioButton(context).evaluate(button=>Number(getComputedStyle(button).opacity)<1),`${name}: cured target name should dim`);
     assert.equal(await page.locator(':focus').getAttribute('data-focus'),`profile:${context}:magic`);
     assert.ok(Math.abs(await profile(context).locator('.profile-content').evaluate(element=>element.scrollTop)-scrollTop)<=1,`${name}: profile scroll jumped on cure`);
     assert.equal(await page.evaluate(()=>h.intents.filter(intent=>intent.type==='field.skill').length),1);
     await page.keyboard.press('Enter');
     assert.deepEqual(await page.evaluate(()=>h.snapshot()),after,`${name}: repeated Enter used another skill`);
     assert.equal(await page.evaluate(()=>h.intents.filter(intent=>intent.type==='field.skill').length),1);
-    await shot(`${name}-after`);checks.push({name,checks:'Five stable rows; Nio only eligible; MP2 cure; retained order and scroll; safe focus; repeated Enter does not cast another skill',geometry,reach});
+    await shot(`${name}-after`);checks.push({name,checks:'Five names only; Nio normal and others dimmed; MP2 cure dims Nio; retained order and scroll; safe focus; repeated Enter does not cast another skill',geometry,reach});
   }
-  // Small phone, portrait and low landscape: target rows and the final action stay reachable.
+  // Small phone, portrait and low landscape: names wrap without overlap and the final target stays reachable.
   for(const [layout,context,width,height] of [['scene','party',390,844],['scene','party',320,568],['scene','town',844,390],['classic','town',390,844],['classic','party',320,568],['classic','party',844,390]]){
     const name=`${layout}-${context}-${width}x${height}`;
     await page.setViewportSize({width,height});await page.evaluate(({layout,context})=>h.start(layout,context),{layout,context});await settle();
     const geometry=await assertTargets(context),reach=await reachLast(context);
-    assert.ok(reach.scrollTop>0,`${name}: final target should require and allow profile scrolling`);
-    await nioButton(context).scrollIntoViewIfNeeded();await shot(name);checks.push({name,checks:'No horizontal overflow; bordered nonoverlapping target rows; 44px actions; final target reached by profile scrolling',geometry,reach});
+    await nioButton(context).scrollIntoViewIfNeeded();await shot(name);checks.push({name,checks:'Names only; no horizontal overflow or overlap after wrapping; 44px actions; final target reachable with scrolling when needed',geometry,reach});
   }
-  // A common ability failure is shown once without obscuring who is poisoned.
+  // A common ability failure is shown once; all target names are dimmed.
   await page.setViewportSize({width:390,height:844});await page.evaluate(()=>h.start('scene','party',{mp:1}));await settle();
   assert.equal(await spell('party').locator('.profile-field-reason').count(),1);
   assert.match(await spell('party').locator('.profile-field-reason').textContent(),/MP/);
   assert.equal(await spell('party').locator('.profile-target-reason').count(),0);
   assert.equal(await spell('party').locator('.profile-target-use:not(:disabled)').count(),0);
-  assert.equal(await spell('party').locator('[data-target="nio"] .profile-target-status').textContent(),'毒');
-  const lowMp=await measure('party');await nioButton('party').scrollIntoViewIfNeeded();await shot('scene-party-390x844-low-mp');checks.push({name:'MP1',checks:'One common MP reason; all use buttons disabled; Nio poison remains readable',geometry:lowMp});
-  // All-allies actions show the whole party, including a wounded non-caster.
+  assert.deepEqual(await spell('party').locator('.profile-target-use').allTextContents(),['アダ','ニオ','セラ','イル','ベルグ']);
+  const reasonId=await spell('party').locator('.profile-field-reason').getAttribute('id');
+  assert.deepEqual(await spell('party').locator('.profile-target-use').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-describedby'))),Array(5).fill(reasonId));
+  assert.deepEqual(await page.evaluate(()=>h.snapshot().actors.nio.statuses),['poison'],'MP shortage must leave the poisoned actor unchanged');
+  const lowMp=await measure('party');await nioButton('party').scrollIntoViewIfNeeded();await shot('scene-party-390x844-low-mp');checks.push({name:'MP1',checks:'One shared MP reason; five names only, all disabled and dimmed; poison unchanged in Core',geometry:lowMp});
+  // All-allies actions keep one named control while still affecting the whole party.
   await page.setViewportSize({width:1280,height:856});await page.evaluate(()=>h.start('scene','party',{actor:'toma',mp:20,page:'skills'}));await settle();
   const group=spell('party','group_heal');assert.equal(await rows('party','group_heal').count(),1);
-  assert.equal(await group.locator('.profile-target-name').textContent(),'仲間全員');
-  assert.deepEqual(await group.locator('.profile-target-member').evaluateAll(elements=>elements.map(element=>element.dataset.member)),['ada','nio','toma','il','berg']);
-  assert.deepEqual(await group.locator('.profile-target-member-name').allTextContents(),['アダ','ニオ','トーマ','イル','ベルグ']);
-  assert.equal(await group.locator('[data-member="nio"] .profile-target-status').textContent(),'毒');
-  assert.equal(await group.locator('.profile-target-vitals').count(),5);
-  assert.ok((await group.locator('.profile-target-vitals').allTextContents()).every(text=>text.startsWith('HP ')&&!text.includes('MP')));
+  assert.equal(await group.locator('.profile-target-use').textContent(),'仲間全員');
+  assert.equal(await group.locator('.profile-target-details,.profile-target-member,.profile-target-status,.profile-target-vitals,.profile-target-reason').count(),0);
   assert.equal(await group.locator('.profile-target-use').isEnabled(),true);
   assert.equal(await group.locator('.profile-target-use').getAttribute('aria-label'),'仲間全員に薬草の霧を使う');
+  assert.equal(await group.locator('.profile-target-use').getAttribute('aria-describedby'),null);
   const groupGeometry=await measure('party','group_heal'),groupReach=await reachLast('party','group_heal');
   await shot('scene-party-1280x856-all-allies');
   const beforeGroup=await page.evaluate(()=>h.snapshot());await group.locator('.profile-target-use').click();
@@ -166,7 +163,7 @@ try{
   assert.ok(afterGroup.actors.ada.hp>beforeGroup.actors.ada.hp,'All-allies healing must affect the wounded non-caster');
   assert.ok(afterGroup.actors.toma.mp<beforeGroup.actors.toma.mp,'All-allies healing must pay the caster cost');
   assert.deepEqual(afterGroup.actors.nio.statuses,['poison'],'Healing must not misreport or silently cure poison');
-  checks.push({name:'all_allies',checks:'One operation with five named member states; a wounded non-caster is healed through real Core',geometry:groupGeometry,reach:groupReach});
+  checks.push({name:'all_allies',checks:'One 仲間全員 control without duplicate party details; a wounded non-caster is healed through real Core',geometry:groupGeometry,reach:groupReach});
   assert.deepEqual(errors,[]);
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify({passed:true,checks,errors},null,2)+'\n');
   console.log(JSON.stringify({passed:true,checks:checks.map(({name,checks})=>({name,checks})),errors,output},null,2));
