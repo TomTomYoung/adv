@@ -9,11 +9,56 @@ export function locationRoot(data,id){
   return location;
 }
 export const dungeonInterior=(data,state)=>state.mode==='town'?locationRoot(data,state.townLocation)?.dungeonEntrance??null:null;
-export const interiorEntrances=(data,state)=>state.mode==='dungeon'?Object.values(data.locations??{}).filter(l=>l.dungeonEntrance&&atWorldPlace(state,{kind:'dungeon',...l.dungeonEntrance},{exact:true})):[];
-export function atWorldPlace(state,place,{exact=false}={}){
+export const interiorEntrances=(data,state)=>state.mode==='dungeon'?Object.values(data.locations??{}).filter(l=>l.dungeonEntrance&&atWorldPlace(state,{kind:'dungeon',...l.dungeonEntrance})):[];
+export function atWorldPlace(state,place){
   if(!place)return true;
   if(place.kind==='town')return state.mode==='town'&&state.townLocation===place.location;
-  return state.mode==='dungeon'&&closeTo(state,place)&&(!exact||state.location.x===place.x&&state.location.y===place.y);
+  return state.mode==='dungeon'&&closeTo(state,place,'here');
+}
+// Same-version saves from before cell-only interaction may contain the old
+// derived party holder, or a conversation already opened from the front cell.
+// This proximity rule is only for validating and finishing those saved states.
+export function legacyWorldPlace(state,place){
+  if(!place)return false;
+  return place.kind==='town'?atWorldPlace(state,place):state.mode==='dungeon'&&closeTo(state,place,'here-or-front');
+}
+export function legacyWorldStoryPlace(state,definition){
+  return Object.entries(definition.worldPlaces).find(([,p])=>legacyWorldPlace(state,p))?.[0]??'transit';
+}
+export function hasWorldConversation(data,state,id){
+  const model=data.quests[id]?.model;
+  // A completed entry script can recap the ending at any of its placed objects;
+  // that text does not resume the final scene at its original world location.
+  return state.vm.some(f=>data.scripts[f?.script]?.storyQuest===id||state.quests[id]?.stage==='active'&&
+    (model?.entryScript===f?.script||model?.interruptionRoutes?.some(r=>r.shortage===f?.script||r.resume===f?.script)));
+}
+export function savedWorldConversation(data,state,id){
+  const d=data.quests[id]?.story,story=state.stories?.[id],scene=d?.scenes[story?.scene],place=d?.worldPlaces?.[scene?.place];
+  return Boolean(place&&state.waiting&&hasWorldConversation(data,state,id)&&legacyWorldPlace(state,place)&&
+    (state.quests[id]?.stage!=='active'||story.values[d.entities.party.holder]===scene.place));
+}
+const restoredConversations=new WeakMap();
+const position=state=>JSON.stringify([state.mode,state.townLocation,state.location?.map,state.location?.x,state.location?.y,state.location?.z??0,state.location?.facing]);
+const placePosition=place=>JSON.stringify(place?.kind==='town'?['town',place.location]:['dungeon',place?.map,place?.x,place?.y,place?.z??0]);
+export function continuesWorldConversation(engine,id,scene=engine.state.stories[id]?.scene){
+  const restored=restoredConversations.get(engine),state=engine.state,d=engine.data.quests[id]?.story,place=d?.worldPlaces?.[d.scenes[scene]?.place];
+  return Boolean(restored&&restored.state===state&&restored.origin===position(state)&&state.quests[id]?.stage==='active'&&!state.journey&&
+    restored.places.get(id)===placePosition(place)&&hasWorldConversation(engine.data,state,id));
+}
+// Called only after the entire save has passed validation. The grant is never
+// serialized; saving during this conversation simply preserves its existing VM.
+export function restoreWorldConversations(engine){
+  restoredConversations.delete(engine);
+  const places=new Map();
+  for(const [id,s] of Object.entries(engine.state.stories)){
+    const d=engine.data.quests[id]?.story,place=d?.worldPlaces?.[d.scenes[s.scene]?.place];
+    if(savedWorldConversation(engine.data,engine.state,id)&&!atWorldPlace(engine.state,place))places.set(id,placePosition(place));
+  }
+  if(places.size)restoredConversations.set(engine,{state:engine.state,origin:position(engine.state),places});
+  syncWorldStories(engine);
+}
+export function finishWorldConversations(engine){
+  if(restoredConversations.delete(engine))syncWorldStories(engine);
 }
 // Between conversations the party follows the actual world position. NPCs stay
 // where they were left; declared journey companions travel with the party.
@@ -23,8 +68,10 @@ export function worldStoryPlace(state,definition){
 export function syncWorldStories(engine){
   for(const [id,s] of Object.entries(engine.state.stories)){
     const d=engine.data.quests[id]?.story;
-    if(d?.worldPlaces&&engine.state.quests[id].stage==='active'&&engine.state.journey?.quest!==id)s.values[d.entities.party.holder]=worldStoryPlace(engine.state,d);
+    if(d?.worldPlaces&&engine.state.quests[id].stage==='active'&&engine.state.journey?.quest!==id&&!continuesWorldConversation(engine,id))s.values[d.entities.party.holder]=worldStoryPlace(engine.state,d);
   }
+  const restored=restoredConversations.get(engine);
+  if(restored&&![...restored.places.keys()].some(id=>continuesWorldConversation(engine,id)))restoredConversations.delete(engine);
 }
 export function worldPlaceName(data,place){
   if(place?.kind==='town')return data.locations[place.location]?.name??place.location;

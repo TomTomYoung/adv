@@ -27,10 +27,10 @@ test('water phases pause during dialog and battle and do not affect a different 
   g.returnTown();g.dispatch({type:'travel',region:3});assert.equal(action(g,'water','wait'),false);assert.deepEqual(projectGame(g).dungeon.systems.map(s=>s.kind),['plant_garden']);roundtrip(g);
 });
 test('both waterway floors remain traversable through real movement, gate operations and stairs',()=>{
-  const g=begin(1);g.random=()=>.999999;assert.ok(action(g,'water','close','upper_gate'));
+  const g=begin(1);g.random=()=>.999999;walk(g,2,1,{heal:true});assert.ok(action(g,'water','close','upper_gate'));
   const stairs=g.map().objects.find(o=>o.id==='stairs');walk(g,stairs.x,stairs.y,{heal:true});
   while(!g.walkable(data.maps.region_1_f2,1,1))wait(g,1);const time=water(g).elapsed;g.dispatch({type:'interact'});drain(g);assert.equal(g.state.location.map,'region_1_f2');assert.equal(water(g).elapsed,time);
-  assert.ok(action(g,'water','close','lower_gate'));walk(g,6,2,{heal:true});roundtrip(g);
+  walk(g,2,1,{heal:true});assert.ok(action(g,'water','close','lower_gate'));walk(g,6,2,{heal:true});roundtrip(g);
   walk(g,1,1,{heal:true});g.dispatch({type:'interact'});drain(g);assert.equal(g.state.location.map,'region_1_f1');roundtrip(g);
 });
 

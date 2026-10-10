@@ -2,11 +2,11 @@ export const faces={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
 export const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 export const integer=(v,min=0,max=1000000)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
 export const identifier=v=>typeof v==='string'&&/^[a-z][a-z0-9_]*$/.test(v)&&!['constructor','prototype','__proto__'].includes(v);
-export const closeTo=(state,point)=>{
-  const loc=state.location;if(!loc||loc.map!==point.map||(loc.z??0)!==(point.z??0))return false;
+export const closeTo=(state,point,range=point.interactionRange??'here')=>{
+  const loc=state.location;if(!loc||loc.map!==point.map||(loc.z??0)!==(point.z??0)||!['here','front','here-or-front'].includes(range))return false;
   if(point.edge)return point.x===loc.x&&point.y===loc.y&&point.edge===loc.facing;
   const [dx,dy]=faces[loc.facing]??[0,0];
-  return point.x===loc.x&&point.y===loc.y||point.x===loc.x+dx&&point.y===loc.y+dy;
+  return point.x===loc.x&&point.y===loc.y?range!=='front':range!=='here'&&point.x===loc.x+dx&&point.y===loc.y+dy;
 };
 export const validPoint=(data,definition,point,tile='.')=>object(point)&&definition.maps.includes(point.map)&&integer(point.x)&&integer(point.y)&&data.maps[point.map]?.tiles[point.y]?.[point.x]===tile;
 export const knownPoint=(state,point)=>point.map===state.location?.map&&(state.discovered[point.map]??[]).includes(`${point.x},${point.y}`);

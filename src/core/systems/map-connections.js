@@ -53,7 +53,7 @@ export const mapConnections={
     const loc=ctx.state.location,links=ctx.spec.links.map(l=>({link:l,side:connectionSide(l,loc.map)})).filter(v=>v.side);
     return {kind:'map_connections',id:ctx.id,title:'区画の出入口',summary:'出入口まで歩き、隣の区画へ移動する。',actions:[],
       cards:links.filter(({side})=>loc.x===side.from.x&&loc.y===side.from.y).map(({link,side})=>({name:link.name,text:`行き先：${ctx.data.maps[side.to.map].name}${connectionBlocked(ctx.data,ctx.state,side)?'／'+connectionBlocked(ctx.data,ctx.state,side):''}`,actions:[available(ctx,{type:'dungeon.action',system:ctx.id,action:'cross',target:link.id},connectionPlan,'隣の区画へ進む')]})),
-      markers:links.map(({link,side})=>({id:link.id,name:`${link.name} → ${ctx.data.maps[side.to.map].name}${connectionBlocked(ctx.data,ctx.state,side)?'（通行不可）':''}`,x:side.from.x,y:side.from.y,kind:'map_connection',glyph:link.kind==='stairs'?'⇵':connectionBlocked(ctx.data,ctx.state,side)?'▣':'▯',closed:Boolean(connectionBlocked(ctx.data,ctx.state,side))}))};
+      markers:links.map(({link,side})=>({id:link.id,name:`${link.name} → ${ctx.data.maps[side.to.map].name}${connectionBlocked(ctx.data,ctx.state,side)?'（通行不可）':''}`,x:side.from.x,y:side.from.y,kind:'map_connection',glyph:link.kind==='stairs'?'⇵':connectionBlocked(ctx.data,ctx.state,side)?'▣':'▯',closed:Boolean(connectionBlocked(ctx.data,ctx.state,side)),inInteractionRange:loc.x===side.from.x&&loc.y===side.from.y}))};
   },
   validate:validateConnections,
   validateState:(_s,p,r)=>object(p)&&!Object.keys(p).length&&(!r||object(r)&&!Object.keys(r).length)?[]:['接続の保存が不正です']

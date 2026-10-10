@@ -54,7 +54,7 @@ test('the chapel observes a real warp and can be investigated at its destination
 
 test('library observation requires opening the seal through the borrowed field ability',()=>{
  const g=begin('region_5');pending(g,'region_5');act(g,'library','borrow','book_1_0',{actor:'ada',sealed:'attack'});
- const gate=data.dungeons.region_5.systems.library.gates.find(g=>g.id==='seal_1_0');const spot=[[gate.x-1,gate.y,'east'],[gate.x+1,gate.y,'west'],[gate.x,gate.y-1,'south'],[gate.x,gate.y+1,'north']].find(([x,y])=>g.walkable(g.data.maps[gate.map],x,y));g.teleport(gate.map,spot[0],spot[1],spot[2]);act(g,'library','unlock',gate.id,{actor:'ada'});at(g,scene('region_5').points[0]);record(g,'region_5');
+ const gate=data.dungeons.region_5.systems.library.gates.find(g=>g.id==='seal_1_0');at(g,gate);act(g,'library','unlock',gate.id,{actor:'ada'});at(g,scene('region_5').points[0]);record(g,'region_5');
 });
 
 test('a failed market payment never creates an observation',()=>{

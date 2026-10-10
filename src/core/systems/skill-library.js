@@ -7,12 +7,12 @@ function plan(ctx,intent){
   if(!ctx.state.members.includes(intent.actor)||!actor||actor.hp<=0)return {ok:false,reason:'行動できる隊員を選んでください。'};
   if(intent.action==='unlock'){
     const gate=ctx.spec.gates.find(p=>p.id===intent.target),ability=ctx.data.fieldAbilities[gate?.ability];
-    if(!gate||!closeTo(ctx.state,gate)||ctx.persistent.opened.includes(gate.id))return {ok:false,reason:'閉じた封印の正面で使ってください。'};
+    if(!gate||!closeTo(ctx.state,gate)||ctx.persistent.opened.includes(gate.id))return {ok:false,reason:'閉じた封印の操作セルに立って使ってください。'};
     if(!permission(ctx.data,ctx.state,intent.actor,gate.ability,'archive.unlock'))return {ok:false,reason:'本から開門の技能を借りてください。'};
     const reason=costProblem(ctx.data,ctx.state,intent.actor,ability);return reason?{ok:false,reason}:{ok:true,gate,ability};
   }
   const book=ctx.spec.books.find(p=>p.id===intent.target);
-  if(!book||!closeTo(ctx.state,book))return {ok:false,reason:'足元か正面の本を選んでください。'};
+  if(!book||!closeTo(ctx.state,book))return {ok:false,reason:'本のあるセルに立って選んでください。'};
   if(intent.action==='return')return ctx.run.loans[intent.actor]?{ok:true,book}:{ok:false,reason:'借りている技能はありません。'};
   if(intent.action!=='borrow')return {ok:false,reason:'読むか、借りた技能を返してください。'};
   const native=baseGrantsFor(ctx.data,ctx.state,intent.actor).filter(g=>g.level<=ctx.state.actors[intent.actor].level);

@@ -58,7 +58,7 @@ export function beginEventCheckpoint(engine,c,frame,index){
   // Resuming the opening conversation must keep the original pre-effect snapshot.
   if(existing){if(JSON.stringify(existing.origin)!==JSON.stringify(origin))throw Error('チェックポイントIDが重複しています');return;}
   const d=data.quests[c.quest].story,s=state.stories[c.quest];
-  if(state.quests[c.quest]?.stage!=='active'||state.journey||s?.scene!==c.scene||state.dungeons?.active?.id!==c.dungeon||!atWorldPlace(state,d.worldPlaces[d.scenes[c.scene].place],{exact:true}))throw Error('チェックポイントの開始地点・場面が違います');
+  if(state.quests[c.quest]?.stage!=='active'||state.journey||s?.scene!==c.scene||state.dungeons?.active?.id!==c.dungeon||!atWorldPlace(state,d.worldPlaces[d.scenes[c.scene].place]))throw Error('チェックポイントの開始地点・場面が違います');
   if(state.eventCheckpoints.some(saved=>conflicts(c,definition(data,saved))))throw Error('復元対象が重なるチェックポイントは同時に開始できません');
   state.eventCheckpoints.push({id:c.id,origin,story:clone(s),values:targets(c).map(p=>capture(state,p)),restrictions:clone(state.dungeonRestrictions.filter(r=>ownsRestriction(c,r)))});
 }

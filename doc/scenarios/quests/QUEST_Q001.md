@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:a91a81b8c75ffc91ff332517fcaaf3827d52c11e475db0a37f5d654154b9b2f2 -->
+<!-- quest-page-source:bdd6071950c2ab42bcc45b634be698a0e0dbb5742544bee777be5e569b67b5b0 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -18,7 +18,7 @@
 
 ![篝火の迷宮・灯番の巡回路の座標とイベントID](../quest-maps/q001-kagaribi_f1.svg)
 
-図の原点は左上の (0, 0)。座標は [kagaribi_f1.json](../../../data/maps/kagaribi_f1.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントはinteractionRangeに従い、未指定なら配置セルに立って調べる。
+図の原点は左上の (0, 0)。座標は [kagaribi_f1.json](../../../data/maps/kagaribi_f1.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは配置セルに立って調べ、探索画面の印も同じ位置で表示する。封鎖扉など手前アクセスが必要な配置だけinteractionRangeに例外を明示する。地図の印は実配置セルを案内する。
 
 図 A (1, 1)：`q001-P-kagaribi`。
 
@@ -765,7 +765,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       "kind": "clue",
       "trigger": "interact",
       "script": "kagaribi.history",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     }
   ],
   "initiallyKnown": [

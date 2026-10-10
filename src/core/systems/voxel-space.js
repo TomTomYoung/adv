@@ -7,7 +7,7 @@ import {object,integer,available,closeTo} from './common.js';
 const access=ctx=>({waterAccess:Object.entries(ctx.definition.systems).some(([id,s])=>s.use==='waterworks'&&ctx.state.dungeons.active.systems[id]?.protected)});
 const current=ctx=>{const map=ctx.data.maps[ctx.state.location?.map];return map?.voxels&&ctx.spec.maps.includes(map.id)?{map,terrain:ctx.persistent.maps[map.id]??freshVoxelState(map)}:null;};
 const known=(ctx,p)=>(ctx.state.discovered[ctx.state.location.map]??[]).includes(voxelKey(p));
-const near=(ctx,c,p)=>voxelReachableNear(c.map,c.terrain,ctx.state.location,p);
+const near=(ctx,c,p)=>closeTo(ctx.state,{...p,map:c.map.id})&&voxelReachableNear(c.map,c.terrain,ctx.state.location,p);
 const blockedObject=(map,state,p)=>map.objects.some(o=>o.x===p.x&&o.y===p.y&&(o.z??0)===p.z&&objectBlocks(state,map,o));
 const oriented=(link,loc)=>sameVoxel(link.path[0],loc)?link.path:link.bidirectional&&sameVoxel(link.path.at(-1),loc)?[...link.path].reverse():null;
 function skillPlan(ctx,actor,id,api){
@@ -45,7 +45,7 @@ function plan(ctx,intent){
     after.water=flow.water;after.drained+=flow.drained;return {ok:true,...c,face,after};
   }
   const device=map.voxels.devices.find(d=>d.id===intent.target);
-  if(!device||!near(ctx,c,device.at))return {ok:false,reason:'同じ高さの装置の足元か正面で操作してください。'};
+  if(!device||!near(ctx,c,device.at))return {ok:false,reason:'同じ高さの装置のセルに立って操作してください。'};
   if(intent.action==='pump'&&device.kind==='pump'){
     const flow=redistributeWater(map,terrain,[{at:device.target,amount:device.amount}]);
     if(flow.rejected)return {ok:false,reason:'水没操作の対象区域が不正です。'};
@@ -104,8 +104,8 @@ function project(ctx){
     else actions.push(action({action:'traverse',target:link.id},'経路を渡る'));
     cards.push({name:link.name,text:`高さ${link.path[0].z}と高さ${link.path.at(-1).z}を結びます。${link.access.kind==='skill'?'対応する探索技能が必要です。':'全区間が通行可能なときに利用できます。'}`,actions});
   }
-  for(const d of map.voxels.devices)if(d.at.z===(loc.z??0)&&known(ctx,d.at))markers.push({...d.at,id:d.id,name:d.name,kind:'voxel_device',glyph:d.kind==='pump'?'給':'掘'});
-  for(const link of map.voxels.links)for(const p of [link.path[0],link.path.at(-1)])if(p.z===(loc.z??0)&&known(ctx,p))markers.push({...p,id:link.id,name:link.name,kind:'voxel_link',glyph:'⇵'});
+  for(const d of map.voxels.devices)if(d.at.z===(loc.z??0)&&known(ctx,d.at))markers.push({...d.at,id:d.id,name:d.name,kind:'voxel_device',glyph:d.kind==='pump'?'給':'掘',inInteractionRange:near(ctx,c,d.at)});
+  for(const link of map.voxels.links)for(const p of [link.path[0],link.path.at(-1)])if(p.z===(loc.z??0)&&known(ctx,p))markers.push({...p,id:link.id,name:link.name,kind:'voxel_link',glyph:'⇵',inInteractionRange:sameVoxel(p,loc)&&Boolean(oriented(link,loc))});
   return {kind:'voxel_space',id:ctx.id,title:'貯水立坑の地形と水',summary:`高さ ${loc.z??0} ／ 足元：${depthName(voxelDepth(terrain,loc))} ／ 水没度 ${voxelLevel(terrain,loc)}/10 ／ 排水処理 ${terrain.drained}回`,cards,actions:[],markers};
 }
 export const voxelSpace={

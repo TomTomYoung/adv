@@ -4,7 +4,7 @@ const current=ctx=>ctx.spec.states.find(s=>s.id===ctx.persistent.phase);
 function plan(ctx,intent){
   if(intent.action==='wait'&&ctx.spec.mode==='random')return {ok:true};
   const control=ctx.spec.controls.find(c=>c.id===intent.target),phase=ctx.spec.states.find(s=>s.id===intent.phase);
-  if(ctx.spec.mode!=='manual'||intent.action!=='shift'||!control||!closeTo(ctx.state,control)||!phase)return {ok:false,reason:'天球儀の前で地形を選んでください。'};
+  if(ctx.spec.mode!=='manual'||intent.action!=='shift'||!control||!closeTo(ctx.state,control)||!phase)return {ok:false,reason:'天球儀のセルに立って地形を選んでください。'};
   if(ctx.persistent.phase===phase.id)return {ok:false,reason:'現在の地形です。'};
   if(phase.tiles.some(p=>p.tile==='#'&&sameCell(p,ctx.state.location)))return {ok:false,reason:'足元が失われます。安全な足場へ移動してください。'};
   return {ok:true,phase};

@@ -15,7 +15,7 @@ import {freshDungeons,enterDungeon,leaveDungeon,stepDungeon,dungeonReplacesLight
 import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding,resumeWorldStory} from './story.js';
-import {townRoot,townLocation,syncWorldStories,locationRoot,dungeonInterior,interiorEntrances} from './world.js';
+import {townRoot,townLocation,syncWorldStories,restoreWorldConversations,locationRoot,dungeonInterior,interiorEntrances} from './world.js';
 import {questEntryPlan} from './quest-navigation.js';
 import {processFieldEvents,recordFieldEntry} from './field-events.js';
 import {freshFieldReactions,signalFieldChange} from './field-signals.js';
@@ -371,6 +371,6 @@ export class GameEngine {
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();return true;
+    this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);return true;
   }
 }

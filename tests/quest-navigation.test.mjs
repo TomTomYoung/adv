@@ -29,6 +29,23 @@ test('the quest entrance shortcut works from every town facility, including nest
  }
 });
 
+test('manual event guidance reports arrival only on its authored cell',()=>{
+ const g=newGame();g.accept('q011');const p=nextQuestPlace(data,g.state,'q011');
+ g.teleport(p.map,p.x,p.y,'east');
+ const approaches=[[-1,0,'east'],[1,0,'west'],[0,-1,'south'],[0,1,'north']].filter(([dx,dy])=>g.walkable(g.map(),p.x+dx,p.y+dy));
+ assert.ok(approaches.length,'the actual event has an accessible approach');
+ for(const [dx,dy,facing] of approaches){
+  g.teleport(p.map,p.x+dx,p.y+dy,facing);
+  const before=g.save(),destination=quest(g,'q011').destination;
+  assert.equal(destination.atPlace,false,'facing the event from the preceding cell is not arrival');
+  assert.deepEqual([destination.x,destination.y],[p.x,p.y],'guidance keeps the actual placement');
+  assert.equal(g.save(),before,'guidance does not start the event');
+ }
+ g.teleport(p.map,p.x,p.y,'north');
+ assert.equal(quest(g,'q011').destination.atPlace,true);
+ assert.equal(quest(g,'q011').destination.hint,'このセルで調べる。');
+});
+
 test('q001 guidance follows saved journeys, then points to the town report rather than the initial dungeon',()=>{
  const g=prepareQuest('q001');choose(g,'talk');assert.equal(quest(g).destination.x,9);
  g.returnTown();assert.equal(quest(g).destination.x,9);const save=g.save();g.load(save);assert.equal(quest(g).destination.x,9);

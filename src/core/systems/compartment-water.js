@@ -15,7 +15,7 @@ export function compartmentState(data,state,mapId){
 export const compartmentBlocked=(data,state,map)=>compartmentState(data,state,map)?.flooded?'水密扉の向こうは完全水没している。乾いた操作室の排水弁で水を抜く。':null;
 function plan(ctx,intent){
   const control=ctx.spec.controls.find(c=>c.id===intent.target&&closeTo(ctx.state,c));
-  if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'操作盤の足元か正面で操作する。'};
+  if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'操作盤のセルに立って操作する。'};
   if(!['open','close'].includes(intent.action))return {ok:false,reason:'給水・排水の操作が不正。'};
   const flooded=intent.action==='open',zone=ctx.spec.zones.find(z=>z.control===control.id);
   if(flooded&&ctx.state.location.map===zone.map)return {ok:false,reason:'在室中は給水弁を開けられない。'};
@@ -32,7 +32,7 @@ export const compartmentWater={
     const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c));
     return {kind:'compartment_water',id:ctx.id,title:'水路の給排水',summary:'各水路は水密扉で独立している。操作盤で排水すると、その区画へ入れる。給水中は扉が閉じる。',actions:[],
       cards:controls.map(c=>({name:c.name,text:`${zones.find(z=>z.control===c.id).name}：${ctx.persistent.controls[c.id]?'完全水没・水密扉施錠':'排水済み・水密扉通行可'}`,actions:[['close','給水を止めて排水'],['open','扉を閉じて給水']].map(([action,label])=>available(ctx,{type:'dungeon.action',system:ctx.id,action,target:c.id},plan,label))})),
-      zones,markers:ctx.spec.controls.filter(c=>c.map===ctx.state.location.map).map(c=>({...c,kind:'water_control',glyph:'⚙'}))};
+      zones,markers:ctx.spec.controls.filter(c=>c.map===ctx.state.location.map).map(c=>({...c,kind:'water_control',glyph:'⚙',inInteractionRange:closeTo(ctx.state,c)}))};
   },
   validate(data,d,s){
     const errors=[],zones=Array.isArray(s.zones)?s.zones:[],controls=Array.isArray(s.controls)?s.controls:[];

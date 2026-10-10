@@ -16,8 +16,8 @@ export function fireContext(data,state){
   const pair=Object.entries(d.systems).find(([,s])=>s.use==='fire_network'&&s.enabled!==false);if(!pair)return null;
   const [id,spec]=pair;return {data,state,definition:d,id,spec,run:active.systems[id],persistent:state.dungeons.persistent[d.id].systems[id]};
 }
-function closeTo(ctx,fixture){
-  return withinReach(ctx.state,fixture);
+function closeTo(ctx,fixture,range){
+  return withinReach(ctx.state,fixture,range);
 }
 function passable(ctx,map,x,y){
   return map.tiles[y]?.[x]==='.'&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(ctx.state,map,o));
@@ -59,7 +59,7 @@ export function canRepel(data,state,skill){
 function plan(ctx,intent){
   const {spec,run,persistent,state}=ctx,portable=intent.target==='portable';
   const fixture=portable?null:spec.fixtures.find(f=>f.id===intent.target);
-  if(!portable&&(!fixture||!closeTo(ctx,fixture)))return {ok:false,reason:'足元か正面の台座を選んでください。'};
+  if(!portable&&(!fixture||!closeTo(ctx,fixture)))return {ok:false,reason:'台座のセルに立って選んでください。壁付きの台座は、その壁を向いて操作します。'};
   if(portable&&!(state.inventory[spec.portable.item]>0))return {ok:false,reason:'携帯松明がありません。'};
   const flame=portable?run.portable:persistent.fixtures[fixture.id],lit=burning(flame);
   if(intent.action==='collect')return !lit?{ok:false,reason:'灯っている火から種火を採ってください。'}:run.ember?.effect===(flame.effect??fixture?.effect)?{ok:false,reason:'同じ種火をすでに持っています。'}:{ok:true,fixture,flame};
@@ -141,7 +141,7 @@ function project(ctx){
     return {id,name,lit:burning(flame),effect:burning(flame)?spec.effects[flame.effect??base].name:'消灯',baseEffect:spec.effects[base].name,fuel:flame.fuel,capacity,actions};
   };
   const fixtures=spec.fixtures.filter(f=>closeTo(ctx,f)).map(f=>makeTarget(f.id,f.name,ctx.persistent.fixtures[f.id],f.effect,f.capacity));
-  const markers=spec.fixtures.filter(f=>f.map===state.location.map&&(state.discovered[f.map]??[]).includes(`${f.x},${f.y}`)).map(f=>({id:f.id,name:f.name,x:f.x,y:f.y,...(f.edge?{edge:f.edge}:{}),kind:'brazier',glyph:burning(ctx.persistent.fixtures[f.id])?'灯':'台',lit:burning(ctx.persistent.fixtures[f.id])}));
+  const markers=spec.fixtures.filter(f=>f.map===state.location.map&&(state.discovered[f.map]??[]).includes(`${f.x},${f.y}`)).map(f=>({id:f.id,name:f.name,x:f.x,y:f.y,...(f.edge?{edge:f.edge}:{}),kind:'brazier',glyph:burning(ctx.persistent.fixtures[f.id])?'灯':'台',lit:burning(ctx.persistent.fixtures[f.id]),inInteractionRange:closeTo(ctx,f)}));
   return {kind:'fire_network',id:ctx.id,title:'火と種火',protected:environment.protected,encounterRate:environment.rate,enemyScale:environment.enemyScale,ember:run.ember?spec.effects[run.ember.effect].name:null,portable:makeTarget('portable','携帯松明',run.portable,spec.portable.baseEffect,spec.portable.capacity),fixtures,markers};
 }
 export const fireNetwork={
@@ -158,7 +158,8 @@ export const fireNetwork={
   leave:ctx=>{ctx.persistent.ember=ctx.run.ember?{...ctx.run.ember}:null;ctx.state.inventory[ctx.spec.portable.item]=0;},
   step:ctx=>{
     burn(ctx.run.portable,ctx.spec.portable.capacity,ctx.spec.portable.warnings,t=>ctx.engine.notify(t),'携帯松明');
-    for(const f of ctx.spec.fixtures){const nearby=closeTo(ctx,f);burn(ctx.persistent.fixtures[f.id],f.capacity,[],t=>{if(nearby)ctx.engine.notify(t);},f.name);}
+    // Nearby flames can go out in view even before the party reaches their cell.
+    for(const f of ctx.spec.fixtures){const nearby=closeTo(ctx,f,'here-or-front');burn(ctx.persistent.fixtures[f.id],f.capacity,[],t=>{if(nearby)ctx.engine.notify(t);},f.name);}
   },
   fieldParameters:ctx=>({...fireEnvironment(ctx),fuel:ctx.run.portable.fuel}),
   encounter:ctx=>{

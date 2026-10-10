@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・3結末。
 
-<!-- quest-page-source:a91a81b8c75ffc91ff332517fcaaf3827d52c11e475db0a37f5d654154b9b2f2 -->
+<!-- quest-page-source:bdd6071950c2ab42bcc45b634be698a0e0dbb5742544bee777be5e569b67b5b0 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -883,7 +883,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
       "once": true,
       "safe": true,
       "script": "region_1_f1.cache",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "fountain",
@@ -895,7 +895,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
       "once": true,
       "safe": true,
       "script": "region_1_f1.fountain",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "trap",
@@ -1210,7 +1210,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
       "once": true,
       "safe": true,
       "script": "region_1_f2.cache",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "fountain",
@@ -1222,7 +1222,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
       "once": true,
       "safe": true,
       "script": "region_1_f2.fountain",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "trap",

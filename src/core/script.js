@@ -6,6 +6,7 @@ import {clone,setPath,pathParts} from './expression.js';
 import {resumeBattleEvent,interruptBattle} from './battle-events.js';
 import {signalFieldChange} from './field-signals.js';
 import {setCast,beginPresentationWait} from './cast.js';
+import {finishWorldConversations} from './world.js';
 export const COMMANDS=new Set(['event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
@@ -18,6 +19,7 @@ export function pushBranch(engine,frame,index,path){
 }
 export function runScript(engine,id,args={}){
   if(!engine.data.scripts[id])throw new Error(`不明なスクリプト: ${id}`);
+  finishWorldConversations(engine);
   if(!engine.state.vm.length){delete engine.state.presentation.message;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;}
   engine.state.vm.push({script:id,path:[],index:0,scope:engine.state.nextScope++,branch:false,local:{args:clone(args)}});pump(engine);
 }
@@ -140,5 +142,5 @@ export function pump(engine){
     if(['item.give','item.take','party.join','party.leave','quest.accept','quest.complete','story.action','event.mark_done'].includes(c.op))signalFieldChange(engine.data,state,'state');
     if(['light.refill','party.heal_all','rest'].includes(c.op))signalFieldChange(engine.data,state,'light');
   }
-  if(!state.vm.length){delete state.presentation.cast;delete state.presentation.castCue;}
+  if(!state.vm.length){delete state.presentation.cast;delete state.presentation.castCue;finishWorldConversations(engine);}
 }

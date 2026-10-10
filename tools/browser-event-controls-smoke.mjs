@@ -108,9 +108,11 @@ try{
     checks.push(`${width}x${height}${coarse?' touch':''}: Shift crab-walk keeps facing, lower windows hide/restore, events force windows visible`);
     checks.push(`${width}x${height}${coarse?' touch':''}: q001 forward coordinate spam inert, pad fixed, all 18 choices reachable, keyboard movement restored`);
     if(width===1280||width===390){
+      // Interaction and exploration share the placed cell; the map still guides us there.
       // Inspect actual canvas glyphs in both layouts, including the scene background.
       // A fresh full-canvas paint clears its record; texture reloads cannot leave stale glyphs.
-      await page.evaluate(()=>{
+      await page.evaluate(async()=>{
+        const {commandTargets}=await import('./src/core/player-commands.js');
         const prototype=CanvasRenderingContext2D.prototype,fillRect=prototype.fillRect,fillText=prototype.fillText,painted=new WeakMap();
         prototype.fillRect=function(...args){
           if(this.canvas.matches?.('.dungeon-canvas')&&args[0]===0&&args[1]===0&&args[2]===this.canvas.width&&args[3]===this.canvas.height)painted.set(this.canvas,[]);
@@ -120,25 +122,39 @@ try{
         window.markerProbe={
           start(layout,id){
             reset(layout);g.random=()=>.99999;if(id!=='history')g.accept('q001');
-            g.dispatch({type:'travel',dungeon:'kagaribi'});g.teleport('kagaribi_f1',id==='history'?2:8,1,id==='history'?'east':'north');show();
+            g.dispatch({type:'travel',dungeon:'kagaribi'});g.teleport('kagaribi_f1',id==='history'?2:7,1,id==='history'?'east':'north');show();
           },
           snapshot(id){
-            const canvas=document.querySelector('.dungeon-canvas');
-            return {unread:view.model.dungeon.objects.find(o=>o.id===id)?.unread,glyphs:painted.get(canvas)??null,background:Boolean(canvas?.closest('.scene-world'))};
+            const canvas=document.querySelector('.dungeon-canvas'),object=view.model.dungeon.objects.find(o=>o.id===id);
+            const cell=document.querySelector(`.map-cell[data-x="${object?.x}"][data-y="${object?.y}"]`);
+            return {
+              unread:object?.unread,inRange:object?.inInteractionRange,
+              inspectable:commandTargets(g,'inspect').some(target=>target.id===`object:${id}`),
+              mapQuestion:Boolean(cell?.querySelector(object?.edge?`.map-edge-marker.${object.edge} .map-edge-image[src$="/clue.svg"]`:'.map-object[src$="/clue.svg"]')),
+              glyphs:painted.get(canvas)??null,background:Boolean(canvas?.closest('.scene-world'))
+            };
           },
           restore(){prototype.fillRect=fillRect;prototype.fillText=fillText;}
         };
       });
       try{
         for(const layout of ['classic','scene']){
-          const marker=async(id,expected)=>{
+          const marker=async(id,unread,{reachable=true,mapQuestion}={})=>{
             await settle();const state=await page.evaluate(id=>markerProbe.snapshot(id),id);
-            assert.equal(state.unread,expected,`${layout} ${width}: ${id} unread`);
+            assert.equal(state.unread,unread,`${layout} ${width}: ${id} unread`);
+            assert.equal(state.inRange,reachable,`${layout} ${width}: ${id} projected interaction range`);
+            assert.equal(state.inspectable,reachable,`${layout} ${width}: ${id} actual inspection target`);
+            if(mapQuestion!==undefined)assert.equal(state.mapQuestion,mapQuestion,`${layout} ${width}: ${id} map marks the placed cell`);
             assert.ok(Array.isArray(state.glyphs),`${layout} ${width}: dungeon canvas was painted`);
             assert.equal(state.background,layout==='scene',`${layout} ${width}: intended canvas path`);
-            assert.equal(state.glyphs.includes('?'),expected,`${layout} ${width}: ${id} actual glyphs ${JSON.stringify(state.glyphs)}`);
+            assert.equal(state.glyphs.includes('?'),unread&&reachable,`${layout} ${width}: ${id} actual glyphs ${JSON.stringify(state.glyphs)}`);
           };
           const shot=async(name)=>{await page.locator('.dungeon-scene').screenshot({path:path.join(output,`markers-${layout}-${width}x${height}-${name}.png`)});};
+          const move=async(direction,x,y,facing)=>{
+            await page.locator(`.movement-pad .${direction}`).click();await settle();
+            assert.deepEqual(await page.evaluate(()=>({x:g.state.location.x,y:g.state.location.y,facing:g.state.location.facing})),{x,y,facing},`${layout} ${width}: ${direction} reaches the intended cell/facing`);
+            assert.equal(await page.evaluate(()=>g.state.waiting),null,`${layout} ${width}: movement leaves inspection available`);
+          };
           const read=async id=>{
             await page.locator('[data-focus="command:interact"]').click();await settle();
             assert.equal(await page.evaluate(()=>g.state.waiting?.type),'text',`${layout} ${width}: ${id} opens its real description`);
@@ -148,14 +164,24 @@ try{
             await marker(id,false);
           };
           await page.evaluate(layout=>markerProbe.start(layout,'history'),layout);
+          await marker('history',true,{reachable:false,mapQuestion:true});await shot('record-before-cell');
+          await page.locator('[data-focus="command:interact"]').click();
+          assert.equal(await page.evaluate(()=>g.state.waiting),null,`${layout} ${width}: convenient inspection cannot read the record one cell ahead`);
+          await move('forward',3,1,'east');
           await marker('history',true);await shot('record-unread');await read('history');await shot('record-read');
+          await move('back',2,1,'east');await marker('history',false,{reachable:false,mapQuestion:false});
           await page.evaluate(layout=>markerProbe.start(layout,'q001_empty_west'),layout);
-          await marker('q001_empty_west',true);await shot('wall-unread');await read('q001_empty_west');await shot('wall-read');
+          await marker('q001_empty_west',true,{reachable:false,mapQuestion:true});
+          await move('right',7,1,'east');await move('forward',8,1,'east');
+          await marker('q001_empty_west',true,{reachable:false,mapQuestion:true});await shot('wall-wrong-facing');
+          await move('left',8,1,'north');
+          await marker('q001_empty_west',true,{mapQuestion:true});await shot('wall-unread');await read('q001_empty_west');
+          await marker('q001_empty_west',false,{mapQuestion:false});await shot('wall-read');
           await page.evaluate(()=>{g.state.objects['kagaribi_f1/q001_empty_west']='lit';show();});
-          await marker('q001_empty_west',true);await shot('wall-new-description');await read('q001_empty_west');
+          await marker('q001_empty_west',true,{mapQuestion:true});await shot('wall-new-description');await read('q001_empty_west');
           await page.evaluate(()=>{g.state.objects['kagaribi_f1/q001_empty_west']='empty';show();});
-          await marker('q001_empty_west',false);
-          checks.push(`${layout} ${width}x${height}: actual record/wall ? stays through reading, disappears on completion, returns for new wall text, and stays absent for previously read text`);
+          await marker('q001_empty_west',false,{mapQuestion:false});
+          checks.push(`${layout} ${width}x${height}: record inspection and actual ? require arrival; wall ? requires its owning cell and facing; map guides to unread locations; read completion hides ? and new wall text restores it`);
         }
       }finally{await page.evaluate(()=>{markerProbe.restore();delete window.markerProbe;reset();show();});}
     }

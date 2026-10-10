@@ -8,6 +8,7 @@ import {projectQuestObjects,questEventPlan} from '../src/core/quest-events.js';
 import {commandTargets,commandDialog} from '../src/core/player-commands.js';
 import {projectDungeonEvents} from '../src/application/dungeon-projection.js';
 import {projectGame} from '../src/application/projection.js';
+import {visibleDungeonObjects} from '../src/view/dungeon.js';
 import {validateContent} from '../src/core/validation.js';
 import {validateSchema} from '../config/shared/schema.js';
 
@@ -35,36 +36,49 @@ for(const trigger of ['interact','action'])for(const [range,here,front] of [[und
       if(trigger==='action'){
         assert.equal(questEventPlan(d,g.state,'q021','range_test').ok,allowed);
         assert.equal(projectDungeonEvents(g,[]).scenes.length>0,allowed);
-      }else assert.equal(g.interactionObjects().some(o=>o.id==='range_test'),allowed);
+      }else{
+        assert.equal(g.interactionObjects().some(o=>o.id==='range_test'),allowed);
+        const dungeon=projectGame(g).dungeon;
+        assert.equal(dungeon.objects.find(o=>o.id==='range_test').inInteractionRange,allowed,`${x}/${facing}/projected range`);
+        assert.equal(visibleDungeonObjects(dungeon).some(o=>o.id==='range_test'),allowed,`${x}/${facing}/exploration candidate`);
+      }
       const hits=g.state.vars.rangeHits??0;
       assert.equal(execute(g,trigger),allowed);assert.equal(g.state.vars.rangeHits??0,hits+Number(allowed));
     }
   });
 }
 
-test('a visible cell event stays on the map ahead but cannot be run until arrival, including after save/load',()=>{
+test('a cell event retains its map position but enters exploration candidates and menus only on arrival, including after save/load',()=>{
   const {g}=setup();
-  assert.ok(projectGame(g).dungeon.objects.some(o=>o.id==='range_test'));
+  const ahead=projectGame(g).dungeon;assert.ok(ahead.objects.some(o=>o.id==='range_test'));
+  assert.equal(ahead.objects.find(o=>o.id==='range_test').inInteractionRange,false);assert.ok(!visibleDungeonObjects(ahead).some(o=>o.id==='range_test'));
   const saved=g.save();g.load(saved);
   assert.equal(commandTargets(g,'inspect').some(t=>t.id==='object:range_test'),false);
   assert.equal(g.trigger('interact','range_test'),false);assert.equal(g.state.vars.rangeHits,undefined);
   assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(g.state.vars.rangeHits,undefined);
+  const arrived=projectGame(g).dungeon;assert.equal(arrived.objects.find(o=>o.id==='range_test').inInteractionRange,true);
+  assert.ok(visibleDungeonObjects(arrived).some(o=>o.id==='range_test'));
   assert.ok(g.trigger('interact','range_test'));assert.equal(g.state.vars.rangeHits,1);
 });
 
 for(const trigger of ['interact','action'])test(`${trigger}: edge targets require their authored cell and facing; front ranges cannot inspect through opaque boundaries`,()=>{
   const {g,d,map,event}=setup(trigger,'here-or-front','north');
   assert.equal(execute(g,trigger),false);
+  if(trigger==='interact')assert.equal(projectGame(g).dungeon.objects.find(o=>o.id==='range_test').inInteractionRange,false);
   g.state.location.x=2;g.state.location.facing='east';assert.equal(execute(g,trigger),false);
+  if(trigger==='interact')assert.ok(!visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='range_test'));
   g.state.location.facing='north';assert.ok(execute(g,trigger));
+  if(trigger==='interact')assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='range_test'));
   delete event.points[0].edge;
   const object=map.objects.find(o=>o.id==='range_test');if(object)delete object.edge;
   g.state.location={map:map.id,x:1,y:1,facing:'east'};
   d.edgeTypes.range_wall={passage:'#',visual:{wall:true,opaque:true},parameters:{water_passable:false}};
   map.cells.edges={'v:2,1':{preset:'range_wall'}};
   assert.equal(commandTargets(g,'inspect').some(t=>t.id===targetId(trigger)),false);
+  if(trigger==='interact')assert.equal(projectGame(g).dungeon.objects.find(o=>o.id==='range_test').inInteractionRange,false);
   assert.equal(execute(g,trigger),false);
   delete map.cells.edges['v:2,1'];
+  if(trigger==='interact')assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='range_test'));
   assert.ok(execute(g,trigger));
 });
 
@@ -76,6 +90,18 @@ test('interaction ranges do not enable remote entry triggers or change map/heigh
   assert.equal(canInteractAt(d,g.state,{...point,map:'kagaribi_f1'},'here-or-front'),false);
   assert.equal(canInteractAt(d,g.state,{...point,z:1},'here-or-front'),false);
   assert.equal(canInteractAt(d,g.state,point,'invalid'),false);
+});
+
+test('an entry event marker joins exploration only at its cell, without projection firing the event',()=>{
+  const {g,map}=setup('enter'),object=map.objects.find(o=>o.id==='range_test');object.kind='decision';delete object.quest;
+  const before=g.save(),ahead=projectGame(g).dungeon;
+  assert.ok(ahead.objects.some(o=>o.id==='range_test'&&o.glyph==='!'));
+  assert.equal(ahead.objects.find(o=>o.id==='range_test').inInteractionRange,false);
+  assert.ok(!visibleDungeonObjects(ahead).some(o=>o.id==='range_test'));assert.equal(g.save(),before);
+  g.state.location.x=2;const arrivedBefore=g.save(),arrived=projectGame(g).dungeon;
+  assert.equal(arrived.objects.find(o=>o.id==='range_test').inInteractionRange,true);
+  assert.ok(visibleDungeonObjects(arrived).some(o=>o.id==='range_test'&&o.glyph==='!'));
+  assert.equal(g.save(),arrivedBefore);assert.equal(g.state.vars.rangeHits,undefined);assert.equal(g.state.events['region_2_f1/range_test'],undefined);
 });
 
 test('a previously displayed target cannot bypass a changed interaction range',()=>{
@@ -108,12 +134,10 @@ test('runtime and authoring schemas reject invalid ranges and ranges on enter/au
   raw.objects[0].interactionRange='front';raw.objects[0].trigger='enter';assert.ok(validateSchema(raw,mapSchema).length);
 });
 
-test('authored placement policy keeps quest locations local, doors reachable and nearby physical objects explicit',async()=>{
+test('authored placement policy keeps cell objects local and reserves front access for blocking doors',async()=>{
   for(const q of Object.values(data.quests))for(const e of q.events)if(['interact','action'].includes(e.trigger)&&e.points.some(p=>!p.edge))assert.equal(e.interactionRange??'here','here',`${q.id}/${e.id}`);
   for(const map of Object.values(data.maps))for(const o of map.objects.filter(o=>!o.quest&&o.trigger==='interact'&&!o.edge)){
-    if(o.kind==='door')assert.equal(o.interactionRange,'front',`${map.id}/${o.id}`);
-    if(['chest','fountain'].includes(o.kind))assert.equal(o.interactionRange,'here-or-front',`${map.id}/${o.id}`);
-    if(['exit','stairs'].includes(o.kind))assert.equal(o.interactionRange,'here',`${map.id}/${o.id}`);
+    assert.equal(o.interactionRange??'here',o.kind==='door'&&o.blocking?'front':'here',`${map.id}/${o.id}`);
   }
   for(const file of ['kagaribi-content','dungeon-content','connected-maps','voxel-content']){
     const source=JSON.parse(await fs.readFile(new URL(`../config/${file}.json`,import.meta.url)));

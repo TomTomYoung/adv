@@ -127,7 +127,7 @@ export function questPageBundle(data,id){
     const file=`quest-maps/${q.id}-${map.id}.svg`;
     files[file]=questMapSvg(data,q,map);
     add(`![${map.name}の座標とイベントID](${file})`);
-    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントはinteractionRangeに従い、未指定なら配置セルに立って調べる。`);
+    add(`図の原点は左上の (0, 0)。座標は [${map.id}.json](../data/maps/${map.id}.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは配置セルに立って調べ、探索画面の印も同じ位置で表示する。封鎖扉など手前アクセスが必要な配置だけinteractionRangeに例外を明示する。地図の印は実配置セルを案内する。`);
     for(const g of mapGroups(q,map))add(`図 ${g.label} (${g.x}, ${g.y})：${g.ids.map(code).join(' / ')}。`);
   }
   const post=q.story.worldPlaces.post,postLocation=data.locations[post.location],guild=data.locations[postLocation.parent],square=data.locations[guild.parent],map=maps[0];

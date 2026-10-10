@@ -19,7 +19,7 @@ function battleRound(ctx){
 }
 function project(ctx){
  const items=copies(ctx).filter(([,c])=>c.salt>0).map(([id,c])=>{let owner='袋';for(const [a,slots] of Object.entries(ctx.state.gear.equipped))if(Object.values(slots).includes(id))owner=ctx.data.actors[a].name;return {id,name:`${c.item in ctx.data.items?ctx.data.items[c.item].name:c.item}（${owner}）`,penalty:c.salt};});
- return {kind:'corrosion',id:ctx.id,title:'装備ごとの塩',perBattle:ctx.spec.perBattle,items,threshold:ctx.spec.eater.threshold,markers:ctx.spec.washZones.filter(p=>p.map===ctx.state.location.map&&(ctx.state.discovered[p.map]??[]).includes(`${p.x},${p.y}`)).map(p=>({...p,id:`wash/${p.x}/${p.y}`,name:'塩を洗える水没区画',kind:'water',level:1,glyph:'~'}))};
+ return {kind:'corrosion',id:ctx.id,title:'装備ごとの塩',perBattle:ctx.spec.perBattle,items,threshold:ctx.spec.eater.threshold,markers:ctx.spec.washZones.filter(p=>p.map===ctx.state.location.map&&(ctx.state.discovered[p.map]??[]).includes(`${p.x},${p.y}`)).map(p=>({...p,id:`wash/${p.x}/${p.y}`,name:'塩を洗える水没区画',kind:'water',level:1,glyph:'~',inInteractionRange:p.x===ctx.state.location.x&&p.y===ctx.state.location.y}))};
 }
 export const corrosion={
  createPersistent:()=>({}),createRun:()=>({}),battleStart,battleRound,equipmentStats,project,

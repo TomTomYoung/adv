@@ -1,4 +1,4 @@
-import {object,integer,identifier,knownPoint,available} from './common.js';
+import {object,integer,identifier,knownPoint,available,closeTo} from './common.js';
 import {cellLayersValid} from '../cell-layers.js';
 
 export const sameCell=(a,b)=>a?.map===b?.map&&a.x===b.x&&a.y===b.y;
@@ -25,7 +25,7 @@ export function inventoryPlan(ctx,cost={},output={}){
   return {ok:true,inventory};
 }
 export const action=(ctx,plan,label,intent)=>available(ctx,{type:'dungeon.action',system:ctx.id,...intent},plan,label);
-export const markers=(ctx,points,glyph)=>points.filter(p=>knownPoint(ctx.state,p)).map(p=>({id:`${ctx.id}_${p.id}`,name:p.name,x:p.x,y:p.y,kind:ctx.spec.use,glyph}));
+export const markers=(ctx,points,glyph,range)=>points.filter(p=>knownPoint(ctx.state,p)).map(p=>({id:`${ctx.id}_${p.id}`,name:p.name,x:p.x,y:p.y,kind:ctx.spec.use,glyph,inInteractionRange:closeTo(ctx.state,p,range)}));
 export const panel=(ctx,title,summary,cards=[],extra={})=>({kind:ctx.spec.use,id:ctx.id,title,summary,cards,actions:[],markers:[],...extra});
 export const patchTile=(patches,map,x,y)=>patches.find(p=>p.map===map.id&&p.x===x&&p.y===y)?.tile??null;
 export const patchCell=(patches,map,x,y)=>{const p=patches.find(p=>p.map===map.id&&p.x===x&&p.y===y);return p?{...p.layers,passage:p.tile}:null;};
