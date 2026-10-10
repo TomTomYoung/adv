@@ -89,6 +89,54 @@ test('field group purification, caster death, full healing and pause reject with
   const unchanged=g.state.actors.sera.mp;assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'greater_heal'}),false);assert.equal(g.state.actors.sera.mp,unchanged);
   g.state.actors.ada.hp=1;g.state.actors.sera.hp=0;assert.equal(fieldSkillPlan(g,'sera','heal','ada').ok,false);g.healAll();g.state.actors.ada.hp=1;g.run('prologue');assert.equal(fieldSkillPlan(g,'sera','heal','ada').ok,false);
 });
+test('field detox explains poison eligibility independently of HP and spends exactly two MP on success',()=>{
+  const g=newGame(),a=g.state.actors.ada;
+  for(const hp of [g.stats('ada').hp,1])for(const statuses of [[],['wet','hollow_curse']]){
+    a.hp=hp;a.statuses=[...statuses];
+    const before=structuredClone({actors:g.state.actors,inventory:g.state.inventory,rng:g.state.rng});
+    assert.deepEqual(fieldSkillPlan(g,'sera','cleanse','ada'),{ok:false,reason:'毒ではありません。',reasonScope:'target'});
+    assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'cleanse',target:'ada'}),false);
+    assert.deepEqual({actors:g.state.actors,inventory:g.state.inventory,rng:g.state.rng},before);
+  }
+  a.hp=g.stats('ada').hp;a.statuses=['poison','wet'];g.state.actors.sera.mp=2;
+  assert.equal(fieldSkillPlan(g,'sera','cleanse','ada').ok,true);
+  assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'cleanse',target:'ada'}),true);
+  assert.equal(a.hp,g.stats('ada').hp);assert.deepEqual(a.statuses,['wet']);assert.equal(g.state.actors.sera.mp,0);
+  assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'cleanse',target:'ada'}),false);assert.equal(g.state.actors.sera.mp,0);
+});
+test('field skill failure scopes distinguish target conditions from shared caster restrictions without costs',()=>{
+  for(const {prepare,target='ada',scope,reason} of [
+    {prepare:g=>{g.state.actors.ada.hp=0;},scope:'target',reason:'戦闘不能の仲間には使えません。'},
+    {prepare:()=>{},target:'berg',scope:'target',reason:'出撃中の仲間を選んでください。'},
+    {prepare:g=>{g.state.actors.sera.mp=1;},scope:'ability',reason:'MPが2必要です。'},
+    {prepare:g=>{g.state.actors.sera.hp=0;},scope:'ability',reason:'倒れている仲間は使用できません。'},
+    {prepare:g=>g.run('prologue'),scope:'ability',reason:'会話や戦闘が終わってから使う。'}
+  ]){
+    const g=newGame();g.state.actors.ada.statuses=['poison'];prepare(g);
+    const before=structuredClone({actors:g.state.actors,inventory:g.state.inventory,rng:g.state.rng});
+    assert.deepEqual(fieldSkillPlan(g,'sera','cleanse',target),{ok:false,reason,reasonScope:scope});
+    assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'cleanse',target}),false);
+    assert.deepEqual({actors:g.state.actors,inventory:g.state.inventory,rng:g.state.rng},before);
+  }
+});
+test('field no-op reasons distinguish single, group, MP and combined recovery while purification still clears all statuses',()=>{
+  const g=newGame();g.award(0,3600);g.healAll();
+  const unavailable=(skill,target,reason)=>assert.deepEqual(fieldSkillPlan(g,'sera',skill,target),{ok:false,reason,reasonScope:'target'});
+  unavailable('heal','ada','HPは満タンです。');
+  unavailable('greater_heal',undefined,'対象の仲間全員のHPは満タンです。');
+  unavailable('purify',undefined,'解除できる状態異常がありません。');
+  g.state.actors.ada.statuses=['wet','hollow_curse'];const mp=g.state.actors.sera.mp;
+  assert.equal(g.dispatch({type:'field.skill',actor:'sera',skill:'purify'}),true);
+  assert.deepEqual(g.state.actors.ada.statuses,[]);assert.equal(g.state.actors.sera.mp,mp-data.skills.purify.mp);
+  assert.equal(g.dispatch({type:'job.change',actor:'sera',job:'bard'}),true);g.healAll();g.state.actors.ada.hp=1;
+  unavailable('inspire','ada','MPは満タンです。');g.state.actors.ada.mp--;
+  assert.equal(fieldSkillPlan(g,'sera','inspire','ada').ok,true);
+  assert.equal(g.dispatch({type:'job.change',actor:'sera',job:'merchant'}),true);g.healAll();
+  unavailable('emergency_ration',undefined,'対象の仲間全員のHP・MPは満タンです。');g.state.actors.ada.mp--;
+  assert.equal(fieldSkillPlan(g,'sera','emergency_ration').ok,true);
+  assert.equal(g.dispatch({type:'job.change',actor:'sera',job:'monk'}),true);g.healAll();
+  unavailable('breathe',undefined,'HPは満タンです。');
+});
 for(const layout of ['scene','classic'])test(`${layout}: result messages advance with Enter; profile exposes personal XP and usable detox targets`,()=>{
   const dom=installDOM();let g=victory(),view;const dispatch=intent=>{const changed=g.dispatch(intent);view.render(projectGame(g));return changed;};
   try{

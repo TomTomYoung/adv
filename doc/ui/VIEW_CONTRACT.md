@@ -41,6 +41,8 @@
 
 項目：party[] / 内容：id、表示名、職業、人物紹介、portrait画像URL、HP/MPと上限、状態異常、能力値、技能、装備名・取外し可否
 
+項目：party[].skills[].fieldTargets[]（roster[]も同じ） / 内容：戦闘外回復技能の対象ID・名前・enabled・reason・reasonScope。reasonScopeは技能共通の拒否ならability、対象側ならtarget、使用可能ならnullです。members[]に各対象の名前、HP/MPと上限、表示用の状態異常名、技能に必要な数値の表示文字列vitals[]を持ちます。全体技能の操作IDは術者のまま、members[]には隊全員を含めます。Viewはenabledで操作を無効化し、abilityの理由を一度表示します。対象の状態を使用可否と独立して表示し、日本語の理由文から効果や可否を推測しません。[対象一覧](CHARACTER_PROFILES.md#回復技能の対象一覧2026-10-10)。
+
 項目：roster[] / tavern / 内容：候補全員の表示情報、active・canJoin・canLeave・swapCandidates。酒場の名前・説明・定員・編集可否
 
 項目：quests[]/tracked / 内容：公開依頼情報、受注可能か、段階、調査座標、完了済みなら選んだ結末
