@@ -115,7 +115,7 @@ export function paintDungeon(canvas,dungeon,battle){
     }
     const shade=ctx.createRadialGradient(WIDTH*.5,HEIGHT*.55,100,WIDTH*.5,HEIGHT*.5,WIDTH*.65);shade.addColorStop(0,'#00000000');shade.addColorStop(1,'#000000b0');ctx.fillStyle=shade;ctx.fillRect(0,0,WIDTH,HEIGHT);
     if(!battle){
-      const ahead=visibleDungeonObjects(dungeon);
+      const ahead=visibleDungeonObjects(dungeon).filter(o=>o.unread!==false);
       const object=ahead.find(o=>!o.edge&&o.art)??ahead.find(o=>!o.edge);if(object){const sprite=object.art?texture(object.art.url,draw):null;
         if(drawable(sprite))ctx.drawImage(sprite,...artRect(sprite,object.art),WIDTH/2-55,HEIGHT*.47,110,110);
         else{const markerY=Number(globalThis.getComputedStyle?.(canvas).getPropertyValue('--dungeon-marker-y'))||.61;ctx.textAlign='center';ctx.font='bold 38px serif';ctx.fillStyle='#edc989';ctx.fillText(object.glyph,WIDTH/2,HEIGHT*markerY);}}

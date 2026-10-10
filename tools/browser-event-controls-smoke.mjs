@@ -23,13 +23,14 @@ try{
     page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(`${r.status()} ${r.url()}`);});
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
     await page.evaluate(async()=>{
-      const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{SceneView}=await import('./src/view/scene-view.js'),{handleGameKey}=await import('./src/view/keyboard.js'),{applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');
+      const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{GameView}=await import('./src/view/view.js'),{SceneView}=await import('./src/view/scene-view.js'),{handleGameKey}=await import('./src/view/keyboard.js'),{applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');
       applyTheme({...THEME_DEFAULT,textSize:24});const data=await loadContent();
       const ui={status(){},soundEnabled:()=>false,effectsMode:()=> 'off',menu(){},help(){}};
-      window.reset=()=>{
+      window.reset=(layout='scene')=>{
         window.view?.destroy();window.g=new GameEngine(data,42);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
         window.dispatch=intent=>{const changed=g.dispatch(intent);if(changed)window.show();return changed;};
-        window.view=new SceneView(document.querySelector('#app'),dispatch,ui);window.show=()=>view.render(projectGame(g));
+        const app=document.querySelector('#app');app.dataset.view=layout;
+        window.view=new (layout==='classic'?GameView:SceneView)(app,dispatch,ui);window.show=()=>view.render(projectGame(g));
       };
       document.addEventListener('keydown',e=>handleGameKey(e,{view:window.view,model:window.view.model,dispatch:window.dispatch}));
       reset();g.accept('q001');g.dispatch({type:'quest.travel',id:'q001'});g.teleport('kagaribi_f1',3,1,'west');show();
@@ -106,6 +107,58 @@ try{
     assert.equal(await page.getByRole('button',{name:'ウィンドウを消す',exact:true}).isVisible(),true);
     checks.push(`${width}x${height}${coarse?' touch':''}: Shift crab-walk keeps facing, lower windows hide/restore, events force windows visible`);
     checks.push(`${width}x${height}${coarse?' touch':''}: q001 forward coordinate spam inert, pad fixed, all 18 choices reachable, keyboard movement restored`);
+    if(width===1280||width===390){
+      // Inspect actual canvas glyphs in both layouts, including the scene background.
+      // A fresh full-canvas paint clears its record; texture reloads cannot leave stale glyphs.
+      await page.evaluate(()=>{
+        const prototype=CanvasRenderingContext2D.prototype,fillRect=prototype.fillRect,fillText=prototype.fillText,painted=new WeakMap();
+        prototype.fillRect=function(...args){
+          if(this.canvas.matches?.('.dungeon-canvas')&&args[0]===0&&args[1]===0&&args[2]===this.canvas.width&&args[3]===this.canvas.height)painted.set(this.canvas,[]);
+          return fillRect.apply(this,args);
+        };
+        prototype.fillText=function(text,...args){painted.get(this.canvas)?.push(String(text));return fillText.call(this,text,...args);};
+        window.markerProbe={
+          start(layout,id){
+            reset(layout);g.random=()=>.99999;if(id!=='history')g.accept('q001');
+            g.dispatch({type:'travel',dungeon:'kagaribi'});g.teleport('kagaribi_f1',id==='history'?2:8,1,id==='history'?'east':'north');show();
+          },
+          snapshot(id){
+            const canvas=document.querySelector('.dungeon-canvas');
+            return {unread:view.model.dungeon.objects.find(o=>o.id===id)?.unread,glyphs:painted.get(canvas)??null,background:Boolean(canvas?.closest('.scene-world'))};
+          },
+          restore(){prototype.fillRect=fillRect;prototype.fillText=fillText;}
+        };
+      });
+      try{
+        for(const layout of ['classic','scene']){
+          const marker=async(id,expected)=>{
+            await settle();const state=await page.evaluate(id=>markerProbe.snapshot(id),id);
+            assert.equal(state.unread,expected,`${layout} ${width}: ${id} unread`);
+            assert.ok(Array.isArray(state.glyphs),`${layout} ${width}: dungeon canvas was painted`);
+            assert.equal(state.background,layout==='scene',`${layout} ${width}: intended canvas path`);
+            assert.equal(state.glyphs.includes('?'),expected,`${layout} ${width}: ${id} actual glyphs ${JSON.stringify(state.glyphs)}`);
+          };
+          const shot=async(name)=>{await page.locator('.dungeon-scene').screenshot({path:path.join(output,`markers-${layout}-${width}x${height}-${name}.png`)});};
+          const read=async id=>{
+            await page.locator('[data-focus="command:interact"]').click();await settle();
+            assert.equal(await page.evaluate(()=>g.state.waiting?.type),'text',`${layout} ${width}: ${id} opens its real description`);
+            await marker(id,true);
+            for(let fuel=100;await page.evaluate(()=>g.state.waiting?.type==='text');fuel--){assert.ok(fuel>0);await page.keyboard.press('Enter');await settle();}
+            assert.equal(await page.evaluate(()=>g.state.waiting),null,`${layout} ${width}: inspection finished`);
+            await marker(id,false);
+          };
+          await page.evaluate(layout=>markerProbe.start(layout,'history'),layout);
+          await marker('history',true);await shot('record-unread');await read('history');await shot('record-read');
+          await page.evaluate(layout=>markerProbe.start(layout,'q001_empty_west'),layout);
+          await marker('q001_empty_west',true);await shot('wall-unread');await read('q001_empty_west');await shot('wall-read');
+          await page.evaluate(()=>{g.state.objects['kagaribi_f1/q001_empty_west']='lit';show();});
+          await marker('q001_empty_west',true);await shot('wall-new-description');await read('q001_empty_west');
+          await page.evaluate(()=>{g.state.objects['kagaribi_f1/q001_empty_west']='empty';show();});
+          await marker('q001_empty_west',false);
+          checks.push(`${layout} ${width}x${height}: actual record/wall ? stays through reading, disappears on completion, returns for new wall text, and stays absent for previously read text`);
+        }
+      }finally{await page.evaluate(()=>{markerProbe.restore();delete window.markerProbe;reset();show();});}
+    }
     await context.close();
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
