@@ -7,7 +7,7 @@ import {inspectScript} from '../src/core/inspection.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
 import {mapSection} from '../src/view/minimap.js';
-import {visibleDungeonObjects} from '../src/view/dungeon.js';
+import {paintDungeon,visibleDungeonObjects} from '../src/view/dungeon.js';
 import {installDOM} from './view-dom.mjs';
 
 const note=(id='note',extra={})=>({id,name:id,kind:'clue',trigger:'interact',interactionRange:'here-or-front',x:2,y:1,script:`unread.${id}`,...extra});
@@ -31,22 +31,36 @@ function questions(g,dom,expanded=false){
  dom.root.replaceChildren(mapSection(projectGame(g),expanded?{}:{onExpand(){}}));
  return dom.root.querySelectorAll('.map-cell').flatMap(cell=>cell.querySelectorAll('.map-object,.map-edge-image').filter(icon=>icon.src.endsWith('/clue.svg')).map(()=>`${cell.dataset.x},${cell.dataset.y}`));
 }
+function explorationGlyphs(g,dom){
+ const glyphs=[],gradient=()=>({addColorStop(){}}),ctx={
+  createLinearGradient:gradient,createRadialGradient:gradient,fillRect(){},drawImage(){},putImageData(){},
+  getImageData(x,y,width,height){return {width,height,data:new Uint8ClampedArray(width*height*4)};},
+  fillText(text){glyphs.push(text);}
+ };
+ const canvas=dom.document.createElement('canvas');canvas.getContext=()=>ctx;dom.root.replaceChildren(canvas);
+ paintDungeon(canvas,projectGame(g).dungeon,null);return glyphs;
+}
 
-test('the actual patrol record stays marked through both pages and saving, then disappears from both maps while remaining rereadable',()=>{
+test('the actual patrol record stays marked through both pages and saving, then disappears from maps and exploration until new text exists',()=>{
  const dom=installDOM();try{
-  const g=newGame();g.random=()=>.99999;assert.ok(g.dispatch({type:'travel',dungeon:'kagaribi'}));g.teleport('kagaribi_f1',2,1,'east');
+  const g=new GameEngine(structuredClone(data));drain(g);g.random=()=>.99999;assert.ok(g.dispatch({type:'travel',dungeon:'kagaribi'}));g.teleport('kagaribi_f1',2,1,'east');
   assert.equal(object(g,'history').unread,true);assert.ok(questions(g,dom).includes('3,1'));
+  assert.ok(explorationGlyphs(g,dom).includes('?'),'an unread record is drawn in the exploration canvas');
   read(g,'history');assert.equal(g.state.waiting.type,'text');assert.match(g.state.waiting.text,/灯番/);
   assert.equal(object(g,'history').unread,true,'opening the first page is not finishing the record');roundtrip(g);
   assert.ok(g.dispatch({type:'advance'}));assert.equal(g.state.waiting.type,'text');assert.match(g.state.waiting.text,/踏査/);
   assert.ok(questions(g,dom,true).includes('3,1'),'the second page is still unread');roundtrip(g);
   drain(g);assert.equal(object(g,'history').unread,false);roundtrip(g);
   assert.ok(!questions(g,dom).includes('3,1'));assert.ok(!questions(g,dom,true).includes('3,1'));
-  assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='history'),'the physical record remains in the dungeon view');
+  assert.ok(!explorationGlyphs(g,dom).includes('?'),'reading the record removes its exploration marker too');
+  assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='history'),'the record remains in the nearby-object projection for repeat inspection');
   assert.ok(commandTargets(g,'inspect').some(t=>t.id==='object:history'));
   g.teleport('kagaribi_f1',4,1,'west');assert.equal(object(g,'history').unread,false,'read status follows the object rather than the player cell');
   read(g,'history','inspect');assert.equal(g.state.waiting.type,'text');assert.equal(object(g,'history').unread,false);drain(g);
-  assert.ok(!questions(g,dom).includes('3,1'));
+  assert.ok(!questions(g,dom).includes('3,1'));assert.ok(!explorationGlyphs(g,dom).includes('?'));
+  g.data.scripts['kagaribi.history'].commands.push({op:'narrate',text:'巡回記録に、新しい通路の注意書きが加わっている。'});
+  assert.equal(object(g,'history').unread,true);assert.ok(explorationGlyphs(g,dom).includes('?'),'new text restores the exploration marker');
+  read(g,'history');drain(g);assert.ok(!explorationGlyphs(g,dom).includes('?'));
  }finally{dom.restore();}
 });
 
@@ -64,27 +78,33 @@ test('wall torch markers return only for unread descriptions, stay independent o
  const dom=installDOM();try{
   const g=newGame();g.random=()=>.99999;assert.ok(g.accept('q001'));assert.ok(g.dispatch({type:'travel',dungeon:'kagaribi'}));g.teleport('kagaribi_f1',8,1,'north');
   assert.equal(object(g,'q001_empty_west').unread,true);assert.ok(questions(g,dom).includes('8,1'));
+  assert.ok(explorationGlyphs(g,dom).includes('?'),'an unread wall description is drawn on the exploration canvas');
   read(g,'q001_empty_west');assert.match(g.state.waiting.text,/油切れ/);drain(g);
   assert.equal(object(g,'q001_empty_west').unread,false);assert.ok(!questions(g,dom).includes('8,1'));
-  assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='q001_empty_west'),'hiding the question does not remove its wall scenery');
+  assert.ok(!explorationGlyphs(g,dom).includes('?'),'reading the wall description removes its exploration marker');
+  assert.ok(visibleDungeonObjects(projectGame(g).dungeon).some(o=>o.id==='q001_empty_west'),'the wall object remains in the nearby-object projection for repeat inspection');
   g.state.flags.unrelated=true;g.state.objects['kagaribi_f1/q001_empty_east']='lit';
   assert.equal(object(g,'q001_empty_west').unread,false);g.teleport('kagaribi_f1',7,1,'west');
   g.state.objects['kagaribi_f1/q001_empty_west']='lit';assert.equal(object(g,'q001_empty_west').unread,true,'a new description is marked even from another cell and facing');
-  g.teleport('kagaribi_f1',8,1,'north');read(g,'q001_empty_west');assert.match(g.state.waiting.text,/火が灯り/);drain(g);roundtrip(g);
-  assert.equal(object(g,'q001_empty_west').unread,false);
+  g.teleport('kagaribi_f1',8,1,'north');assert.ok(explorationGlyphs(g,dom).includes('?'),'a newly lit wall torch has unread text');
+  read(g,'q001_empty_west');assert.match(g.state.waiting.text,/火が灯り/);drain(g);roundtrip(g);
+  assert.equal(object(g,'q001_empty_west').unread,false);assert.ok(!explorationGlyphs(g,dom).includes('?'));
   g.state.objects['kagaribi_f1/q001_empty_west']='empty';assert.equal(object(g,'q001_empty_west').unread,false,'returning to an already read description is not new information');
+  assert.ok(!explorationGlyphs(g,dom).includes('?'));
   g.state.objects['kagaribi_f1/q001_empty_west']='extinguished';assert.equal(object(g,'q001_empty_west').unread,true);
-  assert.ok(questions(g,dom,true).includes('8,1'));
+  assert.ok(questions(g,dom,true).includes('8,1'));assert.ok(explorationGlyphs(g,dom).includes('?'));
  }finally{dom.restore();}
 });
 
-test('a cell question remains until every clue on that cell has been read',()=>{
+test('a cell question remains until every clue is read, and read clues do not hide a later event marker in exploration',()=>{
  const dom=installDOM();try{
-  const g=start(undefined,[note('first'),note('second')]);
+  const g=start(undefined,[note('first'),note('second'),note('next',{kind:'decision',trigger:'enter',interactionRange:'here'})]);
   g.data.scripts['unread.second'].commands=[{op:'narrate',text:'別の記録。'}];
-  assert.deepEqual(questions(g,dom),['2,1']);read(g,'first');drain(g);
+  assert.deepEqual(questions(g,dom),['2,1']);assert.deepEqual(explorationGlyphs(g,dom),['?']);read(g,'first');drain(g);
   assert.equal(object(g,'first').unread,false);assert.equal(object(g,'second').unread,true);assert.deepEqual(questions(g,dom),['2,1']);
+  assert.deepEqual(explorationGlyphs(g,dom),['?'],'a read first candidate does not suppress the remaining unread clue');
   read(g,'second');drain(g);assert.deepEqual(questions(g,dom,true),[]);
+  assert.deepEqual(explorationGlyphs(g,dom),['!'],'the next event remains drawable behind already read clues');
   assert.equal(projectGame(g).dungeon.objects.filter(o=>o.kind==='clue').length,2);
   assert.equal(commandTargets(g,'inspect').filter(t=>t.id.startsWith('object:')).length,2);
  }finally{dom.restore();}
