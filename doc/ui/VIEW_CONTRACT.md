@@ -201,6 +201,8 @@ dungeon.systems[]はwaterworks（現在の水位・残り刻・既知の区画�
 
 partyとrosterには、現在職、成長履歴、習得技能、探索特技、装備、転職候補と能力比較を含めます。jobsは職業カタログ、statNamesは能力値の表示名です。転職候補・探索特技・戦闘技能はenabledとreasonを持ちます。src/application/job-projection.js がコアの計画関数から投影し、Viewで成長・料金・使用許可を計算しません。
 
+party/rosterのfieldAbilitiesは、現在の技能付与（書庫の借用・封印を含む）から本人の習得レベルを満たす探索特技だけを投影します。skillsと同様に未習得の技能を渡しません。習得済みでもMP・場所などの制約で使えない技能はenabled:falseとreasonを持たせて残します。jobsの職業カタログは習得予定レベルの説明を保持します。
+
 ## ダンジョン素材と現地調査
 
 dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `{x,y,width,height}` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。

@@ -117,8 +117,10 @@ test('a pursuer can be lured across either side of the boundary with its pending
 
 test('borrowed skill replaces one native skill, opens seals, survives save and returns on dungeon exit',()=>{
   const g=begin(5),s=spec(g,'library'),book=s.books.find(b=>b.skill==='read_path');walk(g,book.x,book.y,{heal:true});assert.ok(act(g,'library','borrow',book.id,{actor:'ada',sealed:'power'}));assert.ok(!g.skills('ada').includes('power'));assert.ok(permission(data,g.state,'ada','read_path','archive.unlock'));
+  assert.ok(projectGame(g).party.find(a=>a.id==='ada').fieldAbilities.some(a=>a.id==='read_path'));
   const gate=s.gates[0];walk(g,gate.x,gate.y,{heal:true});const mp=g.state.actors.ada.mp;assert.ok(g.dispatch({type:'job.action',actor:'ada',ability:'read_path'}));assert.equal(g.state.actors.ada.mp,mp-3);const tile=gate.tiles[0];assert.ok(g.walkable(g.data.maps[tile.map],tile.x,tile.y));roundtrip(g);
   g.returnTown();assert.ok(g.skills('ada').includes('power'));assert.equal(permission(data,g.state,'ada','read_path','archive.unlock'),null);g.dispatch({type:'travel',region:5});assert.ok(saved(g,'library').opened.includes(gate.id));roundtrip(g);
+  assert.ok(!projectGame(g).party.find(a=>a.id==='ada').fieldAbilities.some(a=>a.id==='read_path'));
 });
 
 test('borrowed battle skills are actually usable, native sealed skills fail, and invalid trades spend nothing',()=>{

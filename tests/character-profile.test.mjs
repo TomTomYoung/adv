@@ -14,6 +14,23 @@ function screen(layout){
   return {...dom,g,view,intents,click,key,panel(tab){view.render(projectGame(g));view.tab=tab;view.render(projectGame(g));},close(){view.destroy();dom.restore();}};
 }
 for(const layout of ['scene','classic']){
+  test(`${layout}: skill pages hide unlearned abilities and retain learned location restrictions`,()=>{
+    const c=screen(layout);try{
+      c.g.award(0,c.g.data.system.xpBase*2);assert.equal(c.g.state.actors.nio.level,2);
+      c.view.profileActor='nio';c.view.profilePage='skills';c.panel('profile');
+      assert.ok(!c.root.querySelector('[data-focus="profile:town:use:survey"]'),'町の一覧に未習得の周辺測量を表示しない');
+      assert.ok(c.root.querySelector('[data-focus="profile:town:use:climb_route"]'));
+      assert.ok(c.g.dispatch({type:'travel',dungeon:'kagaribi'}));const saved=c.g.save();
+      c.panel('party');c.click('roster:party:nio');c.click('profile:party:skills');
+      const content=c.root.querySelector('[data-profile="party"] .profile-content');
+      assert.doesNotMatch(content.textContent,/周辺測量|習得していません/);
+      assert.ok(!content.querySelector('[data-focus="profile:party:use:survey"]'),'隊の一覧に未習得の周辺測量を表示しない');
+      const climb=content.querySelector('[data-focus="profile:party:use:climb_route"]');
+      assert.ok(climb?.disabled);assert.match(climb.parentElement.textContent,/登攀誘導/);
+      assert.equal(climb.parentElement.querySelector('.requirement').textContent,'この迷宮ではこの探索スキルを使えません。');
+      assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
+    }finally{c.close();}
+  });
   test(`${layout}: arrows beside join/leave move only the selected character and retain profile and keyboard focus`,()=>{
     const c=screen(layout);try{
       c.panel('party');const party=[...c.g.state.members],reserve=c.view.model.roster.filter(a=>!a.active).map(a=>a.id);

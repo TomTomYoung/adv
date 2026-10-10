@@ -40,6 +40,24 @@ for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/1
   }
 });
 
+test('探索特技一覧は個人の習得レベルと現在職に従い、MP不足でも習得済みの技能を残します',()=>{
+  const g=newGame();g.state.members=['nio'];g.award(0,data.system.xpBase*8*9);
+  assert.equal(g.state.actors.nio.level,9);assert.equal(g.state.actors.ada.level,1);
+  assert.ok(g.dispatch({type:'travel',dungeon:'kagaribi'}));
+  for(const list of [projectGame(g).party,projectGame(g).roster]){
+    const abilities=list.find(a=>a.id==='nio').fieldAbilities;
+    assert.ok(!abilities.some(a=>a.id==='survey'));assert.ok(abilities.some(a=>a.id==='climb_route'));
+  }
+  g.award(0,data.system.xpBase*9*10-g.state.actors.nio.xp);assert.equal(g.state.actors.nio.level,10);g.state.actors.nio.mp=0;
+  const saved=g.save(),model=projectGame(g);
+  for(const list of [model.party,model.roster]){
+    const survey=list.find(a=>a.id==='nio').fieldAbilities.find(a=>a.id==='survey');
+    assert.ok(survey);assert.equal(survey.enabled,false);assert.match(survey.reason,/MP/);
+  }
+  assert.equal(g.save(),saved);g.returnTown();assert.ok(g.dispatch({type:'job.change',actor:'nio',job:'mage'}));
+  assert.ok(!projectGame(g).roster.find(a=>a.id==='nio').fieldAbilities.some(a=>a.id==='survey'));
+});
+
 test('転職の装備返却・満杯・連打・待機者・負傷は原子的です',()=>{
   const g=newGame();g.give('iron_sword',1-(g.state.inventory.iron_sword??0));g.give('mail',1-(g.state.inventory.mail??0));
   g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});g.dispatch({type:'equip',actor:'ada',item:'mail'});

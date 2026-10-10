@@ -28,7 +28,7 @@ export function projectActorJob(engine,id){
     buffs:buffView(d,s.battle,`actor:${id}`).map(b=>({...b,name:b.name+(dungeonEffectActive(d,s,'buff',b.id)?'':'（停止中）')})),
     covering:(s.battle?.covers??[]).filter(c=>c.sourceActor===id).map(c=>({name:d.actors[c.target.slice(6)].name,remaining:c.remaining})),
     jobOptions:Object.values(d.jobs).map(j=>{const plan=jobChangePlan(d,s,id,j.id);return {id:j.id,current:j.id===a.job,enabled:plan.ok,reason:plan.reason??'',stats:plan.ok?clone(plan.stats):null,returned:(plan.returned??[]).map(item=>d.items[item].name)};}),
-    fieldAbilities:grantsFor(d,s,id).filter(g=>g.api!=='battle.skill').map(g=>{const spec=d.fieldAbilities[g.skill],plan=fieldActionPlan(d,s,id,g.skill);return {id:g.skill,category:abilityCategory(g.skill,true),name:spec.name,level:g.level,mp:spec.mp,description:spec.description,enabled:plan.ok,reason:plan.reason??''};})
+    fieldAbilities:grantsFor(d,s,id).filter(g=>g.api!=='battle.skill'&&a.level>=g.level).map(g=>{const spec=d.fieldAbilities[g.skill],plan=fieldActionPlan(d,s,id,g.skill);return {id:g.skill,category:abilityCategory(g.skill,true),name:spec.name,level:g.level,mp:spec.mp,description:spec.description,enabled:plan.ok,reason:plan.reason??''};})
   };
 }
 export function projectBattleSkills(engine,id){
