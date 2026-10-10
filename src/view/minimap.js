@@ -42,7 +42,14 @@ export function mapSection(model,{onExpand}={}){
   }
   viewport.append(grid);section.append(viewport);
   const legend=make('div','map-legend');
-  for(const [id,label] of [['player','現在地'],['floor','踏査済み'],['wall','壁'],['stairs','階段'],['exit','出口'],['clue','手掛かり'],['decision','次のイベント'],['chest','宝箱'],['door-closed','通行不可'],['door-open','扉通行可'],['water','水没'],['torch-lit','点灯'],['torch-unlit','消灯'],['control','仕掛け']]){const item=make('span','map-legend-item');item.append(image(id,'map-legend-icon'),make('span','',label));legend.append(item);}
-  section.append(legend,make('p','map-note','踏査済みの場所は暗闇でも読めます。光の届くセルは明るい暖色で表示します。'));
+  for(const [id,label,edge] of [['player','現在地'],['floor','踏査済み'],['wall','壁'],['stairs','階段'],['exit','出口'],['clue','手掛かり'],['clue','壁面の手掛かり','east'],['decision','次のイベント'],['chest','宝箱'],['door-closed','通行不可'],['door-open','扉通行可'],['water','水没'],['torch-lit','点灯'],['torch-unlit','消灯'],['control','仕掛け']]){
+    const item=make('span','map-legend-item');let icon;
+    if(edge){
+      icon=make('span','map-legend-icon map-legend-edge');icon.setAttribute('aria-hidden','true');
+      const marker=make('span',`map-edge-marker ${edge}`);marker.append(image(id,'map-edge-image'));icon.append(marker);
+    }else icon=image(id,'map-legend-icon');
+    item.append(icon,make('span','',label));legend.append(item);
+  }
+  section.append(legend,make('p','map-note','マスの端の小さい「？」は壁面の調査対象です。そのマスに立ち、印のある壁を向いて調べます。'),make('p','map-note','踏査済みの場所は暗闇でも読めます。光の届くセルは明るい暖色で表示します。'));
   return section;
 }
