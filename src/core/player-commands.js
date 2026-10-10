@@ -4,7 +4,7 @@ import {processFieldEvents} from './field-events.js';
 import {faces} from './systems/common.js';
 import {canInteractWithEvent} from './event-interaction.js';
 import {connectionSurfaces} from './systems/map-connections.js';
-import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection} from './inspection.js';
+import {inspectionSignature,inspectionOrigin,inspectScript,finishInspection,hasReadInspection,rememberInspectionInformation} from './inspection.js';
 import {interiorEntrances} from './world.js';
 import {dungeonRestrictions,dungeonRestrictionReason} from './dungeon-restrictions.js';
 
@@ -83,12 +83,18 @@ export function commandDialog(engine){
   if(!target)return {type:'choice',text:targets.length?'何を調べる？':'今は調べられるものがない。',options:[...targets.map(t=>({id:key(['target',t.id]),text:t.name,enabled:true,target:t.id})),cancel]};
   return {type:'choice',text:target.text?`${target.name}\n\n${target.text}`:target.name,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
 }
-function remember(engine,target,executing=false){
-  if(!target.script||executing||!target.actions.some(a=>a.enabled))engine.state.inspections[target.record]=target.signature;
+function remember(engine,target){
+  // Preserve a completed receipt from older saves when opening it to reread.
+  const enabled=target.actions.some(a=>a.enabled),read=enabled&&target.script&&hasReadInspection(engine.state,target.record,target,target.status);
+  if(read)rememberInspectionInformation(engine.state,target.record,target.information);
+  if(!target.script||!enabled)engine.state.inspections[target.record]=target.signature;
+  // Updating an unavailable reason to an enabled action must not turn the old
+  // receipt into proof that the script about to start has already been read.
+  else if(!read&&engine.state.inspections[target.record]===target.signature)delete engine.state.inspections[target.record];
   if(target.status)engine.state.inspections[`${target.record}/status`]=target.status;
 }
 function performTarget(engine,target,action){
-  const s=engine.state;remember(engine,target,true);
+  const s=engine.state;remember(engine,target);
   if(target.script)s.inspectionActive={record:target.record,script:target.script,args:target.args,information:target.information};
   let changed;
   if(action.intent.type==='quest.event')changed=openQuestEvent(engine,action.intent.quest,action.intent.id);

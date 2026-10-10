@@ -6,6 +6,16 @@ export function inspectionSignature(value){
   for(let i=0;i<text.length;i++){a=Math.imul(a^text.charCodeAt(i),16777619);b=Math.imul(b,33)^text.charCodeAt(i);}
   return (a>>>0).toString(16).padStart(8,'0')+(b>>>0).toString(16).padStart(8,'0');
 }
+export function rememberInspectionInformation(state,record,information){
+  state.inspections[`${record}/read/${information}`]=information;
+}
+export function hasReadInspection(state,record,info,status){
+  const records=state.inspections??{};
+  if(records[`${record}/read/${info.information}`]===info.information)return true;
+  // Older saves have only the latest signature. A running script or a viewed
+  // failure reason does not prove that its available description was read.
+  return state.inspectionActive?.record!==record&&records[record]===info.signature&&(status===undefined||records[`${record}/status`]===undefined||records[`${record}/status`]===status);
+}
 const presentationOps=['scene.background','scene.cast','scene.cast.clear','audio.bgm','audio.se','effect.play','screen.set','screen.clear'];
 const freeOps=[...presentationOps,'say','narrate','set','add','flag.set','object.state.set','event.mark_done','map.reveal','facing.set','story.scene','map.teleport','town.return','item.give','quest.evidence','quest.accept','actor.heal','actor.restore_mp','party.join','party.leave','status.remove','light.refill','return'];
 // A prior write can change a later branch. Prove that all such paths are free
@@ -37,9 +47,9 @@ export function inspectScript(engine,id,args={}){
       if(!selected&&!['if','switch','call','jump','return','say','narrate','choice',...presentationOps].includes(c.op)&&!c.target?.startsWith?.('local.'))writes=true;
       if(c.op==='if'){const yes=Boolean(value(c.condition));seen.push(yes);walk(yes?c.then:c.else,selected);}
       else if(c.op==='switch'){const v=value(c.value);seen.push(v);walk(c.cases.find(x=>x.equals===v)?.commands??c.default,selected);}
-      else if(c.op==='say'||c.op==='narrate'){const text=[c.op,c.character,c.name,value(c.text)];seen.push(text);shown.push(text);}
+      else if(c.op==='say'||c.op==='narrate'){const text=[c.op,c.character,c.name,value(c.text)];seen.push(text);if(!selected)shown.push(text);}
       else if(c.op==='choice'){
-        for(const o of c.options.filter(o=>o.visibleWhen===undefined||value(o.visibleWhen))){const enabled=o.condition===undefined||Boolean(value(o.condition));seen.push([o.id,o.text,enabled]);shown.push([o.id,o.text,enabled]);if(enabled){const local=structuredClone(context.local);walk(o.commands,true);context.local=local;}}
+        for(const o of c.options.filter(o=>o.visibleWhen===undefined||value(o.visibleWhen))){const enabled=o.condition===undefined||Boolean(value(o.condition));seen.push([o.id,o.text,enabled]);if(!selected)shown.push([o.id,o.text,enabled]);if(enabled){const local=structuredClone(context.local);walk(o.commands,true);context.local=local;}}
       }else if(c.op==='call'||c.op==='jump'){
         if(active.has(c.script)){effect=true;consumes||=!selected;continue;}
         active.add(c.script);const local=context.local;
@@ -61,7 +71,7 @@ export function inspectScript(engine,id,args={}){
   }
   try{active.add(id);walk(engine.data.scripts[id]?.commands);}catch{effect=true;consumes=true;seen.push('dynamic');}
   if(writes&&!consumes)consumes=mayConsumeAfterWrite(engine.data,id);
-  return {effect,consumes,information:inspectionSignature(shown),signature:inspectionSignature([id,seen])};
+  return {effect,consumes,hasInformation:shown.length>0,information:inspectionSignature(shown),signature:inspectionSignature([id,seen])};
 }
 export function validateInspections(state,data){
   const values=state.inspections;
@@ -74,6 +84,6 @@ export function finishInspection(engine){
   const s=engine.state,a=s.inspectionActive;if(!a||s.vm.length||s.battle)return;
   const now=inspectScript(engine,a.script,a.args);
   // Do not mark a newly unlocked description as read before it is displayed.
-  if(now.information===a.information)s.inspections[a.record]=now.signature;
+  if(now.information===a.information){s.inspections[a.record]=now.signature;rememberInspectionInformation(s,a.record,a.information);}
   s.inspectionActive=null;
 }

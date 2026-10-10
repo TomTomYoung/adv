@@ -17,7 +17,7 @@ export function mapSection(model,{onExpand}={}){
   const viewport=make('div','map-viewport'),grid=make('div','minimap');grid.style.setProperty('--map-width',d.width);grid.setAttribute('aria-label','探索済みの地図');
   for(const row of d.cells)for(const cell of row){
     const here=cell.x===d.location.x&&cell.y===d.location.y,known=cell.known||here;
-    const objects=known?d.objects.filter(o=>o.x===cell.x&&o.y===cell.y):[],object=objects.find(o=>!o.edge);
+    const objects=known?d.objects.filter(o=>o.x===cell.x&&o.y===cell.y&&o.unread!==false):[],object=objects.find(o=>!o.edge);
     const terrain=!known?'unknown':cell.wall?'wall':cell.water?'water':cell.floor===false||cell.relief?'pit':'floor';
     const square=make('span',`map-cell ${terrain}${here?' current':''}`);square.dataset.x=String(cell.x);square.dataset.y=String(cell.y);
     const tile=image(terrain,'map-terrain');square.append(tile);
@@ -50,6 +50,6 @@ export function mapSection(model,{onExpand}={}){
     }else icon=image(id,'map-legend-icon');
     item.append(icon,make('span','',label));legend.append(item);
   }
-  section.append(legend,make('p','map-note','マスの端の小さい「？」は壁面の調査対象です。そのマスに立ち、印のある壁を向いて調べます。'),make('p','map-note','踏査済みの場所は暗闇でも読めます。光の届くセルは明るい暖色で表示します。'));
+  section.append(legend,make('p','map-note','「？」は未読の説明がある場所に表示します。マスの端の小さい「？」は壁面の調査対象です。そのマスに立ち、印のある壁を向いて調べます。'),make('p','map-note','踏査済みの場所は暗闇でも読めます。光の届くセルは明るい暖色で表示します。'));
   return section;
 }
