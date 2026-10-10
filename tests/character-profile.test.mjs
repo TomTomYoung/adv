@@ -14,6 +14,23 @@ function screen(layout){
   return {...dom,g,view,intents,click,key,panel(tab){view.render(projectGame(g));view.tab=tab;view.render(projectGame(g));},close(){view.destroy();dom.restore();}};
 }
 for(const layout of ['scene','classic']){
+  test(`${layout}: skill pages hide unlearned abilities and retain learned location restrictions`,()=>{
+    const c=screen(layout);try{
+      c.g.award(0,c.g.data.system.xpBase*2);assert.equal(c.g.state.actors.nio.level,2);
+      c.view.profileActor='nio';c.view.profilePage='skills';c.panel('profile');
+      assert.ok(!c.root.querySelector('[data-focus="profile:town:use:survey"]'),'町の一覧に未習得の周辺測量を表示しない');
+      assert.ok(c.root.querySelector('[data-focus="profile:town:use:climb_route"]'));
+      assert.ok(c.g.dispatch({type:'travel',dungeon:'kagaribi'}));const saved=c.g.save();
+      c.panel('party');c.click('roster:party:nio');c.click('profile:party:skills');
+      const content=c.root.querySelector('[data-profile="party"] .profile-content');
+      assert.doesNotMatch(content.textContent,/周辺測量|習得していません/);
+      assert.ok(!content.querySelector('[data-focus="profile:party:use:survey"]'),'隊の一覧に未習得の周辺測量を表示しない');
+      const climb=content.querySelector('[data-focus="profile:party:use:climb_route"]');
+      assert.ok(climb?.disabled);assert.match(climb.parentElement.textContent,/登攀誘導/);
+      assert.equal(climb.parentElement.querySelector('.requirement').textContent,'この迷宮ではこの探索スキルを使えません。');
+      assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
+    }finally{c.close();}
+  });
   test(`${layout}: arrows beside join/leave move only the selected character and retain profile and keyboard focus`,()=>{
     const c=screen(layout);try{
       c.panel('party');const party=[...c.g.state.members],reserve=c.view.model.roster.filter(a=>!a.active).map(a=>a.id);
@@ -56,6 +73,78 @@ for(const layout of ['scene','classic']){
       c.click('roster:party:apply');assert.ok(!c.g.state.members.includes('nio'));assert.equal(c.intents.at(-1).actor,'nio');
       c.click(`roster:tavern:${candidate.id}`);c.click('roster:tavern:apply');assert.ok(c.g.state.members.includes(candidate.id));assert.equal(c.intents.at(-1).actor,candidate.id);
       assert.ok(c.root.querySelector('[data-profile="party"]').dataset.actor!=='nio');
+    }finally{c.close();}
+  });
+  test(`${layout}: detox keeps every target with its own state and returns focus safely after curing`,()=>{
+    const c=screen(layout);try{
+      assert.ok(c.g.dispatch({type:'party',action:'join',actor:'berg'}));c.g.state.actors.nio.statuses=['poison'];c.g.state.actors.ada.statuses=['wet'];
+      const saved=c.g.save();c.view.profileActor='sera';c.view.profilePage='magic';c.panel('profile');assert.equal(c.g.save(),saved);
+      const entry=()=>c.root.querySelector('[data-field-skill="cleanse"]'),rows=()=>entry().querySelectorAll('.profile-field-target');
+      assert.deepEqual(rows().map(row=>row.dataset.target),c.g.state.members);
+      for(const row of rows()){
+        const id=row.dataset.target,use=row.querySelector('button');
+        assert.equal(row.querySelector('.profile-target-name').textContent,c.g.data.actors[id].name);
+        assert.equal(use.disabled,id!=='nio');assert.equal(use.textContent,'使う');
+        assert.equal(use.getAttribute('aria-label'),`${c.g.data.actors[id].name}に解毒を使う`);
+        for(const description of use.getAttribute('aria-describedby').split(' '))assert.ok(c.root.querySelector(`[id="${description}"]`));
+        assert.equal(row.querySelector('.profile-target-vitals'),null);assert.doesNotMatch(row.textContent,/HP|MP/);
+        if(id==='nio')assert.equal(row.querySelector('.profile-target-status').textContent,'毒');
+        else if(id==='ada'){assert.match(row.querySelector('.profile-target-status').textContent,/濡れ/);assert.equal(row.querySelector('.profile-target-reason').textContent,'毒ではありません。');}
+        else{assert.equal(row.querySelector('.profile-target-status').textContent,'毒ではありません。');assert.equal(row.querySelector('.profile-target-reason'),null);assert.doesNotMatch(row.textContent,/状態異常なし/);}
+      }
+      assert.equal(entry().querySelectorAll('.profile-field-reason').length,0);
+      for(const vitals of c.root.querySelector('[data-field-skill="heal"]').querySelectorAll('.profile-target-vitals')){assert.match(vitals.textContent,/^HP \d+\/\d+$/);assert.doesNotMatch(vitals.textContent,/MP/);}
+      const content=c.root.querySelector('.profile-content');content.scrollTop=140;const mp=c.g.state.actors.sera.mp;
+      c.click('profile:town:use:cleanse:nio');
+      assert.deepEqual(c.intents.at(-1),{type:'field.skill',actor:'sera',skill:'cleanse',target:'nio'});
+      assert.deepEqual(c.g.state.actors.nio.statuses,[]);assert.deepEqual(c.g.state.actors.ada.statuses,['wet']);assert.equal(c.g.state.actors.sera.mp,mp-2);
+      assert.deepEqual(rows().map(row=>row.dataset.target),c.g.state.members);
+      assert.ok(rows().every(row=>row.querySelector('button').disabled));
+      assert.equal(entry().querySelector('[data-target="nio"] .profile-target-status').textContent,'毒ではありません。');assert.equal(entry().querySelector('[data-target="nio"] .profile-target-reason'),null);
+      assert.equal(c.document.activeElement.dataset.focus,'profile:town:magic');assert.equal(c.root.querySelector('.profile-content').scrollTop,140);
+      const cured=c.g.save();c.key('Enter');assert.equal(c.g.save(),cured);assert.equal(c.intents.filter(intent=>intent.type==='field.skill').length,1);
+    }finally{c.close();}
+  });
+  test(`${layout}: dungeon party spells show one MP restriction while preserving each target's condition`,()=>{
+    const c=screen(layout);try{
+      assert.ok(c.g.dispatch({type:'travel',dungeon:'kagaribi'}));c.g.state.actors.nio.statuses=['poison'];c.g.state.actors.sera.mp=1;
+      const saved=c.g.save();c.panel('party');c.click('roster:party:sera');c.click('profile:party:magic');
+      const entry=c.root.querySelector('[data-profile="party"] [data-field-skill="cleanse"]'),reason=entry.querySelector('.profile-field-reason');
+      assert.equal(entry.querySelectorAll('.profile-field-reason').length,1);assert.match(reason.textContent,/MP/);
+      assert.match(entry.textContent,/現在MP 1\//);assert.equal(entry.querySelectorAll('.profile-target-reason').length,0);
+      const rows=entry.querySelectorAll('.profile-field-target');assert.deepEqual(rows.map(row=>row.dataset.target),c.g.state.members);
+      for(const row of rows){
+        const use=row.querySelector('button');assert.ok(use.disabled);assert.ok(use.getAttribute('aria-describedby').split(' ').includes(reason.id));
+      }
+      assert.match(entry.querySelector('[data-target="nio"] .profile-target-status').textContent,/毒/);
+      assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
+    }finally{c.close();}
+  });
+  test(`${layout}: group recovery displays the whole party beneath one shared use operation`,()=>{
+    const c=screen(layout);try{
+      c.g.award(0,3600);c.g.state.actors.ada.statuses=['poison','wet'];c.g.state.actors.nio.statuses=['poison'];
+      c.view.profileActor='sera';c.view.profilePage='magic';c.panel('profile');
+      const entry=c.root.querySelector('[data-field-skill="purify"]'),rows=entry.querySelectorAll('.profile-field-target');
+      assert.equal(rows.length,1);assert.equal(rows[0].querySelector('.profile-target-name').textContent,'仲間全員');
+      assert.deepEqual(rows[0].querySelectorAll('.profile-target-member').map(member=>member.dataset.member),c.g.state.members);
+      assert.deepEqual(rows[0].querySelectorAll('.profile-target-member-name').map(name=>name.textContent),c.g.state.members.map(id=>c.g.data.actors[id].name));
+      assert.equal(entry.querySelectorAll('.profile-target-vitals').length,0);
+      assert.equal(entry.querySelectorAll('button').length,1);assert.equal(entry.querySelector('button').getAttribute('aria-label'),'仲間全員に清浄の祈りを使う');
+      const mp=c.g.state.actors.sera.mp;c.click('profile:town:use:purify:sera');
+      assert.deepEqual(c.g.state.actors.ada.statuses,[]);assert.deepEqual(c.g.state.actors.nio.statuses,[]);assert.equal(c.g.state.actors.sera.mp,mp-c.g.data.skills.purify.mp);
+      assert.equal(c.document.activeElement.dataset.focus,'profile:town:magic');
+    }finally{c.close();}
+  });
+  test(`${layout}: self healing on the skills page keeps focus when the same action remains usable`,()=>{
+    const c=screen(layout);try{
+      c.g.award(0,3600);assert.ok(c.g.dispatch({type:'job.change',actor:'ada',job:'monk'}));c.g.state.actors.ada.hp=1;
+      c.view.profileActor='ada';c.view.profilePage='skills';c.panel('profile');
+      const entry=c.root.querySelector('[data-field-skill="breathe"]');assert.equal(entry.querySelectorAll('.profile-field-target').length,1);
+      assert.deepEqual(entry.querySelectorAll('.profile-target-member').map(member=>member.dataset.member),['ada']);
+      assert.equal(entry.querySelector('.profile-target-vitals').textContent,`HP 1/${c.g.stats('ada').hp}`);
+      const key='profile:town:use:breathe:ada',mp=c.g.state.actors.ada.mp;c.click(key);
+      assert.ok(c.g.state.actors.ada.hp>1&&c.g.state.actors.ada.hp<c.g.stats('ada').hp);assert.equal(c.g.state.actors.ada.mp,mp-c.g.data.skills.breathe.mp);
+      assert.ok(!c.root.querySelector(`[data-focus="${key}"]`).disabled);assert.equal(c.document.activeElement.dataset.focus,key);
     }finally{c.close();}
   });
   test(`${layout}: shop keeps all products and recipient counts visible through selection and purchase`,()=>{

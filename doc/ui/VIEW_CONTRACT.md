@@ -41,6 +41,8 @@
 
 項目：party[] / 内容：id、表示名、職業、人物紹介、portrait画像URL、HP/MPと上限、状態異常、能力値、技能、装備名・取外し可否
 
+項目：party[].skills[].fieldTargets[]（roster[]も同じ） / 内容：戦闘外回復技能の対象ID・名前・enabled・reason・reasonScope。reasonScopeは技能共通の拒否ならability、対象側ならtarget、使用可能ならnullです。members[]に各対象の名前、HP/MPと上限、表示用の状態異常名、技能に必要な数値の表示文字列vitals[]を持ちます。全体技能の操作IDは術者のまま、members[]には隊全員を含めます。Viewはenabledで操作を無効化し、abilityの理由を一度表示します。対象の状態を使用可否と独立して表示し、日本語の理由文から効果や可否を推測しません。[対象一覧](CHARACTER_PROFILES.md#回復技能の対象一覧2026-10-10)。
+
 項目：roster[] / tavern / 内容：候補全員の表示情報、active・canJoin・canLeave・swapCandidates。酒場の名前・説明・定員・編集可否
 
 項目：quests[]/tracked / 内容：公開依頼情報、受注可能か、段階、調査座標、完了済みなら選んだ結末
@@ -198,6 +200,8 @@ dungeon.systems[]はwaterworks（現在の水位・残り刻・既知の区画�
 ## 職業・技能と表示可否
 
 partyとrosterには、現在職、成長履歴、習得技能、探索特技、装備、転職候補と能力比較を含めます。jobsは職業カタログ、statNamesは能力値の表示名です。転職候補・探索特技・戦闘技能はenabledとreasonを持ちます。src/application/job-projection.js がコアの計画関数から投影し、Viewで成長・料金・使用許可を計算しません。
+
+party/rosterのfieldAbilitiesは、現在の技能付与（書庫の借用・封印を含む）から本人の習得レベルを満たす探索特技だけを投影します。skillsと同様に未習得の技能を渡しません。習得済みでもMP・場所などの制約で使えない技能はenabled:falseとreasonを持たせて残します。jobsの職業カタログは習得予定レベルの説明を保持します。
 
 ## ダンジョン素材と現地調査
 

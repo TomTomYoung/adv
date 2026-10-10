@@ -72,7 +72,7 @@ export function dungeonFieldPlan(data,state,actor,ability){
     const action=DUNGEON_SYSTEMS[ctx.spec.use].fieldIntent?.(ctx,actor,ability);
     if(action){const intent={type:'dungeon.action',system:ctx.id,...action};return {...dungeonActionPlan(data,state,intent),dungeonIntent:intent};}
   }
-  return {ok:false,reason:'この迷宮ではその探索スキルを使えません。'};
+  return {ok:false,reason:'この迷宮ではこの探索スキルを使えません。'};
 }
 export function enterDungeon(engine,mapId){
   const {data,state}=engine;if(!data.game.dungeonVersion)return;
