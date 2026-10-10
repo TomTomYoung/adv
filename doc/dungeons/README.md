@@ -1,10 +1,12 @@
 # 探索・ダンジョン
 
+2026-10-10: 調査と仕掛けは配置セルでの操作を基本とし、必要な正面アクセスだけを例外として明示しています。探索画面の印も操作位置に合わせます。[調査仕様](../ui/INSPECTION.md)、[地図の未読・次イベント表示](../ui/MINIMAP.md)。
+
 2026-10-01: [篝火の迷宮の拡張](KAGARIBI_EXPANSION.md)。3層9区画、近道、詰所補給と4件の小事件。
 
 2026-09-26: [水路拡張と地下関所](WATERWAY_EXPANSION.md)を実装済み。
 
-確認日: 2026-10-01。作品版1.25.0。[文書全体へ戻る](../README.md)。
+確認日: 2026-10-10。作品版1.25.0。[文書全体へ戻る](../README.md)。
 
 [CELL_LAYERS.md](CELL_LAYERS.md)：セル種30種類・共有エッジ4種類と地点ごとの上書き。
 
@@ -24,7 +26,7 @@
 
 [DUNGEON_SYSTEM_DESIGN.md](DUNGEON_SYSTEM_DESIGN.md)：共通部品・正本・責務・拡張方法。
 
-[DUNGEON_GENERATION.md](DUNGEON_GENERATION.md)：ランダム生成の設計。階層別の通路・こぶ・小部屋、セル・エッジ・物体・素材・仕掛け・魔物、競合排除、候補比較と原稿出力。生成機能は未実装。
+[DUNGEON_GENERATION.md](DUNGEON_GENERATION.md)：ランダム生成の設計と現在の対応範囲。[統合確認画面](../../dungeon-generation-preview.html)で単一マップの地形・セル生成、候補確認、味方・魔物の設定、実ゲームでの試遊・戦闘に対応。階層別の環境、仕掛け生成と成立検査、候補の保管・比較一覧・採用、原稿一式の出力は未完了。
 
 [DUNGEON_RESTRICTIONS.md](DUNGEON_RESTRICTIONS.md)：トラップ・イベントによる帰還印封印と帰還禁止、発生元別の解除・保存。
 
