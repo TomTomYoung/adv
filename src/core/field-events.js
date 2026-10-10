@@ -5,6 +5,7 @@ import {dungeonCell,dungeonFieldParameters} from './dungeons.js';
 import {cellEventKey,cellEntryId} from './cell-layers.js';
 import {freshFieldReactions,fieldEventIndex,fieldReactionKey} from './field-signals.js';
 import {currentIllumination} from './lighting.js';
+import {storyJourneyArrival,storyArrivalEntryId,consumeStoryArrivalEntry} from './world.js';
 
 export const FIELD_EVENT_TRIGGERS=['enter','auto','interact','action'];
 export const fieldIdle=state=>!state.waiting&&!state.battle&&!state.vm.length;
@@ -38,9 +39,17 @@ function enterEvent(engine){
 }
 function arriveEvent(engine){
   const s=engine.state,j=s.journey;if(!j)return false;
-  const q=engine.data.quests[j.quest],place=q.story.worldPlaces[q.story.actions[j.action].journey.to];
-  const arrived=place.kind==='town'?s.mode==='town'&&s.townLocation===place.location:onFieldCell(s,place);
-  return arrived&&arriveStoryJourney(engine);
+  return Boolean(storyJourneyArrival(engine.data,s,j.quest,j.action))&&arriveStoryJourney(engine);
+}
+function boundStoryEvent(engine){
+  const s=engine.state,entry=s.fieldEntry;
+  if(s.journey||!entry||!onFieldCell(s,entry))return false;
+  for(const [id,story] of Object.entries(s.stories)){
+    const q=engine.data.quests[id],place=q.story?.scenes[story.scene]?.place,point=story.arrivals?.[place]?.point;
+    if(s.quests[id]?.stage!=='active'||!point||!onFieldCell(s,point)||entry.fired.includes(storyArrivalEntryId(id,place)))continue;
+    consumeStoryArrivalEntry(s,id,place);return resumeWorldStory(engine,id);
+  }
+  return false;
 }
 function cellEnterEvent(engine){
   const s=engine.state,entry=s.fieldEntry;if(!entry||!onFieldCell(s,entry))return false;
@@ -96,7 +105,7 @@ export function processFieldEvents(engine){
   let fired=false,budget=engine.data.system.scriptBudget;
   while(fieldIdle(engine.state)){
     if(--budget<0)throw Error('フィールドイベントが実行上限に達しました');
-    if(!enterEvent(engine)&&!arriveEvent(engine)&&!cellEnterEvent(engine)&&!conditionEvent(engine)&&!environmentEvent(engine))break;
+    if(!enterEvent(engine)&&!arriveEvent(engine)&&!boundStoryEvent(engine)&&!cellEnterEvent(engine)&&!conditionEvent(engine)&&!environmentEvent(engine))break;
     fired=true;
   }
   return fired;

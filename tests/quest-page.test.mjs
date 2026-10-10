@@ -26,9 +26,9 @@ for(const id of Object.keys(questPages))test(`${id} is extracted once, retaining
   for(const o of Object.values(q.outcomes))assert.ok(page.includes(o.text));
 });
 
-test('all 19 event IDs are unique, stable when reordered, and cover shared map cells',()=>{
+test('all 20 event IDs are unique, stable when reordered, and cover both return routes',()=>{
   const q=data.quests.q001,entries=questPageEvents(q);
-  assert.equal(entries.length,19);assert.equal(new Set(entries.map(e=>e.id)).size,19);
+  assert.equal(entries.length,20);assert.equal(new Set(entries.map(e=>e.id)).size,20);
   const reordered=structuredClone(q);reordered.model.graph.reverse();reordered.events.reverse();
   assert.deepEqual(questPageEvents(reordered).map(e=>e.id).sort(),entries.map(e=>e.id).sort());
   const bundle=questPageBundle(data,'q001'),page=bundle['QUEST_Q001.md'],svg=bundle['quest-maps/q001-kagaribi_f1.svg'];

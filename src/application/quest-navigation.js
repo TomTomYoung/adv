@@ -15,7 +15,8 @@ export function projectQuestNavigation(data,state,q){
       destination={...place,name:dungeon.name,mapName:map.name,floor:map.floor,label:`${dungeon.name} / ${map.name} (${place.x}, ${place.y}${place.z===undefined?'':`, 高さ${place.z}`})`};
     }
     const entrance=place.kind==='town'?locationRoot(data,place.location)?.dungeonEntrance:null;
-    const automatic=state.journey?.quest===q.id||q.events?.some(e=>e.id===place.event&&e.trigger==='enter');
+    const story=state.stories[q.id],bound=story?.arrivals?.[q.story?.scenes[story?.scene]?.place];
+    const automatic=state.journey?.quest===q.id||Boolean(bound)||q.events?.some(e=>e.id===place.event&&e.trigger==='enter');
     destination.atPlace=atWorldPlace(state,place);
     destination.hint=destination.atPlace?(automatic?'このセルへの進入でイベントが始まる。':place.kind==='town'?'この施設で話を聞く。':'このセルで調べる。'):place.kind==='town'?'町の施設を移動して、この場所へ向かう。':state.location?.map===place.map?(automatic?'指定セルを踏むとイベントが始まる。':'地図を確認し、イベント地点まで歩いて調べる。'):state.mode==='town'?'迷宮の入口に入り、イベント地点まで探索する。':'入口や階段を使い、イベントのあるマップへ向かう。';
     if(entrance)destination.hint=destination.atPlace?'詰所内で話を続ける。':`${data.maps[entrance.map].name} (${entrance.x}, ${entrance.y})の戸口で調べ、詰所に入る。${data.locations[place.location].parent?'受付から留置室前へ進む。':''}`;

@@ -1,5 +1,5 @@
 import {catalogContentHash,questCatalog,questEventId,questPages} from './quest-catalog.mjs';
-import {describePlace} from './location-catalog.mjs';
+import {describeJourneyArrival,describePlace,describeStoryScenePlace,storySceneArrivals} from './location-catalog.mjs';
 import {detailedQuestPageBundle} from './quest-page-details.mjs';
 
 const code=v=>'`'+v+'`';
@@ -11,8 +11,9 @@ const sceneLink=(q,node)=>`[${questEventId(q,'S',node.id)}](#${slug(`${q.id} / $
 
 // IDs use source keys, not array positions. Inserting a scene never renumbers an event.
 export function questPageEvents(q){
+  const arrivalPoints=scene=>storySceneArrivals(q,scene).flatMap(([,a])=>a.journey.arrival.points??[]);
   const entries=[
-    ...q.model.graph.map(n=>({id:questEventId(q,'S',n.id),kind:'scene',source:n.id,place:q.story.worldPlaces?.[q.story.scenes[n.id].place]})),
+    ...q.model.graph.map(n=>({id:questEventId(q,'S',n.id),kind:'scene',source:n.id,place:q.story.worldPlaces?.[q.story.scenes[n.id].place],points:arrivalPoints(n.id)})),
     ...q.events.map(e=>({id:questEventId(q,'P',e.id),kind:'placement',source:e.id,points:e.points})),
     ...q.model.graph.flatMap(n=>{
       const unit=q.model.narrative.units.find(u=>u.id===n.id),place=q.story.worldPlaces?.[q.story.scenes[n.id].place];
@@ -21,7 +22,7 @@ export function questPageEvents(q){
         for(const c of commands){
           if(c.op==='battle.start'){
             const id=c.id??`${q.id}-F-${key}-${c.encounter}`;
-            battles.push({id,kind:'fieldBattle',source:id,place},...(c.events??[]).map(e=>({id:e.id,kind:'battleEvent',source:e.id,place})));
+            battles.push({id,kind:'fieldBattle',source:id,place,points:arrivalPoints(n.id)},...(c.events??[]).map(e=>({id:e.id,kind:'battleEvent',source:e.id,place,points:arrivalPoints(n.id)})));
           }
           for(const option of c.options??[])walk(option.commands,`${key}-${option.id}`);
           for(const branch of ['then','else','on_win','on_escape','on_lose','on_interrupt'])if(c[branch])walk(c[branch],`${key}-${branch}`);
@@ -42,7 +43,7 @@ function mapGroups(q,map){
     const key=`${p.x},${p.y}`;
     if(map.tiles[p.y]?.[p.x]!=='.')throw Error(`${q.id}/${id}: placement is not walkable`);
     if(!groups.has(key))groups.set(key,{x:p.x,y:p.y,ids:[]});
-    groups.get(key).ids.push(id);
+    if(!groups.get(key).ids.includes(id))groups.get(key).ids.push(id);
   };
   for(const e of questPageEvents(q)){
     if(e.place)add(e.place,e.id);
@@ -55,12 +56,15 @@ export function questMapSvg(data,q,map){
   const groups=mapGroups(q,map),cell=46,left=60,top=150;
   const labelAt=p=>groups.find(g=>g.x===p.x&&g.y===p.y)?.label??`(${p.x}, ${p.y})`;
   const route=[map.entrance,...['entry','dark','branch'].map(id=>q.story.worldPlaces[id])].map(labelAt);
+  const returnPoints=[q.story.worldPlaces.dark,...(q.story.actions.old_support.journey.arrival?.points??[])].map(labelAt);
   const lamps=['q001_empty_west','q001_empty_east'].map(id=>labelAt(q.events.find(e=>e.id===id).points.find(p=>p.map===map.id)));
   const x=v=>left+(v+.5)*cell,y=v=>top+(v+.5)*cell;
-  const out=[`<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="930" viewBox="0 0 1420 930" role="img" aria-labelledby="title desc">`,
+  const townY=151+groups.reduce((sum,g)=>sum+27+g.ids.length*23+22,0)+10;
+  const height=Math.max(1030,townY+77+Object.keys(q.outcomes).length*23);
+  const out=[`<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="${height}" viewBox="0 0 1420 ${height}" role="img" aria-labelledby="title desc">`,
     `<title id="title">${xml(q.id+' '+map.name+' イベント配置')}</title>`,
-    '<desc id="desc">配布マップの全セルとクエストの全配置を表示。同じ座標で起きる複数場面は同じ文字の欄に列記。</desc>',
-    '<rect width="1420" height="930" fill="#f7f5ef"/>',
+    '<desc id="desc">配布マップの全セルとクエストの全配置を表示。同じ座標で起きる複数場面は同じ文字の欄に列記。帰路の複数地点と通常のくらがり遭遇は、同じ戦闘と新人救援へ進む。</desc>',
+    `<rect width="1420" height="${height}" fill="#f7f5ef"/>`,
     '<style>text{font-family:"Noto Sans CJK JP","Noto Sans JP",sans-serif;fill:#24333c}.id{font-family:monospace;font-size:17px}.small{font-size:17px}</style>'];
   const text=(xx,yy,t,attrs='')=>out.push(`<text x="${xx}" y="${yy}" ${attrs.replace('class="small"','font-size="17"').replace('class="id"','font-family="monospace" font-size="17"')}>${xml(t)}</text>`);
   text(40,48,`${q.id} 帰らない灯番 / ${map.id}`,'font-size="29"');
@@ -75,7 +79,9 @@ export function questMapSvg(data,q,map){
     out.push(`<circle cx="${x(g.x)}" cy="${y(g.y)}" r="17" fill="#076c79" stroke="#fff" stroke-width="2"/>`);
     text(x(g.x),y(g.y)+7,g.label,'text-anchor="middle" font-size="21" style="fill:white"');
   }
-  const stairs=Object.values(data.dungeons[map.dungeon].systems).filter(s=>s.use==='map_connections').flatMap(s=>s.links.filter(l=>l.kind==='stairs').flatMap(l=>[l.a,l.b].filter(p=>p.map===map.id).map(p=>({...p,kind:'stairs'}))));
+  const connections=Object.values(data.dungeons[map.dungeon].systems).filter(s=>s.use==='map_connections').flatMap(s=>s.links);
+  const stairs=connections.filter(l=>l.kind==='stairs').flatMap(l=>[l.a,l.b].filter(p=>p.map===map.id).map(p=>({...p,kind:'stairs'})));
+  const outlets=connections.flatMap(l=>[l.a,l.b].filter(p=>p.map===map.id));
   for(const o of [...map.objects.filter(o=>!o.quest&&o.id!=='exit'),...stairs]){
     out.push(`<rect x="${x(o.x)-12}" y="${y(o.y)-12}" width="24" height="24" rx="3" fill="#bd7842"/>`);
     text(x(o.x),y(o.y)+6,o.kind==='stairs'?'↓':'i','text-anchor="middle" font-size="19" style="fill:white"');
@@ -84,12 +90,15 @@ export function questMapSvg(data,q,map){
   for(const f of fixtures)out.push(`<circle cx="${x(f.x)+15}" cy="${y(f.y)-15}" r="5" fill="#e49a20" stroke="#513a0d"/>`);
   text(60,609,`青丸 ${groups[0].label}–${groups.at(-1).label}：右欄のクエストイベント（同じ座標は同じ文字）`,'class="small"');
   text(60,641,'濃色：壁 # ／ 淡色：通行セル . ／ 黄点：共通火台','class="small"');
-  text(60,673,'i：巡回記録 (3, 1) ／ ↓：B2への階段 (13, 7)','class="small"');
-  text(60,715,`往路：${route.join(' → ')} ／ 帰路：${[...route].reverse().join(' → ')}`,'font-size="21"');
-  text(60,747,`${lamps.join('・')} の壁松明は任意に調べられる。B2はq001の経路外。`,'class="small"');
-  text(60,789,`${labelAt(map.entrance)}から町へ：篝火広場 → 灯番組合 → 灯番詰所`,'font-size="21"');
-  text(60,821,'町での帰還報告：q001-S-post ／ 結末：q001-E-*','class="small"');
-  text(60,871,'文字は配置点の案内。イベントIDは右欄と本文で共通。','class="small"');
+  text(60,673,`i：巡回記録 (3, 1) ／ 他区画への接続口：${outlets.map(p=>`(${p.x}, ${p.y})`).join('・')}`,'class="small"');
+  text(60,715,`往路：${route.join(' → ')}`,'font-size="21"');
+  text(60,747,`帰路：${route.at(-1)} → ${returnPoints.join(' または ')} → ${route[1]} → ${route[0]}`,'font-size="21"');
+  text(60,779,`${returnPoints.join('・')} は同じ消灯・くらがり戦・新人救援へ進む。`,'class="small"');
+  text(60,811,'老人同行中に通常抽選でくらがりに遭遇しても、その場で救援へ。','class="small"');
+  text(60,853,`${lamps.join('・')} の壁松明は任意に調べられる。他区画はq001の経路外。`,'class="small"');
+  text(60,895,`${labelAt(map.entrance)}から町へ：篝火広場 → 灯番組合 → 灯番詰所`,'font-size="21"');
+  text(60,927,'町での帰還報告：q001-S-post ／ 結末：q001-E-*','class="small"');
+  text(60,977,'文字は配置点の案内。イベントIDは右欄と本文で共通。','class="small"');
   let legendY=151;
   for(const g of groups){
     const scene=q.model.graph.find(n=>{const p=q.story.worldPlaces[q.story.scenes[n.id].place];return p.map===map.id&&p.x===g.x&&p.y===g.y;});
@@ -99,9 +108,9 @@ export function questMapSvg(data,q,map){
     for(const id of g.ids){text(832,legendY,id,'class="id"');legendY+=23;}
     legendY+=22;
   }
-  text(802,801,'町：灯番詰所（組合の奥）','font-size="21"');
-  text(832,828,questEventId(q,'S','post'),'class="id"');
-  Object.keys(q.outcomes).forEach((id,i)=>text(832,851+i*23,questEventId(q,'E',id),'class="id"'));
+  text(802,townY,'町：灯番詰所（組合の奥）','font-size="21"');
+  text(832,townY+27,questEventId(q,'S','post'),'class="id"');
+  Object.keys(q.outcomes).forEach((id,i)=>text(832,townY+50+i*23,questEventId(q,'E',id),'class="id"'));
   out.push('</svg>');return out.join('\n')+'\n';
 }
 
@@ -120,7 +129,7 @@ export function questPageBundle(data,id){
   add(`<!-- quest-page-source:${catalogContentHash(data)} -->`);
   add(`本編は${q.model.graph.length}場面、${Object.keys(q.outcomes).length}結末。ダンジョン内の必須経路は${maps.map(m=>code(m.id)).join('・')}の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。`);
   add('## イベントIDの規則');
-  add('本編の場面は `q001-S-場面キー`、配置物・操作調査は `q001-P-配置キー`、結末は `q001-E-結末キー` を使う。強制戦闘は `q001-F-kuragari`、戦闘中の新人登場は `q001-B-rookie`。全19個がクエスト内で一意。S・P・Eは文書用ID、F・Bは実行データにも記録するID。途中にイベントを追加しても既存IDは変わらない。同じ座標の別場面にも別IDを割り当てる。');
+  add(`本編の場面は \`q001-S-場面キー\`、配置物・操作調査は \`q001-P-配置キー\`、結末は \`q001-E-結末キー\` を使う。強制戦闘は \`q001-F-kuragari\`、戦闘中の新人登場は \`q001-B-rookie\`。全${events.length}個がクエスト内で一意。S・P・Eは文書用ID、F・Bは実行データにも記録するID。途中にイベントを追加しても既存IDは変わらない。同じ座標の別場面にも別IDを割り当てる。同じ戦闘・救援を別地点から起動する場合はF・B・場面IDを共有する。`);
   add('選択肢は所属するイベントIDと選択キーの組で識別する。例：`q001-S-post/repair`。共通の階段、火台、依頼受注機能はマップ・町の機能として区別する。');
   add('## マップとイベント配置');
   for(const map of maps){
@@ -140,31 +149,31 @@ export function questPageBundle(data,id){
     `  post["${postLocation.name} / q001-S-post / q001-E-informed / q001-E-compromise"]`,
     `  entrance["B1入口 (${exit.x}, ${exit.y}) / ${map.id}"]`,
     '  route["B1巡灯路・支道 / q001-S-entry〜gate"]',
-    `  deeper["B2 (${downTarget.x}, ${downTarget.y}) / ${downTarget.map} / q001対象外"]`,
+    `  deeper["${data.maps[downTarget.map].name}・B${data.maps[downTarget.map].floor} (${downTarget.x}, ${downTarget.y}) / ${downTarget.map} / q001対象外"]`,
     '  square <--> guild',
     '  guild <--> post',
     '  square <-->|迷宮へ入る・入口階段で戻る| entrance',
     '  entrance <-->|セルを歩く| route',
-    `  route -.->|"B1 (${down.x}, ${down.y}) の下り階段・任意"| deeper`
+    `  route -.->|"B1 (${down.x}, ${down.y}) の接続口・帰還報告後"| deeper`
   ].join('\n')+'\n```');
   add(`受注は ${code(guild.id)} の依頼掲示板。受注中の依頼の「迷宮の入口へ向かう（篝火の迷宮）」は町のどの施設からでも使え、迷宮入口 ${code(map.id)} (${map.entrance.x}, ${map.entrance.y}) へ入る。帰路は入口の ${code(exit.script)} を調べて広場へ戻り、組合、詰所の順に訪れる。詰所への実到着で自動的に ${code('q001-S-post')} に進む。`);
-  add(`B1 (${down.x}, ${down.y}) の ${code(down.script)} は ${code(downTarget.map)} (${downTarget.x}, ${downTarget.y}) に接続する。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../data/dungeons.json) を参照する。`);
+  add(`B1 (${down.x}, ${down.y}) の ${code(down.script)} は ${data.maps[downTarget.map].name}・B${data.maps[downTarget.map].floor} / ${code(downTarget.map)} (${downTarget.x}, ${downTarget.y}) に接続する。q001受注中の他区画への移動は帰還報告まで閉じ、未受注時の自由探索は可能。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../data/dungeons.json) を参照する。`);
   add('## 本編イベントの順序と実移動');
   for(const n of q.model.graph){
-    const place=q.story.worldPlaces[q.story.scenes[n.id].place];
-    add(`${sceneLink(q,n)}：${q.story.scenes[n.id].title}。${describePlace(data,place)}。`);
+    add(`${sceneLink(q,n)}：${q.story.scenes[n.id].title}。${describeStoryScenePlace(data,q,n.id)}。`);
     for(const option of n.options){
       const action=q.story.actions[`${n.id}_${option.id}`];
       if(!action)continue;
       const dest=option.to.startsWith('@')?questEventId(q,'E',option.to.slice(1)):questEventId(q,'S',option.to);
-      if(action.journey)add(`選択 ${code(option.id)} → ${code(dest)}。行為 ${code(`${n.id}_${option.id}`)} で出発し、${describePlace(data,q.story.worldPlaces[action.journey.to])} に実際に到着して続行する。同行：${action.journey.companions.map(e=>data.characters[q.story.entities[e].character]?.name??e).join('・')||'探索隊のみ'}。`);
+      if(action.journey)add(`選択 ${code(option.id)} → ${code(dest)}。行為 ${code(`${n.id}_${option.id}`)} で出発し、${describeJourneyArrival(data,q,action)} に実際に到着して続行する。同行：${action.journey.companions.map(e=>data.characters[q.story.entities[e].character]?.name??e).join('・')||'探索隊のみ'}。`);
       else add(`${n.automatic?'戦闘中の自動行為':'選択'} ${code(option.id)} → ${code(dest)}。同じ地点で進む。`);
     }
   }
-  add('新人が入口から巡灯路へ駆けつける救助は、戦闘中イベント `q001-B-rookie` から物語行為 `outage_call` を実行する。帰路の消灯会話を送り終えると `q001-F-kuragari` がくらがりとの戦闘を開始する。1ラウンド終了後（第2ラウンド開始時）に新人が発言し、送ると新品油を1つ消費してくらがり除けの携帯松明を25歩分点灯し、`battle.end` で戦闘を強制終了する。`on_interrupt` から `q001-S-rescue` の現地会話へ進む。探索隊の座標は変えない。');
+  add('老人を介助する `old_support` の帰路では、北の (9, 1) と南の (13, 5) のどちらを通っても、共通入口 `q001.v11.visit` から同じ消灯場面へ進む。この2地点で、老人のいる支道から他の区画へ抜ける徒歩経路を覆う。帰路の途中で守りの火が尽き、通常の歩行抽選で `kuragari_hunt` が当選した場合も、その実遭遇セルで同じ消灯場面へ切り替える。消灯・旋回・抽選の外れだけでは開始しない。');
+  add('新人が入口から現地へ駆けつける救助は、戦闘中イベント `q001-B-rookie` から物語行為 `outage_call` を実行する。帰路の消灯会話を送り終えると `q001-F-kuragari` がくらがりとの戦闘を開始する。1ラウンド終了後（第2ラウンド開始時）に新人が発言し、送ると新品油を1つ消費してくらがり除けの携帯松明を25歩分点灯し、`battle.end` で戦闘を強制終了する。`on_interrupt` から `q001-S-rescue` の現地会話へ進む。北・南・通常遭遇のどの経路でも探索隊の座標は変えず、救援は1度だけ実行する。');
   add('第1ラウンドで倒す・逃げる・火で撃退する場合も、その終了確定前に同じ新人イベントを1度だけ実行する。勝利や逃走としては記録せず、強制終了を記録し、戦闘報酬は与えない。新人到着前の全滅は町への帰還と共通チェックポイントによる巻戻しとなり、老人遭遇からの封印・帰路・壁灯・消灯済みフラグを取り消す。救助や油の消費は確定せず、再訪時は老人との遭遇からやり直す。救援成功後は区間を確定し、その後の全滅では戻さない。[共通チェックポイント](EVENT_CHECKPOINTS.md)を参照。戦闘中のセリフでも保存・再開できる。');
   add('探索隊の往路・老人の介助・救助後の入口への移動・詰所への帰還は、出発を選んだ後にプレイヤーが実際に移動する。命令と配置の一覧は [EVENT_CATALOG.md](EVENT_CATALOG.md)、セルごとの明るさは [FIELD_LIGHTING.md](FIELD_LIGHTING.md) を参照する。');
-  add('配置点のIDが同じでも本編場面は異なる。入口は初回の `q001-S-entry` と帰路の `q001-S-gate`、巡灯路は往路の `q001-S-dark`・`q001-S-empty` と帰路の `q001-S-outage`・`q001-S-rescue` が共用する。座標に来るだけで全場面が順番に発生するわけではなく、保存中の場面・移動行為と到着条件に従う。');
+  add('配置点のIDが同じでも本編場面は異なる。入口は初回の `q001-S-entry` と帰路の `q001-S-gate` が共用する。往路の `q001-S-dark`・`q001-S-empty` は (9, 1) だけで起きる。帰路の `q001-S-outage`・`q001-S-rescue` は `old_support` の実到着セルを共用するため、南の配置や通常遭遇で往路の場面が始まることはない。救援後は別の帰路配置を通っても救援を繰り返さない。座標だけで全場面を順番に発生させず、保存中の場面・移動行為と到着条件に従う。');
   add('## 配置イベントと操作条件');
   for(const e of q.events){
     add(`### ${questEventId(q,'P',e.id)}`);

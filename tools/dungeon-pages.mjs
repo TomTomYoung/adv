@@ -50,7 +50,7 @@ function systemRules(data,s){
  switch(s.use){
   case 'fire_network':return [
    `携帯火は最大${s.portable.capacity}成功歩、残り${s.portable.warnings.join('・')}歩で警告します。燃料には${name(data,s.fuelItem)}を使います。火台は${s.fixtures.length}基です。`,
-   `守りのない歩行では${data.system.encounterCheckSteps}成功歩ごとに基本${percent(s.threat.encounterRate)}で抽選します。当選後の候補は${s.threat.encounterPool.map(p=>`${data.encounters[p.encounter].enemies.map(id=>data.enemies[id].name).join('・')}（重み${p.weight}）`).join('、')}です。q001の消灯戦闘は独立した物語イベントです。`,
+   `守りのない歩行では${data.system.encounterCheckSteps}成功歩ごとに基本${percent(s.threat.encounterRate)}で抽選します。当選後の候補は${s.threat.encounterPool.map(p=>`${data.encounters[p.encounter].enemies.map(id=>data.enemies[id].name).join('・')}（重み${p.weight}）`).join('、')}です。移動中の物語行為に遭遇時の到着条件がある場合は、指定遭遇の当選後に現地の物語イベントへ進みます。消灯だけで即座に戦闘を始める処理ではありません。`,
    ...Object.values(s.effects).map(e=>`${e.name}：${e.description} 通常遭遇率${e.encounterRate}倍、通常敵の能力${e.enemyScale}倍。`)
   ];
   case 'map_connections':return [`接続${s.links.length}本。通常扉・水密扉は接続口の壁面、階段は接続セルで操作します。条件と水没状態は歩行・操作・表示で共通に判定します。`];

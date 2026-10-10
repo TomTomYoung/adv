@@ -391,13 +391,13 @@ npm run check:docs
 
 ### セル上のイベント種別
 
-マップ固有とクエストから投影した map.objects は計526定義、8種、配置座標は525か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
+マップ固有とクエストから投影した map.objects は計527定義、8種、配置座標は526か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
 
 `chest`：21定義。進入時0／調べる21、blocking指定0、safe指定21、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
 
 `clue`：206定義。進入時0／調べる206、blocking指定0、safe指定195、once指定0。配置例：`q006_clue_a` region_1_f2 (4,3) ／ `q008_clue_a` region_1_f2 (6,3)。
 
-`decision`：208定義。進入時3／調べる205、blocking指定0、safe指定204、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
+`decision`：209定義。進入時4／調べる205、blocking指定0、safe指定204、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
 
 `door`：24定義。進入時0／調べる24、blocking指定20、safe指定24、once指定0。配置例：`door` region_1_f1 (9,3) ／ `door` region_1_f2 (9,3)。
 

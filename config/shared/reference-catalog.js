@@ -5011,7 +5011,7 @@ export const referenceData={
         "script"
       ],
       "kind": "scripts",
-      "id": "q001.wall.q001_empty_west"
+      "id": "q001.v11.visit"
     },
     {
       "file": "quests/q001.events.json",
@@ -5030,6 +5030,28 @@ export const referenceData={
       "path": [
         "events",
         4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q001.wall.q001_empty_west"
+    },
+    {
+      "file": "quests/q001.events.json",
+      "path": [
+        "events",
+        5,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "quests/q001.events.json",
+      "path": [
+        "events",
+        5,
         "script"
       ],
       "kind": "scripts",
@@ -5039,7 +5061,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        5,
+        6,
         "points",
         0,
         "map"
@@ -5051,7 +5073,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        5,
+        6,
         "script"
       ],
       "kind": "scripts",
@@ -5061,7 +5083,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        6,
+        7,
         "dungeon"
       ],
       "kind": "dungeons",
@@ -5071,7 +5093,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        6,
+        7,
         "points",
         0,
         "map"
@@ -5083,7 +5105,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        6,
+        7,
         "script"
       ],
       "kind": "scripts",
@@ -34371,6 +34393,9 @@ export const referenceData={
       "q001_return": {
         "name": "油切れの巡灯路"
       },
+      "q001_return_south": {
+        "name": "帰路の南側の曲がり角"
+      },
       "q001_elder": {
         "name": "最後の灯の下の老人"
       },
@@ -36307,11 +36332,11 @@ export const referenceData={
         "events",
         2
       ],
-      "id": "q001_elder",
-      "name": "最後の灯の下の老人",
+      "id": "q001_return_south",
+      "name": "帰路の南側の曲がり角",
       "map": "kagaribi_f1",
       "x": 13,
-      "y": 3,
+      "y": 5,
       "trigger": "enter"
     },
     {
@@ -36326,22 +36351,12 @@ export const referenceData={
         "events",
         3
       ],
-      "id": "q001_empty_west",
-      "name": "西の壁松明",
+      "id": "q001_elder",
+      "name": "最後の灯の下の老人",
       "map": "kagaribi_f1",
-      "x": 8,
-      "y": 1,
-      "edge": "north",
-      "trigger": "interact",
-      "fire": {
-        "effect": "ward",
-        "radius": 1,
-        "litStates": [
-          "lit",
-          "low"
-        ]
-      },
-      "initialState": "empty"
+      "x": 13,
+      "y": 3,
+      "trigger": "enter"
     },
     {
       "file": "quests/q001.events.json",
@@ -36355,10 +36370,10 @@ export const referenceData={
         "events",
         4
       ],
-      "id": "q001_empty_east",
-      "name": "東の壁松明",
+      "id": "q001_empty_west",
+      "name": "西の壁松明",
       "map": "kagaribi_f1",
-      "x": 11,
+      "x": 8,
       "y": 1,
       "edge": "north",
       "trigger": "interact",
@@ -36384,6 +36399,35 @@ export const referenceData={
         "events",
         5
       ],
+      "id": "q001_empty_east",
+      "name": "東の壁松明",
+      "map": "kagaribi_f1",
+      "x": 11,
+      "y": 1,
+      "edge": "north",
+      "trigger": "interact",
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      },
+      "initialState": "empty"
+    },
+    {
+      "file": "quests/q001.events.json",
+      "path": [
+        "events",
+        6,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        6
+      ],
       "id": "q001_last_lamp",
       "name": "老人を守る最後の壁松明",
       "map": "kagaribi_f1",
@@ -36405,13 +36449,13 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        6,
+        7,
         "points",
         0
       ],
       "eventPath": [
         "events",
-        6
+        7
       ],
       "id": "kagaribi",
       "name": "灯を受け渡す準備",
@@ -58353,11 +58397,19 @@ export const referenceData={
       ],
       "id": "q001_return"
     },
-    "events/q001_elder": {
+    "events/q001_return_south": {
       "file": "quests/q001.events.json",
       "path": [
         "events",
         2
+      ],
+      "id": "q001_return_south"
+    },
+    "events/q001_elder": {
+      "file": "quests/q001.events.json",
+      "path": [
+        "events",
+        3
       ],
       "id": "q001_elder"
     },
@@ -58365,7 +58417,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        3
+        4
       ],
       "id": "q001_empty_west"
     },
@@ -58373,7 +58425,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        4
+        5
       ],
       "id": "q001_empty_east"
     },
@@ -58381,7 +58433,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        5
+        6
       ],
       "id": "q001_last_lamp"
     },
@@ -58389,7 +58441,7 @@ export const referenceData={
       "file": "quests/q001.events.json",
       "path": [
         "events",
-        6
+        7
       ],
       "id": "kagaribi"
     },

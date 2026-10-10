@@ -1,6 +1,6 @@
 import {evaluate} from './expression.js';
 import {objectVisible} from './quest-events.js';
-import {nextQuestPlace} from './quest-navigation.js';
+import {nextQuestPlaces} from './quest-navigation.js';
 import {hasReadInspection,inspectScript,inspectionSignature} from './inspection.js';
 
 export function objectHasUnreadInformation(data,state,map,object){
@@ -22,6 +22,8 @@ export function objectMarkerVisible(data,state,map,object){
   if(object.condition!==undefined&&!evaluate(object.condition,state))return false;
   if(!object.quest)return true;
   if(state.quests[object.quest]?.stage!=='active')return false;
-  const place=nextQuestPlace(data,state,object.quest),id=place?.event??place?.object;
-  return Boolean(place?.kind==='dungeon'&&place.map===map.id&&place.x===object.x&&place.y===object.y&&(place.z??0)===(object.z??0)&&(!id||id===object.id));
+  return nextQuestPlaces(data,state,object.quest).some(place=>{
+    const id=place.event??place.object;
+    return place.kind==='dungeon'&&place.map===map.id&&place.x===object.x&&place.y===object.y&&(place.z??0)===(object.z??0)&&(!id||id===object.id);
+  });
 }

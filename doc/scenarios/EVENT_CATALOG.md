@@ -34,11 +34,11 @@
 
 `kagaribi/restored_last_patrol_main` 最後の巡回灯の復旧：購読 `move` / `light` / `object`、再発 `once`、条件 `{"op":"eq","left":{"ref":"dungeons.persistent.kagaribi.systems.fires.fixtures.last_patrol_main.lit"},"right":true}` → `script` `kagaribi.restored.last_patrol_main`。[原稿](../../config/dungeons/kagaribi.json)。
 
-通常のくらがり襲撃は条件付き即戦闘から歩行遭遇へ変更した。通常点灯はくらがりを防ぎ、普通の魔物は出る。火の守りがない場所では成功7歩ごとに基本22％で抽選し、敵候補は現在くらがり100％。消火操作だけでは戦闘しない。q001の老人同行時の消灯は独立したイベント戦闘で、確率・周期を通さない。[火と遭遇](../dungeons/KAGARIBI_DUNGEON.md)。
+通常のくらがり襲撃は条件付き即戦闘から歩行遭遇へ変更した。通常点灯はくらがりを防ぎ、普通の魔物は出る。火の守りがない場所では成功7歩ごとに基本22％で抽選し、敵候補は現在くらがり100％。消火操作だけでは戦闘しない。q001の老人同行中は、北・南の帰路配置への到着なら通常抽選とは独立して同じ物語戦闘へ進み、途中でくらがりの通常抽選が当選した場合も現地でその物語戦闘へ切り替える。[火と遭遇](../dungeons/KAGARIBI_DUNGEON.md)。
 
 ## 専用処理を維持する理由
 
-旅程到着はすでに共通のarriveEventで実座標・町施設と到着効果を処理する。迷宮限定fieldEventsへの重複登録はしない。クエストautoは受注中クエストのautoだけを候補にする。
+旅程到着は共通のarriveEventで実座標・町施設と到着効果を処理する。任意のjourney.arrivalで追加の到着地点と通常遭遇の当選条件を指定し、実到着地点を以後の場面でも保持する。迷宮限定fieldEventsへの重複登録はしない。クエストautoは受注中クエストのautoだけを候補にする。
 
 power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・勝利時の状態更新が一体のため、汎用式への分解による二重管理を避ける。air_supplyの全滅救助はHP更新直後の敗北処理で、条件付き戦闘ではないため専用処理を維持する。水位・腐食・地形変更・通常ランダム遭遇も更新順と乱数規則を維持する。
 
@@ -46,9 +46,9 @@ power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・�
 
 老人の発見場面 `q001.v11.old` で帰還印封印・帰還禁止を付与する。帰路のイベント戦闘が `battle.end` で終了した直後、`on_interrupt` の先頭でq001の封印だけを解除する。会話中断・階層移動・保存読込で解除せず、通常戦闘の勝利や単なる再点火も解除条件にならない。救援前の全滅時はチェックポイントから老人遭遇時へ進行を戻し、q001の封印・帰路・壁灯変更を取り消す。[封印・禁止](../dungeons/DUNGEON_RESTRICTIONS.md)。
 
-`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。上部の目的地と継続ボタンは削除済み。
+`q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・北の帰路、`q001_return_south` (13, 5) の南の帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。南は老人を介助するold_supportの帰路だけで有効で、往路の油切れ確認は北の (9, 1) だけ。上部の目的地と継続ボタンは削除済み。
 
-`q001-F-kuragari`：`kagaribi_f1` (9, 1) の帰路。消灯会話の後、`kuragari_hunt` と強制戦闘。起点は `q001.v11.outage`。
+`q001-F-kuragari`：帰路の `old_support` で 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル に到着すると、共通入口 `q001.v11.visit` から `q001.v11.outage` へ進む。消灯会話の後、`kuragari_hunt` と強制戦闘。戦闘と救援会話は到着した実セルで続け、救援後は他の配置を通っても繰り返さない。
 
 `q001-B-rookie`：同じ位置。第1ラウンド終了後に新人が登場して発言。セリフを送ると `outage_call` で新品油1を消費し、くらがり除けの携帯松明を25歩分点灯。`battle.end` → `on_interrupt` → `q001.v11.rescue` で現地の救助会話へ移る。1ラウンドより早い勝利・逃走・撃退も確定前にこのイベントを通る。新人救援前の全滅は町へ救助され、老人との再遭遇からやり直す。確定後の全滅では救援を巻き戻さない。[区間の巻き戻し](EVENT_CHECKPOINTS.md)。
 
@@ -65,6 +65,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `q001/q001_decision` 入口で待つ新人：`kagaribi_f1` (2, 1)。起動 `enter` → `q001.v11.visit`。[定義](../../data/quests/q001.json)。
 
 `q001/q001_return` 油切れの巡灯路：`kagaribi_f1` (9, 1)。起動 `enter` → `q001.v11.visit`。[定義](../../data/quests/q001.json)。
+
+`q001/q001_return_south` 帰路の南側の曲がり角：`kagaribi_f1` (13, 5)。起動 `enter` → `q001.v11.visit`。[定義](../../data/quests/q001.json)。
 
 `q001/q001_elder` 最後の灯の下の老人：`kagaribi_f1` (13, 3)。起動 `enter` → `q001.v11.visit`。[定義](../../data/quests/q001.json)。
 
