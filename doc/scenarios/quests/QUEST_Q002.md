@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:3520776d78bf05b05b88533752b5489d587b1b594f0e74abbf0777933d9fb651 -->
+<!-- quest-page-source:a91a81b8c75ffc91ff332517fcaaf3827d52c11e475db0a37f5d654154b9b2f2 -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
@@ -131,7 +131,9 @@ flowchart TD
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"journey"},"right":null},{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"completed"},{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"active"},{"op":"or","args":[{"op":"not","arg":{"op":"exists","value":{"ref":"stories.q002"}}},{"op":"eq","left":{"ref":"stories.q002.values.partyAt"},"right":"landing"}]}]}]}]}`。操作条件：`true`。
 
-初回と中断再開は現地を調べる。移動行為 school_recover の帰着時は、目的セルへの進入で recovery が自動開始する。移動中は通常の受付イベントを表示せず、到着処理と二重起動しない。
+「!」の表示条件：`{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"active"}`。通常の出現条件に優先し、受注中かつ現在の次地点に一致するときだけ表示する。
+
+初回と中断再開は現地を調べる。移動行為 school_recover の帰着時は、目的セルへの進入で recovery が自動開始する。移動中は通常の受付操作を出さず、到着処理と二重起動しない。引き揚げ場が次の目的地なら「!」で案内し、次が町の場合や依頼完了後は消す。
 
 ## q002 骨の荷札
 
@@ -767,6 +769,13 @@ flowchart TD
     "safe": true,
     "script": "q002.v11.visit",
     "role": "decision",
+    "markerWhen": {
+      "op": "eq",
+      "left": {
+        "ref": "quests.q002.stage"
+      },
+      "right": "active"
+    },
     "visibleWhen": {
       "op": "and",
       "args": [

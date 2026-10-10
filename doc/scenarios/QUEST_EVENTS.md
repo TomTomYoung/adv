@@ -1,6 +1,6 @@
 # クエスト内イベントとマップへの投影
 
-更新日: 2026-10-09。作品版1.20.0。セル進入・条件自動・任意調査、2D区画の配置と共通メッセージへ接続しています。
+更新日: 2026-10-10。作品版1.25.0。セル進入・条件自動・任意調査、2D区画の配置と共通メッセージへ接続しています。
 
 エッジ配置にはpointsへ `edge: "north"` などを追加します。設置セルでその面を向いた場合にだけinteractまたはactionを実行できます。enter・auto・blockingとの併用は拒否します。[調査仕様](../ui/INSPECTION.md)。
 
@@ -22,7 +22,7 @@
 
 id はクエスト内で一意です。マップへ配置するイベントでは、そのまま object ID にも使います。title は表示名、points は map・x・y・任意の z を持つ配置先です。同一mapに同じIDを二重配置できません。異なる高さでも同じmapの別物体には別IDを付けます。
 
-trigger が enter または interact のイベントは、kind、script、interactionRange、safe、once、blocking、initialState、visibleWhen、condition をマップへ投影します。script は必ず同じクエストの scripts に定義します。role がある地点は追跡欄の locations へ生成されます。
+trigger が enter または interact のイベントは、kind、script、interactionRange、safe、once、blocking、initialState、visibleWhen、condition、markerWhen をマップへ投影します。script は必ず同じクエストの scripts に定義します。role がある地点は追跡欄の locations へ生成されます。
 
 visibleWhen は物体の出現条件です。偽なら表示・操作・通行妨害・遮蔽の対象になりません。condition は操作の有効条件です。visibleWhen が真で condition が偽なら、物体は存在しますがスクリプトは実行しません。false を直接指定しても条件を省略した扱いにはしません。
 
@@ -33,6 +33,14 @@ safe は配置地点の通常遭遇を抑える従来の指定です。イベン
 once は `state.events[map/object]` を参照します。状態は `state.objects[map/object]` を正本とし、未更新時だけ initialState を使います。`object.state.set` で low、empty、lit、extinguished などの空でない文字列を保存できます。q001の壁灯3本をこの形式で配置しています。式 `object_state` は map・object・default から現在値を読みます。任意の fire は effect・radius・litStates を持ち、有効な状態の壁灯だけが火の守護範囲になります。
 
 会話の表示条件と分岐は scripts 内の if／switch、選択肢の表示条件は visibleWhen、選択可否は condition と storyAction、要求表示は requirement、実行内容は commands に定義します。q001以外の既存命令列は、今回の改訂でも保持しています。
+
+## 次のイベントを示す「！」
+
+`kind: decision` の「！」は、受注中の各依頼の次の物理地点だけに表示します。未受注・前提条件未成立・完了済み・今の進行先ではない地点は表示しません。移動中の到着先や未完了作業の再開地点を使い、後で同じセルへ戻る必要があれば再び表示します。次の目的地が町なら迷宮の「！」は消えます。
+
+任意の `markerWhen` は「！」専用の表示式です。指定時は通常の `visibleWhen` に優先しますが、`condition`、`once`、受注状態と次地点の判定は継続します。指定しない場合は通常の出現条件を使います。実体の出現・操作・通行妨害を変更せず、完了後の任意調査や後日談を保持します。`decision` 以外の表示には使いません。
+
+q002は現地会話の出現条件を保持しながら、引き揚げ場への帰還移動中も「！」を出します。独立イベントでは荷車修理・交代要員・窯場討伐の準備と完了のフラグを `markerWhen` に明記します。縄不足などの資材不足だけでは未完了の作業場所を消しません。表示先はミニマップ・拡大地図・探索画面で共通です。[投影契約](../ui/VIEW_CONTRACT.md#次に進めるイベントの目印2026-10-10)。
 
 ## 操作できる位置
 
@@ -73,3 +81,5 @@ trigger が action のイベントはマップオブジェクトを追加せず�
 `tests/quest-events.test.mjs` は1.8.0の改稿対象外スクリプト・オブジェクトの指紋、原稿と配布定義の一致、出現／操作条件の分離、once、状態の保存再読込、13記録の引継ぎ、不正な配置と外部スクリプト参照を検証します。既存の現地調査テストはクエストイベントの操作意図へ移し、13ダンジョンの実状態と旧会話の継続を確認します。
 
 `tests/event-interaction.test.mjs` は距離3種と省略時の既定値、候補と直接実行の一致、エッジ・境界・高さ、表示と操作の分離、保存再開、古い選択肢の拒否、原稿の分類を検証します。
+
+`tests/event-markers.test.mjs` は次地点・前提フラグ・完了・再訪・資材不足・保存読込と、目印を消しても既存の調査・通行判定を保持することを検証します。`tests/event-marker-authoring.test.mjs` は式の検証と編集画面からの追加・出力を確認します。

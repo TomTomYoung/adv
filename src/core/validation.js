@@ -147,7 +147,7 @@ export function validateContent(data){
       if(object.edge!==undefined&&(!['north','east','south','west'].includes(object.edge)||object.trigger!=='interact'||object.blocking))fail(id,'エッジ配置は有効な方向・interact・非blockingが必要です');
       if(!['enter','interact'].includes(object.trigger))fail(id,'トリガーが不正です');
       if(!interactionRangeValid(object))fail(id,`操作位置が不正です: ${object.id}`);
-      reference(data.scripts,object.script,id);for(const key of ['condition','visibleWhen'])if(object[key]!==undefined)expression(object[key],id);
+      reference(data.scripts,object.script,id);for(const key of ['condition','visibleWhen','markerWhen'])if(object[key]!==undefined)expression(object[key],id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);
     if(map.encounterPool!==undefined){if(!Array.isArray(map.encounterPool)||!map.encounterPool.length)fail(id,'遭遇候補が必要です');else for(const e of map.encounterPool){reference(data.encounters,e.encounter,id);if(!Number.isFinite(e.weight)||e.weight<=0)fail(id,'遭遇重みは正数です');}}
