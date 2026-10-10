@@ -294,7 +294,8 @@ function q002PageBundle(data){
     add(`### ${questEventId(q,'P',event.id)}`);add(`${event.title}。実行ID ${code(event.id)}、スクリプト ${code(event.script)}、起動 ${code(event.trigger)}。`);
     for(const point of event.points)add(`配置：${describePlace(data,{kind:'dungeon',dungeon:event.dungeon,...point,event:event.id})}。`);
     add(`表示条件：${code(JSON.stringify(event.visibleWhen??true))}。操作条件：${code(JSON.stringify(event.condition??true))}。`);
-    add('初回と中断再開は現地を調べる。移動行為 school_recover の帰着時は、目的セルへの進入で recovery が自動開始する。移動中は通常の受付イベントを表示せず、到着処理と二重起動しない。');
+    if(event.markerWhen!==undefined)add(`「!」の表示条件：${code(JSON.stringify(event.markerWhen))}。通常の出現条件に優先し、受注中かつ現在の次地点に一致するときだけ表示する。`);
+    add('初回と中断再開は現地を調べる。移動行為 school_recover の帰着時は、目的セルへの進入で recovery が自動開始する。移動中は通常の受付操作を出さず、到着処理と二重起動しない。引き揚げ場が次の目的地なら「!」で案内し、次が町の場合や依頼完了後は消す。');
   }
   add(questCatalog(data,'',{questId:q.id}).trimEnd());
   add('## マップデータと接続定義');

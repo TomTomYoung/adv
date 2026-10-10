@@ -6,7 +6,7 @@ import {resolveSchema,initialValue} from './schema-form.js';
 import {validateSchema} from '../schema.js';
 const clone=v=>structuredClone(v);
 const textKeys=new Set(['text','description','brief','past','progression','role','limitation','requirement','message','detail','notice']);
-const expressionKeys=new Set(['condition','visibleWhen','when','requires']);
+const expressionKeys=new Set(['condition','visibleWhen','markerWhen','when','requires']);
 const commandKeys=new Set(['commands','then','else','default','on_win','on_lose','on_escape','on_interrupt']);
 const identityKeys=new Set(['id','schemaVersion','version']);
 export function referenceOptions(app,key,location,parent={}){
@@ -61,14 +61,14 @@ export function renderValue(app,location,definition={},key='value',{parent={},re
  const inputError=message=>{error.textContent=message;if(message)app.errors.set(errorKey,{file,path,message});else app.errors.delete(errorKey);app.invalidate();};
  if(!required&&!identityKeys.has(key)&&value!==null&&typeof value==='object'&&typeof path.at(-1)!=='number')root.append(button('未指定に戻す',()=>{if(app.guard())write(undefined,true);},'field-remove'));
  if(commandKeys.has(key)&&Array.isArray(value)){root.append(renderCommands(app,location,value));return root;}
- if(expression||expressionKeys.has(key)||(definition.$ref==='#/$defs/value'&&!((typeof value!=='object'||value===null)&&(textKeys.has(key)||referenceOptions(app,key,location,parent)?.length)))||definition.$ref==='#/$defs/expression'||(value?.op&&expressionNames[value.op])){root.append(renderExpression(app,location,value,caption));return root;}
+ if(expression||expressionKeys.has(key)||(definition.$ref==='#/$defs/value'&&!((typeof value!=='object'||value===null)&&(textKeys.has(key)||referenceOptions(app,key,location,parent)?.length)))||definition.$ref==='#/$defs/expression'||(value?.op&&expressionNames[value.op])){root.append(renderExpression(app,location,value,caption));if(help[key])root.append(el('p',help[key],'field-help'));return root;}
  const nullable=definition.anyOf?.some(s=>s.type==='null')||Array.isArray(definition.type)&&definition.type.includes('null');
  if(nullable&&value===null){root.append(el('span',key==='capacity'?'無制限':'なし'),button('値を指定する',()=>{if(!app.guard())return;const nonnull=definition.anyOf?.find(s=>s.type!=='null')??{...definition,type:definition.type.filter(t=>t!=='null')};write(initialValue(nonnull,rootSchema,key),true);}));return root;}
  if(nullable)root.append(button(key==='capacity'?'無制限にする':'なしにする',()=>{if(app.guard())write(null,true);}));
  if(identityKeys.has(key)){root.append(el('code',String(value),'identifier'),el('small','参照を維持するため通常の編集では変更しません。','muted'));return root;}
  if(value&&typeof value==='object'&&!Array.isArray(value)&&'x' in value&&'y' in value){
   const point=el('div','','point-fields');const map=value.map??app.mapId;
-  point.append(renderRecord(app,location,schema,{keys:Object.keys(value)}));
+  point.append(renderRecord(app,location,schema));
   point.append(button('配置図で場所を選ぶ',()=>app.pickPoint({...location,name:app.recordName()+' / '+caption,allowEdge:Boolean(schema.properties?.edge||schema.properties?.side||value.edge!==undefined),edgeKey:schema.properties?.side?'side':'edge',omitMap:value.map===undefined,eventPath:file.startsWith('quests/')&&path[0]==='events'?path.slice(0,2):undefined},get(app.workspace.value(file),path)?.map??app.mapId)));root.append(point);return root;
  }
  if(Array.isArray(value)){

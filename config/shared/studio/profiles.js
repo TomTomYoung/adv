@@ -19,7 +19,7 @@ export function collections(entry,value){
  }
 }
 export const groups={
- event:[['基本',['title','kind','trigger','interactionRange','once','blocking','safe','initialState','role']],['配置',['points','fire']],['条件',['visibleWhen','condition','requirement','note']],['実行内容',['script']]],
+ event:[['基本',['title','kind','trigger','interactionRange','once','blocking','safe','initialState','role']],['配置',['points','fire']],['条件',['visibleWhen','condition','markerWhen','requirement','note']],['実行内容',['script']]],
  fieldEvent:[['基本',['id','title','watch','repeat','message']],['配置',['points']],['条件・処理',['condition','action']]],
  cellEvent:[['基本',['trigger','once']],['条件・処理',['condition','script']]],
  dungeon:[['基本',['name','description','region','recommendedLevel']],['所属マップ・入口',['maps','entries']]],

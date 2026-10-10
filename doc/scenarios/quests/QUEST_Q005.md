@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編5場面・3結末。
 
-<!-- quest-page-source:3520776d78bf05b05b88533752b5489d587b1b594f0e74abbf0777933d9fb651 -->
+<!-- quest-page-source:a91a81b8c75ffc91ff332517fcaaf3827d52c11e475db0a37f5d654154b9b2f2 -->
 
 ## 依頼の焦点と分岐の意味
 
