@@ -1,6 +1,7 @@
 import {PresentationClock} from './application/presentation-clock.js';
 import {restoreGame} from './application/restore.js';
 import {loadContent} from './core/loader.js';
+import {runtimeReader,versionRuntimeAssets} from './application/runtime-content.js';
 import {GameEngine} from './core/engine.js';
 import {projectGame} from './application/projection.js';
 import {replaceView,VIEW_LAYOUTS,normalizeLayout} from './view/view-layout.js';
@@ -46,6 +47,7 @@ function dispatch(intent){try{const changed=engine.dispatch(intent);if(changed)s
 function restore(text){const result=restoreGame(data,text);engine=result.engine;storageWrite('auto',engine.save());dialog.close();render();status(result.message);}
 function menu(){
   modal('旅の記録');dialog.append(make('p','会話・選択肢・戦闘の途中も保存できます。記録はこのブラウザに保存されます。'));
+  if(globalThis.advRuntime)dialog.append(make('p',`更新ID：${globalThis.advRuntime.manifest.revision.slice(0,12)}`));
   for(let i=1;i<=3;i++){const row=make('div');row.className='modal-row';row.dataset.controlGroup=`save:${i}`;const existing=storageRead(`slot${i}`);row.append(make('span',`記録 ${i}${existing?' / 保存あり':' / 空き'}`),btn('ここへ保存',()=>{if(storageWrite(`slot${i}`,engine.save())){status(`記録${i}へ保存しました。`);menu();}}));const load=btn('読み込む',()=>{const saved=storageRead(`slot${i}`);if(saved)restore(saved);});load.disabled=!existing;row.append(load);dialog.append(row);}
   const row=make('div');row.className='modal-row';row.append(btn('記録ファイルを書き出す',()=>download('lantern-archive-save.json',engine.save())));dialog.append(row);
   const label=make('label','記録ファイルを読み込む'),input=make('input');input.type='file';input.accept='.json,application/json';input.addEventListener('change',async()=>{const f=input.files[0];if(!f)return;if(f.size>data.system.maxSaveBytes){restore(null);return;}try{restore(await f.text());}catch{restore(null);}});label.append(input);dialog.append(label);
@@ -77,7 +79,7 @@ const viewUi={menu,help,status,keyHint:exploring=>inputHint(settings.keyBindings
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);const keys=readKeyConfig(parsed.keyBindings);settings.keyBindings=keys.config;if(keys.recovered)status('保存済みのキー設定が不正なため、初期値へ戻しました。');settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   if(savedSettings){try{settings.viewLayout=normalizeLayout(JSON.parse(savedSettings).viewLayout);}catch{settings.viewLayout='scene';}}
-  data=await loadContent();sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);
+  data=await loadContent(runtimeReader());versionRuntimeAssets(data);sound.preload(Object.values(data.sounds??{}).map(s=>data.assets.audio[s.asset]));engine=new GameEngine(data);
   const autosave=storageRead('auto');if(autosave!==null){const result=restoreGame(data,autosave);engine=result.engine;if(result.restarted){storageWrite('auto',engine.save());status(result.message);}}
   view=replaceView(null,settings.viewLayout,root,dispatch,viewUi);render();
   document.addEventListener('keydown',event=>{if(!systemControls.handleKey(event))handleGameKey(event,{view,model:lastModel,dispatch,bindings:settings.keyBindings.bindings});});
