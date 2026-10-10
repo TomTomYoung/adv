@@ -1,7 +1,7 @@
 import {projectQuestObjects} from './quest-events.js';
 import { validateContent } from './validation.js';
 export async function loadContent(read = async path => {
-  const response = await fetch(new URL(`../../${path}`, import.meta.url));
+  const response = await fetch(new URL(`../../${path}`, import.meta.url),{cache:'no-store'});
   if (!response.ok) throw new Error(`読込失敗: ${path} (${response.status})`);
   return response.json();
 }) {

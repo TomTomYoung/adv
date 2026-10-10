@@ -1,0 +1,38 @@
+name: Validate cached runtime updates in Chromium
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'runtime.json'
+      - 'src/**'
+      - 'data/**'
+      - 'assets/**'
+      - 'tools/build-runtime.mjs'
+      - 'tools/browser-runtime-smoke.mjs'
+      - '.github/workflows/runtime-update.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run check:runtime
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+      - name: Verify warm-cache updates and partial deployments
+        run: node tools/browser-runtime-smoke.mjs
+      - name: Keep update checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-update-checkpoints
+          path: /tmp/adv-runtime-browser
+          if-no-files-found: ignore

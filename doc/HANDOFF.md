@@ -1,5 +1,7 @@
 # 実装引き継ぎ
 
+2026-10-10: 配信更新IDによる起動を追加しました。通常の再読み込みでJS依存先・CSS・JSON・参照素材のURLを更新し、配信途中の不一致時はセーブを変更せず停止します。内容版1.25.0は保持します。コードや配布ファイルの変更後は `npm run build:runtime` が必要です。[配信とキャッシュ](development/README.md#配信とキャッシュ)。
+
 確認日: 2026-10-01。作品版1.25.0。篝火の迷宮拡張はmaster `55e864e`を基点にしています。現状は[CURRENT_STATUS.md](CURRENT_STATUS.md)、検証と未確認事項は[PROGRESS.md](development/PROGRESS.md)を参照してください。
 
 ## 完了していること
