@@ -86,7 +86,7 @@ test('post requires the actual doorway and local authorization; relief unlocks p
 
 test('relighting the relay reveals its surroundings once, protects only its area, and permits its shortcut',()=>{
  const g=start();go(g,'kagaribi_relay',1,9);face(g,'west');inspectAt(g,'relay_latch');assert.equal(g.dispatch({type:'choose',id:'open'}),false);choose(g,'leave');
- go(g,'kagaribi_relay',6,5);face(g,'east');fire(g,'ignite','relay_main');assert.ok(flags(g).relay_mainSeen);assert.equal(g.state.events['field/kagaribi/restored_relay_main'],1);save(g);
+ go(g,'kagaribi_relay',7,5);face(g,'east');fire(g,'ignite','relay_main');assert.ok(flags(g).relay_mainSeen);assert.equal(g.state.events['field/kagaribi/restored_relay_main'],1);save(g);
  fire(g,'extinguish');assert.equal(fireEnvironment(fireContext(data,g.state)).protected,true);
  inspectLatch(g,'kagaribi_relay',1,9,'relay_latch','west');assert.ok(flags(g).relayGate);save(g);
  go(g,'kagaribi_relay',7,5);fire(g,'extinguish','relay_main');fire(g,'ignite','relay_main');assert.equal(g.state.events['field/kagaribi/restored_relay_main'],1);

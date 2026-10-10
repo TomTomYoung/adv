@@ -15,7 +15,7 @@ import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js
 import {scaledEnemy} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock,dungeonWaterAccess} from './dungeons.js';
 import {storyStateErrors,storyEnding,journeyErrors} from './story.js';
-import {atWorldPlace} from './world.js';
+import {atWorldPlace,hasWorldConversation,savedWorldConversation} from './world.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
@@ -189,8 +189,8 @@ export function validateSave(save,data){
     else for(const [id,story] of Object.entries(s.stories)){
       const def=data.quests[id]?.story;
       if(!def){fail('不明な物語状態');continue;}
-      try{errors.push(...storyStateErrors(def,story,s,id,{scene:s.quests[id]?.stage==='active',world:true}));}catch{fail('物語状態不正');}
-      if(def.worldPlaces&&s.waiting&&s.vm.some(f=>data.scripts[f.script]?.storyQuest===id)&&!atWorldPlace(s,def.worldPlaces[def.scenes[story.scene]?.place]))fail('会話と実際の現在地が一致しません');
+      try{errors.push(...storyStateErrors(def,story,s,id,{scene:s.quests[id]?.stage==='active',world:true,legacyWorld:true}));}catch{fail('物語状態不正');}
+      if(def.worldPlaces&&s.waiting&&hasWorldConversation(data,s,id)&&!atWorldPlace(s,def.worldPlaces[def.scenes[story.scene]?.place])&&!savedWorldConversation(data,s,id))fail('会話と実際の現在地が一致しません');
     }
     for(const [id,q] of Object.entries(data.quests))if(q.story&&s.quests[id]?.stage==='completed'&&!s.flags.legacyStoryRoutes?.[id])try{storyEnding({data,state:s},id,s.quests[id].outcome);}catch{fail('物語の結末条件不正');}
   }

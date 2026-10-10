@@ -76,7 +76,7 @@ try{
   const {SceneView}=await import('./src/view/scene-view.js'),{projectGame}=await import('./src/application/projection.js');
   view.destroy();document.querySelector('#app').dataset.view='scene';document.documentElement.style.setProperty('--text-size','17px');
   window.view=new SceneView(document.querySelector('#app'),dispatch,ui);g.dispatch({type:'advance'});g.dispatch({type:'location.move',id:'hikarigaeri_square'});g.dispatch({type:'travel',dungeon:'kagaribi'});
-  const m=projectGame(g);m.dungeon.objects=[{kind:'event',glyph:'?',x:m.dungeon.location.x,y:m.dungeon.location.y}];
+  const m=projectGame(g);m.dungeon.objects=[{kind:'event',glyph:'?',x:m.dungeon.location.x,y:m.dungeon.location.y,inInteractionRange:true}];
   window.originalFillText=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,x,y,...args){if(text==='?')window.markerBaseline=y;return originalFillText.call(this,text,x,y,...args);};
   view.render(m);
  });await shot('05-dungeon-marker');

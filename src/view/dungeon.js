@@ -62,7 +62,7 @@ export function floorColor(material,wx,wy,cell,distance){
 }
 export function visibleDungeonObjects(dungeon){
   const {x,y,facing}=dungeon.location,[dx,dy]={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]}[facing];
-  return dungeon.objects.filter(o=>!['water','vector','boundary','map_connection'].includes(o.kind)&&(o.edge?o.x===x&&o.y===y&&o.edge===facing:o.x===x&&o.y===y||o.x===x+dx&&o.y===y+dy&&!closed(dungeon,x,y,facing)));
+  return dungeon.objects.filter(o=>!['water','vector','boundary','map_connection'].includes(o.kind)&&(o.inInteractionRange??(o.edge?o.x===x&&o.y===y&&o.edge===facing:o.x===x&&o.y===y||o.x===x+dx&&o.y===y+dy&&!closed(dungeon,x,y,facing))));
 }
 export function paintDungeon(canvas,dungeon,battle){
   const ctx=canvas.getContext('2d');if(!ctx)return;canvas.width=WIDTH;canvas.height=HEIGHT;

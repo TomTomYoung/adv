@@ -1,5 +1,5 @@
 import {placementValid} from './cast.js';
-import {atWorldPlace,worldPlaceName,worldStoryPlace} from './world.js';
+import {atWorldPlace,worldPlaceName,worldStoryPlace,legacyWorldPlace,legacyWorldStoryPlace,continuesWorldConversation,finishWorldConversations} from './world.js';
 import {clone,evaluate,isRecord} from './expression.js';
 
 // Finite, authored story worlds. No quest IDs or narrative text belong here.
@@ -17,7 +17,7 @@ export function storyPlace(d,s,id,seen=new Set()){
   const holder=s.values[e.holder];
   return storyPlace(d,s,holder,seen);
 }
-export function storyStateErrors(d,s,state,id,{scene=false,world=false}={}){
+export function storyStateErrors(d,s,state,id,{scene=false,world=false,legacyWorld=false}={}){
   const errors=[];
   if(!isRecord(s)||s.version!==d.version||!isRecord(s.values)||!Array.isArray(s.events)||!isRecord(s.knowledge))return [`${id}: 物語状態不正`];
   if((s.revision??1)!==(d.revision??1))errors.push(`${id}: 物語状態の改訂版が一致しません`);
@@ -28,9 +28,9 @@ export function storyStateErrors(d,s,state,id,{scene=false,world=false}={}){
   for(const entity of Object.keys(d.entities))try{storyPlace(d,s,entity);}catch(e){errors.push(`${id}: ${e.message}`);}
   for(const invariant of d.invariants??[])try{if(!check(invariant.condition,state,id,s))errors.push(`${id}: ${invariant.id} — ${invariant.message}`);}catch(e){errors.push(`${id}: ${invariant.id}: ${e.message}`);}
   if(s.scene!==null&&!d.scenes[s.scene])errors.push(`${id}: 不明な場面`);
-  if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&state.journey?.quest!==id&&s.values[d.entities.party.holder]!==worldStoryPlace(state,d))errors.push(`${id}: 探索隊の所在と実際の現在地が一致しません`);
+  if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&state.journey?.quest!==id&&s.values[d.entities.party.holder]!==worldStoryPlace(state,d)&&(!legacyWorld||s.values[d.entities.party.holder]!==legacyWorldStoryPlace(state,d)))errors.push(`${id}: 探索隊の所在と実際の現在地が一致しません`);
   if(world&&d.worldPlaces&&state.quests?.[id]?.stage==='active'&&s.scene===null&&state.journey?.quest!==id)errors.push(`${id}: 移動記録または再開場面がありません`);
-  if(scene&&s.scene&&d.scenes[s.scene]&&(!d.worldPlaces||atWorldPlace(state,d.worldPlaces[d.scenes[s.scene].place])))try{assertScene(d,s,state,id,s.scene);}catch(e){errors.push(e.message);}
+  if(scene&&s.scene&&d.scenes[s.scene]&&(!d.worldPlaces||atWorldPlace(state,d.worldPlaces[d.scenes[s.scene].place])||legacyWorld&&s.values[d.entities.party.holder]===legacyWorldStoryPlace(state,d)&&legacyWorldPlace(state,d.worldPlaces[d.scenes[s.scene].place])))try{assertScene(d,s,state,id,s.scene);}catch(e){errors.push(e.message);}
   return errors;
 }
 function assertValid(d,s,state,id){const errors=storyStateErrors(d,s,state,id);if(errors.length)throw Error(errors.join('\n'));}
@@ -58,18 +58,18 @@ export function initStory(engine,id){
 }
 export function enterStoryScene(engine,id,scene){
   const d=definition(engine.data,id),s=engine.state.stories?.[id];if(!s)throw Error('物語が初期化されていません');
-  if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
+  if(d.worldPlaces&&!atWorldPlace(engine.state,d.worldPlaces[d.scenes[scene]?.place])&&!continuesWorldConversation(engine,id,scene)){engine.state.vm=[];engine.state.waiting=null;engine.notify('この場面の場所へ戻ると再開できる。');return;}
   assertScene(d,s,engine.state,id,scene);s.scene=scene;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;
 }
-export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false}={}){
+export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=false,continuing=false}={}){
   const d=definition(data,id),a=d.actions[actionId];let current=state.stories?.[id];
   if(a?.journey){
     if(arrive){
-      if(state.journey?.quest!==id||state.journey.action!==actionId||!atWorldPlace(state,d.worldPlaces[a.journey.to],{exact:true}))throw Error('目的地のセル・施設へ到達する必要がある。');
+      if(state.journey?.quest!==id||state.journey.action!==actionId||!atWorldPlace(state,d.worldPlaces[a.journey.to]))throw Error('目的地のセル・施設へ到達する必要がある。');
       current=clone(current);current.scene=state.journey.from;
     }else if(!depart||state.journey)throw Error('移動中の行為を完了してください');
   }
-  if(d.worldPlaces&&!arrive&&!atWorldPlace(state,d.worldPlaces[d.scenes[current?.scene]?.place]))throw Error('この行為の場所にいません');
+  if(d.worldPlaces&&!arrive&&!continuing&&!atWorldPlace(state,d.worldPlaces[d.scenes[current?.scene]?.place]))throw Error('この行為の場所にいません');
   if(!current||!a)throw Error(`${id}/${actionId}: 未定義の行動`);
   if(state.quests[id].stage!=='active'||!a.from.includes(current.scene)||!check(a.requires,state,id,current))throw Error(`${id}/${actionId}: 行動の前提条件不成立`);
   if(a.once!==false&&current.events.includes(actionId))throw Error(`${id}/${actionId}: 完了済みの行動`);
@@ -129,11 +129,11 @@ export function storyActionPlan(data,state,id,actionId,{depart=false,arrive=fals
   return {story:s,gold,inventory};
 }
 export function applyStoryAction(engine,id,action){
-  const plan=storyActionPlan(engine.data,engine.state,id,action);
+  const plan=storyActionPlan(engine.data,engine.state,id,action,{continuing:continuesWorldConversation(engine,id)});
   // There is no await or text/save boundary between these assignments.
   engine.state.stories[id]=plan.story;engine.state.gold=plan.gold;engine.state.inventory=plan.inventory;
 }
-export function storyCanAct(engine,id,action){try{storyActionPlan(engine.data,engine.state,id,action,{depart:Boolean(engine.data.quests[id]?.story?.actions[action]?.journey)});return true;}catch{return false;}}
+export function storyCanAct(engine,id,action){try{storyActionPlan(engine.data,engine.state,id,action,{depart:Boolean(engine.data.quests[id]?.story?.actions[action]?.journey),continuing:continuesWorldConversation(engine,id)});return true;}catch{return false;}}
 export function storyEnding(engine,id,outcome){
   const q=engine.data.quests[id];
   if(q.model?.progressionUpgrade&&!evaluate(q.model.progressionUpgrade.current,engine.state))return q.legacyOutcomes?.[outcome]??q.outcomes[outcome];
@@ -194,9 +194,10 @@ export function validateStories(data,expression=()=>{}){
 }
 
 export function beginStoryJourney(engine,id,action){
-  const p=storyActionPlan(engine.data,engine.state,id,action,{depart:true});
+  const p=storyActionPlan(engine.data,engine.state,id,action,{depart:true,continuing:continuesWorldConversation(engine,id)});
   engine.state.stories[id]=p.story;engine.state.gold=p.gold;engine.state.inventory=p.inventory;engine.state.journey=p.journey;
   engine.state.vm=[];engine.state.waiting=null;
+  finishWorldConversations(engine);
   const d=engine.data.quests[id].story;engine.notify(`${worldPlaceName(engine.data,d.worldPlaces[d.actions[action].journey.to])}へ向かう。`);
 }
 export function arriveStoryJourney(engine){

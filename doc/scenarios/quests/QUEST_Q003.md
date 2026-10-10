@@ -4,7 +4,7 @@
 
 作品版 1.25.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編9場面・3結末。
 
-<!-- quest-page-source:a91a81b8c75ffc91ff332517fcaaf3827d52c11e475db0a37f5d654154b9b2f2 -->
+<!-- quest-page-source:bdd6071950c2ab42bcc45b634be698a0e0dbb5742544bee777be5e569b67b5b0 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -968,7 +968,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
       "once": true,
       "safe": true,
       "script": "region_1_f1.cache",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "fountain",
@@ -980,7 +980,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
       "once": true,
       "safe": true,
       "script": "region_1_f1.fountain",
-      "interactionRange": "here-or-front"
+      "interactionRange": "here"
     },
     {
       "id": "trap",

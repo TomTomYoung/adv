@@ -9,7 +9,7 @@ export const interactionRangeValid=event=>event.interactionRange===undefined||
 // An event's position is independent of when it fires. Unspecified cell events
 // require arrival; edge placements still require their own cell and facing.
 export function canInteractAt(data,state,point,range=point.interactionRange??'here'){
-  if(!INTERACTION_RANGES.includes(range)||!closeTo(state,point))return false;
+  if(!INTERACTION_RANGES.includes(range)||!closeTo(state,point,range))return false;
   if(point.edge)return true;
   const loc=state.location,here=point.x===loc.x&&point.y===loc.y;
   if(here)return range!=='front';

@@ -149,7 +149,7 @@ test('completed cart, relief and hunt events remain readable through manual insp
  }
 });
 
-test('known minimap cells and the dungeon view render only the next q001 event, never future or completed markers',()=>{
+test('the minimap guides the next q001 destination while exploration markers require arrival and never show finished events',()=>{
  const dom=installDOM();try{
   const g=newGame();g.random=()=>.99;g.award(0,data.system.xpBase*24*25);g.healAll();
   g.accept('q001');g.dispatch({type:'quest.travel',id:'q001'});
@@ -157,12 +157,12 @@ test('known minimap cells and the dungeon view render only the next q001 event, 
   const render=()=>{const model=projectGame(g);dom.root.replaceChildren(mapSection(model));return model;};
   const mapMarkers=()=>dom.root.querySelectorAll('.map-cell').filter(cell=>cell.querySelector('.map-object')?.src.endsWith('/decision.svg')).map(cell=>`${cell.dataset.x},${cell.dataset.y}`);
   const nearby=model=>visibleDungeonObjects(model.dungeon).filter(o=>o.kind==='decision').map(o=>o.id);
-  let model=render();assert.deepEqual(mapMarkers(),['2,1']);assert.deepEqual(nearby(model),['q001_decision']);
+  let model=render();assert.deepEqual(mapMarkers(),['2,1']);assert.deepEqual(nearby(model),[],'the entrance event is marked on the map but cannot be drawn one cell ahead');
   g.teleport('kagaribi_f1',8,1,'east');model=render();
   assert.deepEqual(mapMarkers(),['2,1']);assert.deepEqual(nearby(model),[],'facing the future corridor does not reveal its marker');
   g.teleport('kagaribi_f1',1,1,'east');walk(g,2,1);choose(g,'talk');walk(g,1,1);g.state.location.facing='east';model=render();
   assert.deepEqual(mapMarkers(),['9,1']);assert.deepEqual(nearby(model),[],'the completed entrance marker stays hidden after leaving its cell');
-  g.teleport('kagaribi_f1',8,1,'east');model=render();assert.deepEqual(nearby(model),['q001_return']);
+  g.teleport('kagaribi_f1',8,1,'east');model=render();assert.deepEqual(nearby(model),[],'the current corridor event waits for arrival at its own cell');
   finishJourney(g);choose(g,'inspect');choose(g,'follow');finishJourney(g);choose(g,'support');finishJourney(g);
   assert.ok(g.state.battle);g.finishBattle('win');drain(g);choose(g,'home');finishJourney(g);choose(g,'report');finishJourney(g);choose(g,'rest');
   goTownLocation(g,data.game.world.townRoot);g.dispatch({type:'travel',dungeon:'kagaribi'});model=render();

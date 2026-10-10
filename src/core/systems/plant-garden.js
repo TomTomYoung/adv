@@ -21,7 +21,7 @@ function plan(ctx,intent){
     return inventoryPlan(ctx,{},ctx.spec.supplies);
   }
   const plot=ctx.spec.plots.find(p=>p.id===intent.target),plant=ctx.persistent.plants[plot?.id],species=Object.hasOwn(ctx.spec.species,intent.species??'')?ctx.spec.species[intent.species]:null;
-  if(!plot||!closeTo(ctx.state,plot))return {ok:false,reason:'足元か正面の植床を選んでください。'};
+  if(!plot||!closeTo(ctx.state,plot))return {ok:false,reason:'植床のセルに立って選んでください。'};
   if(intent.action==='plant'){
     if(plant)return {ok:false,reason:'先に採取・伐採してください。'};
     if(!species||species.terrain&&!plot.terrain[species.terrain])return {ok:false,reason:'この植床には適さない植物です。'};

@@ -2,9 +2,11 @@ import {permission,costProblem,payCost} from '../jobs.js';
 import {object,identifier,closeTo,validPoint,knownPoint,available} from './common.js';
 import {cellLayersValid} from '../cell-layers.js';
 
+// An intact wall occupies solid terrain, so it must be broken from the front.
+const inReach=(ctx,wall)=>closeTo(ctx.state,wall,'front');
 function plan(ctx,intent){
   const wall=ctx.spec.walls.find(w=>w.id===intent.target);
-  if(!wall||!closeTo(ctx.state,wall))return {ok:false,reason:'正面の破壊壁を選んでください。'};
+  if(!wall||!inReach(ctx,wall))return {ok:false,reason:'正面の破壊壁を選んでください。'};
   if(ctx.persistent.broken.includes(wall.id))return {ok:false,reason:'この壁はすでに開通しています。'};
   if(intent.action==='item'){
     if(!wall.items.includes(intent.item))return {ok:false,reason:'この壁を破壊できる道具ではありません。'};
@@ -23,14 +25,14 @@ function act(ctx,intent,p){
   if(p.ability)payCost(ctx.engine,intent.actor,p.ability);else ctx.engine.give(intent.item,-1);
   ctx.persistent.broken.push(p.wall.id);ctx.engine.reveal();ctx.engine.eventCue('unlock');ctx.engine.notify(`${p.wall.name}を破壊し、通路を開きました。`);
 }
-const target=(ctx)=>ctx.spec.walls.find(w=>closeTo(ctx.state,w)&&!ctx.persistent.broken.includes(w.id));
+const target=(ctx)=>ctx.spec.walls.find(w=>inReach(ctx,w)&&!ctx.persistent.broken.includes(w.id));
 function project(ctx){
-  const walls=ctx.spec.walls.filter(w=>closeTo(ctx.state,w)).map(w=>{
+  const walls=ctx.spec.walls.filter(w=>inReach(ctx,w)).map(w=>{
     const actions=w.items.map(item=>available(ctx,{type:'dungeon.action',system:ctx.id,action:'item',target:w.id,item},plan,`${ctx.data.items[item].name}で破壊（1個）`));
     for(const actor of ctx.state.members)for(const ability of w.abilities)if(permission(ctx.data,ctx.state,actor,ability,'wall.break'))actions.push(available(ctx,{type:'dungeon.action',system:ctx.id,action:'skill',target:w.id,actor,ability},plan,`${ctx.data.actors[actor].name}：${ctx.data.fieldAbilities[ability].name}（MP${ctx.data.fieldAbilities[ability].mp}）`));
     return {id:w.id,name:w.name,broken:ctx.persistent.broken.includes(w.id),actions};
   });
-  const markers=ctx.spec.walls.filter(w=>knownPoint(ctx.state,w)).map(w=>({id:w.id,name:w.name+(ctx.persistent.broken.includes(w.id)?'（開通）':''),x:w.x,y:w.y,kind:'breakable_wall',glyph:ctx.persistent.broken.includes(w.id)?'◇':'砕'}));
+  const markers=ctx.spec.walls.filter(w=>knownPoint(ctx.state,w)).map(w=>({id:w.id,name:w.name+(ctx.persistent.broken.includes(w.id)?'（開通）':''),x:w.x,y:w.y,kind:'breakable_wall',glyph:ctx.persistent.broken.includes(w.id)?'◇':'砕',inInteractionRange:inReach(ctx,w)}));
   return {kind:'breakable_walls',id:ctx.id,title:'破壊できる壁',walls,markers};
 }
 function validate(data,definition,spec){

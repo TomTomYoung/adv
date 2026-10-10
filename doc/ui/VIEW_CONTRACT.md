@@ -169,6 +169,14 @@ quests/trackedのlocationsとevidenceTotalは、現在使用している経路�
 
 既読でも `dungeon.objects` から配置物のデータ自体は除去しない。`visibleDungeonObjects` は位置と向きによる候補を返し、実際の記号描画前に未読判定を適用する。任意調べる、衝突、地形・壁の描画、壁灯の照明は従来の物体と操作の規則に従う。記号の表示有無で物理的な存在や光源を変更しない。保存と情報解析の詳細は[調査仕様](INSPECTION.md#未読情報とマーカー)、地図の描き分けは[ミニマップ仕様](MINIMAP.md#未読情報の表示)を参照。
 
+## 操作位置と探索画面の目印（2026-10-10）
+
+実ゲームのマップ配置物、室内入口、操作装置のマーカーへ `inInteractionRange: boolean` を投影する。Coreの操作距離判定から算出し、通常は同じmap・x・y・z、壁面は所有セルと向き、必要な正面アクセスだけは明示した範囲を使う。通行可能な扉の操作盤は配置セルで扱い、入れない扉本体や破壊壁とは区別する。
+
+共通の `visibleDungeonObjects` はこの値を使い、通常表示・背景内表示とも、操作位置へ着いてから記号・配置物画像を描く。Viewで無条件に正面一マスを候補へ追加しない。既存の固定プレビューに値がなければ従来の位置・向きの判定を使う。「？」の未読、「！」の次イベント条件は、この位置判定に加えて適用する。
+
+ミニマップと拡大地図は配置セルへの道案内なので、`inInteractionRange` で対象を隠さない。遠方の対象も実配置の座標を維持し、踏査・未読・次イベントの条件に従って表示する。距離が合うだけでイベントを開始したり、投影時に既読状態を変えたりしない。
+
 ## 会話人物
 
 `dialog.scene` は省略可能で、`title`・`mode`（stage/cards）・`speakerId`・`cast`を持つ。castの要素は `{id, name, role, portrait, sprite, remote, display}`。displayには位置・拡大率・左右反転・重なり順が入る。この場面で表示する人物だけを Application が投影する。View は元の entities、knowledge、作者向け truth を読まない。`remote` は伝声管・面会窓越しの人物で、同席を意味しない。完了後の結果文では最後の場面の人物像を残さない。
@@ -195,7 +203,7 @@ partyとrosterには、現在職、成長履歴、習得技能、探索特技、
 
 dungeons[].art、dungeon.wall、各固有システム・カード・マーカーのartは `{url, rect}` です。rectは0〜1の正規化された `{x,y,width,height}` で、同じアトラスの切り出し範囲を表します。ダンジョンの壁面・装置はsrc/application/dungeon-projection.jsで画像IDから表示URLへ解決します。素材がない場合は既存の色・記号による描画を維持します。
 
-dungeon.scenesは現在地または正面の調査情報です。常設パネルとして描画しません。調査の入口はplayer.commandのinteract（便利）・inspect（任意）で、Coreが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
+dungeon.scenesは操作位置に合う調査情報です。配置セルを基本とし、明示された例外だけ正面から扱います。常設パネルとして描画しません。調査の入口はplayer.commandのinteract（便利）・inspect（任意）で、Coreが距離・会話・戦闘・対象IDを再検査します。会話中はdialog.fieldSceneにtitleとartを渡します。dialog.sceneの人物像とは別項目です。
 
 quests[].fieldLinksは関連する迷宮・調査地点の案内、quests[].fieldNotesはその依頼で獲得済みの観察、fieldNotesは手帳全体の観察一覧です。未獲得の観察本文は投影しません。調査記録を得ても依頼の結末や報酬を自動確定しません。表示と依頼の接続は[DUNGEON_ART_AND_SCENARIOS.md](../dungeons/DUNGEON_ART_AND_SCENARIOS.md)を参照してください。
 
@@ -223,7 +231,7 @@ surfaceNoticeは正面の水深と通行可否、その対処の文章です。�
 
 ## メッセージとコマンド（2026-09-18）
 
-[確定仕様](MESSAGE_AND_COMMAND_WINDOWS.md)に従い、通常の探索画面から固有システムの操作パネルを除去した。systemのcards/actionsは描画情報・Coreの操作候補として保持するが、Viewが並べて直接実行する入口にはしない。足元・正面の対象を「調べる」で選び、説明と選択肢をdialogへ投影する。携帯松明と場所を問わない待機等はコマンドウィンドウから開く。
+[確定仕様](MESSAGE_AND_COMMAND_WINDOWS.md)に従い、通常の探索画面から固有システムの操作パネルを除去した。systemのcards/actionsは描画情報・Coreの操作候補として保持するが、Viewが並べて直接実行する入口にはしない。操作位置に合う対象を「調べる」で選び、説明と選択肢をdialogへ投影する。携帯松明と場所を問わない待機等はコマンドウィンドウから開く。
 
 選択肢は同じメッセージウィンドウに置く。背景内ビューでは本文の右、従来ビューでは本文の下に表示する。Coreのwaiting.typeはシナリオのtext/choiceとコマンド由来のcommandを区別し、Applicationはどちらもdialog.type=text/choiceへ変換する。Viewとキーボードは共通のadvance/chooseを送る。選択肢がある間のadvanceは無効。帰還費用はCoreが確定時に計算し、別モーダルを使わない。
 

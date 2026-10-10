@@ -51,3 +51,15 @@ test('sideways devices never float in the forward view, and closed faces hide th
  const d={location:{x:2,y:2,facing:'south'},objects:[{id:'left',x:3,y:2},{id:'right',x:1,y:2},{id:'back',x:2,y:1},{id:'front',x:2,y:3},{id:'feet',x:2,y:2},{id:'water',kind:'water',x:2,y:3}]};
  assert.deepEqual(visibleDungeonObjects(d).map(o=>o.id),['front','feet']);d.boundaries={'2,2/south':true};assert.deepEqual(visibleDungeonObjects(d).map(o=>o.id),['feet']);
 });
+
+test('authored interaction ranges control exploration candidates while unannotated device previews retain geometric visibility',()=>{
+ const d={location:{x:2,y:2,facing:'south'},objects:[
+  {id:'cell_event_ahead',kind:'clue',x:2,y:3,inInteractionRange:false},
+  {id:'cell_event_here',kind:'clue',x:2,y:2,inInteractionRange:true},
+  {id:'blocking_door_ahead',kind:'door',x:2,y:3,inInteractionRange:true},
+  {id:'front_only_object_here',kind:'door',x:2,y:2,inInteractionRange:false},
+  {id:'legacy_device_ahead',x:2,y:3},
+  {id:'legacy_device_side',x:3,y:2}
+ ]};
+ assert.deepEqual(visibleDungeonObjects(d).map(o=>o.id),['cell_event_here','blocking_door_ahead','legacy_device_ahead']);
+});

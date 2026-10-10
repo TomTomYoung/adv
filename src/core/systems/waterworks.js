@@ -42,7 +42,7 @@ function plan(ctx,intent){
   const reason=costProblem(ctx.data,ctx.state,intent.actor,ability);return reason?{ok:false,reason}:{ok:true,ability};
  }
  const control=ctx.spec.controls.find(c=>c.id===intent.target);
- if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'足元か正面の水門・バルブを選んでください。'};
+ if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'水門・バルブの操作セルに立って選んでください。'};
  if(!['open','close'].includes(intent.action))return {ok:false,reason:'水門・バルブの操作が不正です。'};
  const open=intent.action==='open';if(ctx.persistent.controls[control.id]===open)return {ok:false,reason:'すでにその状態です。'};
  return {ok:true,control,open};
@@ -57,7 +57,7 @@ function project(ctx){
  const phase=waterPhase(ctx.spec,ctx.run.elapsed),level=waterLevel(ctx),actions=[available(ctx,{type:'dungeon.action',system:ctx.id,action:'wait'},plan,'1刻待つ'),available(ctx,{type:'dungeon.action',system:ctx.id,action:'protect',item:ctx.spec.protectionItem},plan,'潜水具を使う')];
  const controls=ctx.spec.controls.filter(c=>closeTo(ctx.state,c)).map(c=>({id:c.id,name:c.name,open:ctx.persistent.controls[c.id],actions:[['open','開く'],['close','閉じて排水']].map(([action,label])=>available(ctx,{type:'dungeon.action',system:ctx.id,action,target:c.id},plan,label))}));
  const map=ctx.data.maps[ctx.state.location.map],markers=[];
- if(!map.voxels)for(let y=0;y<map.tiles.length;y++)for(let x=0;x<map.tiles[y].length;x++)if(map.tiles[y][x]==='.'&&(ctx.state.discovered[map.id]??[]).includes(`${x},${y}`)){const n=waterAt(ctx,map.id,x,y);markers.push({id:`water/${x}/${y}`,name:`フロア水没度 ${n}/10`,x,y,kind:'water',glyph:n?'≈':'·',level:floodDepth(n),floodLevel:n,waitable:true});}
+ if(!map.voxels)for(let y=0;y<map.tiles.length;y++)for(let x=0;x<map.tiles[y].length;x++)if(map.tiles[y][x]==='.'&&(ctx.state.discovered[map.id]??[]).includes(`${x},${y}`)){const n=waterAt(ctx,map.id,x,y);markers.push({id:`water/${x}/${y}`,name:`フロア水没度 ${n}/10`,x,y,kind:'water',glyph:n?'≈':'·',level:floodDepth(n),floodLevel:n,waitable:true,inInteractionRange:closeTo(ctx.state,{map:map.id,x,y})});}
  return {kind:'waterworks',id:ctx.id,title:'フロアの水没',phase:phase.name,remaining:phase.remaining,elapsed:ctx.run.elapsed,level,protected:ctx.run.protected,zones:[{id:map.id,name:map.name,level,status:`水没度 ${level}/10・${['乾燥','足元まで','腰まで','完全水没'][floodDepth(level)]}`}],controls,markers,actions};
 }
 function validate(data,d,s){

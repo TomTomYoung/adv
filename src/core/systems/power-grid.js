@@ -7,14 +7,14 @@ const standingOn=(ctx,device)=>device.kind==='door'&&device.tiles.some(p=>sameCe
 function plan(ctx,intent){
   if(intent.action==='toggle'){
     const control=ctx.spec.controls.find(c=>c.id===intent.target);
-    if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'配電盤の前で系統を切り替えてください。'};
+    if(!control||!closeTo(ctx.state,control))return {ok:false,reason:'配電盤のセルに立って系統を切り替えてください。'};
     const circuits=ctx.persistent.circuits.includes(control.id)?ctx.persistent.circuits.filter(id=>id!==control.id):[...ctx.persistent.circuits,control.id];
     if(!circuits.includes(control.id)&&ctx.spec.devices.some(d=>d.circuit===control.id&&powered(ctx,d)&&standingOn(ctx,d)))return {ok:false,reason:'動力扉の通路から降りてください。'};
     if(load(ctx,circuits)>ctx.spec.capacity)return {ok:false,reason:`動力が不足しています（必要 ${load(ctx,circuits)}／容量 ${ctx.spec.capacity}）。別系統を切るか不要な部品を外してください。`};
     return {ok:true,control,circuits};
   }
   const device=ctx.spec.devices.find(d=>d.id===intent.target);
-  if(!device||!closeTo(ctx.state,device))return {ok:false,reason:'装置の前で操作してください。'};
+  if(!device||!closeTo(ctx.state,device))return {ok:false,reason:'装置のセルに立って操作してください。'};
   if(intent.action==='disconnect'&&connected(ctx,device)){if(powered(ctx,device)&&standingOn(ctx,device))return {ok:false,reason:'動力扉の通路から降りてください。'};return {...inventoryPlan(ctx,{},device.salvage),device};}
   if(intent.action==='reconnect'&&!connected(ctx,device)){
     if(ctx.persistent.circuits.includes(device.circuit)&&load(ctx)+device.power>ctx.spec.capacity)return {ok:false,reason:'先に系統の動力を切ってください。'};
@@ -36,7 +36,8 @@ export const powerGrid={createPersistent:()=>({circuits:[],disconnected:[]}),cre
     if(intent.action==='ride'){const d=p.device.destination;ctx.engine.teleport(d.map,d.x,d.y,d.facing??'north');}
     ctx.engine.reveal();
   },
-  danger(ctx){const guard=ctx.spec.devices.find(d=>d.kind==='guardian'&&powered(ctx,d)&&!ctx.run.fought.includes(d.id)&&closeTo(ctx.state,d));if(!guard)return false;fight(ctx,guard);return true;},
+  // Hostile approach is a proximity trigger, independent of device operation.
+  danger(ctx){const guard=ctx.spec.devices.find(d=>d.kind==='guardian'&&powered(ctx,d)&&!ctx.run.fought.includes(d.id)&&closeTo(ctx.state,d,'here-or-front'));if(!guard)return false;fight(ctx,guard);return true;},
   battleEnd(ctx){if(ctx.run.fighting){if(ctx.result==='win')ctx.run.fought.push(ctx.run.fighting);ctx.run.fighting=null;}},
   tile:(ctx,map,x,y)=>patchTile(ctx.spec.devices.filter(d=>d.kind==='door'&&powered(ctx,d)).flatMap(d=>d.tiles),map,x,y),
   cell:(ctx,map,x,y)=>patchCell(ctx.spec.devices.filter(d=>d.kind==='door'&&powered(ctx,d)).flatMap(d=>d.tiles),map,x,y),
