@@ -75,7 +75,7 @@ for(const layout of ['scene','classic']){
       assert.ok(c.root.querySelector('[data-profile="party"]').dataset.actor!=='nio');
     }finally{c.close();}
   });
-  test(`${layout}: detox keeps every target with its own state and returns focus safely after curing`,()=>{
+  test(`${layout}: detox shows only target names with eligibility and returns focus safely after curing`,()=>{
     const c=screen(layout);try{
       assert.ok(c.g.dispatch({type:'party',action:'join',actor:'berg'}));c.g.state.actors.nio.statuses=['poison'];c.g.state.actors.ada.statuses=['wet'];
       const saved=c.g.save();c.view.profileActor='sera';c.view.profilePage='magic';c.panel('profile');assert.equal(c.g.save(),saved);
@@ -83,52 +83,46 @@ for(const layout of ['scene','classic']){
       assert.deepEqual(rows().map(row=>row.dataset.target),c.g.state.members);
       for(const row of rows()){
         const id=row.dataset.target,use=row.querySelector('button');
-        assert.equal(row.querySelector('.profile-target-name').textContent,c.g.data.actors[id].name);
-        assert.equal(use.disabled,id!=='nio');assert.equal(use.textContent,'使う');
+        assert.equal(row.children.length,1);assert.equal(row.textContent,c.g.data.actors[id].name);
+        assert.equal(use.disabled,id!=='nio');assert.equal(use.textContent,c.g.data.actors[id].name);
         assert.equal(use.getAttribute('aria-label'),`${c.g.data.actors[id].name}に解毒を使う`);
-        for(const description of use.getAttribute('aria-describedby').split(' '))assert.ok(c.root.querySelector(`[id="${description}"]`));
-        assert.equal(row.querySelector('.profile-target-vitals'),null);assert.doesNotMatch(row.textContent,/HP|MP/);
-        if(id==='nio')assert.equal(row.querySelector('.profile-target-status').textContent,'毒');
-        else if(id==='ada'){assert.match(row.querySelector('.profile-target-status').textContent,/濡れ/);assert.equal(row.querySelector('.profile-target-reason').textContent,'毒ではありません。');}
-        else{assert.equal(row.querySelector('.profile-target-status').textContent,'毒ではありません。');assert.equal(row.querySelector('.profile-target-reason'),null);assert.doesNotMatch(row.textContent,/状態異常なし/);}
+        assert.equal(use.getAttribute('aria-describedby'),null);assert.equal(use.getAttribute('title'),null);
       }
       assert.equal(entry().querySelectorAll('.profile-field-reason').length,0);
-      for(const vitals of c.root.querySelector('[data-field-skill="heal"]').querySelectorAll('.profile-target-vitals')){assert.match(vitals.textContent,/^HP \d+\/\d+$/);assert.doesNotMatch(vitals.textContent,/MP/);}
+      assert.doesNotMatch(entry().textContent,/現在MP/);
+      assert.deepEqual(c.root.querySelector('[data-field-skill="heal"]').querySelectorAll('.profile-field-target').map(row=>row.textContent),c.g.state.members.map(id=>c.g.data.actors[id].name));
       const content=c.root.querySelector('.profile-content');content.scrollTop=140;const mp=c.g.state.actors.sera.mp;
       c.click('profile:town:use:cleanse:nio');
       assert.deepEqual(c.intents.at(-1),{type:'field.skill',actor:'sera',skill:'cleanse',target:'nio'});
       assert.deepEqual(c.g.state.actors.nio.statuses,[]);assert.deepEqual(c.g.state.actors.ada.statuses,['wet']);assert.equal(c.g.state.actors.sera.mp,mp-2);
       assert.deepEqual(rows().map(row=>row.dataset.target),c.g.state.members);
       assert.ok(rows().every(row=>row.querySelector('button').disabled));
-      assert.equal(entry().querySelector('[data-target="nio"] .profile-target-status').textContent,'毒ではありません。');assert.equal(entry().querySelector('[data-target="nio"] .profile-target-reason'),null);
+      assert.equal(entry().querySelector('[data-target="nio"]').textContent,'ニオ');
       assert.equal(c.document.activeElement.dataset.focus,'profile:town:magic');assert.equal(c.root.querySelector('.profile-content').scrollTop,140);
       const cured=c.g.save();c.key('Enter');assert.equal(c.g.save(),cured);assert.equal(c.intents.filter(intent=>intent.type==='field.skill').length,1);
     }finally{c.close();}
   });
-  test(`${layout}: dungeon party spells show one MP restriction while preserving each target's condition`,()=>{
+  test(`${layout}: dungeon party spells show one MP restriction and disable every target name`,()=>{
     const c=screen(layout);try{
       assert.ok(c.g.dispatch({type:'travel',dungeon:'kagaribi'}));c.g.state.actors.nio.statuses=['poison'];c.g.state.actors.sera.mp=1;
       const saved=c.g.save();c.panel('party');c.click('roster:party:sera');c.click('profile:party:magic');
       const entry=c.root.querySelector('[data-profile="party"] [data-field-skill="cleanse"]'),reason=entry.querySelector('.profile-field-reason');
       assert.equal(entry.querySelectorAll('.profile-field-reason').length,1);assert.match(reason.textContent,/MP/);
-      assert.match(entry.textContent,/現在MP 1\//);assert.equal(entry.querySelectorAll('.profile-target-reason').length,0);
+      assert.doesNotMatch(entry.textContent,/現在MP/);
       const rows=entry.querySelectorAll('.profile-field-target');assert.deepEqual(rows.map(row=>row.dataset.target),c.g.state.members);
       for(const row of rows){
-        const use=row.querySelector('button');assert.ok(use.disabled);assert.ok(use.getAttribute('aria-describedby').split(' ').includes(reason.id));
+        const use=row.querySelector('button');assert.ok(use.disabled);assert.equal(use.getAttribute('aria-describedby'),reason.id);
+        assert.equal(row.textContent,c.g.data.actors[row.dataset.target].name);
       }
-      assert.match(entry.querySelector('[data-target="nio"] .profile-target-status').textContent,/毒/);
       assert.equal(c.g.save(),saved);assert.equal(c.intents.length,0);
     }finally{c.close();}
   });
-  test(`${layout}: group recovery displays the whole party beneath one shared use operation`,()=>{
+  test(`${layout}: group recovery uses one party label and applies to all members`,()=>{
     const c=screen(layout);try{
       c.g.award(0,3600);c.g.state.actors.ada.statuses=['poison','wet'];c.g.state.actors.nio.statuses=['poison'];
       c.view.profileActor='sera';c.view.profilePage='magic';c.panel('profile');
       const entry=c.root.querySelector('[data-field-skill="purify"]'),rows=entry.querySelectorAll('.profile-field-target');
-      assert.equal(rows.length,1);assert.equal(rows[0].querySelector('.profile-target-name').textContent,'仲間全員');
-      assert.deepEqual(rows[0].querySelectorAll('.profile-target-member').map(member=>member.dataset.member),c.g.state.members);
-      assert.deepEqual(rows[0].querySelectorAll('.profile-target-member-name').map(name=>name.textContent),c.g.state.members.map(id=>c.g.data.actors[id].name));
-      assert.equal(entry.querySelectorAll('.profile-target-vitals').length,0);
+      assert.equal(rows.length,1);assert.equal(rows[0].textContent,'仲間全員');
       assert.equal(entry.querySelectorAll('button').length,1);assert.equal(entry.querySelector('button').getAttribute('aria-label'),'仲間全員に清浄の祈りを使う');
       const mp=c.g.state.actors.sera.mp;c.click('profile:town:use:purify:sera');
       assert.deepEqual(c.g.state.actors.ada.statuses,[]);assert.deepEqual(c.g.state.actors.nio.statuses,[]);assert.equal(c.g.state.actors.sera.mp,mp-c.g.data.skills.purify.mp);
@@ -140,8 +134,8 @@ for(const layout of ['scene','classic']){
       c.g.award(0,3600);assert.ok(c.g.dispatch({type:'job.change',actor:'ada',job:'monk'}));c.g.state.actors.ada.hp=1;
       c.view.profileActor='ada';c.view.profilePage='skills';c.panel('profile');
       const entry=c.root.querySelector('[data-field-skill="breathe"]');assert.equal(entry.querySelectorAll('.profile-field-target').length,1);
-      assert.deepEqual(entry.querySelectorAll('.profile-target-member').map(member=>member.dataset.member),['ada']);
-      assert.equal(entry.querySelector('.profile-target-vitals').textContent,`HP 1/${c.g.stats('ada').hp}`);
+      assert.equal(entry.querySelector('.profile-field-target').dataset.target,'ada');
+      assert.equal(entry.querySelector('.profile-field-target').textContent,'アダ');
       const key='profile:town:use:breathe:ada',mp=c.g.state.actors.ada.mp;c.click(key);
       assert.ok(c.g.state.actors.ada.hp>1&&c.g.state.actors.ada.hp<c.g.stats('ada').hp);assert.equal(c.g.state.actors.ada.mp,mp-c.g.data.skills.breathe.mp);
       assert.ok(!c.root.querySelector(`[data-focus="${key}"]`).disabled);assert.equal(c.document.activeElement.dataset.focus,key);

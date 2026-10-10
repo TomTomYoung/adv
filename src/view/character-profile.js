@@ -8,26 +8,13 @@ function refocus(view,key){focusButton([...view.root.querySelectorAll('[data-foc
 function fieldTargets(view,row,actor,ability,context,page){
   const targets=ability.fieldTargets??[],prefix=`profile-${context}-${actor.id}-${ability.id}`;
   row.dataset.fieldSkill=ability.id;
-  row.append(make('small','muted',`戦闘中・戦闘外で使用　現在MP ${actor.mp}/${actor.maxMp}`));
+  row.append(make('small','muted','戦闘中・戦闘外で使用'));
   const commonReason=targets.find(target=>target.reasonScope==='ability'&&target.reason)?.reason;
   if(commonReason){const note=make('p','profile-field-reason requirement',commonReason);note.id=`${prefix}-reason`;row.append(note);}
   const list=make('ul','profile-field-targets');list.setAttribute('aria-label',`${ability.name}の対象`);
   for(const target of targets){
-    const entry=make('li','profile-field-target'+(target.enabled?' available':''));entry.dataset.target=target.id;
-    const details=make('div','profile-target-details');details.id=`${prefix}-${target.id}-details`;details.append(make('strong','profile-target-name',target.name));
-    const members=target.members??[],single=ability.target!=='all_allies'&&members.length===1,targetReason=target.reasonScope!=='ability'?target.reason:'';
-    for(const member of members){
-      const state=make('div','profile-target-member');state.dataset.member=member.id;
-      if(ability.target==='all_allies')state.append(make('span','profile-target-member-name',member.name));
-      const statuses=[...(member.hp<=0?['戦闘不能']:[]),...(member.statuses??[])];
-      const inlineReason=single&&!statuses.length?targetReason:'';
-      state.append(make('span','profile-target-status'+(statuses.length?' affected':inlineReason?' unavailable':''),statuses.join('・')||inlineReason||'状態異常なし'));
-      if(single&&targetReason&&statuses.length)state.append(make('span','profile-target-reason',targetReason));
-      if(member.vitals?.length)state.append(make('span','profile-target-vitals',member.vitals.join('　')));
-      details.append(state);
-    }
-    if(targetReason&&!single)details.append(make('small','profile-target-reason',targetReason));
-    const key=`profile:${context}:use:${ability.id}:${target.id}`,use=button('使う',key,()=>{
+    const entry=make('li','profile-field-target');entry.dataset.target=target.id;
+    const key=`profile:${context}:use:${ability.id}:${target.id}`,use=button(target.name,key,()=>{
       const scrollTop=use.closest('.profile-content')?.scrollTop;
       view.act({type:'field.skill',actor:actor.id,skill:ability.id,target:target.id});
       // A completed cure must not move confirmation onto a different spell.
@@ -36,9 +23,9 @@ function fieldTargets(view,row,actor,ability,context,page){
         const content=tab?.closest('.character-profile')?.querySelector('.profile-content');if(content&&scrollTop!==undefined)content.scrollTop=scrollTop;
       }
     },!target.enabled);
-    use.className='profile-target-use';use.setAttribute('aria-label',`${target.name}に${ability.name}を使う`);use.setAttribute('aria-describedby',`${details.id}${commonReason?` ${prefix}-reason`:''}`);
-    if(target.reason)use.title=target.reason;
-    entry.append(details,use);list.append(entry);
+    use.className='profile-target-use';use.setAttribute('aria-label',`${target.name}に${ability.name}を使う`);
+    if(commonReason)use.setAttribute('aria-describedby',`${prefix}-reason`);
+    entry.append(use);list.append(entry);
   }
   row.append(list);
 }
