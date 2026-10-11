@@ -1,5 +1,7 @@
 # advの現状
 
+2026-10-12: [進入イベントとトラップ](dungeons/TRAPS_AND_HAZARDS.md)の4発生方式・9パッケージ・漏水／ガス漏れ、[状態異常](battle/STATUS_EFFECTS.md)の共通処理、[トレジャーとサービス](dungeons/DUNGEON_PACKAGES.md)を実装しました。既存の工具箱・町の施設へ適用し、保存・設定編集・生成へ接続しています。詳細は[検証記録](development/PROGRESS.md)を参照してください。
+
 2026-10-10: 配信更新IDによる起動を追加しました。通常の再読み込みでJS依存先・CSS・JSON・参照素材のURLを更新し、配信途中の不一致時はセーブを変更せず停止します。内容版1.25.0は保持します。コードや配布ファイルの変更後は `npm run build:runtime` が必要です。[配信とキャッシュ](development/README.md#配信とキャッシュ)。
 
 全体確認日: 2026-10-01。ダンジョン情報の更新日: 2026-10-10。配布作品版1.25.0。篝火の迷宮拡張の基点はmaster `55e864e`。[現行仕様](SPEC.md)、[検証と残作業](development/PROGRESS.md)、[引き継ぎ](HANDOFF.md)を参照してください。

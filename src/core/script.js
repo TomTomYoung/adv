@@ -1,3 +1,9 @@
+import {attemptIgnition} from './fire-hazards.js';
+import {collectTreasure,treasureKey} from './treasures.js';
+import {applyImpact} from './hazard-effects.js';
+import {applyMapPatch} from './map-mutations.js';
+import {applyStatus,removeStatus} from './status-effects.js';
+import {cellEventKey,cellEntryId} from './cell-layers.js';
 import {beginEventCheckpoint,commitEventCheckpoint} from './event-checkpoints.js';
 import {setDungeonRestriction,clearDungeonRestriction} from './dungeon-restrictions.js';
 import {initStory,enterStoryScene,applyStoryAction,storyCanAct,beginStoryJourney} from './story.js';
@@ -7,7 +13,7 @@ import {resumeBattleEvent,interruptBattle} from './battle-events.js';
 import {signalFieldChange} from './field-signals.js';
 import {setCast,beginPresentationWait} from './cast.js';
 import {finishWorldConversations} from './world.js';
-export const COMMANDS=new Set(['event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['treasure.collect','treasure.reset','hazard.impact','map.patch','cell.event.reset','event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -50,6 +56,11 @@ export function pump(engine){
     if(frame.index>=commands.length){state.vm.pop();const parent=state.vm.at(-1);if(frame.branch&&parent?.scope===frame.scope)parent.local=clone(frame.local);continue;}
     const index=frame.index++,c=commands[index],v=x=>engine.value(x),branch=path=>pushBranch(engine,frame,index,path);
     switch(c.op){
+      case 'treasure.collect':frame.local.collected=collectTreasure(engine,c.map,c.object);frame.local.receipt=state.notice;break;
+      case 'treasure.reset':delete state.events[treasureKey(c.map,c.object)];break;
+      case 'hazard.impact':if(!applyImpact(engine,c))return;break;
+      case 'map.patch':applyMapPatch(engine,c.patch);break;
+      case 'cell.event.reset':{delete state.events[cellEventKey(c.map,c.x,c.y,c.event)];const e=state.fieldEntry,id=cellEntryId(c.event);if(e?.map===c.map&&e.x===c.x&&e.y===c.y&&!e.fired.includes(id))e.fired.push(id);break;}
       case 'event.checkpoint.begin':beginEventCheckpoint(engine,c,frame,index);break;
       case 'event.checkpoint.commit':commitEventCheckpoint(engine,c.id);break;
       case 'story.init':initStory(engine,c.quest);break;
@@ -105,14 +116,14 @@ export function pump(engine){
       case 'party.join':if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
       case 'party.leave':if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
       case 'status.apply':case 'status.remove':{
-        for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply'){if(!a.statuses.includes(c.status))a.statuses.push(c.status);}else a.statuses=a.statuses.filter(s=>s!==c.status);}break;
+        for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration);else removeStatus(a,c.status);}break;
       }
-      case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0);break;
+      case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0,true);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
       case 'dungeon.restriction.set':setDungeonRestriction(engine,c);signalFieldChange(engine.data,state,'state');break;
       case 'dungeon.restriction.clear':clearDungeonRestriction(engine,c);signalFieldChange(engine.data,state,'state');break;
       case 'fire.portable.set':engine.setPortableFire(c);break;
-      case 'light.refill':state.light=engine.data.system.lightCapacity;engine.eventCue('light');break;
+      case 'light.refill':if(attemptIgnition(engine)){state.light=engine.data.system.lightCapacity;engine.eventCue('light');}break;
       case 'facing.set':state.location.facing=c.direction;break;
       case 'object.state.set':{
         const key=`${c.map??state.location.map}/${c.object}`;

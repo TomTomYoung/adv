@@ -15,7 +15,7 @@ export function canInteractAt(data,state,point,range=point.interactionRange??'he
   if(here)return range!=='front';
   if(range==='here')return false;
   const map=data.maps[loc.map];
-  return Boolean(map&&!edgeBetween(data,map,loc,point)?.visual.opaque&&
+  return Boolean(map&&!edgeBetween(data,map,loc,point,state)?.visual.opaque&&
     (!map.voxels||faceRules(map,voxelMapState(data,state,map),loc,point).passage));
 }
 

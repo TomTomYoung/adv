@@ -1,3 +1,5 @@
+import {applyStatus,removeStatus,statusStats,tickStatuses} from './status-effects.js';
+import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
 import {wetResistance,wetAfterSkill} from './wet.js';
 import {canRepel,kindlePortable} from './systems/fire-network.js';
@@ -29,7 +31,7 @@ export function activeActor(engine){
   const s=engine.state,b=s.battle;if(!b)return null;
   return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&!b.acted.includes(id))??null;
 }
-export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),enemy.stats);
+export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),statusStats(engine.data,engine.state,enemy,enemy.stats));
 export function endBattle(engine,result,skipEvents=false){
   const s=engine.state,b=s.battle,continuation=b.continuations;
   if(!skipEvents){b.pendingResult=result;if(triggerBattleEvent(engine,'before_end'))return;}
@@ -61,7 +63,10 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   const grant=permission(engine.data,s,actorId,skillId,'battle.skill');
   if(!grant)return fail('この職業・レベルでは習得していません。');
   const reason=effectsProblem(engine.data,skill)||costProblem(engine.data,s,actorId,skill);if(reason)return fail(reason);
-  if(skill.effects.some(e=>e.type==='repel')&&!canRepel(engine.data,s,skill))return fail('この火で撃退できるのは、篝火の迷宮のくらがりです。');
+  if(skill.effects.some(e=>e.type==='repel')){
+    if(!canRepel(engine.data,s,skill))return fail('この火で撃退できるのは、篝火の迷宮のくらがりです。');
+    const wetReason=ignitionReason(engine.data,s);if(wetReason)return fail(wetReason);
+  }
   let targets;
   if(skill.target==='all_enemies')targets=b.enemies.filter(e=>e.hp>0);
   else if(skill.target==='all_allies')targets=s.members.map(id=>s.actors[id]).filter(a=>a.hp>0);
@@ -101,7 +106,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
       const guarded=target.instance?target.guard:b.guards.includes(target.id);
-      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*wetResistance(target,effect.element);
+      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(target,effect.element):1);
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
@@ -114,10 +119,10 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     }
     if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;(b?.log??s.log).push(`${targetName}のMPが${spent}減少。`);}
     if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,Math.floor(raw));target.mp+=restored;(b?.log??s.log).push(`${targetName}のMPが${restored}回復。`);}
-    if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&target.hp>0&&!(target.statusImmune??engine.data.actors[target.id]?.statusImmune??[]).includes(effect.status)&&engine.random()<(effect.chance??1)&&!target.statuses.includes(effect.status)){
-      target.statuses.push(effect.status);(b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
+    if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&target.hp>0&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration)){
+      (b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
     }
-    if(effect.type==='cleanse')target.statuses=effect.status?target.statuses.filter(id=>id!==effect.status):[];
+    if(effect.type==='cleanse')removeStatus(target,effect.status);
   }
   return damageTotal;
 }
@@ -164,6 +169,7 @@ function enemiesTurn(engine){
   }
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
+  for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0)tickStatuses(engine.data,s,unit,'turns');
   tickBuffs(b);b.acted=[];b.guards=[];b.round++;b.log=b.log.slice(-30);
   triggerBattleEvent(engine,'round_start');
 }
@@ -184,7 +190,7 @@ export function battleAction(engine,intent){
     const plan=battleSkillPlan(engine,actorId,intent.skill,intent.target);
     if(!plan.ok){engine.notify(plan.reason);return false;}
     const {skill,targets}=plan;payCost(engine,actorId,skill);
-    if(skill.effects.some(e=>e.type==='repel')){kindlePortable(engine.data,s,skill.fireEffect);engine.eventCue('light');endBattle(engine,'repel');return true;}
+    if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else {b.acted.push(actorId);if(!activeActor(engine))enemiesTurn(engine);}return true;}
     useSkill(engine,actor,targets,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;

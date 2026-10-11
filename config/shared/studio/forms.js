@@ -39,6 +39,12 @@ export function renderRecord(app,location,schema,{keys,title,description,omit=[]
  const value=get(app.workspace.value(location.file),location.path),rootSchema=app.schemas.get(location.file),resolved=resolveSchema(schema,rootSchema,value);
  const root=title?section(title,description):el('div','','record-fields');
  if(!value||typeof value!=='object'||Array.isArray(value)){root.append(renderValue(app,location,resolved,location.path.at(-1)??'value'));return root;}
+ if(location.file==='cell-layers.json'&&location.path[0]==='events'&&location.path.length===2){
+  const p=value.occurrence??{chance:1,maxCount:value.once?1:null,reset:'never'},mode=(p.chance<1?'chance':'always')+(p.maxCount===null?'':'_limited');
+  root.append(select([['always','毎回・無制限'],['chance','確率・無制限'],['always_limited','毎回・回数制限'],['chance_limited','確率・回数制限']],mode,next=>{
+   if(!app.guard())return;const event=structuredClone(value);delete event.once;event.occurrence={chance:next.startsWith('chance')?(p.chance<1?p.chance:.25):1,maxCount:next.endsWith('_limited')?(p.maxCount??1):null,reset:p.reset};app.workspace.set(location.file,location.path,event,'進入イベントの発生方式を変更');app.refresh();
+  },'進入イベントの発生方式'));
+ }
  const properties=resolved.properties??{},available=keys??[...new Set([...Object.keys(properties),...Object.keys(value)])];
  const optional=available.filter(k=>value[k]===undefined&&!omit.includes(k)&&!identityKeys.has(k));
  for(const key of available){if(omit.includes(key)||value[key]===undefined)continue;const s=properties[key]??{};
@@ -48,7 +54,9 @@ export function renderRecord(app,location,schema,{keys,title,description,omit=[]
  if(optional.length){const line=el('div','','add-optional');let chosen=optional[0];line.append(select(optional.map(k=>[k,label(k)]),chosen,k=>chosen=k,'追加する設定'),button('設定を追加',()=>{
   if(!app.guard())return;const s=properties[chosen]??{};let next=initialValue(s,rootSchema,chosen,{defaultReference:key=>referenceOptions(app,key,location,value)?.[0]?.[0]});
   if(expressionKeys.has(chosen))next=true;if(commandKeys.has(chosen))next=[];
-  app.workspace.set(location.file,[...location.path,chosen],next,`${label(chosen)}を追加`);app.refresh();
+  if(location.file==='cell-layers.json'&&location.path[0]==='events'&&location.path.length===2&&['package','script','once','occurrence'].includes(chosen)){
+   const event=structuredClone(value);delete event[({package:'script',script:'package',once:'occurrence',occurrence:'once'})[chosen]];event[chosen]=chosen==='occurrence'?{chance:1,maxCount:null,reset:'never'}:next;app.workspace.set(location.file,location.path,event,`${label(chosen)}を追加`);
+  }else app.workspace.set(location.file,[...location.path,chosen],next,`${label(chosen)}を追加`);app.refresh();
  }));root.append(line);}
  return root;
 }
@@ -62,9 +70,14 @@ export function renderValue(app,location,definition={},key='value',{parent={},re
  if(!required&&!identityKeys.has(key)&&value!==null&&typeof value==='object'&&typeof path.at(-1)!=='number')root.append(button('未指定に戻す',()=>{if(app.guard())write(undefined,true);},'field-remove'));
  if(commandKeys.has(key)&&Array.isArray(value)){root.append(renderCommands(app,location,value));return root;}
  if(expression||expressionKeys.has(key)||(definition.$ref==='#/$defs/value'&&!((typeof value!=='object'||value===null)&&(textKeys.has(key)||referenceOptions(app,key,location,parent)?.length)))||definition.$ref==='#/$defs/expression'||(value?.op&&expressionNames[value.op])){root.append(renderExpression(app,location,value,caption));if(help[key])root.append(el('p',help[key],'field-help'));return root;}
+ const variants=definition.oneOf?.filter(s=>s.properties?.kind?.const);
+ if(variants?.length>1&&value&&typeof value==='object')root.append(select(variants.map(s=>[s.properties.kind.const,enumLabel(s.properties.kind.const)]),value.kind,next=>{
+  if(!app.guard())return;const chosen=variants.find(s=>s.properties.kind.const===next),fresh=initialValue(chosen,rootSchema,key,{defaultReference:k=>referenceOptions(app,k,location,parent)?.[0]?.[0]});
+  for(const [k,v] of Object.entries(value))if(k!=='kind'&&chosen.properties[k])fresh[k]=v;write(fresh,true);
+ },'パッケージの種類'));
  const nullable=definition.anyOf?.some(s=>s.type==='null')||Array.isArray(definition.type)&&definition.type.includes('null');
- if(nullable&&value===null){root.append(el('span',key==='capacity'?'無制限':'なし'),button('値を指定する',()=>{if(!app.guard())return;const nonnull=definition.anyOf?.find(s=>s.type!=='null')??{...definition,type:definition.type.filter(t=>t!=='null')};write(initialValue(nonnull,rootSchema,key),true);}));return root;}
- if(nullable)root.append(button(key==='capacity'?'無制限にする':'なしにする',()=>{if(app.guard())write(null,true);}));
+ if(nullable&&value===null){root.append(el('span',['capacity','maxCount'].includes(key)?'無制限':'なし'),button('値を指定する',()=>{if(!app.guard())return;const nonnull=definition.anyOf?.find(s=>s.type!=='null')??{...definition,type:definition.type.filter(t=>t!=='null')};write(initialValue(nonnull,rootSchema,key),true);}));return root;}
+ if(nullable)root.append(button(['capacity','maxCount'].includes(key)?'無制限にする':'なしにする',()=>{if(app.guard())write(null,true);}));
  if(identityKeys.has(key)){root.append(el('code',String(value),'identifier'),el('small','参照を維持するため通常の編集では変更しません。','muted'));return root;}
  if(value&&typeof value==='object'&&!Array.isArray(value)&&'x' in value&&'y' in value){
   const point=el('div','','point-fields');const map=value.map??app.mapId;

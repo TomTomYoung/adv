@@ -1,3 +1,4 @@
+import {removeStatus} from './status-effects.js';
 import {actorStats,knownSkills,grantsFor} from './jobs.js';
 export const xpThreshold=(data,level)=>data.system.xpBase*level*(level+1);
 export const experienceRecipients=state=>state.members.filter(id=>state.actors[id].hp>0);
@@ -13,7 +14,7 @@ export function awardExperience(engine,xp,recipients=experienceRecipients(engine
       if(data.jobs)actor.growthHistory[actor.job]=(actor.growthHistory[actor.job]??0)+1;
       const after=actorStats(data,state,id,false);
       // Preserve the existing level-up recovery, only for this character.
-      actor.hp=after.hp;actor.mp=after.mp;actor.statuses=[];
+      actor.hp=after.hp;actor.mp=after.mp;removeStatus(actor);
       const skills=[...new Set([...knownSkills(data,state,id),...grantsFor(data,state,id).filter(g=>g.level<=actor.level).map(g=>g.skill)])].filter(skill=>!learned.has(skill));
       levels.push({actor:id,level:actor.level,growth:Object.fromEntries(Object.keys(before).map(key=>[key,after[key]-before[key]])),skills});
     }

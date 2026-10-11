@@ -1,3 +1,4 @@
+import {statusDefinitionsErrors} from '../../src/core/status-effects.js';
 import {reliefParametersValid} from '../../src/core/cell-behaviors.js';
 import {validateSchema} from './schema.js';
 import {kind,pathLabel} from './model.js';
@@ -62,6 +63,7 @@ export function createValidator(read=browserRead){
       }
     }
     walk(value);
+    if(value.statuses)for(const e of statusDefinitionsErrors({statuses:value.statuses}))errors.push(e);
     if(entry.family==='rewards'){
       const enemies=await read('data/enemies.json'),items=await read('data/items.json');
       for(const id of Object.keys(enemies))if(!Object.hasOwn(value.drops,id))fail(['drops',id],'魔物の宝箱設定が必要です。');

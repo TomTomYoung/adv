@@ -1048,6 +1048,324 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "hazard.impact"
+            },
+            "target": {
+              "enum": [
+                "party",
+                "leader"
+              ]
+            },
+            "damage": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "statuses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "duration": {
+                    "type": "object",
+                    "properties": {
+                      "steps": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000000
+                      },
+                      "turns": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000000
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false,
+                    "minProperties": 1
+                  }
+                },
+                "required": [
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "patches": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "x": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "y": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "preset": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "x",
+                      "y",
+                      "preset"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "edge": {
+                        "type": "string",
+                        "pattern": "^[hv]:(0|[1-9]\\d*),(0|[1-9]\\d*)$"
+                      },
+                      "preset": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "edge",
+                      "preset"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "map": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "object": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "state": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "map",
+                      "object",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "extinguish": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "op",
+            "target",
+            "damage",
+            "statuses",
+            "patches",
+            "extinguish"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "map.patch"
+            },
+            "patch": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "map": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "x": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "y": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "preset": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "map",
+                    "x",
+                    "y",
+                    "preset"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "map": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "edge": {
+                      "type": "string",
+                      "pattern": "^[hv]:(0|[1-9]\\d*),(0|[1-9]\\d*)$"
+                    },
+                    "preset": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "map",
+                    "edge",
+                    "preset"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "map": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "object": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "state": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "map",
+                    "object",
+                    "state"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "op",
+            "patch"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "cell.event.reset"
+            },
+            "map": {
+              "type": "string",
+              "minLength": 1
+            },
+            "x": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "y": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "event": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "map",
+            "x",
+            "y",
+            "event"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "treasure.collect"
+            },
+            "map": {
+              "type": "string",
+              "minLength": 1
+            },
+            "object": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "map",
+            "object"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "treasure.reset"
+            },
+            "map": {
+              "type": "string",
+              "minLength": 1
+            },
+            "object": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "map",
+            "object"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "fire.portable.set"
             },
             "fuel": {
@@ -1718,6 +2036,24 @@
             "status": {
               "type": "string",
               "minLength": 1
+            },
+            "duration": {
+              "type": "object",
+              "properties": {
+                "steps": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000000
+                },
+                "turns": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000000
+                }
+              },
+              "required": [],
+              "additionalProperties": false,
+              "minProperties": 1
             }
           },
           "required": [
@@ -2313,6 +2649,55 @@
   "additionalProperties": {
     "type": "object",
     "properties": {
+      "package": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "merchant",
+              "rest",
+              "camp",
+              "services"
+            ]
+          },
+          "services": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "shop": {
+            "type": "boolean"
+          },
+          "rest": {
+            "type": "object",
+            "properties": {
+              "cost": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000000
+              },
+              "ratio": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "cost",
+              "ratio"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "kind",
+          "services"
+        ],
+        "additionalProperties": false
+      },
       "id": {
         "type": "string",
         "minLength": 1

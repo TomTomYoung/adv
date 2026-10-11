@@ -1,3 +1,4 @@
+import {statusStats,removeStatus} from './status-effects.js';
 import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {dungeonInterior} from './world.js';
 import {unequipGear} from './equipment.js';
@@ -28,7 +29,7 @@ export function actorStats(data,state,id,battle=true){
   }else for(const [key,rate] of Object.entries(data.system.growth))stats[key]=(stats[key]??0)+rate*(actor.level-1);
   for(const [slot,item] of Object.entries(actor.equipment))for(const [key,amount] of Object.entries(dungeonEquipmentStats(data,state,item,id,slot)))stats[key]=(stats[key]??0)+amount;
   for(const key of STAT_KEYS)stats[key]=Math.max(key==='hp'?1:0,Math.floor(stats[key]));
-  const environmental=dungeonActorStats(data,state,id,stats);
+  const environmental=statusStats(data,state,actor,dungeonActorStats(data,state,id,stats));
   return battle?buffStats(data,dungeonBuffs(data,state),`actor:${id}`,environmental):environmental;
 }
 export function initializeJob(data,actor){
@@ -120,8 +121,8 @@ export function fieldAction(engine,id,abilityId){
   if(plan.dungeonIntent)return dungeonAction(engine,plan.dungeonIntent);
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
-  if(plan.ability.api==='fire.kindling')kindlePortable(engine.data,engine.state,plan.ability.effect);
-  if(plan.ability.api==='party.dry')for(const member of engine.state.members)engine.state.actors[member].statuses=engine.state.actors[member].statuses.filter(s=>s!=='wet');
+  if(plan.ability.api==='fire.kindling'&&!kindlePortable(engine.data,engine.state,plan.ability.effect,engine))return true;
+  if(plan.ability.api==='party.dry')for(const member of engine.state.members)removeStatus(engine.state.actors[member],'wet');
   if(plan.ability.api==='party.heal')for(const member of engine.state.members){const a=engine.state.actors[member];if(a.hp>0)a.hp=Math.min(engine.stats(member).hp,a.hp+plan.ability.amount);}
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;
 }
