@@ -1,10 +1,14 @@
+import {compileServiceLocations} from '../src/core/dungeon-packages.js';
 import fs from 'node:fs/promises';
 import {buildNarration} from './build-narration.mjs';
 import path from 'node:path';
 export async function buildWorld(root){
   const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
   const write=async(f,value)=>fs.writeFile(path.join(root,f),JSON.stringify(value,null,2)+'\n');
-  const game=await read('data/game.json'),locations=await read('config/locations.json'),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
+  const generated={services:[],scripts:{}};
+  const game=await read('data/game.json'),locations=compileServiceLocations(await read('config/locations.json'),generated),assets=await read('data/assets.json'),dungeons=await read('data/dungeons.json');
+  game.services=game.services.filter(s=>!s.id.startsWith('package_rest_'));game.services.push(...generated.services);
+  await write('data/scripts/service-packages.json',{scripts:generated.scripts});game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/service-packages.json'])];
   for(const id of ['slime','skeleton','construct','wraith','dragon'])assets.images[id]=`assets/images/monsters/${id}.webp`;
   const owners={};for(const d of Object.values(dungeons))for(const map of d.maps){if(owners[map])throw Error(`Duplicate dungeon owner: ${map}`);owners[map]=d.id;}
   for(const l of Object.values(locations))assets.images[l.background]=`assets/images/locations/${l.background.slice(9)}.webp`;

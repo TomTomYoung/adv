@@ -1,3 +1,8 @@
+import {impactErrors} from './hazard-effects.js';
+import {mapPatchErrors} from './map-mutations.js';
+import {statusDefinitionsErrors,statusDurationValid} from './status-effects.js';
+import {fireHazardsErrors} from './fire-hazards.js';
+import {treasureErrors} from './treasures.js';
 import {checkpointCommandValid} from './event-checkpoints.js';
 import {interactionRangeValid} from './event-interaction.js';
 import {restrictionValid} from './dungeon-restrictions.js';
@@ -79,6 +84,11 @@ export function validateContent(data){
         reference(data.maps,c.map,at);const m=data.maps[c.map];if(m?.voxels?voxelAt(m,null,{x:c.x,y:c.y,z:c.z??0})!=='.':(c.z??0)!==0||m?.tiles[c.y]?.[c.x]===undefined||m?.tiles[c.y]?.[c.x]==='#')fail(at,'移動座標が通行不能です');
         if(c.facing!==undefined&&!['north','east','south','west'].includes(c.facing))fail(at,'方角が不正です');
       }
+      if(c.op==='hazard.impact')for(const e of impactErrors(data,c))fail(at,e);
+      if(c.op==='map.patch')for(const e of mapPatchErrors(data,c.patch))fail(at,e);
+      if(c.op==='cell.event.reset'&&(!data.maps[c.map]||data.maps[c.map].tiles[c.y]?.[c.x]===undefined||data.cellEvents[c.event]?.occurrence?.reset!=='manual'))fail(at,'回数リセットはmanualの実在する進入イベントに限ります');
+      if(['treasure.collect','treasure.reset'].includes(c.op)){const t=data.maps[c.map]?.objects.find(o=>o.id===c.object)?.treasure;if(!t||c.op==='treasure.reset'&&t.reset!=='manual')fail(at,'トレジャーの参照・リセット規則が不正です');}
+      if(c.op==='status.apply'&&c.duration!==undefined&&!statusDurationValid(c.duration))fail(at,'状態異常の持続が不正です');
       if(c.op==='fire.portable.set'&&(!Number.isInteger(c.fuel)||c.fuel<0||c.fuel>100000||c.fuel>0&&!Object.values(data.dungeons??{}).some(d=>Object.values(d.systems).some(s=>s.use==='fire_network'&&s.effects[c.effect]))))fail(at,'携行松明の効果・燃料が不正です');
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
       if(['say','narrate'].includes(c.op)&&c.character!==undefined)reference(data.characters,c.character,at);
@@ -111,6 +121,8 @@ export function validateContent(data){
       if(c.op==='random.branch'){if(!Array.isArray(c.branches)||!c.branches.length)fail(at,'分岐が必要です');for(const b of c.branches??[]){if(!(b.weight>0))fail(at,'weightは正です');commands(b.commands,at,depth+1,inBattleEvent);}}
     });
   };
+  errors.push(...statusDefinitionsErrors(data));
+  for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
@@ -147,6 +159,7 @@ export function validateContent(data){
       if(object.edge!==undefined&&(!['north','east','south','west'].includes(object.edge)||object.trigger!=='interact'||object.blocking))fail(id,'エッジ配置は有効な方向・interact・非blockingが必要です');
       if(!['enter','interact'].includes(object.trigger))fail(id,'トリガーが不正です');
       if(!interactionRangeValid(object))fail(id,`操作位置が不正です: ${object.id}`);
+      if(object.treasure){errors.push(...treasureErrors(data,object.treasure));if(object.treasure.condition!==undefined)expression(object.treasure.condition,id);if(object.trigger!=='interact'||object.once)fail(id,'トレジャーはinteract・once:falseを指定します');}
       reference(data.scripts,object.script,id);for(const key of ['condition','visibleWhen','markerWhen'])if(object[key]!==undefined)expression(object[key],id);
     }
     reference(data.encounters,map.encounter,id);reference(data.assets.images,map.background,id);reference(data.assets.audio,map.music,id);

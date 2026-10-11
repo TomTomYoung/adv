@@ -1,3 +1,4 @@
+import {buildDungeonPackages} from './build-dungeon-packages.mjs';
 import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
 import {buildBattleRewards} from './build-battle-rewards.mjs';
 import {buildCellLayers} from './build-cell-layers.mjs';
@@ -65,6 +66,7 @@ export async function buildDungeons(){
   await buildBattleRewards(root);
   await buildWorld(root);
   await buildCellLayers(root);
+  await buildDungeonPackages(root);
   await buildQuestInterruptions(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }

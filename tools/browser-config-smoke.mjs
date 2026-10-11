@@ -23,7 +23,7 @@ try{
  await page.locator('[data-edge="2,2/north"]').click();
  await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();
  const output=page.getByLabel('config/quests/q001.events.json のJSON全文',{exact:true});await output.waitFor({state:'attached'});
- const original=JSON.parse(await fs.readFile(path.join(root,'config/quests/q001.events.json'),'utf8'));original.events[3].title='編集確認';original.events[3].points[0]={...original.events[3].points[0],x:2,y:2,edge:'north'};assert.deepEqual(JSON.parse(await output.inputValue()),original);
+ const original=JSON.parse(await fs.readFile(path.join(root,'config/quests/q001.events.json'),'utf8')),edited=original.events.find(e=>e.id==='q001_empty_west');edited.title='編集確認';edited.points[0]={...edited.points[0],x:2,y:2,edge:'north'};assert.deepEqual(JSON.parse(await output.inputValue()),original);
  await page.getByRole('button',{name:'このJSON全文をコピー',exact:true}).click();assert.deepEqual(JSON.parse(await page.evaluate(()=>navigator.clipboard.readText())),original);
  await page.screenshot({path:'/tmp/adv-studio-quest.png',fullPage:false});
  await page.getByRole('button',{name:'戻す',exact:true}).click();assert.equal(await page.locator('.review-panel').isVisible(),false);

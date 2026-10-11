@@ -1,3 +1,6 @@
+import {ignitionReason,attemptIgnition,activeFireHazards} from '../fire-hazards.js';
+import {edgeBetween} from '../edge-layers.js';
+import {dungeonTile,dungeonCell,dungeonBlock} from '../dungeons.js';
 import {objectBlocks,objectVisible} from '../quest-events.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 import {signalFieldChange} from '../field-signals.js';
@@ -20,7 +23,7 @@ function closeTo(ctx,fixture,range){
   return withinReach(ctx.state,fixture,range);
 }
 function passable(ctx,map,x,y){
-  return map.tiles[y]?.[x]==='.'&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(ctx.state,map,o));
+  return dungeonTile(ctx.data,ctx.state,map,x,y)==='.'&&!dungeonCell(ctx.data,ctx.state,map,x,y)?.visual.opaque&&!dungeonBlock(ctx.data,ctx.state,map,x,y)&&!map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(ctx.state,map,o));
 }
 // Flood through passages, rather than leaking a circular aura through solid walls.
 function reaches(ctx,fixture){
@@ -28,7 +31,7 @@ function reaches(ctx,fixture){
   const map=ctx.data.maps[loc.map],queue=[[fixture.x,fixture.y,0]],seen=new Set([`${fixture.x},${fixture.y}`]);
   for(let i=0;i<queue.length;i++){
     const [x,y,depth]=queue[i];if(x===loc.x&&y===loc.y)return true;if(depth>=fixture.radius)continue;
-    for(const [dx,dy] of Object.values(faces)){const nx=x+dx,ny=y+dy,key=`${nx},${ny}`;if(!seen.has(key)&&passable(ctx,map,nx,ny)){seen.add(key);queue.push([nx,ny,depth+1]);}}
+    for(const [dx,dy] of Object.values(faces)){const nx=x+dx,ny=y+dy,key=`${nx},${ny}`;if(!seen.has(key)&&!edgeBetween(ctx.data,map,{x,y},{x:nx,y:ny},ctx.state)?.visual.opaque&&passable(ctx,map,nx,ny)){seen.add(key);queue.push([nx,ny,depth+1]);}}
   }
   return false;
 }
@@ -46,10 +49,12 @@ export function fireSkillPlan(data,state,actor,ability){
   if(!ctx||!spec||spec.api!=='fire.kindling'||!ctx.spec.effects[spec.effect])return {ok:false,reason:'この迷宮ではその火を灯せません。'};
   if(!state.members.includes(actor)||!permission(data,state,actor,ability,'fire.kindling'))return {ok:false,reason:'この探索特技は習得していません。'};
   if(!(state.inventory[ctx.spec.portable.item]>0))return {ok:false,reason:'携帯松明がありません。'};
+  const wetReason=ignitionReason(data,state);if(wetReason)return {ok:false,reason:wetReason};
   const reason=costProblem(data,state,actor,spec);return reason?{ok:false,reason}:{ok:true,ctx,ability:spec};
 }
-export function kindlePortable(data,state,effect){
+export function kindlePortable(data,state,effect,engine){
   const ctx=fireContext(data,state);if(!ctx||!ctx.spec.effects[effect])return false;
+  if(ignitionReason(data,state)||(engine?!attemptIgnition(engine):activeFireHazards(data,state).some(h=>h.kind==='gas_leak')))return false;
   state.inventory[ctx.spec.portable.item]=1;ctx.run.portable=freshFlame(effect,ctx.spec.portable.capacity);signalFieldChange(data,state,'light');return true;
 }
 export function canRepel(data,state,skill){
@@ -65,6 +70,7 @@ function plan(ctx,intent){
   if(intent.action==='collect')return !lit?{ok:false,reason:'灯っている火から種火を採ってください。'}:run.ember?.effect===(flame.effect??fixture?.effect)?{ok:false,reason:'同じ種火をすでに持っています。'}:{ok:true,fixture,flame};
   if(intent.action==='extinguish')return lit?{ok:true,fixture,flame}:{ok:false,reason:'すでに消えています。'};
   if(!['ignite','transplant','skill','refuel'].includes(intent.action))return {ok:false,reason:'未知の火の操作です。'};
+  const wetReason=ignitionReason(ctx.data,state,portable?state.location:fixture);if(intent.action!=='refuel'&&wetReason)return {ok:false,reason:wetReason};
   if(intent.action==='skill'){
     const skill=fireSkillPlan(ctx.data,state,intent.actor,intent.ability);if(!skill.ok)return skill;
     if(!portable&&lit)return {ok:false,reason:'先に台座の火を消してください。'};
@@ -83,6 +89,7 @@ function act(ctx,intent,p){
   if(intent.action==='extinguish'){p.flame.lit=false;p.flame.effect=null;p.flame.fuel=0;engine.notify(`${name}の火を消しました。移した火の効果も消えました。`);return;}
   if(p.ability)payCost(engine,intent.actor,p.ability);
   if(p.fuelCost)engine.give(spec.fuelItem,-1);
+  if(intent.action!=='refuel'&&!attemptIgnition(engine,portable?ctx.state.location:p.fixture)){if(intent.action==='transplant'){run.ember=null;ctx.state.inventory[spec.emberItem]=0;}return;}
   const effect=p.effect??p.fixture?.effect;
   Object.assign(p.flame,freshFlame(effect,portable?spec.portable.capacity:p.fixture.capacity));
   if(intent.action==='transplant'){run.ember=null;ctx.state.inventory[spec.emberItem]=0;}
@@ -173,8 +180,9 @@ export const fireNetwork={
   plan,act,project,validate,validateState
 };
 
-export function setPortableFire(data,state,{fuel,effect}){
+export function setPortableFire(data,state,{fuel,effect},engine){
  const ctx=fireContext(data,state);if(!ctx||!Number.isInteger(fuel)||fuel<0||fuel>ctx.spec.portable.capacity||fuel>0&&!ctx.spec.effects[effect])throw Error("携行松明の状態指定が不正です");
+ if(fuel>0&&(ignitionReason(data,state)||(engine?!attemptIgnition(engine):activeFireHazards(data,state).some(h=>h.kind==='gas_leak'))))return false;
  const next={lit:fuel>0,fuel,effect:fuel>0?effect:null};
  if(Object.entries(next).some(([key,value])=>ctx.run.portable[key]!==value)){Object.assign(ctx.run.portable,next);signalFieldChange(data,state,'light');}
 }

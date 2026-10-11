@@ -1,3 +1,7 @@
+import {occurrenceSaveErrors} from './event-occurrence.js';
+import {mapChangesErrors} from './map-mutations.js';
+import {statusStateErrors} from './status-effects.js';
+import {treasureSaveErrors} from './treasures.js';
 import {validateEventCheckpoints} from './event-checkpoints.js';
 import {battleResultErrors} from './battle-results.js';
 import {xpThreshold} from './progression.js';
@@ -140,6 +144,7 @@ export function validateSave(save,data){
     if(typeof v==='number'&&!Number.isFinite(v))fail('数値不正');
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
+  errors.push(...occurrenceSaveErrors(data,s),...mapChangesErrors(data,s),...treasureSaveErrors(data,s));
   if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
   if(data.game.inspectionVersion===1)errors.push(...validateInspections(s,data));
   if(data.game.fieldEventVersion===1)errors.push(...validateFieldReactions(data,s));
@@ -149,13 +154,21 @@ export function validateSave(save,data){
     const l=s.location,m=data.maps[l?.map];
     try{if(!m||!integer(l?.z??0,-32,32)||(m.voxels?(!Number.isSafeInteger(l.z)||Boolean(voxelOccupancyReason(m,voxelMapState(data,s,m),l,{waterAccess:dungeonWaterAccess(data,s)}))):((l?.z??0)!==0||dungeonTile(data,s,m,l?.x,l?.y)!=='.'))||!['north','east','south','west'].includes(l?.facing))fail('位置不正');}catch{fail('位置または地形状態不正');}
   }else if(s.location!==null)fail('町の位置不正');
-  if(s.fieldEntry!==null){
-    const e=s.fieldEntry,m=data.maps[e?.map];
-    const boundEntry=id=>Object.entries(s.stories??{}).some(([quest,story])=>Object.entries(story?.arrivals??{}).some(([place,binding])=>{
+  const boundEntry=(e,id)=>Object.entries(s.stories??{}).some(([quest,story])=>Object.entries(story?.arrivals??{}).some(([place,binding])=>{
       const point=binding?.point;
       return id===storyArrivalEntryId(quest,place)&&point?.map===e.map&&point.x===e.x&&point.y===e.y&&(point.z??0)===(e.z??0);
     }));
-    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')&&!boundEntry(id)))fail('フィールド入場イベントの記録不正');
+  if(s.fieldEntry!==null){
+    const e=s.fieldEntry,m=data.maps[e?.map];
+    if(!isRecord(e)||s.mode!=='dungeon'||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')&&!boundEntry(e,id)))fail('フィールド入場イベントの記録不正');
+  }
+  if(s.fieldEntry?.history!==undefined){
+    const history=s.fieldEntry.history;
+    if(!Array.isArray(history)||history.length>10000)fail('進入イベントの到着履歴不正');
+    else for(const e of history){
+      const m=data.maps[e?.map];
+      if(!isRecord(e)||Object.keys(e).some(k=>!['map','x','y','z','fired'].includes(k))||!m||!integer(e.x,0,m.tiles[0].length-1)||!integer(e.y,0,m.tiles.length-1)||!integer(e.z,-32,32)||!Array.isArray(e.fired)||new Set(e.fired).size!==e.fired.length||e.fired.some(id=>!m.objects.some(o=>o.id===id&&o.trigger==='enter')&&!Object.entries(data.cellEvents??{}).some(([key,event])=>cellEntryId(key)===id&&event.trigger==='enter')&&!boundEntry(e,id)))fail('進入イベントの到着履歴不正');
+    }
   }
   if(data.game.world){
     if(s.mode==='town'?!data.locations?.[s.townLocation]:s.townLocation!==null)fail('町ロケーションの参照不正');
@@ -177,6 +190,7 @@ export function validateSave(save,data){
     let stats;
     try{stats=actorStats(data,s,id,false);}catch{fail('職業または能力不正');continue;}
     for(const [slot,itemId] of Object.entries(actor.equipment)){const item=data.items[itemId];if(!item||item.slot!==slot)fail('装備不正');}
+    errors.push(...statusStateErrors(data,actor));
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
   errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s));
@@ -229,7 +243,7 @@ export function validateSave(save,data){
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&e.hp===0))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
-      b.enemies.forEach((enemy,i)=>{const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
+      b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}

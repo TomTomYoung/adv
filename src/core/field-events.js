@@ -1,3 +1,4 @@
+import {attemptOccurrence,occurrenceAvailable} from './event-occurrence.js';
 import {eventVisible,objectVisible} from './quest-events.js';
 import {nextQuestPlace} from './quest-navigation.js';
 import {arriveStoryJourney,resumeWorldStory} from './story.js';
@@ -13,9 +14,11 @@ export function onFieldCell(state,point){
   const p=state.location;
   return state.mode==='dungeon'&&p?.map===point?.map&&p.x===point.x&&p.y===point.y&&(p.z??0)===(point.z??0);
 }
-export function recordFieldEntry(state){
+export function recordFieldEntry(state,continueEntry=false){
   const {map,x,y,z=0}=state.location;
-  state.fieldEntry={map,x,y,z,fired:[]};
+  const previous=state.fieldEntry,history=continueEntry&&previous?[...(previous.history??[]),{map:previous.map,x:previous.x,y:previous.y,z:previous.z,fired:[...previous.fired]}]:[];
+  const fired=[...new Set(history.filter(e=>e.map===map&&e.x===x&&e.y===y&&e.z===z).flatMap(e=>e.fired))];
+  state.fieldEntry={map,x,y,z,fired,...(history.length?{history:history.filter(e=>!(e.map===map&&e.x===x&&e.y===y&&e.z===z))}:{})};
   state.fieldReactions=freshFieldReactions();
 }
 
@@ -56,8 +59,8 @@ function cellEnterEvent(engine){
   const cell=dungeonCell(engine.data,s,engine.map(),entry.x,entry.y);
   for(const id of cell?.events??[]){
     const event=engine.data.cellEvents[id],firedId=cellEntryId(id),key=cellEventKey(entry.map,entry.x,entry.y,id);
-    if(event.trigger!=='enter'||entry.fired.includes(firedId)||event.once&&s.events[key]||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
-    entry.fired.push(firedId);s.events[key]=(s.events[key]??0)+1;
+    if(event.trigger!=='enter'||entry.fired.includes(firedId)||!occurrenceAvailable(s,event,key)||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
+    entry.fired.push(firedId);if(!attemptOccurrence(engine,event,key))continue;
     engine.run(event.script,{map:entry.map,x:entry.x,y:entry.y,event:id});return true;
   }
   return false;

@@ -20,9 +20,21 @@
 
 通常2Dはセル種と地点上書きのeventsからenterイベントを参照する。判定は実占有セルだけで、既存オブジェクト進入・旅程到着の後、クエスト条件イベントの前。会話・戦闘中は待機し、入場ごとの実行済みIDと地点単位の一回性を保存する。HP減算や戦闘開始は参照先スクリプトで行う。[セル仕様](../dungeons/CELL_LAYERS.md)。
 
-本編のセルイベント定義は1件。新たな危険床は配置していない。環境変化を購読する迷宮の条件付きイベントは次節を参照。
+本編のセルイベント定義は7件。新たな危険床は配置していない。環境変化を購読する迷宮の条件付きイベントは次節を参照。
 
 `poison_step`：`enter` → `cell.poison_step`、一回性 false。
+
+`trap_rockfall`：`enter` → `cell.package.trap_rockfall`、一回性 undefined。
+
+`trap_needle`：`enter` → `cell.package.trap_needle`、一回性 undefined。
+
+`trap_arrow`：`enter` → `cell.package.trap_arrow`、一回性 undefined。
+
+`trap_gas`：`enter` → `cell.package.trap_gas`、一回性 undefined。
+
+`trap_magic_circle`：`enter` → `cell.package.trap_magic_circle`、一回性 undefined。
+
+`trap_drip`：`enter` → `cell.package.trap_drip`、一回性 undefined。
 
 ## 環境変化を購読する迷宮イベント
 
@@ -1580,7 +1592,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `kagaribi_oilstore/cart`：(11, 5) `decision`、起動 `interact` → `kagaribi.cart`。[定義](../../data/maps/kagaribi_oilstore.json)。
 
-`kagaribi_oilstore/tools`：(3, 9) `chest`、起動 `interact` → `kagaribi.tools`。[定義](../../data/maps/kagaribi_oilstore.json)。
+`kagaribi_oilstore/tools`：(3, 9) `chest`、起動 `interact` → `treasure.package.kagaribi_oilstore.tools`。[定義](../../data/maps/kagaribi_oilstore.json)。
 
 `kagaribi_oilstore/relief`：(11, 1) `decision`、起動 `interact` → `kagaribi.relief`。[定義](../../data/maps/kagaribi_oilstore.json)。
 

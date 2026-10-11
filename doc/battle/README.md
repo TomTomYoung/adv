@@ -4,6 +4,8 @@
 
 [PROGRESSION_AND_REWARDS.md](PROGRESSION_AND_REWARDS.md)：個別経験値、勝利リザルト、魔物別宝箱、戦闘外の回復。
 
+[STATUS_EFFECTS.md](STATUS_EFFECTS.md)：毒・呪い・濡れ・パラメータ異常・魔術系異常の付与、持続、解除、保存。
+
 [JOB_SYSTEM.md](JOB_SYSTEM.md)：30職、技能・成長・装備・探索特技。
 
 [LANTERN_KEEPER.md](LANTERN_KEEPER.md)：灯番の採用するクラス仕様。油による攻撃、油の回復・生成、敵種別の油取得、MP種火の戦闘・探索での適用。現行実装と未確定の詳細を併記。

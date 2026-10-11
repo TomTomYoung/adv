@@ -1,3 +1,4 @@
+import {treasurePlan} from './treasures.js';
 import {dungeonViews,dungeonAction,dungeonCell} from './dungeons.js';
 import {questEvents,questEventPlan,openQuestEvent,eventVisible} from './quest-events.js';
 import {processFieldEvents} from './field-events.js';
@@ -45,10 +46,11 @@ export function commandTargets(engine,command='interact'){
   }
   for(const object of engine.nearbyObjects()){
     if(object.trigger!=='interact'||!eventVisible(state,{visibleWhen:object.visibleWhen??object.condition}))continue;
-    const reason=object.kind==='exit'?dungeonRestrictionReason(state,'return'):'';
+    const treasure=treasurePlan(data,state,state.location.map,object);
+    const reason=object.kind==='exit'?dungeonRestrictionReason(state,'return'):treasure.ok||treasure.exhausted?'':treasure.reason;
     const done=object.once&&state.events[`${state.location.map}/${object.id}`],enabled=!reason&&!done&&(object.condition===undefined||engine.value(object.condition));
     const args={object:object.id,map:state.location.map},info=inspectScript(engine,object.script,args);
-    add(`object:${object.id}`,object.name,reason||(done?'調査済み。':''),[{label:'調べる',enabled,reason:reason||(done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。'),consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done),status:inspectionSignature([enabled,done,reason]),script:done?null:object.script,args});
+    add(`object:${object.id}`,object.name,reason||(treasure.exhausted?treasure.reason:done?'調査済み。':''),[{label:'調べる',enabled,reason:reason||(done?'この対象の処理は完了している。':enabled?'':'今は実行条件を満たしていない。'),consumes:info.consumes,meaningful:info.effect,intent:{type:'field.object',id:object.id}}],{signature:info.signature,information:info.information,completed:Boolean(done||treasure.exhausted),status:inspectionSignature([enabled,done,reason]),script:done?null:object.script,args});
   }
   if(manual){
     const l=state.location,[dx,dy]=faces[l.facing];

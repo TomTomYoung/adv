@@ -77,3 +77,7 @@
 `npm run check:config` は全226原稿・HTML・生成索引の一致を確認します。`tests/config-studio.test.mjs` は原稿間の編集・参照・保持・出力、分野別UIを検証します。`node tools/browser-config-smoke.mjs` はPlaywrightとChromiumで `/adv/` 配下の検索、イベントのエッジ配置、セルの塗り替え、技能消費、3ファイル出力、コピー、Undo、入力エラー、1440／900／390／320px幅を確認します。実行ファイルは必要に応じて `ADV_BROWSER_EXECUTABLE` で指定します。
 
 くぼみ6種類は「くぼみ」分類から選べます。深さ（m）、底の見えない指定、水面高さ（m）を地点の例外でも編集できます。[表示確認ページ](../../depression-preview.html)と[くぼみの仕様](../dungeons/FLOOR_DEPRESSIONS.md)を参照してください。
+
+## 進入イベント・配置物パッケージ（2026-10-12）
+
+セル進入イベントでは4方式の選択、確率、上限、リセット、9種のトラップ設定を編集できます。scriptとpackage、onceとoccurrenceは排他として切り替えます。迷宮の基本設定には「環境危険」を追加し、漏水・ガス漏れの範囲と原因条件を指定できます。マップの配置物はtreasure、町・迷宮内の施設はpackageから共通処理を設定します。[トラップの項目](../dungeons/TRAPS_AND_HAZARDS.md)、[トレジャー／サービス](../dungeons/DUNGEON_PACKAGES.md)。

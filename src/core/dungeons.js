@@ -1,3 +1,5 @@
+import {resetTreasures} from './treasures.js';
+import {resetEntryOccurrences} from './event-occurrence.js';
 import {collapsedCell} from './cell-behaviors.js';
 import {voxelAt,voxelPoint} from './voxels.js';
 import {voxelSpace} from './systems/voxel-space.js';
@@ -35,6 +37,7 @@ export function dungeonContexts(data,state){
 export function dungeonTile(data,state,map,x,y){
   let tile=map?.tiles[y]?.[x];
   for(const ctx of dungeonContexts(data,state))tile=DUNGEON_SYSTEMS[ctx.spec.use].tile?.(ctx,map,x,y)??tile;
+  const changed=state.mapChanges?.cells?.[`${map?.id}/${x},${y}`];if(changed)tile=data.cellTypes[changed].passage;
   return collapsedCell(state,map?.id,x,y)?'#':tile;
 }
 export function dungeonCell(data,state,map,x,y){
@@ -44,6 +47,7 @@ export function dungeonCell(data,state,map,x,y){
     const patch=DUNGEON_SYSTEMS[ctx.spec.use].cell?.(ctx,map,x,y);
     if(patch)cell=mergeCellLayers(cell,patch);
   }
+  const changed=state.mapChanges?.cells?.[`${map.id}/${x},${y}`];if(changed)cell=mergeCellLayers(data.cellTypes[changed]);
   if(collapsedCell(state,map.id,x,y))cell=mergeCellLayers(cell,{passage:'#',visual:{wall:false,floor:false,opaque:false},parameters:{fragile:false},events:[]});
   return cell;
 }
@@ -84,6 +88,8 @@ export function enterDungeon(engine,mapId){
   const persistent=state.dungeons.persistent[definition.id]??={systems:{}};
   const active={id:definition.id,run:state.dungeons.nextRun++,steps:0,systems:{}};
   state.dungeons.active=active;
+  resetEntryOccurrences(data,state,definition.maps);
+  resetTreasures(data,state,definition.maps);
   for(const [id,spec] of Object.entries(definition.systems))if(spec.enabled!==false){
     const implementation=DUNGEON_SYSTEMS[spec.use];
     persistent.systems[id]??=implementation.createPersistent(spec);

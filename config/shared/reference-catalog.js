@@ -31931,8 +31931,10 @@ export const referenceData={
     "data/regions.json",
     "data/scripts/cell-events.json",
     "data/scripts/common.json",
+    "data/scripts/dungeon-packages.json",
     "data/scripts/dungeon-systems.json",
     "data/scripts/kagaribi.json",
+    "data/scripts/service-packages.json",
     "data/shops.json",
     "data/skills.json",
     "data/sounds.json",
@@ -32996,6 +32998,15 @@ export const referenceData={
       },
       "wet": {
         "name": "濡れ"
+      },
+      "weakened": {
+        "name": "衰弱"
+      },
+      "enfeebled": {
+        "name": "重度衰弱"
+      },
+      "arcane_malaise": {
+        "name": "魔力障害"
       }
     },
     "shops": {
@@ -33782,6 +33793,24 @@ export const referenceData={
     "cellEvents": {
       "poison_step": {
         "name": "poison_step"
+      },
+      "trap_rockfall": {
+        "name": "trap_rockfall"
+      },
+      "trap_needle": {
+        "name": "trap_needle"
+      },
+      "trap_arrow": {
+        "name": "trap_arrow"
+      },
+      "trap_gas": {
+        "name": "trap_gas"
+      },
+      "trap_magic_circle": {
+        "name": "trap_magic_circle"
+      },
+      "trap_drip": {
+        "name": "trap_drip"
       }
     },
     "quests": {
@@ -45135,6 +45164,8 @@ export const referenceData={
     "gold",
     "journey",
     "local.args.target",
+    "local.collected",
+    "local.receipt",
     "location.x",
     "quests.q001.outcome",
     "quests.q001.stage",
@@ -46363,6 +46394,34 @@ export const referenceData={
     "cell.poison_step": {
       "name": "毒の沼地を踏んだ。",
       "file": "config/cell-layers.json"
+    },
+    "cell.package.trap_rockfall": {
+      "name": "落石が発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "cell.package.trap_needle": {
+      "name": "針が発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "cell.package.trap_arrow": {
+      "name": "矢が発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "cell.package.trap_gas": {
+      "name": "ガスが発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "cell.package.trap_magic_circle": {
+      "name": "魔法陣が発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "cell.package.trap_drip": {
+      "name": "落滴が発生した。",
+      "file": "data/scripts/cell-events.json"
+    },
+    "treasure.package.kagaribi_oilstore.tools": {
+      "name": "treasure.package.kagaribi_oilstore.tools",
+      "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
       "name": "入口の篝火の下で、新人が松明を両手で握っていた。",
@@ -62515,6 +62574,48 @@ export const referenceData={
       "path": [
         "events",
         "poison_step"
+      ]
+    },
+    "cellEvents/trap_rockfall": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_rockfall"
+      ]
+    },
+    "cellEvents/trap_needle": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_needle"
+      ]
+    },
+    "cellEvents/trap_arrow": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_arrow"
+      ]
+    },
+    "cellEvents/trap_gas": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_gas"
+      ]
+    },
+    "cellEvents/trap_magic_circle": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_magic_circle"
+      ]
+    },
+    "cellEvents/trap_drip": {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_drip"
       ]
     }
   },

@@ -8,6 +8,10 @@ on:
       - 'tools/browser-kagaribi-smoke.mjs'
       - 'tools/browser-q001-return-smoke.mjs'
       - 'tools/browser-field-skills-smoke.mjs'
+      - 'tools/browser-config-smoke.mjs'
+      - 'tools/browser-packages-smoke.mjs'
+      - 'config/shared/**'
+      - 'data/schemas/**'
       - 'config/kagaribi-content.json'
       - 'config/dungeons/kagaribi.json'
       - 'config/cell-layers.json'
@@ -46,6 +50,10 @@ jobs:
         run: node tools/browser-field-skills-smoke.mjs
       - name: Verify generated dungeon through the actual game engine
         run: node tools/browser-generated-dungeon-engine-smoke.mjs
+      - name: Verify config editing and reusable dungeon packages
+        run: |
+          node tools/browser-config-smoke.mjs
+          node tools/browser-packages-smoke.mjs
       - name: Keep viewport checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -58,4 +66,6 @@ jobs:
             /tmp/adv-q001-return-browser
             /tmp/adv-field-target-browser
             /tmp/adv-generated-engine-browser
+            /tmp/adv-studio-*.png
+            /tmp/adv-packages-editor.png
           if-no-files-found: ignore

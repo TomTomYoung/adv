@@ -8,7 +8,7 @@ export const opposite={north:'south',south:'north',east:'west',west:'east'};
 export function connectionSide(link,map){return link.a.map===map?{from:link.a,to:link.b,link}:link.b.map===map?{from:link.b,to:link.a,link}:null;}
 export function connectionBlocked(data,state,side){
   if(side.link?.condition!==undefined&&!evaluate(side.link.condition,state))return side.link.requirement??'この出入口はまだ開いていない。';
-  if([side.from,side.to].some(p=>p.side&&authoredEdge(data,data.maps[p.map],p.x,p.y,p.side)?.passage==='#'))return '接続口の境界が通行を妨げている。';
+  if([side.from,side.to].some(p=>p.side&&authoredEdge(data,data.maps[p.map],p.x,p.y,p.side,state)?.passage==='#'))return '接続口の境界が通行を妨げている。';
   return compartmentBlocked(data,state,side.to.map);
 }
 export function connectionPlan(ctx,intent){

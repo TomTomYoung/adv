@@ -717,15 +717,71 @@
       "once": {
         "type": "boolean"
       },
+      "occurrence": {
+        "type": "object",
+        "properties": {
+          "chance": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "maxCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 1000000000
+          },
+          "reset": {
+            "enum": [
+              "never",
+              "reentry",
+              "manual"
+            ]
+          }
+        },
+        "required": [
+          "chance",
+          "maxCount",
+          "reset"
+        ],
+        "additionalProperties": false
+      },
       "condition": {
         "$ref": "#/$defs/value"
       }
     },
     "required": [
       "trigger",
-      "script",
-      "once"
+      "script"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "allOf": [
+      {
+        "oneOf": [
+          {
+            "required": [
+              "once"
+            ],
+            "not": {
+              "required": [
+                "occurrence"
+              ]
+            }
+          },
+          {
+            "required": [
+              "occurrence"
+            ],
+            "not": {
+              "required": [
+                "once"
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 }

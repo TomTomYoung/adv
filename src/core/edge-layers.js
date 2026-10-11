@@ -9,11 +9,12 @@ export function edgePoint(key){const m=/^([hv]):(0|[1-9]\d*),(0|[1-9]\d*)$/.exec
 export function edgeInBounds(key,width,height){const p=edgePoint(key);return Boolean(p&&p.x>=0&&p.y>=0&&(p.axis==='h'?p.x<width&&p.y<=height:p.x<=width&&p.y<height));}
 export function edgeFaces(key,width,height){const p=edgePoint(key);if(!p)return [];return (p.axis==='h'?[{x:p.x,y:p.y-1,side:'south'},{x:p.x,y:p.y,side:'north'}]:[{x:p.x-1,y:p.y,side:'east'},{x:p.x,y:p.y,side:'west'}]).filter(p=>p.x>=0&&p.y>=0&&p.x<width&&p.y<height);}
 export const mergeEdgeLayers=(base,patch={})=>({...base,...patch,visual:{...base.visual,...patch.visual},parameters:{...base.parameters,...patch.parameters}});
-export function authoredEdge(data,map,x,y,side){const placement=map?.cells?.edges?.[edgeKey(x,y,side)];if(!placement)return null;const preset=data.edgeTypes?.[placement.preset];return preset?mergeEdgeLayers(preset,placement.overrides):null;}
-export function edgeBetween(data,map,from,to){const dx=to.x-from.x,dy=to.y-from.y;return Math.abs(dx)+Math.abs(dy)===1?authoredEdge(data,map,from.x,from.y,dx===1?'east':dx===-1?'west':dy===1?'south':'north'):null;}
-export function edgeSurfaces(data,map){
- const boundaries={},occlusion={},edges={};if(!map?.cells?.edges)return {boundaries,occlusion,edges};
- for(const [key,p] of Object.entries(map.cells.edges)){const base=data.edgeTypes?.[p.preset];if(!base)continue;const value=mergeEdgeLayers(base,p.overrides);
+export function authoredEdge(data,map,x,y,side,state){const key=edgeKey(x,y,side),changed=state?.mapChanges?.edges?.[`${map?.id}/${key}`],placement=changed?{preset:changed}:map?.cells?.edges?.[key];if(!placement)return null;const preset=data.edgeTypes?.[placement.preset];return preset?mergeEdgeLayers(preset,placement.overrides):null;}
+export function edgeBetween(data,map,from,to,state){const dx=to.x-from.x,dy=to.y-from.y;return Math.abs(dx)+Math.abs(dy)===1?authoredEdge(data,map,from.x,from.y,dx===1?'east':dx===-1?'west':dy===1?'south':'north',state):null;}
+export function edgeSurfaces(data,map,state){
+ const boundaries={},occlusion={},edges={};if(!map?.cells)return {boundaries,occlusion,edges};
+ const placements={...map.cells.edges};for(const [key,preset] of Object.entries(state?.mapChanges?.edges??{}))if(key.startsWith(map.id+'/'))placements[key.slice(map.id.length+1)]={preset};
+ for(const [key,p] of Object.entries(placements)){const base=data.edgeTypes?.[p.preset];if(!base)continue;const value=mergeEdgeLayers(base,p.overrides);
   for(const f of edgeFaces(key,map.tiles[0].length,map.tiles.length)){const address=`${f.x},${f.y}/${f.side}`;edges[address]=value;if(value.visual.wall)boundaries[address]=true;if(value.visual.opaque)occlusion[address]=true;}
  }return {boundaries,occlusion,edges};
 }
