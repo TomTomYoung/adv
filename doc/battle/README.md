@@ -8,6 +8,10 @@
 
 [JOB_SYSTEM.md](JOB_SYSTEM.md)：30職、技能・成長・装備・探索特技。
 
+[SCOUT_SKILLS.md](SCOUT_SKILLS.md)：斥候の罠解除・罠発見・奇襲・索敵・哨戒・迷彩・偵察の採用仕様。
+
+[SKILL_LEVELS.md](SKILL_LEVELS.md)：技能Lvと人物Lv・使用回数・武器回数・イベント等を組み合わせる成長条件。
+
 [SKILL_CATALOG.md](SKILL_CATALOG.md)：現行の戦闘スキル・探索スキル。魔法表示に分類される能力は除外。
 
 [MAGIC_CATALOG.md](MAGIC_CATALOG.md)：現行UIで魔法に分類される戦闘・探索能力。

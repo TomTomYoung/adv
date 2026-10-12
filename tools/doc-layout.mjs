@@ -24,7 +24,7 @@ export const worldDocs = new Set([
   'WORLD_LOCATIONS.md', 'LOCATION_CATALOG.md'
 ]);
 export const battleDocs = new Set([
-  'STATUS_EFFECTS.md', 'SKILL_CATALOG.md', 'MAGIC_CATALOG.md', 'ITEM_CATALOG.md', 'BALANCE_PLAN.md', 'COMPANION_CATALOG.md', 'JOB_SYSTEM.md',
+  'STATUS_EFFECTS.md', 'SCOUT_SKILLS.md', 'SKILL_LEVELS.md', 'SKILL_CATALOG.md', 'MAGIC_CATALOG.md', 'ITEM_CATALOG.md', 'BALANCE_PLAN.md', 'COMPANION_CATALOG.md', 'JOB_SYSTEM.md',
   'MONSTER_CATALOG.md', 'PROGRESSION_AND_REWARDS.md'
 ]);
 export const authoringDocs = new Set([
