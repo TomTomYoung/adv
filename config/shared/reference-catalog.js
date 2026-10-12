@@ -57323,6 +57323,13 @@ export const referenceData={
         "robe"
       ]
     },
+    "items/recovered_trap": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "recovered_trap"
+      ]
+    },
     "jobs/warrior": {
       "file": "jobs.json",
       "path": [
@@ -57811,6 +57818,146 @@ export const referenceData={
       "path": [
         "skills",
         "valley_curse"
+      ]
+    },
+    "fieldAbilities/survey": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "survey"
+      ]
+    },
+    "fieldAbilities/prepare_ration": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "prepare_ration"
+      ]
+    },
+    "fieldAbilities/kuragari_ward": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kuragari_ward"
+      ]
+    },
+    "fieldAbilities/kindle_calm": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kindle_calm"
+      ]
+    },
+    "fieldAbilities/kindle_lure": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kindle_lure"
+      ]
+    },
+    "fieldAbilities/break_rock": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "break_rock"
+      ]
+    },
+    "fieldAbilities/read_path": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "read_path"
+      ]
+    },
+    "fieldAbilities/field_prayer": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "field_prayer"
+      ]
+    },
+    "fieldAbilities/garden_medicine": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "garden_medicine"
+      ]
+    },
+    "fieldAbilities/weave_rope": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "weave_rope"
+      ]
+    },
+    "fieldAbilities/climb_route": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "climb_route"
+      ]
+    },
+    "fieldAbilities/water_breath": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "water_breath"
+      ]
+    },
+    "fieldAbilities/dry_clothes": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "dry_clothes"
+      ]
+    },
+    "fieldAbilities/trap_disarm": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm"
+      ]
+    },
+    "fieldAbilities/trap_detect": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect"
+      ]
+    },
+    "fieldAbilities/ambush": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush"
+      ]
+    },
+    "fieldAbilities/seek_enemy": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy"
+      ]
+    },
+    "fieldAbilities/patrol": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol"
+      ]
+    },
+    "fieldAbilities/camouflage": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage"
+      ]
+    },
+    "fieldAbilities/reconnaissance": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "reconnaissance"
       ]
     },
     "buffs/battle_cry": {
@@ -62962,153 +63109,6 @@ export const referenceData={
       "path": [
         "events",
         "trap_drip"
-      ]
-    },
-    "fieldAbilities/survey": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "survey"
-      ]
-    },
-    "fieldAbilities/prepare_ration": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "prepare_ration"
-      ]
-    },
-    "fieldAbilities/kuragari_ward": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kuragari_ward"
-      ]
-    },
-    "fieldAbilities/kindle_calm": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kindle_calm"
-      ]
-    },
-    "fieldAbilities/kindle_lure": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kindle_lure"
-      ]
-    },
-    "fieldAbilities/break_rock": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "break_rock"
-      ]
-    },
-    "fieldAbilities/read_path": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "read_path"
-      ]
-    },
-    "fieldAbilities/field_prayer": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "field_prayer"
-      ]
-    },
-    "fieldAbilities/garden_medicine": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "garden_medicine"
-      ]
-    },
-    "fieldAbilities/weave_rope": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "weave_rope"
-      ]
-    },
-    "fieldAbilities/climb_route": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "climb_route"
-      ]
-    },
-    "fieldAbilities/water_breath": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "water_breath"
-      ]
-    },
-    "fieldAbilities/dry_clothes": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "dry_clothes"
-      ]
-    },
-    "fieldAbilities/trap_disarm": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "trap_disarm"
-      ]
-    },
-    "fieldAbilities/trap_detect": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "trap_detect"
-      ]
-    },
-    "fieldAbilities/ambush": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "ambush"
-      ]
-    },
-    "fieldAbilities/seek_enemy": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "seek_enemy"
-      ]
-    },
-    "fieldAbilities/patrol": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "patrol"
-      ]
-    },
-    "fieldAbilities/camouflage": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "camouflage"
-      ]
-    },
-    "fieldAbilities/reconnaissance": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "reconnaissance"
-      ]
-    },
-    "items/recovered_trap": {
-      "file": "jobs.json",
-      "path": [
-        "items",
-        "recovered_trap"
       ]
     }
   },
