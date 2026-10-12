@@ -9,6 +9,7 @@ export function collectReferences(value,file,path=[],out=[]){
   if(file==='locations.json'&&(key==='parent'||key==='links'))kind='locations';
   if(key==='cue'&&path[0]==='fieldAbilities')kind='eventCues';
   if(key==='skill'&&value.api&&value.api!=='battle.skill')kind='fieldAbilities';
+  if(key==='skill'&&path[0]==='fieldAbilities'&&path.includes('skillLevel'))kind='fieldAbilities';
   if(key==='asset')kind=value.op?.startsWith('audio.')?'audio':'images';
   if(key==='effect'&&value.op==='effect.play')kind='effects';
   if(key==='formula'&&typeof child==='string')kind='formulas';

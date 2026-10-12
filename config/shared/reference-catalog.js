@@ -4922,6 +4922,46 @@ export const referenceData={
       ],
       "kind": "eventCues",
       "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "unlock"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
     }
   ],
   "references": [
@@ -17705,6 +17745,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "jobs",
+        "rogue",
+        "grants",
+        3,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
         "assassin",
         "grants",
         0,
@@ -17784,6 +17836,90 @@ export const referenceData={
       ],
       "kind": "fieldAbilities",
       "id": "climb_route"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        4,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_detect"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        5,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "camouflage"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        6,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        7,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "ambush"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        8,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "seek_enemy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        9,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "patrol"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        10,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "reconnaissance"
     },
     {
       "file": "jobs.json",
@@ -18986,6 +19122,280 @@ export const referenceData={
       ],
       "kind": "eventCues",
       "id": "light"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "unlock"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm",
+        "skillLevel",
+        "upgrades",
+        0,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "light"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect",
+        "skillLevel",
+        "upgrades",
+        0,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_detect"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_detect"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "ambush"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "encounter"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy",
+        "skillLevel",
+        "upgrades",
+        0,
+        "when",
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "seek_enemy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "seek_enemy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol",
+        "skillLevel",
+        "upgrades",
+        0,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "patrol"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "patrol"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "guard"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage",
+        "skillLevel",
+        "upgrades",
+        0,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "camouflage"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "camouflage"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "reconnaissance",
+        "cue"
+      ],
+      "kind": "eventCues",
+      "id": "light"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "reconnaissance",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        0,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_detect"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "reconnaissance",
+        "skillLevel",
+        "upgrades",
+        1,
+        "when",
+        "conditions",
+        1,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "reconnaissance"
     },
     {
       "file": "jobs.json",
@@ -32446,6 +32856,9 @@ export const referenceData={
       },
       "kagaribi_nameplate": {
         "name": "煤けた灯番の名札"
+      },
+      "recovered_trap": {
+        "name": "回収した罠"
       }
     },
     "enemies": {
@@ -33007,6 +33420,9 @@ export const referenceData={
       },
       "arcane_malaise": {
         "name": "魔力障害"
+      },
+      "stun": {
+        "name": "スタン"
       }
     },
     "shops": {
@@ -33418,6 +33834,27 @@ export const referenceData={
       },
       "dry_clothes": {
         "name": "乾かしの火"
+      },
+      "trap_disarm": {
+        "name": "罠解除"
+      },
+      "trap_detect": {
+        "name": "罠発見"
+      },
+      "ambush": {
+        "name": "奇襲"
+      },
+      "seek_enemy": {
+        "name": "索敵"
+      },
+      "patrol": {
+        "name": "哨戒"
+      },
+      "camouflage": {
+        "name": "迷彩"
+      },
+      "reconnaissance": {
+        "name": "偵察"
       }
     },
     "characters": {
@@ -57376,97 +57813,6 @@ export const referenceData={
         "valley_curse"
       ]
     },
-    "fieldAbilities/survey": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "survey"
-      ]
-    },
-    "fieldAbilities/prepare_ration": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "prepare_ration"
-      ]
-    },
-    "fieldAbilities/kuragari_ward": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kuragari_ward"
-      ]
-    },
-    "fieldAbilities/kindle_calm": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kindle_calm"
-      ]
-    },
-    "fieldAbilities/kindle_lure": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "kindle_lure"
-      ]
-    },
-    "fieldAbilities/break_rock": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "break_rock"
-      ]
-    },
-    "fieldAbilities/read_path": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "read_path"
-      ]
-    },
-    "fieldAbilities/field_prayer": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "field_prayer"
-      ]
-    },
-    "fieldAbilities/garden_medicine": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "garden_medicine"
-      ]
-    },
-    "fieldAbilities/weave_rope": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "weave_rope"
-      ]
-    },
-    "fieldAbilities/climb_route": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "climb_route"
-      ]
-    },
-    "fieldAbilities/water_breath": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "water_breath"
-      ]
-    },
-    "fieldAbilities/dry_clothes": {
-      "file": "jobs.json",
-      "path": [
-        "fieldAbilities",
-        "dry_clothes"
-      ]
-    },
     "buffs/battle_cry": {
       "file": "jobs.json",
       "path": [
@@ -62616,6 +62962,153 @@ export const referenceData={
       "path": [
         "events",
         "trap_drip"
+      ]
+    },
+    "fieldAbilities/survey": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "survey"
+      ]
+    },
+    "fieldAbilities/prepare_ration": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "prepare_ration"
+      ]
+    },
+    "fieldAbilities/kuragari_ward": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kuragari_ward"
+      ]
+    },
+    "fieldAbilities/kindle_calm": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kindle_calm"
+      ]
+    },
+    "fieldAbilities/kindle_lure": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "kindle_lure"
+      ]
+    },
+    "fieldAbilities/break_rock": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "break_rock"
+      ]
+    },
+    "fieldAbilities/read_path": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "read_path"
+      ]
+    },
+    "fieldAbilities/field_prayer": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "field_prayer"
+      ]
+    },
+    "fieldAbilities/garden_medicine": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "garden_medicine"
+      ]
+    },
+    "fieldAbilities/weave_rope": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "weave_rope"
+      ]
+    },
+    "fieldAbilities/climb_route": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "climb_route"
+      ]
+    },
+    "fieldAbilities/water_breath": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "water_breath"
+      ]
+    },
+    "fieldAbilities/dry_clothes": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "dry_clothes"
+      ]
+    },
+    "fieldAbilities/trap_disarm": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm"
+      ]
+    },
+    "fieldAbilities/trap_detect": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect"
+      ]
+    },
+    "fieldAbilities/ambush": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush"
+      ]
+    },
+    "fieldAbilities/seek_enemy": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy"
+      ]
+    },
+    "fieldAbilities/patrol": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol"
+      ]
+    },
+    "fieldAbilities/camouflage": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage"
+      ]
+    },
+    "fieldAbilities/reconnaissance": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "reconnaissance"
+      ]
+    },
+    "items/recovered_trap": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "recovered_trap"
       ]
     }
   },
