@@ -1,6 +1,7 @@
 import {permission,costProblem,payCost} from './jobs.js';
 import {applySkill} from './battle.js';
 import {dungeonEffectActive} from './dungeons.js';
+import {recordSkillUse} from './skill-levels.js';
 
 function unneededRecoveryReason(data,skill){
   const group=skill.target==='all_allies',types=new Set(skill.effects.map(e=>e.type));
@@ -34,6 +35,7 @@ export function useFieldSkill(engine,actorId,skillId,targetId){
   const plan=fieldSkillPlan(engine,actorId,skillId,targetId);if(!plan.ok){engine.notify(plan.reason);return false;}
   payCost(engine,actorId,plan.skill);
   for(const target of plan.targets)applySkill(engine,engine.state.actors[actorId],target,plan.skill,skillId);
+  recordSkillUse(engine,actorId,skillId);
   engine.cue(engine.data.presentation?.bindings.skills[skillId],plan.targets.map(a=>`actor:${a.id}`));
   engine.notify(`${engine.data.actors[actorId].name}は${plan.skill.name}を使った。`);return true;
 }

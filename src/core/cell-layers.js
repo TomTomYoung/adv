@@ -44,7 +44,7 @@ export function validateCellLayers(data,expression){
   for(const [id,preset] of Object.entries(data.cellTypes))if(!identifier(id)||!cellLayersValid(data,preset))bad(`プリセット不正 ${id}`);
   for(const [id,preset] of Object.entries(data.edgeTypes??{}))if(!identifier(id)||!edgeLayersValid(data,preset))bad(`エッジ種不正 ${id}`);
   for(const [id,event] of Object.entries(data.cellEvents)){
-    if(!identifier(id)||!keys(event,['trigger','script','once','occurrence','condition'])||event.trigger!=='enter'||!occurrenceValid(event)||!Object.hasOwn(data.scripts,event.script))bad(`イベント不正 ${id}`);
+    if(!identifier(id)||!keys(event,['trigger','script','once','occurrence','condition','trap'])||event.trigger!=='enter'||!occurrenceValid(event)||!Object.hasOwn(data.scripts,event.script))bad(`イベント不正 ${id}`);
     if(event?.condition!==undefined)expression(event.condition,`cellEvents/${id}`);
   }
   for(const map of Object.values(data.maps)){

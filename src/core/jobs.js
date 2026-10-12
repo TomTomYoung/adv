@@ -4,8 +4,10 @@ import {dungeonInterior} from './world.js';
 import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {buffStats} from './buffs.js';
+import {SCOUT_FIELD_APIS,scoutingFieldPlan,applyScoutingFieldAction} from './scouting.js';
+import {ensureSkillState,skillLevel,recordSkillUse} from './skill-levels.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_FIELD_APIS]);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -33,7 +35,7 @@ export function actorStats(data,state,id,battle=true){
   return battle?buffStats(data,dungeonBuffs(data,state),`actor:${id}`,environmental):environmental;
 }
 export function initializeJob(data,actor){
-  actor.job=data.actors[actor.id].initialJob;actor.growthHistory={};
+  actor.job=data.actors[actor.id].initialJob;actor.growthHistory={};ensureSkillState(actor);
 }
 export function canEquip(data,state,id,itemId,jobId=state.actors[id]?.job){
   const item=data.items[itemId];if(!item?.slot)return false;
@@ -106,6 +108,7 @@ export function fieldActionPlan(data,state,id,abilityId){
   if(ability.api==='party.dry'&&dungeonFloodLevel(data,state)>0)return {ok:false,reason:'水没していない場所で炎を使ってください。'};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
+  if(SCOUT_FIELD_APIS.has(ability.api)){const plan=scoutingFieldPlan(data,state,id,ability);if(!plan.ok)return plan;return {...plan,ability,inventory:{...state.inventory}};}
   if(['wall.break','archive.unlock','voxel.traverse','water.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
@@ -120,6 +123,7 @@ export function fieldAction(engine,id,abilityId){
   const plan=fieldActionPlan(engine.data,engine.state,id,abilityId);if(!plan.ok){engine.notify(plan.reason);return false;}
   if(plan.dungeonIntent)return dungeonAction(engine,plan.dungeonIntent);
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
+  if(SCOUT_FIELD_APIS.has(plan.ability.api)){const message=applyScoutingFieldAction(engine,id,plan.ability,plan,skillLevel(engine.data,engine.state,id,abilityId));recordSkillUse(engine,id,abilityId);engine.eventCue(plan.ability.cue);if(message)engine.notify(message);return true;}
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
   if(plan.ability.api==='fire.kindling'&&!kindlePortable(engine.data,engine.state,plan.ability.effect,engine))return true;
   if(plan.ability.api==='party.dry')for(const member of engine.state.members)removeStatus(engine.state.actors[member],'wet');

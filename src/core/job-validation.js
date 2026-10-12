@@ -1,5 +1,7 @@
 import {isRecord} from './expression.js';
 import {STAT_KEYS,FIELD_APIS,SKILL_EFFECTS,grantsFor} from './jobs.js';
+import {skillLevelDefinitionErrors} from './skill-levels.js';
+import {SCOUT_FIELD_APIS} from './scouting.js';
 export const ELEMENTS=['physical','fire','ice','lightning','water','light','earth','dark'];
 const integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
 const own=(object,key)=>typeof key==='string'&&Object.hasOwn(object??{},key);
@@ -83,7 +85,7 @@ export function validateJobs(data){
     if(!isRecord(buff.resist)||Object.entries(buff.resist).some(([key,n])=>!ELEMENTS.includes(key)||!finite(n,0,1)))fail(id,'バフ耐性不正');
     if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist'].includes(key)))fail(id,'未知のバフ項目');
   }
-  for(const [id,skill] of Object.entries(data.skills))for(const message of skillDefinitionErrors(data,skill))fail(`skills.${id}`,message);
+  for(const [id,skill] of Object.entries(data.skills)){for(const message of skillDefinitionErrors(data,skill))fail(`skills.${id}`,message);for(const message of skillLevelDefinitionErrors(data,id,skill))fail(`skills.${id}`,message);}
   for(const [id,a] of Object.entries(data.fieldAbilities??{})){
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
@@ -93,6 +95,13 @@ export function validateJobs(data){
     if(a.api==='party.heal'&&(a.target!=='self'||!integer(a.amount,1,999)||a.output!==undefined))fail(id,'探索祈祷が不正です');
     if(a.api==='map.reveal'&&(a.target!=='location'||!integer(a.radius,1,8)||a.modes.includes('town')||a.output!==undefined))fail(id,'測量範囲不正');
     if(a.api==='inventory.convert'&&(a.target!=='self'||!isRecord(a.materials)||!Object.keys(a.materials).length||!isRecord(a.output)||!Object.keys(a.output).length))fail(id,'変換入出力不正');
+    if(SCOUT_FIELD_APIS.has(a.api)&&a.modes.some(m=>m!=='dungeon'))fail(id,'斥候探索技能はダンジョン専用です');
+    if(a.api==='trap.detect'&&(!Array.isArray(a.sizeBySkillLevel)||a.sizeBySkillLevel.length!==3||a.sizeBySkillLevel.some(n=>!integer(n,1,15)||n%2===0)))fail(id,'罠発見範囲不正');
+    if(a.api==='battle.ambush'&&(!Array.isArray(a.countBySkillLevel)||a.countBySkillLevel.length!==3||a.countBySkillLevel.some(n=>!integer(n,1,9))))fail(id,'奇襲先制回数不正');
+    if(['battle.patrol','encounter.camouflage'].includes(a.api)&&(!Array.isArray(a.stepsBySkillLevel)||a.stepsBySkillLevel.length!==3||a.stepsBySkillLevel.some(n=>!integer(n,1,999))))fail(id,'持続歩数不正');
+    if(a.api==='encounter.camouflage'&&(!Array.isArray(a.rateBySkillLevel)||a.rateBySkillLevel.length!==3||a.rateBySkillLevel.some(n=>!finite(n,.01,1))))fail(id,'迷彩遭遇率不正');
+    if(a.api==='scout.recon'&&(!Array.isArray(a.revealBySkillLevel)||a.revealBySkillLevel.length!==3||a.revealBySkillLevel.some(n=>!integer(n,1,999))||!Array.isArray(a.awayStepsBySkillLevel)||a.awayStepsBySkillLevel.length!==3||a.awayStepsBySkillLevel.some(n=>!integer(n,1,999))))fail(id,'偵察範囲・離脱歩数不正');
+    for(const message of skillLevelDefinitionErrors(data,id,a))fail(id,message);
     for(const field of ['materials','output'])if(a[field]!==undefined&&(!isRecord(a[field])||Object.entries(a[field]).some(([item,n])=>!own(data.items,item)||!integer(n,1,data.system.maxStack))))fail(id,'材料・出力不正');
   }
   for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
