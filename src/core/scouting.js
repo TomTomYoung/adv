@@ -4,7 +4,7 @@ import {TRAP_NAMES} from './dungeon-packages.js';
 import {objectVisible} from './quest-events.js';
 import {skillLevel} from './skill-levels.js';
 
-const DIRS=['north','east','south','west'],DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
+const DIRS=['north','east','south','west'],DELTAS=[[0,-1],[1,0],[0,1],[-1,0]],OPPOSITE={north:'south',east:'west',south:'north',west:'east'};
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
 export const SCOUT_FIELD_APIS=new Set(['trap.disarm','trap.detect','battle.ambush','battle.seek','battle.patrol','encounter.camouflage','scout.recon']);
 export const freshScouting=()=>({discovered:[],disabled:[],effects:{ambush:null,patrol:null,camouflage:null},detached:[]});
@@ -46,7 +46,7 @@ function reachableTrap(data,state){
   const loc=state.location,map=data.maps[loc?.map];if(!map)return null;
   const traps=mapTraps(data,state,map),dir=DIRS.indexOf(loc.facing),[dx,dy]=DELTAS[dir],ahead={x:loc.x+dx,y:loc.y+dy};
   return traps.find(t=>{
-    if(t.x===ahead.x&&t.y===ahead.y)return true;
+    if(t.x===ahead.x&&t.y===ahead.y)return !t.edge||t.edge===OPPOSITE[loc.facing];
     if(t.x!==loc.x||t.y!==loc.y||!sameCellAllowed(state,t))return false;
     return !t.edge||t.edge===loc.facing;
   })??null;
@@ -56,11 +56,16 @@ function revealCell(state,map,x,y,z=0){
 }
 function revealTrap(state,trap){discover(state,trap.key);revealCell(state,trap.map,trap.x,trap.y);}
 export function discoveredTrapMarkers(data,state,map){
-  const s=ensureScouting(state),prefix=`cell/${map.id}/`,rows=[];
-  for(const key of s.discovered.filter(k=>k.startsWith(prefix))){
-    const m=/^cell\/([^/]+)\/(\d+),(\d+)\/([^/]+)$/.exec(key);if(!m)continue;
-    const event=data.cellEvents[m[4]];if(!event?.trap)continue;
-    rows.push({id:`scout:${key}`,name:`${s.disabled.includes(key)?'解除済みの':'発見した'}${TRAP_NAMES[event.trap.kind]??'罠'}`,x:Number(m[2]),y:Number(m[3]),kind:'trap',unread:true});
+  const s=ensureScouting(state),rows=[];
+  for(const key of s.discovered){
+    let x,y,name='罠';
+    const cell=/^cell\/([^/]+)\/(\d+),(\d+)\/([^/]+)$/.exec(key);
+    if(cell&&cell[1]===map.id){const event=data.cellEvents[cell[4]];if(!event?.trap)continue;x=Number(cell[2]);y=Number(cell[3]);name=TRAP_NAMES[event.trap.kind]??'罠';}
+    else{
+      const objectKey=/^object\/([^/]+)\/([^/]+)$/.exec(key);if(!objectKey||objectKey[1]!==map.id)continue;
+      const trap=map.objects?.find(o=>o.id===objectKey[2]&&o.kind==='trap');if(!trap)continue;x=trap.x;y=trap.y;name=trap.name??'罠';
+    }
+    rows.push({id:`scout:${key}`,name:`${s.disabled.includes(key)?'解除済みの':'発見した'}${name}`,x,y,kind:'trap',unread:true});
   }
   return rows;
 }
@@ -128,7 +133,7 @@ export function applyScoutingFieldAction(engine,actorId,ability,plan,level){
   }
   return '';
 }
-const activeEffect=(state,name)=>{const s=ensureScouting(state),e=s.effects[name];return e&&e.run===currentRun(state)&&state.steps<e.until?e:null;};
+const activeEffect=(state,name)=>{const s=ensureScouting(state),e=s.effects[name];return e&&e.run===currentRun(state)&&state.steps<=e.until?e:null;};
 export const scoutingEncounterRate=state=>activeEffect(state,'camouflage')?.rate??1;
 export const patrolActive=state=>Boolean(activeEffect(state,'patrol'));
 export function battlePreemptive(engine,encounter,options={}){
