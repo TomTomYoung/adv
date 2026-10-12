@@ -27,7 +27,7 @@ export function jobPanel(actor,model,dispatch){
 export function fieldSkills(actor,dispatch){
   const wrap=node('div','field-skills');
   for(const ability of actor.fieldAbilities??[]){
-    const button=node('button','',`${ability.name} MP${ability.mp}（Lv${ability.level}）`);button.type='button';button.disabled=!ability.enabled;button.title=ability.reason||ability.description;
+    const button=node('button','',`${ability.name} MP${ability.mp}（習得Lv${ability.level}・技能Lv${ability.skillLevel??1}）`);button.type='button';button.disabled=!ability.enabled;button.title=ability.reason||ability.description;
     button.addEventListener('click',()=>dispatch({type:'job.action',actor:actor.id,ability:ability.id}));wrap.append(button);
     if(!ability.enabled)wrap.append(node('small','muted',ability.reason));
   }

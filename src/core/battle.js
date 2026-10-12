@@ -14,22 +14,27 @@ import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
 import {describeTarget,playBattleCue} from './feedback.js';
+import {recordSkillUse} from './skill-levels.js';
+import {battlePreemptive} from './scouting.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle||engine.state.battleResult)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
   consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
   engine.state.records.battles++;
-  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music,preemptive:null,openingResolved:false};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
+  engine.state.battle.preemptive=battlePreemptive(engine,encounter,options);
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
   if(engine.state.members.every(id=>engine.state.actors[id].hp<=0))endBattle(engine,'lose');
-  else triggerBattleEvent(engine,'start');
+  else if(!triggerBattleEvent(engine,'start'))resolveBattleOpening(engine);
 }
 export function activeActor(engine){
   const s=engine.state,b=s.battle;if(!b)return null;
-  return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&!b.acted.includes(id))??null;
+  const ordered=[...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi);
+  if(b.preemptive?.side==='party'&&b.preemptive.remaining>0)return ordered.find(id=>s.actors[id].hp>0)??null;
+  return ordered.find(id=>s.actors[id].hp>0&&!b.acted.includes(id))??null;
 }
 export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),statusStats(engine.data,engine.state,enemy,enemy.stats));
 export function endBattle(engine,result,skipEvents=false){
@@ -145,28 +150,53 @@ function coveredTarget(engine,target,skill){
   b.log.push(`${engine.data.actors[id].name}が${engine.data.actors[target.id].name}をかばった。`);
   return s.actors[id]; // One redirect only: no cover chains.
 }
+function consumeStun(engine,unit,name){
+  if(!unit.statuses?.includes('stun'))return false;
+  removeStatus(unit,'stun');engine.state.battle.log.push(`${name}は昏倒している。行動できない。`);return true;
+}
+function enemyAction(engine,enemy){
+  const s=engine.state,b=s.battle;if(!b||enemy.hp<=0)return false;enemy.guard=false;
+  if(consumeStun(engine,enemy,enemy.name))return true;
+  const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)return false;
+  const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
+  if(!rule)return true;
+  const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
+  const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
+  let targets;
+  if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
+  else if(skill.target==='all_allies')targets=b.enemies.filter(e=>e.hp>0);
+  else if(rule.target==='self'||skill.target==='self')targets=[enemy];
+  else if(skill.target==='ally')targets=[b.enemies.filter(e=>e.hp>0).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
+  else targets=[coveredTarget(engine,s.actors[targetId],skill)];
+  if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
+  useSkill(engine,enemy,targets,skill,rule.skill,true);return true;
+}
+function completePartyAction(engine,actorId){
+  const b=engine.state.battle;if(!b)return;
+  if(b.preemptive?.side==='party'&&b.preemptive.remaining>0){
+    b.preemptive.remaining--;if(b.preemptive.remaining<=0)b.preemptive=null;return;
+  }
+  if(!b.acted.includes(actorId))b.acted.push(actorId);
+  if(!activeActor(engine))enemiesTurn(engine);
+}
+export function resolveBattleOpening(engine){
+  const s=engine.state,b=s.battle;if(!b||b.openingResolved||b.event||s.waiting?.type!=='battle')return false;
+  b.openingResolved=true;
+  if(b.preemptive?.side!=='enemy'||b.preemptive.remaining<=0)return false;
+  while(s.battle&&b.preemptive?.side==='enemy'&&b.preemptive.remaining>0){
+    const enemy=[...b.enemies].filter(e=>e.hp>0).sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)[0];if(!enemy)break;
+    enemyAction(engine,enemy);b.preemptive.remaining--;
+    if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return true;}
+  }
+  if(s.battle)b.preemptive=null;return true;
+}
 function enemiesTurn(engine){
   const s=engine.state,b=s.battle;
   dungeonBattleRound(engine);
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);recordDefeated(engine);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
-  for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)){
-    if(enemy.hp<=0)continue;enemy.guard=false;
-    const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)break;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
-    if(!rule)continue;
-    const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
-    const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
-    let targets;
-    if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
-    else if(skill.target==='all_allies')targets=b.enemies.filter(e=>e.hp>0);
-    else if(rule.target==='self'||skill.target==='self')targets=[enemy];
-    else if(skill.target==='ally')targets=[b.enemies.filter(e=>e.hp>0).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
-    else targets=[coveredTarget(engine,s.actors[targetId],skill)];
-    if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
-    useSkill(engine,enemy,targets,skill,rule.skill,true);
-  }
+  for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi))if(enemy.hp>0)enemyAction(engine,enemy);
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0)tickStatuses(engine.data,s,unit,'turns');
@@ -176,10 +206,11 @@ function enemiesTurn(engine){
 export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
   const actor=s.actors[actorId];
+  if(consumeStun(engine,actor,engine.data.actors[actorId].name)){completePartyAction(engine,actorId);return true;}
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
     if(engine.random()<Math.min(1,engine.data.system.escapeRate+engine.partyEffect('escapeBonus',0,'max')))endBattle(engine,'escape');
-    else{b.log.push('退路を塞がれました。');enemiesTurn(engine);}return true;
+    else{b.log.push('退路を塞がれました。');if(b.preemptive?.side==='party')completePartyAction(engine,actorId);else enemiesTurn(engine);}return true;
   }
   if(intent.action==='item'){
     const item=engine.data.items[intent.item],target=s.actors[intent.target];
@@ -189,15 +220,14 @@ export function battleAction(engine,intent){
   }else if(intent.action==='skill'){
     const plan=battleSkillPlan(engine,actorId,intent.skill,intent.target);
     if(!plan.ok){engine.notify(plan.reason);return false;}
-    const {skill,targets}=plan;payCost(engine,actorId,skill);
-    if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else {b.acted.push(actorId);if(!activeActor(engine))enemiesTurn(engine);}return true;}
+    const {skill,targets}=plan;payCost(engine,actorId,skill);recordSkillUse(engine,actorId,intent.skill);
+    if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else completePartyAction(engine,actorId);return true;}
     useSkill(engine,actor,targets,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;
   const used=intent.action==='skill'?engine.data.skills[intent.skill]:engine.data.skills[engine.data.items[intent.item]?.battleSkill];if(used)wetAfterSkill(engine,actor,used);
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return true;}
-  b.acted.push(actorId);
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return true;}
-  if(!activeActor(engine))enemiesTurn(engine);
+  completePartyAction(engine,actorId);
   return true;
 }

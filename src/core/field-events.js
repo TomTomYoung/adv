@@ -7,6 +7,7 @@ import {cellEventKey,cellEntryId} from './cell-layers.js';
 import {freshFieldReactions,fieldEventIndex,fieldReactionKey} from './field-signals.js';
 import {currentIllumination} from './lighting.js';
 import {storyJourneyArrival,storyArrivalEntryId,consumeStoryArrivalEntry} from './world.js';
+import {trapDisabled} from './scouting.js';
 
 export const FIELD_EVENT_TRIGGERS=['enter','auto','interact','action'];
 export const fieldIdle=state=>!state.waiting&&!state.battle&&!state.vm.length;
@@ -59,7 +60,7 @@ function cellEnterEvent(engine){
   const cell=dungeonCell(engine.data,s,engine.map(),entry.x,entry.y);
   for(const id of cell?.events??[]){
     const event=engine.data.cellEvents[id],firedId=cellEntryId(id),key=cellEventKey(entry.map,entry.x,entry.y,id);
-    if(event.trigger!=='enter'||entry.fired.includes(firedId)||!occurrenceAvailable(s,event,key)||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
+    if(event.trigger!=='enter'||entry.fired.includes(firedId)||event.trap&&trapDisabled(s,key)||!occurrenceAvailable(s,event,key)||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
     entry.fired.push(firedId);if(!attemptOccurrence(engine,event,key))continue;
     engine.run(event.script,{map:entry.map,x:entry.x,y:entry.y,event:id});return true;
   }

@@ -27,6 +27,8 @@ import {isRecord,clone,evaluate} from './expression.js';
 import {commandsAt} from './script.js';
 import {battleDefinition} from './battle-events.js';
 import {freshRecords,snapshotRecords,recordsValid} from './records.js';
+import {skillStateErrors} from './skill-levels.js';
+import {scoutingStateErrors} from './scouting.js';
 function addScenarioState(save,data){
   const s=save.state;
   for(const id of Object.keys(data.quests))s.quests[id]??={stage:'available',evidence:[],outcome:null};
@@ -190,10 +192,10 @@ export function validateSave(save,data){
     let stats;
     try{stats=actorStats(data,s,id,false);}catch{fail('職業または能力不正');continue;}
     for(const [slot,itemId] of Object.entries(actor.equipment)){const item=data.items[itemId];if(!item||item.slot!==slot)fail('装備不正');}
-    errors.push(...statusStateErrors(data,actor));
+    errors.push(...statusStateErrors(data,actor),...skillStateErrors(data,actor));
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
-  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s));
+  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...scoutingStateErrors(data,s));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
@@ -241,6 +243,8 @@ export function validateSave(save,data){
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
+      if(b.openingResolved!==undefined&&typeof b.openingResolved!=='boolean')fail('戦闘開始状態不正');
+      if(b.preemptive!==undefined&&b.preemptive!==null&&(!isRecord(b.preemptive)||!['party','enemy'].includes(b.preemptive.side)||!integer(b.preemptive.remaining,1,9)||Object.keys(b.preemptive).some(k=>!['side','remaining'].includes(k))))fail('先制状態不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&e.hp===0))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
       b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});

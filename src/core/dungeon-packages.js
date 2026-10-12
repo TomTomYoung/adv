@@ -17,7 +17,7 @@ export function compileCellPackages(source){
   for(const [id,event] of Object.entries(result.events))if(event.package){
     const script=`cell.package.${id}`;if(result.scripts[script])throw Error(`生成処理IDが重複しています: ${script}`);
     result.scripts[script]={commands:compileTrap(event.package)};
-    delete event.package;event.script=script;
+    event.trap=JSON.parse(JSON.stringify(event.package));delete event.package;event.script=script;
   }
   return result;
 }

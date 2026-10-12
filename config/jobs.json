@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.25.0",
   "profile": {
     "commonSkills": [
       "attack",
@@ -534,6 +534,14 @@
           "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
+        },
+        {
+          "skill": "trap_disarm",
+          "level": 1,
+          "api": "trap.disarm",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
         }
       ]
     },
@@ -652,6 +660,62 @@
           "level": 1,
           "api": "voxel.traverse",
           "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "trap_detect",
+          "level": 1,
+          "api": "trap.detect",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "camouflage",
+          "level": 1,
+          "api": "encounter.camouflage",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "trap_disarm",
+          "level": 3,
+          "api": "trap.disarm",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "ambush",
+          "level": 5,
+          "api": "battle.ambush",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "seek_enemy",
+          "level": 5,
+          "api": "battle.seek",
+          "target": "location",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "patrol",
+          "level": 7,
+          "api": "battle.patrol",
+          "target": "self",
+          "maxTargets": 1,
+          "lifetime": "equipped"
+        },
+        {
+          "skill": "reconnaissance",
+          "level": 10,
+          "api": "scout.recon",
+          "target": "self",
           "maxTargets": 1,
           "lifetime": "equipped"
         }
@@ -2324,6 +2388,373 @@
       "target": "self",
       "description": "MP2。水没していない場所で炎を使い、隊全員の濡れを解除する。",
       "cue": "light"
+    },
+    "trap_disarm": {
+      "id": "trap_disarm",
+      "name": "罠解除",
+      "api": "trap.disarm",
+      "target": "location",
+      "mp": 2,
+      "modes": [
+        "dungeon"
+      ],
+      "salvageAtSkillLevel": 2,
+      "description": "足元の未発動罠、または正面の隣接セルにある罠を解除します。壁面の罠も対象。技能Lv2以上では解除した罠を回収できます。",
+      "cue": "unlock",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 7
+                },
+                {
+                  "type": "uses",
+                  "skill": "trap_disarm",
+                  "count": 5
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 12
+                },
+                {
+                  "type": "uses",
+                  "skill": "trap_disarm",
+                  "count": 15
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "trap_detect": {
+      "id": "trap_detect",
+      "name": "罠発見",
+      "api": "trap.detect",
+      "target": "location",
+      "mp": 2,
+      "modes": [
+        "dungeon"
+      ],
+      "sizeBySkillLevel": [
+        3,
+        5,
+        7
+      ],
+      "description": "技能Lvに応じたN×N範囲の罠を発見し、地図へ表示します。",
+      "cue": "light",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 7
+                },
+                {
+                  "type": "uses",
+                  "skill": "trap_detect",
+                  "count": 5
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 12
+                },
+                {
+                  "type": "uses",
+                  "skill": "trap_detect",
+                  "count": 15
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ambush": {
+      "id": "ambush",
+      "name": "奇襲",
+      "api": "battle.ambush",
+      "target": "self",
+      "mp": 4,
+      "modes": [
+        "dungeon"
+      ],
+      "countBySkillLevel": [
+        1,
+        2,
+        3
+      ],
+      "description": "次の戦闘で技能Lvと同じ回数の先制行動を得ます。",
+      "cue": "guard",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 8
+                },
+                {
+                  "type": "weapon_uses",
+                  "weapon": "bow",
+                  "count": 15
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 14
+                },
+                {
+                  "type": "uses",
+                  "skill": "ambush",
+                  "count": 12
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "seek_enemy": {
+      "id": "seek_enemy",
+      "name": "索敵",
+      "api": "battle.seek",
+      "target": "location",
+      "mp": 2,
+      "modes": [
+        "dungeon"
+      ],
+      "description": "現在のフロアで出現する敵を捜し出し、ただちに戦闘へ入ります。",
+      "cue": "encounter",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "random_on_use",
+              "skill": "seek_enemy",
+              "chance": 0.15
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "uses",
+              "skill": "seek_enemy",
+              "count": 15
+            }
+          }
+        ]
+      }
+    },
+    "patrol": {
+      "id": "patrol",
+      "name": "哨戒",
+      "api": "battle.patrol",
+      "target": "self",
+      "mp": 4,
+      "modes": [
+        "dungeon"
+      ],
+      "stepsBySkillLevel": [
+        20,
+        35,
+        50
+      ],
+      "description": "一定歩数、敵側の先制を無効化します。",
+      "cue": "guard",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 7
+                },
+                {
+                  "type": "uses",
+                  "skill": "patrol",
+                  "count": 5
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 12
+                },
+                {
+                  "type": "uses",
+                  "skill": "patrol",
+                  "count": 15
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "camouflage": {
+      "id": "camouflage",
+      "name": "迷彩",
+      "api": "encounter.camouflage",
+      "target": "self",
+      "mp": 3,
+      "modes": [
+        "dungeon"
+      ],
+      "stepsBySkillLevel": [
+        20,
+        30,
+        40
+      ],
+      "rateBySkillLevel": [
+        0.7,
+        0.5,
+        0.35
+      ],
+      "description": "一定歩数、通常のランダム戦闘発生率を下げます。",
+      "cue": "guard",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 7
+                },
+                {
+                  "type": "uses",
+                  "skill": "camouflage",
+                  "count": 5
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "actor_level",
+                  "level": 12
+                },
+                {
+                  "type": "uses",
+                  "skill": "camouflage",
+                  "count": 15
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "reconnaissance": {
+      "id": "reconnaissance",
+      "name": "偵察",
+      "api": "scout.recon",
+      "target": "self",
+      "mp": 5,
+      "modes": [
+        "dungeon"
+      ],
+      "revealBySkillLevel": [
+        8,
+        16,
+        24
+      ],
+      "awayStepsBySkillLevel": [
+        4,
+        3,
+        2
+      ],
+      "disarmAtSkillLevel": 3,
+      "description": "使用者が一時的に隊を離れ、未踏区画と罠を偵察します。技能Lv3では発見した罠を解除します。",
+      "cue": "light",
+      "skillLevel": {
+        "max": 3,
+        "upgrades": [
+          {
+            "level": 2,
+            "when": {
+              "type": "actor_level",
+              "level": 10
+            }
+          },
+          {
+            "level": 3,
+            "when": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "has_skill",
+                  "skill": "trap_detect",
+                  "level": 2
+                },
+                {
+                  "type": "uses",
+                  "skill": "reconnaissance",
+                  "count": 8
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   "skills": {
@@ -3303,6 +3734,12 @@
         "vit": 2,
         "mp": 4
       }
+    },
+    "recovered_trap": {
+      "id": "recovered_trap",
+      "name": "回収した罠",
+      "description": "罠解除の熟練者が壊さず回収した罠。売却・加工などへの利用を想定する素材です。",
+      "type": "material"
     }
   },
   "equipmentPatches": {
