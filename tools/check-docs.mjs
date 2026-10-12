@@ -8,6 +8,7 @@ import {characterCatalog} from './character-catalog.mjs';
 import {monsterCatalog} from './monster-catalog.mjs';
 import {dungeonPageBundle} from './dungeon-pages.mjs';
 import {locationCatalog,questPlaces} from './location-catalog.mjs';
+import {skillCatalog,magicCatalog,itemCatalog} from './gameplay-catalogs.mjs';
 import {questEvents} from '../src/core/quest-events.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -60,6 +61,9 @@ const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'u
 check(await fs.readFile(path.join(folder,'scenarios/quests/README.md'),'utf8')===relocateDoc(questPageIndex(data),'scenarios/quests/README.md'),'quest page index differs');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
 check(await fs.readFile(path.join(folder,docPath('LOCATION_CATALOG.md')),'utf8')===relocateDoc(locationCatalog(data),'LOCATION_CATALOG.md'),'LOCATION_CATALOG: location references differ');
+check(await fs.readFile(path.join(folder,docPath('SKILL_CATALOG.md')),'utf8')===relocateDoc(skillCatalog(data,{date:snapshot.updated}),'SKILL_CATALOG.md'),'SKILL_CATALOG: generated skills differ; run npm run build:docs');
+check(await fs.readFile(path.join(folder,docPath('MAGIC_CATALOG.md')),'utf8')===relocateDoc(magicCatalog(data,{date:snapshot.updated}),'MAGIC_CATALOG.md'),'MAGIC_CATALOG: generated magic differs; run npm run build:docs');
+check(await fs.readFile(path.join(folder,docPath('ITEM_CATALOG.md')),'utf8')===relocateDoc(itemCatalog(data,{date:snapshot.updated}),'ITEM_CATALOG.md'),'ITEM_CATALOG: generated items differ; run npm run build:docs');
 for(const q of Object.values(data.quests)){
  const section=catalog.split(`## ${q.id} `)[1]?.split('\n## ')[0]??'';
  check(section.includes(questRouteSummary(data,q)),`QUEST_CATALOG: ${q.id} route summary differs; review authoring/quest-route-notes.json, then run npm run build:catalog`);
