@@ -97,7 +97,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='stun'){if(applyStun(engine,target,effect))(b?.log??s.log).push(`${targetName}はスタンした。`);continue;}
     if(effect.type==='guard'){
       applyGuard(b,target);
-      (b?.log??s.log).push(`${targetName}は防御状態になった。`);continue;
+      (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
     }
     if(effect.type==='buff'){if(dungeonEffectActive(engine.data,s,'buff',effect.buff)){addBuff(engine,effect.buff,target,source,skillId);(b?.log??s.log).push(`${targetName}：${engine.data.buffs[effect.buff].name}。`);}continue;}
     if(effect.type==='cover'){
