@@ -1,6 +1,17 @@
 import {isRecord} from './expression.js';
 import {unitKey} from './buffs.js';
 
+export const BATTLE_STATUS_DEFINITIONS={
+  guarded:{id:'guarded',name:'防御',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{duration:'one_turn',damageTaken:'system.guardRate'},2:null,3:null}},
+  stun:{id:'stun',name:'スタン',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{lostActions:1},2:{lostActions:2},3:{lostActions:3}}}
+};
+export const guarded=(battle,unit)=>unit?.instance?Boolean(unit.guard):(battle?.guards??[]).includes(unit?.id);
+export function applyGuard(battle,target){
+  if(!battle||!target)return false;
+  if(target.instance)target.guard=true;
+  else if(!battle.guards.includes(target.id))battle.guards.push(target.id);
+  return true;
+}
 export function preemptiveValid(c){return isRecord(c)&&Object.keys(c).every(k=>['side','actions','chance','priority'].includes(k))&&['allies','enemies'].includes(c.side)&&Number.isInteger(c.actions)&&c.actions>=1&&c.actions<=20&&(c.chance===undefined||Number.isFinite(c.chance)&&c.chance>=0&&c.chance<=1)&&(c.priority===undefined||Number.isInteger(c.priority)&&c.priority>=0&&c.priority<=100);}
 export function resolvePreemptive(engine,encounter,options){
   const s=engine.state,q=s.scouting,b=s.battle,candidates=[encounter.preemptive,options.preemptive,...encounter.enemies.map(id=>engine.data.enemies[id].preemptive)].filter(Boolean);

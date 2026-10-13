@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {data,drain} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {activeActor,applySkill,enemyStats} from '../src/core/battle.js';
-import {applyStun,preemptiveValid} from '../src/core/battle-turns.js';
+import {applyStun,preemptiveValid,guarded,BATTLE_STATUS_DEFINITIONS} from '../src/core/battle-turns.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
 function game(){const d=structuredClone(data),g=new GameEngine(d);drain(g);g.award(0,d.system.xpBase*9*10);g.teleport('region_2_f1',1,1);return {g,d};}
@@ -55,4 +55,11 @@ test('invalid battle phases, targets and stun counts fail save validation',()=>{
   for(const bad of [{side:'both',remaining:2},{side:'allies',remaining:-1},{side:'allies',remaining:21},{side:'enemies',remaining:2,reroll:true}]){const s=structuredClone(saved);s.state.battle.preemptive=bad;assert.ok(validateSave(s,g.data).length);}
   for(const bad of [{'actor:missing':1},{'actor:nio':-1},{'enemy:missing':1}]){const s=structuredClone(saved);s.state.battle.stuns=bad;assert.ok(validateSave(s,g.data).length);}
   assert.equal(preemptiveValid({side:'allies',actions:1,chance:2}),false);
+});
+
+
+test('defense is recognized as a battle-only status while preserving guard storage compatibility',()=>{
+  const {g}=game();start(g);const id=activeActor(g),actor=g.state.actors[id];
+  assert.equal(BATTLE_STATUS_DEFINITIONS.guarded.name,'防御');assert.equal(BATTLE_STATUS_DEFINITIONS.guarded.maxLevel,3);
+  assert.equal(guarded(g.state.battle,actor),false);guard(g);assert.equal(guarded(g.state.battle,actor),true);roundtrip(g);
 });
