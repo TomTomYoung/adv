@@ -26,7 +26,7 @@ import {processFieldEvents,recordFieldEntry} from './field-events.js';
 import {freshFieldReactions,signalFieldChange} from './field-signals.js';
 import {freshRecords,snapshotRecords} from './records.js';
 import {clone,evaluate,getPath,setPath,random} from './expression.js';
-import {startBattle,endBattle,battleAction} from './battle.js';
+import {startBattle,endBattle,battleAction,continuePreemptive} from './battle.js';
 import {runScript,advanceScript,chooseOption,pump,finishPresentation} from './script.js';
 import {validateSave,migrateSave} from './save.js';
 import {freshFeedback,beginFeedback,playCue} from './feedback.js';
@@ -387,6 +387,13 @@ export class GameEngine {
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);return true;
+    this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
+    // Same-version saves from the side-based scheduler do not contain a turn queue.
+    // Rebuild remaining turns without replaying allies already recorded in acted.
+    if(this.state.battle?.turnQueue===undefined){
+      this.state.battle.turnQueue=null;this.state.battle.turnIndex=0;
+      if(this.state.waiting?.type==='battle')continuePreemptive(this);
+    }
+    return true;
   }
 }
