@@ -28,8 +28,8 @@ export function applyStatus(data,state,target,id,duration,level=1){
 }
 export function removeStatus(target,id){
   target.statuses=id?target.statuses.filter(s=>s!==id):[];
-  if(target.statusDurations){if(id)delete target.statusDurations[id];else delete target.statusDurations;if(!Object.keys(target.statusDurations).length)delete target.statusDurations;}
-  if(target.statusLevels){if(id)delete target.statusLevels[id];else delete target.statusLevels;if(target.statusLevels&&!Object.keys(target.statusLevels).length)delete target.statusLevels;}
+  if(target.statusDurations){if(id){delete target.statusDurations[id];if(!Object.keys(target.statusDurations).length)delete target.statusDurations;}else delete target.statusDurations;}
+  if(target.statusLevels){if(id){delete target.statusLevels[id];if(!Object.keys(target.statusLevels).length)delete target.statusLevels;}else delete target.statusLevels;}
 }
 export function tickStatuses(data,state,target,clock){
   for(const [id,timer] of Object.entries(target.statusDurations??{})){
