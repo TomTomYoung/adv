@@ -25,7 +25,16 @@ test('group healing skips the fallen, group guard covers the party, and MP recov
   const g=newGame();g.state.members=['toma','dora','ren'];g.state.actors.dora.hp=0;g.state.actors.toma.hp=8;g.state.actors.ren.hp=8;g.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});
   assert.equal(activeActor(g),'ren');const total=g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0);g.dispatch({type:'battle',action:'skill',skill:'inspire',target:'ren'});assert.equal(g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0),total-3);
   assert.equal(activeActor(g),'toma');g.dispatch({type:'battle',action:'skill',skill:'group_heal'});assert.equal(g.state.actors.dora.hp,0);assert.ok(g.state.actors.toma.hp>8);assert.ok(g.state.actors.ren.hp>8);
-  const shield=newGame();shield.state.members=['dora','ada'];shield.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});shield.state.battle.acted=['ada'];shield.state.battle.enemies[0].stats.agi=0;const before=shield.state.actors.ada.hp;shield.dispatch({type:'battle',action:'skill',skill:'party_guard'});assert.ok(shield.state.actors.ada.hp<before);assert.ok(before-shield.state.actors.ada.hp<=4);assert.deepEqual(shield.state.battle.guards,[]);
+  const shield=newGame();shield.state.members=['dora','ada'];
+  const native=shield.stats.bind(shield);shield.stats=id=>({...native(id),agi:id==='dora'?100:0});
+  shield.data=structuredClone(shield.data);shield.data.enemies.bone_whale.stats.agi=1;
+  shield.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});
+  const before=shield.state.actors.ada.hp;assert.equal(activeActor(shield),'dora');
+  shield.dispatch({type:'battle',action:'skill',skill:'party_guard'});
+  assert.ok(shield.state.actors.ada.hp<before);assert.ok(before-shield.state.actors.ada.hp<=4);
+  assert.ok(shield.state.battle.guards.includes('ada'));
+  shield.dispatch({type:'battle',action:'skill',skill:'guard'});
+  assert.deepEqual(shield.state.battle.guards,[]);
 });
 test('MP draining never changes the saved battle replay',()=>{
   const g=newGame(119);g.dispatch({type:'travel',region:3});const copy=newGame();copy.load(g.save());
