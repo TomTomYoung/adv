@@ -113,10 +113,12 @@ export function skillLevelLines(spec){
   if(!spec.levelUp)return [];
   return [`技能Lv：1〜${spec.maxSkillLevel??3}。人物Lvによる習得条件とは独立。`,...Object.entries(spec.levels??{}).map(([n,v])=>`技能Lv${n}の変更：${JSON.stringify(v)}。`),...Object.entries(spec.levelUp).map(([n,v])=>`技能Lv${n}の成長条件：${JSON.stringify(v)}。`)];
 }
-const staticGrowthText=(data,id,c)=>{
+const staticGrowthText=(data,id,c,nested=false)=>{
   const name=skill=>data.skills?.[skill]?.name??data.fieldAbilities?.[skill]?.name??skill;
-  if(c?.all)return c.all.map(v=>staticGrowthText(data,id,v)).join(' かつ ');
-  if(c?.any)return c.any.map(v=>staticGrowthText(data,id,v)).join(' または ');
+  if(c?.all||c?.any){
+    const list=c.all??c.any,join=c.all?' かつ ':' または ',body=list.map(v=>staticGrowthText(data,id,v,true)).join(join);
+    return nested?`(${body})`:body;
+  }
   switch(c?.kind){
     case 'actor_level':return `人物Lv${c.level}以上`;
     case 'uses':return `${name(c.skill??id)}を${c.count}回使用`;
