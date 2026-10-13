@@ -7,8 +7,9 @@ export const effectSchema={oneOf:[
  obj({type:{const:'stun'},count:{type:'integer',minimum:1,maximum:20},stack:{enum:['refresh','add']},chance:{type:'number',minimum:0,maximum:1}},['type']),
  obj({type:{const:'damage'},formula:str,amount:num,element:{enum:['physical','fire','ice','lightning','light','dark','earth']}},['type']),
  obj({type:{const:'heal'},formula:str,amount:num},['type']),obj({type:{const:'restore_mp'},amount:num,formula:str},['type']),obj({type:{const:'drain_mp'},amount:num,formula:str},['type']),
- obj({type:{const:'status'},status:str,chance:{type:'number',minimum:0,maximum:1}},['type','status']),obj({type:{const:'buff'},buff:str},['type','buff']),
- ...['guard','cleanse','cover','analyze','repel'].map(type=>obj({type:{const:type}},['type']))
+ obj({type:{const:'status'},status:str,level:{type:'integer',minimum:1,maximum:3},chance:{type:'number',minimum:0,maximum:1}},['type','status']),obj({type:{const:'buff'},buff:str},['type','buff']),
+ obj({type:{const:'guard'},level:{type:'integer',minimum:1,maximum:3}},['type']),
+ ...['cleanse','cover','analyze','repel'].map(type=>obj({type:{const:type}},['type']))
 ]};
 export const recordSchemas={
  item:obj({id:str,name:str,description:{type:'string'},type:{enum:['consumable','material','equipment','key','dungeon_tool']},field:bool,consumed:bool,script:str,battleSkill:str,slot:{enum:['weapon','armor','charm']},equipmentType:str,stats,resist:dict(num)},['name']),

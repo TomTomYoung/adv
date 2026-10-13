@@ -1,5 +1,5 @@
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
-import {resolvePreemptive,applyStun,consumeStun,applyGuard,guarded as battleGuarded} from './battle-turns.js';
+import {resolvePreemptive,applyStun,consumeStun,applyGuard,clearGuard,guardLevel,guardDamageRate} from './battle-turns.js';
 import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
@@ -101,7 +101,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   for(const effect of skill.effects){
     if(effect.type==='stun'){if(applyStun(engine,target,effect))(b?.log??s.log).push(`${targetName}はスタンした。`);continue;}
     if(effect.type==='guard'){
-      applyGuard(b,target);
+      applyGuard(b,target,effect.level??1);
       (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
     }
     if(effect.type==='buff'){if(dungeonEffectActive(engine.data,s,'buff',effect.buff)){addBuff(engine,effect.buff,target,source,skillId);(b?.log??s.log).push(`${targetName}：${engine.data.buffs[effect.buff].name}。`);}continue;}
@@ -114,11 +114,11 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:sourceStats},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
-      const guarded=battleGuarded(b,target);
+      const guardRate=guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
-      const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
+      const damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
     }
     if(effect.type==='heal'){
@@ -229,7 +229,7 @@ function actionOverridden(engine,source){
 }
 function enemyAction(engine,enemy){
   const s=engine.state,b=s.battle;
-    if(enemy.hp<=0)return;enemy.guard=false;if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
+    if(enemy.hp<=0)return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
     const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)return;
     const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
@@ -270,7 +270,7 @@ function finishRound(engine){
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;const max=engine.stats(id);for(const status of a.statuses){const loss=applyStatusClock(engine.data,s,a,status,'turns',max);if(loss.hp||loss.mp)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0){tickStatuses(engine.data,s,unit,'turns');recoverStatuses(engine,unit);}
-  tickBuffs(b);b.acted=[];b.guards=[];b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
+  tickBuffs(b);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
   triggerBattleEvent(engine,'round_start');
 }
 function advanceBattleTurns(engine){

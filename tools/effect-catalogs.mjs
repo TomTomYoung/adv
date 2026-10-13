@@ -1,4 +1,4 @@
-import {BATTLE_STATUS_DEFINITIONS} from '../src/core/battle-turns.js';
+import {BATTLE_STATUS_DEFINITIONS,guardDamageRate} from '../src/core/battle-turns.js';
 
 const statLabels={str:'力',vit:'防御',agi:'速さ',int:'知力'};
 const elementLabels={physical:'物理',fire:'炎',ice:'氷',lightning:'雷',water:'水',light:'光',earth:'地',dark:'闇'};
@@ -50,7 +50,7 @@ const statusLevelText=(id,def,level)=>{
   if(effect.accuracyRate!==undefined)parts.push(`攻撃・攻撃的な効果の命中率×${effect.accuracyRate}`);
   if(effect.confusionChance!==undefined)parts.push(`行動時${percent(effect.confusionChance)}で使用可能な行動・対象をランダム選択`);
   for(const kind of effect.blockedActions??[])parts.push(`${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}使用不可`);
-  if(effect.recovery)parts.push(`ターン終了時に回復抽選（初回${percent(effect.recovery.initialChance)}、以後毎ターン${percent(effect.recovery.increment)}ポイント上昇、上限100%）`,'戦闘終了後も状態と回復経過を持ち越す');
+  if(effect.recovery)parts.push(`ラウンド終了時に回復抽選（初回${percent(effect.recovery.initialChance)}、以後毎ラウンド${Math.round(effect.recovery.increment*1000)/10}ポイント上昇、上限100%）`,'戦闘終了後も状態と回復経過を持ち越す');
   if(id==='wet'){
     parts.push(`雷・氷の被ダメージ×${effect.wetDamageScale??1}`);
     parts.push(`雷・氷魔法使用時、自身の最大HPの${percent(effect.wetBacklashRate??0)}を失う`);
@@ -62,7 +62,7 @@ const statusLevelText=(id,def,level)=>{
 const statusSkillSources=(data,id)=>Object.entries(data.skills??{}).filter(([,skill])=>[...(skill.effects??[]),...(skill.selfEffects??[])].some(e=>e.type==='status'&&e.status===id)).map(([skillId,skill])=>`${skill.name} (${skillId})`);
 export function statusCatalog(data,{date}={}){
   const entries=Object.entries(data.statuses??{}),lines=['# 状態異常一覧','',`更新日: ${date??'未記録'}。作品版${data.game.version}。通常状態異常${entries.length}件＋戦闘限定状態2件。`,'',
-    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。毒系・帰らぬ呪い・濡れ・衰弱、およびまひ・くらやみ・各封印・こんらんのLv1数値は2026-10-13時点の暫定基準値です。戦闘限定の防御とスタンもこのカタログに含めます。','',
+    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。通常状態異常14種と戦闘限定の防御・スタンはLv1〜Lv3を設定済みです。数値は2026-10-13時点の基準値です。','',
     '## 通常状態異常',''];
   for(const [id,def] of entries){
     const sources=[...statusSkillSources(data,id),...(trapSources[id]??[]).map(v=>`標準トラップ：${v}`)];
@@ -70,8 +70,9 @@ export function statusCatalog(data,{date}={}){
     for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',def.levels?.[level]||level===1?`効果：${statusLevelText(id,def,level)}。`:'効果：未設定。','');
   }
   const guard=BATTLE_STATUS_DEFINITIONS.guarded,stun=BATTLE_STATUS_DEFINITIONS.stun;
-  lines.push('## 戦闘限定状態','',
-    `### ${guard.name} (${guard.id})`,'','分類：有利な戦闘限定状態。防御技能・盾の壁で付与。','','#### Lv1','',`効果：1ターン、防御状態。受けるダメージ×${data.system.guardRate}。`,'','#### Lv2','','効果：未設定。','','#### Lv3','','効果：未設定。','',
+  lines.push('## 戦闘限定状態','',`### ${guard.name} (${guard.id})`,'','分類：有利な戦闘限定状態。防御技能・盾の壁で付与。','');
+  for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',`効果：1ターン、防御状態。受けるダメージ×${guardDamageRate(data,level)}。`,'');
+  lines.push(
     `### ${stun.name} (${stun.id})`,'','分類：不利な戦闘限定状態。戦闘終了時に消える。','','#### Lv1','','効果：次の行動機会を1回失う。','','#### Lv2','','効果：次の行動機会を2回失う。','','#### Lv3','','効果：次の行動機会を3回失う。','');
   return lines.join('\n').trimEnd()+'\n';
 }
