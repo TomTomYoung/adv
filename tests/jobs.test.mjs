@@ -146,7 +146,7 @@ test('かばうは隊順の一人へ一度だけ転送し、全体攻撃・倒�
     const skill=mode==='area'?'probe_area':'probe_single';g.data.skills[skill]={name:'検証打撃',mp:0,target:mode==='area'?'all_enemies':'enemy',effects:[{type:'damage',amount:10,element:'physical'}]};g.data.enemies.waterwheel_beaver.ai=[{priority:1,skill,target:'weakest'}];
     g.state.actors.sera.hp=20;start(g,'wild_waterwheel_beaver');
     assert.ok(g.dispatch({type:'battle',action:'skill',skill:'cover',target:mode==='chain'?'nio':'sera'}));actAs(g,'nio');assert.ok(g.dispatch({type:'battle',action:'skill',skill:'cover',target:'sera'}));
-    g.state.battle.acted=['ada','nio','sera','il'];if(mode==='fallen')g.state.actors.ada.hp=0;
+    g.state.battle.acted=['ada','nio','sera','il'];g.state.battle.turnQueue=['actor:ada','actor:nio','actor:sera','actor:il','actor:berg','enemy:enemy_0'];g.state.battle.turnIndex=4;if(mode==='fallen')g.state.actors.ada.hp=0;
     const before=resources(g),saved=g.save(),copy=new GameEngine(g.data);drain(copy);copy.load(saved);
     for(const engine of [g,copy])assert.ok(engine.dispatch({type:'battle',action:'skill',skill:'guard',target:'berg'}));assert.equal(g.save(),copy.save());
     if(mode==='area'){assert.equal(g.state.actors.sera.hp,10);assert.equal(g.state.actors.ada.hp,before.actors.ada.hp-9);}
