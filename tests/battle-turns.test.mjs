@@ -23,7 +23,8 @@ test('enemy preemptive N uses only the fastest enemy and does not advance the no
   for(const id of d.encounters.wild_pair_10.enemies){d.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];d.enemies[id].stats.agi=1;}
   d.enemies[d.encounters.wild_pair_10.enemies[1]].stats.agi=40;start(g);
   const fastest=[...g.state.battle.enemies].sort((a,b)=>enemyStats(g,b).agi-enemyStats(g,a).agi)[0];
-  assert.equal(g.state.battle.log.filter(t=>t===`${fastest.name}は守りを固めた。`).length,3);assert.equal(g.state.battle.round,1);assert.equal(g.state.battle.preemptive,undefined);assert.ok(activeActor(g));roundtrip(g);
+  const ordinary=g.state.battle.turnQueue.slice(0,g.state.battle.turnIndex).filter(key=>key==='enemy:'+fastest.instance).length;
+  assert.equal(g.state.battle.log.filter(t=>t===`${fastest.name}は守りを固めた。`).length,3+ordinary);assert.equal(g.state.battle.round,1);assert.equal(g.state.battle.preemptive,undefined);assert.ok(activeActor(g));roundtrip(g);
 });
 test('ambush is consumed exactly once; enemy and ally candidates resolve exclusively; patrol prevents enemy rolls',()=>{
   const {g,d}=game();d.encounters.wild_pair_10.preemptive={side:'enemies',actions:4,priority:20,chance:1};g.state.scouting={traps:{},effects:{ambush:{remaining:20,actions:2},patrol:{remaining:10}}};let rolls=0;g.random=()=>{rolls++;return 0;};start(g);
@@ -33,7 +34,7 @@ test('ambush is consumed exactly once; enemy and ally candidates resolve exclusi
 test('start event saves the resolved enemy phase and resumes it once after the dialog',()=>{
   const {g,d}=game();const id=d.encounters.wild_pair_10.enemies[0];d.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];d.enemies[id].stats.agi=99;
   d.scripts.preempt={commands:[{op:'battle.start',encounter:'wild_pair_10',preemptive:{side:'enemies',actions:2},on_win:[],on_lose:[],on_escape:[],on_interrupt:[],events:[{id:'intro',triggers:['start'],commands:[{op:'narrate',text:'戦闘開始'}]}]}]};
-  g.run('preempt');assert.equal(g.state.waiting.type,'text');assert.equal(g.state.battle.preemptive.remaining,2);roundtrip(g);drain(g);assert.equal(g.state.battle.preemptive,undefined);assert.equal(g.state.battle.log.filter(t=>t===`${d.enemies[id].name}は守りを固めた。`).length,2);roundtrip(g);
+  g.run('preempt');assert.equal(g.state.waiting.type,'text');assert.equal(g.state.battle.preemptive.remaining,2);roundtrip(g);drain(g);assert.equal(g.state.battle.preemptive,undefined);const ordinary=g.state.battle.turnQueue.slice(0,g.state.battle.turnIndex).filter(key=>key==='enemy:enemy_0').length;assert.equal(g.state.battle.log.filter(t=>t===`${d.enemies[id].name}は守りを固めた。`).length,2+ordinary);roundtrip(g);
 });
 test('stun consumes one actual action without MP/items/uses and is refreshed instead of stacked by default',()=>{
   const {g}=game();start(g);const id=activeActor(g),a=g.state.actors[id],before={mp:a.mp,uses:a.skillProgress?.guard?.uses??0};g.random=()=>0;
