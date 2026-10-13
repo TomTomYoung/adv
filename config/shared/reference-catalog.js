@@ -33155,6 +33155,12 @@ export const referenceData={
       },
       "arcane_malaise": {
         "name": "魔力障害"
+      },
+      "virulent_poison": {
+        "name": "劇毒"
+      },
+      "curse_poison": {
+        "name": "呪毒"
       }
     },
     "shops": {

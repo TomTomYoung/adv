@@ -2,7 +2,7 @@ import {syncSkillGrowth} from './skill-levels.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
 import {treasurePlan} from './treasures.js';
-import {removeStatus,tickStatuses} from './status-effects.js';
+import {removeStatus,tickStatuses,applyStatusClock} from './status-effects.js';
 import {rollbackEventCheckpoints} from './event-checkpoints.js';
 import {edgeBetween} from './edge-layers.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
@@ -194,8 +194,8 @@ export class GameEngine {
     try{
     const loc=this.state.location,{x,y}=point,z=point.z??0;
     const from={...loc};collapseAfterLeaving(this,from,{...loc,x,y});loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
-    for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
-    if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
+    for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;const max=this.stats(id);for(const status of actor.statuses)applyStatusClock(this.data,this.state,actor,status,'steps',max,{lethal:false});}
+    if(this.state.members.some(id=>this.state.actors[id].statuses.some(status=>['poison','virulent_poison','curse_poison','hollow_curse'].includes(status))))this.eventCue('field_poison');
     for(const id of this.state.members)if(this.state.actors[id].hp>0)tickStatuses(this.data,this.state,this.state.actors[id],'steps');
     stepScouting(this);
     recordFieldEntry(this.state);

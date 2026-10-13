@@ -92,6 +92,7 @@ export function validateContent(data){
       if(c.op==='cell.event.reset'&&(!data.maps[c.map]||data.maps[c.map].tiles[c.y]?.[c.x]===undefined||data.cellEvents[c.event]?.occurrence?.reset!=='manual'))fail(at,'回数リセットはmanualの実在する進入イベントに限ります');
       if(['treasure.collect','treasure.reset'].includes(c.op)){const t=data.maps[c.map]?.objects.find(o=>o.id===c.object)?.treasure;if(!t||c.op==='treasure.reset'&&t.reset!=='manual')fail(at,'トレジャーの参照・リセット規則が不正です');}
       if(c.op==='status.apply'&&c.duration!==undefined&&!statusDurationValid(c.duration))fail(at,'状態異常の持続が不正です');
+      if(c.op==='status.apply'&&c.level!==undefined&&(!Number.isInteger(c.level)||c.level<1||c.level>3))fail(at,'状態異常Lvが不正です');
       if(c.op==='fire.portable.set'&&(!Number.isInteger(c.fuel)||c.fuel<0||c.fuel>100000||c.fuel>0&&!Object.values(data.dungeons??{}).some(d=>Object.values(d.systems).some(s=>s.use==='fire_network'&&s.effects[c.effect]))))fail(at,'携行松明の効果・燃料が不正です');
       if(c.op==='object.state.set'){const map=data.maps[c.map];if(!map?.objects.some(o=>o.id===c.object))fail(at,'object.state.setは実在するmap/objectを指定します');}
       if(['say','narrate'].includes(c.op)&&c.character!==undefined)reference(data.characters,c.character,at);

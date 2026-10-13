@@ -36,7 +36,7 @@ test('diving item and skill protect the entire party through level ten and spend
  }
 });
 test('wet penalties, recoil, fire prohibition and dry-land recovery share actual immersion state',()=>{
- const g=enter(1),dry=g.stats('ada');setLevel(g,4);action(g,'water','wait');assert.ok(g.state.members.every(id=>g.state.actors[id].statuses.includes('wet')));assert.ok(g.stats('ada').agi<dry.agi);assert.ok(g.stats('ada').str<dry.str);assert.equal(wetResistance(g.state.actors.il,'ice'),1.5);
+ const g=enter(1),dry=g.stats('ada');setLevel(g,4);action(g,'water','wait');assert.ok(g.state.members.every(id=>g.state.actors[id].statuses.includes('wet')));assert.ok(g.stats('ada').agi<dry.agi);assert.ok(g.stats('ada').str<dry.str);assert.equal(wetResistance(data,g.state.actors.il,'ice'),1.2);
  const hp=g.state.actors.il.hp;wetAfterSkill(g,g.state.actors.il,data.skills.lightning);assert.ok(g.state.actors.il.hp<hp);assert.ok(g.state.actors.il.statuses.includes('wet'));assert.equal(g.jobAction('il','dry_clothes'),false);
  setLevel(g,7);g.startBattle('water_giant',{win:[],escape:[],lose:[]});assert.equal(battleSkillPlan(g,'il','fire','enemy_0').ok,false);escape(g);g.returnTown();assert.ok(g.state.actors.il.statuses.includes('wet'));assert.ok(g.jobAction('il','dry_clothes'));assert.ok(g.state.members.every(id=>!g.state.actors[id].statuses.includes('wet')));roundtrip(g);
 });

@@ -33,23 +33,36 @@ export const buffCatalog=(data,options)=>modifierCatalog(data,'buff',options);
 export const debuffCatalog=(data,options)=>modifierCatalog(data,'debuff',options);
 
 const durationText=d=>d?Object.entries(d).map(([k,n])=>`${k==='steps'?'歩数':'ターン'}${n}`).join(' または '):'解除まで';
-const statusBaseEffect=def=>{
-  const parts=[];
-  if(def.stepDamage)parts.push(`成功歩ごとHP−${def.stepDamage}`);
-  if(def.turnDamage)parts.push(`戦闘ターン終了時HP−${def.turnDamage}`);
-  for(const [key,n] of Object.entries(def.stats??{}))parts.push(`${statLabels[key]??key}×${n}`);
-  if(def.description)parts.push(def.description);
-  return [...new Set(parts)].join(' / ')||'個別効果なし';
+const percent=n=>`${Math.round(n*1000)/10}%`;
+const statusLevelEffect=(def,level)=>({...def,...(def.levels?.[level]??{})});
+const statusLevelText=(id,def,level)=>{
+  const effect=statusLevelEffect(def,level),parts=[];
+  if(effect.stepDamage)parts.push(`成功歩ごとHP−${effect.stepDamage}`);
+  if(effect.turnDamage)parts.push(`戦闘ターン終了時HP−${effect.turnDamage}`);
+  if(effect.stepHpRate)parts.push(`成功歩ごと最大HPの${percent(effect.stepHpRate)}減少`);
+  if(effect.turnHpRate)parts.push(`戦闘ターン終了時最大HPの${percent(effect.turnHpRate)}減少`);
+  if(effect.stepMpDamage)parts.push(`成功歩ごとMP−${effect.stepMpDamage}`);
+  if(effect.turnMpDamage)parts.push(`戦闘ターン終了時MP−${effect.turnMpDamage}`);
+  if(effect.stepMpRate)parts.push(`成功歩ごと最大MPの${percent(effect.stepMpRate)}減少`);
+  if(effect.turnMpRate)parts.push(`戦闘ターン終了時最大MPの${percent(effect.turnMpRate)}減少`);
+  for(const [key,n] of Object.entries(effect.stats??{}))parts.push(`${statLabels[key]??key}×${n}`);
+  if(id==='wet'){
+    parts.push(`雷・氷の被ダメージ×${effect.wetDamageScale??1}`);
+    parts.push(`雷・氷魔法使用時、自身の最大HPの${percent(effect.wetBacklashRate??0)}を失う`);
+    if(effect.wetSuppressElements?.length)parts.push('雷・氷魔法は使用できるが発動しない');
+    parts.push('水のない場所で炎を使うと乾く');
+  }
+  return parts.join(' / ')||'個別効果なし';
 };
 const statusSkillSources=(data,id)=>Object.entries(data.skills??{}).filter(([,skill])=>[...(skill.effects??[]),...(skill.selfEffects??[])].some(e=>e.type==='status'&&e.status===id)).map(([skillId,skill])=>`${skill.name} (${skillId})`);
 export function statusCatalog(data,{date}={}){
   const entries=Object.entries(data.statuses??{}),lines=['# 状態異常一覧','',`更新日: ${date??'未記録'}。作品版${data.game.version}。通常状態異常${entries.length}件＋戦闘限定状態2件。`,'',
-    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。現行の通常状態異常はLv1効果のみ確定しており、Lv2・Lv3は個別決定まで未設定です。戦闘限定の防御とスタンもこのカタログに含めます。','',
+    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。毒系・帰らぬ呪い・濡れ・衰弱の数値は2026-10-13時点の暫定基準値です。戦闘限定の防御とスタンもこのカタログに含めます。','',
     '## 通常状態異常',''];
   for(const [id,def] of entries){
     const sources=[...statusSkillSources(data,id),...(trapSources[id]??[]).map(v=>`標準トラップ：${v}`)];
-    lines.push(`### ${def.name} (${id})`,'',`分類：${categoryLabels[def.category]??'身体・環境状態'}。`,`持続：${durationText(def.duration)}。`,`付与元：${sources.join(' / ')||'環境・スクリプト'}。`,'',
-      '#### Lv1','',`効果：${statusBaseEffect(def)}。`,'','#### Lv2','','効果：未設定。','','#### Lv3','','効果：未設定。','');
+    lines.push(`### ${def.name} (${id})`,'',`分類：${categoryLabels[def.category]??'身体・環境状態'}。`,`持続：${durationText(def.duration)}。`,`付与元：${sources.join(' / ')||'環境・スクリプト'}。`,'');
+    for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',def.levels?.[level]||level===1?`効果：${statusLevelText(id,def,level)}。`:'効果：未設定。','');
   }
   const guard=BATTLE_STATUS_DEFINITIONS.guarded,stun=BATTLE_STATUS_DEFINITIONS.stun;
   lines.push('## 戦闘限定状態','',

@@ -1,9 +1,9 @@
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {resolvePreemptive,applyStun,consumeStun,applyGuard,guarded as battleGuarded} from './battle-turns.js';
-import {applyStatus,removeStatus,statusStats,tickStatuses} from './status-effects.js';
+import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
-import {wetResistance,wetAfterSkill} from './wet.js';
+import {wetResistance,wetAfterSkill,wetSkillBlocked} from './wet.js';
 import {canRepel,kindlePortable} from './systems/fire-network.js';
 import {dungeonBattleStart,dungeonBattleRound,dungeonBattleEnd,dungeonAbilityReason,dungeonEffectActive,dungeonBuffs,dungeonDamageScale} from './dungeons.js';
 import {scaledEnemy} from './enemy.js';
@@ -110,7 +110,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
       const guarded=battleGuarded(b,target);
-      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(target,effect.element):1);
+      const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
       const damage=Math.max(1,Math.floor(Math.floor(raw)*power*(guarded?engine.data.system.guardRate:1)*elementScale*taken));
@@ -123,7 +123,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     }
     if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;(b?.log??s.log).push(`${targetName}のMPが${spent}減少。`);}
     if(effect.type==='restore_mp'){const restored=Math.min(targetStats.mp-target.mp,Math.floor(raw));target.mp+=restored;(b?.log??s.log).push(`${targetName}のMPが${restored}回復。`);}
-    if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&target.hp>0&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration)){
+    if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&target.hp>0&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration,effect.level??1)){
       (b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
     }
     if(effect.type==='cleanse')removeStatus(target,effect.status);
@@ -131,7 +131,11 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   return damageTotal;
 }
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
-  const origin=describeTarget(engine,unitKey(source));
+  const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
+  if(wetSkillBlocked(engine,source,skill)){
+    (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
+    wetAfterSkill(engine,source,skill);return false;
+  }
   const results=targets.map(target=>{
     const result=describeTarget(engine,unitKey(target));
     const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId);
@@ -140,6 +144,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   });
   const hostile=enemySource&&targets.some(t=>!t.instance)&&skill.effects.some(e=>e.type==='damage');
   playBattleCue(engine,engine.data.presentation?.bindings.skills[skillId],origin,results,hostile);
+  wetAfterSkill(engine,source,skill);return true;
 }
 function coveredTarget(engine,target,skill){
   if(skill.target!=='enemy'||!skill.effects.some(e=>e.type==='damage'))return target;
@@ -170,10 +175,10 @@ function enemiesTurn(engine){
   const s=engine.state,b=s.battle;
   dungeonBattleRound(engine);
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
-  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);recordDefeated(engine);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
+  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){const loss=applyStatusClock(engine.data,s,enemy,status,'turns',enemy.stats);recordDefeated(engine);if(loss.hp||loss.mp)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
   for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi))enemyAction(engine,enemy);
-  for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
+  for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;const max=engine.stats(id);for(const status of a.statuses){const loss=applyStatusClock(engine.data,s,a,status,'turns',max);if(loss.hp||loss.mp)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0)tickStatuses(engine.data,s,unit,'turns');
   tickBuffs(b);b.acted=[];b.guards=[];b.round++;b.log=b.log.slice(-30);
@@ -217,10 +222,9 @@ export function battleAction(engine,intent){
     const {skill,targets}=plan;payCost(engine,actorId,skill);
     recordSkillUse(engine,actorId,intent.skill,{weapon:skill.effects.some(e=>e.type==='damage'&&e.element==='physical')});
     if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else finishAction(engine,actorId);return true;}
-    useSkill(engine,actor,targets,skill,intent.skill);
-    if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
+    const activated=useSkill(engine,actor,targets,skill,intent.skill);
+    if(activated&&skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;
-  const used=intent.action==='skill'?engine.data.skills[intent.skill]:engine.data.skills[engine.data.items[intent.item]?.battleSkill];if(used)wetAfterSkill(engine,actor,used);
   finishAction(engine,actorId);
   return true;
 }
