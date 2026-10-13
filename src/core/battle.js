@@ -22,7 +22,7 @@ export function startBattle(engine,id,continuations,options={}){
   consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
   engine.state.records.battles++;
-  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],turnQueue:null,turnIndex:0,guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   resolvePreemptive(engine,encounter,options);
@@ -31,8 +31,10 @@ export function startBattle(engine,id,continuations,options={}){
   else if(!triggerBattleEvent(engine,'start'))continuePreemptive(engine);
 }
 export function activeActor(engine){
-  const s=engine.state,b=s.battle;if(!b||b.preemptive?.side==='enemies')return null;
-  return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&(b.preemptive?.side==='allies'||!b.acted.includes(id)))??null;
+  const s=engine.state,b=s.battle;if(!b||b.event||b.preemptive?.side==='enemies')return null;
+  if(b.preemptive?.side==='allies')return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0)??null;
+  const key=b.turnQueue?.[b.turnIndex],id=key?.startsWith('actor:')?key.slice(6):null;
+  return id&&s.actors[id]?.hp>0?id:null;
 }
 export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),statusStats(engine.data,engine.state,enemy,enemy.stats));
 export function endBattle(engine,result,skipEvents=false){
@@ -171,18 +173,44 @@ function enemyAction(engine,enemy){
     if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
     useSkill(engine,enemy,targets,skill,rule.skill,true);
 }
-function enemiesTurn(engine){
+// The mixed queue is a snapshot of the living units' AGI at each round start.
+// Equal AGI is stable: party order first, then encounter order.
+function buildTurnQueue(engine){
+  const s=engine.state,b=s.battle;
+  const entries=[
+    ...s.members.filter(id=>s.actors[id].hp>0&&!b.acted.includes(id)).map((id,i)=>({key:'actor:'+id,agi:engine.stats(id).agi,order:i})),
+    ...b.enemies.filter(e=>e.hp>0).map((enemy,i)=>({key:unitKey(enemy),agi:enemyStats(engine,enemy).agi,order:s.members.length+i}))
+  ];
+  return entries.sort((a,c)=>c.agi-a.agi||a.order-c.order).map(entry=>entry.key);
+}
+function finishRound(engine){
   const s=engine.state,b=s.battle;
   dungeonBattleRound(engine);
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){const loss=applyStatusClock(engine.data,s,enemy,status,'turns',enemy.stats);recordDefeated(engine);if(loss.hp||loss.mp)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
-  for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi))enemyAction(engine,enemy);
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;const max=engine.stats(id);for(const status of a.statuses){const loss=applyStatusClock(engine.data,s,a,status,'turns',max);if(loss.hp||loss.mp)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0)tickStatuses(engine.data,s,unit,'turns');
-  tickBuffs(b);b.acted=[];b.guards=[];b.round++;b.log=b.log.slice(-30);
+  tickBuffs(b);b.acted=[];b.guards=[];b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
   triggerBattleEvent(engine,'round_start');
+}
+function advanceBattleTurns(engine){
+  const s=engine.state,b=s.battle;
+  while(s.battle===b&&!b.event&&!b.preemptive){
+    if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
+    if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
+    if(!Array.isArray(b.turnQueue)){b.turnQueue=buildTurnQueue(engine);b.turnIndex=0;}
+    if(b.turnIndex>=b.turnQueue.length){finishRound(engine);continue;}
+    const key=b.turnQueue[b.turnIndex];
+    if(key.startsWith('actor:')){
+      if(s.actors[key.slice(6)]?.hp>0)return;
+      b.turnIndex++;continue; // A defeated actor cannot use this round's slot.
+    }
+    const enemy=b.enemies.find(e=>unitKey(e)===key);
+    b.turnIndex++;
+    if(enemy?.hp>0)enemyAction(engine,enemy); // Stun also consumes exactly one slot.
+  }
 }
 export function continuePreemptive(engine){
   const s=engine.state,b=s.battle;if(!b||b.event)return;
@@ -193,14 +221,15 @@ export function continuePreemptive(engine){
     if(--b.preemptive.remaining===0)delete b.preemptive;
     if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   }
+  advanceBattleTurns(engine);
 }
 function finishAction(engine,actorId){
   const s=engine.state,b=s.battle;if(!b)return;
   if(b.preemptive?.side==='allies'){if(--b.preemptive.remaining===0)delete b.preemptive;}
-  else b.acted.push(actorId);
+  else{b.acted.push(actorId);b.turnIndex++;}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
-  if(!activeActor(engine))enemiesTurn(engine);
+  advanceBattleTurns(engine);
 }
 export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
@@ -209,7 +238,7 @@ export function battleAction(engine,intent){
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
     if(engine.random()<Math.min(1,engine.data.system.escapeRate+engine.partyEffect('escapeBonus',0,'max')))endBattle(engine,'escape');
-    else{b.log.push('退路を塞がれました。');if(b.preemptive)finishAction(engine,actorId);else enemiesTurn(engine);}return true;
+    else{b.log.push('退路を塞がれました。');finishAction(engine,actorId);}return true;
   }
   if(intent.action==='item'){
     const item=engine.data.items[intent.item],target=s.actors[intent.target];
