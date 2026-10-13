@@ -9,6 +9,7 @@ on:
       - 'tools/browser-q001-return-smoke.mjs'
       - 'tools/browser-field-skills-smoke.mjs'
       - 'tools/browser-scouting-smoke.mjs'
+      - 'tools/browser-action-statuses-smoke.mjs'
       - 'tools/browser-config-smoke.mjs'
       - 'tools/browser-packages-smoke.mjs'
       - 'config/shared/**'
@@ -57,6 +58,8 @@ jobs:
           node tools/browser-packages-smoke.mjs
       - name: Verify scout skills, stun and preemptive actions
         run: node tools/browser-scouting-smoke.mjs
+      - name: Verify persistent action statuses and sealed controls
+        run: node tools/browser-action-statuses-smoke.mjs
       - name: Keep viewport checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,6 +72,7 @@ jobs:
             /tmp/adv-q001-return-browser
             /tmp/adv-field-target-browser
             /tmp/adv-scouting-browser
+            /tmp/adv-action-status-browser
             /tmp/adv-generated-engine-browser
             /tmp/adv-studio-*.png
             /tmp/adv-packages-editor.png

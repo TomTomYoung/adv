@@ -1,7 +1,7 @@
 import {effectiveSkill,recordSkillUse,skillLevel} from './skill-levels.js';
 import {scoutingPlan,applyScouting} from './scouting.js';
 import {SCOUT_APIS} from './scout-apis.js';
-import {statusStats,removeStatus} from './status-effects.js';
+import {statusStats,removeStatus,statusAbilityReason} from './status-effects.js';
 import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {dungeonInterior} from './world.js';
 import {unequipGear} from './equipment.js';
@@ -105,7 +105,7 @@ export function fieldActionPlan(data,state,id,abilityId,target){
   const restriction=dungeonAbilityReason(data,state,abilityId,ability?.api);if(restriction)return {ok:false,reason:restriction};
   if(!ability||!FIELD_APIS.has(ability.api)||!permission(data,state,id,abilityId,ability.api))return {ok:false,reason:'この探索特技は習得していません。'};
   if(state.waiting||state.battle||!ability.modes.includes(state.mode)||!state.members.includes(id))return {ok:false,reason:'この場所・状態では使用できません。'};
-  const reason=costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
+  const reason=statusAbilityReason(data,state,state.actors[id],abilityId,true)||costProblem(data,state,id,ability);if(reason)return {ok:false,reason};
   if(ability.api==='party.dry'&&dungeonFloodLevel(data,state)>0)return {ok:false,reason:'水没していない場所で炎を使ってください。'};
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
