@@ -12,7 +12,7 @@ const resources=g=>structuredClone({actors:g.state.actors,inventory:g.state.inve
 function atLevel(g,level){g.award(0,data.system.xpBase*(level-1)*level-g.state.actors.ada.xp);assert.equal(g.state.actors.ada.level,level);}
 function setup(job,level=10){const g=newGame(17);if(job!=='warrior')assert.ok(g.dispatch({type:'job.change',actor:'ada',job}));atLevel(g,level);g.state.members=['ada','nio','sera','il','berg'];g.healAll();return g;}
 function actAs(g,id){const b=g.state.battle,key='actor:'+id,remaining=(b.turnQueue??[]).slice(b.turnIndex).filter(slot=>slot!==key);b.acted=[];b.turnQueue=[key,...remaining];b.turnIndex=0;assert.equal(activeActor(g),id);}
-function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
+function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});if(id==='wild_pair_10'){g.data=structuredClone(g.data);for(const enemy of g.data.encounters[id].enemies)g.data.enemies[enemy].stats.agi=0;}g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
 function equipSkill(g,id){const spec=data.skills[id];let item=spec.equippedItem;if(!item&&spec.weaponTypes)item=Object.keys(data.items).find(key=>spec.weaponTypes.includes(data.items[key].equipmentType));if(item){g.give(item,1-(g.state.inventory[item]??0));assert.ok(g.dispatch({type:'equip',actor:'ada',item}));}for(const [item,n] of Object.entries(spec.materials??{}))g.state.inventory[item]=n;}
 
 for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/10/30・全習得技能・装備・保存`,()=>{
