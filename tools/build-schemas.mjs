@@ -45,7 +45,7 @@ command('set add',{target:string,value});command('flag.set',{key:string,value});
 command('random.branch',{branches:{type:'array',minItems:1,items:obj({weight:{type:'number',exclusiveMinimum:0},commands})}});
 command('item.give item.take',{item:value,count:{oneOf:[{type:'integer',minimum:1},expr]}},['item']);command('gold.change',{amount:value});
 command('actor.heal actor.damage actor.restore_mp',{target:value,amount:value});command('party.heal_all',{ratio:{type:'number',minimum:0,maximum:1}},[]);
-command('party.join party.leave',{actor:string});command('status.apply',{target:value,status:string,duration:durationSchema},['target','status']);command('status.remove',{target:value,status:string});
+command('party.join party.leave',{actor:string});command('status.apply',{target:value,status:string,duration:durationSchema,level:{type:'integer',minimum:1,maximum:3}},['target','status']);command('status.remove',{target:value,status:string});
 command('map.teleport',{map:string,x:integer,y:integer,z:{type:'integer'},facing:{enum:['north','east','south','west']}},['map','x','y']);command('map.reveal',{radius:integer},[]);command('facing.set',{direction:{enum:['north','east','south','west']}});
 command('object.state.set',{map:string,object:string,state:string},['map','object','state']);command('event.mark_done',{event:string});
 command('battle.end');
