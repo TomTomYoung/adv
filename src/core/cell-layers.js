@@ -1,3 +1,4 @@
+import {trapDefinitionValid} from './scouting.js';
 import {occurrenceValid} from './event-occurrence.js';
 import {edgeLayersValid,edgePlacementErrors} from './edge-layers.js';
 import {cellSurfaces,cellBindings,cellBindingErrors,reliefParametersValid} from './cell-behaviors.js';
@@ -15,7 +16,7 @@ const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const identifier=v=>typeof v==='string'&&/^[a-z][a-z0-9_]*$/.test(v)&&!['constructor','prototype','__proto__'].includes(v);
 const keys=(v,allowed)=>object(v)&&Object.keys(v).every(k=>allowed.includes(k));
 export function cellLayersValid(data,value,partial=false){
-  if(!keys(value,['name','description','passage','visual','parameters','events']))return false;
+  if(!keys(value,['name','description','passage','visual','parameters','events','eventFaces']))return false;
   if(['name','description'].some(k=>value[k]!==undefined&&(typeof value[k]!=='string'||!value[k].trim())))return false;
   if((!partial||value.passage!==undefined)&&!['.','#'].includes(value.passage))return false;
   if(!partial||value.visual!==undefined){
@@ -34,6 +35,7 @@ export function cellLayersValid(data,value,partial=false){
     if((!partial||p.water_passable!==undefined)&&typeof p.water_passable!=='boolean')return false;
   }
   if((!partial||value.events!==undefined)&&(!Array.isArray(value.events)||new Set(value.events).size!==value.events.length||value.events.some(id=>!Object.hasOwn(data.cellEvents??{},id))))return false;
+  if(value.eventFaces!==undefined&&(!object(value.eventFaces)||Object.entries(value.eventFaces).some(([id,face])=>!data.cellEvents[id]?.trap||!['north','east','south','west'].includes(face)||!partial&&!value.events.includes(id))))return false;
   return true;
 }
 export function validateCellLayers(data,expression){
@@ -44,7 +46,8 @@ export function validateCellLayers(data,expression){
   for(const [id,preset] of Object.entries(data.cellTypes))if(!identifier(id)||!cellLayersValid(data,preset))bad(`プリセット不正 ${id}`);
   for(const [id,preset] of Object.entries(data.edgeTypes??{}))if(!identifier(id)||!edgeLayersValid(data,preset))bad(`エッジ種不正 ${id}`);
   for(const [id,event] of Object.entries(data.cellEvents)){
-    if(!identifier(id)||!keys(event,['trigger','script','once','occurrence','condition'])||event.trigger!=='enter'||!occurrenceValid(event)||!Object.hasOwn(data.scripts,event.script))bad(`イベント不正 ${id}`);
+    if(!identifier(id)||!keys(event,['trigger','script','once','occurrence','condition','trap'])||event.trigger!=='enter'||!occurrenceValid(event)||!Object.hasOwn(data.scripts,event.script))bad(`イベント不正 ${id}`);
+    if(event.trap!==undefined&&!trapDefinitionValid(data,event.trap))bad(`罠定義不正 ${id}`);
     if(event?.condition!==undefined)expression(event.condition,`cellEvents/${id}`);
   }
   for(const map of Object.values(data.maps)){

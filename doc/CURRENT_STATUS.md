@@ -1,5 +1,7 @@
 # advの現状
 
+2026-10-13: [技能Lvと成長条件](battle/SKILL_LEVELS.md)、[斥候の7技能・盗賊の罠解除](battle/SCOUT_SKILLS.md)、[スタン・陣営別先制](battle/STATUS_EFFECTS.md)を実装しました。任意の保存項目で同版セーブを継続し、人物画面・地図・設定編集・カタログへ反映しています。
+
 2026-10-12: [進入イベントとトラップ](dungeons/TRAPS_AND_HAZARDS.md)の4発生方式・9パッケージ・漏水／ガス漏れ、[状態異常](battle/STATUS_EFFECTS.md)の共通処理、[トレジャーとサービス](dungeons/DUNGEON_PACKAGES.md)を実装しました。既存の工具箱・町の施設へ適用し、保存・設定編集・生成へ接続しています。詳細は[検証記録](development/PROGRESS.md)を参照してください。
 
 2026-10-10: 配信更新IDによる起動を追加しました。通常の再読み込みでJS依存先・CSS・JSON・参照素材のURLを更新し、配信途中の不一致時はセーブを変更せず停止します。内容版1.25.0は保持します。コードや配布ファイルの変更後は `npm run build:runtime` が必要です。[配信とキャッシュ](development/README.md#配信とキャッシュ)。

@@ -8,6 +8,10 @@ export function collectReferences(value,file,path=[],out=[]){
   const p=[...path,Array.isArray(value)?Number(key):key];let kind=direct[key];
   if(file==='locations.json'&&(key==='parent'||key==='links'))kind='locations';
   if(key==='cue'&&path[0]==='fieldAbilities')kind='eventCues';
+  if(key==='skill'&&(['uses','skill','training'].includes(value.kind)||value.op==='skill.train'))kind='skillDefinitions';
+  if(key==='weapon'&&value.kind==='weapon_uses')kind='items';
+  if(key==='id'&&value.kind==='random'&&['skill','weapon'].includes(value.on))kind=value.on==='skill'?'skillDefinitions':'items';
+  if(key==='event'&&value.kind==='event')kind=null;
   if(key==='skill'&&value.api&&value.api!=='battle.skill')kind='fieldAbilities';
   if(key==='asset')kind=value.op?.startsWith('audio.')?'audio':'images';
   if(key==='effect'&&value.op==='effect.play')kind='effects';

@@ -710,6 +710,69 @@
       "trigger": {
         "const": "enter"
       },
+      "trap": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "rockfall",
+              "cave_in",
+              "needle",
+              "arrow",
+              "gas",
+              "magic_circle",
+              "pit",
+              "explosion",
+              "drip"
+            ]
+          },
+          "hidden": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20
+          },
+          "difficulty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "recovery": {
+            "type": "object",
+            "properties": {
+              "item": {
+                "type": "string",
+                "minLength": 1
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000000000
+              },
+              "minLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "chance": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "item",
+              "count",
+              "minLevel",
+              "chance"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "additionalProperties": false
+      },
       "script": {
         "type": "string",
         "minLength": 1

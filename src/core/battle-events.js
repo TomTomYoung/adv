@@ -1,3 +1,4 @@
+import {continuePreemptive} from './battle.js';
 import {commandsAt,pushBranch,pump} from './script.js';
 import {clone} from './expression.js';
 
@@ -23,7 +24,7 @@ export function resumeBattleEvent(engine){
   const phase=b.event.phase;b.event=null;
   if(triggerBattleEvent(engine,phase))return;
   if(b.pendingResult){engine.finishBattle(b.pendingResult,true);return;}
-  engine.state.waiting={type:'battle'};
+  engine.state.waiting={type:'battle'};continuePreemptive(engine);
 }
 export function interruptBattle(engine){
   const b=engine.state.battle;if(!b?.event)throw Error('battle.end は戦闘中イベント内で実行します');

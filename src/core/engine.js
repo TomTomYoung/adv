@@ -1,3 +1,5 @@
+import {syncSkillGrowth} from './skill-levels.js';
+import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
 import {treasurePlan} from './treasures.js';
 import {removeStatus,tickStatuses} from './status-effects.js';
@@ -65,7 +67,7 @@ export class GameEngine {
   stats(id) {return actorStats(this.data,this.state,id);}
   skills(id) {return knownSkills(this.data,this.state,id);}
   changeJob(id,job) {return changeJob(this,id,job);}
-  jobAction(id,ability) {return fieldAction(this,id,ability);}
+  jobAction(id,ability,target) {return fieldAction(this,id,ability,target);}
   partyEffect(key,neutral=1,mode='min') {return partyEffect(this.data,this.state,key,neutral,mode);}
   price(price) {return purchasePrice(this.data,this.state,price);}
   trapContext() {
@@ -131,6 +133,7 @@ export class GameEngine {
   }
   teleport(mapId,x,y,facing='north',z=0,continueEntry=false){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    if(this.state.scouting?.recon?.map!==mapId)returnRecon(this);
     collapseAfterLeaving(this,this.state.location,{map:mapId,x,y});
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
@@ -147,6 +150,7 @@ export class GameEngine {
   // Defeat rescue is forced recovery. Roll back unfinished event checkpoints
   // before synchronizing the party to its rescued location.
   #arriveTown(emergency=false,quiet=false){
+    clearScoutingTrip(this);
     collapseAfterLeaving(this,this.state.location,null);
     leaveDungeon(this);
     if(!quiet)this.eventCue('return');
@@ -186,11 +190,14 @@ export class GameEngine {
     return moved;
   }
   finishMove(point){
+    const effects=this.state.scouting?.effects;
+    try{
     const loc=this.state.location,{x,y}=point,z=point.z??0;
     const from={...loc};collapseAfterLeaving(this,from,{...loc,x,y});loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;for(const status of actor.statuses){if(!dungeonEffectActive(this.data,this.state,'status',status))continue;const damage=this.data.statuses[status]?.stepDamage??0;actor.hp=Math.max(1,actor.hp-damage);}}
     if(this.state.members.some(id=>this.state.actors[id].statuses.includes('poison')))this.eventCue('field_poison');
     for(const id of this.state.members)if(this.state.actors[id].hp>0)tickStatuses(this.data,this.state,this.state.actors[id],'steps');
+    stepScouting(this);
     recordFieldEntry(this.state);
     stepDungeon(this,{from,to:{...loc}});
     if(this.state.mode==='dungeon'&&this.state.location===loc)signalFieldChange(this.data,this.state,'enter','move','light');
@@ -199,7 +206,7 @@ export class GameEngine {
     if(processFieldEvents(this))return true;
     if(dungeonDanger(this))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
-    if(!dungeonCell(this.data,this.state,map,x,y)?.parameters.safe&&!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate)){
+    if(!dungeonCell(this.data,this.state,map,x,y)?.parameters.safe&&!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate*camouflageRate(this.state))){
       let encounter=map.encounter;
       const pool=environment.encounterPool??map.encounterPool;
       if(pool?.length){let roll=this.random()*pool.reduce((sum,e)=>sum+e.weight,0);encounter=pool.at(-1).encounter;for(const entry of pool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
@@ -207,6 +214,7 @@ export class GameEngine {
       if(!encounterStoryJourney(this,encounter))this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
     }
     return true;
+    }finally{expireScoutingEffects(this,effects);}
   }
   interactionObjects(){return this.triggerCandidates('interact');}
   nearbyObjects(){
@@ -250,6 +258,7 @@ export class GameEngine {
       // Attribute direct item consumption before follow-up scripts can award more.
       settleHoldings(this.data,this.state,intent?.type==='item'&&changed?{item:intent.item,source:intent.source,spent:Math.max(0,before-(this.state.inventory[intent.item]??0))}:{});
       finishInspection(this);
+      if(changed)syncSkillGrowth(this);
       if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
       return changed;
     }finally{this.dispatching=false;settleHoldings(this.data,this.state);}
@@ -299,7 +308,7 @@ export class GameEngine {
       this.run(service.script);return true;
     }
     if(type==='job.change')return this.changeJob(intent.actor,intent.job);
-    if(type==='job.action')return this.jobAction(intent.actor,intent.ability);
+    if(type==='job.action')return this.jobAction(intent.actor,intent.ability,intent.target);
     if(type==='field.skill')return useFieldSkill(this,intent.actor,intent.skill,intent.target);
     if(type==='party')return this.changeParty(intent.action,intent.actor,intent.replace);
     if(type==='party.order')return reorderParty(this,intent.group,intent.actor,intent.direction);
@@ -333,6 +342,7 @@ export class GameEngine {
   enterLocation(id){
     const s=this.state,dest=interiorEntrances(this.data,s).find(l=>l.id===id);
     if(!dest||s.waiting||s.battle||s.vm.length)return false;
+    returnRecon(this);
     s.mode='town';s.townLocation=id;s.location=null;s.fieldEntry=null;
     s.presentation.background=dest.background;syncWorldStories(this);this.notify(dest.description);return true;
   }

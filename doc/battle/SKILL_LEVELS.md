@@ -1,6 +1,6 @@
 # 技能レベルと成長条件
 
-採用方針の決定日: 2026-10-13。技能に、人物Lvや職業の習得条件とは別の技能Lvを導入する。大まかに3段階を標準とし、必要なら技能ごとに最大Lvを変えられる設計とする。
+実装日: 2026-10-13。内容版1.25.0。技能に、人物Lvや職業の習得条件とは別の技能Lvを導入する。大まかに3段階を標準とし、必要なら技能ごとに最大Lvを変えられる設計とする。
 
 [職業システム](JOB_SYSTEM.md) ／ [スキル一覧](SKILL_CATALOG.md) ／ [斥候](SCOUT_SKILLS.md)
 
@@ -58,8 +58,16 @@ levelUp はLv2になる条件、Lv3になる条件を段階ごとに持つ。条
 
 次Lv条件をプレイヤーへ公開するか、進行度だけ見せるか、隠すかは技能定義の表示方針で選べるようにする。ショップやイベントで明示的に訓練する技能は必要条件を表示できるようにする。
 
-## 現行実装との差
+## 現行の定義・保存
 
-現行は職業の人物Lv条件 grant.level だけを持ち、技能自体のLv・使用回数・熟練カウンターは保存していない。
+[config/jobs.json](../../config/jobs.json) が技能と成長条件の正本。`maxSkillLevel` は省略時3、1〜20。`levels` はLv2以降の差分を順に重ねる。名前・API・対象は変更できない。`levelUp` は移行先Lvをキーに持ち、途中段階を飛ばさない。
 
-したがって今回の技能Lvは採用仕様であり、保存形式、技能定義Schema、条件評価、UI、カタログ生成、テストを実装してから現行機能として扱う。
+条件の `kind` は `actor_level`（level）、`uses`（skill省略時は当技能、count）、`random`（on=skill/weapon/action、id、chance）、`weapon_uses`（weapon、count）、`action_uses`（action、count）、`event`（event保存キー）、`flag`（flag、value省略時true）、`training`（skill省略時は当技能、count）、`skill`（skill、level）、`companion`（actor）。`all`／`any` の配列で入れ子にできる。同伴者は出撃中かつ生存中の人物に限る。
+
+人物の任意項目 `skillProgress[技能ID] = {level, uses}` と `skillCounters = {weapons, actions, training}` を保存する。武器カウンターは物理ダメージ技能を実行した際の装備武器ID、行動カウンターは `jobProfile.skillActions` の登録IDで記録する。出撃外・未習得・費用不足・対象不成立は使用回数を増やさない。アイテムによる技能実行は技能使用回数に含めない。
+
+`skill.train`（actor、skill）はショップ／訓練／NPCの既存スクリプトから訓練回数を増やす。金額・アイテム・会話等の必要条件と支払いは呼出元の既存 `if`／`gold.change` 等で定義する。`skill.action`（actor、action）は登録行動の発生を記録する。訓練の新施設を全町に一括配置したものではない。
+
+使用成功時に一度だけ抽選し、表示・歩行・保存・読込で抽選しない。決定的な条件は状態を変更した入力後と経験値付与後にも評価する。各段階の達成を現在Lvへ記録するため、同じ段階の報酬を再付与しない。`growthDisplay` は `full`／`progress`／`hidden`。人物のスキル・魔法一覧は現在Lvを表示する。
+
+既存の同版セーブでは省略状態をLv1・使用0と解釈し、ロードだけでは追加・成長させない。未知ID・不正Lv・負の回数・未知カウンターを拒否する。実装は [skill-levels.js](../../src/core/skill-levels.js)、回帰検証は [skill-levels.test.mjs](../../tests/skill-levels.test.mjs)。

@@ -1,3 +1,4 @@
+import {trapDisabled,discoverTriggeredTrap} from './scouting.js';
 import {attemptOccurrence,occurrenceAvailable} from './event-occurrence.js';
 import {eventVisible,objectVisible} from './quest-events.js';
 import {nextQuestPlace} from './quest-navigation.js';
@@ -59,8 +60,9 @@ function cellEnterEvent(engine){
   const cell=dungeonCell(engine.data,s,engine.map(),entry.x,entry.y);
   for(const id of cell?.events??[]){
     const event=engine.data.cellEvents[id],firedId=cellEntryId(id),key=cellEventKey(entry.map,entry.x,entry.y,id);
-    if(event.trigger!=='enter'||entry.fired.includes(firedId)||!occurrenceAvailable(s,event,key)||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
+    if(event.trigger!=='enter'||trapDisabled(s,key)||entry.fired.includes(firedId)||!occurrenceAvailable(s,event,key)||event.condition!==undefined&&!engine.value(event.condition,{cell}))continue;
     entry.fired.push(firedId);if(!attemptOccurrence(engine,event,key))continue;
+    discoverTriggeredTrap(engine.data,s,entry.map,entry.x,entry.y,id);
     engine.run(event.script,{map:entry.map,x:entry.x,y:entry.y,event:id});return true;
   }
   return false;

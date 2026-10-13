@@ -69,6 +69,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
   if(effect.type==='restore_mp')return `${prefix}：MP回復量 = min(最大MP - 現在MP, floor(${base}))。`;
   if(effect.type==='drain_mp')return `${prefix}：MP減少量 = min(現在MP, floor(${base}))。`;
   if(effect.type==='status')return `${prefix}：状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を ${chanceText(effect.chance)} で付与${effect.duration!==undefined?`、持続 ${effect.duration}`:''}。`;
+  if(effect.type==='stun')return `${prefix}：次の行動機会を${effect.count??1}回消費（${effect.stack==='add'?'加算':'更新'}）、付与率${chanceText(effect.chance)}。`;
   if(effect.type==='cleanse')return `${prefix}：${effect.status?`状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を解除`:'解除可能な状態異常を解除'}。`;
   if(effect.type==='buff')return `${prefix}：${buffEffectText(data,effect.buff)}。`;
   if(effect.type==='guard')return `${prefix}：ガード中の被ダメージ補正 = ×${data.system?.guardRate??0.5}。`;
@@ -92,6 +93,13 @@ const commonRules=data=>[
 ];
 
 const fieldCalculation=(data,spec)=>{
+  if(spec.api==='trap.detect')return `範囲：${spec.radius*2+1}×${spec.radius*2+1}。対応隠蔽度：${spec.hidden}。`;
+  if(spec.api==='trap.disarm')return `解除難度：${spec.difficulty}まで。回収：${spec.recover?'罠定義の最低Lv・確率・袋の空きに従う':'なし'}。`;
+  if(spec.api==='party.ambush')return `効果：${spec.duration}歩以内の次戦闘で味方先制${spec.actions}回を予約。`;
+  if(spec.api==='party.patrol')return `効果：${spec.duration}歩、敵先制候補を除外。`;
+  if(spec.api==='party.camouflage')return `効果：${spec.duration}歩、通常遭遇率×${spec.rate}。`;
+  if(spec.api==='party.recon')return `結果：周囲半径${spec.radius}の通行可能な接続域から未探索${spec.cells}セルまで。${spec.returnSteps}歩で復帰、罠解除は${spec.disarmCount}件まで。`;
+  if(spec.api==='encounter.seek')return '遭遇：現在フロアの通常候補を重み付きで抽選。';
   if(spec.api==='map.reveal'&&spec.radius!==undefined)return `計算式：記録範囲 = 現在地を中心とする半径${spec.radius}マス。`;
   if(spec.api==='inventory.convert')return `変換式：${materialText(data,spec.materials).join(' + ')}${spec.mp?` + MP${spec.mp}`:''} → ${outputText(data,spec.output)}。`;
   if(spec.api==='party.heal'&&spec.amount!==undefined)return `計算式：各生存隊員のHP回復量 = min(最大HP - 現在HP, ${spec.amount})。`;
@@ -101,11 +109,16 @@ const fieldCalculation=(data,spec)=>{
   return '計算式：固定の数値計算なし。APIの成立条件と状態変更を適用する。';
 };
 
+export function skillLevelLines(spec){
+  if(!spec.levelUp)return [];
+  return [`技能Lv：1〜${spec.maxSkillLevel??3}。人物Lvによる習得条件とは独立。`,...Object.entries(spec.levels??{}).map(([n,v])=>`技能Lv${n}の変更：${JSON.stringify(v)}。`),...Object.entries(spec.levelUp).map(([n,v])=>`技能Lv${n}の成長条件：${JSON.stringify(v)}。`)];
+}
 const battleEntry=(data,id,spec,label)=>[
   `### ${spec.name} (${id})`,'',
   `区分：戦闘${label}。対象：${targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
   spec.description??'説明なし。',
   ...calculationLines(data,id,spec),
+  ...skillLevelLines(spec),
   `使用元：${usage(data,id,'battle.skill')}。`,
   spec.fieldUse?'戦闘外使用：可。':'戦闘外使用：不可。',''
 ];
@@ -118,6 +131,7 @@ const fieldEntry=(data,id,spec,label)=>{
     `区分：探索${label}。API：${spec.api}。対象：${targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。使用場所：${(spec.modes??[]).join(' / ')||'未指定'}。`,
     spec.description??'説明なし。',
     fieldCalculation(data,spec),
+    ...skillLevelLines(spec),
     ...extra,
     `習得：${usage(data,id,spec.api)}。`,''
   ];

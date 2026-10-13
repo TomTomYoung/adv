@@ -1,3 +1,5 @@
+import {effectiveSkill,recordSkillUse} from './skill-levels.js';
+import {resolvePreemptive,applyStun,consumeStun} from './battle-turns.js';
 import {applyStatus,removeStatus,statusStats,tickStatuses} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
@@ -23,13 +25,14 @@ export function startBattle(engine,id,continuations,options={}){
   engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
+  resolvePreemptive(engine,encounter,options);
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
   if(engine.state.members.every(id=>engine.state.actors[id].hp<=0))endBattle(engine,'lose');
-  else triggerBattleEvent(engine,'start');
+  else if(!triggerBattleEvent(engine,'start'))continuePreemptive(engine);
 }
 export function activeActor(engine){
-  const s=engine.state,b=s.battle;if(!b)return null;
-  return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&!b.acted.includes(id))??null;
+  const s=engine.state,b=s.battle;if(!b||b.preemptive?.side==='enemies')return null;
+  return [...s.members].sort((a,c)=>engine.stats(c).agi-engine.stats(a).agi).find(id=>s.actors[id].hp>0&&(b.preemptive?.side==='allies'||!b.acted.includes(id)))??null;
 }
 export const enemyStats=(engine,enemy)=>buffStats(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(enemy),statusStats(engine.data,engine.state,enemy,enemy.stats));
 export function endBattle(engine,result,skipEvents=false){
@@ -55,7 +58,7 @@ export function endBattle(engine,result,skipEvents=false){
 function effectsProblem(data,skill){return skillDefinitionErrors(data,skill).join(' / ');}
 
 export function battleSkillPlan(engine,actorId,skillId,targetId){
-  const s=engine.state,b=s.battle,skill=Object.hasOwn(engine.data.skills,skillId??'')?engine.data.skills[skillId]:null;
+  const s=engine.state,b=s.battle,skill=Object.hasOwn(engine.data.skills,skillId??'')?effectiveSkill(engine.data,s,actorId,skillId):null;
   const fail=reason=>({ok:false,reason});
   if(!b||b.event||!s.members.includes(actorId)||!s.actors[actorId])return fail('戦闘の行動待ちではありません。');
   if(!skill)return fail('技能がありません。');
@@ -91,6 +94,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
   if(!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
   for(const effect of skill.effects){
+    if(effect.type==='stun'){if(applyStun(engine,target,effect))(b?.log??s.log).push(`${targetName}はスタンした。`);continue;}
     if(effect.type==='guard'){
       if(target.instance)target.guard=true;else if(!b.guards.includes(target.id))b.guards.push(target.id);
       (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
@@ -145,17 +149,12 @@ function coveredTarget(engine,target,skill){
   b.log.push(`${engine.data.actors[id].name}が${engine.data.actors[target.id].name}をかばった。`);
   return s.actors[id]; // One redirect only: no cover chains.
 }
-function enemiesTurn(engine){
+function enemyAction(engine,enemy){
   const s=engine.state,b=s.battle;
-  dungeonBattleRound(engine);
-  if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
-  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);recordDefeated(engine);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
-  if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
-  for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)){
-    if(enemy.hp<=0)continue;enemy.guard=false;
-    const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)break;
+    if(enemy.hp<=0)return;enemy.guard=false;if(consumeStun(engine,enemy))return;
+    const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)return;
     const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
-    if(!rule)continue;
+    if(!rule)return;
     const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
     let targets;
@@ -166,20 +165,46 @@ function enemiesTurn(engine){
     else targets=[coveredTarget(engine,s.actors[targetId],skill)];
     if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
     useSkill(engine,enemy,targets,skill,rule.skill,true);
-  }
+}
+function enemiesTurn(engine){
+  const s=engine.state,b=s.battle;
+  dungeonBattleRound(engine);
+  if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
+  for(const enemy of b.enemies)if(enemy.hp>0)for(const status of enemy.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;enemy.hp=Math.max(0,enemy.hp-damage);recordDefeated(engine);if(damage)b.log.push(`${enemy.name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}
+  if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
+  for(const enemy of [...b.enemies].sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi))enemyAction(engine,enemy);
   for(const id of s.members){const a=s.actors[id];if(a.hp<=0)continue;for(const status of a.statuses){if(!dungeonEffectActive(engine.data,s,'status',status))continue;const damage=engine.data.statuses[status].turnDamage??0;a.hp=Math.max(0,a.hp-damage);if(damage)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${damage}ダメージ。`);}}
   if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(unit.hp>0)tickStatuses(engine.data,s,unit,'turns');
   tickBuffs(b);b.acted=[];b.guards=[];b.round++;b.log=b.log.slice(-30);
   triggerBattleEvent(engine,'round_start');
 }
+export function continuePreemptive(engine){
+  const s=engine.state,b=s.battle;if(!b||b.event)return;
+  while(s.battle===b&&b.preemptive?.side==='enemies'){
+    const enemy=[...b.enemies].filter(e=>e.hp>0).sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)[0];
+    if(!enemy){endBattle(engine,'win');return;}
+    enemyAction(engine,enemy);
+    if(--b.preemptive.remaining===0)delete b.preemptive;
+    if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
+  }
+}
+function finishAction(engine,actorId){
+  const s=engine.state,b=s.battle;if(!b)return;
+  if(b.preemptive?.side==='allies'){if(--b.preemptive.remaining===0)delete b.preemptive;}
+  else b.acted.push(actorId);
+  if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return;}
+  if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
+  if(!activeActor(engine))enemiesTurn(engine);
+}
 export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
   const actor=s.actors[actorId];
+  if(consumeStun(engine,actor)){finishAction(engine,actorId);return true;}
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
     if(engine.random()<Math.min(1,engine.data.system.escapeRate+engine.partyEffect('escapeBonus',0,'max')))endBattle(engine,'escape');
-    else{b.log.push('退路を塞がれました。');enemiesTurn(engine);}return true;
+    else{b.log.push('退路を塞がれました。');if(b.preemptive)finishAction(engine,actorId);else enemiesTurn(engine);}return true;
   }
   if(intent.action==='item'){
     const item=engine.data.items[intent.item],target=s.actors[intent.target];
@@ -190,14 +215,12 @@ export function battleAction(engine,intent){
     const plan=battleSkillPlan(engine,actorId,intent.skill,intent.target);
     if(!plan.ok){engine.notify(plan.reason);return false;}
     const {skill,targets}=plan;payCost(engine,actorId,skill);
-    if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else {b.acted.push(actorId);if(!activeActor(engine))enemiesTurn(engine);}return true;}
+    recordSkillUse(engine,actorId,intent.skill,{weapon:skill.effects.some(e=>e.type==='damage'&&e.element==='physical')});
+    if(skill.effects.some(e=>e.type==='repel')){const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);if(!s.battle)return true;if(lit){engine.eventCue('light');endBattle(engine,'repel');}else finishAction(engine,actorId);return true;}
     useSkill(engine,actor,targets,skill,intent.skill);
     if(skill.selfEffects?.length)applySkill(engine,actor,actor,{...skill,effects:skill.selfEffects},intent.skill);
   }else return false;
   const used=intent.action==='skill'?engine.data.skills[intent.skill]:engine.data.skills[engine.data.items[intent.item]?.battleSkill];if(used)wetAfterSkill(engine,actor,used);
-  if(s.members.every(id=>s.actors[id].hp<=0)){endBattle(engine,'lose');return true;}
-  b.acted.push(actorId);
-  if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return true;}
-  if(!activeActor(engine))enemiesTurn(engine);
+  finishAction(engine,actorId);
   return true;
 }

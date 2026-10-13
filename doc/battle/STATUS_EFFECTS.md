@@ -43,9 +43,9 @@ ID：arcane_malaise / 名称・分類：魔力障害・魔術系 / 効果：知�
 
 保存では既存のID配列に加えて任意の期限辞書を検証する。未知ID、重複ID、付与されていないIDの期限、0以下・範囲外の期限を拒否する。同じ内容版の従来の無期限状態には期限を後付けしない。
 
-## 採用する戦闘時状態：スタンと先制
+## 戦闘時状態：スタンと先制
 
-2026-10-13採用。以下は未実装の戦闘時状態であり、現在の data/statuses.json に存在する状態異常6種とは区別して実装する。
+2026-10-13実装。data/statuses.json の共通状態異常6種と分けて、battle内へ保存する。
 
 ### スタン
 
@@ -69,6 +69,14 @@ ID：arcane_malaise / 名称・分類：魔力障害・魔術系 / 効果：知�
 
 先制区間で保存した場合は、先制側と残り回数を保存し、読込時に再抽選・再付与しない。
 
+スタンの技能効果は `{type:"stun", chance:1, count:1, stack:"refresh"}`。countは1〜20、stackはrefresh/add、省略時は1回へ更新する。味方は行動画面の「行動を進める」でその機会を消費し、その時点で行動不能メッセージを出す。敵は自動で消費する。いずれも費用・技能使用回数を消費しない。先制中もスタンで失う機会は先制回数から引く。
+
+先制候補は遭遇定義・敵定義・`battle.start` の `preemptive = {side:"allies"|"enemies", actions:1〜20, chance?:0〜1, priority?:0〜100}`。哨戒で敵候補を除外した後に確率判定し、priority降順、回数降順、同値なら味方の順で一方を決める。奇襲のpriorityは10。予約は勝敗にかかわらず次の戦闘開始で消費する。
+
+通常巡とは別の `battle.preemptive = {side, remaining}` と `battle.stuns[actor:ID / enemy:instance] = 残り機会数` を保存する。開始会話中は先制を待機し、会話後に続ける。先制終了時は通常の第1巡を全員未行動で開始する。通常巡の毒・期限・環境処理を先制の各行動へ重複適用しない。途中ロードで候補抽選を再実行しない。
+
 ## 正本
 
 追加状態の編集元は [config/dungeon-content.json](../../config/dungeon-content.json)、配布は [data/statuses.json](../../data/statuses.json)。毒の基礎定義は既存のコンテンツ生成原稿を引き続き使う。共通処理は [status-effects.js](../../src/core/status-effects.js)、戦闘は [battle.js](../../src/core/battle.js)、歩行は [engine.js](../../src/core/engine.js)。
+
+戦闘機会の処理は [battle-turns.js](../../src/core/battle-turns.js)、回帰検証は [battle-turns.test.mjs](../../tests/battle-turns.test.mjs)。

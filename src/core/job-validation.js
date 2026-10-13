@@ -1,3 +1,7 @@
+import {skillLevelDefinitionErrors,maxSkillLevel,effectiveSkill,skillLevel} from './skill-levels.js';
+import {scoutDefinitionErrors} from './scouting.js';
+import {preemptiveValid} from './battle-turns.js';
+function* levelVariants(spec){yield spec;if(!isRecord(spec))return;let current={...spec};for(let n=2;n<=Math.min(20,maxSkillLevel(spec));n++){current={...current,...spec.levels?.[n]};yield current;}}
 import {isRecord} from './expression.js';
 import {STAT_KEYS,FIELD_APIS,SKILL_EFFECTS,grantsFor} from './jobs.js';
 export const ELEMENTS=['physical','fire','ice','lightning','water','light','earth','dark'];
@@ -26,7 +30,8 @@ export function skillDefinitionErrors(data,skill){
     if(effect.type==='buff'&&!own(data.buffs,effect.buff))fail('バフ参照不正');
     if(effect.type==='status'&&!own(data.statuses,effect.status))fail('状態異常参照不正');
     if(['damage','heal','drain_mp','restore_mp'].includes(effect.type)&&effect.formula===undefined&&effect.amount===undefined)fail('効果量未定義');
-    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status'];
+    if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
+    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status',...(effect.type==='stun'?['count','stack']:[])];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
@@ -47,6 +52,9 @@ export function validateJobs(data){
   const errors=[],fail=(p,m)=>errors.push(`${p}: ${m}`),ref=(objects,id,p)=>{if(!own(objects,id))fail(p,`参照不正: ${id}`);};
   if(!data.jobs)return errors;
   const profile=data.jobProfile;
+  if(profile?.skillActions!==undefined&&(!list(profile.skillActions)||profile.skillActions.some(id=>typeof id!=='string'||!/^[a-z][a-z0-9_]{0,63}$/.test(id))))fail('skillActions','成長行動ID不正');
+  for(const id of Object.keys(data.skills))if(own(data.fieldAbilities,id))fail(id,'戦闘・探索技能のID重複');
+  for(const spec of [...Object.values(data.enemies),...Object.values(data.encounters)])if(spec.preemptive!==undefined&&!preemptiveValid(spec.preemptive))fail(spec.id??'encounter','先制定義不正');
   if(!isRecord(profile)||!isRecord(profile.equipmentTypes)||!list(profile.commonSkills))return ['職業プロファイル不正'];
   for(const id of profile.commonSkills){ref(data.skills,id,'commonSkills');if(!['attack','guard'].includes(id))fail('commonSkills','共通技能は攻撃・防御です');}
   if(!profile.commonSkills.includes('attack')||!profile.commonSkills.includes('guard'))fail('commonSkills','攻撃・防御が必要です');
@@ -83,8 +91,9 @@ export function validateJobs(data){
     if(!isRecord(buff.resist)||Object.entries(buff.resist).some(([key,n])=>!ELEMENTS.includes(key)||!finite(n,0,1)))fail(id,'バフ耐性不正');
     if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist'].includes(key)))fail(id,'未知のバフ項目');
   }
-  for(const [id,skill] of Object.entries(data.skills))for(const message of skillDefinitionErrors(data,skill))fail(`skills.${id}`,message);
-  for(const [id,a] of Object.entries(data.fieldAbilities??{})){
+  for(const [id,skill] of Object.entries(data.skills)){for(const m of skillLevelDefinitionErrors(data,id,skill))fail(id,m);for(const variant of levelVariants(skill))for(const message of skillDefinitionErrors(data,variant))fail(`skills.${id}`,message);}
+  for(const [id,spec] of Object.entries(data.fieldAbilities??{})){for(const m of skillLevelDefinitionErrors(data,id,spec))fail(id,m);for(const a of levelVariants(spec)){
+    for(const m of scoutDefinitionErrors(a))fail(id,m);
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
@@ -94,6 +103,7 @@ export function validateJobs(data){
     if(a.api==='map.reveal'&&(a.target!=='location'||!integer(a.radius,1,8)||a.modes.includes('town')||a.output!==undefined))fail(id,'測量範囲不正');
     if(a.api==='inventory.convert'&&(a.target!=='self'||!isRecord(a.materials)||!Object.keys(a.materials).length||!isRecord(a.output)||!Object.keys(a.output).length))fail(id,'変換入出力不正');
     for(const field of ['materials','output'])if(a[field]!==undefined&&(!isRecord(a[field])||Object.entries(a[field]).some(([item,n])=>!own(data.items,item)||!integer(n,1,data.system.maxStack))))fail(id,'材料・出力不正');
+  }
   }
   for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
   return errors;
@@ -110,7 +120,8 @@ export function validateJobState(data,state){
   if(!Array.isArray(b.buffs)||!Array.isArray(b.covers)||!Array.isArray(b.analyzed)||!Array.isArray(b.enemies)){fail('職業戦闘状態不正');return errors;}
   const enemyKeys=b.enemies.map(e=>`enemy:${e?.instance}`),actorKeys=state.members.map(id=>`actor:${id}`),targets=new Set([...enemyKeys,...actorKeys]);
   const source=(record)=>{
-    const actor=state.actors[record.sourceActor],job=data.jobs[record.sourceJob],skill=data.skills[record.sourceSkill];
+    const actor=state.actors[record.sourceActor],job=data.jobs[record.sourceJob],skill=effectiveSkill(data,state,record.sourceActor,record.sourceSkill);
+    if(skill){const base=data.skills[record.sourceSkill],stages=[base,...Object.entries(base.levels??{}).filter(([n])=>Number(n)<=skillLevel(state,record.sourceActor,record.sourceSkill)).map(([,v])=>v)];skill.effects=stages.flatMap(v=>v.effects??[]);skill.selfEffects=stages.flatMap(v=>v.selfEffects??[]);}
     return actor&&state.members.includes(record.sourceActor)&&actor.job===record.sourceJob&&job&&grantsFor(data,state,record.sourceActor).some(g=>g.skill===record.sourceSkill&&g.api==='battle.skill'&&g.level<=actor.level)&&skill;
   };
   const seen=new Set();

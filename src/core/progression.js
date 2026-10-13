@@ -1,3 +1,4 @@
+import {syncSkillGrowth} from './skill-levels.js';
 import {removeStatus} from './status-effects.js';
 import {actorStats,knownSkills,grantsFor} from './jobs.js';
 export const xpThreshold=(data,level)=>data.system.xpBase*level*(level+1);
@@ -19,5 +20,6 @@ export function awardExperience(engine,xp,recipients=experienceRecipients(engine
       levels.push({actor:id,level:actor.level,growth:Object.fromEntries(Object.keys(before).map(key=>[key,after[key]-before[key]])),skills});
     }
   }
+  syncSkillGrowth(engine);
   return levels;
 }

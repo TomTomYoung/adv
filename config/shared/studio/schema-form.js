@@ -1,7 +1,7 @@
 import {kind} from '../model.js';
 export function resolveSchema(schema,root,value,depth=0){
  if(depth>30)return {};if(schema===true||schema===false||!schema)return {};
- if(schema.$ref){let target=root;for(const p of schema.$ref.slice(2).split('/'))target=target?.[p.replaceAll('~1','/').replaceAll('~0','~')];return resolveSchema(target,root,value,depth+1);}
+ if(schema.$ref){let target=root;for(const p of schema.$ref.slice(2).split('/'))target=target?.[p.replaceAll('~1','/').replaceAll('~0','~')];if(schema.$ref==='#/$defs/skillCondition'&&(value?.all||value?.any))target=target.oneOf.find(s=>s.properties[value.all?'all':'any']);return resolveSchema(target,root,value,depth+1);}
  const variants=schema.oneOf??schema.anyOf;
  if(variants){const resolved=variants.map(s=>resolveSchema(s,root,value,depth+1));const discriminator=resolved.find(s=>Object.entries(s.properties??{}).some(([k,v])=>Object.hasOwn(v,'const')&&value?.[k]===v.const));
   const reference=resolved.find(s=>s.properties?.ref&&value?.ref!==undefined),format=resolved.find(s=>s.properties?.format&&value?.format!==undefined);

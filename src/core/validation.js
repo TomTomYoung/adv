@@ -1,3 +1,5 @@
+import {preemptiveValid} from './battle-turns.js';
+import {skillDefinition} from './skill-levels.js';
 import {impactErrors} from './hazard-effects.js';
 import {mapPatchErrors} from './map-mutations.js';
 import {statusDefinitionsErrors,statusDurationValid} from './status-effects.js';
@@ -55,6 +57,7 @@ export function validateContent(data){
       if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
       if(inBattleEvent&&!['event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','wait','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
+        if(c.preemptive!==undefined&&!preemptiveValid(c.preemptive))fail(at,'先制定義不正');
         reference(data.encounters,c.encounter,at);
         if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
         if(c.events!==undefined){
@@ -104,6 +107,8 @@ export function validateContent(data){
       if(['screen.set','screen.clear'].includes(c.op)&&!layerNameValid(c.layer))fail(at,'レイヤー名が不正です');
       if(c.op==='screen.set'&&(!colorValid(c.color)||!Number.isFinite(c.opacity)||c.opacity<0||c.opacity>.65||(c.shade!==undefined&&typeof c.shade!=='boolean')))fail(at,'画面レイヤーが不正です');
       if(['status.apply','status.remove'].includes(c.op))reference(data.statuses,c.status,at);
+      if(c.op==='skill.train'){reference(data.actors,c.actor,at);if(!skillDefinition(data,c.skill))fail(at,'訓練技能参照不正');}
+      if(c.op==='skill.action'){reference(data.actors,c.actor,at);if(!data.jobProfile.skillActions?.includes(c.action))fail(at,'成長行動参照不正');}
       if(c.op==='job.change'){reference(data.actors,c.actor,at);reference(data.jobs,c.job,at);}
       if(c.op==='job.action'){reference(data.actors,c.actor,at);reference(data.fieldAbilities,c.ability,at);}
       if(c.op==='party.join'||c.op==='party.leave')reference(data.actors,c.actor,at);

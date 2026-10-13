@@ -1,6 +1,6 @@
 # スキル一覧
 
-更新日: 2026-10-11。作品版1.25.0。戦闘スキル56件、探索スキル6件。
+更新日: 2026-10-13。作品版1.25.0。戦闘スキル56件、探索スキル13件。
 
 正本は [data/skills.json](../../data/skills.json) と [data/field-abilities.json](../../data/field-abilities.json)。魔法との表示分類は [character-profile.js](../../src/application/character-profile.js) の明示分類に従います。魔法に分類される能力は [MAGIC_CATALOG.md](MAGIC_CATALOG.md) に分けます。
 
@@ -387,6 +387,11 @@ MP5。貫通攻撃と毒を付与。毒への免疫は貫通しません。
 MP3。攻撃後、敵の速さを35%低下。敵2巡。
 計算式：基礎値 = max(0, max(1, (使用者の力 - floor((対象の防御 ÷ 2)))))。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正))。属性：物理。
 計算式：速さ ×0.65 / 持続 2敵巡。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"mp":2}。
+技能Lv3の変更：{"effects":[{"type":"damage","formula":"physical","element":"physical"},{"type":"buff","buff":"trip"},{"type":"stun","chance":0.5}]}。
+技能Lv2の成長条件：{"kind":"uses","count":5}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"kind":"uses","count":15}]}。
 使用元：職業：斥候 Lv5。
 戦闘外使用：不可。
 
@@ -520,3 +525,87 @@ MP1と植物繊維3個から補修用の縄1個を作ります。
 立体地形の指定経路で、仲間全員を渡り綱に沿って誘導します。密・閉じた境界・完全水没は通過できません。
 計算式：固定の数値計算なし。APIの成立条件と状態変更を適用する。
 習得：職業：狩人 Lv1・斥候 Lv1。
+
+### 罠解除 (trap_disarm)
+
+区分：探索スキル。API：trap.disarm。対象：地点。消費：MP2。使用場所：dungeon。
+既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。
+解除難度：1まで。回収：なし。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"difficulty":2,"recover":true}。
+技能Lv3の変更：{"difficulty":3}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：盗賊 Lv1・斥候 Lv1。
+
+### 罠発見 (trap_detect)
+
+区分：探索スキル。API：trap.detect。対象：地点。消費：MP2。使用場所：dungeon。
+周囲3×3の罠を地図へ記録する。技能Lv2で5×5、Lv3で7×7。
+範囲：3×3。対応隠蔽度：1。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"radius":2,"hidden":2}。
+技能Lv3の変更：{"radius":3,"hidden":3}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv1。
+
+### 奇襲 (ambush)
+
+区分：探索スキル。API：party.ambush。対象：地点。消費：MP4。使用場所：dungeon。
+40歩以内の次の戦闘に味方先制を予約する。技能Lvごとに先制回数が増える。
+効果：40歩以内の次戦闘で味方先制1回を予約。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"actions":2,"duration":60}。
+技能Lv3の変更：{"actions":3,"duration":80}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv5。
+
+### 索敵 (seek_enemy)
+
+区分：探索スキル。API：encounter.seek。対象：地点。消費：MP2。使用場所：dungeon。
+同じフロアの通常遭遇候補と戦う。固定戦闘・依頼専用の戦闘は呼び寄せない。
+遭遇：現在フロアの通常候補を重み付きで抽選。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"mp":1}。
+技能Lv3の変更：{"mp":0}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv1。
+
+### 哨戒 (patrol)
+
+区分：探索スキル。API：party.patrol。対象：地点。消費：MP3。使用場所：dungeon。
+30歩の間、敵側の先制を防ぐ。味方の先制は別に用意する。
+効果：30歩、敵先制候補を除外。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"duration":50}。
+技能Lv3の変更：{"duration":80}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv1。
+
+### 迷彩 (camouflage)
+
+区分：探索スキル。API：party.camouflage。対象：地点。消費：MP4。使用場所：dungeon。
+30歩の間、通常遭遇率を0.6倍にする。固定イベントの戦闘は影響を受けない。
+効果：30歩、通常遭遇率×0.6。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"duration":50,"rate":0.4}。
+技能Lv3の変更：{"duration":80,"rate":0.2}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv5。
+
+### 偵察 (recon)
+
+区分：探索スキル。API：party.recon。対象：地点。消費：MP5。使用場所：dungeon。
+隊から一時離脱し、周囲の未探索域と罠を調べて6歩後に復帰する。技能Lv3では最大2件を解除する。
+結果：周囲半径4の通行可能な接続域から未探索8セルまで。6歩で復帰、罠解除は0件まで。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"radius":6,"hidden":2,"difficulty":2,"cells":16,"returnSteps":5}。
+技能Lv3の変更：{"radius":8,"hidden":3,"difficulty":3,"cells":24,"returnSteps":4,"disarmCount":2}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+習得：職業：斥候 Lv10。

@@ -25,7 +25,7 @@ export function checkWorkspace(snapshot,files,base,schemas){
    for(const key of ['materials','harvest','immatureHarvest','supplies','output'])if(v[key]&&typeof v[key]==='object')for(const [id,count] of Object.entries(v[key]))if(!Number.isInteger(count)||count<1)fail(file,[...path,key,id],'個数は1以上の整数です。');
    for(const [key,child] of Object.entries(v))walk(child,[...path,Array.isArray(v)?Number(key):key]);
   }walk(value);
-  for(const [key,kind] of [['items','item'],['skills','skill'],['monsters','monster'],['enemies','monster'],['actors','actor']]){
+  for(const [key,kind] of [['items','item'],['skills','skill'],['fieldAbilities','ability'],['encounters','encounter'],['monsters','monster'],['enemies','monster'],['actors','actor']]){
    for(const [id,record] of Object.entries(value[key]??{})){const schema=recordSchemas[kind];for(const message of validateSchema(record,{$defs:schemas.get(file)?.$defs??{},...schema}))fail(file,[key,Array.isArray(value[key])?Number(id):id],message);}
   }
   if(file==='cell-layers.json')for(const [id,c] of Object.entries(value.maps??{})){

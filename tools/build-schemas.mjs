@@ -1,3 +1,5 @@
+import {skillConditionSchema,preemptiveSchema} from '../config/shared/skill-schemas.js';
+import {SCOUT_APIS} from '../src/core/scouting.js';
 import {durationSchema,mapPatchSchema,impactProperties,treasureSchema,servicePackageSchema,fireHazardsSchema} from './package-schemas.mjs';
 import {INTERACTION_RANGES} from '../src/core/event-interaction.js';
 import {CAST_EASINGS} from '../src/core/cast.js';
@@ -47,9 +49,10 @@ command('party.join party.leave',{actor:string});command('status.apply',{target:
 command('map.teleport',{map:string,x:integer,y:integer,z:{type:'integer'},facing:{enum:['north','east','south','west']}},['map','x','y']);command('map.reveal',{radius:integer},[]);command('facing.set',{direction:{enum:['north','east','south','west']}});
 command('object.state.set',{map:string,object:string,state:string},['map','object','state']);command('event.mark_done',{event:string});
 command('battle.end');
-command('battle.start',{id:string,encounter:string,on_win:commands,on_lose:commands,on_escape:commands,on_interrupt:commands,events:{type:'array',minItems:1,items:obj({id:string,triggers:{type:'array',minItems:1,uniqueItems:true,items:{enum:BATTLE_EVENT_PHASES}},condition:value,commands},['id','triggers','commands'])}},['encounter','on_win','on_lose','on_escape']);command('quest.accept',{quest:string});command('quest.evidence',{quest:string,key:string,text:string});command('quest.complete',{quest:string,outcome:string});
+command('battle.start',{preemptive:preemptiveSchema,id:string,encounter:string,on_win:commands,on_lose:commands,on_escape:commands,on_interrupt:commands,events:{type:'array',minItems:1,items:obj({id:string,triggers:{type:'array',minItems:1,uniqueItems:true,items:{enum:BATTLE_EVENT_PHASES}},condition:value,commands},['id','triggers','commands'])}},['encounter','on_win','on_lose','on_escape']);command('quest.accept',{quest:string});command('quest.evidence',{quest:string,key:string,text:string});command('quest.complete',{quest:string,outcome:string});
 command('scene.background audio.bgm',{asset:string});command('audio.se',{asset:string,volume:{type:'number',minimum:0,maximum:1},delay:{type:'number',minimum:0,maximum:5000}},['asset']);command('effect.play',{wait:boolean,effect:string,target:{type:'string',pattern:'^(scene|screen|party|actor:[a-z][a-z0-9_]*|enemy:enemy_[0-7])$'},delay:{type:'number',minimum:0,maximum:5000}},['effect']);command('screen.set',{layer:{type:'string',pattern:'^[a-z][a-z0-9_]{0,31}$'},color:{type:'string',pattern:'^#[0-9a-fA-F]{6}$'},opacity:{type:'number',minimum:0,maximum:.65},shade:boolean},['layer','color','opacity']);command('screen.clear',{layer:string});command('rest',{cost:integer,ratio:{type:'number',minimum:0,maximum:1}},[]);command('town.return light.refill');command('ending.set',{title:string,text:string});
-command('job.change',{actor:string,job:string});command('job.action',{actor:string,ability:string});
+command('skill.train',{actor:string,skill:string});command('skill.action',{actor:string,action:string});
+command('job.change',{actor:string,job:string});command('job.action',{actor:string,ability:string,target:string},['actor','ability']);
 if(variants.length!==COMMANDS.size)throw Error('Schema/command registry mismatch');
 const expressionVariants=[obj({ref:string}),obj({format:{type:'string'},values:{type:'object',additionalProperties:value}})];
 for(const op of ['eq','ne','gt','gte','lt','lte','in','contains'])expressionVariants.push(obj({op:{const:op},left:value,right:value}));
@@ -57,7 +60,7 @@ for(const op of ['and','or','add','sub','mul','div','mod','min','max','floor','c
 expressionVariants.push(obj({op:{const:'not'},arg:value}),obj({op:{const:'exists'},value}),obj({op:{const:'has_item'},item:string,count:{type:'integer',minimum:1}},['op','item']),obj({op:{const:'has_member'},actor:string}),obj({op:{const:'has_status'},actor:string,status:string}),obj({op:{const:'event_done'},event:string}),obj({op:{const:'map_discovered'},map:string,x:integer,y:integer,z:{type:'integer'}},['op','map','x','y']));
 expressionVariants.push(obj({op:{const:'object_state'},map:string,object:string,default:string},['op','map','object']));
 expressionVariants.push(obj({op:{const:'record_count'},metric:{enum:['battles','wins','escapes','losses','repels','interruptions','kills','encounters']},id:string,sinceQuest:string},['op','metric']));
-const definitions={value:{oneOf:[{type:['string','number','boolean','null']},{type:'array',items:value},expr]},expression:{oneOf:expressionVariants},command:{oneOf:variants},script:obj({commands,storyQuest:string,dungeonScene:string},['commands'])};
+const definitions={skillCondition:skillConditionSchema,value:{oneOf:[{type:['string','number','boolean','null']},{type:'array',items:value},expr]},expression:{oneOf:expressionVariants},command:{oneOf:variants},script:obj({commands,storyQuest:string,dungeonScene:string},['commands'])};
 const base={"$schema":"https://json-schema.org/draft/2020-12/schema","$defs":definitions};
 const write=(name,content)=>fs.writeFile(path.join(folder,name),JSON.stringify({...base,...content},null,2)+'\n');
 await write('script.schema.json',{title:'灯帰り DSL v1 スクリプト',...obj({scripts:{type:'object',additionalProperties:{$ref:'#/$defs/script'}}})});
@@ -99,7 +102,7 @@ await fs.writeFile(path.join(folder,'sounds.schema.json'),JSON.stringify({$schem
 const jobStats=Object.fromEntries(['hp','mp','str','vit','agi','int'].map(k=>[k,numeric(0,100)]));
 const strings={type:'array',uniqueItems:true,items:string};
 const rates={type:'object',additionalProperties:numeric(0,3)};
-const grants=obj({skill:string,level:{type:'integer',minimum:1,maximum:30},api:{enum:['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry']},target:{enum:['self','ally','enemy','all_allies','all_enemies','location']},maxTargets:{type:'integer',minimum:1,maximum:8},lifetime:{const:'equipped'}});
+const grants=obj({skill:string,level:{type:'integer',minimum:1,maximum:30},api:{enum:['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_APIS]},target:{enum:['self','ally','enemy','all_allies','all_enemies','location']},maxTargets:{type:'integer',minimum:1,maximum:8},lifetime:{const:'equipped'}});
 const job=obj({id:string,name:string,role:string,limitation:string,growth:obj(jobStats),stats:obj(Object.fromEntries(Object.keys(jobStats).map(k=>[k,numeric(-100,100)])),[]),equipment:obj({weapon:strings,armor:strings,charm:strings}),passives:{type:'object',additionalProperties:{oneOf:[numeric(0,100),rates]}},grants:{type:'array',minItems:1,items:grants}});
 await fs.writeFile(path.join(folder,'jobs.schema.json'),JSON.stringify({$schema:base.$schema,title:'灯帰り 職業定義 v1.3',type:'object',additionalProperties:job},null,2)+'\n');
 const buff=obj({id:string,name:string,turns:{type:'integer',minimum:1,maximum:10},stats:obj(Object.fromEntries(['str','vit','agi','int'].map(k=>[k,numeric(.1,3)])),[]),resist:{type:'object',additionalProperties:numeric(0,1)}});
