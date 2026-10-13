@@ -92,7 +92,7 @@ for(const [label,actual] of [['commands',[...COMMANDS]],['operators',[...EXPRESS
 const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
 check(JSON.stringify(files)===JSON.stringify(snapshot.files),'DATA_SNAPSHOT: manifest files differ');
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}
-check(snapshot.contentSha256===digest.digest('hex'),'DATA_SNAPSHOT: content changed; run npm run build:docs');
+const expectedContentSha256=digest.digest('hex');check(snapshot.contentSha256===expectedContentSha256,`DATA_SNAPSHOT: content changed; expected ${expectedContentSha256}; run npm run build:docs`);
 for(const key of ['images','audio'])check(snapshot.assets[key]===count(data.assets[key]),`DATA_SNAPSHOT: ${key} asset count differs`);
 for(const file of current){
  if(file==='doc/README.md')continue;
