@@ -1,5 +1,5 @@
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
-import {resolvePreemptive,applyStun,consumeStun} from './battle-turns.js';
+import {resolvePreemptive,applyStun,consumeStun,applyGuard,guarded as battleGuarded} from './battle-turns.js';
 import {applyStatus,removeStatus,statusStats,tickStatuses} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
@@ -96,8 +96,8 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   for(const effect of skill.effects){
     if(effect.type==='stun'){if(applyStun(engine,target,effect))(b?.log??s.log).push(`${targetName}はスタンした。`);continue;}
     if(effect.type==='guard'){
-      if(target.instance)target.guard=true;else if(!b.guards.includes(target.id))b.guards.push(target.id);
-      (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
+      applyGuard(b,target);
+      (b?.log??s.log).push(`${targetName}は防御状態になった。`);continue;
     }
     if(effect.type==='buff'){if(dungeonEffectActive(engine.data,s,'buff',effect.buff)){addBuff(engine,effect.buff,target,source,skillId);(b?.log??s.log).push(`${targetName}：${engine.data.buffs[effect.buff].name}。`);}continue;}
     if(effect.type==='cover'){
@@ -109,7 +109,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:sourceStats},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
-      const guarded=target.instance?target.guard:b.guards.includes(target.id);
+      const guarded=battleGuarded(b,target);
       const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(target,effect.element):1);
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);

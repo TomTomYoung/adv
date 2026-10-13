@@ -6,6 +6,12 @@
 
 [STATUS_EFFECTS.md](STATUS_EFFECTS.md)：毒・呪い・濡れ・パラメータ異常・魔術系異常の付与、持続、解除、保存。
 
+[STATUS_CATALOG.md](STATUS_CATALOG.md)：通常状態異常と、防御・スタンなど戦闘限定状態のLv1〜Lv3。
+
+[BUFF_CATALOG.md](BUFF_CATALOG.md)：戦闘中の強化補正と付与元。
+
+[DEBUFF_CATALOG.md](DEBUFF_CATALOG.md)：戦闘中の弱体補正と付与元。
+
 [JOB_SYSTEM.md](JOB_SYSTEM.md)：30職、技能・成長・装備・探索特技。
 
 [SCOUT_SKILLS.md](SCOUT_SKILLS.md)：斥候の罠解除・罠発見・奇襲・索敵・哨戒・迷彩・偵察の採用仕様。

@@ -13,6 +13,7 @@ import {characterCatalog} from './character-catalog.mjs';
 import {monsterCatalog} from './monster-catalog.mjs';
 import {locationCatalog} from './location-catalog.mjs';
 import {skillCatalog,magicCatalog,itemCatalog,skillLevelLines} from './gameplay-catalogs.mjs';
+import {buffCatalog,debuffCatalog,statusCatalog} from './effect-catalogs.mjs';
 import {dungeonPageBundle} from './dungeon-pages.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
@@ -23,6 +24,9 @@ await fs.writeFile(path.join(folder,docPath('LOCATION_CATALOG.md')),relocateDoc(
 await fs.writeFile(path.join(folder,docPath('SKILL_CATALOG.md')),relocateDoc(skillCatalog(data,{date}),'SKILL_CATALOG.md'));
 await fs.writeFile(path.join(folder,docPath('MAGIC_CATALOG.md')),relocateDoc(magicCatalog(data,{date}),'MAGIC_CATALOG.md'));
 await fs.writeFile(path.join(folder,docPath('ITEM_CATALOG.md')),relocateDoc(itemCatalog(data,{date}),'ITEM_CATALOG.md'));
+await fs.writeFile(path.join(folder,docPath('BUFF_CATALOG.md')),relocateDoc(buffCatalog(data,{date}),'BUFF_CATALOG.md'));
+await fs.writeFile(path.join(folder,docPath('DEBUFF_CATALOG.md')),relocateDoc(debuffCatalog(data,{date}),'DEBUFF_CATALOG.md'));
+await fs.writeFile(path.join(folder,docPath('STATUS_CATALOG.md')),relocateDoc(statusCatalog(data,{date}),'STATUS_CATALOG.md'));
 const quests=Object.values(data.quests),count=o=>Object.keys(o??{}).length;
 const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}

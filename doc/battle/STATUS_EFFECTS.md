@@ -53,9 +53,15 @@ ID：arcane_malaise / 名称・分類：魔力障害・魔術系 / 効果：知�
 
 保存では既存のID配列に加えて任意の期限辞書を検証する。未知ID、重複ID、付与されていないIDの期限、0以下・範囲外の期限を拒否する。同じ内容版の従来の無期限状態には期限を後付けしない。
 
-## 戦闘時状態：スタンと先制
+## 戦闘時状態：防御・スタンと先制
 
 2026-10-13実装。data/statuses.json の共通状態異常6種と分けて、battle内へ保存する。
+
+### 防御
+
+防御は有利な戦闘限定状態異常として扱う。防御技能または盾の壁でLv1を付与し、1ターンの間、受けるダメージを system.guardRate（現行0.5）倍にする。次の敵巡が終わると解除する。敵が防御した場合も同じ意味で、次に行動するまでの味方側攻撃を軽減する。
+
+状態異常Lvは他と同じくLv1〜Lv3固定だが、現時点で防御Lv2・Lv3の効果は未設定。現行の保存互換のため内部記録は battle.guards / enemy.guard を維持するが、Coreでは戦闘限定状態「guarded」として一つの定義から参照する。新規仕様上は独立した特殊ルールではなく状態異常の一種として認識する。
 
 ### スタン
 
@@ -89,4 +95,4 @@ ID：arcane_malaise / 名称・分類：魔力障害・魔術系 / 効果：知�
 
 追加状態の編集元は [config/dungeon-content.json](../../config/dungeon-content.json)、配布は [data/statuses.json](../../data/statuses.json)。毒の基礎定義は既存のコンテンツ生成原稿を引き続き使う。共通処理は [status-effects.js](../../src/core/status-effects.js)、戦闘は [battle.js](../../src/core/battle.js)、歩行は [engine.js](../../src/core/engine.js)。
 
-戦闘機会の処理は [battle-turns.js](../../src/core/battle-turns.js)、回帰検証は [battle-turns.test.mjs](../../tests/battle-turns.test.mjs)。
+戦闘限定状態の定義と戦闘機会の処理は [battle-turns.js](../../src/core/battle-turns.js)、回帰検証は [battle-turns.test.mjs](../../tests/battle-turns.test.mjs)。一覧は [STATUS_CATALOG.md](STATUS_CATALOG.md)。
