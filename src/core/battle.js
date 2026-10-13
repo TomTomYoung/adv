@@ -183,6 +183,13 @@ function buildTurnQueue(engine){
   ];
   return entries.sort((a,c)=>c.agi-a.agi||a.order-c.order).map(entry=>entry.key);
 }
+// Buffs and debuffs can change AGI during a round. Only future slots are reordered.
+function resortRemainingQueue(engine){
+  const s=engine.state,b=s.battle,order=[...s.members.map(id=>'actor:'+id),...b.enemies.map(e=>unitKey(e))],rank=new Map(order.map((key,i)=>[key,i]));
+  const speed=key=>key.startsWith('actor:')?engine.stats(key.slice(6)).agi:enemyStats(engine,b.enemies.find(e=>unitKey(e)===key)).agi;
+  const remaining=b.turnQueue.slice(b.turnIndex).sort((a,c)=>speed(c)-speed(a)||rank.get(a)-rank.get(c));
+  b.turnQueue.splice(b.turnIndex,remaining.length,...remaining);
+}
 function finishRound(engine){
   const s=engine.state,b=s.battle;
   dungeonBattleRound(engine);
@@ -202,6 +209,7 @@ function advanceBattleTurns(engine){
     if(b.enemies.every(e=>e.hp<=0)){endBattle(engine,'win');return;}
     if(!Array.isArray(b.turnQueue)){b.turnQueue=buildTurnQueue(engine);b.turnIndex=0;}
     if(b.turnIndex>=b.turnQueue.length){finishRound(engine);continue;}
+    resortRemainingQueue(engine);
     const key=b.turnQueue[b.turnIndex];
     if(key.startsWith('actor:')){
       if(s.actors[key.slice(6)]?.hp>0)return;
