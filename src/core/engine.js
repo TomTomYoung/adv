@@ -390,7 +390,7 @@ export class GameEngine {
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
     // Same-version saves from the side-based scheduler do not contain a turn queue.
     // Rebuild remaining turns without replaying allies already recorded in acted.
-    if(this.state.battle?.turnQueue===undefined){
+    if(this.state.battle&&this.state.battle.turnQueue===undefined){
       this.state.battle.turnQueue=null;this.state.battle.turnIndex=0;
       if(this.state.waiting?.type==='battle')continuePreemptive(this);
     }
