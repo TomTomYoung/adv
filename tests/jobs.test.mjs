@@ -11,8 +11,8 @@ import {projectGame} from '../src/application/projection.js';
 const resources=g=>structuredClone({actors:g.state.actors,inventory:g.state.inventory,gold:g.state.gold,level:g.state.actors.ada.level,xp:g.state.actors.ada.xp,rng:g.state.rng,steps:g.state.steps,light:g.state.light,battle:g.state.battle,discovered:g.state.discovered});
 function atLevel(g,level){g.award(0,data.system.xpBase*(level-1)*level-g.state.actors.ada.xp);assert.equal(g.state.actors.ada.level,level);}
 function setup(job,level=10){const g=newGame(17);if(job!=='warrior')assert.ok(g.dispatch({type:'job.change',actor:'ada',job}));atLevel(g,level);g.state.members=['ada','nio','sera','il','berg'];g.healAll();return g;}
-function actAs(g,id){g.state.battle.acted=[];let left=5;while(activeActor(g)!==id&&left-->0)g.state.battle.acted.push(activeActor(g));assert.equal(activeActor(g),id);}
-function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
+function actAs(g,id){const b=g.state.battle,key='actor:'+id,remaining=(b.turnQueue??[]).slice(b.turnIndex).filter(slot=>slot!==key);b.acted=[];b.turnQueue=[key,...remaining];b.turnIndex=0;assert.equal(activeActor(g),id);}
+function start(g,id='wild_pair_10'){g.dispatch({type:'travel',region:10});if(id==='wild_pair_10'){const original=g.stats.bind(g);g.stats=actorId=>{const stats=original(actorId);return {...stats,agi:actorId==='ada'?1000:stats.agi};};}g.startBattle(id,{win:[],lose:[],escape:[]});actAs(g,'ada');}
 function equipSkill(g,id){const spec=data.skills[id];let item=spec.equippedItem;if(!item&&spec.weaponTypes)item=Object.keys(data.items).find(key=>spec.weaponTypes.includes(data.items[key].equipmentType));if(item){g.give(item,1-(g.state.inventory[item]??0));assert.ok(g.dispatch({type:'equip',actor:'ada',item}));}for(const [item,n] of Object.entries(spec.materials??{}))g.state.inventory[item]=n;}
 
 for(const job of Object.values(data.jobs))test(`30職実行 ${job.name}: Lv1/5/10/30・全習得技能・装備・保存`,()=>{
@@ -113,7 +113,7 @@ test('バフは付与元付きで保存し、同種更新・最強正負・期�
   tickBuffs(g.state.battle);assert.equal(g.state.battle.buffs[0].remaining,1);tickBuffs(g.state.battle);assert.equal(g.state.battle.buffs.length,0);
 });
 test('速度バフは未行動者だけを並べ替え、追加行動を与えません',()=>{
-  const g=setup('bard',10);start(g);g.state.battle.acted=[];const first=activeActor(g);g.state.battle.acted.push(first);const a=g.state.actors.ada;addBuff(g,'march_song',a,a,'march_song');assert.notEqual(activeActor(g),first);assert.ok(g.state.battle.acted.includes(first));
+  const g=setup('bard',10);start(g);const first=activeActor(g);assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));const a=g.state.actors.ada;addBuff(g,'march_song',a,a,'march_song');assert.notEqual(activeActor(g),first);assert.ok(g.state.battle.acted.includes(first));
 });
 test('解析結果は対象ごとに初めて公開し、弱点記録は解析前に使えません',()=>{
   const g=setup('scholar',10);start(g);const before=resources(g);assert.equal(projectGame(g).battle.enemies[0].analysis,null);assert.equal(g.dispatch({type:'battle',action:'skill',skill:'weak_notes',target:'enemy_0'}),false);assert.deepEqual(resources(g),before);
@@ -146,7 +146,7 @@ test('かばうは隊順の一人へ一度だけ転送し、全体攻撃・倒�
     const skill=mode==='area'?'probe_area':'probe_single';g.data.skills[skill]={name:'検証打撃',mp:0,target:mode==='area'?'all_enemies':'enemy',effects:[{type:'damage',amount:10,element:'physical'}]};g.data.enemies.waterwheel_beaver.ai=[{priority:1,skill,target:'weakest'}];
     g.state.actors.sera.hp=20;start(g,'wild_waterwheel_beaver');
     assert.ok(g.dispatch({type:'battle',action:'skill',skill:'cover',target:mode==='chain'?'nio':'sera'}));actAs(g,'nio');assert.ok(g.dispatch({type:'battle',action:'skill',skill:'cover',target:'sera'}));
-    g.state.battle.acted=['ada','nio','sera','il'];if(mode==='fallen')g.state.actors.ada.hp=0;
+    g.state.battle.acted=['ada','nio','sera','il'];g.state.battle.turnQueue=['actor:ada','actor:nio','actor:sera','actor:il','actor:berg','enemy:enemy_0'];g.state.battle.turnIndex=4;if(mode==='fallen')g.state.actors.ada.hp=0;
     const before=resources(g),saved=g.save(),copy=new GameEngine(g.data);drain(copy);copy.load(saved);
     for(const engine of [g,copy])assert.ok(engine.dispatch({type:'battle',action:'skill',skill:'guard',target:'berg'}));assert.equal(g.save(),copy.save());
     if(mode==='area'){assert.equal(g.state.actors.sera.hp,10);assert.equal(g.state.actors.ada.hp,before.actors.ada.hp-9);}

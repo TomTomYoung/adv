@@ -108,7 +108,7 @@ test('drips extinguish both portable and selected fixed fires; water blocks ever
  assert.equal(g.dispatch(action),false);assert.equal(g.state.inventory[ctx.spec.fuelItem],fuel);g.setPortableFire({fuel:10,effect:ctx.spec.portable.baseEffect});assert.equal(ctx.run.portable.lit,false);
  roundtrip(g);g.state.flags.pipeFixed=true;assert.ok(g.dispatch(action));assert.equal(fireContext(d,g.state).run.portable.lit,true);
  g.returnTown();assert.ok(g.dispatch({type:'job.change',actor:'ada',job:'lantern_keeper'}));g.teleport(c.m.id,1,1);g.state.members=['ada'];g.state.flags.pipeFixed=false;
- g.startBattle('kuragari_hunt',{win:[],lose:[],escape:[]});const mp=g.state.actors.ada.mp;
+ d.enemies.kuragari.stats.agi=0;g.startBattle('kuragari_hunt',{win:[],lose:[],escape:[]});const mp=g.state.actors.ada.mp;
  assert.match(battleSkillPlan(g,'ada','repel_kuragari','ada').reason,/漏水/);assert.equal(g.dispatch({type:'battle',action:'skill',skill:'repel_kuragari',target:'ada'}),false);assert.equal(g.state.actors.ada.mp,mp);assert.deepEqual(g.state.battle.acted,[]);roundtrip(g);
 });
 test('gas explosions use the shared explosion impact, spend the ignition cost, and persist until the cause is fixed',()=>{

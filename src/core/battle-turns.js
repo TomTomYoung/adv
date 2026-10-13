@@ -36,6 +36,15 @@ export function battleTurnSaveErrors(state){
   const b=state.battle;if(!b)return [];
   const errors=[],valid=new Set([...state.members.map(id=>`actor:${id}`),...(b.enemies??[]).map(e=>`enemy:${e.instance}`)]);
   if(b.stuns!==undefined&&(!isRecord(b.stuns)||Object.entries(b.stuns).some(([id,n])=>!valid.has(id)||!Number.isInteger(n)||n<1||n>20)))errors.push('スタン行動回数不正');
+  // Old same-version battle saves omit both fields; GameEngine.load rebuilds their queue.
+  const queue=b.turnQueue,index=b.turnIndex,legacy=queue===undefined&&index===undefined;
+  if(!legacy){
+    if(!Number.isInteger(index)||index<0||queue!==null&&!Array.isArray(queue)||(queue===null&&index!==0))errors.push('戦闘行動キュー不正');
+    else if(Array.isArray(queue)){
+      const keys=new Set(queue);
+      if(index>queue.length||queue.length>valid.size||keys.size!==queue.length||queue.some(key=>typeof key!=='string'||!valid.has(key))||b.preemptive||b.acted?.some(id=>queue.includes('actor:'+id)&&!queue.slice(0,index).includes('actor:'+id))||(!b.event&&index<queue.length&&queue[index].startsWith('enemy:')))errors.push('戦闘行動キュー不正');
+    }else if(!b.preemptive&&!b.event)errors.push('戦闘行動キュー不正');
+  }
   const p=b.preemptive;if(p!==undefined&&(!isRecord(p)||Object.keys(p).some(k=>!['side','remaining'].includes(k))||!['allies','enemies'].includes(p.side)||!Number.isInteger(p.remaining)||p.remaining<1||p.remaining>20||b.round!==1||b.acted?.length||p.side==='enemies'&&!b.event))errors.push('先制陣営・残り行動回数不正');
   return errors;
 }
