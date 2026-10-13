@@ -47,7 +47,8 @@ test('explicit additive stuns consume multiple opportunities, including preempti
 });
 test('enemy stun skips its opportunity and battle-only state is cleared on escape and defeat',()=>{
   const {g}=game();start(g);const enemy=g.state.battle.enemies[0];g.random=()=>0;applySkill(g,g.state.actors.nio,enemy,{name:'テスト',effects:[{type:'stun'}]},'trip');
-  const count=g.state.members.length;for(let i=0;i<count;i++)guard(g);assert.match(g.state.battle.log.join('\n'),/スタンで行動できない/);assert.equal(g.state.battle.stuns[`enemy:${enemy.instance}`],undefined);g.finishBattle('escape');assert.equal(g.state.battle,null);assert.ok(g.state.members.every(id=>!g.state.actors[id].statuses.includes('stun')));
+  for(let i=0;i<g.state.members.length*3&&g.state.battle.stuns?.[`enemy:${enemy.instance}`];i++)guard(g);
+  assert.match(g.state.battle.log.join('\n'),/スタンで行動できない/);assert.equal(g.state.battle.stuns[`enemy:${enemy.instance}`],undefined);g.finishBattle('escape');assert.equal(g.state.battle,null);assert.ok(g.state.members.every(id=>!g.state.actors[id].statuses.includes('stun')));
   start(g);applyStun(g,g.state.actors.nio,{});g.finishBattle('lose');assert.equal(g.state.battle,null);roundtrip(g);
 });
 test('invalid battle phases, targets and stun counts fail save validation',()=>{
@@ -62,4 +63,83 @@ test('defense is recognized as a battle-only status while preserving guard stora
   const {g}=game();start(g);const id=activeActor(g),actor=g.state.actors[id];
   assert.equal(BATTLE_STATUS_DEFINITIONS.guarded.name,'防御');assert.equal(BATTLE_STATUS_DEFINITIONS.guarded.maxLevel,3);
   assert.equal(guarded(g.state.battle,actor),false);guard(g);assert.equal(guarded(g.state.battle,actor),true);roundtrip(g);
+});
+
+function mixedGame({fastEnemy=false,tie=false}={}){
+  const {g,d}=game(),members=[...g.state.members],native=g.stats.bind(g);
+  g.stats=id=>({...native(id),agi:id===members[0]?80:id===members[1]?30:1});
+  d.encounters.wild_pair_10.enemies.forEach((id,i)=>{
+    d.enemies[id].stats.agi=i===0?(fastEnemy?120:tie?80:50):10;
+    d.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];
+  });
+  start(g);return {g,d,members};
+}
+test('mixed queue interleaves allies and enemies by AGI, and retains the round boundary',()=>{
+  const {g,members}=mixedGame(),b=g.state.battle;
+  assert.deepEqual(b.turnQueue.slice(0,4),['actor:'+members[0],'enemy:enemy_0','actor:'+members[1],'enemy:enemy_1']);
+  assert.equal(activeActor(g),members[0]);assert.equal(b.turnIndex,0);
+  guard(g);
+  assert.equal(b.turnIndex,2);assert.equal(activeActor(g),members[1]);
+  assert.equal(b.log.filter(line=>line.includes('守りを固めた。')).length,2); // first ally and the first enemy
+  roundtrip(g);assert.equal(g.state.battle.turnIndex,2);
+  assert.equal(activeActor(g),members[1]);guard(g);
+  assert.equal(g.state.battle.turnIndex,4);
+  assert.equal(activeActor(g),members[2]);
+  for(let i=2;i<members.length;i++)guard(g);
+  assert.equal(g.state.battle.round,2);
+  assert.equal(g.state.battle.turnIndex,0);assert.equal(activeActor(g),members[0]);
+  assert.equal(g.state.battle.log.filter(line=>line.includes('守りを固めた。')).length,members.length+2);
+  roundtrip(g);
+});
+test('mixed queue applies stable tie priority and executes faster enemies before the first ally',()=>{
+  const tied=mixedGame({tie:true});
+  assert.deepEqual(tied.g.state.battle.turnQueue.slice(0,2),['actor:'+tied.members[0],'enemy:enemy_0']);
+  const faster=mixedGame({fastEnemy:true}),b=faster.g.state.battle;
+  assert.equal(b.turnQueue[0],'enemy:enemy_0');
+  assert.equal(b.turnIndex,1);assert.equal(activeActor(faster.g),faster.members[0]);
+  assert.equal(b.log.filter(line=>line.includes('守りを固めた。')).length,1);
+  roundtrip(faster.g);
+});
+test('mixed queue skips an enemy stun slot without dropping later ally turns',()=>{
+  const {g,members}=mixedGame(),enemy=g.state.battle.enemies[0];
+  applyStun(g,enemy,{});guard(g);
+  assert.equal(g.state.battle.turnIndex,2);
+  assert.equal(g.state.battle.stuns?.['enemy:'+enemy.instance],undefined);
+  assert.equal(activeActor(g),members[1]);
+  assert.match(g.state.battle.log.join('\n'),/スタンで行動できない/);
+  roundtrip(g);
+});
+test('failed escape consumes only the current mixed-queue slot',()=>{
+  const {g,members}=mixedGame();g.random=()=>1;
+  assert.ok(g.dispatch({type:'battle',action:'escape'}));
+  assert.equal(g.state.battle.round,1);
+  assert.equal(g.state.battle.turnIndex,2);
+  assert.equal(activeActor(g),members[1]);
+  assert.ok(g.state.battle.log.includes('退路を塞がれました。'));
+});
+test('legacy battle saves without a mixed queue rebuild remaining slots',()=>{
+  const {g,members}=mixedGame(),legacy=JSON.parse(g.save());
+  legacy.state.battle.acted=[members[0]];
+  delete legacy.state.battle.turnQueue;delete legacy.state.battle.turnIndex;
+  assert.deepEqual(validateSave(legacy,g.data),[]);
+  g.load(JSON.stringify(legacy));
+  assert.equal(activeActor(g),members[1]); // The acted member is not replayed.
+  assert.ok(!g.state.battle.turnQueue.includes('actor:'+members[0]));
+  assert.equal(g.state.battle.turnIndex,1); // Faster enemy 0 has acted.
+  roundtrip(g);
+});
+test('invalid mixed queue slots, cursors and action history are rejected',()=>{
+  const {g}=mixedGame(),snapshot=JSON.parse(g.save());
+  for(const edit of [
+    b=>b.turnQueue.push('enemy:enemy_0'),
+    b=>b.turnQueue[0]='enemy:missing',
+    b=>b.turnIndex=-1,
+    b=>b.turnIndex=999,
+    b=>b.turnQueue=null,
+    b=>b.turnQueue=['enemy:enemy_0',...b.turnQueue.slice(1)],
+    b=>b.acted.push(g.state.members.at(-1))
+  ]){
+    const bad=structuredClone(snapshot);edit(bad.state.battle);
+    assert.ok(validateSave(bad,g.data).length);
+  }
 });
