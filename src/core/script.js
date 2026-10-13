@@ -121,7 +121,7 @@ export function pump(engine){
       case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
       case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
       case 'status.apply':case 'status.remove':{
-        for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration);else removeStatus(a,c.status);}break;
+        for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration,c.level??1);else removeStatus(a,c.status);}break;
       }
       case 'map.teleport':engine.teleport(c.map,c.x,c.y,c.facing,c.z??0,true);break;
       case 'map.reveal':engine.reveal(c.radius??2);break;
