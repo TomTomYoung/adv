@@ -113,16 +113,52 @@ export function skillLevelLines(spec){
   if(!spec.levelUp)return [];
   return [`技能Lv：1〜${spec.maxSkillLevel??3}。人物Lvによる習得条件とは独立。`,...Object.entries(spec.levels??{}).map(([n,v])=>`技能Lv${n}の変更：${JSON.stringify(v)}。`),...Object.entries(spec.levelUp).map(([n,v])=>`技能Lv${n}の成長条件：${JSON.stringify(v)}。`)];
 }
-const battleEntry=(data,id,spec,label)=>[
+const staticGrowthText=(data,id,c,nested=false)=>{
+  const name=skill=>data.skills?.[skill]?.name??data.fieldAbilities?.[skill]?.name??skill;
+  if(c?.all||c?.any){
+    const list=c.all??c.any,join=c.all?' かつ ':' または ',body=list.map(v=>staticGrowthText(data,id,v,true)).join(join);
+    return nested?`(${body})`:body;
+  }
+  switch(c?.kind){
+    case 'actor_level':return `人物Lv${c.level}以上`;
+    case 'uses':return `${name(c.skill??id)}を${c.count}回使用`;
+    case 'weapon_uses':return `${data.items?.[c.weapon]?.name??c.weapon}を${c.count}回使用`;
+    case 'action_uses':return `${c.action}を${c.count}回実行`;
+    case 'event':return `イベント「${c.event}」完了`;
+    case 'flag':return `条件「${c.flag}」=${String(c.value??true)}`;
+    case 'training':return `${name(c.skill??id)}を${c.count}回訓練`;
+    case 'skill':return `${name(c.skill)} 技能Lv${c.level??1}以上`;
+    case 'companion':return `${data.actors?.[c.actor]?.name??c.actor}が生存して同行`;
+    case 'random':return `${c.on==='skill'?name(c.id):c.on==='weapon'?data.items?.[c.id]?.name??c.id:c.id}使用時に${Math.round(c.chance*100)}%`;
+    default:return '未設定';
+  }
+};
+const resolvedSkillLevel=(spec,level)=>{
+  const result=structuredClone(spec);
+  for(let n=2;n<=level;n++)Object.assign(result,spec.levels?.[n]??{});
+  return result;
+};
+const skillCatalogLevelLines=(data,id,spec,field=false)=>{
+  const max=spec.maxSkillLevel??3,lines=['技能Lv別',''];
+  for(let n=1;n<=max;n++){
+    const resolved=resolvedSkillLevel(spec,n),changed=n===1||Boolean(spec.levels?.[n]);
+    lines.push(`#### 技能Lv${n}`,'',`消費：${costText(data,resolved)}。対象：${targetLabels[resolved.target]??resolved.target??'未指定'}。`);
+    if(field)lines.push(changed?fieldCalculation(data,resolved):'効果：前Lvと同一。');
+    else lines.push(...(changed?calculationLines(data,id,resolved):['効果：前Lvと同一。']));
+    lines.push(`到達条件：${n===1?'習得時の初期段階':spec.levelUp?.[n]?staticGrowthText(data,id,spec.levelUp[n]):'未設定（現行では到達不可）'}。`,'');
+  }
+  return lines;
+};
+const battleEntry=(data,id,spec,label,rawLevels=true)=>[
   `### ${spec.name} (${id})`,'',
   `区分：戦闘${label}。対象：${targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。`,
   spec.description??'説明なし。',
   ...calculationLines(data,id,spec),
-  ...skillLevelLines(spec),
+  ...(rawLevels?skillLevelLines(spec):[]),
   `使用元：${usage(data,id,'battle.skill')}。`,
   spec.fieldUse?'戦闘外使用：可。':'戦闘外使用：不可。',''
 ];
-const fieldEntry=(data,id,spec,label)=>{
+const fieldEntry=(data,id,spec,label,rawLevels=true)=>{
   const extra=[];
   if(Object.keys(spec.materials??{}).length)extra.push(`材料：${materialText(data,spec.materials).join(' / ')}。`);
   if(Object.keys(spec.output??{}).length)extra.push(`生成：${outputText(data,spec.output)}。`);
@@ -131,7 +167,7 @@ const fieldEntry=(data,id,spec,label)=>{
     `区分：探索${label}。API：${spec.api}。対象：${targetLabels[spec.target]??spec.target??'未指定'}。消費：${costText(data,spec)}。使用場所：${(spec.modes??[]).join(' / ')||'未指定'}。`,
     spec.description??'説明なし。',
     fieldCalculation(data,spec),
-    ...skillLevelLines(spec),
+    ...(rawLevels?skillLevelLines(spec):[]),
     ...extra,
     `習得：${usage(data,id,spec.api)}。`,''
   ];
@@ -172,9 +208,9 @@ export function skillCatalog(data,{date}={}){
   const lines=['# スキル一覧','',`更新日: ${date??'未記録'}。作品版${data.game.version}。戦闘スキル${battle.length}件、探索スキル${field.length}件。`,'',
     '正本は [data/skills.json](../data/skills.json) と [data/field-abilities.json](../data/field-abilities.json)。魔法との表示分類は [character-profile.js](../src/application/character-profile.js) の明示分類に従います。魔法に分類される能力は [MAGIC_CATALOG.md](MAGIC_CATALOG.md) に分けます。','',
     ...commonRules(data),'## 戦闘スキル',''];
-  for(const [id,spec] of battle)lines.push(...battleEntry(data,id,spec,'スキル'));
+  for(const [id,spec] of battle)lines.push(...battleEntry(data,id,spec,'スキル',false),...skillCatalogLevelLines(data,id,spec,false));
   lines.push('## 探索スキル','');
-  for(const [id,spec] of field)lines.push(...fieldEntry(data,id,spec,'スキル'));
+  for(const [id,spec] of field)lines.push(...fieldEntry(data,id,spec,'スキル',false),...skillCatalogLevelLines(data,id,spec,true));
   return lines.join('\n').trimEnd()+'\n';
 }
 
