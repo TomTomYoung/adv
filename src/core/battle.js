@@ -1,6 +1,6 @@
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {resolvePreemptive,applyStun,consumeStun,applyGuard,clearGuard,guardLevel,guardDamageRate} from './battle-turns.js';
-import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy} from './status-effects.js';
+import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy,statusEffectAtLevel,activeStatuses,statusControl,clearBattleStatuses,wakeOnDamage,criticalChance,CRITICAL_DAMAGE_MULTIPLIER} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
 import {wetResistance,wetAfterSkill,wetSkillBlocked} from './wet.js';
@@ -42,6 +42,7 @@ export function endBattle(engine,result,skipEvents=false){
   if(!skipEvents){b.pendingResult=result;if(triggerBattleEvent(engine,'before_end'))return;}
   recordResult(engine,result);
   dungeonBattleEnd(engine,b,result);
+  for(const actor of Object.values(s.actors))clearBattleStatuses(engine.data,actor);
   s.presentation.music=b.musicBefore;s.battle=null;s.waiting=null;
   if(result==='lose'){
     const rolledBack=engine.defeat();
@@ -89,13 +90,13 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   return {ok:true,skill,targets};
 }
 export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true){
-  let damageTotal=0;
+  let damageTotal=0,critical=null,wakeChecked=false;
   const b=engine.state.battle,s=engine.state;
   const sourceStats=enemySource?enemyStats(engine,source):engine.stats(source.id);
   const targetStats=target.instance?enemyStats(engine,target):engine.stats(target.id);
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
   if(!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
-  const offensive=skill.effects.some(e=>['damage','drain_mp','status','stun'].includes(e.type)||e.type==='buff'&&(Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
+  const offensive=skill.effects.some(e=>['damage','drain_mp','stun'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
   const accuracy=offensive&&checkAccuracy?statusAccuracy(engine.data,s,source):1;
   if(accuracy<1&&engine.random()>=accuracy){(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
   for(const effect of skill.effects){
@@ -114,12 +115,14 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:sourceStats},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):effect.amount??0);
     if(effect.type==='damage'){
+      if(critical===null){const chance=checkAccuracy?criticalChance(engine.data,s,source,target):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
       const guardRate=guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
       const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=target.instance?1:(passives(engine.data,s,target.id).damageTaken??1);
-      const damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken));
-      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${targetName}に${damage}。`);
+      const damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
+      target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
     if(effect.type==='heal'){
       const multiplier=effect.itemHealing||itemId==='potion'?(powers.itemHealing??1):itemId?1:(powers.healingPower??1);
@@ -135,12 +138,31 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   }
   return damageTotal;
 }
+function misfireTargets(engine,source,targets,skill,skillId,itemId){
+  if(itemId||['attack','guard'].includes(skillId)||skill.effects.some(e=>e.type==='repel'))return targets;
+  const {data:d,state:s}=engine,b=s.battle;
+  const all=[...s.members.map(id=>s.actors[id]),...b.enemies].filter(t=>t.hp>0),group=['all_enemies','all_allies'].includes(skill.target);
+  // A misfire changes only targets. Keep special action prerequisites and the
+  // learned target limit, and exclude the originally selected targets.
+  let pool=all.filter(t=>!targets.includes(t));
+  if(group)pool=pool.filter(t=>Boolean(t.instance)!==Boolean(targets[0]?.instance));
+  if(skill.effects.some(e=>e.type==='cover'))pool=pool.filter(t=>!t.instance&&t.id!==source.id);
+  if(skill.effects.some(e=>e.type==='analyze'))pool=pool.filter(t=>t.instance);
+  if(skill.requiresAnalyzed)pool=pool.filter(t=>t.instance&&b.analyzed.includes(t.instance));
+  if(!pool.length)return targets;
+  const status=rollActionStatus(engine,source,'misfireChance');if(!status)return targets;
+  const limit=group?Math.min(skill.maxTargets??Infinity,source.instance?Infinity:permission(d,s,source.id,skillId,'battle.skill')?.maxTargets??1):1,next=[];
+  while(pool.length&&next.length<limit){const at=Math.floor(engine.random()*pool.length);next.push(...pool.splice(at,1));}
+  b.log.push(`${source.name??d.actors[source.id].name}の${skill.name}が${d.statuses[status].name}した。`);
+  return next.map(t=>t.instance?t:coveredTarget(engine,t,skill));
+}
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
   if(wetSkillBlocked(engine,source,skill)){
     (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
     wetAfterSkill(engine,source,skill);return false;
   }
+  targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
   const results=targets.map(target=>{
     const result=describeTarget(engine,unitKey(target));
     const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId);
@@ -221,8 +243,19 @@ function confusedAction(engine,source){
 }
 function actionOverridden(engine,source){
   const name=source.name??engine.data.actors[source.id].name;
+  const effects=activeStatuses(engine.data,engine.state,source),sleep=effects.find(e=>e.actionDisabled);
+  if(sleep){engine.state.battle.log.push(`${name}は${sleep.name}で行動できない。`);return true;}
   const stopped=rollActionStatus(engine,source,'actionFailureChance');
   if(stopped){engine.state.battle.log.push(`${name}は${engine.data.statuses[stopped].name}で行動できない。`);return true;}
+  const berserk=effects.find(e=>e.forcedAttack);
+  if(berserk){
+    const {data:d,state:s}=engine,enemy=Boolean(source.instance),skill=enemy?d.skills.attack:effectiveSkill(d,s,source.id,'attack');
+    const foes=(enemy?s.members.map(id=>s.actors[id]):s.battle.enemies).filter(t=>t.hp>0);
+    const valid=foes.filter(t=>enemy?!dungeonAbilityReason(d,s,'attack','battle.skill')&&!effectsProblem(d,skill)&&source.mp>=skill.mp:battleSkillPlan(engine,source.id,'attack',t.instance).ok);
+    if(valid.length){const target=valid[Math.floor(engine.random()*valid.length)];s.battle.log.push(`${name}は${berserk.name}して襲いかかった。`);performSkill(engine,source,{skill,skillId:'attack',targets:[enemy?coveredTarget(engine,target,skill):target]});}
+    else s.battle.log.push(`${name}は${berserk.name}しているが、攻撃できない。`);
+    return true;
+  }
   const confused=rollActionStatus(engine,source,'confusionChance');
   if(confused){engine.state.battle.log.push(`${name}は${engine.data.statuses[confused].name}で勝手に行動した。`);confusedAction(engine,source);return true;}
   return false;
@@ -314,6 +347,10 @@ export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
   const actor=s.actors[actorId];
   if(consumeStun(engine,actor)){finishAction(engine,actorId);return true;}
+  if(statusControl(engine.data,s,actor)){
+    if(intent.action!=='wait')return false;
+    actionOverridden(engine,actor);if(s.battle===b)finishAction(engine,actorId);return true;
+  }
   let selection;
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;

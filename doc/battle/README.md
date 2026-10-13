@@ -6,7 +6,7 @@
 
 [STATUS_EFFECTS.md](STATUS_EFFECTS.md)：毒・呪い・濡れ・まひ・くらやみ・各封印・こんらん等の付与、自然回復、行動制限、持ち越しと保存。
 
-[STATUS_CATALOG.md](STATUS_CATALOG.md)：通常状態異常と、防御・スタンなど戦闘限定状態のLv1〜Lv3。
+[STATUS_CATALOG.md](STATUS_CATALOG.md)：ねむり・必中・鈍重・狂暴化・暴発・クリティカル関連を含む共通管理23種と、防御・スタンのLv1〜Lv3。
 
 [BUFF_CATALOG.md](BUFF_CATALOG.md)：戦闘中の強化補正と付与元。
 

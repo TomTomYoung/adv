@@ -48,7 +48,29 @@ try{
     assert.match(await page.locator('.battle-log').innerText(),/まひで行動できない/);
     const state=await page.evaluate(()=>{const saved=g.save();g.load(saved);return {same:g.save()===saved,round:g.state.battle.round,statuses:projectGame(g).party[0].statuses,ages:g.state.actors.ada.statusRecoveryTurns};});
     assert.equal(state.same,true);assert.equal(state.round,2);assert.equal(state.statuses.length,6);assert.ok(Object.values(state.ages).every(n=>n===1));
+    await page.evaluate(async()=>{
+      const {applyStatus,removeStatus}=await import('./src/core/status-effects.js');const actor=g.state.actors.ada;removeStatus(actor);applyStatus(g.data,g.state,actor,'sleep',undefined,3);view.render(projectGame(g));
+    });
+    assert.equal(await page.locator('[data-focus="skill:attack"]').count(),0);
+    assert.match(await page.locator('.battle-commands').innerText(),/ねむりで行動できません/);
+    await page.getByRole('button',{name:'行動を進める',exact:true}).click();
+    assert.match(await page.locator('.battle-log').innerText(),/ねむりで行動できない/);
+    await page.screenshot({path:path.join(output,`${mode}-${width}-sleep.png`)});
+    const beforeBerserk=await page.evaluate(async()=>{
+      const {applyStatus,removeStatus}=await import('./src/core/status-effects.js');const actor=g.state.actors.ada;removeStatus(actor);applyStatus(g.data,g.state,actor,'berserk',undefined,2);applyStatus(g.data,g.state,actor,'sure_hit',undefined,3);applyStatus(g.data,g.state,actor,'guaranteed_critical',undefined,3);view.render(projectGame(g));return {mp:actor.mp,uses:actor.skillProgress?.attack?.uses??0};
+    });
+    assert.equal(await page.locator('[data-focus="skill:guard"]').count(),0);
+    assert.match(await page.locator('.battle-commands').innerText(),/狂暴化で敵に通常攻撃/);
+    await page.getByRole('button',{name:'行動を進める',exact:true}).click();
+    assert.match(await page.locator('.battle-log').innerText(),/狂暴化して襲いかかった/);
+    assert.match(await page.locator('.battle-log').innerText(),/クリティカル/);
+    const afterBerserk=await page.evaluate(()=>{const saved=g.save();g.load(saved);return {same:g.save()===saved,mp:g.state.actors.ada.mp,uses:g.state.actors.ada.skillProgress.attack.uses};});
+    assert.equal(afterBerserk.same,true);assert.equal(afterBerserk.mp,beforeBerserk.mp);assert.equal(afterBerserk.uses,beforeBerserk.uses+1);
+    await page.screenshot({path:path.join(output,`${mode}-${width}-berserk.png`)});
+    await page.evaluate(async()=>{const {removeStatus}=await import('./src/core/status-effects.js');removeStatus(g.state.actors.ada);view.render(projectGame(g));});
+    assert.equal(await page.locator('[data-focus="skill:attack"]').isDisabled(),false);
+    assert.equal(await page.getByRole('button',{name:'行動を進める',exact:true}).count(),0);
     await page.close();
   }
-  assert.deepEqual(errors,[]);console.log('ACTION STATUS BROWSER OK: normal/scene × 1280/390; sealed controls, paralysis, recovery clocks and save/load');
+  assert.deepEqual(errors,[]);console.log('ACTION STATUS BROWSER OK: normal/scene × 1280/390; seals, sleep, berserk, sure hit, critical, recovery clocks and save/load');
 }finally{await browser?.close();await new Promise(r=>server.close(r));}

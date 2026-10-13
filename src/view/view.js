@@ -60,7 +60,7 @@ export class GameView {
     this.tabNavigation=false;
     prepareControls(this.root);
     for(const scroll of snapshot.scrolls??[]){const e=[...this.root.querySelectorAll('[data-scroll]')].find(e=>e.dataset.scroll===scroll.key);if(e){e.scrollTop=scroll.top;e.scrollLeft=scroll.left;}}
-    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned]:null,this.battleMenu,this.pendingBattleAction,this.inventoryAction,this.bagActor]);
+    const m=this.model,key=JSON.stringify([m.mode,m.town?.id,this.tab,m.dialog?[m.feedback?.session,m.feedback?.revision,m.dialog,this.page]:null,m.battle?[m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned,m.battle.control]:null,this.battleMenu,this.pendingBattleAction,this.inventoryAction,this.bagActor]);
     const same=key===this.inputKey;this.inputKey=key;
     if(same)for(const d of this.root.querySelectorAll('details')){const toggle=d.querySelector('summary button');if(snapshot.details.includes(toggle?.dataset.focus)){d.open=true;toggle.setAttribute('aria-expanded','true');}}
     if(this.ui.modalOpen?.())return;
@@ -236,7 +236,7 @@ export class GameView {
   battle(parent,m){
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
-    const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned]);
+    const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned,m.battle.control]);
     if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.battleTurn=turn;}
     this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,m.dialog);return;}
     const section=node('div','battle-panel'),commands=node('section','battle-commands');commands.setAttribute('aria-label','戦闘コマンド');
@@ -249,6 +249,7 @@ export class GameView {
     };
     const pending=this.pendingBattleAction;
     if(m.battle.stunned){commands.append(node('p','requirement','スタンで今回の行動はできません。'),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
+    else if(m.battle.control){commands.append(node('p','requirement',m.battle.control.reason),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
     else if(pending){
       commands.append(node('h3','battle-menu-title',`${pending.name}の対象`));const targets=node('div','battle-targets');targets.setAttribute('aria-label',`${pending.name}の対象`);
       const skill=pending.intent.action==='skill'?m.battle.skills.find(s=>s.id===pending.intent.skill):null;

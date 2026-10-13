@@ -10,9 +10,36 @@ export function statusEffectAtLevel(data,id,level=1){
   const effect={...def,...(def.levels?.[level]??{})};delete effect.levels;return effect;
 }
 export const statusEffect=(data,target,id)=>statusEffectAtLevel(data,id,statusLevel(target,id));
+export const CRITICAL_DAMAGE_MULTIPLIER=2;
+export const activeStatuses=(data,state,target)=>(target?.statuses??[]).filter(id=>dungeonEffectActive(data,state,'status',id)).map(id=>({id,...statusEffect(data,target,id)}));
+export function statusControl(data,state,target){
+  const effects=activeStatuses(data,state,target),sleep=effects.find(e=>e.actionDisabled),berserk=effects.find(e=>e.forcedAttack);
+  if(sleep)return {id:sleep.id,reason:`${sleep.name}で行動できません。`};
+  if(berserk)return {id:berserk.id,reason:`${berserk.name}で敵に通常攻撃します。`};
+  return null;
+}
+export function criticalChance(data,state,source,target){
+  const attack=activeStatuses(data,state,source),defense=activeStatuses(data,state,target);
+  if(attack.some(e=>e.guaranteedCritical)||defense.some(e=>e.guaranteedCriticalTaken))return 1;
+  return Math.min(1,attack.reduce((n,e)=>n+(e.criticalChance??0),0)+defense.reduce((n,e)=>n+(e.criticalTakenChance??0),0));
+}
+export function wakeOnDamage(engine,target){
+  if(target.hp<=0)return;
+  for(const effect of activeStatuses(engine.data,engine.state,target)){
+    const chance=effect.damageWakeChance??0;
+    if(chance>0&&(chance>=1||engine.random()<chance)){
+      removeStatus(target,effect.id);
+      (engine.state.battle?.log??engine.state.log).push(`${target.name??engine.data.actors[target.id]?.name}はダメージで${effect.name}から回復した。`);
+    }
+  }
+}
+export function clearBattleStatuses(data,target){
+  for(const id of [...target.statuses])if(statusEffect(data,target,id)?.battleOnly)removeStatus(target,id);
+}
 export function applyStatus(data,state,target,id,duration,level=1){
   if(!data.statuses[id])throw Error(`不明な状態異常: ${id}`);
   if(!statusLevelValid(level))throw Error('状態異常Lvが不正です');
+  if(statusEffectAtLevel(data,id,level)?.battleOnly&&!state.battle)return false;
   if(target.hp<=0||!dungeonEffectActive(data,state,'status',id)||(target.statusImmune??data.actors[target.id]?.statusImmune??[]).includes(id))return false;
   const fresh=!target.statuses.includes(id),prior=fresh?1:statusLevel(target,id),nextLevel=fresh?level:Math.max(prior,level);
   if(fresh)target.statuses.push(id);
@@ -70,6 +97,7 @@ export function rollActionStatus(engine,target,key){
   return null;
 }
 export function statusAccuracy(data,state,target){
+  if(activeStatuses(data,state,target).some(e=>e.sureHit))return 1;
   return (target.statuses??[]).reduce((rate,id)=>rate*(dungeonEffectActive(data,state,'status',id)?statusEffect(data,target,id)?.accuracyRate??1:1),1);
 }
 // A field item's recipient is not its user. Shared supplies may be used by any
@@ -101,7 +129,8 @@ function effectErrors(e){
   if(!record(e))return true;
   if(['stepDamage','turnDamage','stepMpDamage','turnMpDamage'].some(k=>e[k]!==undefined&&(!Number.isSafeInteger(e[k])||e[k]<0||e[k]>1e6)))return true;
   if(['stepHpRate','turnHpRate','stepMpRate','turnMpRate'].some(k=>e[k]!==undefined&&(!Number.isFinite(e[k])||e[k]<0||e[k]>1)))return true;
-  if(['actionFailureChance','confusionChance','accuracyRate'].some(k=>e[k]!==undefined&&(!Number.isFinite(e[k])||e[k]<0||e[k]>1)))return true;
+  if(['actionFailureChance','confusionChance','accuracyRate','damageWakeChance','misfireChance','criticalChance','criticalTakenChance'].some(k=>e[k]!==undefined&&(!Number.isFinite(e[k])||e[k]<0||e[k]>1)))return true;
+  if(['battleOnly','beneficial','actionDisabled','forcedAttack','sureHit','guaranteedCritical','guaranteedCriticalTaken'].some(k=>e[k]!==undefined&&typeof e[k]!=='boolean'))return true;
   if(e.blockedActions!==undefined&&(!Array.isArray(e.blockedActions)||!e.blockedActions.length||new Set(e.blockedActions).size!==e.blockedActions.length||e.blockedActions.some(k=>!['magic','skills','items'].includes(k))))return true;
   if(e.recovery!==undefined&&(!record(e.recovery)||Object.keys(e.recovery).some(k=>!['initialChance','increment'].includes(k))||!Number.isFinite(e.recovery.initialChance)||e.recovery.initialChance<=0||e.recovery.initialChance>1||!Number.isFinite(e.recovery.increment)||e.recovery.increment<=0||e.recovery.increment>1))return true;
   if(e.wetDamageScale!==undefined&&(!Number.isFinite(e.wetDamageScale)||e.wetDamageScale<0||e.wetDamageScale>5))return true;
