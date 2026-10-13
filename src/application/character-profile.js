@@ -1,11 +1,7 @@
 import {heldCount} from '../core/inventory.js';
 import {fieldSkillPlan} from '../core/field-skills.js';
 
-// Display categories are explicit: MP costs, elements and healing alone do not
-// distinguish a spell from alchemy, breathing, songs or weapon techniques.
-const magicSkills=new Set(['fire','heal','cleanse','ice','lightning','firestorm','ice_bind','rune_armor','thundercloud','flameblade','greater_heal','purify','holy_guard','holy_light','lamplight','roots','blood_light','homeward','repel_kuragari','valley_curse']);
-const magicAbilities=new Set(['kuragari_ward','kindle_calm','kindle_lure','read_path','field_prayer','water_breath','dry_clothes']);
-export const abilityCategory=(id,field=false)=>(field?magicAbilities:magicSkills).has(id)?'magic':'skills';
+export {abilityCategory} from '../core/ability-category.js';
 export function projectFieldSkillTargets(engine,actorId,skillId){
   const {data:d,state:s}=engine,skill=d.skills[skillId];
   if(!skill.fieldUse)return [];

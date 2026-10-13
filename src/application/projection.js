@@ -1,7 +1,7 @@
 import {effectiveSkill,skillGrowthView} from '../core/skill-levels.js';
 import {trapMarkers} from '../core/scouting.js';
 import {stunned} from '../core/battle-turns.js';
-import {statusLevel} from '../core/status-effects.js';
+import {statusLevel,statusActionReason} from '../core/status-effects.js';
 import {xpThreshold} from '../core/progression.js';
 import {abilityCategory,personalItems,projectFieldSkillTargets} from './character-profile.js';
 import {rosterOrder,partyOrderPlan} from '../core/party-order.js';
@@ -51,7 +51,7 @@ export function projectGame(engine){
   if(dialog&&!s.battleResult)dialog.fieldScene=projectEventArt(d,s);
   let battle=null;
   if(s.battle){const actorId=activeActor(engine),actor=actorId?s.actors[actorId]:null;
-    battle={stunned:actor?stunned(s.battle,actor):false,preemptive:clone(s.battle.preemptive??null),event:s.battle.event?{id:s.battle.event.id}:null,background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,target:d.skills[d.items[id].battleSkill]?.target??'ally',enabled:!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id)}))};
+    battle={stunned:actor?stunned(s.battle,actor):false,preemptive:clone(s.battle.preemptive??null),event:s.battle.event?{id:s.battle.event.id}:null,background:d.assets.images[s.presentation.background],round:s.battle.round,actorId,actorName:d.actors[actorId]?.name??'',enemies:s.battle.enemies.map(e=>({id:e.instance,name:e.name,hp:e.hp,maxHp:e.stats.hp,sprite:d.assets.images[e.sprite],guarded:e.guard,statuses:e.statuses.map(id=>d.statuses[id].name+(dungeonEffectActive(d,s,'status',id)?'':'（停止中）')),...projectEnemyJob(engine,e)})),skills:projectBattleSkills(engine,actorId),canEscape:d.encounters[s.battle.encounter].escape,log:clone(s.battle.log),items:Object.entries(s.inventory).filter(([id,n])=>n>0&&d.items[id].battleSkill).map(([id,count])=>({id,name:d.items[id].name,count,target:d.skills[d.items[id].battleSkill]?.target??'ally',enabled:Boolean(actor)&&!statusActionReason(d,s,actor,'items')&&!dungeonAbilityReason(d,s,d.items[id].battleSkill,'battle.skill')&&dungeonEffectActive(d,s,'item',id),reason:statusActionReason(d,s,actor,'items')}))};
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectMarkerVisible(d,s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,inInteractionRange:canInteractAt(d,s,{map:map.id,...o}),...(o.edge?{edge:o.edge}:{}),...(o.kind==='clue'?{unread:objectHasUnreadInformation(d,s,map,o)}:{}),glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]),...trapMarkers(d,s));

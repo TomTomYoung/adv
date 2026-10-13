@@ -1,3 +1,4 @@
+import {statusAbilityReason} from './status-effects.js';
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {permission,costProblem,payCost} from './jobs.js';
 import {applySkill} from './battle.js';
@@ -21,7 +22,7 @@ export function fieldSkillPlan(engine,actorId,skillId,targetId){
   if(!grant)return fail('現在の職業・レベルでは使えない。');
   if(!dungeonEffectActive(d,s,'skill',skillId))return fail('この場所では効果が停止している。');
   if(!skill.effects.length||skill.effects.some(e=>!['heal','cleanse','restore_mp'].includes(e.type))||skill.selfEffects?.length)return fail('戦闘外で使えない効果がある。');
-  const reason=costProblem(d,s,actorId,skill);if(reason)return fail(reason);
+  const reason=statusAbilityReason(d,s,s.actors[actorId],skillId)||costProblem(d,s,actorId,skill);if(reason)return fail(reason);
   let ids=skill.target==='self'?[actorId]:skill.target==='all_allies'?s.members:skill.target==='ally'&&s.members.includes(targetId)?[targetId]:[];
   ids=ids.filter(id=>s.actors[id].hp>0);
   if(skill.selection==='lowest_hp_ratio')ids=[...ids].sort((a,b)=>s.actors[a].hp/engine.stats(a).hp-s.actors[b].hp/engine.stats(b).hp);

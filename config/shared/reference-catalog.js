@@ -33161,6 +33161,24 @@ export const referenceData={
       },
       "curse_poison": {
         "name": "呪毒"
+      },
+      "paralysis": {
+        "name": "まひ"
+      },
+      "blindness": {
+        "name": "くらやみ"
+      },
+      "spell_seal": {
+        "name": "呪文封印"
+      },
+      "skill_seal": {
+        "name": "スキル封印"
+      },
+      "item_seal": {
+        "name": "アイテム封印"
+      },
+      "confusion": {
+        "name": "こんらん"
       }
     },
     "shops": {

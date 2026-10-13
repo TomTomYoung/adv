@@ -2,7 +2,7 @@ import {syncSkillGrowth} from './skill-levels.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
 import {treasurePlan} from './treasures.js';
-import {removeStatus,tickStatuses,applyStatusClock} from './status-effects.js';
+import {removeStatus,tickStatuses,applyStatusClock,fieldItemUser} from './status-effects.js';
 import {rollbackEventCheckpoints} from './event-checkpoints.js';
 import {edgeBetween} from './edge-layers.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
@@ -328,7 +328,7 @@ export class GameEngine {
     if(type==='equip')return this.equip(intent.actor,intent.item,intent.source);
     if(type==='item'){
       if(intent.source!==undefined&&(!validHolder(this.state,intent.source)||heldCount(this.data,this.state,intent.item,intent.source)<1)){this.state.notice='選んだ持ち主は、その品物を持っていません。';return false;}
-      return this.useItem(intent.item,intent.actor);
+      return this.useItem(intent.item,intent.actor,intent.source);
     }
     return false;
   }
@@ -374,7 +374,8 @@ export class GameEngine {
     const item=a.equipment[slot];if(!item||(s.inventory[item]??0)>=this.data.system.maxStack)return false;
     unequipGear(s,actorId,slot);delete a.equipment[slot];s.inventory[item]=(s.inventory[item]??0)+1;const stats=this.stats(actorId);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);return true;
   }
-  useItem(itemId,actorId){
+  useItem(itemId,actorId,source='shared'){
+    const user=fieldItemUser(this.data,this.state,source);if(!user.ok){this.notify(user.reason);return false;}
     const handled=dungeonUseItem(this,itemId);if(handled!==null)return handled;
     const item=this.data.items[itemId];if(!item||!item.field||!(this.state.inventory[itemId]>0)||!this.state.members.includes(actorId))return false;
     if(!dungeonEffectActive(this.data,this.state,'item',itemId)||item.battleSkill&&dungeonAbilityReason(this.data,this.state,item.battleSkill,'battle.skill')){this.notify('この場所では道具の術を使用できません。');return false;}

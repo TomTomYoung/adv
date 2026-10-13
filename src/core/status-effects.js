@@ -1,3 +1,4 @@
+import {abilityCategory} from './ability-category.js';
 import {dungeonEffectActive} from './dungeons.js';
 const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 export const STATUS_LEVEL_MAX=3;
@@ -29,6 +30,7 @@ export function applyStatus(data,state,target,id,duration,level=1){
 export function removeStatus(target,id){
   target.statuses=id?target.statuses.filter(s=>s!==id):[];
   if(target.statusDurations){if(id){delete target.statusDurations[id];if(!Object.keys(target.statusDurations).length)delete target.statusDurations;}else delete target.statusDurations;}
+  if(target.statusRecoveryTurns){if(id){delete target.statusRecoveryTurns[id];if(!Object.keys(target.statusRecoveryTurns).length)delete target.statusRecoveryTurns;}else delete target.statusRecoveryTurns;}
   if(target.statusLevels){if(id){delete target.statusLevels[id];if(!Object.keys(target.statusLevels).length)delete target.statusLevels;}else delete target.statusLevels;}
 }
 export function tickStatuses(data,state,target,clock){
@@ -37,6 +39,46 @@ export function tickStatuses(data,state,target,clock){
     if(!dungeonEffectActive(data,state,'status',id)||timer[clock]===undefined)continue;
     if(--timer[clock]<=0)removeStatus(target,id);
   }
+}
+// Recovery age belongs to the unit, so ending a battle or loading cannot reset it.
+export function recoverStatuses(engine,target){
+  if(target.hp<=0)return;
+  for(const id of [...target.statuses]){
+    const recovery=statusEffect(engine.data,target,id)?.recovery;
+    if(!recovery||!dungeonEffectActive(engine.data,engine.state,'status',id))continue;
+    const elapsed=target.statusRecoveryTurns?.[id]??0;
+    const chance=Math.min(1,Math.round((recovery.initialChance+elapsed*recovery.increment)*1e12)/1e12);
+    if(chance>=1||engine.random()<chance){
+      removeStatus(target,id);
+      (engine.state.battle?.log??engine.state.log).push(`${target.name??engine.data.actors[target.id]?.name}の${engine.data.statuses[id].name}が治った。`);
+    }else (target.statusRecoveryTurns??={})[id]=Math.min(1e6,elapsed+1);
+  }
+}
+export function statusActionReason(data,state,target,kind){
+  for(const id of target?.statuses??[])if(dungeonEffectActive(data,state,'status',id)&&statusEffect(data,target,id)?.blockedActions?.includes(kind))return `${data.statuses[id].name}で${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}を使用できません。`;
+  return '';
+}
+export function statusAbilityReason(data,state,target,id,field=false){
+  if(!field&&['attack','guard'].includes(id))return '';
+  return statusActionReason(data,state,target,abilityCategory(id,field));
+}
+export function rollActionStatus(engine,target,key){
+  for(const id of target.statuses)if(dungeonEffectActive(engine.data,engine.state,'status',id)){
+    const chance=statusEffect(engine.data,target,id)?.[key]??0;
+    if(chance>0&&(chance>=1||engine.random()<chance))return id;
+  }
+  return null;
+}
+export function statusAccuracy(data,state,target){
+  return (target.statuses??[]).reduce((rate,id)=>rate*(dungeonEffectActive(data,state,'status',id)?statusEffect(data,target,id)?.accuracyRate??1:1),1);
+}
+// A field item's recipient is not its user. Shared supplies may be used by any
+// living, unsealed party member; a named holder is the acting party member.
+export function fieldItemUser(data,state,holder='shared'){
+  const ids=holder==='shared'?state.members:state.members.filter(id=>id===holder);
+  const alive=ids.filter(id=>state.actors[id]?.hp>0);
+  const actor=alive.find(id=>!statusActionReason(data,state,state.actors[id],'items'));
+  return actor?{ok:true,actor}:{ok:false,reason:alive.length?statusActionReason(data,state,state.actors[alive[0]],'items'):'アイテムを使用できる仲間がいません。'};
 }
 export function statusStats(data,state,target,base){
   const stats={...base};
@@ -59,6 +101,9 @@ function effectErrors(e){
   if(!record(e))return true;
   if(['stepDamage','turnDamage','stepMpDamage','turnMpDamage'].some(k=>e[k]!==undefined&&(!Number.isSafeInteger(e[k])||e[k]<0||e[k]>1e6)))return true;
   if(['stepHpRate','turnHpRate','stepMpRate','turnMpRate'].some(k=>e[k]!==undefined&&(!Number.isFinite(e[k])||e[k]<0||e[k]>1)))return true;
+  if(['actionFailureChance','confusionChance','accuracyRate'].some(k=>e[k]!==undefined&&(!Number.isFinite(e[k])||e[k]<0||e[k]>1)))return true;
+  if(e.blockedActions!==undefined&&(!Array.isArray(e.blockedActions)||!e.blockedActions.length||new Set(e.blockedActions).size!==e.blockedActions.length||e.blockedActions.some(k=>!['magic','skills','items'].includes(k))))return true;
+  if(e.recovery!==undefined&&(!record(e.recovery)||Object.keys(e.recovery).some(k=>!['initialChance','increment'].includes(k))||!Number.isFinite(e.recovery.initialChance)||e.recovery.initialChance<=0||e.recovery.initialChance>1||!Number.isFinite(e.recovery.increment)||e.recovery.increment<=0||e.recovery.increment>1))return true;
   if(e.wetDamageScale!==undefined&&(!Number.isFinite(e.wetDamageScale)||e.wetDamageScale<0||e.wetDamageScale>5))return true;
   if(e.wetBacklashRate!==undefined&&(!Number.isFinite(e.wetBacklashRate)||e.wetBacklashRate<0||e.wetBacklashRate>1))return true;
   if(e.wetSuppressElements!==undefined&&(!Array.isArray(e.wetSuppressElements)||e.wetSuppressElements.some(x=>!['ice','lightning'].includes(x))))return true;
@@ -78,5 +123,6 @@ export function statusStateErrors(data,target){
   const errors=[];if(new Set(target.statuses).size!==target.statuses.length)errors.push('状態異常が重複しています');
   if(target.statusDurations!==undefined&&(!record(target.statusDurations)||Object.entries(target.statusDurations).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusDurationValid(v))))errors.push('状態異常の残り時間が不正です');
   if(target.statusLevels!==undefined&&(!record(target.statusLevels)||Object.entries(target.statusLevels).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusLevelValid(v)||v===1)))errors.push('状態異常Lvが不正です');
+  if(target.statusRecoveryTurns!==undefined&&(!record(target.statusRecoveryTurns)||Object.entries(target.statusRecoveryTurns).some(([id,v])=>!data.statuses[id]||!target.statuses.includes(id)||!statusEffect(data,target,id)?.recovery||!Number.isSafeInteger(v)||v<0||v>1e6)))errors.push('状態異常の回復経過ターンが不正です');
   return errors;
 }

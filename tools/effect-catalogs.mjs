@@ -46,6 +46,11 @@ const statusLevelText=(id,def,level)=>{
   if(effect.stepMpRate)parts.push(`成功歩ごと最大MPの${percent(effect.stepMpRate)}減少`);
   if(effect.turnMpRate)parts.push(`戦闘ターン終了時最大MPの${percent(effect.turnMpRate)}減少`);
   for(const [key,n] of Object.entries(effect.stats??{}))parts.push(`${statLabels[key]??key}×${n}`);
+  if(effect.actionFailureChance!==undefined)parts.push(`行動時${percent(effect.actionFailureChance)}で行動不能（行動枠のみ消費）`);
+  if(effect.accuracyRate!==undefined)parts.push(`攻撃・攻撃的な効果の命中率×${effect.accuracyRate}`);
+  if(effect.confusionChance!==undefined)parts.push(`行動時${percent(effect.confusionChance)}で使用可能な行動・対象をランダム選択`);
+  for(const kind of effect.blockedActions??[])parts.push(`${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}使用不可`);
+  if(effect.recovery)parts.push(`ターン終了時に回復抽選（初回${percent(effect.recovery.initialChance)}、以後毎ターン${percent(effect.recovery.increment)}ポイント上昇、上限100%）`,'戦闘終了後も状態と回復経過を持ち越す');
   if(id==='wet'){
     parts.push(`雷・氷の被ダメージ×${effect.wetDamageScale??1}`);
     parts.push(`雷・氷魔法使用時、自身の最大HPの${percent(effect.wetBacklashRate??0)}を失う`);
@@ -57,7 +62,7 @@ const statusLevelText=(id,def,level)=>{
 const statusSkillSources=(data,id)=>Object.entries(data.skills??{}).filter(([,skill])=>[...(skill.effects??[]),...(skill.selfEffects??[])].some(e=>e.type==='status'&&e.status===id)).map(([skillId,skill])=>`${skill.name} (${skillId})`);
 export function statusCatalog(data,{date}={}){
   const entries=Object.entries(data.statuses??{}),lines=['# 状態異常一覧','',`更新日: ${date??'未記録'}。作品版${data.game.version}。通常状態異常${entries.length}件＋戦闘限定状態2件。`,'',
-    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。毒系・帰らぬ呪い・濡れ・衰弱の数値は2026-10-13時点の暫定基準値です。戦闘限定の防御とスタンもこのカタログに含めます。','',
+    '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。毒系・帰らぬ呪い・濡れ・衰弱、およびまひ・くらやみ・各封印・こんらんのLv1数値は2026-10-13時点の暫定基準値です。戦闘限定の防御とスタンもこのカタログに含めます。','',
     '## 通常状態異常',''];
   for(const [id,def] of entries){
     const sources=[...statusSkillSources(data,id),...(trapSources[id]??[]).map(v=>`標準トラップ：${v}`)];

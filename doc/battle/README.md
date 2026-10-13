@@ -4,7 +4,7 @@
 
 [PROGRESSION_AND_REWARDS.md](PROGRESSION_AND_REWARDS.md)：個別経験値、勝利リザルト、魔物別宝箱、戦闘外の回復。
 
-[STATUS_EFFECTS.md](STATUS_EFFECTS.md)：毒・呪い・濡れ・パラメータ異常・魔術系異常の付与、持続、解除、保存。
+[STATUS_EFFECTS.md](STATUS_EFFECTS.md)：毒・呪い・濡れ・まひ・くらやみ・各封印・こんらん等の付与、自然回復、行動制限、持ち越しと保存。
 
 [STATUS_CATALOG.md](STATUS_CATALOG.md)：通常状態異常と、防御・スタンなど戦闘限定状態のLv1〜Lv3。
 
