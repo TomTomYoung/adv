@@ -1,3 +1,4 @@
+import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {permission,costProblem,payCost} from './jobs.js';
 import {applySkill} from './battle.js';
 import {dungeonEffectActive} from './dungeons.js';
@@ -12,7 +13,7 @@ function unneededRecoveryReason(data,skill){
 }
 
 export function fieldSkillPlan(engine,actorId,skillId,targetId){
-  const {data:d,state:s}=engine,skill=d.skills[skillId],fail=(reason,reasonScope='ability')=>({ok:false,reason,reasonScope});
+  const {data:d,state:s}=engine,skill=effectiveSkill(d,s,actorId,skillId),fail=(reason,reasonScope='ability')=>({ok:false,reason,reasonScope});
   if(!skill?.fieldUse)return fail('この技能は戦闘時に使用する。');
   if(!['town','dungeon'].includes(s.mode)||s.waiting||s.battle||s.battleResult)return fail('会話や戦闘が終わってから使う。');
   if(!s.members.includes(actorId))return fail('出撃メンバーだけが使える。');
@@ -34,6 +35,7 @@ export function useFieldSkill(engine,actorId,skillId,targetId){
   const plan=fieldSkillPlan(engine,actorId,skillId,targetId);if(!plan.ok){engine.notify(plan.reason);return false;}
   payCost(engine,actorId,plan.skill);
   for(const target of plan.targets)applySkill(engine,engine.state.actors[actorId],target,plan.skill,skillId);
+  recordSkillUse(engine,actorId,skillId);
   engine.cue(engine.data.presentation?.bindings.skills[skillId],plan.targets.map(a=>`actor:${a.id}`));
   engine.notify(`${engine.data.actors[actorId].name}は${plan.skill.name}を使った。`);return true;
 }

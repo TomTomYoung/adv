@@ -1,6 +1,263 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
+    "skillCondition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "actor_level"
+            },
+            "level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            }
+          },
+          "required": [
+            "kind",
+            "level"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "uses"
+            },
+            "skill": {
+              "type": "string",
+              "minLength": 1
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            }
+          },
+          "required": [
+            "kind",
+            "count"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "weapon_uses"
+            },
+            "weapon": {
+              "type": "string",
+              "minLength": 1
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            }
+          },
+          "required": [
+            "kind",
+            "weapon",
+            "count"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "action_uses"
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            }
+          },
+          "required": [
+            "kind",
+            "action",
+            "count"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "event"
+            },
+            "event": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "event"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "flag"
+            },
+            "flag": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": [
+                "boolean",
+                "number",
+                "string"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "flag"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "training"
+            },
+            "skill": {
+              "type": "string",
+              "minLength": 1
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            }
+          },
+          "required": [
+            "kind",
+            "count"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "skill"
+            },
+            "skill": {
+              "type": "string",
+              "minLength": 1
+            },
+            "level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          },
+          "required": [
+            "kind",
+            "skill"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "companion"
+            },
+            "actor": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "actor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "random"
+            },
+            "on": {
+              "enum": [
+                "skill",
+                "weapon",
+                "action"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "chance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "on",
+            "id",
+            "chance"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 16,
+              "items": {
+                "$ref": "#/$defs/skillCondition"
+              }
+            }
+          },
+          "required": [
+            "all"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "any": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 16,
+              "items": {
+                "$ref": "#/$defs/skillCondition"
+              }
+            }
+          },
+          "required": [
+            "any"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
     "value": {
       "oneOf": [
         {
@@ -2221,6 +2478,37 @@
             "op": {
               "const": "battle.start"
             },
+            "preemptive": {
+              "type": "object",
+              "properties": {
+                "side": {
+                  "enum": [
+                    "allies",
+                    "enemies"
+                  ]
+                },
+                "actions": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
+                },
+                "chance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "side",
+                "actions"
+              ],
+              "additionalProperties": false
+            },
             "id": {
               "type": "string",
               "minLength": 1
@@ -2578,6 +2866,50 @@
           "type": "object",
           "properties": {
             "op": {
+              "const": "skill.train"
+            },
+            "actor": {
+              "type": "string",
+              "minLength": 1
+            },
+            "skill": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "actor",
+            "skill"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "skill.action"
+            },
+            "actor": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "actor",
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
               "const": "job.change"
             },
             "actor": {
@@ -2607,6 +2939,10 @@
               "minLength": 1
             },
             "ability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
               "type": "string",
               "minLength": 1
             }
@@ -2804,6 +3140,22 @@
               "water_passable"
             ]
           },
+          "eventFaces": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "additionalProperties": {
+              "enum": [
+                "north",
+                "east",
+                "south",
+                "west"
+              ]
+            }
+          },
           "events": {
             "type": "array",
             "uniqueItems": true,
@@ -2916,6 +3268,69 @@
         "properties": {
           "trigger": {
             "const": "enter"
+          },
+          "trap": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "rockfall",
+                  "cave_in",
+                  "needle",
+                  "arrow",
+                  "gas",
+                  "magic_circle",
+                  "pit",
+                  "explosion",
+                  "drip"
+                ]
+              },
+              "hidden": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 20
+              },
+              "difficulty": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "item": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000000000
+                  },
+                  "minLevel": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "chance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "item",
+                  "count",
+                  "minLevel",
+                  "chance"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
           },
           "script": {
             "type": "string",
@@ -4980,6 +5395,22 @@
                     ]
                   },
                   "required": []
+                },
+                "eventFaces": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                  },
+                  "additionalProperties": {
+                    "enum": [
+                      "north",
+                      "east",
+                      "south",
+                      "west"
+                    ]
+                  }
                 },
                 "events": {
                   "type": "array",

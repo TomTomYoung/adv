@@ -14898,6 +14898,30 @@ export const referenceData={
       "id": "cell.poison_step"
     },
     {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_needle",
+        "trap",
+        "recovery",
+        "item"
+      ],
+      "kind": "items",
+      "id": "hard_thorn"
+    },
+    {
+      "file": "cell-layers.json",
+      "path": [
+        "events",
+        "trap_arrow",
+        "trap",
+        "recovery",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
       "file": "connected-maps.json",
       "path": [
         "maps",
@@ -17705,6 +17729,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "jobs",
+        "rogue",
+        "grants",
+        3,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
         "assassin",
         "grants",
         0,
@@ -17784,6 +17820,90 @@ export const referenceData={
       ],
       "kind": "fieldAbilities",
       "id": "climb_route"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        4,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_disarm"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        5,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "trap_detect"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        6,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "ambush"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        7,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "seek_enemy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        8,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "patrol"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        9,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "camouflage"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
+        "scout",
+        "grants",
+        10,
+        "skill"
+      ],
+      "kind": "fieldAbilities",
+      "id": "recon"
     },
     {
       "file": "jobs.json",
@@ -19208,6 +19328,34 @@ export const referenceData={
       "path": [
         "skills",
         "trip",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "trip"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trip",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "trip",
+        "levels",
+        "3",
         "effects",
         1,
         "buff"
@@ -33321,6 +33469,9 @@ export const referenceData={
       },
       "statNames": {
         "name": "statNames"
+      },
+      "skillActions": {
+        "name": "skillActions"
       }
     },
     "buffs": {
@@ -33418,6 +33569,27 @@ export const referenceData={
       },
       "dry_clothes": {
         "name": "乾かしの火"
+      },
+      "trap_disarm": {
+        "name": "罠解除"
+      },
+      "trap_detect": {
+        "name": "罠発見"
+      },
+      "ambush": {
+        "name": "奇襲"
+      },
+      "seek_enemy": {
+        "name": "索敵"
+      },
+      "patrol": {
+        "name": "哨戒"
+      },
+      "camouflage": {
+        "name": "迷彩"
+      },
+      "recon": {
+        "name": "偵察"
       }
     },
     "characters": {
@@ -57465,6 +57637,55 @@ export const referenceData={
       "path": [
         "fieldAbilities",
         "dry_clothes"
+      ]
+    },
+    "fieldAbilities/trap_disarm": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_disarm"
+      ]
+    },
+    "fieldAbilities/trap_detect": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "trap_detect"
+      ]
+    },
+    "fieldAbilities/ambush": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "ambush"
+      ]
+    },
+    "fieldAbilities/seek_enemy": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "seek_enemy"
+      ]
+    },
+    "fieldAbilities/patrol": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "patrol"
+      ]
+    },
+    "fieldAbilities/camouflage": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "camouflage"
+      ]
+    },
+    "fieldAbilities/recon": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "recon"
       ]
     },
     "buffs/battle_cry": {

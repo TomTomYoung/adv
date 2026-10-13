@@ -2,7 +2,7 @@
 
 状態異常の共通処理は [STATUS_EFFECTS.md](STATUS_EFFECTS.md) を参照してください。戦闘技能・トラップ・探索の解除は同じ状態を扱います。
 
-2026-10-13: 斥候へ追加する罠解除・罠発見・奇襲・索敵・哨戒・迷彩・偵察は [斥候の探索技能](SCOUT_SKILLS.md)、技能そのもののLv1〜3程度の成長は [技能レベル](SKILL_LEVELS.md) に採用仕様として分離しました。現行の生成一覧は未実装能力を含めません。
+2026-10-13: [斥候の7技能](SCOUT_SKILLS.md)、盗賊の罠解除、[技能Lvと成長条件](SKILL_LEVELS.md)、スタン・先制を実装しました。同版セーブを継続でき、人物ごとの技能Lvは転職後も保持します。使用権限は現在職のままです。
 
 更新日: 2026-09-25。作品版1.20.0の30職と、転職・技能・バフ・装備制限・履歴成長の仕様です。検証状況は[PROGRESS.md](../development/PROGRESS.md)を参照してください。
 
@@ -129,11 +129,11 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ### 盗賊 (rogue)
 
-罠の被害を抑え、敵の攻撃力を削って損失を減らす。
+罠を解除し、敵の攻撃力を削って損失を減らす。
 
 成長/Lv：HP 6.5 / MP 2 / STR 1.9 / VIT 0.8 / AGI 0.8 / INT 1.3。現在職の加算：なし。
 装備：weapon＝dagger・sword / armor＝light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv5 武器落とし (battle.skill) / Lv10 軽身の構え (battle.skill)。
+習得：Lv1 毒の刃 (battle.skill) / Lv5 武器落とし (battle.skill) / Lv10 軽身の構え (battle.skill) / Lv1 罠解除 (trap.disarm)。
 特性：{"trapDamage":0.7}。鍵や物語条件を無視する解錠・盗品複製は行いません。
 
 ### 暗殺者 (assassin)
@@ -147,11 +147,11 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ### 斥候 (scout)
 
-遭遇を少し減らし、敵の足を乱して離脱を支える。
+罠と未探索域を調べ、敵との接触順を整えて隊を導く。
 
 成長/Lv：HP 6.5 / MP 2 / STR 1.8 / VIT 0.9 / AGI 0.8 / INT 1.3。現在職の加算：なし。
 装備：weapon＝dagger・bow / armor＝light / charm＝charm。
-習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal) / Lv1 登攀誘導 (voxel.traverse)。
+習得：Lv1 毒の刃 (battle.skill) / Lv5 足払い (battle.skill) / Lv10 周辺測量 (map.reveal) / Lv1 登攀誘導 (voxel.traverse) / Lv1 罠解除 (trap.disarm) / Lv1 罠発見 (trap.detect) / Lv5 奇襲 (party.ambush) / Lv1 索敵 (encounter.seek) / Lv1 哨戒 (party.patrol) / Lv5 迷彩 (party.camouflage) / Lv10 偵察 (party.recon)。
 特性：{"encounterRate":0.9,"escapeBonus":0.08}。直接火力より行軍の安全を重視します。
 
 ### 魔術師 (mage)
@@ -334,7 +334,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 習得：Lv1 手当の祈り (battle.skill) / Lv5 帰路の祈り (battle.skill) / Lv10 解毒 (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
 特性：{"retreatCost":0.5}。割引は帰還印のみで、敗北時の救援費は変わりません。
 
-## 探索特技13定義
+## 探索特技20定義
 
 ### 周辺測量 (survey)
 
@@ -387,6 +387,69 @@ MP4。地下水道の探索中、隊全員の移動と呼吸を水没度10まで
 ### 乾かしの火 (dry_clothes)
 
 MP2。水没していない場所で炎を使い、隊全員の濡れを解除する。 API: party.dry。使用場所: town / dungeon。
+
+### 罠解除 (trap_disarm)
+
+既知の床罠・向いている壁面罠を解除する。技能Lv2から回収可能な罠の部品を拾える。 API: trap.disarm。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"difficulty":2,"recover":true}。
+技能Lv3の変更：{"difficulty":3}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 罠発見 (trap_detect)
+
+周囲3×3の罠を地図へ記録する。技能Lv2で5×5、Lv3で7×7。 API: trap.detect。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"radius":2,"hidden":2}。
+技能Lv3の変更：{"radius":3,"hidden":3}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 奇襲 (ambush)
+
+40歩以内の次の戦闘に味方先制を予約する。技能Lvごとに先制回数が増える。 API: party.ambush。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"actions":2,"duration":60}。
+技能Lv3の変更：{"actions":3,"duration":80}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 索敵 (seek_enemy)
+
+同じフロアの通常遭遇候補と戦う。固定戦闘・依頼専用の戦闘は呼び寄せない。 API: encounter.seek。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"mp":1}。
+技能Lv3の変更：{"mp":0}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 哨戒 (patrol)
+
+30歩の間、敵側の先制を防ぐ。味方の先制は別に用意する。 API: party.patrol。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"duration":50}。
+技能Lv3の変更：{"duration":80}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 迷彩 (camouflage)
+
+30歩の間、通常遭遇率を0.6倍にする。固定イベントの戦闘は影響を受けない。 API: party.camouflage。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"duration":50,"rate":0.4}。
+技能Lv3の変更：{"duration":80,"rate":0.2}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 偵察 (recon)
+
+隊から一時離脱し、周囲の未探索域と罠を調べて6歩後に復帰する。技能Lv3では最大2件を解除する。 API: party.recon。使用場所: dungeon。
+技能Lv：1〜3。人物Lvによる習得条件とは独立。
+技能Lv2の変更：{"radius":6,"hidden":2,"difficulty":2,"cells":16,"returnSteps":5}。
+技能Lv3の変更：{"radius":8,"hidden":3,"difficulty":3,"cells":24,"returnSteps":4,"disarmCount":2}。
+技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
+技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
 
 <!-- /generated:jobs -->
 

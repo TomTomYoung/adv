@@ -49,7 +49,7 @@ function profile(view,actor,m,{context,page='overview',jobs=false,onPage}){
     const parameters=make('dl','profile-parameters');for(const [key,value] of Object.entries(actor.stats??{}))parameters.append(make('dt','',m.statNames?.[key]??stats[key]??key),make('dd','',String(value)));content.append(parameters);
     if(actor.statuses?.length)content.append(make('p','requirement',actor.statuses.join('・')));
     if(buffLabels(actor).length)content.append(make('p','',buffLabels(actor).join(' / ')));
-    content.append(make('h4','','戦闘時アクション'));const actions=make('div','profile-action-list');for(const skill of actor.skills??[])actions.append(make('span','badge',`${skill.name}${skill.mp?` MP${skill.mp}`:''}`));content.append(actions);
+    content.append(make('h4','','戦闘時アクション'));const actions=make('div','profile-action-list');for(const skill of actor.skills??[])actions.append(make('span','badge',`${skill.name} Lv${skill.skillLevel??1}${skill.mp?` MP${skill.mp}`:''}`));content.append(actions);
     content.append(make('h4','','装備'));for(const [slot,label] of Object.entries(slots))content.append(make('p','profile-equipment',`${label}：${actor.equipment?.[slot]??'なし'}`));
   }else if(page==='jobs'){
     content.append(make('h3','',`${actor.name}の転職`));const jobsPanel=jobPanel(actor,m,intent=>view.act(intent));if(jobsPanel){jobsPanel.open=true;content.append(jobsPanel);}
@@ -61,13 +61,14 @@ function profile(view,actor,m,{context,page='overview',jobs=false,onPage}){
     content.append(make('h3','',`${actor.name}の${page==='magic'?'魔法':'スキル'}`));
     const entries=[...(actor.skills??[]).filter(s=>(s.category??'skills')===page).map(s=>({...s,battle:true})),...(actor.fieldAbilities??[]).filter(s=>(s.category??'skills')===page)];
     if(!entries.length)content.append(make('p','empty',`習得している${page==='magic'?'魔法':'スキル'}はありません。`));
-    for(const ability of entries){const row=make('article','profile-entry');row.append(make('h4','',`${ability.name}　MP${ability.mp??0}`),make('p','',ability.description));
+    for(const ability of entries){const row=make('article','profile-entry');row.append(make('h4','',`${ability.name}　技能Lv${ability.skillLevel??1}　MP${ability.mp??0}`),make('p','',ability.description));
+      if(ability.growth)row.append(make('small','profile-skill-growth',`次の技能Lv：${ability.growth}`));
       if(ability.battle){
         if(ability.fieldUse){
           fieldTargets(view,row,actor,ability,context,page);
         }else row.append(make('small','muted','戦闘時に使用'));
       }
-      else{row.append(button('使う',`profile:${context}:use:${ability.id}`,()=>view.act({type:'job.action',actor:actor.id,ability:ability.id}),!ability.enabled));if(ability.reason)row.append(make('small','requirement',ability.reason));}
+      else{if(ability.targets?.length){for(const target of ability.targets)row.append(button(target.name,`profile:${context}:use:${ability.id}:${target.id}`,()=>view.act({type:'job.action',actor:actor.id,ability:ability.id,target:target.id}),!target.enabled));}else row.append(button('使う',`profile:${context}:use:${ability.id}`,()=>view.act({type:'job.action',actor:actor.id,ability:ability.id}),!ability.enabled));if(ability.reason)row.append(make('small','requirement',ability.reason));}
       content.append(row);
     }
   }
@@ -80,6 +81,7 @@ export function renderCharacter(view,parent,m){
 }
 export function renderParty(view,parent,m){
   const section=make('section','panel-content party-board');section.setAttribute('aria-label','隊の状態');
+  if(m.scouting?.recon)section.append(make('p','requirement',`${m.scouting.recon.name}は偵察中。あと${m.scouting.recon.remaining}歩で合流します。`));
   view.partySelection??={};view.partyPages??={};
   for(const [group,title,actors] of [['party','パーティー',m.party.map(a=>(m.roster??[]).find(r=>r.id===a.id)??a)],['tavern','酒場',(m.roster??[]).filter(a=>!a.active)]]){
     if(group==='tavern'&&m.mode!=='town')continue;

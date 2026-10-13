@@ -1,3 +1,6 @@
+import {battleTurnSaveErrors} from './battle-turns.js';
+import {scoutingSaveErrors} from './scouting.js';
+import {skillProgressErrors} from './skill-levels.js';
 import {occurrenceSaveErrors} from './event-occurrence.js';
 import {mapChangesErrors} from './map-mutations.js';
 import {statusStateErrors} from './status-effects.js';
@@ -144,7 +147,7 @@ export function validateSave(save,data){
     if(typeof v==='number'&&!Number.isFinite(v))fail('数値不正');
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
-  errors.push(...occurrenceSaveErrors(data,s),...mapChangesErrors(data,s),...treasureSaveErrors(data,s));
+  errors.push(...scoutingSaveErrors(data,s),...skillProgressErrors(data,s),...occurrenceSaveErrors(data,s),...mapChangesErrors(data,s),...treasureSaveErrors(data,s));
   if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
   if(data.game.inspectionVersion===1)errors.push(...validateInspections(s,data));
   if(data.game.fieldEventVersion===1)errors.push(...validateFieldReactions(data,s));
@@ -193,7 +196,7 @@ export function validateSave(save,data){
     errors.push(...statusStateErrors(data,actor));
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
-  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s));
+  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}

@@ -13,8 +13,12 @@ export function referenceOptions(app,key,location,parent={}){
  const context=app.context,path=location.path;
  let kind=referenceKinds[key];
  if(key==='cue'&&path[0]==='fieldAbilities')kind='eventCues';
+ if(key==='skill'&&(['uses','skill','training'].includes(parent.kind)||parent.op==='skill.train'))kind='skillDefinitions';
+ if(key==='id'&&parent.kind==='random'&&['skill','weapon'].includes(parent.on))kind=parent.on==='skill'?'skillDefinitions':'items';
+ if(key==='weapon'&&parent.kind==='weapon_uses')kind='items';
+ if(key==='event'&&parent.kind==='event')return null;
  if(key==='skill'&&parent.api&&parent.api!=='battle.skill')kind='fieldAbilities';
- if(key==='api')return ['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry'].filter(id=>path[0]!=='fieldAbilities'||id!=='battle.skill').map(id=>[id,enumLabel(id)]);
+ if(key==='api')return ['battle.skill','map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry','trap.disarm','trap.detect','party.ambush','encounter.seek','party.patrol','party.camouflage','party.recon'].filter(id=>path[0]!=='fieldAbilities'||id!=='battle.skill').map(id=>[id,enumLabel(id)]);
  if(key==='equipmentType')return context.options('equipment-all');
  if(key==='instrument')return ['pluck','bell','flute','pulse','pad','bass','kick','snare','hat'].map(id=>[id,enumLabel(id)]);
  if(key==='asset')kind=parent.op?.startsWith('audio.')?'audio':'images';
@@ -70,6 +74,10 @@ export function renderValue(app,location,definition={},key='value',{parent={},re
  if(!required&&!identityKeys.has(key)&&value!==null&&typeof value==='object'&&typeof path.at(-1)!=='number')root.append(button('未指定に戻す',()=>{if(app.guard())write(undefined,true);},'field-remove'));
  if(commandKeys.has(key)&&Array.isArray(value)){root.append(renderCommands(app,location,value));return root;}
  if(expression||expressionKeys.has(key)||(definition.$ref==='#/$defs/value'&&!((typeof value!=='object'||value===null)&&(textKeys.has(key)||referenceOptions(app,key,location,parent)?.length)))||definition.$ref==='#/$defs/expression'||(value?.op&&expressionNames[value.op])){root.append(renderExpression(app,location,value,caption));if(help[key])root.append(el('p',help[key],'field-help'));return root;}
+ if(definition.$ref==='#/$defs/skillCondition'){
+  const choices=rootSchema.$defs.skillCondition.oneOf.map(s=>({key:s.properties.kind?.const??(s.properties.all?'all':'any'),schema:s}));
+  root.append(select(choices.map(c=>[c.key,enumLabel(c.key)]),value?.kind??(value?.all?'all':'any'),next=>{if(!app.guard())return;write(initialValue(choices.find(c=>c.key===next).schema,rootSchema,key,{defaultReference:k=>referenceOptions(app,k,location,{kind:next})?.[0]?.[0]}),true);},'成長条件の種類'));
+ }
  const variants=definition.oneOf?.filter(s=>s.properties?.kind?.const);
  if(variants?.length>1&&value&&typeof value==='object')root.append(select(variants.map(s=>[s.properties.kind.const,enumLabel(s.properties.kind.const)]),value.kind,next=>{
   if(!app.guard())return;const chosen=variants.find(s=>s.properties.kind.const===next),fresh=initialValue(chosen,rootSchema,key,{defaultReference:k=>referenceOptions(app,k,location,parent)?.[0]?.[0]});
@@ -78,7 +86,7 @@ export function renderValue(app,location,definition={},key='value',{parent={},re
  const nullable=definition.anyOf?.some(s=>s.type==='null')||Array.isArray(definition.type)&&definition.type.includes('null');
  if(nullable&&value===null){root.append(el('span',['capacity','maxCount'].includes(key)?'無制限':'なし'),button('値を指定する',()=>{if(!app.guard())return;const nonnull=definition.anyOf?.find(s=>s.type!=='null')??{...definition,type:definition.type.filter(t=>t!=='null')};write(initialValue(nonnull,rootSchema,key),true);}));return root;}
  if(nullable)root.append(button(['capacity','maxCount'].includes(key)?'無制限にする':'なしにする',()=>{if(app.guard())write(null,true);}));
- if(identityKeys.has(key)){root.append(el('code',String(value),'identifier'),el('small','参照を維持するため通常の編集では変更しません。','muted'));return root;}
+ if(identityKeys.has(key)&&!(key==='id'&&parent.kind==='random')){root.append(el('code',String(value),'identifier'),el('small','参照を維持するため通常の編集では変更しません。','muted'));return root;}
  if(value&&typeof value==='object'&&!Array.isArray(value)&&'x' in value&&'y' in value){
   const point=el('div','','point-fields');const map=value.map??app.mapId;
   point.append(renderRecord(app,location,schema));
@@ -93,7 +101,7 @@ export function renderValue(app,location,definition={},key='value',{parent={},re
    const inner=el('div','',['stats','growth','resist','parameters','rect','display'].includes(key)?'compact-fields':'nested-fields');
    inner.append(renderRecord(app,location,schema));root.append(inner);return root;
   }
-  const details=el('details','','nested-card');details.open=['outcomes','initialJobs','bindings','equipment'].includes(key);details.append(el('summary',`${caption}（${Object.keys(value).length}件）`));
+  const details=el('details','','nested-card');details.open=['outcomes','initialJobs','bindings','equipment','levels','levelUp'].includes(key);details.append(el('summary',`${caption}（${Object.keys(value).length}件）`));
   for(const [id,entry] of Object.entries(value)){
    let childSchema=typeof schema.additionalProperties==='object'?schema.additionalProperties:{};
    if(key==='initialJobs')childSchema={type:'string'};
@@ -133,7 +141,8 @@ function renderArray(app,location,schema,key){
  for(const [i,item] of value.entries()){
   const itemLocation={file:location.file,path:[...location.path,i]},row=el('details','','array-card');row.open=value.length<=4;
   row.append(el('summary',`${i+1}. ${item?.name??item?.title??item?.text??(kind?app.context.name(kind,item):typeof item==='string'?enumLabel(item):item?.type?enumLabel(item.type):label(key))}`));
-  if(kind&&typeof item==='string')row.append(select(app.context.options(kind),item,next=>{app.workspace.set(location.file,itemLocation.path,next,`${label(key)}を変更`);app.refresh();},label(key)+' '+(i+1)));
+  if(itemSchema.$ref==='#/$defs/skillCondition')row.append(renderValue(app,itemLocation,itemSchema,key,{hideLabel:true}));
+  else if(kind&&typeof item==='string')row.append(select(app.context.options(kind),item,next=>{app.workspace.set(location.file,itemLocation.path,next,`${label(key)}を変更`);app.refresh();},label(key)+' '+(i+1)));
   else if(item&&typeof item==='object'&&!Array.isArray(item)&&'x' in item&&'y' in item)row.append(renderValue(app,itemLocation,itemSchema,key,{hideLabel:true}));
   else if(item&&typeof item==='object'&&!Array.isArray(item)&&!item.op){
    const variants=itemSchema.oneOf??itemSchema.anyOf,discriminator=['type','kind'].find(k=>variants?.some(s=>s.properties?.[k]?.const));

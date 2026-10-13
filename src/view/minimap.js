@@ -14,6 +14,9 @@ export function mapSection(model,{onExpand}={}){
   const header=make('div','map-heading');header.append(make('span','eyebrow','測量図'));
   if(onExpand){const expand=make('button','map-expand','拡大');expand.type='button';expand.dataset.focus='map:expand';expand.setAttribute('aria-label','地図を拡大');expand.setAttribute('aria-haspopup','dialog');expand.addEventListener('click',onExpand);header.append(expand);}
   section.append(header,make('p','muted',`${model.lightLabel??'灯油'} ${model.light}/${model.lightMax}`));
+  if(model.scouting?.recon)section.append(make('p','map-note',`${model.scouting.recon.name}は偵察中（あと${model.scouting.recon.remaining}歩）。`));
+  const effects=model.scouting?.effects??{};
+  for(const [id,label] of [['ambush','奇襲'],['patrol','哨戒'],['camouflage','迷彩']])if(effects[id])section.append(make('p','map-note',`${label}：残り${effects[id].remaining}歩${id==='ambush'?`・先制${effects[id].actions}回`:''}`));
   const viewport=make('div','map-viewport'),grid=make('div','minimap');grid.style.setProperty('--map-width',d.width);grid.setAttribute('aria-label','探索済みの地図');
   for(const row of d.cells)for(const cell of row){
     const here=cell.x===d.location.x&&cell.y===d.location.y,known=cell.known||here;
@@ -31,10 +34,10 @@ export function mapSection(model,{onExpand}={}){
         const key=`${cell.x},${cell.y}/${side}`,closed=d.doors?.[key]?.closed??Boolean(cell.edges?.[side]||d.boundaries?.[key]);
         if(closed)square.append(make('span',`map-boundary ${side}`));
       }
-      if(!here&&object)square.append(image(markerAsset(object),'map-object'));
+      if(!here&&object){const icon=image(markerAsset(object),'map-object');if(object.disabled)icon.style.opacity='.35';square.append(icon);}
       square.title=`${cell.x},${cell.y}${cell.relief?' '+cell.cellName+' / '+(cell.blocked?'通行不可':'通行可'):''}${d.voxel?', 高さ '+d.z+' / '+cell.waterLabel:''}${objects.length?' '+objects.map(o=>o.name).join('・'):''} / 明るさ ${light}/8`;
       for(const marker of objects.filter(o=>o.edge)){
-        const edge=make('span',`map-edge-marker ${marker.edge}`);edge.title=marker.name;edge.setAttribute('aria-label',`${marker.name} (${marker.edge})`);edge.append(image(markerAsset(marker),'map-edge-image'));square.append(edge);
+        const edge=make('span',`map-edge-marker ${marker.edge}`);if(marker.disabled)edge.style.opacity='.35';edge.title=marker.name;edge.setAttribute('aria-label',`${marker.name} (${marker.edge})`);edge.append(image(markerAsset(marker),'map-edge-image'));square.append(edge);
       }
     }
     if(here){const arrow=image('player','map-player');arrow.style.transform=`rotate(${facing[d.location.facing]??0}deg)`;square.append(arrow);square.setAttribute('aria-label',`現在地 ${cell.x},${cell.y}・${{north:'北',east:'東',south:'南',west:'西'}[d.location.facing]}向き`);}
@@ -42,7 +45,7 @@ export function mapSection(model,{onExpand}={}){
   }
   viewport.append(grid);section.append(viewport);
   const legend=make('div','map-legend');
-  for(const [id,label,edge] of [['player','現在地'],['floor','踏査済み'],['wall','壁'],['stairs','階段'],['exit','出口'],['clue','手掛かり'],['clue','壁面の手掛かり','east'],['decision','次のイベント'],['chest','宝箱'],['door-closed','通行不可'],['door-open','扉通行可'],['water','水没'],['torch-lit','点灯'],['torch-unlit','消灯'],['control','仕掛け']]){
+  for(const [id,label,edge] of [['player','現在地'],['floor','踏査済み'],['wall','壁'],['stairs','階段'],['exit','出口'],['clue','手掛かり'],['clue','壁面の手掛かり','east'],['decision','次のイベント'],['chest','宝箱'],['trap','発見した罠（薄い印は解除済み）'],['door-closed','通行不可'],['door-open','扉通行可'],['water','水没'],['torch-lit','点灯'],['torch-unlit','消灯'],['control','仕掛け']]){
     const item=make('span','map-legend-item');let icon;
     if(edge){
       icon=make('span','map-legend-icon map-legend-edge');icon.setAttribute('aria-hidden','true');

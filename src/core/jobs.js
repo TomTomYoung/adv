@@ -1,3 +1,6 @@
+import {effectiveSkill,recordSkillUse,skillLevel} from './skill-levels.js';
+import {scoutingPlan,applyScouting} from './scouting.js';
+import {SCOUT_APIS} from './scout-apis.js';
 import {statusStats,removeStatus} from './status-effects.js';
 import {dungeonEquipmentStats,dungeonFieldPlan,dungeonAction,dungeonActorStats,dungeonGrants,dungeonAbilityReason,dungeonBuffs,dungeonFloodLevel} from './dungeons.js';
 import {dungeonInterior} from './world.js';
@@ -5,8 +8,8 @@ import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry']);
-export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel']);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_APIS]);
+export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','stun']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
 export const passives=(data,state,id)=>actorJob(data,state,id)?.passives??{};
@@ -97,8 +100,8 @@ export function partyEffect(data,state,key,neutral=1,mode='min'){
   return (mode==='min'?Math.min:Math.max)(neutral,...values);
 }
 export const purchasePrice=(data,state,price)=>Math.ceil(price*(1-partyEffect(data,state,'shopDiscount',0,'max')));
-export function fieldActionPlan(data,state,id,abilityId){
-  const ability=data.fieldAbilities?.[abilityId];
+export function fieldActionPlan(data,state,id,abilityId,target){
+  const ability=effectiveSkill(data,state,id,abilityId);
   const restriction=dungeonAbilityReason(data,state,abilityId,ability?.api);if(restriction)return {ok:false,reason:restriction};
   if(!ability||!FIELD_APIS.has(ability.api)||!permission(data,state,id,abilityId,ability.api))return {ok:false,reason:'この探索特技は習得していません。'};
   if(state.waiting||state.battle||!ability.modes.includes(state.mode)||!state.members.includes(id))return {ok:false,reason:'この場所・状態では使用できません。'};
@@ -107,6 +110,7 @@ export function fieldActionPlan(data,state,id,abilityId){
   if(ability.api==='map.reveal'&&(!state.location||!Number.isInteger(ability.radius)||ability.radius<1||ability.radius>8))return {ok:false,reason:'測量できる場所ではありません。'};
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
   if(['wall.break','archive.unlock','voxel.traverse','water.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
+  const scouting=SCOUT_APIS.includes(ability.api)?scoutingPlan(data,state,id,ability,target):{};if(scouting.ok===false)return scouting;
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -114,15 +118,17 @@ export function fieldActionPlan(data,state,id,abilityId){
     inventory[item]=(inventory[item]??0)+count;
     if(inventory[item]>data.system.maxStack)return {ok:false,reason:`${data.items[item].name}の袋が満杯です。`};
   }
-  return {ok:true,ability,inventory};
+  return {ok:true,ability,inventory,usedLevel:skillLevel(state,id,abilityId),...scouting};
 }
-export function fieldAction(engine,id,abilityId){
-  const plan=fieldActionPlan(engine.data,engine.state,id,abilityId);if(!plan.ok){engine.notify(plan.reason);return false;}
-  if(plan.dungeonIntent)return dungeonAction(engine,plan.dungeonIntent);
+export function fieldAction(engine,id,abilityId,target){
+  const plan=fieldActionPlan(engine.data,engine.state,id,abilityId,target);if(!plan.ok){engine.notify(plan.reason);return false;}
+  if(plan.dungeonIntent){const changed=dungeonAction(engine,plan.dungeonIntent);if(changed)recordSkillUse(engine,id,abilityId);return changed;}
   payCost(engine,id,plan.ability);engine.state.inventory=plan.inventory;
   if(plan.ability.api==='map.reveal')engine.reveal(plan.ability.radius);
-  if(plan.ability.api==='fire.kindling'&&!kindlePortable(engine.data,engine.state,plan.ability.effect,engine))return true;
+  if(plan.ability.api==='fire.kindling'&&!kindlePortable(engine.data,engine.state,plan.ability.effect,engine)){recordSkillUse(engine,id,abilityId);return true;}
   if(plan.ability.api==='party.dry')for(const member of engine.state.members)removeStatus(engine.state.actors[member],'wet');
   if(plan.ability.api==='party.heal')for(const member of engine.state.members){const a=engine.state.actors[member];if(a.hp>0)a.hp=Math.min(engine.stats(member).hp,a.hp+plan.ability.amount);}
+  recordSkillUse(engine,id,abilityId);
+  if(SCOUT_APIS.includes(plan.ability.api))applyScouting(engine,id,plan.ability,plan);
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;
 }

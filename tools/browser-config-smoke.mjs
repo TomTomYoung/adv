@@ -33,6 +33,11 @@ try{
  await page.getByLabel('編集するJSON',{exact:true}).selectOption('jobs.json');await page.getByRole('button',{name:'戦闘技能',exact:true}).click();await page.getByRole('button',{name:'消費・条件',exact:true}).click();await page.getByLabel('MP',{exact:true}).fill('7');
  await page.getByRole('button',{name:'効果',exact:true}).click();await page.screenshot({path:'/tmp/adv-studio-skill.png',fullPage:false});
  await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();await page.getByLabel('config/jobs.json のJSON全文',{exact:true}).waitFor({state:'attached'});assert.equal(await page.locator('.review-panel .editor-section').count(),3);
+ await page.goto(base+'config/jobs.html');await page.getByRole('button',{name:'探索特技',exact:true}).click();await page.locator('.record-buttons button').filter({hasText:'罠発見'}).click();await page.getByRole('button',{name:'技能Lv',exact:true}).click();
+ const growth=page.getByRole('combobox',{name:'成長条件の種類',exact:true});assert.equal(await growth.first().inputValue(),'any');
+ await growth.first().selectOption('actor_level');assert.equal(await growth.first().inputValue(),'actor_level');await growth.first().selectOption('any');
+ await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();const growthOutput=page.getByLabel('config/jobs.json のJSON全文',{exact:true});await growthOutput.waitFor({state:'attached'});
+ assert.deepEqual(JSON.parse(await growthOutput.inputValue()).fieldAbilities.trap_detect.levelUp['2'],{any:[{kind:'actor_level',level:1}]});
  await page.goto(base+'config/dungeons/kagaribi.html');await page.getByLabel('推奨レベル',{exact:true}).waitFor();
  for(const width of [1440,900,390,320]){await page.setViewportSize({width,height:800});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`viewport ${width}`);}
  await page.getByLabel('推奨レベル',{exact:true}).fill('-1');await page.getByRole('button',{name:'変更を確認・JSONを出力',exact:true}).click();await page.locator('.status.error').waitFor();assert.equal(await page.locator('.review-panel').isVisible(),false);

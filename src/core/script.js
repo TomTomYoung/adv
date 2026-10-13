@@ -1,3 +1,5 @@
+import {trainSkill,recordSkillAction} from './skill-levels.js';
+import {returnRecon,rearmTrap} from './scouting.js';
 import {attemptIgnition} from './fire-hazards.js';
 import {collectTreasure,treasureKey} from './treasures.js';
 import {applyImpact} from './hazard-effects.js';
@@ -13,7 +15,7 @@ import {resumeBattleEvent,interruptBattle} from './battle-events.js';
 import {signalFieldChange} from './field-signals.js';
 import {setCast,beginPresentationWait} from './cast.js';
 import {finishWorldConversations} from './world.js';
-export const COMMANDS=new Set(['treasure.collect','treasure.reset','hazard.impact','map.patch','cell.event.reset','event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
+export const COMMANDS=new Set(['skill.train','skill.action','treasure.collect','treasure.reset','hazard.impact','map.patch','cell.event.reset','event.checkpoint.begin','event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','story.journey','fire.portable.set','story.init','story.scene','story.action','jump','say','narrate','choice','if','switch','call','return','set','add','flag.set','random.set','random.branch','item.give','item.take','gold.change','actor.heal','actor.damage','actor.restore_mp','party.heal_all','party.join','party.leave','status.apply','status.remove','map.teleport','map.reveal','facing.set','object.state.set','event.mark_done','battle.start','battle.end','quest.accept','quest.evidence','quest.complete','scene.background','scene.cast','scene.cast.clear','wait','audio.bgm','audio.se','rest','town.return','ending.set','light.refill','effect.play','screen.set','screen.clear','job.change','job.action']);
 export function commandsAt(data,frame){
   let commands=data.scripts[frame.script]?.commands;
   for(const part of frame.path) commands=commands?.[part];
@@ -25,6 +27,7 @@ export function pushBranch(engine,frame,index,path){
 }
 export function runScript(engine,id,args={}){
   if(!engine.data.scripts[id])throw new Error(`不明なスクリプト: ${id}`);
+  if(!args.target)returnRecon(engine);
   finishWorldConversations(engine);
   if(!engine.state.vm.length){delete engine.state.presentation.message;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;}
   engine.state.vm.push({script:id,path:[],index:0,scope:engine.state.nextScope++,branch:false,local:{args:clone(args)}});pump(engine);
@@ -60,7 +63,7 @@ export function pump(engine){
       case 'treasure.reset':delete state.events[treasureKey(c.map,c.object)];break;
       case 'hazard.impact':if(!applyImpact(engine,c))return;break;
       case 'map.patch':applyMapPatch(engine,c.patch);break;
-      case 'cell.event.reset':{delete state.events[cellEventKey(c.map,c.x,c.y,c.event)];const e=state.fieldEntry,id=cellEntryId(c.event);if(e?.map===c.map&&e.x===c.x&&e.y===c.y&&!e.fired.includes(id))e.fired.push(id);break;}
+      case 'cell.event.reset':{rearmTrap(state,cellEventKey(c.map,c.x,c.y,c.event));delete state.events[cellEventKey(c.map,c.x,c.y,c.event)];const e=state.fieldEntry,id=cellEntryId(c.event);if(e?.map===c.map&&e.x===c.x&&e.y===c.y&&!e.fired.includes(id))e.fired.push(id);break;}
       case 'event.checkpoint.begin':beginEventCheckpoint(engine,c,frame,index);break;
       case 'event.checkpoint.commit':commitEventCheckpoint(engine,c.id);break;
       case 'story.init':initStory(engine,c.quest);break;
@@ -111,10 +114,12 @@ export function pump(engine){
         break;
       }
       case 'job.change':engine.changeJob(c.actor,c.job);break;
-      case 'job.action':engine.jobAction(c.actor,c.ability);break;
+      case 'job.action':engine.jobAction(c.actor,c.ability,c.target);break;
+      case 'skill.train':trainSkill(engine,c.actor,c.skill);break;
+      case 'skill.action':recordSkillAction(engine,c.actor,c.action);break;
       case 'party.heal_all':engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
-      case 'party.join':if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
-      case 'party.leave':if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
+      case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
+      case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
       case 'status.apply':case 'status.remove':{
         for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration);else removeStatus(a,c.status);}break;
       }
@@ -130,7 +135,7 @@ export function pump(engine){
         if(state.objects[key]!==c.state){state.objects[key]=c.state;signalFieldChange(engine.data,state,'object','light');}break;
       }
       case 'event.mark_done':state.events[c.event]=1;break;
-      case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'});break;
+      case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'},{preemptive:c.preemptive});break;
       case 'battle.end':interruptBattle(engine);return;
       case 'quest.accept':engine.accept(c.quest);break;
       case 'quest.evidence':engine.evidence(c.quest,c.key,c.text);break;

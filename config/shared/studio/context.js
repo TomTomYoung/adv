@@ -9,6 +9,7 @@ export class EditorContext{
  constructor(workspace,read,base=referenceData){this.workspace=workspace;this.read=read;this.base=base;this.mapCache=new Map();this.pending=new Map();}
  async data(file){if(!this.pending.has(file))this.pending.set(file,Promise.resolve().then(()=>this.read(file)).then(x=>typeof x==='string'?JSON.parse(x):x).catch(e=>{this.pending.delete(file);throw e;}));return this.pending.get(file);}
  names(kind){
+  if(kind==='skillDefinitions')return {...this.names('skills'),...this.names('fieldAbilities')};
   if(kind.startsWith('equipment-')){const types=this.workspace.documents.get('jobs.json')?.value.profile.equipmentTypes??this.base.equipmentTypes;return Object.fromEntries((kind==='equipment-all'?Object.values(types).flat():types[kind.slice(10)]??[]).map(id=>[id,{name:enumLabel(id)}]));}
   if(kind==='eventCues'){const bindings=this.workspace.documents.get('presentation.json')?.value.bindings?.events;return bindings?Object.fromEntries(Object.entries(bindings).map(([id,cue])=>[id,{name:enumLabel(id),cue}])):this.base.names.eventCues;}
   if(kind==='maps')return Object.fromEntries(Object.entries(this.maps()).map(([id,m])=>[id,{name:m.name}]));

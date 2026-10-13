@@ -8,7 +8,7 @@ export async function buildCellLayers(root){
   const write=async(file,value)=>fs.writeFile(path.join(root,file),JSON.stringify(value,null,2)+'\n');
   const source=compileCellPackages(await read('config/cell-layers.json')),game=await read('data/game.json');
   if(source.schemaVersion!==1)throw Error('セル原稿の形式版が不正です');
-  const data={game,cellTypes:source.presets,edgeTypes:source.edgePresets,cellEvents:source.events,scripts:source.scripts,assets:await read('data/assets.json'),maps:{}};
+  const data={game,items:await read('data/items.json'),system:await read('data/system.json'),cellTypes:source.presets,edgeTypes:source.edgePresets,cellEvents:source.events,scripts:source.scripts,assets:await read('data/assets.json'),maps:{}};
   game.cellLayerVersion=1;
   for(const file of game.files.maps){
     const map=await read(file),placement=source.maps[map.id];

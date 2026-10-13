@@ -12,7 +12,7 @@ import {eventCatalog} from './event-catalog.mjs';
 import {characterCatalog} from './character-catalog.mjs';
 import {monsterCatalog} from './monster-catalog.mjs';
 import {locationCatalog} from './location-catalog.mjs';
-import {skillCatalog,magicCatalog,itemCatalog} from './gameplay-catalogs.mjs';
+import {skillCatalog,magicCatalog,itemCatalog,skillLevelLines} from './gameplay-catalogs.mjs';
 import {dungeonPageBundle} from './dungeon-pages.mjs';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8'));
@@ -33,7 +33,7 @@ const names=ids=>ids.map(id=>data.skills[id]?.name??data.fieldAbilities[id]?.nam
 const stats=v=>Object.entries(v).map(([k,n])=>`${k.toUpperCase()} ${n}`).join(' / ');
 const jobs=[`## 現行${count(data.jobs)}職の定義`,'',`作品版${version}の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。`,''];
 for(const j of Object.values(data.jobs)){jobs.push(`### ${j.name} (${j.id})`,'',j.role,'',`成長/Lv：${stats(j.growth)}。現在職の加算：${Object.keys(j.stats).length?stats(j.stats):'なし'}。`,`装備：${Object.entries(j.equipment).map(([slot,types])=>`${slot}＝${types.join('・')}`).join(' / ')}。`,`習得：${j.grants.map(g=>`Lv${g.level} ${names([g.skill])} (${g.api})`).join(' / ')}。`,`特性：${JSON.stringify(j.passives)}。${j.limitation}`,'');}
-jobs.push(`## 探索特技${count(data.fieldAbilities)}定義`,'');for(const [id,a] of Object.entries(data.fieldAbilities))jobs.push(`### ${a.name} (${id})`,'',`${a.description} API: ${a.api}。使用場所: ${(a.modes??[]).join(' / ')}。`,'');await section('JOB_SYSTEM.md','jobs',jobs.join('\n'));
+jobs.push(`## 探索特技${count(data.fieldAbilities)}定義`,'');for(const [id,a] of Object.entries(data.fieldAbilities))jobs.push(`### ${a.name} (${id})`,'',`${a.description} API: ${a.api}。使用場所: ${(a.modes??[]).join(' / ')}。`,...skillLevelLines(a),'');await section('JOB_SYSTEM.md','jobs',jobs.join('\n'));
 const actors=['# 仲間一覧と酒場の編成','',`更新日: ${date}。作品版${version}。仲間${count(data.actors)}人から1〜${data.system.maxParty}人を編成します。初期隊は${data.game.initial.members.map(id=>data.actors[id].name).join('・')}です。`,'','## 編成と状態','','町の酒場で加入・待機・入れ替えを行います。生存者を最低1人残し、会話・戦闘中は編成しません。HP・MP・状態異常・装備・職業と成長履歴を保持し、編成変更だけでは回復しません。NPCの人物一覧は[CHARACTERS.md](scenarios/CHARACTERS.md)に分けます。','','技能は現在職とレベル、装備、貸出、固有環境から判定します。下記はLv1・初期職・初期装備の状態です。人物定義に残る旧skills配列だけを現在の習得技能として表示しません。','','## 現行の仲間',''];
 for(const [id,a] of Object.entries(data.actors))actors.push(`### ${a.name} (${id})`,'',`![${a.name}](../${data.assets.images[a.portrait]})`,'',a.bio,`人物の役割：${a.class}／${a.role}。初期職：${data.jobs[a.initialJob].name}。`,`初期能力：${stats(engine.stats(id))}。`,`初期戦闘技能：${names(engine.skills(id))}。`,'');
 actors.push('## 編集と保存','','人物・初期能力・肖像の正本は config/entities.json、職業は config/jobs.json です。職業別の成長と使用可能な探索特技は[JOB_SYSTEM.md](JOB_SYSTEM.md)、保存方針は[SPEC.md](SPEC.md)を参照してください。現行版は旧内容版から移行せず、読込エラー時に新規開始します。');await fs.writeFile(path.join(folder,docPath('COMPANION_CATALOG.md')),relocateDoc(actors.join('\n')+'\n','COMPANION_CATALOG.md'));

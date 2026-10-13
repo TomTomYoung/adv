@@ -1,3 +1,4 @@
+import {effectiveSkill,skillGrowthView} from '../core/skill-levels.js';
 import {dungeonEffectActive} from '../core/dungeons.js';
 import {clone} from '../core/expression.js';
 import {actorJob,grantsFor,jobChangePlan,fieldActionPlan,canEquip} from '../core/jobs.js';
@@ -28,18 +29,18 @@ export function projectActorJob(engine,id){
     buffs:buffView(d,s.battle,`actor:${id}`).map(b=>({...b,name:b.name+(dungeonEffectActive(d,s,'buff',b.id)?'':'（停止中）')})),
     covering:(s.battle?.covers??[]).filter(c=>c.sourceActor===id).map(c=>({name:d.actors[c.target.slice(6)].name,remaining:c.remaining})),
     jobOptions:Object.values(d.jobs).map(j=>{const plan=jobChangePlan(d,s,id,j.id);return {id:j.id,current:j.id===a.job,enabled:plan.ok,reason:plan.reason??'',stats:plan.ok?clone(plan.stats):null,returned:(plan.returned??[]).map(item=>d.items[item].name)};}),
-    fieldAbilities:grantsFor(d,s,id).filter(g=>g.api!=='battle.skill'&&a.level>=g.level).map(g=>{const spec=d.fieldAbilities[g.skill],plan=fieldActionPlan(d,s,id,g.skill);return {id:g.skill,category:abilityCategory(g.skill,true),name:spec.name,level:g.level,mp:spec.mp,description:spec.description,enabled:plan.ok,reason:plan.reason??''};})
+    fieldAbilities:grantsFor(d,s,id).filter(g=>g.api!=='battle.skill'&&a.level>=g.level).map(g=>{const spec=effectiveSkill(d,s,id,g.skill),plan=fieldActionPlan(d,s,id,g.skill);return {id:g.skill,...skillGrowthView(d,s,id,g.skill),targets:(plan.targets??[]).map(t=>({...t,enabled:fieldActionPlan(d,s,id,g.skill,t.id).ok})),category:abilityCategory(g.skill,true),name:spec.name,level:g.level,mp:spec.mp,description:spec.description,enabled:plan.ok,reason:plan.reason??''};})
   };
 }
 export function projectBattleSkills(engine,id){
   if(!id)return [];
   const s=engine.state,d=engine.data;
   return engine.skills(id).map(skillId=>{
-    const skill=d.skills[skillId],ids=skill.target==='enemy'?s.battle.enemies.map(e=>e.instance):skill.target==='ally'?s.members:[id];
+    const skill=effectiveSkill(d,s,id,skillId),ids=skill.target==='enemy'?s.battle.enemies.map(e=>e.instance):skill.target==='ally'?s.members:[id];
     const availability=Object.fromEntries(ids.map(target=>{const plan=battleSkillPlan(engine,id,skillId,target);return [target,{enabled:plan.ok,reason:plan.reason??''}];}));
     const values=Object.values(availability),enabled=values.some(v=>v.enabled);
     const cost=[skill.mp?`MP${skill.mp}`:'',skill.hp?`HP${skill.hp}`:'',...Object.entries(skill.materials??{}).map(([item,n])=>`${d.items[item].name}×${n}`)].filter(Boolean).join(' / ');
-    return {id:skillId,...clone(skill),enabled,availability,cost,reason:enabled?'':values[0]?.reason??'対象がありません。'};
+    return {id:skillId,...clone(skill),...skillGrowthView(d,s,id,skillId),enabled,availability,cost,reason:enabled?'':values[0]?.reason??'対象がありません。'};
   });
 }
 export function projectEnemyJob(engine,enemy){
