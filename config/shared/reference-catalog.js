@@ -33179,6 +33179,33 @@ export const referenceData={
       },
       "confusion": {
         "name": "こんらん"
+      },
+      "sleep": {
+        "name": "ねむり"
+      },
+      "sure_hit": {
+        "name": "必中"
+      },
+      "sluggish": {
+        "name": "鈍重"
+      },
+      "berserk": {
+        "name": "狂暴化"
+      },
+      "misfire": {
+        "name": "暴発"
+      },
+      "critical_up": {
+        "name": "クリティカルアップ"
+      },
+      "critical_vulnerability": {
+        "name": "被クリティカルアップ"
+      },
+      "guaranteed_critical": {
+        "name": "確定クリティカル"
+      },
+      "guaranteed_critical_vulnerability": {
+        "name": "被確定クリティカル"
       }
     },
     "shops": {

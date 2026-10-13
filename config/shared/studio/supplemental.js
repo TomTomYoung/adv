@@ -19,7 +19,7 @@ export const recordSchemas={
  actor:obj({id:str,name:str,description:{type:'string'},portrait:str,stats,growth:stats,skills:arr(str),equipment:obj({weapon:{type:['string','null']},armor:{type:['string','null']},charm:{type:['string','null']}}),statusImmune:arr(str)},['id','name','stats']),
  stock:obj({item:str,price:uint},['item','price']),
  encounter:obj({preemptive:preemptiveSchema,id:str,text:{type:'string'},escape:bool,enemies:{...arr(str),minItems:1}},['text','escape','enemies']),
- status:obj({...actionStatusProperties,name:str,description:str,category:{enum:['physical','parameter','magic']},stats:obj(Object.fromEntries(['str','vit','agi','int'].map(k=>[k,{type:'number',exclusiveMinimum:0,maximum:5}]))),duration:obj({steps:{type:'integer',minimum:1,maximum:1e6},turns:{type:'integer',minimum:1,maximum:1e6}}),stepDamage:uint,turnDamage:uint},['name']),
+ status:obj({...actionStatusProperties,name:str,description:str,category:{enum:['physical','parameter','magic']},stats:obj(Object.fromEntries(['str','vit','agi','int'].map(k=>[k,{type:'number',minimum:0,maximum:5}]))),duration:obj({steps:{type:'integer',minimum:1,maximum:1e6},turns:{type:'integer',minimum:1,maximum:1e6}}),stepDamage:uint,turnDamage:uint},['name']),
  profile:obj({skillActions:arr(str),commonSkills:arr(str),legacyGrowth:stats,equipmentTypes:obj({weapon:arr(str),armor:arr(str),charm:arr(str)}),statNames:dict(str)}),
  ambient:obj({darkness:obj({threshold:uint,color:str,maxOpacity:{type:'number',minimum:0,maximum:1}}),shade:obj({color:str,opacity:{type:'number',minimum:0,maximum:1}})}),
 };
