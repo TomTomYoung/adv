@@ -29,7 +29,7 @@ export function skillDefinitionErrors(data,skill){
     if(effect.itemHealing!==undefined&&typeof effect.itemHealing!=='boolean')fail('道具回復指定不正');
     if(effect.type==='buff'&&!own(data.buffs,effect.buff))fail('バフ参照不正');
     if(effect.type==='status'&&!own(data.statuses,effect.status))fail('状態異常参照不正');
-    if(effect.type==='status'&&effect.level!==undefined&&!integer(effect.level,1,3))fail('状態異常Lv不正');
+    if(['status','guard'].includes(effect.type)&&effect.level!==undefined&&!integer(effect.level,1,3))fail('状態異常Lv不正');
     if(['damage','heal','drain_mp','restore_mp'].includes(effect.type)&&effect.formula===undefined&&effect.amount===undefined)fail('効果量未定義');
     if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
     const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='stun'?['count','stack']:[])];

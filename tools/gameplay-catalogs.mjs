@@ -1,4 +1,5 @@
 import {abilityCategory} from '../src/application/character-profile.js';
+import {guardDamageRate} from '../src/core/battle-turns.js';
 
 const targetLabels={enemy:'敵1体',ally:'味方1人',self:'自分',all_enemies:'敵全体',all_allies:'味方全体',location:'地点'};
 const itemTypeLabels={consumable:'消耗品',material:'素材',equipment:'装備品',key:'重要品',dungeon_tool:'ダンジョン道具'};
@@ -59,7 +60,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
   const base=`max(0, ${rawText(data,effect)})`;
   if(effect.type==='damage'){
     const element=elementLabels[effect.element]??effect.element??'未指定';
-    return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正))。属性：${element}。`;
+    return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正))。防御Lv3では0。属性：${element}。`;
   }
   if(effect.type==='heal'){
     const multiplier=(effect.itemHealing||skillId==='potion')?'アイテム回復補正':'回復威力補正';
@@ -72,7 +73,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
   if(effect.type==='stun')return `${prefix}：次の行動機会を${effect.count??1}回消費（${effect.stack==='add'?'加算':'更新'}）、付与率${chanceText(effect.chance)}。`;
   if(effect.type==='cleanse')return `${prefix}：${effect.status?`状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を解除`:'解除可能な状態異常を解除'}。`;
   if(effect.type==='buff')return `${prefix}：${buffEffectText(data,effect.buff)}。`;
-  if(effect.type==='guard')return `${prefix}：ガード中の被ダメージ補正 = ×${data.system?.guardRate??0.5}。`;
+  if(effect.type==='guard')return `${prefix}：防御Lv${effect.level??1}、ガード中の被ダメージ補正 = ×${guardDamageRate(data,effect.level??1)}。`;
   if(effect.type==='cover')return `${prefix}：指定した味方への単体攻撃を1回の対象変更として引き受ける。数値ダメージ式は攻撃側の式をそのまま使う。`;
   if(effect.type==='analyze')return `${prefix}：数値計算なし。対象の能力・耐性を解析済みとして記録する。`;
   if(effect.type==='repel')return `${prefix}：数値ダメージなし。対象条件を満たすくらがり戦を撃退終了する。`;
@@ -87,7 +88,7 @@ const calculationLines=(data,id,spec)=>{
 const commonRules=data=>[
   '## 共通の計算規則','',
   '戦闘の基礎式は [data/formulas.json](../data/formulas.json)、戦闘補正は [data/buffs.json](../data/buffs.json)、ガード率などは [data/system.json](../data/system.json) が正本です。各能力の「計算式」には基礎値を展開して記載します。','',
-  'ダメージは、まず各技の基礎式を評価し、0未満を0へ丸めます。その後、最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正)) です。威力補正にはダンジョン属性補正、物理／魔法威力の職業特性、属性威力特性を含みます。ガード補正は通常1、ガード中は system.guardRate。属性補正には対象の属性耐性、戦闘バフの耐性、濡れによる耐性変化を含みます。被ダメージ補正は対象側の職業特性です。','',
+  'ダメージは、まず各技の基礎式を評価し、0未満を0へ丸めます。その後、最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正)) です。威力補正にはダンジョン属性補正、物理／魔法威力の職業特性、属性威力特性を含みます。ガード補正は通常1、防御Lv1は system.guardRate（現行0.5）、Lv2は0.25、Lv3は0。防御Lv3の最終ダメージは最小1を適用せず0とします。属性補正には対象の属性耐性、戦闘バフの耐性、濡れによる耐性変化を含みます。被ダメージ補正は対象側の職業特性です。','',
   'HP回復は 回復量 = floor(基礎値 × 回復補正 × 個別scale) です。通常の回復技能は回復威力補正、傷薬系はアイテム回復補正を使い、最大HPを超えた分は切り捨てます。','',
   '戦闘バフ／デバフの能力値は、能力ごとに 最終値 = max(0, floor(基礎値 × 最大の強化倍率 × 最大の弱体倍率)) です。同じ能力の強化を無制限に乗算せず、最も強い強化1つと最も強い弱体1つを使います。属性耐性補正も有効なもののうち最も強い軽減を使います。',''
 ];

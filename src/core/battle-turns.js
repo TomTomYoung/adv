@@ -1,15 +1,30 @@
 import {isRecord} from './expression.js';
 import {unitKey} from './buffs.js';
+import {statusLevelValid} from './status-effects.js';
 
 export const BATTLE_STATUS_DEFINITIONS={
-  guarded:{id:'guarded',name:'防御',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{duration:'one_turn',damageTaken:'system.guardRate'},2:null,3:null}},
+  guarded:{id:'guarded',name:'防御',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{duration:'one_turn',damageTaken:'system.guardRate'},2:{duration:'one_turn',damageTaken:0.25},3:{duration:'one_turn',damageTaken:0}}},
   stun:{id:'stun',name:'スタン',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{lostActions:1},2:{lostActions:2},3:{lostActions:3}}}
 };
 export const guarded=(battle,unit)=>unit?.instance?Boolean(unit.guard):(battle?.guards??[]).includes(unit?.id);
-export function applyGuard(battle,target){
+export const guardLevel=(battle,unit)=>guarded(battle,unit)?battle?.guardLevels?.[unitKey(unit)]??1:0;
+export function guardDamageRate(data,level=1){
+  if(level===0)return 1;
+  const rate=BATTLE_STATUS_DEFINITIONS.guarded.levels[level]?.damageTaken;
+  return rate==='system.guardRate'?data.system?.guardRate??0.5:rate;
+}
+export function clearGuard(battle,target){
+  if(target.instance)target.guard=false;
+  else battle.guards=battle.guards.filter(id=>id!==target.id);
+  if(battle.guardLevels){delete battle.guardLevels[unitKey(target)];if(!Object.keys(battle.guardLevels).length)delete battle.guardLevels;}
+}
+export function applyGuard(battle,target,level=1){
+  if(!statusLevelValid(level))throw Error('防御Lvが不正です');
   if(!battle||!target)return false;
+  const nextLevel=Math.max(guardLevel(battle,target),level);
   if(target.instance)target.guard=true;
   else if(!battle.guards.includes(target.id))battle.guards.push(target.id);
+  if(nextLevel>1)(battle.guardLevels??={})[unitKey(target)]=nextLevel;
   return true;
 }
 export function preemptiveValid(c){return isRecord(c)&&Object.keys(c).every(k=>['side','actions','chance','priority'].includes(k))&&['allies','enemies'].includes(c.side)&&Number.isInteger(c.actions)&&c.actions>=1&&c.actions<=20&&(c.chance===undefined||Number.isFinite(c.chance)&&c.chance>=0&&c.chance<=1)&&(c.priority===undefined||Number.isInteger(c.priority)&&c.priority>=0&&c.priority<=100);}
@@ -35,6 +50,8 @@ export function consumeStun(engine,unit){
 export function battleTurnSaveErrors(state){
   const b=state.battle;if(!b)return [];
   const errors=[],valid=new Set([...state.members.map(id=>`actor:${id}`),...(b.enemies??[]).map(e=>`enemy:${e.instance}`)]);
+  const guarding=new Set([...(Array.isArray(b.guards)?b.guards:[]).map(id=>`actor:${id}`),...(b.enemies??[]).filter(e=>e.guard).map(unitKey)]);
+  if(b.guardLevels!==undefined&&(!isRecord(b.guardLevels)||Object.entries(b.guardLevels).some(([id,n])=>!valid.has(id)||!guarding.has(id)||!statusLevelValid(n)||n===1)))errors.push('防御Lv不正');
   if(b.stuns!==undefined&&(!isRecord(b.stuns)||Object.entries(b.stuns).some(([id,n])=>!valid.has(id)||!Number.isInteger(n)||n<1||n>20)))errors.push('スタン行動回数不正');
   // Old same-version battle saves omit both fields; GameEngine.load rebuilds their queue.
   const queue=b.turnQueue,index=b.turnIndex,legacy=queue===undefined&&index===undefined;

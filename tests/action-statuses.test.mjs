@@ -19,9 +19,9 @@ function game(job='mage',start=true){
 const inflict=(g,a,id)=>applyStatus(g.data,g.state,a,id);
 const guard=g=>assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));
 const roundtrip=g=>{const save=g.save();assert.deepEqual(validateSave(JSON.parse(save),g.data),[]);g.load(save);assert.equal(g.save(),save);};
-test('six statuses have explicit Lv1 baselines; invalid probabilities and recovery clocks are rejected',()=>{
+test('six statuses have Lv1 baselines and Lv2/3 overrides; invalid probabilities and recovery clocks are rejected',()=>{
   const {g,d,a}=game();assert.deepEqual(statusDefinitionsErrors(d),[]);
-  for(const id of ids){assert.ok(d.statuses[id].recovery);assert.equal(d.statuses[id].levels,undefined);inflict(g,a,id);}
+  for(const id of ids){assert.ok(d.statuses[id].recovery);assert.deepEqual(Object.keys(d.statuses[id].levels),['2','3']);inflict(g,a,id);}
   for(const bad of [-1,2,NaN]){d.statuses.paralysis.actionFailureChance=bad;assert.ok(statusDefinitionsErrors(d).length);}d.statuses.paralysis.actionFailureChance=.25;
   d.statuses.paralysis.recovery.increment=0;assert.ok(statusDefinitionsErrors(d).length);d.statuses.paralysis.recovery.increment=.1;
   for(const value of [{paralysis:-1},{paralysis:1.5},{unknown:1},{poison:1}]){a.statusRecoveryTurns=value;assert.ok(statusStateErrors(d,a).length);}
