@@ -55,7 +55,6 @@ export function applyStatusClock(data,state,target,id,clock,maxStats,{lethal=tru
   if(mp)target.mp=Math.max(0,target.mp-mp);
   return {hp,mp};
 }
-const levelEffectValid=e=>record(e)&&['stepDamage','turnDamage','stepMpDamage','turnMpDamage'].every(k=>e[k]===undefined||Number.isSafeInteger(e[k])&&e[k]>=0&&e[k]<=1e6)&&['stepHpRate','turnHpRate','stepMpRate','turnMpRate','wetDamageScale','wetBacklashRate'].every(k=>e[k]===undefined||Number.isFinite(e[k])&&e[k]>=0&&e[k]<=5)&&e.duration===undefined||false;
 function effectErrors(e){
   if(!record(e))return true;
   if(['stepDamage','turnDamage','stepMpDamage','turnMpDamage'].some(k=>e[k]!==undefined&&(!Number.isSafeInteger(e[k])||e[k]<0||e[k]>1e6)))return true;
