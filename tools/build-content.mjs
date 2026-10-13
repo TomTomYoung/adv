@@ -144,7 +144,7 @@ for(let i=0;i<rows.length;i++){
 }
 for(const map of Object.values(maps)){delete map._cells;await write(`data/maps/${map.id}.json`,map);}
 await write('data/actors.json',actors);await write('data/formulas.json',formulas);await write('data/skills.json',skills);await write('data/items.json',items);await write('data/regions.json',regions);await write('data/enemies.json',enemies);await write('data/encounters.json',encounters);
-await write('data/statuses.json',{poison:{name:'毒',stepDamage:1,turnDamage:3}});
+await write('data/statuses.json',{poison:{"name":"毒","stepDamage":1,"turnDamage":3,"levels":{"1":{"stepDamage":1,"turnDamage":3},"2":{"stepDamage":10,"turnDamage":30},"3":{"stepDamage":100,"turnDamage":300}}}});
 await write('data/system.json',{maxParty:5,maxStack:99,maxLevel:30,xpBase:40,lightCapacity:90,encounterCheckSteps:7,darkEncounterBonus:0.15,guardRate:0.5,escapeRate:0.78,retreatGoldRate:0.08,defeatGoldRate:0.15,recoveryRatio:0.35,scriptBudget:1000,maxSaveBytes:2000000,growth:{hp:7,mp:2,str:2,vit:1,agi:0,int:2}});
 await write('data/shops.json',{name:'旅支度の店',goods:[{item:'potion',price:14},{item:'antidote',price:8},{item:'ration',price:20},{item:'torch',price:6},{item:'rope',price:12},{item:'iron_sword',price:95},{item:'mail',price:85},{item:'focus',price:95}]});
 await write('data/assets.json',{images:{corridor:'assets/images/dungeon-corridor.png',slime:'assets/images/slime.png',skeleton:'assets/images/skeleton.png',wraith:'assets/images/wraith.png',construct:'assets/images/construct.png',dragon:'assets/images/dragon.png'},audio:{exploration:'assets/audio/exploration.ogg',battle:'assets/audio/battle.ogg'}});
