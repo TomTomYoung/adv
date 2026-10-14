@@ -1,7 +1,6 @@
 import {GameEngine} from '../core/engine.js';
-import {nextFormation} from '../core/battle-formation.js';
 import {frontlineTargetingErrors,frontlineProfile,frontlineTargetPlan} from '../core/frontline-targeting.js';
-import {battleSkillPlan,activeActor} from '../core/battle.js';
+import {battleSkillPlan,activeActor,continuePreemptive} from '../core/battle.js';
 import {frontlineUnits,frontPosition} from '../core/battle-frontline.js';
 import {unitKey} from '../core/buffs.js';
 import {applyStatus} from '../core/status-effects.js';
@@ -28,7 +27,7 @@ export function validateTesterCase(data,c){
  if(c.presentation&&(!Number.isFinite(c.presentation.overlap)||c.presentation.overlap<0||c.presentation.overlap>.5||!Array.isArray(c.presentation.rowScale)||c.presentation.rowScale.length!==3||c.presentation.rowScale.some(v=>!Number.isFinite(v)||v<=0||v>1.5)))errors.push('描画設定不正');
  errors.push(...frontlineTargetingErrors(c.profile));return errors;
 }
-export function createTesterEngine(base,config){
+export function createTesterEngine(base,config,{manualTurns=true}={}){
  const errors=validateTesterCase(base,config);if(errors.length)throw Error(errors.join('\n'));
  const data=structuredClone(base);data.game.initial.members=config.allies.map(u=>u.id);data.system.maxParty=15;
  const configureSkill=(id,u)=>{data.skills[id]={name:'検証用通常攻撃',mp:0,target:'enemy',effects:[{type:'damage',formula:'physical',element:'physical'}],frontlineTargeting:testerProfile({range:{min:1,max:u.range}})};};
@@ -37,10 +36,14 @@ export function createTesterEngine(base,config){
  for(const u of config.allies){const spec=data.actors[u.id],job=structuredClone(data.jobs[spec.initialJob]),jid=`lab_${u.id}`,sid=`lab_${u.id}_attack`;configureSkill(sid,u);job.id=jid;job.stats=Object.fromEntries(Object.keys(job.stats).map(k=>[k,0]));job.grants.push(...grants(sid));data.jobs[jid]=job;spec.initialJob=jid;Object.assign(spec.stats,Object.fromEntries(['hp','mp','str','vit','int','agi'].map(k=>[k,u[k]])));}
  const enemyIds=config.enemies.map((u,i)=>{const id=`lab_enemy_${i}`,sid=id+'_attack';configureSkill(sid,u);const e=structuredClone(data.enemies[u.id]);e.id=id;e.name+=` ${i+1}`;Object.assign(e.stats,Object.fromEntries(['hp','mp','str','vit','int','agi'].map(k=>[k,u[k]])));e.ai=[{skill:sid,priority:1,target:'weakest'}];delete e.preemptive;data.enemies[id]=e;return id;});
  data.encounters.lab_battle={text:'バトルテスター',escape:true,enemies:enemyIds,battleMode:config.mode,frontlinePositions:config.enemies.map(({depth,lane})=>({depth,lane})),enemyPositions:config.enemies.map(({depth,lane})=>({x:lane,y:2-depth})),frontlineReactions:Object.fromEntries(config.enemies.flatMap((u,i)=>u.reaction?[[`enemy:enemy_${i}`,[{on:'onHit',skill:'guard',cancelRemaining:true}]]]:[])),...(config.preemptive?{preemptive:config.preemptive}:{})};
- const engine=new GameEngine(data,config.seed);engine.state.vm=[];engine.state.waiting=null;engine.state.battle=null;engine.state.battleResult=null;engine.state.rng=(config.seed>>>0)||1;engine.state.partyFormation=nextFormation(engine.state.members);engine.state.partyFrontlineFormation=Object.fromEntries(config.allies.map(({id,depth,lane})=>[id,{depth,lane}]));
+ const engine=new GameEngine(data,config.seed);engine.state.vm=[];engine.state.waiting=null;engine.state.battle=null;engine.state.battleResult=null;engine.state.rng=(config.seed>>>0)||1;engine.state.partyFormation=Object.fromEntries(config.allies.map(({id,depth,lane})=>[id,{x:lane,y:depth}]));engine.state.partyFrontlineFormation=Object.fromEntries(config.allies.map(({id,depth,lane})=>[id,{depth,lane}]));
+ delete engine.state.presentation.message;delete engine.state.presentation.cast;delete engine.state.presentation.castCue;
  for(const u of config.allies){const a=engine.state.actors[u.id];a.hp=u.hp;a.mp=u.mp;a.statuses=[];if(u.status)applyStatus(data,engine.state,a,u.status);}
  engine.startBattle('lab_battle',{win:[],lose:[],escape:[]},{manualTurns:true});
  for(let i=0;i<config.enemies.length;i++)if(config.enemies[i].status)applyStatus(data,engine.state,engine.state.battle.enemies[i],config.enemies[i].status);
+ // Install all statuses before allowing the normal queue (including enemy
+ // initiative/preemptive actions) to advance. Diagnostic pacing is the default.
+ if(!manualTurns){delete engine.state.battle.manualTurns;continuePreemptive(engine);}
  return engine;
 }
 export function testerCurrentUnit(engine){const b=engine.state.battle;if(!b)return null;const actor=activeActor(engine);if(actor)return 'actor:'+actor;if(b.preemptive?.side==='enemies')return unitKey(b.enemies.filter(e=>e.hp>0).sort((a,c)=>c.stats.agi-a.stats.agi)[0]);return b.turnQueue?.[b.turnIndex]??null;}

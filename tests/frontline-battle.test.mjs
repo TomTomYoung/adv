@@ -101,3 +101,26 @@ test('Frontline confusion, berserk and misfire keep their own target-range rules
  for(const status of ['confusion','berserk','misfire']){const {g,b}=setup();b.frontline.positions['enemy:enemy_1']={depth:2,lane:4};g.data.skills.attack.frontlineTargeting=testerProfile({range:{min:1,max:1}});g.data.skills.lab_strike.frontlineTargeting=testerProfile({range:{min:1,max:1}});const before=b.enemies[1].hp;
  applyStatus(g.data,g.state,g.state.actors.ada,status,undefined,3);g.random=()=>0;const ok=g.dispatch(status==='berserk'?{type:'battle',action:'wait'}:{type:'battle',action:'skill',skill:status==='misfire'?'lab_strike':'guard',target:'enemy:enemy_0'});assert.ok(ok);assert.equal(b.enemies[1].hp,before);assert.equal(b.turnIndex,1);}
 });
+
+test('real playtest drains enemies automatically with the same Core results as manual stepping',()=>{
+ for(const mode of ['frontline','classic','grid']){
+  const c=testerPreset(data,'crowd');c.mode=mode;c.preemptive={side:'enemies',actions:2};c.enemies.forEach(u=>u.agi=80);
+  const manual=createTesterEngine(data,c),play=createTesterEngine(data,c,{manualTurns:false});
+  assert.equal(manual.state.battle.manualTurns,true);assert.equal(play.state.battle.manualTurns,undefined);
+  for(let i=0;i<20&&testerCurrentUnit(manual)?.startsWith('enemy:');i++)assert.ok(manual.dispatch({type:'battle.step'}));
+  delete manual.state.battle.manualTurns;
+  assert.equal(play.save(),manual.save());assert.ok(testerCurrentUnit(play).startsWith('actor:'));roundtrip(play);
+ }
+});
+test('real playtest applies enemy status before preemptive actions and retains configured Grid formation',()=>{
+ const c=testerPreset(data,'rear_only');c.mode='grid';c.preemptive={side:'enemies',actions:2};c.enemies[0].status='sleep';
+ const play=createTesterEngine(data,c,{manualTurns:false});
+ assert.equal(play.state.actors.ada.hp,c.allies[0].hp);assert.equal(play.state.battle.preemptive,undefined);
+ assert.deepEqual(play.state.battle.grid.positions['actor:ada'],{x:c.allies[0].lane,y:c.allies[0].depth+3});roundtrip(play);
+});
+test('playtest reset is deterministic and its actions do not alter the diagnostic engine or base data',()=>{
+ const c=testerPreset(data),original=JSON.stringify(data),manual=createTesterEngine(data,c),saved=manual.save();
+ const play=createTesterEngine(data,c,{manualTurns:false}),initial=play.save();assert.ok(attack(play));
+ assert.equal(manual.save(),saved);assert.equal(JSON.stringify(data),original);
+ assert.equal(createTesterEngine(data,c,{manualTurns:false}).save(),initial);
+});
