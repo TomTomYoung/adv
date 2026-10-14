@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,drain} from './helpers.mjs';
@@ -13,7 +14,7 @@ import {actionStatusProperties} from '../config/shared/status-schemas.js';
 const ids=['sleep','sure_hit','sluggish','berserk','misfire','critical_up','guaranteed_critical','critical_vulnerability','guaranteed_critical_vulnerability'];
 const battleOnly=['sure_hit','critical_up','guaranteed_critical','critical_vulnerability','guaranteed_critical_vulnerability'];
 function game({job='mage',start=true}={}){
-  const d=structuredClone(data);d.jobs[job].passives={};const g=new GameEngine(d);drain(g);g.changeJob('ada',job);g.award(0,d.system.xpBase*9*10);g.state.members=['ada'];g.teleport('region_2_f1',1,1);
+  const d=structuredClone(data);d.jobs[job].passives={};const g=new GameEngine(d);drain(g);g.changeJob('ada',job);g.award(0,d.system.xpBase*9*10);g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.teleport('region_2_f1',1,1);
   for(const id of d.encounters.wild_pair_10.enemies){d.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];d.enemies[id].stats.agi=0;d.enemies[id].resist={};d.enemies[id].stats.hp=2000;d.enemies[id].stats.mp=200;}
   if(start)g.startBattle('wild_pair_10',{win:[],lose:[],escape:[]});g.random=()=>.99;
   return {g,d,a:g.state.actors.ada};

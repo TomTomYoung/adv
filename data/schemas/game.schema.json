@@ -1344,6 +1344,11 @@
                     "required": [],
                     "additionalProperties": false,
                     "minProperties": 1
+                  },
+                  "level": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
                   }
                 },
                 "required": [
@@ -2311,6 +2316,11 @@
               "required": [],
               "additionalProperties": false,
               "minProperties": 1
+            },
+            "level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
             }
           },
           "required": [
@@ -2477,6 +2487,18 @@
           "properties": {
             "op": {
               "const": "battle.start"
+            },
+            "battleMode": {
+              "enum": [
+                "classic",
+                "grid"
+              ]
+            },
+            "movement": {
+              "enum": [
+                "fixed",
+                "step"
+              ]
             },
             "preemptive": {
               "type": "object",
@@ -2983,6 +3005,34 @@
   "title": "灯帰り DSL v1 作品マニフェスト",
   "type": "object",
   "properties": {
+    "battle": {
+      "type": "object",
+      "properties": {
+        "defaultMode": {
+          "enum": [
+            "classic",
+            "grid"
+          ]
+        },
+        "weaponRanges": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            }
+          }
+        }
+      },
+      "required": [
+        "defaultMode"
+      ],
+      "additionalProperties": false
+    },
     "schemaVersion": {
       "const": 1
     },

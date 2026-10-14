@@ -1,3 +1,4 @@
+import {nextFormation,setFormation} from './battle-formation.js';
 import {syncSkillGrowth} from './skill-levels.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
@@ -43,6 +44,7 @@ export class GameEngine {
     this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,battleResult:null,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
     for(const [item,count] of Object.entries(this.state.inventory))if(data.items[item]?.slot)addGear(this.state,item,count);
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,level:1,xp:0,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
+    this.state.partyFormation=nextFormation(this.state.members);this.state.battleModePreference='auto';
     this.state.carried={};
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
@@ -258,8 +260,8 @@ export class GameEngine {
       // Attribute direct item consumption before follow-up scripts can award more.
       settleHoldings(this.data,this.state,intent?.type==='item'&&changed?{item:intent.item,source:intent.source,spent:Math.max(0,before-(this.state.inventory[intent.item]??0))}:{});
       finishInspection(this);
-      if(changed)syncSkillGrowth(this);
-      if(changed&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
+      if(changed&&!['party.formation.set','battle.mode.set'].includes(intent.type))syncSkillGrowth(this);
+      if(changed&&!['party.formation.set','battle.mode.set'].includes(intent.type)&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
       return changed;
     }finally{this.dispatching=false;settleHoldings(this.data,this.state);}
   }
@@ -271,6 +273,8 @@ export class GameEngine {
     if(type==='choose')return this.state.waiting?.type==='command'?chooseCommand(this,intent.id):chooseOption(this,intent.id);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='party.formation.set')return setFormation(this,intent.actor,intent.x,intent.y);
+    if(type==='battle.mode.set'){if(!['auto','classic','grid'].includes(intent.mode))return false;this.state.battleModePreference=intent.mode;return true;}
     if(type==='location.move')return this.moveLocation(intent.id);
     if(type==='location.enter')return this.enterLocation(intent.id);
     if(type==='location.exit')return this.exitLocation();
@@ -367,7 +371,8 @@ export class GameEngine {
     else if(action==='swap'){const replaceAt=next.indexOf(replaceId);if(at!==-1||replaceAt===-1)return false;next[replaceAt]=actorId;}
     else return false;
     if(!next.some(id=>s.actors[id].hp>0))return false;
-    s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
+    const formation=nextFormation(next,s.partyFormation,action==='swap'?{from:replaceId,to:actorId}:null);if(!formation)return false;
+    s.partyFormation=formation;s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
   }
   unequip(actorId,slot){
     const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||(s.mode!=='town'||dungeonInterior(this.data,s))&&!s.members.includes(actorId))return false;

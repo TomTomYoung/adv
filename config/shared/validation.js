@@ -1,3 +1,4 @@
+import {encounterGridProperties,targetingSchema,battleRulesSchema,battleGridPresentationSchema} from './battle-grid-schemas.js';
 import {actionStatusProperties} from './status-schemas.js';
 import {skillLevelProperties,scoutingProperties,preemptiveSchema} from './skill-schemas.js';
 import {effectSchema} from './studio/supplemental.js';
@@ -15,10 +16,10 @@ const point=obj({map:str,x:uint,y:uint});
 const item=obj({id:str,name:str,description:str},['name']);
 const actor=obj({id:str,name:str,stats,skills:array(str)},['id','name','stats']);
 const enemy=obj({preemptive:preemptiveSchema,id:str,name:str,sprite:str,stats},['id','name','sprite','stats']);
-const encounter=obj({preemptive:preemptiveSchema,id:str,text:str,escape:bool,enemies:{...array(str),minItems:1}},['text','escape','enemies']);
+const encounter=obj({...encounterGridProperties,preemptive:preemptiveSchema,id:str,text:str,escape:bool,enemies:{...array(str),minItems:1}},['text','escape','enemies']);
 const status=obj({...actionStatusProperties,name:str,stepDamage:uint,turnDamage:uint},['name']);
 const ability=obj({...skillLevelProperties(effectSchema),...scoutingProperties,id:str,name:str,api:str,target:str,mp:uint,hp:uint,materials:dict(uint)},['id','name','api','target','mp']);
-const skill=obj({...skillLevelProperties(effectSchema),name:str,mp:uint,target:str,effects:array(effectSchema)},['name','mp','target','effects']);
+const skill=obj({targeting:targetingSchema,...skillLevelProperties(effectSchema),name:str,mp:uint,target:str,effects:array(effectSchema)},['name','mp','target','effects']);
 const outcome=obj({label:str,text:str,gold:uint,xp:uint});
 export const browserRead=async path=>{const r=await fetch(new URL(`../../${path}`,import.meta.url),{cache:'no-cache'});if(!r.ok)throw Error(`読込失敗: ${path} (${r.status})`);return path.startsWith('config/')?r.text():r.json();};
 export function createDefinitions(read=browserRead){
@@ -36,12 +37,12 @@ export function createDefinitions(read=browserRead){
     if(family==='bundle')shape=obj({services:array(obj({id:str,label:str,detail:str,script:str,interior:bool},['id','label','detail','script'])),maps:mapValues,scripts,items:dict(item),enemies:dict(enemy),encounters:dict(encounter),statuses:dict(status),shopGoods:goods,mapOpenings:array(point),mapKnown:dict(array(str))},entry.file==='dungeon-content.json'?['maps','scripts','items','enemies','encounters','statuses','shopGoods','mapOpenings','mapKnown']:['maps','scripts','items','enemies','encounters']);
     if(family==='voxel')shape=obj({maps:mapValues,scripts});
     if(family==='terrain')shape=obj({mapOpenings:array(point),items:dict(item),shopGoods:goods});
-    if(family==='jobs')shape=obj({version:str,profile:obj({skillActions:array(str),commonSkills:array(str),legacyGrowth:stats,equipmentTypes:dict(array(str)),statNames:dict(str)},['commonSkills','legacyGrowth','equipmentTypes','statNames']),initialJobs:dict(str),jobs:await schema('jobs'),buffs:await schema('buffs'),fieldAbilities:dict(ability),skills:dict(skill),formulas:dict({$ref:'#/$defs/value'}),items:dict(item),equipmentPatches:dict({type:'object'}),shopGoods:goods,skillCues:dict(str)});
+    if(family==='jobs')shape=obj({gridProfiles:dict(targetingSchema),battle:battleRulesSchema,version:str,profile:obj({skillActions:array(str),commonSkills:array(str),legacyGrowth:stats,equipmentTypes:dict(array(str)),statNames:dict(str)},['commonSkills','legacyGrowth','equipmentTypes','statNames']),initialJobs:dict(str),jobs:await schema('jobs'),buffs:await schema('buffs'),fieldAbilities:dict(ability),skills:dict(skill),formulas:dict({$ref:'#/$defs/value'}),items:dict(item),equipmentPatches:dict({type:'object'}),shopGoods:goods,skillCues:dict(str)});
     if(family==='entities')shape=obj({version:str,source:str,examples:str,monsters:array({...enemy,properties:{...enemy.properties,region:{type:'integer',minimum:1,maximum:10},skill:str},required:[...enemy.required,'region','skill']}),actors:dict(actor)});
     if(family==='presentation'){
       const sound=obj({name:str,use:str,instrument:str,gain:{type:'number',minimum:0,maximum:1},notes:array(obj({pitch:{type:'integer',minimum:0,maximum:127},start:{type:'number',minimum:0},seconds:{type:'number',exclusiveMinimum:0},velocity:{type:'integer',minimum:0,maximum:127}}))});
       const cue=obj({effects:array(str),sound:str,target:str,gap:{type:'number',minimum:0},battle:obj({impact:{type:'number',minimum:0,maximum:1000},anticipation:str},['impact'])},['effects','target']);
-      shape=obj({version:str,sounds:dict(sound),effects:await schema('effects'),cues:dict(cue),bindings:dict(dict(str)),ambient:{type:'object'}});
+      shape=obj({battleGrid:battleGridPresentationSchema,version:str,sounds:dict(sound),effects:await schema('effects'),cues:dict(cue),bindings:dict(dict(str)),ambient:{type:'object'}},['version','sounds','effects','cues','bindings','ambient']);
     }
     if(family==='catalog')shape={...array(obj({id:str,title:str,brief:str,past:str,progression:str,outcomes:dict(outcome),nodes:array(obj({id:str,options:array(obj({text:str,to:str},['text']))},['id']))})),minItems:10,maxItems:10};
     if(!shape)throw Error(`編集形式がありません: ${family}`);

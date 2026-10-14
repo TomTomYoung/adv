@@ -33414,6 +33414,9 @@ export const referenceData={
       },
       "ambient": {
         "name": "ambient"
+      },
+      "battleGrid": {
+        "name": "battleGrid"
       }
     },
     "jobs": {

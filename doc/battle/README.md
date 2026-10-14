@@ -1,5 +1,7 @@
 # 戦闘・隊編成
 
+[Classic/Grid戦闘と開始陣形](GRID_BATTLE.md)：方式切替、陣形編集、射程・範囲・移動、奥行き表示と保存。
+
 確認日: 2026-09-25。作品版1.20.0。[文書全体へ戻る](../README.md)。
 
 [PROGRESSION_AND_REWARDS.md](PROGRESSION_AND_REWARDS.md)：個別経験値、勝利リザルト、魔物別宝箱、戦闘外の回復。

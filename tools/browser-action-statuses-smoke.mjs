@@ -21,9 +21,10 @@ try{
     const page=await browser.newPage({viewport:{width,height:856}});page.on('pageerror',e=>errors.push(e.message));
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
     await page.evaluate(async mode=>{
-      const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{GameView}=await import('./src/view/view.js'),{SceneView}=await import('./src/view/scene-view.js'),{applyStatus}=await import('./src/core/status-effects.js'),{applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');
+      const {nextFormation}=await import('./src/core/battle-formation.js');
+    const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{GameView}=await import('./src/view/view.js'),{SceneView}=await import('./src/view/scene-view.js'),{applyStatus}=await import('./src/core/status-effects.js'),{applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');
       applyTheme(THEME_DEFAULT);const data=await loadContent(),g=new GameEngine(data,29);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
-      g.changeJob('ada','mage');g.award(0,data.system.xpBase*9*10);g.state.members=['ada'];
+      g.changeJob('ada','mage');g.award(0,data.system.xpBase*9*10);g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);
       for(const id of data.encounters.wild_pair_10.enemies){data.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];data.enemies[id].stats.agi=0;}
       g.teleport('region_2_f1',1,1);g.startBattle('wild_pair_10',{win:[],lose:[],escape:[]});
       for(const id of ['paralysis','blindness','spell_seal','skill_seal','item_seal','confusion'])applyStatus(data,g.state,g.state.actors.ada,id);

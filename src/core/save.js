@@ -1,3 +1,5 @@
+import {nextFormation} from './battle-formation.js';
+import {gridSaveErrors} from './battle-grid.js';
 import {battleTurnSaveErrors} from './battle-turns.js';
 import {scoutingSaveErrors} from './scouting.js';
 import {skillProgressErrors} from './skill-levels.js';
@@ -125,7 +127,12 @@ function migrateContentSave(original,data){
   return save;
 }
 export function migrateSave(original,data){
-  const migrated=migrateContentSave(original,data);
+  let migrated=migrateContentSave(original,data);
+  if(migrated?.contentVersion===data.game.version&&Array.isArray(migrated.state?.members)){
+    migrated=clone(migrated);if(migrated.state.partyFormation===undefined)migrated.state.partyFormation=nextFormation(migrated.state.members);
+    if(migrated.state.battleModePreference===undefined)migrated.state.battleModePreference='auto';
+    if(migrated.state.battle&&migrated.state.battle.mode===undefined)migrated.state.battle.mode='classic';
+  }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
   if(data.game.migrations?.[original?.contentVersion]?.environmentRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
@@ -196,7 +203,7 @@ export function validateSave(save,data){
     errors.push(...statusStateErrors(data,actor));
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
-  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s));
+  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s),...gridSaveErrors(s));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}

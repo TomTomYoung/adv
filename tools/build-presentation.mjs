@@ -11,7 +11,7 @@ export async function applyPresentation(){
   for(const effect of Object.values(plan.effects))for(const track of effect.tracks)if(track.kind==='sprite')assets.images[track.asset]=`assets/effects/${track.asset}.png`;
   game.version=plan.version;game.files.databases={...game.files.databases,effects:'data/effects.json',sounds:'data/sounds.json',presentation:'data/presentation.json'};
   game.migrations={...game.migrations,'1.1.0':{actors:Object.keys(await read('data/actors.json'))}};
-  await write('data/game.json',game);await write('data/assets.json',assets);await write('data/effects.json',plan.effects);await write('data/sounds.json',sounds);await write('data/presentation.json',{cues:plan.cues,bindings:plan.bindings,ambient:plan.ambient});
+  await write('data/game.json',game);await write('data/assets.json',assets);await write('data/effects.json',plan.effects);await write('data/sounds.json',sounds);await write('data/presentation.json',{cues:plan.cues,bindings:plan.bindings,ambient:plan.ambient,battleGrid:plan.battleGrid});
   await applyJobs();
   console.log(`Presentation: ${Object.keys(sounds).length} SE, ${Object.keys(plan.effects).length} effects`);
 }

@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,newGame,drain,exploreSpot} from './helpers.mjs';
@@ -22,10 +23,10 @@ test('reserve equipment never disappears when inventory is full and view data ca
 });
 
 test('group healing skips the fallen, group guard covers the party, and MP recovery cannot multiply MP',()=>{
-  const g=newGame();g.state.members=['toma','dora','ren'];g.state.actors.dora.hp=0;g.state.actors.toma.hp=8;g.state.actors.ren.hp=8;g.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});
+  const g=newGame();g.state.members=['toma','dora','ren'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.actors.dora.hp=0;g.state.actors.toma.hp=8;g.state.actors.ren.hp=8;g.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});
   assert.equal(activeActor(g),'ren');const total=g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0);g.dispatch({type:'battle',action:'skill',skill:'inspire',target:'ren'});assert.equal(g.state.members.reduce((n,id)=>n+g.state.actors[id].mp,0),total-3);
   assert.equal(activeActor(g),'toma');g.dispatch({type:'battle',action:'skill',skill:'group_heal'});assert.equal(g.state.actors.dora.hp,0);assert.ok(g.state.actors.toma.hp>8);assert.ok(g.state.actors.ren.hp>8);
-  const shield=newGame();shield.state.members=['dora','ada'];
+  const shield=newGame();shield.state.members=['dora','ada'];shield.state.partyFormation=nextFormation(shield.state.members,shield.state.partyFormation);
   const native=shield.stats.bind(shield);shield.stats=id=>({...native(id),agi:id==='dora'?100:0});
   shield.data=structuredClone(shield.data);shield.data.enemies.bone_whale.stats.agi=1;
   shield.startBattle('wild_bone_whale',{win:[],lose:[],escape:[]});

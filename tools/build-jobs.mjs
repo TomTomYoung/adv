@@ -1,3 +1,4 @@
+import {buildBattleGrid} from './build-battle-grid.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -23,6 +24,7 @@ export async function applyJobs(){
     write('data/skills.json',{...await read('data/skills.json'),...p.skills}),write('data/formulas.json',{...await read('data/formulas.json'),...p.formulas}),
     write('data/presentation.json',presentation)
   ]);
+  await buildBattleGrid(root);
   console.log(`Jobs: ${Object.keys(p.jobs).length} professions, ${Object.keys(p.skills).length} new battle skills, ${Object.keys(p.fieldAbilities).length} field abilities`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await applyJobs();

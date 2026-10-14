@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,drain} from './helpers.mjs';
@@ -10,7 +11,7 @@ import {fieldSkillPlan} from '../src/core/field-skills.js';
 import {fieldActionPlan} from '../src/core/jobs.js';
 const ids=['paralysis','blindness','spell_seal','skill_seal','item_seal','confusion'];
 function game(job='mage',start=true){
-  const d=structuredClone(data),g=new GameEngine(d);drain(g);g.changeJob('ada',job);g.award(0,d.system.xpBase*9*10);g.state.members=['ada'];
+  const d=structuredClone(data),g=new GameEngine(d);drain(g);g.changeJob('ada',job);g.award(0,d.system.xpBase*9*10);g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);
   for(const id of d.encounters.wild_pair_10.enemies){d.enemies[id].ai=[{priority:1,skill:'guard',target:'self'}];d.enemies[id].stats.agi=0;d.enemies[id].stats.hp=2000;d.enemies[id].stats.mp=200;}
   g.teleport('region_2_f1',1,1);
   if(start)g.startBattle('wild_pair_10',{win:[],lose:[],escape:[]});

@@ -1,5 +1,7 @@
+import {isGrid,gridStart,gridMovePlan,gridCells,position,distance,revivePosition} from './battle-grid.js';
+import {gridTargetPlan,gridSelections,targetingProfile} from './battle-targeting.js';
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
-import {resolvePreemptive,applyStun,consumeStun,applyGuard,clearGuard,guardLevel,guardDamageRate} from './battle-turns.js';
+import {resolvePreemptive,applyStun,consumeStun,applyGuard,clearGuard,stunned,guardLevel,guardDamageRate} from './battle-turns.js';
 import {applyStatus,removeStatus,statusStats,tickStatuses,applyStatusClock,recoverStatuses,statusAbilityReason,statusActionReason,rollActionStatus,statusAccuracy,statusEffectAtLevel,activeStatuses,statusControl,clearBattleStatuses,wakeOnDamage,criticalChance,CRITICAL_DAMAGE_MULTIPLIER} from './status-effects.js';
 import {ignitionReason} from './fire-hazards.js';
 import {beginBattleResult} from './battle-results.js';
@@ -19,10 +21,11 @@ import {describeTarget,playBattleCue} from './feedback.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle||engine.state.battleResult)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
+  const layout=gridStart(engine.data,engine.state,encounter,options);
   consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
   engine.state.records.battles++;
-  engine.state.battle={recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],turnQueue:null,turnIndex:0,guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.battle={...layout,recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],turnQueue:null,turnIndex:0,guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   resolvePreemptive(engine,encounter,options);
@@ -60,7 +63,7 @@ export function endBattle(engine,result,skipEvents=false){
 }
 function effectsProblem(data,skill){return skillDefinitionErrors(data,skill).join(' / ');}
 
-export function battleSkillPlan(engine,actorId,skillId,targetId){
+export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   const s=engine.state,b=s.battle,skill=Object.hasOwn(engine.data.skills,skillId??'')?effectiveSkill(engine.data,s,actorId,skillId):null;
   const fail=reason=>({ok:false,reason});
   if(!b||b.event||!s.members.includes(actorId)||!s.actors[actorId])return fail('戦闘の行動待ちではありません。');
@@ -72,6 +75,10 @@ export function battleSkillPlan(engine,actorId,skillId,targetId){
   if(skill.effects.some(e=>e.type==='repel')){
     if(!canRepel(engine.data,s,skill))return fail('この火で撃退できるのは、篝火の迷宮のくらがりです。');
     const wetReason=ignitionReason(engine.data,s);if(wetReason)return fail(wetReason);
+  }
+  if(isGrid(s)){
+    if(!Number.isInteger(grant.maxTargets)||grant.maxTargets<1)return fail('対象数の許可が不正です。');
+    return gridTargetPlan(engine,s.actors[actorId],skill,skillId,targetId,{limit:Math.min(grant.maxTargets,skill.maxTargets??grant.maxTargets),...options});
   }
   let targets;
   if(skill.target==='all_enemies')targets=b.enemies.filter(e=>e.hp>0);
@@ -127,6 +134,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='heal'){
       const multiplier=effect.itemHealing||itemId==='potion'?(powers.itemHealing??1):itemId?1:(powers.healingPower??1);
       const amount=Math.floor(raw*multiplier*(effect.scale??1)),restored=Math.min(targetStats.hp-target.hp,amount);
+      if(isGrid(s)&&target.hp<=0&&restored>0){const next=revivePosition(s,target);if(next===false)return 0;b.grid.positions[unitKey(target)]={...next};}
       target.hp+=restored;(b?.log??s.log).push(`${targetName}のHPが${restored}回復。`);
     }
     if(effect.type==='drain_mp'){const spent=Math.min(target.mp,Math.floor(raw));target.mp-=spent;(b?.log??s.log).push(`${targetName}のMPが${spent}減少。`);}
@@ -141,6 +149,12 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
 function misfireTargets(engine,source,targets,skill,skillId,itemId){
   if(itemId||['attack','guard'].includes(skillId)||skill.effects.some(e=>e.type==='repel'))return targets;
   const {data:d,state:s}=engine,b=s.battle;
+  if(isGrid(s)){
+    const limit=source.instance?skill.maxTargets??1:Math.min(skill.maxTargets??Infinity,permission(d,s,source.id,skillId,'battle.skill')?.maxTargets??1);
+    const choices=gridSelections(engine,source,skill,skillId,{limit,anySide:true}).filter(p=>p.ok&&p.targets.length&&!p.targets.some(t=>targets.includes(t)));
+    if(!choices.length||!rollActionStatus(engine,source,'misfireChance'))return targets;
+    b.log.push(`${source.name??d.actors[source.id].name}の${skill.name}が暴発した。`);return choices[Math.floor(engine.random()*choices.length)].targets;
+  }
   const all=[...s.members.map(id=>s.actors[id]),...b.enemies].filter(t=>t.hp>0),group=['all_enemies','all_allies'].includes(skill.target);
   // A misfire changes only targets. Keep special action prerequisites and the
   // learned target limit, and exclude the originally selected targets.
@@ -163,6 +177,7 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
     wetAfterSkill(engine,source,skill);return false;
   }
   targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
+  if(isGrid(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   const results=targets.map(target=>{
     const result=describeTarget(engine,unitKey(target));
     const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId);
@@ -175,8 +190,9 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
 }
 function coveredTarget(engine,target,skill){
   if(skill.target!=='enemy'||!skill.effects.some(e=>e.type==='damage'))return target;
+  if(isGrid(engine.state)&&targetingProfile(engine.data,{},skill,'').area.shape!=='single')return target;
   const s=engine.state,b=s.battle;
-  const id=s.members.find(id=>id!==target.id&&s.actors[id].hp>0&&b.covers.some(c=>c.target===unitKey(target)&&c.sourceActor===id&&c.remaining>0));
+  const id=s.members.find(id=>id!==target.id&&s.actors[id].hp>0&&(!isGrid(s)||distance(position(s,s.actors[id]),position(s,target))<=1)&&b.covers.some(c=>c.target===unitKey(target)&&c.sourceActor===id&&c.remaining>0));
   if(!id)return target;
   b.log.push(`${engine.data.actors[id].name}が${engine.data.actors[target.id].name}をかばった。`);
   return s.actors[id]; // One redirect only: no cover chains.
@@ -186,9 +202,10 @@ export function battleItemPlan(engine,actorId,itemId,targetId){
   if(!s.battle||s.battle.event||!s.members.includes(actorId)||!actor||actor.hp<=0)return fail('戦闘の行動待ちではありません。');
   const reason=statusActionReason(d,s,actor,'items');if(reason)return fail(reason);
   if(!item?.battleSkill||!(s.inventory[itemId]>0))return fail('使用できるアイテムがありません。');
-  if(!s.members.includes(targetId)||!target||target.hp<=0)return fail('生存する仲間を選んでください。');
+  if(!isGrid(s)&&(!s.members.includes(targetId)||!target||target.hp<=0))return fail('生存する仲間を選んでください。');
   const skill=d.skills[item.battleSkill];
   if(!skill||effectsProblem(d,skill)||dungeonAbilityReason(d,s,item.battleSkill,'battle.skill')||!dungeonEffectActive(d,s,'item',itemId))return fail('この場所ではアイテムを使用できません。');
+  if(isGrid(s)){const plan=gridTargetPlan(engine,actor,skill,item.battleSkill,targetId,{limit:1});return {...plan,skillId:item.battleSkill,itemId};}
   return {ok:true,skill,skillId:item.battleSkill,itemId,targets:[target]};
 }
 function performSkill(engine,source,selection){
@@ -207,6 +224,7 @@ function performSkill(engine,source,selection){
   if(activated&&skill.selfEffects?.length)applySkill(engine,source,source,{...skill,effects:skill.selfEffects},skillId,enemySource,null,false);
 }
 function confusedAction(engine,source){
+  if(isGrid(engine.state)){gridConfusedAction(engine,source);return;}
   const {data:d,state:s}=engine,b=s.battle,enemySource=Boolean(source.instance),candidates=[];
   const friends=(enemySource?b.enemies:s.members.map(id=>s.actors[id])).filter(a=>a.hp>0);
   const foes=(enemySource?s.members.map(id=>s.actors[id]):b.enemies).filter(a=>a.hp>0),all=[...friends,...foes];
@@ -251,8 +269,8 @@ function actionOverridden(engine,source){
   if(berserk){
     const {data:d,state:s}=engine,enemy=Boolean(source.instance),skill=enemy?d.skills.attack:effectiveSkill(d,s,source.id,'attack');
     const foes=(enemy?s.members.map(id=>s.actors[id]):s.battle.enemies).filter(t=>t.hp>0);
-    const valid=foes.filter(t=>enemy?!dungeonAbilityReason(d,s,'attack','battle.skill')&&!effectsProblem(d,skill)&&source.mp>=skill.mp:battleSkillPlan(engine,source.id,'attack',t.instance).ok);
-    if(valid.length){const target=valid[Math.floor(engine.random()*valid.length)];s.battle.log.push(`${name}は${berserk.name}して襲いかかった。`);performSkill(engine,source,{skill,skillId:'attack',targets:[enemy?coveredTarget(engine,target,skill):target]});}
+    const valid=foes.filter(t=>enemy?(!isGrid(s)||gridTargetPlan(engine,source,skill,'attack',unitKey(t)).ok)&&!dungeonAbilityReason(d,s,'attack','battle.skill')&&!effectsProblem(d,skill)&&source.mp>=skill.mp:battleSkillPlan(engine,source.id,'attack',t.instance).ok);
+    if(valid.length){const target=valid[Math.floor(engine.random()*valid.length)];s.battle.log.push(`${name}は${berserk.name}して襲いかかった。`);performSkill(engine,source,{skill,skillId:'attack',targets:[enemy&&!isGrid(s)?coveredTarget(engine,target,skill):target]});}
     else s.battle.log.push(`${name}は${berserk.name}しているが、攻撃できない。`);
     return true;
   }
@@ -263,6 +281,7 @@ function actionOverridden(engine,source){
 function enemyAction(engine,enemy){
   const s=engine.state,b=s.battle;
     if(enemy.hp<=0)return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
+    if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
     const alive=s.members.filter(id=>s.actors[id].hp>0);if(!alive.length)return;
     const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
@@ -346,6 +365,7 @@ function finishAction(engine,actorId){
 export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
   const actor=s.actors[actorId];
+  if(isGrid(s)&&stunned(b,actor)&&intent.action!=='wait')return false;
   if(consumeStun(engine,actor)){finishAction(engine,actorId);return true;}
   if(statusControl(engine.data,s,actor)){
     if(intent.action!=='wait')return false;
@@ -354,6 +374,9 @@ export function battleAction(engine,intent){
   let selection;
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
+  }else if(intent.action==='move'){
+    selection=gridMovePlan(s,actor,intent.to);
+    if(!selection.ok){engine.notify(selection.reason);return false;}
   }else if(intent.action==='item'){
     selection=battleItemPlan(engine,actorId,intent.item,intent.target);
     if(!selection.ok){engine.notify(selection.reason);return false;}
@@ -369,7 +392,47 @@ export function battleAction(engine,intent){
     if(engine.random()<Math.min(1,engine.data.system.escapeRate+engine.partyEffect('escapeBonus',0,'max')))endBattle(engine,'escape');
     else{b.log.push('退路を塞がれました。');finishAction(engine,actorId);}return true;
   }
-  performSkill(engine,actor,selection);
+  if(intent.action==='move'){b.grid.positions[unitKey(actor)]=selection.to;b.log.push(`${engine.data.actors[actorId].name}は移動した。`);}
+  else performSkill(engine,actor,selection);
   if(s.battle===b)finishAction(engine,actorId);
   return true;
+}
+
+function gridEnemyChoices(engine,enemy,skillId,{anySide=false,origin=null}={}){
+  const {data:d,state:s}=engine,skill=d.skills[skillId];
+  if(!skill||enemy.mp<skill.mp||statusAbilityReason(d,s,enemy,skillId)||dungeonAbilityReason(d,s,skillId,'battle.skill')||effectsProblem(d,skill))return [];
+  return gridSelections(engine,enemy,skill,skillId,{limit:skill.maxTargets??(skill.target.startsWith('all_')?8:1),anySide,origin}).filter(p=>p.ok).map(p=>({...p,skillId}));
+}
+function gridConfusedAction(engine,source){
+  const {state:s,data:d}=engine,enemy=Boolean(source.instance),choices=[];
+  for(const id of enemy?[...new Set(source.ai.map(r=>r.skill))]:engine.skills(source.id)){
+    if(enemy)choices.push(...gridEnemyChoices(engine,source,id,{anySide:true}));
+    else{const skill=effectiveSkill(d,s,source.id,id);for(const p of gridSelections(engine,source,skill,id,{anySide:true})){const plan=battleSkillPlan(engine,source.id,id,p.id,{anySide:true});if(plan.ok)choices.push({...plan,skillId:id});}}
+  }
+  if(!enemy)for(const [itemId,n] of Object.entries(s.inventory))if(n>0&&d.items[itemId]?.battleSkill){
+    const skillId=d.items[itemId].battleSkill,skill=d.skills[skillId];
+    if(statusActionReason(d,s,source,'items')||effectsProblem(d,skill)||dungeonAbilityReason(d,s,skillId,'battle.skill')||!dungeonEffectActive(d,s,'item',itemId))continue;
+    choices.push(...gridSelections(engine,source,skill,skillId,{limit:1,anySide:true}).filter(p=>p.ok).map(p=>({...p,itemId,skillId})));
+  }
+  if(choices.length)performSkill(engine,source,choices[Math.floor(engine.random()*choices.length)]);
+  else s.battle.log.push(`${source.name??d.actors[source.id].name}は使える行動がない。`);
+}
+function gridEnemyAction(engine,enemy){
+  const {state:s,data:d}=engine,b=s.battle;
+  for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
+    if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
+    let choices=gridEnemyChoices(engine,enemy,rule.skill);
+    if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
+    if(!choices.length)continue;
+    if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
+    performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
+  }
+  // Score all legal steps without changing state or RNG. Prefer a step which
+  // reaches any usable attack's distance band, then the closest opponent.
+  const foes=s.members.map(id=>s.actors[id]).filter(a=>a.hp>0),from=position(s,enemy);
+  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
+  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
+  const steps=gridCells().map(p=>gridMovePlan(s,enemy,p)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
+  if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
+  else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }

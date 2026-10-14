@@ -1,3 +1,4 @@
+import {targetingErrors} from './battle-targeting.js';
 import {skillLevelDefinitionErrors,maxSkillLevel,effectiveSkill,skillLevel} from './skill-levels.js';
 import {scoutDefinitionErrors} from './scouting.js';
 import {preemptiveValid} from './battle-turns.js';
@@ -14,6 +15,7 @@ const passiveRules={physicalPower:[.1,3],magicPower:[.1,3],damageTaken:[.1,3],he
 export function skillDefinitionErrors(data,skill){
   const errors=[],fail=m=>errors.push(m);
   if(!isRecord(skill))return ['技能定義がありません'];
+  errors.push(...targetingErrors(skill.targeting));
   if(!integer(skill.mp,0,999)||!integer(skill.hp??0,0,999))fail('技能消費不正');
   if(!['enemy','ally','self','all_enemies','all_allies'].includes(skill.target))fail('技能対象不正');
   if(!Array.isArray(skill.effects)||skill.effects.length>16)fail('技能効果列不正');

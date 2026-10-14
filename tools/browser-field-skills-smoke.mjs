@@ -26,6 +26,7 @@ try{
   page.on('response',response=>{if(response.status()>=400&&!response.url().endsWith('favicon.ico'))errors.push(`${response.status()} ${response.url()}`);});
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
   await page.evaluate(async()=>{
+    const {nextFormation}=await import('./src/core/battle-formation.js');
     const {loadContent}=await import('/src/core/loader.js'),{GameEngine}=await import('/src/core/engine.js'),{projectGame}=await import('/src/application/projection.js'),{replaceView}=await import('/src/view/view-layout.js'),{handleGameKey}=await import('/src/view/keyboard.js'),{applyTheme,THEME_DEFAULT}=await import('/src/view/theme.js');
     applyTheme(THEME_DEFAULT);const data=await loadContent();let g,view;
     const root=document.querySelector('#app'),intents=[];
@@ -38,7 +39,7 @@ try{
       get g(){return g;},get view(){return view;},intents,render,
       start(layout,context,{actor='sera',mp=12,page:profilePage='magic'}={}){
         view?.destroy();g=new GameEngine(data,83);settleStory();
-        g.state.members=['ada','nio',actor,'il','berg'];
+        g.state.members=['ada','nio',actor,'il','berg'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);
         if(context==='party'){
           g.dispatch({type:'location.move',id:'hikarigaeri_square'});
           if(!g.dispatch({type:'travel',dungeon:'kagaribi'}))throw new Error('Harness could not enter Kagaribi');

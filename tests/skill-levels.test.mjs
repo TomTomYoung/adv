@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -33,7 +34,7 @@ for(const kind of ['actor_level','uses','weapon_uses','action_uses','event','fla
   if(kind==='flag')g.state.flags.trained=true;
   if(kind==='training')trainSkill(g,'nio','trap_detect');
   if(kind==='skill')a.skillProgress={trap_disarm:{level:2,uses:5}};
-  if(kind==='companion')g.state.members.push('ren');
+  if(kind==='companion'){g.state.members.push('ren');g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);}
   advanceSkills(g,'nio');assert.equal(skillLevel(g.state,'nio','trap_detect'),2);advanceSkills(g,'nio');assert.equal(skillLevel(g.state,'nio','trap_detect'),2);roundtrip(g);
 });
 for(const on of ['skill','weapon','action'])test(`random growth only rolls on its ${on} event, never projection/save/load/walking`,()=>{

@@ -1,3 +1,4 @@
+import {nextFormation} from './battle-formation.js';
 import {trainSkill,recordSkillAction} from './skill-levels.js';
 import {returnRecon,rearmTrap} from './scouting.js';
 import {attemptIgnition} from './fire-hazards.js';
@@ -118,8 +119,8 @@ export function pump(engine){
       case 'skill.train':trainSkill(engine,c.actor,c.skill);break;
       case 'skill.action':recordSkillAction(engine,c.actor,c.action);break;
       case 'party.heal_all':engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
-      case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);}break;
-      case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0))state.members=state.members.filter(id=>id!==c.actor);break;
+      case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);}break;
+      case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0)){state.members=state.members.filter(id=>id!==c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);}break;
       case 'status.apply':case 'status.remove':{
         for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration,c.level??1);else removeStatus(a,c.status);}break;
       }
@@ -135,7 +136,7 @@ export function pump(engine){
         if(state.objects[key]!==c.state){state.objects[key]=c.state;signalFieldChange(engine.data,state,'object','light');}break;
       }
       case 'event.mark_done':state.events[c.event]=1;break;
-      case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'},{preemptive:c.preemptive});break;
+      case 'battle.start':engine.startBattle(c.encounter,{frame:clone(frame),index,win:'on_win',lose:'on_lose',escape:'on_escape'},{preemptive:c.preemptive,battleMode:c.battleMode,movement:c.movement});break;
       case 'battle.end':interruptBattle(engine);return;
       case 'quest.accept':engine.accept(c.quest);break;
       case 'quest.evidence':engine.evidence(c.quest,c.key,c.text);break;

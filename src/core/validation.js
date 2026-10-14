@@ -1,3 +1,4 @@
+import {gridDefinitionErrors} from './battle-grid.js';
 import {preemptiveValid} from './battle-turns.js';
 import {skillDefinition} from './skill-levels.js';
 import {impactErrors} from './hazard-effects.js';
@@ -57,6 +58,7 @@ export function validateContent(data){
       if(c.op==='battle.end'&&!inBattleEvent)fail(at,'battle.end は戦闘中イベント専用です');
       if(inBattleEvent&&!['event.checkpoint.commit','dungeon.restriction.set','dungeon.restriction.clear','say','narrate','choice','if','switch','set','add','flag.set','story.action','fire.portable.set','battle.end','scene.cast','scene.cast.clear','wait','effect.play','audio.se','screen.set','screen.clear'].includes(c.op))fail(at,'戦闘中イベントで許可されていない命令です');
       if(c.op==='battle.start'){
+        if(c.battleMode!==undefined&&!['classic','grid'].includes(c.battleMode)||c.movement!==undefined&&!['fixed','step'].includes(c.movement))fail(at,'戦闘モード・移動不正');
         if(c.preemptive!==undefined&&!preemptiveValid(c.preemptive))fail(at,'先制定義不正');
         reference(data.encounters,c.encounter,at);
         if(c.id!==undefined&&(typeof c.id!=='string'||!c.id.trim()))fail(at,'強制戦闘ID不正');
@@ -130,6 +132,7 @@ export function validateContent(data){
   errors.push(...statusDefinitionsErrors(data));
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
+  errors.push(...gridDefinitionErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');

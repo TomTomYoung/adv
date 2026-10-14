@@ -1,3 +1,5 @@
+import {isGrid} from '../core/battle-grid.js';
+import {gridSkillView} from './battle-grid-projection.js';
 import {effectiveSkill,skillGrowthView} from '../core/skill-levels.js';
 import {dungeonEffectActive} from '../core/dungeons.js';
 import {clone} from '../core/expression.js';
@@ -38,9 +40,9 @@ export function projectBattleSkills(engine,id){
   return engine.skills(id).map(skillId=>{
     const skill=effectiveSkill(d,s,id,skillId),ids=skill.target==='enemy'?s.battle.enemies.map(e=>e.instance):skill.target==='ally'?s.members:[id];
     const availability=Object.fromEntries(ids.map(target=>{const plan=battleSkillPlan(engine,id,skillId,target);return [target,{enabled:plan.ok,reason:plan.reason??''}];}));
-    const values=Object.values(availability),enabled=values.some(v=>v.enabled);
+    const grid=isGrid(s)?gridSkillView(engine,id,skillId,skill):null,values=grid?.choices??Object.values(availability),enabled=values.some(v=>v.enabled);
     const cost=[skill.mp?`MP${skill.mp}`:'',skill.hp?`HP${skill.hp}`:'',...Object.entries(skill.materials??{}).map(([item,n])=>`${d.items[item].name}×${n}`)].filter(Boolean).join(' / ');
-    return {id:skillId,...clone(skill),...skillGrowthView(d,s,id,skillId),enabled,availability,cost,reason:enabled?'':values[0]?.reason??'対象がありません。'};
+    return {id:skillId,...clone(skill),...skillGrowthView(d,s,id,skillId),enabled,availability,...(grid??{}),cost,reason:enabled?'':values[0]?.reason??'対象がありません。'};
   });
 }
 export function projectEnemyJob(engine,enemy){

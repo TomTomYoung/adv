@@ -23,12 +23,13 @@ try{
   page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(`${r.status()} ${r.url()}`);});
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
   await page.evaluate(async()=>{
+    const {nextFormation}=await import('./src/core/battle-formation.js');
     const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js');
     const {SceneView}=await import('./src/view/scene-view.js'),{GameView}=await import('./src/view/view.js'),{GameAudio}=await import('./src/application/audio.js');
     const {applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');applyTheme(THEME_DEFAULT);const data=await loadContent();
     window.setup=async({actor='ada',mode='full',layout='scene',kill=false}={})=>{
       window.view?.destroy();window.sound?.stopEffects();const g=new GameEngine(data,42);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
-      g.state.members=[actor];g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle(kill?'wild_waterwheel_beaver':'wild_pair_1',{win:[],lose:[],escape:[]});
+      g.state.members=[actor];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle(kill?'wild_waterwheel_beaver':'wild_pair_1',{win:[],lose:[],escape:[]});
       if(kill)g.state.battle.enemies[0].hp=1;
       const marks=[],voices=[],root=document.querySelector('#app');root.dataset.view=layout;
       const sound=new GameAudio({createAudio:url=>({paused:true,volume:0,pause(){this.paused=true;},addEventListener(){},play(){this.paused=false;voices.push({url,at:performance.now()});return Promise.resolve();}})});sound.configure(true,1,1);
