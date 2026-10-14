@@ -1,3 +1,4 @@
+import {frontlineSaveErrors} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
 import {gridSaveErrors} from './battle-grid.js';
 import {battleTurnSaveErrors} from './battle-turns.js';
@@ -203,7 +204,7 @@ export function validateSave(save,data){
     errors.push(...statusStateErrors(data,actor));
     if(actor.id!==id||!integer(actor.hp,0,stats.hp)||!integer(actor.mp,0,stats.mp)||actor.statuses.some(x=>!data.statuses[x]))fail('HP・MP・状態異常不正');
   }
-  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s),...gridSaveErrors(s));
+  errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s),...gridSaveErrors(s),...frontlineSaveErrors(s,data));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}

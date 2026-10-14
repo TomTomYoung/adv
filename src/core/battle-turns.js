@@ -49,7 +49,8 @@ export function consumeStun(engine,unit){
 }
 export function battleTurnSaveErrors(state){
   const b=state.battle;if(!b)return [];
-  const errors=[],valid=new Set([...state.members.map(id=>`actor:${id}`),...(b.enemies??[]).map(e=>`enemy:${e.instance}`)]);
+  const errors=[];if(b.manualTurns!==undefined&&b.manualTurns!==true)errors.push('戦闘ステップ設定不正');
+  const valid=new Set([...state.members.map(id=>`actor:${id}`),...(b.enemies??[]).map(e=>`enemy:${e.instance}`)]);
   const guarding=new Set([...(Array.isArray(b.guards)?b.guards:[]).map(id=>`actor:${id}`),...(b.enemies??[]).filter(e=>e.guard).map(unitKey)]);
   if(b.guardLevels!==undefined&&(!isRecord(b.guardLevels)||Object.entries(b.guardLevels).some(([id,n])=>!valid.has(id)||!guarding.has(id)||!statusLevelValid(n)||n===1)))errors.push('防御Lv不正');
   if(b.stuns!==undefined&&(!isRecord(b.stuns)||Object.entries(b.stuns).some(([id,n])=>!valid.has(id)||!Number.isInteger(n)||n<1||n>20)))errors.push('スタン行動回数不正');
@@ -59,9 +60,9 @@ export function battleTurnSaveErrors(state){
     if(!Number.isInteger(index)||index<0||queue!==null&&!Array.isArray(queue)||(queue===null&&index!==0))errors.push('戦闘行動キュー不正');
     else if(Array.isArray(queue)){
       const keys=new Set(queue);
-      if(index>queue.length||queue.length>valid.size||keys.size!==queue.length||queue.some(key=>typeof key!=='string'||!valid.has(key))||b.preemptive||b.acted?.some(id=>queue.includes('actor:'+id)&&!queue.slice(0,index).includes('actor:'+id))||(!b.event&&index<queue.length&&queue[index].startsWith('enemy:')))errors.push('戦闘行動キュー不正');
+      if(index>queue.length||queue.length>valid.size||keys.size!==queue.length||queue.some(key=>typeof key!=='string'||!valid.has(key))||b.preemptive||b.acted?.some(id=>queue.includes('actor:'+id)&&!queue.slice(0,index).includes('actor:'+id))||(!b.event&&!b.manualTurns&&index<queue.length&&queue[index].startsWith('enemy:')))errors.push('戦闘行動キュー不正');
     }else if(!b.preemptive&&!b.event)errors.push('戦闘行動キュー不正');
   }
-  const p=b.preemptive;if(p!==undefined&&(!isRecord(p)||Object.keys(p).some(k=>!['side','remaining'].includes(k))||!['allies','enemies'].includes(p.side)||!Number.isInteger(p.remaining)||p.remaining<1||p.remaining>20||b.round!==1||b.acted?.length||p.side==='enemies'&&!b.event))errors.push('先制陣営・残り行動回数不正');
+  const p=b.preemptive;if(p!==undefined&&(!isRecord(p)||Object.keys(p).some(k=>!['side','remaining'].includes(k))||!['allies','enemies'].includes(p.side)||!Number.isInteger(p.remaining)||p.remaining<1||p.remaining>20||b.round!==1||b.acted?.length||p.side==='enemies'&&!b.event&&!b.manualTurns))errors.push('先制陣営・残り行動回数不正');
   return errors;
 }

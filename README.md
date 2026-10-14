@@ -1,5 +1,7 @@
 # 灯帰りの迷宮
 
+[前中後衛のバトルテスター](battle-tester.html) ／ [操作・設定](doc/battle/FRONTLINE_BATTLE.md)。
+
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。
 
 [設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/authoring/CONFIG_EDITORS.md)。

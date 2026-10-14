@@ -30,11 +30,11 @@ Grid開始時にコピーした `battle.grid.positions` は個体キー→全体
 
 ## 定義の正本と生成
 
-- `config/jobs.json` の `gridProfiles`：通常攻撃を除く75技能の個別Grid定義。`battle.weaponRanges`：全9武器種の通常攻撃射程。`battle.defaultMode`：作品の既定方式。
-- `config/presentation.json` の `battleGrid.enemyPresentation`：敵の表示設定。前後行の倍率70/85/100%、足元中央、最大重なり目安0.33、奥から手前へ描画します。`sprites` の敵種IDごとの `spriteScale`・`offsetX`・`offsetY` で素材を補正できます。
-- 遭遇原稿の任意 `battleMode`・`movement`・`enemyPositions`。配置は種族IDでなく遭遇の出現順に対応します。`battle.start` も `battleMode` と `movement` に対応します。
-- `tools/build-battle-grid.mjs` は既存技能に対応する定義が欠ければ失敗します。職業・迷宮の生成末尾でも呼び出し、後段で技能定義が上書きされても射程を再適用します。
-- Coreの専用検証と `config/shared/battle-grid-schemas.js` が設定画面・技能Lv派生・DSL Schemaを検査します。技能固有の `targeting` がない外部定義には、採用仕様の互換プロファイルを使います。
+1. `config/jobs.json` の `gridProfiles`：通常攻撃を除く75技能の個別Grid定義。`battle.weaponRanges`：全9武器種の通常攻撃射程。`battle.defaultMode`：作品の既定方式。
+1. `config/presentation.json` の `battleGrid.enemyPresentation`：敵の表示設定。前後行の倍率70/85/100%、足元中央、最大重なり目安0.33、奥から手前へ描画します。`sprites` の敵種IDごとの `spriteScale`・`offsetX`・`offsetY` で素材を補正できます。
+1. 遭遇原稿の任意 `battleMode`・`movement`・`enemyPositions`。配置は種族IDでなく遭遇の出現順に対応します。`battle.start` も `battleMode` と `movement` に対応します。
+1. `tools/build-battle-grid.mjs` は既存技能に対応する定義が欠ければ失敗します。職業・迷宮の生成末尾でも呼び出し、後段で技能定義が上書きされても射程を再適用します。
+1. Coreの専用検証と `config/shared/battle-grid-schemas.js` が設定画面・技能Lv派生・DSL Schemaを検査します。技能固有の `targeting` がない外部定義には、採用仕様の互換プロファイルを使います。
 
 敵スプライトは表示幅の全体調整→敵種補正→行倍率を合成します。画像の矩形と実際のセル占有は独立しています。描画補正・レイアウトはセーブに保存しません。論理セルの座標と足元を対応させ、画像は縦横の比率を保持します。現在の表示幅は5列間隔と重なり上限から求め、画像内の余白は必要に応じ個別オフセットで調整します。
 

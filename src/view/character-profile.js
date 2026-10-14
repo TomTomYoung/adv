@@ -1,3 +1,4 @@
+import {renderFrontlineFormation} from './battle-frontline.js';
 import {renderFormation} from './battle-grid.js';
 import {jobPanel,buffLabels} from './jobs.js';
 import {focusButton} from './focus.js';
@@ -81,6 +82,7 @@ export function renderCharacter(view,parent,m){
   const section=make('section','panel-content character-page');section.append(profile(view,actor,m,{context:'town',page:view.profilePage??'overview',jobs:m.mode==='town',onPage:page=>{view.profilePage=page;}}));parent.append(section);
 }
 export function renderParty(view,parent,m){
+  if(view.frontlineFormationOpen){renderFrontlineFormation(view,parent,m);return;}
   if(view.formationOpen){renderFormation(view,parent,m);return;}
   const section=make('section','panel-content party-board');section.setAttribute('aria-label','隊の状態');
   if(m.scouting?.recon)section.append(make('p','requirement',`${m.scouting.recon.name}は偵察中。あと${m.scouting.recon.remaining}歩で合流します。`));
@@ -90,6 +92,7 @@ export function renderParty(view,parent,m){
     if(!actors.some(a=>a.id===view.partySelection[group])){view.partySelection[group]=actors[0]?.id??null;view.partyPages[group]='overview';}
     const selected=actors.find(a=>a.id===view.partySelection[group]),choices=make('section',`party-picker ${group}-picker`);choices.setAttribute('aria-label',`${title}キャラクター選択`);
     choices.append(make('h3','',`${title}　${actors.length}${group==='party'?` / ${m.tavern?.maxParty??5}`:''}人`));
+    if(group==='party'&&m.frontlineFormation)choices.append(button('前中後衛の陣形','front-formation:open',()=>{view.frontlineFormationOpen=true;view.render(m);}));
     if(group==='party'&&m.formation)choices.append(button('戦闘陣形','formation:open',()=>{view.formationOpen=true;view.formationActor=null;view.render(m);}));
     const cards=make('div','party-card-list');cards.dataset.scroll=`roster:${group}`;
     for(const actor of actors){const key=`roster:${group}:${actor.id}`;cards.append(characterCard(view,actor,key,actor===selected,()=>{view.partySelection[group]=actor.id;view.partyPages[group]='overview';view.render(view.model);refocus(view,key);}));}choices.append(cards);

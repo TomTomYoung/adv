@@ -1,3 +1,4 @@
+import {syncFrontFormation} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
 import {trainSkill,recordSkillAction} from './skill-levels.js';
 import {returnRecon,rearmTrap} from './scouting.js';
@@ -119,8 +120,8 @@ export function pump(engine){
       case 'skill.train':trainSkill(engine,c.actor,c.skill);break;
       case 'skill.action':recordSkillAction(engine,c.actor,c.action);break;
       case 'party.heal_all':engine.healAll(c.ratio??1);state.light=engine.data.system.lightCapacity;break;
-      case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);}break;
-      case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0)){state.members=state.members.filter(id=>id!==c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);}break;
+      case 'party.join':returnRecon(engine);if(!state.members.includes(c.actor)&&state.members.length<engine.data.system.maxParty){state.members.push(c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);syncFrontFormation(state);}break;
+      case 'party.leave':returnRecon(engine);if(state.members.length>1&&state.members.some(id=>id!==c.actor&&state.actors[id].hp>0)){state.members=state.members.filter(id=>id!==c.actor);state.partyFormation=nextFormation(state.members,state.partyFormation);syncFrontFormation(state);}break;
       case 'status.apply':case 'status.remove':{
         for(const id of c.target==='party'?state.members:[v(c.target)]){const a=state.actors[id];if(c.op==='status.apply')applyStatus(engine.data,state,a,c.status,c.duration,c.level??1);else removeStatus(a,c.status);}break;
       }
