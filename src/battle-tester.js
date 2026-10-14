@@ -1,7 +1,7 @@
 import {loadContent} from './core/loader.js';
 import {unitKey} from './core/buffs.js';
 import {frontlineUnits,depthNames} from './core/battle-frontline.js';
-import {testerPreset,createTesterEngine,testerPlan,testerCurrentUnit,testerSnapshot} from './application/battle-tester-model.js';
+import {testerPreset,createTesterEngine,validateTesterCase,testerPlan,testerCurrentUnit,testerSnapshot} from './application/battle-tester-model.js';
 import {renderFrontlineSprites} from './view/battle-frontline.js';
 const $=id=>document.getElementById(id),node=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const base=await loadContent();let config=testerPreset(base),engine,saved=null,eventIndex=null,lastPlan=null;
@@ -33,8 +33,13 @@ function readProfile(){
  config.profile=p;if(engine)engine.data.skills.lab_strike.frontlineTargeting=structuredClone(p);return p;
 }
 function presentation(){return {overlap:Math.max(0,Math.min(.5,Number($('overlap').value))),rowScale:[0,1,2].map(i=>Math.max(.1,Math.min(1.5,Number($('scale'+i).value))))};}
+function readCase(){
+ readProfile();config.mode=$('mode').value;config.seed=Number($('seed').value);config.preemptive=$('preemptive').value?{side:$('preemptive').value,actions:2}:null;config.presentation=presentation();
+ const errors=validateTesterCase(base,config);if(errors.length)throw Error(errors.join('\n'));
+ return structuredClone(config);
+}
 function start(){try{
- readProfile();config.mode=$('mode').value;config.seed=Number($('seed').value);config.preemptive=$('preemptive').value?{side:$('preemptive').value,actions:2}:null;config.presentation=presentation();engine=createTesterEngine(base,config);saved=null;eventIndex=null;render(true);status('戦闘を開始しました。射程確認と対象選択では手番・MP・乱数を消費しません。');
+ const next=readCase();engine=createTesterEngine(base,next);loadEngine(next);saved=null;eventIndex=null;render(true);status('戦闘を開始しました。射程確認と対象選択では手番・MP・乱数を消費しません。');
 }catch(e){status(e.message);}}
 function units(){return engine?.state.battle?frontlineUnits(engine.state):[];}
 function currentSkill(){const value=$('skill').value,source=$('attacker').value;if(value==='participant_attack')return source.startsWith('actor:')?`lab_${source.slice(6)}_attack`:`lab_${source.slice(6)}_attack`;return value;}
@@ -71,7 +76,7 @@ function render(force=false){
  const log=$('event-log'),events=b?.frontline?.events??[];log.replaceChildren();events.forEach((e,i)=>{const li=node('li',eventLabel(e));if(i===eventIndex)li.className='selected';li.addEventListener('click',()=>{eventIndex=i;render();});log.append(li);});
  if(!events.length)for(const text of b?.log??[])log.append(node('li',text));
  $('event-position').textContent=eventIndex===null?'現在の状態':`イベント ${eventIndex+1} / ${events.length}`;$('debug').textContent=JSON.stringify({state:testerSnapshot(engine),selectedEvent:eventIndex===null?null:events[eventIndex],range:lastPlan?.requiredRange,targets:lastPlan?.targets?.map(unitKey)},null,2);
- window.battleTester={engine,config,start,render,preview,get plan(){return lastPlan;},get eventIndex(){return eventIndex;}};
+ window.battleTester={engine,config,start,render,preview,loadEngine,engineSync,get plan(){return lastPlan;},get eventIndex(){return eventIndex;}};
 }
 function act(fn){try{if(!engine?.state.battle)return;const ok=fn();eventIndex=null;render(true);status(ok===false?'現在の行動は実行できません。':'Coreで行動を確定しました。イベント一覧から各ステップを確認できます。');}catch(e){status(e.message);}}
 $('apply-preset').addEventListener('click',()=>{config=testerPreset(base,$('preset').value);loadInputs();status('プリセットを編成へ反映しました。「この編成で開始」を押してください。');});
@@ -87,6 +92,32 @@ $('save').addEventListener('click',()=>{saved=engine?.save();status('このテ�
 $('event-prev').addEventListener('click',()=>{const n=engine?.state.battle?.frontline?.events.length??0;if(n){eventIndex=Math.max(0,(eventIndex??n)-1);render();}});
 $('event-next').addEventListener('click',()=>{const n=engine?.state.battle?.frontline?.events.length??0;if(n){eventIndex=Math.min(n-1,eventIndex===null?0:eventIndex+1);render();}});
 $('event-latest').addEventListener('click',()=>{eventIndex=null;render();});
-$('export').addEventListener('click',()=>{readProfile();config.presentation=presentation();const blob=new Blob([JSON.stringify(config,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=node('a');a.href=url;a.download='battle-case.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$('export').addEventListener('click',()=>{try{const next=readCase();const blob=new Blob([JSON.stringify(next,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=node('a');a.href=url;a.download='battle-case.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){status(e.message);}});
 $('import').addEventListener('change',async()=>{try{const file=$('import').files[0];if(!file)return;const next=JSON.parse(await file.text());createTesterEngine(base,next);config=next;loadInputs();start();}catch(e){status(e.message);}});
+const engineFrame=$('engine-frame'),engineSync={ready:false,request:0,loaded:0,error:null};let engineCase=null;
+function sendEngine(){
+ if(!engineSync.ready||!engineCase)return;
+ engineSync.request++;engineSync.error=null;$('engine-status').textContent='設定を読み込み中…';
+ engineFrame.contentWindow.postMessage({type:'adv:battle-tester:load',request:engineSync.request,config:engineCase,layout:$('engine-layout').value},location.origin);
+}
+function loadEngine(next=readCase()){engineCase=structuredClone(next);sendEngine();}
+function setLabMode(mode){
+ document.body.dataset.labMode=mode;
+ for(const button of document.querySelectorAll('[data-lab-mode]'))if(button.tagName==='BUTTON')button.setAttribute('aria-pressed',String(button.dataset.labMode===mode));
+}
+for(const button of document.querySelectorAll('button[data-lab-mode]'))button.addEventListener('click',()=>setLabMode(button.dataset.labMode));
+$('engine-load').addEventListener('click',()=>{try{loadEngine();}catch(e){$('engine-status').textContent=e.message;}});
+$('engine-layout').addEventListener('change',()=>{
+ if(engineSync.ready)engineFrame.contentWindow.postMessage({type:'adv:battle-tester:layout',layout:$('engine-layout').value},location.origin);
+});
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||event.source!==engineFrame.contentWindow)return;
+ const m=event.data;if(m?.type==='adv:battle-tester:ready'){engineSync.ready=true;sendEngine();return;}
+ if(m?.request!==engineSync.request)return;
+ if(m.type==='adv:battle-tester:loaded'){engineSync.loaded=m.request;engineSync.error=null;}
+ else if(m.type==='adv:battle-tester:error')engineSync.error=m.message;
+ else if(m.type!=='adv:battle-tester:status')return;
+ $('engine-status').textContent=m.message;
+});
 loadInputs();start();
+engineFrame.contentWindow.postMessage({type:'adv:battle-tester:connect'},location.origin);
