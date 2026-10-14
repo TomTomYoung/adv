@@ -1,3 +1,4 @@
+import {targetingSchema} from './battle-grid-schemas.js';
 const str={type:'string',minLength:1},integer=(min=0,max=1e9)=>({type:'integer',minimum:min,maximum:max});
 const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
 const condition={$ref:'#/$defs/skillCondition'},stage={pattern:'^([2-9]|1[0-9]|20)$'};
@@ -11,7 +12,7 @@ export const skillConditionSchema={oneOf:[
 export const scoutingProperties={radius:integer(1,8),duration:integer(1,10000),actions:integer(1,20),rate:{type:'number',minimum:0,maximum:1},hidden:integer(0,20),difficulty:integer(1,20),trapKinds:{type:'array',uniqueItems:true,items:{enum:['rockfall','cave_in','needle','arrow','gas','magic_circle','pit','explosion','drip']}},recover:{type:'boolean'},returnSteps:integer(1,1000),cells:integer(1,256),disarmCount:integer(0,32)};
 export function skillLevelProperties(effect={type:'object'}){return {
   maxSkillLevel:integer(1,20),growthDisplay:{enum:['full','progress','hidden']},
-  levels:{type:'object',propertyNames:stage,additionalProperties:obj({mp:integer(0,999),hp:integer(0,999),effects:{type:'array',maxItems:16,items:effect},selfEffects:{type:'array',maxItems:16,items:effect},maxTargets:integer(1,8),amount:integer(1,999),...scoutingProperties},[])},
+  levels:{type:'object',propertyNames:stage,additionalProperties:obj({targeting:targetingSchema,mp:integer(0,999),hp:integer(0,999),effects:{type:'array',maxItems:16,items:effect},selfEffects:{type:'array',maxItems:16,items:effect},maxTargets:integer(1,8),amount:integer(1,999),...scoutingProperties},[])},
   levelUp:{type:'object',propertyNames:stage,additionalProperties:condition}
 };}
 export const preemptiveSchema=obj({side:{enum:['allies','enemies']},actions:integer(1,20),chance:{type:'number',minimum:0,maximum:1},priority:integer(0,100)},['side','actions']);

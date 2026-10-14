@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,newGame} from './helpers.mjs';
@@ -7,7 +8,7 @@ import {EffectsRenderer} from '../src/view/effects.js';
 import {installDOM} from './view-dom.mjs';
 import {feedbackDelay} from '../src/feedback-timing.js';
 
-function battle(){const g=newGame(311);g.state.members=['ada'];g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});for(const e of g.state.battle.enemies){e.hp=1000;e.ai=[{priority:1,skill:'attack',target:'weakest'}];}return g;}
+function battle(){const g=newGame(311);g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});for(const e of g.state.battle.enemies){e.hp=1000;e.ai=[{priority:1,skill:'attack',target:'weakest'}];}return g;}
 
 test('view and audio delays share the render origin and never schedule in the past',()=>{
   assert.equal(100+feedbackDelay({startedAt:80},130,100),160+feedbackDelay({startedAt:80},130,160));
@@ -27,18 +28,18 @@ test('one impact carries sound, recoil and the resolved damage; enemy advance pr
 });
 
 test('all-target enemy attacks use one sound and one anticipation with each target damage, healing has no damage number',()=>{
-  const g=battle();g.state.members=['ada','sera'];g.state.battle.acted=['sera'];
+  const g=battle();g.state.members=['ada','sera'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.battle.acted=['sera'];
   for(const e of g.state.battle.enemies)e.ai=[{priority:1,skill:'bone_rain',target:'weakest'}];
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
   const hits=g.feedback.events.filter(e=>e.source?.key.startsWith('enemy:'));
   assert.equal(hits.length,2);assert.equal(g.feedback.events.filter(e=>e.effects.includes('enemy_advance')).length,2);
   for(const hit of hits){assert.equal(hit.sound,'se_heavy');assert.equal(hit.targets.length,2);assert.ok(hit.targets.every(t=>t.damage>0));}
-  const h=newGame();h.state.members=['toma','dora'];h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});
+  const h=newGame();h.state.members=['toma','dora'];h.state.partyFormation=nextFormation(h.state.members,h.state.partyFormation);h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});
   const heal=h.feedback.events.find(e=>e.sound==='se_heal');assert.ok(heal.targets.every(t=>t.damage===undefined));
 });
 
 test('cover redirects the displayed hit to the defender, and overkill preserves the logged damage and image',()=>{
-  const g=battle();g.state.members=['ada','sera'];g.state.actors.sera.hp=1;g.state.battle.acted=['sera'];
+  const g=battle();g.state.members=['ada','sera'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.actors.sera.hp=1;g.state.battle.acted=['sera'];
   g.state.battle.covers=[{target:'actor:sera',sourceActor:'ada',remaining:1}];
   g.dispatch({type:'battle',action:'skill',skill:'guard',target:'ada'});
   assert.ok(g.feedback.events.filter(e=>e.source?.key.startsWith('enemy:')).every(e=>e.targets[0].key==='actor:ada'));

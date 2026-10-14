@@ -86,7 +86,7 @@ export function skillGrowthView(data,state,actor,id){
   const spec=skillDefinition(data,id),level=skillLevel(state,actor,id),condition=spec?.levelUp?.[level+1],policy=spec?.growthDisplay??'full';
   return {skillLevel:level,maxSkillLevel:maxSkillLevel(spec),growth:condition&&policy!=='hidden'?conditionText(data,state,actor,id,condition,policy==='progress'):''};
 }
-export const LEVEL_FIELDS=['mp','hp','effects','selfEffects','maxTargets','amount','radius','duration','actions','rate','hidden','difficulty','trapKinds','recover','returnSteps','cells','disarmCount'];
+export const LEVEL_FIELDS=['targeting','mp','hp','effects','selfEffects','maxTargets','amount','radius','duration','actions','rate','hidden','difficulty','trapKinds','recover','returnSteps','cells','disarmCount'];
 export function skillLevelDefinitionErrors(data,id,spec){
   if(!isRecord(spec))return [`${id}: 技能定義不正`];
   const errors=[],fail=m=>errors.push(`${id}: ${m}`),max=maxSkillLevel(spec);

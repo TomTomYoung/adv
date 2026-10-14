@@ -1,3 +1,4 @@
+import {gridScene,renderGridControls} from './battle-grid.js';
 import {SceneCastRenderer} from './scene-cast.js';
 import {renderCharacter,renderParty} from './character-profile.js';
 import {renderBag,renderShop,cancelInventoryAction} from './inventory-view.js';
@@ -73,6 +74,7 @@ export class GameView {
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
     if(this.mapOverlay){this.closeMap();return;}
+    if(this.tab==='party'&&this.formationOpen){if(this.formationActor)this.formationActor=null;else this.formationOpen=false;this.render(this.model);return;}
     if(this.tab==='profile'&&this.profilePage!=='overview'&&!this.root.querySelector('.button-picker')){this.profilePage='overview';this.render(this.model);return;}
     const profile=document.activeElement?.closest('.character-profile')?.dataset.profile;
     if(this.tab==='party'&&profile&&this.partyPages?.[profile]!=='overview'){this.partyPages[profile]='overview';this.render(this.model);return;}
@@ -80,7 +82,7 @@ export class GameView {
     if(closeDetails(this.inputScope()))return;
     const base=this.model.mode==='town'?'location':'explore';
     if(this.tab!==base){this.closePanel();return;}
-    if(this.pendingBattleAction){const key=this.pendingBattleAction.focus;this.pendingBattleAction=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
+    if(this.pendingBattleAction){const key=this.pendingBattleAction.focus;this.pendingBattleAction=null;this.gridChoice=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
     if(this.battleMenu){const key=`battle-menu:${this.battleMenu}`;this.battleMenu=null;this.render(this.model);focusButton([...this.root.querySelectorAll('[data-focus]')].find(e=>e.dataset.focus===key));return;}
     const d=this.model.dialog;
     if(d?.cancelAdvance){this.act({type:'advance'});return;}
@@ -196,7 +198,8 @@ export class GameView {
     const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.dataset.fx='scene';scene.append(canvas);
     const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`B${m.dungeon.floor} / ${m.dungeon.location.x}, ${m.dungeon.location.y}${m.dungeon.voxel?' / 高さ '+m.dungeon.z:''}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
-    if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`));enemies.append(b);}scene.append(enemies);}
+    if(m.battle?.grid)gridScene(this,scene,m);
+    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`));enemies.append(b);}scene.append(enemies);}
     for(const layer of m.atmosphere??[]){if(!layer.opacity||!layer.lighting&&(this.ui.effectsMode?.()??'full')==='off')continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
   }
@@ -237,19 +240,21 @@ export class GameView {
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
     const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned,m.battle.control]);
-    if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.battleTurn=turn;}
+    if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.gridChoice=null;this.battleTurn=turn;}
     this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,m.dialog);return;}
     const section=node('div','battle-panel'),commands=node('section','battle-commands');commands.setAttribute('aria-label','戦闘コマンド');
     commands.append(node('h2','battle-actor',`${m.battle.actorName} の行動`));section.append(commands);
     if(m.battle.preemptive)commands.append(node('p','battle-preemptive',`${m.battle.preemptive.side==='allies'?'味方':'敵'}の先制　残り${m.battle.preemptive.remaining}回`));
     const chooseAction=(action,id,target,name,focus)=>{
       const intent={type:'battle',action,[action]:id};
+      if(m.battle.grid){this.gridChoice=null;this.pendingBattleAction={intent,target,name,focus};this.render(m);return;}
       if(!['enemy','ally'].includes(target)){this.act({...intent,target:m.battle.actorId});return;}
       this.pendingBattleAction={intent,target,name,focus};this.render(m);
     };
     const pending=this.pendingBattleAction;
     if(m.battle.stunned){commands.append(node('p','requirement','スタンで今回の行動はできません。'),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
     else if(m.battle.control){commands.append(node('p','requirement',m.battle.control.reason),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
+    else if(pending&&m.battle.grid){renderGridControls(this,commands,m);}
     else if(pending){
       commands.append(node('h3','battle-menu-title',`${pending.name}の対象`));const targets=node('div','battle-targets');targets.setAttribute('aria-label',`${pending.name}の対象`);
       const skill=pending.intent.action==='skill'?m.battle.skills.find(s=>s.id===pending.intent.skill):null;
@@ -273,6 +278,7 @@ export class GameView {
         for(const [id,title,hasEntries] of [['skills','スキル',m.battle.skills.some(s=>!basic.has(s.id))],['items','アイテム',m.battle.items.length>0]]){
           const b=button(title,()=>{this.battleMenu=id;this.render(m);},'',!hasEntries);b.dataset.focus=`battle-menu:${id}`;actions.append(b);
         }
+        if(m.battle.grid?.movement==='step'){const move=button('移動',()=>{this.gridChoice=null;this.pendingBattleAction={intent:{type:'battle',action:'move'},name:'移動',focus:'battle:move'};this.render(m);});move.dataset.focus='battle:move';actions.append(move);}
         const escape=button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape);escape.dataset.focus='battle:escape';actions.append(escape);
       }
       if(this.battleMenu){const back=button('戻る',()=>this.cancel());back.dataset.focus='battle:back';actions.append(back);}commands.append(actions);

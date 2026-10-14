@@ -1,3 +1,4 @@
+import {buildBattleGrid} from './build-battle-grid.mjs';
 import {buildDungeonPackages} from './build-dungeon-packages.mjs';
 import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
 import {buildBattleRewards} from './build-battle-rewards.mjs';
@@ -68,6 +69,7 @@ export async function buildDungeons(){
   await buildCellLayers(root);
   await buildDungeonPackages(root);
   await buildQuestInterruptions(root);
+  await buildBattleGrid(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await buildDungeons();

@@ -1,3 +1,4 @@
+import {nextFormation} from './battle-formation.js';
 import {encounterStoryJourney} from './story.js';
 import {dungeonCell,dungeonEncounter} from './dungeons.js';
 import {edgeBetween} from './edge-layers.js';
@@ -111,7 +112,7 @@ export function applyScouting(engine,actor,a,plan){
   if(a.api==='party.camouflage')q.effects.camouflage={remaining:a.duration,rate:a.rate};
   if(a.api==='party.recon'){
     q.recon={actor,ability:a.id,level:plan.usedLevel,map:p.map,x:p.x,y:p.y,slot:s.members.indexOf(actor),startedStep:s.steps,returnAt:s.steps+a.returnSteps,result:plan.result};
-    s.members=s.members.filter(id=>id!==actor);engine.log(`${engine.data.actors[actor].name}は偵察へ。あと${a.returnSteps}歩で合流します。`);
+    s.members=s.members.filter(id=>id!==actor);s.partyFormation=nextFormation(s.members,s.partyFormation);engine.log(`${engine.data.actors[actor].name}は偵察へ。あと${a.returnSteps}歩で合流します。`);
   }
   if(a.api==='encounter.seek'){
     let roll=engine.random()*plan.pool.reduce((n,e)=>n+e.weight,0),id=plan.pool.at(-1).encounter;
@@ -122,7 +123,7 @@ export function applyScouting(engine,actor,a,plan){
 export function returnRecon(engine,complete=false){
   const s=engine.state,r=s.scouting?.recon;if(!r)return;
   // Reserve the original party slot throughout departure; restoration is never lossy.
-  if(!s.members.includes(r.actor))s.members.splice(Math.min(r.slot,s.members.length),0,r.actor);
+  if(!s.members.includes(r.actor)){s.members.splice(Math.min(r.slot,s.members.length),0,r.actor);s.partyFormation=nextFormation(s.members,s.partyFormation);}
   delete s.scouting.recon;
   if(complete){
     s.discovered[r.map]=[...new Set([...(s.discovered[r.map]??[]),...r.result.cells])];

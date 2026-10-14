@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,drain} from './helpers.mjs';
@@ -49,7 +50,7 @@ test('trap recovery respects skill level, configured probability, stack limit an
 });
 test('thief shares disarm; all seven new skills reject town, battle and absent users',()=>{
   const {g,d}=game();g.returnTown();assert.ok(g.dispatch({type:'job.change',actor:'nio',job:'rogue'}));g.teleport('region_2_f1',1,1);assert.match(fieldActionPlan(d,g.state,'nio','trap_disarm').reason,/罠/);assert.match(fieldActionPlan(d,g.state,'nio','trap_detect').reason,/習得/);
-  for(const ability of ['trap_disarm','trap_detect','ambush','seek_enemy','patrol','camouflage','recon']){const c=game();c.g.returnTown();assert.equal(use(c.g,ability),false);c.g.teleport(c.m.id,1,1);c.g.state.members=c.g.state.members.filter(id=>id!=='nio');assert.equal(use(c.g,ability),false);}
+  for(const ability of ['trap_disarm','trap_detect','ambush','seek_enemy','patrol','camouflage','recon']){const c=game();c.g.returnTown();assert.equal(use(c.g,ability),false);c.g.teleport(c.m.id,1,1);c.g.state.members=c.g.state.members.filter(id=>id!=='nio');c.g.state.partyFormation=nextFormation(c.g.state.members,c.g.state.partyFormation);assert.equal(use(c.g,ability),false);}
 });
 test('patrol and camouflage expire on successful walking only; fixed battles still start',()=>{
   const {g}=game();use(g,'patrol');use(g,'camouflage');use(g,'ambush');const before=structuredClone(g.state.scouting.effects);g.dispatch({type:'move',direction:'left'});roundtrip(g);projectGame(g);assert.deepEqual(g.state.scouting.effects,before);assert.equal(camouflageRate(g.state),.6);
@@ -76,7 +77,7 @@ for(const action of ['return','defeat','teleport','event'])test(`recon recalls s
   assert.deepEqual(g.state.members,members);assert.equal(g.state.scouting.recon,undefined);assert.ok(g.state.actors.nio.hp>0);roundtrip(g);
 });
 test('recon cannot remove the last living member and rejects malformed saved expeditions',()=>{
-  const {g}=game();g.state.members=['nio'];assert.equal(use(g,'recon'),false);g.state.members=['ada','nio'];assert.ok(use(g,'recon'));const s=structuredClone(g.state);
+  const {g}=game();g.state.members=['nio'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);assert.equal(use(g,'recon'),false);g.state.members=['ada','nio'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);assert.ok(use(g,'recon'));const s=structuredClone(g.state);
   for(const mutate of [s=>s.members.push('nio'),s=>s.scouting.recon.actor='unknown',s=>s.scouting.recon.returnAt=-1,s=>s.scouting.recon.result.cells=['999,999'],s=>s.scouting.recon.result.disarmed=['cell/region_2_f1/2,1/missing'],s=>s.scouting.effects.camouflage={remaining:1,rate:2}]){const copy=structuredClone(s);mutate(copy);assert.ok(scoutingSaveErrors(g.data,copy).length);}
 });
 

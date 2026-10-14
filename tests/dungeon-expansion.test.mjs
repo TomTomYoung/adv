@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,newGame,drain,walk,pathTo,fight} from './helpers.mjs';
@@ -104,7 +105,7 @@ test('valley prevents specified field and battle skills, suspends charms and res
 });
 
 test('enemy curse is suppressed inside while physical damage still applies, and an existing curse resumes outside',()=>{
-  const g=begin('prayerless_valley');g.state.members=['ada'];g.state.actors.ada.statuses=['hollow_curse'];at(g,{map:'prayerless_valley_f1',x:5,y:1});const hp=g.state.actors.ada.hp;
+  const g=begin('prayerless_valley');g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.actors.ada.statuses=['hollow_curse'];at(g,{map:'prayerless_valley_f1',x:5,y:1});const hp=g.state.actors.ada.hp;
   g.startBattle('valley_roamers',{win:[],escape:[],lose:[]});const mp=g.state.battle.enemies[0].mp;assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));assert.equal(g.state.battle.enemies[0].mp,mp);assert.ok(g.state.actors.ada.hp<hp);assert.ok(!dungeonEffectActive(data,g.state,'status','hollow_curse'));escape(g);
   at(g,{map:'prayerless_valley_f1',x:4,y:1},'west');const hp2=g.state.actors.ada.hp;g.dispatch({type:'move',direction:'forward'});assert.equal(g.state.actors.ada.hp,hp2-2);assert.ok(dungeonEffectActive(data,g.state,'status','hollow_curse'));roundtrip(g);
 });
@@ -126,7 +127,7 @@ test('borrowed skill replaces one native skill, opens seals, survives save and r
 test('borrowed battle skills are actually usable, native sealed skills fail, and invalid trades spend nothing',()=>{
   const g=begin(5),book=spec(g,'library').books.find(b=>b.skill==='holy_light');at(g,book);const before=g.state.actors.ada.mp;
   assert.equal(act(g,'library','borrow',book.id,{actor:'ada',sealed:'missing'}),false);assert.equal(g.state.actors.ada.mp,before);assert.ok(act(g,'library','borrow',book.id,{actor:'ada',sealed:'power'}));
-  g.state.members=['ada'];g.startBattle('roaming_1',{win:[],escape:[],lose:[]});assert.ok(battleSkillPlan(g,'ada','holy_light','enemy_0').ok);assert.equal(battleSkillPlan(g,'ada','power','enemy_0').ok,false);roundtrip(g);assert.ok(g.dispatch({type:'battle',action:'skill',skill:'holy_light',target:'enemy_0'}));if(g.state.battle)escape(g);at(g,book);assert.ok(act(g,'library','return',book.id,{actor:'ada'}));assert.ok(g.skills('ada').includes('power'));assert.ok(!g.skills('ada').includes('holy_light'));roundtrip(g);
+  g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.startBattle('roaming_1',{win:[],escape:[],lose:[]});assert.ok(battleSkillPlan(g,'ada','holy_light','enemy_0').ok);assert.equal(battleSkillPlan(g,'ada','power','enemy_0').ok,false);roundtrip(g);assert.ok(g.dispatch({type:'battle',action:'skill',skill:'holy_light',target:'enemy_0'}));if(g.state.battle)escape(g);at(g,book);assert.ok(act(g,'library','return',book.id,{actor:'ada'}));assert.ok(g.skills('ada').includes('power'));assert.ok(!g.skills('ada').includes('holy_light'));roundtrip(g);
 });
 
 test('market toll and barter open routes persistently, merchant purchases and escort spend exact resources',()=>{
@@ -152,7 +153,7 @@ test('combat raises market alarm, closes merchants, adds guards and clears a gua
 
 test('air is spent on underwater movement, battle start and rounds; air rooms refill and flotation opens routes',()=>{
   const g=begin(7),s=spec(g,'air');g.state.location.facing='south';assert.ok(g.dispatch({type:'move',direction:'forward'}));assert.equal(run(g,'air').air,35);
-  g.state.members=['ada'];g.startBattle('roaming_7',{win:[],escape:[],lose:[]});assert.equal(run(g,'air').air,33);g.award(0,100000);assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));assert.equal(run(g,'air').air,31);roundtrip(g);escape(g);
+  g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.startBattle('roaming_7',{win:[],escape:[],lose:[]});assert.equal(run(g,'air').air,33);g.award(0,100000);assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));assert.equal(run(g,'air').air,31);roundtrip(g);escape(g);
   const device=s.devices[0];at(g,device);assert.ok(act(g,'air','raise',device.id));assert.equal(run(g,'air').air,36);assert.ok(g.walkable(g.map(),device.tiles[0].x,device.tiles[0].y));roundtrip(g);g.returnTown();g.dispatch({type:'travel',region:7});assert.ok(saved(g,'air').raised.includes(device.id));assert.equal(run(g,'air').air,36);
 });
 

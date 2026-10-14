@@ -1,0 +1,10 @@
+const int=(min,max)=>({type:'integer',minimum:min,maximum:max});
+const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
+export const battleModeSchema={enum:['classic','grid']};
+export const movementSchema={enum:['fixed','step']};
+export const gridPointSchema=obj({x:int(0,4),y:int(0,2)});
+export const encounterGridProperties={battleMode:battleModeSchema,movement:movementSchema,enemyPositions:{type:'array',minItems:1,maxItems:15,uniqueItems:true,items:gridPointSchema}};
+export const targetingSchema=obj({aim:{enum:['unit','cell']},range:obj({min:int(0,5),max:int(0,5)}),area:obj({shape:{enum:['single','cross','radius','rectangle','line','cone','row','column','side_all']},radius:int(0,6),width:int(1,6),height:int(1,6),length:int(1,6)},['shape']),trajectory:{enum:['direct','piercing','lob','indirect']},friendlyFire:{type:'boolean'},maxAffected:int(1,30),allowEmpty:{type:'boolean'}},['aim','range','area','trajectory','friendlyFire']);
+export const battleRulesSchema=obj({defaultMode:battleModeSchema,weaponRanges:{type:'object',additionalProperties:{type:'array',minItems:2,maxItems:2,items:int(0,5)}}},['defaultMode']);
+export const enemyPresentationSchema=obj({anchor:{const:'bottom-center'},rowScale:{type:'array',minItems:3,maxItems:3,items:{type:'number',exclusiveMinimum:0,maximum:2}},maxOverlapRatio:{type:'number',minimum:0,maximum:.5},depthSort:{const:'back-to-front'},sprites:{type:'object',additionalProperties:obj({spriteScale:{type:'number',exclusiveMinimum:0,maximum:4},offsetX:{type:'number',minimum:-25,maximum:25},offsetY:{type:'number',minimum:-25,maximum:25}},[])}},['anchor','rowScale','maxOverlapRatio','depthSort']);
+export const battleGridPresentationSchema=obj({enemyPresentation:enemyPresentationSchema});

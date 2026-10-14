@@ -1,3 +1,4 @@
+import {nextFormation} from '../src/core/battle-formation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data,newGame,drain} from './helpers.mjs';
@@ -22,7 +23,7 @@ test('presentation does not consume random numbers or change battle and quest st
 });
 test('last blows keep the defeated enemy image, group skills emit one sound for all targets',()=>{
  const g=newGame();g.dispatch({type:'travel',region:1});g.startBattle('wild_waterwheel_beaver',{win:[],lose:[],escape:[]});g.state.battle.enemies[0].hp=1;g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});assert.equal(g.state.battle,null);const hit=g.feedback.events.find(e=>e.effects.includes('strike_slash'));assert.equal(hit.targets[0].image,'monster_waterwheel_beaver');assert.ok(g.feedback.events.some(e=>e.sound==='se_victory'));
- const h=newGame();h.state.members=['toma','dora'];h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});const heals=h.feedback.events.filter(e=>e.sound==='se_heal');assert.equal(heals.length,1);assert.equal(heals[0].targets.length,2);
+ const h=newGame();h.state.members=['toma','dora'];h.state.partyFormation=nextFormation(h.state.members,h.state.partyFormation);h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});const heals=h.feedback.events.filter(e=>e.sound==='se_heal');assert.equal(heals.length,1);assert.equal(heals[0].targets.length,2);
 });
 test('field atmosphere follows light and malformed effect scripts and transforms are rejected',()=>{
  const g=newGame();g.dispatch({type:'travel',region:2});g.state.light=0;assert.equal(projectGame(g).atmosphere[1].opacity,.65);g.state.light=90;assert.equal(projectGame(g).atmosphere[1].opacity,0);
