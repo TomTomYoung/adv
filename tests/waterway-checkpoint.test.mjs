@@ -7,6 +7,7 @@ import {validateContent} from '../src/core/validation.js';
 import {validateSave} from '../src/core/save.js';
 import {GameView} from '../src/view/view.js';
 import {SceneView} from '../src/view/scene-view.js';
+import {visibleDungeonObjects} from '../src/view/dungeon.js';
 import {installDOM} from './view-dom.mjs';
 
 const choose=(g,id)=>{assert.ok(g.dispatch({type:'choose',id}),id);drain(g);};
@@ -30,6 +31,15 @@ test('expanded waterway has connected wet basins: shallow is walkable, deep and 
   assert.equal(g.dispatch({type:'move',direction:'forward'}),false);
   const cell=projectGame(g).dungeon.cells[5][6];assert.equal(cell.relief.bottomless,true);assert.equal(cell.wall,false);assert.equal(cell.waterDepth,2);
   saved(g);
+});
+
+test('the checkpoint entrance projects a drawable glyph instead of undefined',()=>{
+  const scene=projectGame(atDoor()).dungeon;
+  const marker=visibleDungeonObjects(scene).find(o=>o.id==='interior:waterway_checkpoint');
+  assert.ok(marker);
+  assert.equal(marker.name,'地下関所の詰所');
+  assert.equal(marker.kind,'door');
+  assert.equal(marker.glyph,'▥');
 });
 
 test('checkpoint requires its exact cell and an explicit entry choice, then returns to that cell with the same expedition',()=>{

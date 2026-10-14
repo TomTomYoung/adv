@@ -57,7 +57,7 @@ export function projectGame(engine){
   }
   const objects=map?.objects.filter(o=>(o.z??0)===(s.location?.z??0)&&objectMarkerVisible(d,s,map,o)).map(o=>({id:o.id,name:o.name,x:o.x,y:o.y,kind:o.kind,inInteractionRange:canInteractAt(d,s,{map:map.id,...o}),...(o.edge?{edge:o.edge}:{}),...(o.kind==='clue'?{unread:objectHasUnreadInformation(d,s,map,o)}:{}),glyph:glyphs[o.kind]??'·',quest:o.quest,open:engine.objectState(o)==='open'}))??[];
   const {systems,wall,floorArt,scenes}=projectDungeonEvents(engine,dungeonViews(d,s).filter(v=>!map?.voxels||v.kind!=='waterworks'));objects.push(...systems.flatMap(system=>system.markers??[]),...trapMarkers(d,s));
-  if(map)for(const location of Object.values(d.locations??{})){const entrance=location.dungeonEntrance;if(entrance?.map===map.id)objects.push({id:`interior:${location.id}`,name:location.name,x:entrance.x,y:entrance.y,kind:'door',inInteractionRange:canInteractAt(d,s,entrance),open:false});}
+  if(map)for(const location of Object.values(d.locations??{})){const entrance=location.dungeonEntrance;if(entrance?.map===map.id)objects.push({id:`interior:${location.id}`,name:location.name,x:entrance.x,y:entrance.y,kind:'door',glyph:glyphs.door,inInteractionRange:canInteractAt(d,s,entrance),open:false});}
   const current=map?objects.filter(o=>o.x===s.location.x&&o.y===s.location.y):[];
   const terrain=projectDungeonSurfaces(engine,systems);
   const feedbackTarget=t=>({...clone(t),image:d.assets.images[t.image]??null});
