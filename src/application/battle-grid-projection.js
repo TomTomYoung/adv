@@ -21,7 +21,7 @@ export function gridItemView(engine,id,itemId){
   const skillId=engine.data.items[itemId].battleSkill,skill=engine.data.skills[skillId],source=engine.state.actors[id];
   if(!source)return {choices:[],enabled:false};
   const choices=gridSelections(engine,source,skill,skillId).map(c=>projectChoice(engine,c.id,battleItemPlan(engine,id,itemId,c.id)));
-  return {choices,profile:clone(targetingProfile(engine.data,source,skill,skillId)),enabled:choices.some(c=>c.enabled),reason:choices.find(c=>!c.enabled)?.reason??''};
+  return {choices,profile:clone(targetingProfile(engine.data,source,skill,skillId)),enabled:choices.some(c=>c.enabled),reason:choices.some(c=>c.enabled)?'':choices[0]?.reason??'対象がありません。'};
 }
 export function projectBattleGrid(engine,actorId){
   const s=engine.state;if(!isGrid(s))return null;

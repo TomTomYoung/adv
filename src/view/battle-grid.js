@@ -45,6 +45,6 @@ export function gridScene(view,scene,m){
   // individual scaling then row scaling preserves every image's aspect ratio.
   const maxScale=Math.max(1,...entries.map(e=>config.sprites?.[e.enemyId]?.spriteScale??1)),fit=1/maxScale;
   for(const e of entries){const override=config.sprites?.[e.enemyId]??{},scale=config.rowScale[e.p.y]*(override.spriteScale??1)*fit,img=make('img','grid-enemy-sprite');img.src=e.sprite;img.alt=e.name;img.dataset.fx=`enemy:${e.id}`;
-    img.style.width=`${Math.min(26,18/(1-config.maxOverlapRatio))*scale}%`;img.style.left=`${14+18*e.p.x+(override.offsetX??0)}%`;img.style.bottom=`${100-(e.p.y+1)*100/6+(override.offsetY??0)}%`;img.style.zIndex=String(e.p.y*10+e.p.x);if(view.selectedTarget===e.id)img.classList.add('selected');sprites.append(img);
+    img.style.width=`${Math.min(26,18/(1-config.maxOverlapRatio))*scale}%`;img.style.maxHeight=`${(15/.7)*scale}%`;img.style.left=`${14+18*e.p.x+(override.offsetX??0)}%`;img.style.bottom=`${100-(e.p.y+1)*100/6+(override.offsetY??0)}%`;img.style.zIndex=String(e.p.y*10+e.p.x);if(view.selectedTarget===e.id)img.classList.add('selected');sprites.append(img);
   }scene.append(sprites);
 }

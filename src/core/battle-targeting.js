@@ -65,7 +65,8 @@ export function gridTargetPlan(engine,source,skill,skillId,selection,{limit=skil
 }
 export function gridSelections(engine,source,skill,skillId,options){
   const profile=targetingProfile(engine.data,source,skill,skillId);
-  const ids=skill.target==='self'?[unitKey(source)]:profile.aim==='cell'?gridCells().map(cellId):profile.area.shape==='side_all'&&!options?.anySide?[unitKey(source)]:battleUnits(engine.state).map(unitKey);
+  const units=battleUnits(engine.state).filter(u=>u.hp>0&&(options?.anySide||profile.friendlyFire||(Boolean(u.instance)===Boolean(source.instance))===['ally','all_allies'].includes(skill.target)));
+  const ids=skill.target==='self'?[unitKey(source)]:profile.aim==='cell'?gridCells().map(cellId):profile.area.shape==='side_all'&&!options?.anySide?[unitKey(source)]:units.map(unitKey);
   return ids.map(id=>({id,...gridTargetPlan(engine,source,skill,skillId,id,options)}));
 }
 export function targetingErrors(t){
