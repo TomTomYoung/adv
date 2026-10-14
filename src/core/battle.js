@@ -489,9 +489,9 @@ function frontlineEnemyAction(engine,enemy){
   if(!choices.length)continue;if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
   performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
  }
- const p=frontPosition(s,enemy),moves=[0,1,2].map(depth=>frontlineMovePlan(s,enemy,{depth})).filter(p=>p.ok),canAttack=to=>enemy.ai.some(r=>gridEnemyChoices(engine,enemy,r.skill,{origin:to}).length);
- const move=moves.find(m=>canAttack(m.to))??moves.find(m=>m.to.depth<p.depth);
- if(move)moveFrontline(engine,enemy,move.to);else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
+ // Lack of range is not a move command. Hold formation until the side has no
+ // living front and prepareFrontlineRound advances it at the next round start.
+ applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);
 }
 // Manual stepping is a diagnostic pacing option of the same queue, not another
 // battle implementation. Normal play still drains enemy turns automatically.

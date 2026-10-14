@@ -5,7 +5,7 @@ import {GameEngine} from '../src/core/engine.js';
 import {testerPreset,createTesterEngine,testerProfile,testerCurrentUnit,testerPlan,validateTesterCase} from '../src/application/battle-tester-model.js';
 import {frontlineTargetPlan,frontlineTargetingErrors,frontlineAreaCells} from '../src/core/frontline-targeting.js';
 import {frontPosition,prepareFrontlineRound,frontlineMovePlan,frontlineDefinitionErrors} from '../src/core/battle-frontline.js';
-import {battleSkillPlan} from '../src/core/battle.js';
+import {battleSkillPlan,activeActor} from '../src/core/battle.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
 import {applyStatus} from '../src/core/status-effects.js';
@@ -45,7 +45,11 @@ test('first round recursively advances rear-only allies and enemies in two indep
  assert.equal(b.round,1);const before=g.save();prepareFrontlineRound(g);assert.equal(g.save(),before);roundtrip(g);
 });
 test('a living front prevents promotion; a fallen front advances only at next full round',()=>{
- const {g,b}=setup('front_rear');assert.equal(b.frontline.events.filter(e=>e.type==='advance').length,0);b.enemies[0].hp=0;b.enemies[1].ai=[{skill:'guard',priority:1,target:'self'}];g.dispatch({type:'battle.step'});assert.equal(frontPosition(g.state,b.enemies[1]).depth,2);nextRound(g);assert.equal(frontPosition(g.state,b.enemies[1]).depth,0);assert.equal(b.round,2);assert.equal(b.frontline.events.filter(e=>e.type==='advance'&&e.side==='enemies').length,2);
+ const {g,b}=setup('front_rear',c=>c.allies[1].agi=1);assert.equal(b.frontline.events.filter(e=>e.type==='advance').length,0);b.enemies[0].hp=0;
+ assert.ok(g.dispatch({type:'battle.step'}));assert.equal(testerCurrentUnit(g),'enemy:enemy_1');
+ assert.ok(g.dispatch({type:'battle.step'}));assert.equal(testerCurrentUnit(g),'actor:nio');assert.equal(b.round,1);
+ assert.equal(frontPosition(g.state,b.enemies[1]).depth,2);assert.equal(b.frontline.events.filter(e=>e.type==='move'||e.type==='advance').length,0);
+ nextRound(g);assert.equal(frontPosition(g.state,b.enemies[1]).depth,0);assert.equal(b.round,2);assert.equal(b.frontline.events.filter(e=>e.type==='advance'&&e.side==='enemies').length,2);
 });
 test('voluntary retreat consumes one slot, permits rear destination, then returns at next full turn',()=>{
  const {g,b}=setup('rear_only');const form=structuredClone(g.state.partyFrontlineFormation),rng=g.state.rng;
@@ -123,4 +127,28 @@ test('playtest reset is deterministic and its actions do not alter the diagnosti
  const play=createTesterEngine(data,c,{manualTurns:false}),initial=play.save();assert.ok(attack(play));
  assert.equal(manual.save(),saved);assert.equal(JSON.stringify(data),original);
  assert.equal(createTesterEngine(data,c,{manualTurns:false}).save(),initial);
+});
+
+
+test('Frontline AI holds middle and rear ranks while a living front remains, in manual and normal play',()=>{
+ for(const manualTurns of [true,false]){
+  const g=createTesterEngine(data,testerPreset(data),{manualTurns}),b=g.state.battle,positions=structuredClone(b.frontline.positions);
+  for(let round=1;round<=3;round++){
+   if(manualTurns)nextRound(g);
+   else for(let n=0;n<20&&b.round===round;n++)assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard',target:'actor:'+activeActor(g)}));
+   assert.equal(b.round,round+1);assert.ok(b.enemies[0].hp>0&&b.enemies[1].hp>0);
+   assert.deepEqual(b.frontline.positions,positions);
+  }
+  assert.equal(b.frontline.events.filter(e=>e.type==='move'||e.type==='advance').length,0);
+  assert.ok(b.log.some(line=>line.includes('守りを固めた')));roundtrip(g);
+ }
+});
+test('Frontline ranged rear enemies attack in place; out-of-range preemptive enemies also hold formation',()=>{
+ for(const range of [1,3]){
+  const c=testerPreset(data,'front_rear');c.enemies[1].agi=90;c.enemies[1].range=range;c.preemptive={side:'enemies',actions:2};
+  const g=createTesterEngine(data,c,{manualTurns:false}),b=g.state.battle;
+  assert.equal(frontPosition(g.state,b.enemies[1]).depth,2);assert.equal(b.frontline.events.filter(e=>e.type==='move'||e.type==='advance').length,0);
+  const rearAttacks=b.frontline.events.filter(e=>e.type==='attack_start'&&e.source==='enemy:enemy_1');
+  assert.equal(rearAttacks.length,range===3?3:0);assert.ok(testerCurrentUnit(g).startsWith('actor:'));roundtrip(g);
+ }
 });

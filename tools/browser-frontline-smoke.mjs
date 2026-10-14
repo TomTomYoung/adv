@@ -12,6 +12,9 @@ try{
  for(const width of [1280,390,320]){
   const page=await browser.newPage({viewport:{width,height:900}});page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/battle-tester.html');await page.waitForFunction(()=>window.battleTester?.engine?.state.battle);
   const preset=async value=>{await page.selectOption('#preset',value);await page.click('#apply-preset');await page.click('#start');await page.waitForFunction(()=>document.querySelector('.frontline-stage')?.dataset.ready==='true');};
+  await preset('ranks');const positions=await page.evaluate(()=>structuredClone(battleTester.engine.state.battle.frontline.positions));
+  for(let i=0;i<2;i++){await page.click('#round-step');assert.deepEqual(await page.evaluate(()=>battleTester.engine.state.battle.frontline.positions),positions);}
+  assert.equal(await page.evaluate(()=>battleTester.engine.state.battle.frontline.events.filter(e=>e.type==='move'||e.type==='advance').length),0);
   await preset('crowd');assert.equal(await page.locator('.lab-diagnostics').count(),0);assert.equal(await page.locator('.frontline-sprite').count(),5);
   const overlap=await page.locator('.frontline-sprite').evaluateAll(cs=>cs.slice(1).map((b,i)=>{const a=cs[i],ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),ad=a.getContext('2d').getImageData(0,0,a.width,a.height).data,bd=b.getContext('2d').getImageData(0,0,b.width,b.height).data;let count=0;
    for(let y=Math.max(ra.top,rb.top);y<Math.min(ra.bottom,rb.bottom);y+=2)for(let x=Math.max(ra.left,rb.left);x<Math.min(ra.right,rb.right);x+=2){const aa=ad[(Math.floor((y-ra.top)/ra.height*a.height)*a.width+Math.floor((x-ra.left)/ra.width*a.width))*4+3],ba=bd[(Math.floor((y-rb.top)/rb.height*b.height)*b.width+Math.floor((x-rb.left)/rb.width*b.width))*4+3];if(aa>100&&ba>100)count++;}

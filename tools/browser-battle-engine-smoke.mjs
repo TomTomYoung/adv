@@ -41,6 +41,11 @@ try{
    await frame.locator('[data-focus="skill:lab_strike"]').click();await frame.locator('[data-focus="front:choice:enemy:enemy_0"]').click();await frame.locator('[data-focus="front:confirm"]').click();
   }
   assert.equal(await frame.evaluate(()=>battlePlaytest.engine.state.battle.round),2);
+  assert.deepEqual(await frame.evaluate(()=>battlePlaytest.engine.state.battle.frontline.positions),JSON.parse(initial).state.battle.frontline.positions);
+  assert.equal(await frame.evaluate(()=>battlePlaytest.engine.state.battle.frontline.events.filter(e=>e.type==='move'||e.type==='advance').length),0);
+  await frame.waitForFunction(()=>document.querySelector('.frontline-stage')?.dataset.ready==='true');
+  assert.deepEqual(await frame.locator('.frontline-sprite').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.depth))),[0,0,1,2]);
+  await page.locator('#engine-frame').screenshot({path:path.join(output,`hold-ranks-${width}.png`)});
   assert.equal(await page.evaluate(()=>battleTester.engine.save()),diagnostic);
   assert.equal(await frame.evaluate(()=>battlePlaytest.engine.state.battle.frontline.events.some(e=>e.type==='hit'&&e.target.startsWith('actor:'))),true);
   await page.click('#engine-load');await synced();assert.equal(await frame.evaluate(()=>battlePlaytest.engine.save()),initial);
