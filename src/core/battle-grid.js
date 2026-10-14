@@ -1,3 +1,4 @@
+import {frontlineStart} from './battle-frontline.js';
 import {unitKey} from './buffs.js';
 import {isRecord} from './expression.js';
 import {PARTY_CELLS,ENEMY_CELLS,nextFormation,sameCell,validCell,formationErrors} from './battle-formation.js';
@@ -9,8 +10,9 @@ export const gridCells=()=>Array.from({length:30},(_,i)=>({x:i%5,y:Math.floor(i/
 export const cellId=p=>`cell:${p.x},${p.y}`;
 export function gridStart(data,state,encounter,options={}){
   const mode=options.battleMode??encounter.battleMode??(state.battleModePreference==='auto'?undefined:state.battleModePreference)??data.game.battle?.defaultMode??'classic';
-  if(!['classic','grid'].includes(mode))throw Error('戦闘モード不正');
+  if(!['classic','grid','frontline'].includes(mode))throw Error('戦闘モード不正');
   if(mode==='classic')return {mode};
+  if(mode==='frontline')return frontlineStart(state,encounter,data);
   const movement=options.movement??encounter.movement??'step';
   if(!['step','fixed'].includes(movement)||formationErrors(state).length)throw Error('Grid陣形・移動設定不正');
   const enemies=encounter.enemyPositions??ENEMY_CELLS.slice(0,encounter.enemies.length);
@@ -33,9 +35,9 @@ export function revivePosition(state,unit){
 }
 export function gridSaveErrors(state){
   const errors=formationErrors(state),b=state.battle;
-  if(state.battleModePreference!==undefined&&!['auto','classic','grid'].includes(state.battleModePreference))errors.push('戦闘モード希望値不正');
+  if(state.battleModePreference!==undefined&&!['auto','classic','grid','frontline'].includes(state.battleModePreference))errors.push('戦闘モード希望値不正');
   if(!b)return errors;
-  if(b.mode!==undefined&&!['classic','grid'].includes(b.mode))errors.push('戦闘モード不正');
+  if(b.mode!==undefined&&!['classic','grid','frontline'].includes(b.mode))errors.push('戦闘モード不正');
   if(!isGrid(state)){if(b.grid!==undefined)errors.push('Classic戦闘にGrid構造があります');return errors;}
   const g=b.grid;
   if(!isRecord(g)||Object.keys(g).some(k=>!['movement','positions'].includes(k))||!['step','fixed'].includes(g.movement)||!isRecord(g.positions)||!Array.isArray(b.enemies)){errors.push('Grid構造不正');return errors;}
@@ -44,8 +46,8 @@ export function gridSaveErrors(state){
   return errors;
 }
 export function gridDefinitionErrors(data){
-  const errors=[],mode=v=>v===undefined||['classic','grid'].includes(v),movement=v=>v===undefined||['fixed','step'].includes(v);
-  if(!mode(data.game?.battle?.defaultMode)||data.game?.battle!==undefined&&(!isRecord(data.game.battle)||Object.keys(data.game.battle).some(k=>!['defaultMode','weaponRanges'].includes(k))))errors.push('既定戦闘モード不正');
+  const errors=[],mode=v=>v===undefined||['classic','grid','frontline'].includes(v),movement=v=>v===undefined||['fixed','step'].includes(v);
+  if(!mode(data.game?.battle?.defaultMode)||data.game?.battle!==undefined&&(!isRecord(data.game.battle)||Object.keys(data.game.battle).some(k=>!['defaultMode','weaponRanges','frontlineWeaponRanges'].includes(k))))errors.push('既定戦闘モード不正');
   const ranges=data.game?.battle?.weaponRanges;
   if(ranges!==undefined&&(!isRecord(ranges)||Object.entries(ranges).some(([type,r])=>!data.jobProfile?.equipmentTypes.weapon.includes(type)||!Array.isArray(r)||r.length!==2||r.some(n=>!Number.isInteger(n)||n<0||n>5)||r[0]>r[1])))errors.push('武器射程定義不正');
   for(const [id,e] of Object.entries(data.encounters??{})){

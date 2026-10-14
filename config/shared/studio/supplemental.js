@@ -1,4 +1,4 @@
-import {encounterGridProperties,targetingSchema,battleRulesSchema,battleGridPresentationSchema} from '../battle-grid-schemas.js';
+import {encounterGridProperties,targetingSchema,frontlineTargetingSchema,battleRulesSchema,battleGridPresentationSchema} from '../battle-grid-schemas.js';
 import {actionStatusProperties} from '../status-schemas.js';
 import {skillLevelProperties,scoutingProperties,preemptiveSchema} from '../skill-schemas.js';
 const str={type:'string',minLength:1},num={type:'number'},uint={type:'integer',minimum:0},bool={type:'boolean'},dict=s=>({type:'object',additionalProperties:s}),arr=s=>({type:'array',items:s}),obj=(properties,required=[])=>({type:'object',properties,required,additionalProperties:true});
@@ -14,7 +14,7 @@ export const effectSchema={oneOf:[
 ]};
 export const recordSchemas={
  item:obj({id:str,name:str,description:{type:'string'},type:{enum:['consumable','material','equipment','key','dungeon_tool']},field:bool,consumed:bool,script:str,battleSkill:str,slot:{enum:['weapon','armor','charm']},equipmentType:str,stats,resist:dict(num)},['name']),
- skill:obj({targeting:targetingSchema,...skillLevelProperties(effectSchema),fieldUse:bool,name:str,description:{type:'string'},mp:uint,hp:uint,target,maxTargets:{type:'integer',minimum:1},materials:dict(uint),requiresWeapon:arr(str),requiresAnalyzed:bool,effects:arr(effectSchema),selfEffects:arr(effectSchema),fireEffect:str,priority:num},['name','mp','target','effects']),
+ skill:obj({targeting:targetingSchema,frontlineTargeting:frontlineTargetingSchema,...skillLevelProperties(effectSchema),fieldUse:bool,name:str,description:{type:'string'},mp:uint,hp:uint,target,maxTargets:{type:'integer',minimum:1},materials:dict(uint),requiresWeapon:arr(str),requiresAnalyzed:bool,effects:arr(effectSchema),selfEffects:arr(effectSchema),fireEffect:str,priority:num},['name','mp','target','effects']),
  ability:obj({...skillLevelProperties(effectSchema),...scoutingProperties,id:str,name:str,api:str,target:str,modes:arr(str),mp:uint,hp:uint},['id','name','api','target','modes','mp']),
  monster:obj({preemptive:preemptiveSchema,id:str,name:str,description:{type:'string'},region:{type:'integer',minimum:1,maximum:10},sprite:str,stats,resist:dict(num),rewards:obj({gold:uint,xp:uint}),skill:str,skills:arr(str),ai:arr(obj({priority:num,condition:expression,skill:str,target:{enum:['random','weakest','self']}},['priority','skill','target'])),statusImmune:arr(str)},['name','sprite','stats']),
  actor:obj({id:str,name:str,description:{type:'string'},portrait:str,stats,growth:stats,skills:arr(str),equipment:obj({weapon:{type:['string','null']},armor:{type:['string','null']},charm:{type:['string','null']}}),statusImmune:arr(str)},['id','name','stats']),

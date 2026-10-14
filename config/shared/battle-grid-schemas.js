@@ -1,10 +1,15 @@
 const int=(min,max)=>({type:'integer',minimum:min,maximum:max});
 const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
-export const battleModeSchema={enum:['classic','grid']};
+export const battleModeSchema={enum:['classic','grid','frontline']};
 export const movementSchema={enum:['fixed','step']};
 export const gridPointSchema=obj({x:int(0,4),y:int(0,2)});
 export const encounterGridProperties={battleMode:battleModeSchema,movement:movementSchema,enemyPositions:{type:'array',minItems:1,maxItems:15,uniqueItems:true,items:gridPointSchema}};
 export const targetingSchema=obj({aim:{enum:['unit','cell']},range:obj({min:int(0,5),max:int(0,5)}),area:obj({shape:{enum:['single','cross','radius','rectangle','line','cone','row','column','side_all']},radius:int(0,6),width:int(1,6),height:int(1,6),length:int(1,6)},['shape']),trajectory:{enum:['direct','piercing','lob','indirect']},friendlyFire:{type:'boolean'},maxAffected:int(1,30),allowEmpty:{type:'boolean'}},['aim','range','area','trajectory','friendlyFire']);
-export const battleRulesSchema=obj({defaultMode:battleModeSchema,weaponRanges:{type:'object',additionalProperties:{type:'array',minItems:2,maxItems:2,items:int(0,5)}}},['defaultMode']);
+export const battleRulesSchema=obj({defaultMode:battleModeSchema,frontlineWeaponRanges:{type:'object',additionalProperties:{type:'array',minItems:2,maxItems:2,items:int(0,5)}},weaponRanges:{type:'object',additionalProperties:{type:'array',minItems:2,maxItems:2,items:int(0,5)}}},['defaultMode']);
 export const enemyPresentationSchema=obj({anchor:{const:'bottom-center'},rowScale:{type:'array',minItems:3,maxItems:3,items:{type:'number',exclusiveMinimum:0,maximum:2}},maxOverlapRatio:{type:'number',minimum:0,maximum:.5},depthSort:{const:'back-to-front'},sprites:{type:'object',additionalProperties:obj({spriteScale:{type:'number',exclusiveMinimum:0,maximum:4},offsetX:{type:'number',minimum:-25,maximum:25},offsetY:{type:'number',minimum:-25,maximum:25}},[])}},['anchor','rowScale','maxOverlapRatio','depthSort']);
 export const battleGridPresentationSchema=obj({enemyPresentation:enemyPresentationSchema});
+export const frontlinePointSchema=obj({depth:int(0,2),lane:int(0,4)});
+export const frontlineReactionSchema=obj({on:{enum:['onHit','onAdvance']},skill:{type:'string'},cancelRemaining:{type:'boolean'}});
+export const frontlineTargetingSchema=obj({aim:{enum:['unit','cell']},range:obj({min:int(0,5),max:int(0,5)}),allyRange:obj({min:int(0,5),max:int(0,5)}),area:obj({shape:{enum:['single','cross4','around8','row','column','side_all']}}),friendlyFire:{type:'boolean'},maxAffected:int(1,30),resolution:{enum:['simultaneous','sequential']},order:{enum:['front_to_back','back_to_front','left_to_right','right_to_left']},reevaluate:{enum:['alive','position']},damageSeries:obj({mode:{enum:['constant','decrease','increase']},basis:{enum:['power','final']},start:{type:'number',minimum:0,maximum:10},step:{type:'number',minimum:0,maximum:10}})},['aim','range','allyRange','area','friendlyFire','resolution','order','reevaluate','damageSeries']);
+// Assigned after the point/reaction declarations to avoid initialization cycles.
+Object.assign(encounterGridProperties,{frontlinePositions:{type:'array',minItems:1,maxItems:15,uniqueItems:true,items:frontlinePointSchema},frontlineReactions:{type:'object',additionalProperties:{type:'array',maxItems:8,items:frontlineReactionSchema}}});

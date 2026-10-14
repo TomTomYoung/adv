@@ -1,3 +1,5 @@
+import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
+import {stepBattle} from './battle.js';
 import {nextFormation,setFormation} from './battle-formation.js';
 import {syncSkillGrowth} from './skill-levels.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
@@ -271,10 +273,12 @@ export class GameEngine {
     if(type==='presentation.complete')return finishPresentation(this,intent);
     if(type==='advance')return this.state.waiting?.type==='battle_result'?advanceBattleResult(this):this.state.waiting?.type==='command'?advanceCommand(this):advanceScript(this);
     if(type==='choose')return this.state.waiting?.type==='command'?chooseCommand(this,intent.id):chooseOption(this,intent.id);
+    if(type==='battle.step')return stepBattle(this,intent);
+    if(type==='party.frontline.set')return setFrontFormation(this,intent.actor,intent.depth,intent.lane);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
     if(type==='party.formation.set')return setFormation(this,intent.actor,intent.x,intent.y);
-    if(type==='battle.mode.set'){if(!['auto','classic','grid'].includes(intent.mode))return false;this.state.battleModePreference=intent.mode;return true;}
+    if(type==='battle.mode.set'){if(!['auto','classic','grid','frontline'].includes(intent.mode))return false;this.state.battleModePreference=intent.mode;return true;}
     if(type==='location.move')return this.moveLocation(intent.id);
     if(type==='location.enter')return this.enterLocation(intent.id);
     if(type==='location.exit')return this.exitLocation();
@@ -372,7 +376,7 @@ export class GameEngine {
     else return false;
     if(!next.some(id=>s.actors[id].hp>0))return false;
     const formation=nextFormation(next,s.partyFormation,action==='swap'?{from:replaceId,to:actorId}:null);if(!formation)return false;
-    s.partyFormation=formation;s.members=next;this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
+    s.partyFormation=formation;s.members=next;syncFrontFormation(s,action==='swap'?{from:replaceId,to:actorId}:null);this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
   }
   unequip(actorId,slot){
     const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||(s.mode!=='town'||dungeonInterior(this.data,s))&&!s.members.includes(actorId))return false;

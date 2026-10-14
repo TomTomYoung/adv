@@ -1,3 +1,4 @@
+import {frontlineScene,renderFrontlineControls} from './battle-frontline.js';
 import {gridScene,renderGridControls} from './battle-grid.js';
 import {SceneCastRenderer} from './scene-cast.js';
 import {renderCharacter,renderParty} from './character-profile.js';
@@ -74,6 +75,7 @@ export class GameView {
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
     if(this.mapOverlay){this.closeMap();return;}
+    if(this.tab==='party'&&this.frontlineFormationOpen){this.frontlineFormationOpen=false;this.render(this.model);return;}
     if(this.tab==='party'&&this.formationOpen){if(this.formationActor)this.formationActor=null;else this.formationOpen=false;this.render(this.model);return;}
     if(this.tab==='profile'&&this.profilePage!=='overview'&&!this.root.querySelector('.button-picker')){this.profilePage='overview';this.render(this.model);return;}
     const profile=document.activeElement?.closest('.character-profile')?.dataset.profile;
@@ -198,7 +200,8 @@ export class GameView {
     const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.dataset.fx='scene';scene.append(canvas);
     const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`B${m.dungeon.floor} / ${m.dungeon.location.x}, ${m.dungeon.location.y}${m.dungeon.voxel?' / 高さ '+m.dungeon.z:''}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
-    if(m.battle?.grid)gridScene(this,scene,m);
+    if(m.battle?.frontline)frontlineScene(this,scene,m);
+    else if(m.battle?.grid)gridScene(this,scene,m);
     else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`));enemies.append(b);}scene.append(enemies);}
     for(const layer of m.atmosphere??[]){if(!layer.opacity||!layer.lighting&&(this.ui.effectsMode?.()??'full')==='off')continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
@@ -247,13 +250,14 @@ export class GameView {
     if(m.battle.preemptive)commands.append(node('p','battle-preemptive',`${m.battle.preemptive.side==='allies'?'味方':'敵'}の先制　残り${m.battle.preemptive.remaining}回`));
     const chooseAction=(action,id,target,name,focus)=>{
       const intent={type:'battle',action,[action]:id};
-      if(m.battle.grid){this.gridChoice=null;this.pendingBattleAction={intent,target,name,focus};this.render(m);return;}
+      if(m.battle.grid||m.battle.frontline){this.gridChoice=null;this.pendingBattleAction={intent,target,name,focus};this.render(m);return;}
       if(!['enemy','ally'].includes(target)){this.act({...intent,target:m.battle.actorId});return;}
       this.pendingBattleAction={intent,target,name,focus};this.render(m);
     };
     const pending=this.pendingBattleAction;
     if(m.battle.stunned){commands.append(node('p','requirement','スタンで今回の行動はできません。'),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
     else if(m.battle.control){commands.append(node('p','requirement',m.battle.control.reason),button('行動を進める',()=>this.act({type:'battle',action:'wait'})));}
+    else if(pending&&m.battle.frontline){renderFrontlineControls(this,commands,m);}
     else if(pending&&m.battle.grid){renderGridControls(this,commands,m);}
     else if(pending){
       commands.append(node('h3','battle-menu-title',`${pending.name}の対象`));const targets=node('div','battle-targets');targets.setAttribute('aria-label',`${pending.name}の対象`);
@@ -278,7 +282,7 @@ export class GameView {
         for(const [id,title,hasEntries] of [['skills','スキル',m.battle.skills.some(s=>!basic.has(s.id))],['items','アイテム',m.battle.items.length>0]]){
           const b=button(title,()=>{this.battleMenu=id;this.render(m);},'',!hasEntries);b.dataset.focus=`battle-menu:${id}`;actions.append(b);
         }
-        if(m.battle.grid?.movement==='step'){const move=button('移動',()=>{this.gridChoice=null;this.pendingBattleAction={intent:{type:'battle',action:'move'},name:'移動',focus:'battle:move'};this.render(m);});move.dataset.focus='battle:move';actions.append(move);}
+        if(m.battle.frontline||m.battle.grid?.movement==='step'){const move=button('移動',()=>{this.gridChoice=null;this.pendingBattleAction={intent:{type:'battle',action:'move'},name:'移動',focus:'battle:move'};this.render(m);});move.dataset.focus='battle:move';actions.append(move);}
         const escape=button('逃走',()=>this.act({type:'battle',action:'escape'}),'',!m.battle.canEscape);escape.dataset.focus='battle:escape';actions.append(escape);
       }
       if(this.battleMenu){const back=button('戻る',()=>this.cancel());back.dataset.focus='battle:back';actions.append(back);}commands.append(actions);
