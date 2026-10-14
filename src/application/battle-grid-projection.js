@@ -10,7 +10,7 @@ export function projectFormation(engine){
 }
 export function gridSkillView(engine,id,skillId,skill){
   const source=engine.state.actors[id],profile=targetingProfile(engine.data,source,skill,skillId);
-  const choices=gridSelections(engine,source,skill,skillId).map(choice=>{const p=battleSkillPlan(engine,id,skillId,choice.id);return projectChoice(engine,choice.id,p);});
+  const choices=gridSelections(engine,source,skill,skillId).map(choice=>{const p=battleSkillPlan(engine,id,skillId,choice.id);return {...projectChoice(engine,choice.id,p),...(profile.area.shape==='side_all'?{name:['ally','all_allies'].includes(skill.target)?'仲間全員':'敵全員'}:{})};});
   return {profile:clone(profile),choices};
 }
 function projectChoice(engine,id,p){

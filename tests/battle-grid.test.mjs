@@ -84,3 +84,26 @@ test('grid enemy AI walks into range, guards when fixed, and shares mixed queue 
 test('start events with enemy preemption preserve grid coordinates across save and interruption',()=>{
  const {g,d}=game();d.scripts.grid_intro={commands:[{op:'battle.start',encounter:'wild_pair_1',battleMode:'grid',preemptive:{side:'enemies',actions:2},on_win:[],on_lose:[],on_escape:[],on_interrupt:[],events:[{id:'intro',triggers:['start'],commands:[{op:'narrate',text:'開始'}]}]}]};g.run('grid_intro');const positions=structuredClone(g.state.battle.grid.positions);roundtrip(g);assert.deepEqual(g.state.battle.grid.positions,positions);drain(g);assert.equal(g.state.battle.preemptive,undefined);roundtrip(g);
 });
+
+test('self targeting projects only the acting unit, while side-wide skills retain a single group choice',()=>{
+ const {g}=game();start(g);const m=projectGame(g),guard=m.battle.skills.find(s=>s.id==='guard');assert.equal(guard.choices.length,1);assert.equal(guard.choices[0].id,'actor:'+m.battle.actorId);assert.deepEqual(guard.choices[0].targets,['actor:'+m.battle.actorId]);
+});
+test('grid confusion and berserk cannot strike outside the shared range, and misfire stays in its legal band',()=>{
+ for(const status of ['confusion','berserk','misfire']){
+  const {g,d}=game();g.changeJob('ada','warrior');g.state.members=['ada','nio'];g.state.partyFormation=nextFormation(g.state.members);const b=start(g);b.turnQueue=['actor:ada','actor:nio','enemy:enemy_0','enemy:enemy_1'];b.turnIndex=0;
+  set(g,'actor:ada',0,3);set(g,'actor:nio',1,3);set(g,'enemy:enemy_0',0,2);set(g,'enemy:enemy_1',4,0);g.state.actors.ada.mp=100;applyStatus(d,g.state,g.state.actors.ada,status,undefined,3);g.random=()=>0;
+  const far=b.enemies[1].hp;
+  if(status==='misfire'){assert.ok(g.dispatch({type:'battle',action:'skill',skill:'power',target:'enemy_0'}));assert.ok(g.state.actors.nio.hp<g.stats('nio').hp);}
+  else assert.ok(g.dispatch(status==='berserk'?{type:'battle',action:'wait'}:{type:'battle',action:'skill',skill:'guard'}));
+  assert.equal(b.enemies[1].hp,far);assert.ok(b.acted.includes('ada'));
+ }
+});
+test('grid cover needs adjacency both when selected and when the attack redirects',()=>{
+ for(const adjacent of [true,false]){
+  const {g}=game();g.changeJob('ada','knight');g.award(0,10000);const b=start(g),a=g.state.actors.ada,n=g.state.actors.nio;
+  set(g,'actor:ada',2,3);set(g,'actor:nio',1,3);assert.ok(battleSkillPlan(g,'ada','cover','nio').ok);applySkill(g,a,n,g.data.skills.cover,'cover');
+  if(!adjacent)set(g,'actor:ada',4,5);assert.equal(battleSkillPlan(g,'ada','cover','nio').ok,adjacent);
+  set(g,'enemy:enemy_0',1,2);set(g,'enemy:enemy_1',3,0);b.enemies[0].ai=[{priority:1,skill:'attack',target:'weakest'}];b.enemies[0].stats.agi=999;n.hp=1;b.turnQueue=['actor:nio','enemy:enemy_0','actor:ada'];b.turnIndex=0;const before=a.hp;
+  assert.ok(g.dispatch({type:'battle',action:'skill',skill:'guard'}));assert.equal(n.hp>0,adjacent);assert.equal(a.hp<before,adjacent);
+ }
+});
