@@ -1,3 +1,4 @@
+import {oilRoom} from './expedition-oil.js';
 import {canEquip} from './jobs.js';
 import {townLocation} from './world.js';
 
@@ -44,6 +45,7 @@ export function purchasePlan(engine,item,actor=SHARED_BAG){
   const s=engine.state,d=engine.data,stock=d.shops.goods.find(g=>g.item===item);
   if(s.mode!=='town'||s.waiting||s.battle||d.game.world&&!townLocation(d,s)?.shop)return {ok:false,reason:'ショップで購入できます。'};
   if(!stock||!validHolder(s,actor))return {ok:false,reason:'品物または渡す相手を選び直してください。'};
+  if(d.expedition?.oil.item===item&&oilRoom(d,s)<d.expedition.oil.units)return {ok:false,reason:'隊の油の携行容量が足りません。'};
   const price=engine.price(stock.price);
   if(s.gold<price)return {ok:false,reason:`${price-s.gold} G足りません。`};
   if((s.inventory[item]??0)>=d.system.maxStack)return {ok:false,reason:'この品物は所持数の上限です。'};

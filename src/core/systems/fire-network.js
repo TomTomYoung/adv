@@ -1,3 +1,4 @@
+import {managesOil,oilFuelPlan} from '../expedition-oil.js';
 import {ignitionReason,attemptIgnition,activeFireHazards} from '../fire-hazards.js';
 import {edgeBetween} from '../edge-layers.js';
 import {dungeonTile,dungeonCell,dungeonBlock} from '../dungeons.js';
@@ -79,7 +80,13 @@ function plan(ctx,intent){
   if(intent.action==='refuel'){
     if(!lit||flame.fuel===null||flame.fuel===(portable?spec.portable.capacity:fixture.capacity))return {ok:false,reason:'燃料補充が必要な火を選んでください。'};
   }else if(lit)return {ok:false,reason:'先に火を消してください。'};
-  if(intent.action==='transplant')return run.ember?{ok:true,fixture,flame,effect:run.ember.effect}:{ok:false,reason:'先に種火を採ってください。'};
+  if(intent.action==='transplant'&&!run.ember)return {ok:false,reason:'先に種火を採ってください。'};
+  if(managesOil(state)){
+    const capacity=portable?spec.portable.capacity:fixture.capacity,needed=capacity===null?1:capacity-(intent.action==='refuel'?flame.fuel:0),fuel=oilFuelPlan(ctx.data,state,needed);
+    if(!fuel.ok)return fuel;
+    return {...fuel,fixture,flame,fuelAmount:fuel.oilCost||Math.min(needed,ctx.data.expedition.oil.units),effect:intent.action==='transplant'?run.ember.effect:intent.action==='refuel'?flame.effect:portable?spec.portable.baseEffect:fixture.effect};
+  }
+  if(intent.action==='transplant')return {ok:true,fixture,flame,effect:run.ember.effect};
   if(!(state.inventory[spec.fuelItem]>0))return {ok:false,reason:`${ctx.data.items[spec.fuelItem].name}が1個必要です。`};
   return {ok:true,fixture,flame,effect:intent.action==='refuel'?flame.effect:portable?spec.portable.baseEffect:fixture.effect,fuelCost:true};
 }
@@ -88,10 +95,12 @@ function act(ctx,intent,p){
   if(intent.action==='collect'){run.ember={effect:p.flame.effect??p.fixture.effect};ctx.state.inventory[spec.emberItem]=1;engine.notify(`${name}から「${spec.effects[run.ember.effect].name}」の種火を採りました。`);return;}
   if(intent.action==='extinguish'){p.flame.lit=false;p.flame.effect=null;p.flame.fuel=0;engine.notify(`${name}の火を消しました。移した火の効果も消えました。`);return;}
   if(p.ability)payCost(engine,intent.actor,p.ability);
+  if(p.oilCost)ctx.state.expedition.reserve-=p.oilCost;
   if(p.fuelCost)engine.give(spec.fuelItem,-1);
   if(intent.action!=='refuel'&&!attemptIgnition(engine,portable?ctx.state.location:p.fixture)){if(intent.action==='transplant'){run.ember=null;ctx.state.inventory[spec.emberItem]=0;}return;}
   const effect=p.effect??p.fixture?.effect;
-  Object.assign(p.flame,freshFlame(effect,portable?spec.portable.capacity:p.fixture.capacity));
+  const capacity=portable?spec.portable.capacity:p.fixture.capacity,amount=capacity===null?null:p.fuelAmount===undefined?capacity:Math.min(capacity,(intent.action==='refuel'?p.flame.fuel:0)+p.fuelAmount);
+  Object.assign(p.flame,freshFlame(effect,amount));
   if(intent.action==='transplant'){run.ember=null;ctx.state.inventory[spec.emberItem]=0;}
   engine.eventCue('light');engine.notify(`${name}に「${spec.effects[effect].name}」が灯りました。`);
 }
@@ -139,7 +148,7 @@ function project(ctx){
   const makeTarget=(id,name,flame,base,capacity)=>{
     const actions=[];
     for(const [action,label] of [['ignite','普通の火を灯す'],['refuel','燃料を補充'],['collect','種火を採る'],['extinguish','火を消す'],['transplant','種火を移す']]){
-      const intent={type:'dungeon.action',system:ctx.id,action,target:id},p=plan(ctx,intent);actions.push({label:(action==='collect'&&run.ember?'種火を持ち替える':label)+(['ignite','refuel'].includes(action)?`（${ctx.data.items[spec.fuelItem].name}×1）`:''),intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??'',consumes:actionConsumes(ctx,intent,p)});
+      const intent={type:'dungeon.action',system:ctx.id,action,target:id},p=plan(ctx,intent);actions.push({label:(action==='collect'&&run.ember?'種火を持ち替える':label)+(['ignite','refuel'].includes(action)?(managesOil(state)?'（予備油、空なら灯油瓶）':`（${ctx.data.items[spec.fuelItem].name}×1）`):''),intent,enabled:p.ok&&!state.waiting&&!state.battle,reason:p.reason??'',consumes:actionConsumes(ctx,intent,p)});
     }
     for(const actor of state.members)for(const grant of ctx.data.jobs?.[state.actors[actor].job]?.grants??[])if(grant.api==='fire.kindling'){
       const ability=ctx.data.fieldAbilities[grant.skill],intent={type:'dungeon.action',system:ctx.id,action:'skill',target:id,actor,ability:grant.skill},p=plan(ctx,intent);

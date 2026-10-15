@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.26.0",
   "profile": {
     "commonSkills": [
       "attack",
@@ -2204,6 +2204,82 @@
         "agi": 0.7
       },
       "resist": {}
+    },
+    "exp_stance20": {
+      "id": "exp_stance20",
+      "name": "構え崩し",
+      "turns": 2,
+      "stats": {
+        "vit": 0.8
+      },
+      "resist": {}
+    },
+    "exp_stance25": {
+      "id": "exp_stance25",
+      "name": "構え崩し・熟練",
+      "turns": 2,
+      "stats": {
+        "vit": 0.75
+      },
+      "resist": {}
+    },
+    "exp_ice": {
+      "id": "exp_ice",
+      "name": "氷結針",
+      "turns": 2,
+      "stats": {
+        "agi": 0.85
+      },
+      "resist": {}
+    },
+    "exp_tuning": {
+      "id": "exp_tuning",
+      "name": "調律拍",
+      "turns": 2,
+      "stats": {
+        "str": 0.9
+      },
+      "resist": {}
+    },
+    "exp_tide": {
+      "id": "exp_tide",
+      "name": "防潮刻印",
+      "turns": 2,
+      "stats": {},
+      "resist": {
+        "water": 0.75,
+        "lightning": 0.75
+      }
+    },
+    "exp_magic80": {
+      "id": "exp_magic80",
+      "name": "連結護符",
+      "turns": 2,
+      "stats": {},
+      "resist": {
+        "fire": 0.8,
+        "ice": 0.8,
+        "lightning": 0.8,
+        "water": 0.8,
+        "light": 0.8,
+        "earth": 0.8,
+        "dark": 0.8
+      }
+    },
+    "exp_magic75": {
+      "id": "exp_magic75",
+      "name": "連結護符",
+      "turns": 2,
+      "stats": {},
+      "resist": {
+        "fire": 0.75,
+        "ice": 0.75,
+        "lightning": 0.75,
+        "water": 0.75,
+        "light": 0.75,
+        "earth": 0.75,
+        "dark": 0.75
+      }
     }
   },
   "fieldAbilities": {
@@ -3424,6 +3500,422 @@
           "chance": 1
         }
       ]
+    },
+    "exp_row_sweep": {
+      "name": "横列払い",
+      "mp": 6,
+      "weaponTypes": [
+        "sword",
+        "axe"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 3,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_row_sweep_1",
+          "element": "physical"
+        }
+      ],
+      "description": "MP6。同列最大3体へ物理攻撃。Classicでは遭遇順に最大3体。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_row_sweep_2",
+              "element": "physical"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_row_sweep_3",
+              "element": "physical"
+            }
+          ],
+          "mp": 5
+        }
+      }
+    },
+    "exp_stance_break": {
+      "name": "構え崩し",
+      "mp": 5,
+      "weaponTypes": [
+        "sword",
+        "axe",
+        "spear",
+        "fist"
+      ],
+      "target": "enemy",
+      "maxTargets": 1,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_stance_break",
+          "element": "physical"
+        },
+        {
+          "type": "buff",
+          "buff": "exp_stance20"
+        }
+      ],
+      "description": "MP5。敵1体へ物理攻撃、VITを20%低下。2巡。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_stance_break",
+              "element": "physical"
+            },
+            {
+              "type": "buff",
+              "buff": "exp_stance25"
+            }
+          ]
+        },
+        "3": {
+          "mp": 4
+        }
+      }
+    },
+    "exp_line_thrust": {
+      "name": "貫通突き",
+      "mp": 6,
+      "weaponTypes": [
+        "spear"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_line_thrust_1",
+          "element": "physical"
+        }
+      ],
+      "description": "MP6。前後一直線の最大2体へ物理攻撃。Classicでは遭遇順に最大2体。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_line_thrust_2",
+              "element": "physical"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_line_thrust_3",
+              "element": "physical"
+            }
+          ],
+          "mp": 5
+        }
+      }
+    },
+    "exp_chain_flame": {
+      "name": "連環火弾",
+      "mp": 9,
+      "weaponTypes": [
+        "staff"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 3,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_chain_flame_1",
+          "element": "fire"
+        }
+      ],
+      "description": "MP9。対象と上下左右の範囲から最大3体へ火攻撃。Classicでは遭遇順に選択。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_chain_flame_2",
+              "element": "fire"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_chain_flame_3",
+              "element": "fire"
+            }
+          ],
+          "mp": 8
+        }
+      }
+    },
+    "exp_ice_needles": {
+      "name": "氷結針",
+      "mp": 7,
+      "weaponTypes": [
+        "staff"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_ice_needles_1",
+          "element": "ice"
+        },
+        {
+          "type": "buff",
+          "buff": "exp_ice"
+        }
+      ],
+      "description": "MP7。対象と上下左右の範囲から最大2体へ氷攻撃。Classicでは遭遇順に選択。AGIを15%低下、2巡。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_ice_needles_2",
+              "element": "ice"
+            },
+            {
+              "type": "buff",
+              "buff": "exp_ice"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_ice_needles_3",
+              "element": "ice"
+            },
+            {
+              "type": "buff",
+              "buff": "exp_ice"
+            }
+          ],
+          "mp": 6
+        }
+      }
+    },
+    "exp_chain_thunder": {
+      "name": "渡り雷",
+      "mp": 9,
+      "weaponTypes": [
+        "staff"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 3,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_chain_thunder_1",
+          "element": "lightning"
+        }
+      ],
+      "description": "MP9。対象と上下左右の範囲から最大3体へ雷攻撃。Classicでは遭遇順に選択。",
+      "maxSkillLevel": 1
+    },
+    "exp_paired_aid": {
+      "name": "応急連携",
+      "mp": 7,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "target": "all_allies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "heal",
+          "formula": "exp_paired_aid_1"
+        }
+      ],
+      "description": "MP7。HP割合が低い生存味方2人を回復。",
+      "maxSkillLevel": 3,
+      "selection": "lowest_hp_ratio",
+      "fieldUse": true,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "heal",
+              "formula": "exp_paired_aid_2"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "heal",
+              "formula": "exp_paired_aid_3"
+            }
+          ]
+        }
+      }
+    },
+    "exp_clearwater_aid": {
+      "name": "清水の手当",
+      "mp": 5,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "target": "all_allies",
+      "maxTargets": 1,
+      "effects": [
+        {
+          "type": "heal",
+          "formula": "exp_clearwater_aid_1"
+        },
+        {
+          "type": "cleanse",
+          "status": "wet"
+        }
+      ],
+      "description": "MP5。HP割合が低い生存味方1人を回復。現在の濡れも解除。",
+      "maxSkillLevel": 3,
+      "selection": "lowest_hp_ratio",
+      "fieldUse": true,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "heal",
+              "formula": "exp_clearwater_aid_2"
+            },
+            {
+              "type": "cleanse",
+              "status": "wet"
+            }
+          ]
+        },
+        "3": {
+          "maxTargets": 2,
+          "mp": 7
+        }
+      }
+    },
+    "exp_tide_ward": {
+      "name": "防潮刻印",
+      "mp": 8,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "target": "all_allies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "exp_tide"
+        }
+      ],
+      "description": "MP8。生存味方2人の水・雷被害を25%軽減。2巡。",
+      "maxSkillLevel": 1
+    },
+    "exp_tuning_beat": {
+      "name": "調律拍",
+      "mp": 6,
+      "weaponTypes": [
+        "instrument"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "exp_tuning"
+        }
+      ],
+      "description": "MP6。敵最大2体のSTRを10%低下。2巡。",
+      "maxSkillLevel": 1
+    },
+    "exp_precise_pierce": {
+      "name": "精密穿ち",
+      "mp": 8,
+      "weaponTypes": [
+        "dagger",
+        "bow",
+        "sword"
+      ],
+      "target": "enemy",
+      "maxTargets": 1,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_precise_pierce_1",
+          "element": "physical"
+        }
+      ],
+      "description": "MP8。単体へ防御の影響が小さい精密攻撃。投射を含み射程1〜5。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_precise_pierce_2",
+              "element": "physical"
+            }
+          ]
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "damage",
+              "formula": "exp_precise_pierce_3",
+              "element": "physical"
+            }
+          ]
+        }
+      }
+    },
+    "exp_linked_ward": {
+      "name": "連結護符",
+      "mp": 8,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "target": "all_allies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "exp_magic80"
+        }
+      ],
+      "description": "MP8。生存味方2人の物理以外の属性被害を20%軽減。2巡。",
+      "maxSkillLevel": 3,
+      "levels": {
+        "2": {
+          "maxTargets": 3
+        },
+        "3": {
+          "effects": [
+            {
+              "type": "buff",
+              "buff": "exp_magic75"
+            }
+          ]
+        }
+      }
     }
   },
   "formulas": {
@@ -3707,6 +4199,646 @@
           ]
         }
       ]
+    },
+    "exp_row_sweep_1": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.7
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_row_sweep_2": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_row_sweep_3": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.9
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_stance_break": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.9
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.2
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_line_thrust_1": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.85
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.3
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_line_thrust_2": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                0.95
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.3
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_line_thrust_3": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                1.05
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.3
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_chain_flame_1": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.75
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_chain_flame_2": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.85
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_chain_flame_3": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.95
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_ice_needles_1": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.8
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_ice_needles_2": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.9
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_ice_needles_3": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    1.0
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_chain_thunder_1": {
+      "op": "max",
+      "args": [
+        3,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.75
+                  ]
+                },
+                8
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.25
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_paired_aid_1": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.65
+              ]
+            },
+            12
+          ]
+        }
+      ]
+    },
+    "exp_paired_aid_2": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.75
+              ]
+            },
+            14
+          ]
+        }
+      ]
+    },
+    "exp_paired_aid_3": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.85
+              ]
+            },
+            16
+          ]
+        }
+      ]
+    },
+    "exp_clearwater_aid_1": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.5
+              ]
+            },
+            8
+          ]
+        }
+      ]
+    },
+    "exp_clearwater_aid_2": {
+      "op": "max",
+      "args": [
+        1,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.6
+              ]
+            },
+            12
+          ]
+        }
+      ]
+    },
+    "exp_precise_pierce_1": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                1.2
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_precise_pierce_2": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                1.35
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "exp_precise_pierce_3": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.str"
+                },
+                1.5
+              ]
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "target.stats.vit"
+                },
+                0.15
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   "items": {
@@ -3926,7 +5058,19 @@
     "blood_light": "fire",
     "homeward": "heal",
     "repel_kuragari": "light",
-    "valley_curse": "power"
+    "valley_curse": "power",
+    "exp_row_sweep": "power",
+    "exp_stance_break": "power",
+    "exp_line_thrust": "power",
+    "exp_chain_flame": "fire",
+    "exp_ice_needles": "ice",
+    "exp_chain_thunder": "lightning",
+    "exp_paired_aid": "heal",
+    "exp_clearwater_aid": "guard",
+    "exp_tide_ward": "guard",
+    "exp_tuning_beat": "guard",
+    "exp_precise_pierce": "power",
+    "exp_linked_ward": "guard"
   },
   "gridProfiles": {
     "power": {
@@ -4828,6 +5972,153 @@
       },
       "area": {
         "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_row_sweep": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "row"
+      },
+      "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "exp_stance_break": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "exp_line_thrust": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 2
+      },
+      "area": {
+        "shape": "column"
+      },
+      "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "exp_chain_flame": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "cross",
+        "radius": 1
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_ice_needles": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "cross",
+        "radius": 1
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_chain_thunder": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "cross",
+        "radius": 1
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_paired_aid": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_clearwater_aid": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_tide_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_tuning_beat": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_precise_pierce": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "exp_linked_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
       },
       "trajectory": "indirect",
       "friendlyFire": false
@@ -6701,6 +7992,294 @@
       },
       "area": {
         "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_row_sweep": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "row"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_stance_break": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_line_thrust": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "column"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_chain_flame": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "cross4"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_ice_needles": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "cross4"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_chain_thunder": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "cross4"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_paired_aid": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_clearwater_aid": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_tide_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_tuning_beat": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_precise_pierce": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_linked_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
       },
       "friendlyFire": false,
       "resolution": "simultaneous",

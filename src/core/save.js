@@ -1,3 +1,4 @@
+import {freshExpedition,expeditionSaveErrors} from './expedition.js';
 import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
 import {frontlineSaveErrors} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
@@ -77,6 +78,12 @@ function migrateContentSave(original,data){
   if(!isRecord(original))return original;
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
   const migration=data.game.migrations?.[original.contentVersion];if(!migration)return original;
+  if(migration.expeditionRevision===1){
+    const legacy={...data,expedition:undefined,game:{...data.game,version:original.contentVersion}};
+    const previous=migrateSave(original,legacy);
+    if(validateSave(previous,legacy).length)return original;
+    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return save;
+  }
   if(migration.environmentRevision){
     // Validate the old version's system membership before adding only the missing state.
     const dungeons=clone(data.dungeons);
@@ -148,7 +155,7 @@ export function migrateSave(original,data){
     }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
-  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;
@@ -295,6 +302,6 @@ export function validateSave(save,data){
       if(scene&&(scene.op==='story.scene'?s.stories[id]?.scene!==scene.scene:evaluate({ref:scene.target},s)!==scene.value))fail('依頼の再開場面が一致しません');
     }
   }
-  errors.push(...validateDungeonState(data,s),...validateDungeonRestrictions(data,s),...validateEventCheckpoints(data,s));
+  errors.push(...expeditionSaveErrors(data,s),...validateDungeonState(data,s),...validateDungeonRestrictions(data,s),...validateEventCheckpoints(data,s));
   return [...new Set(errors)];
 }

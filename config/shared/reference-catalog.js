@@ -18294,6 +18294,195 @@ export const referenceData={
       "id": "portrait_ren"
     },
     {
+      "file": "expedition-content.json",
+      "path": [
+        "oil",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        1,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        2,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        2,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        3,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        3,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_landing"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        4,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        4,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_lower_landing"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        5,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        5,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        6,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        6,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        7,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        7,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        8,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        8,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f2"
+    },
+    {
       "file": "jobs.json",
       "path": [
         "profile",
@@ -20583,6 +20772,452 @@ export const referenceData={
       ],
       "kind": "statuses",
       "id": "hollow_curse"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_row_sweep",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_row_sweep_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_row_sweep",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_row_sweep_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_row_sweep",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_row_sweep_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_stance_break",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_stance_break"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_stance_break",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_stance20"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_stance_break",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_stance_break"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_stance_break",
+        "levels",
+        "2",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_stance25"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_line_thrust",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_line_thrust_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_line_thrust",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_line_thrust_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_line_thrust",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_line_thrust_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_flame",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_chain_flame_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_flame",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_chain_flame_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_flame",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_chain_flame_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_ice_needles_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_ice"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_ice_needles_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "levels",
+        "2",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_ice"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_ice_needles_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles",
+        "levels",
+        "3",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_ice"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_thunder",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_chain_thunder_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_paired_aid",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_paired_aid_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_paired_aid",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_paired_aid_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_paired_aid",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_paired_aid_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_clearwater_aid",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_clearwater_aid_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_clearwater_aid",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "wet"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_clearwater_aid",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_clearwater_aid_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_clearwater_aid",
+        "levels",
+        "2",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "wet"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_tide_ward",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_tide"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_tuning_beat",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_tuning"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_precise_pierce",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_precise_pierce_1"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_precise_pierce",
+        "levels",
+        "2",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_precise_pierce_2"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_precise_pierce",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_precise_pierce_3"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_linked_ward",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_magic80"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_linked_ward",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_magic75"
     },
     {
       "file": "jobs.json",
@@ -32536,6 +33171,7 @@ export const referenceData={
     "config/dungeons/region_8.json",
     "config/dungeons/region_9.json",
     "config/entities.json",
+    "config/expedition-content.json",
     "config/jobs.json",
     "config/kagaribi-content.json",
     "config/locations.json",
@@ -32763,6 +33399,7 @@ export const referenceData={
     "data/effects.json",
     "data/encounters.json",
     "data/enemies.json",
+    "data/expedition.json",
     "data/field-abilities.json",
     "data/formulas.json",
     "data/game.json",
@@ -33172,6 +33809,72 @@ export const referenceData={
       },
       "job_blood": {
         "name": "job_blood"
+      },
+      "exp_row_sweep_1": {
+        "name": "exp_row_sweep_1"
+      },
+      "exp_row_sweep_2": {
+        "name": "exp_row_sweep_2"
+      },
+      "exp_row_sweep_3": {
+        "name": "exp_row_sweep_3"
+      },
+      "exp_stance_break": {
+        "name": "exp_stance_break"
+      },
+      "exp_line_thrust_1": {
+        "name": "exp_line_thrust_1"
+      },
+      "exp_line_thrust_2": {
+        "name": "exp_line_thrust_2"
+      },
+      "exp_line_thrust_3": {
+        "name": "exp_line_thrust_3"
+      },
+      "exp_chain_flame_1": {
+        "name": "exp_chain_flame_1"
+      },
+      "exp_chain_flame_2": {
+        "name": "exp_chain_flame_2"
+      },
+      "exp_chain_flame_3": {
+        "name": "exp_chain_flame_3"
+      },
+      "exp_ice_needles_1": {
+        "name": "exp_ice_needles_1"
+      },
+      "exp_ice_needles_2": {
+        "name": "exp_ice_needles_2"
+      },
+      "exp_ice_needles_3": {
+        "name": "exp_ice_needles_3"
+      },
+      "exp_chain_thunder_1": {
+        "name": "exp_chain_thunder_1"
+      },
+      "exp_paired_aid_1": {
+        "name": "exp_paired_aid_1"
+      },
+      "exp_paired_aid_2": {
+        "name": "exp_paired_aid_2"
+      },
+      "exp_paired_aid_3": {
+        "name": "exp_paired_aid_3"
+      },
+      "exp_clearwater_aid_1": {
+        "name": "exp_clearwater_aid_1"
+      },
+      "exp_clearwater_aid_2": {
+        "name": "exp_clearwater_aid_2"
+      },
+      "exp_precise_pierce_1": {
+        "name": "exp_precise_pierce_1"
+      },
+      "exp_precise_pierce_2": {
+        "name": "exp_precise_pierce_2"
+      },
+      "exp_precise_pierce_3": {
+        "name": "exp_precise_pierce_3"
       }
     },
     "skills": {
@@ -33402,6 +34105,42 @@ export const referenceData={
       },
       "valley_curse": {
         "name": "途切れぬ呪詠"
+      },
+      "exp_row_sweep": {
+        "name": "横列払い"
+      },
+      "exp_stance_break": {
+        "name": "構え崩し"
+      },
+      "exp_line_thrust": {
+        "name": "貫通突き"
+      },
+      "exp_chain_flame": {
+        "name": "連環火弾"
+      },
+      "exp_ice_needles": {
+        "name": "氷結針"
+      },
+      "exp_chain_thunder": {
+        "name": "渡り雷"
+      },
+      "exp_paired_aid": {
+        "name": "応急連携"
+      },
+      "exp_clearwater_aid": {
+        "name": "清水の手当"
+      },
+      "exp_tide_ward": {
+        "name": "防潮刻印"
+      },
+      "exp_tuning_beat": {
+        "name": "調律拍"
+      },
+      "exp_precise_pierce": {
+        "name": "精密穿ち"
+      },
+      "exp_linked_ward": {
+        "name": "連結護符"
       }
     },
     "items": {
@@ -34527,6 +35266,27 @@ export const referenceData={
       },
       "roots": {
         "name": "根の拘束"
+      },
+      "exp_stance20": {
+        "name": "構え崩し"
+      },
+      "exp_stance25": {
+        "name": "構え崩し・熟練"
+      },
+      "exp_ice": {
+        "name": "氷結針"
+      },
+      "exp_tuning": {
+        "name": "調律拍"
+      },
+      "exp_tide": {
+        "name": "防潮刻印"
+      },
+      "exp_magic80": {
+        "name": "連結護符"
+      },
+      "exp_magic75": {
+        "name": "連結護符"
       }
     },
     "fieldAbilities": {
@@ -35042,6 +35802,26 @@ export const referenceData={
       },
       "trap_drip": {
         "name": "trap_drip"
+      }
+    },
+    "expedition": {
+      "version": {
+        "name": "version"
+      },
+      "oil": {
+        "name": "oil"
+      },
+      "shopLocation": {
+        "name": "shopLocation"
+      },
+      "camps": {
+        "name": "camps"
+      },
+      "products": {
+        "name": "products"
+      },
+      "enemyGems": {
+        "name": "enemyGems"
       }
     },
     "quests": {
@@ -59603,6 +60383,90 @@ export const referenceData={
         "valley_curse"
       ]
     },
+    "skills/exp_row_sweep": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_row_sweep"
+      ]
+    },
+    "skills/exp_stance_break": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_stance_break"
+      ]
+    },
+    "skills/exp_line_thrust": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_line_thrust"
+      ]
+    },
+    "skills/exp_chain_flame": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_flame"
+      ]
+    },
+    "skills/exp_ice_needles": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_ice_needles"
+      ]
+    },
+    "skills/exp_chain_thunder": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_chain_thunder"
+      ]
+    },
+    "skills/exp_paired_aid": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_paired_aid"
+      ]
+    },
+    "skills/exp_clearwater_aid": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_clearwater_aid"
+      ]
+    },
+    "skills/exp_tide_ward": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_tide_ward"
+      ]
+    },
+    "skills/exp_tuning_beat": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_tuning_beat"
+      ]
+    },
+    "skills/exp_precise_pierce": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_precise_pierce"
+      ]
+    },
+    "skills/exp_linked_ward": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_linked_ward"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -59867,6 +60731,55 @@ export const referenceData={
       "path": [
         "buffs",
         "roots"
+      ]
+    },
+    "buffs/exp_stance20": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_stance20"
+      ]
+    },
+    "buffs/exp_stance25": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_stance25"
+      ]
+    },
+    "buffs/exp_ice": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_ice"
+      ]
+    },
+    "buffs/exp_tuning": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_tuning"
+      ]
+    },
+    "buffs/exp_tide": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_tide"
+      ]
+    },
+    "buffs/exp_magic80": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_magic80"
+      ]
+    },
+    "buffs/exp_magic75": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_magic75"
       ]
     },
     "items/kagaribi_torch": {

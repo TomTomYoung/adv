@@ -25,6 +25,7 @@ const enemyUsers=(data,id)=>Object.values(data.enemies??{}).filter(enemy=>(enemy
 const itemUsers=(data,id)=>Object.values(data.items??{}).filter(item=>item.battleSkill===id).map(item=>item.name);
 const usage=(data,id,api)=>{
   const values=[];
+  const product=data.expedition?.products[id];if(product)values.push(`技能教習所：宝石${product.price}、${product.tier===1?'給油修理':'中継起動'}後。対応職：${compact(product.jobs.map(j=>data.jobs[j].name))}`);
   if(api==='battle.skill'&&(data.jobProfile?.commonSkills??[]).includes(id))values.push('全職共通');
   const job=grants(data,id,api);if(job.length)values.push(`職業：${compact(job)}`);
   if(api==='battle.skill'){const enemies=enemyUsers(data,id);if(enemies.length)values.push(`魔物：${compact(enemies)}`);const items=itemUsers(data,id);if(items.length)values.push(`道具：${compact(items)}`);}
@@ -146,7 +147,7 @@ const skillCatalogLevelLines=(data,id,spec,field=false)=>{
     lines.push(`#### 技能Lv${n}`,'',`消費：${costText(data,resolved)}。対象：${targetLabels[resolved.target]??resolved.target??'未指定'}。`);
     if(field)lines.push(changed?fieldCalculation(data,resolved):'効果：前Lvと同一。');
     else lines.push(...(changed?calculationLines(data,id,resolved):['効果：前Lvと同一。']));
-    lines.push(`到達条件：${n===1?'習得時の初期段階':spec.levelUp?.[n]?staticGrowthText(data,id,spec.levelUp[n]):'未設定（現行では到達不可）'}。`,'');
+    lines.push(`到達条件：${data.expedition?.products[id]?`技能教習所で宝石${data.expedition.products[id].price*(n===1?1:n===2?2:4)}を追加支払い${n>1?'、前段階の習得が必要':''}`:n===1?'習得時の初期段階':spec.levelUp?.[n]?staticGrowthText(data,id,spec.levelUp[n]):'未設定（現行では到達不可）'}。`,'');
   }
   return lines;
 };

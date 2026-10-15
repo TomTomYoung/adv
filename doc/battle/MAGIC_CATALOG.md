@@ -1,6 +1,6 @@
 # 魔法一覧
 
-更新日: 2026-10-15。作品版1.25.0。戦闘魔法20件、探索魔法7件。
+更新日: 2026-10-15。作品版1.26.0。戦闘魔法20件、探索魔法7件。
 
 魔法は独立したデータベースではなく、[data/skills.json](../../data/skills.json) と [data/field-abilities.json](../../data/field-abilities.json) の一部を表示分類したものです。分類元は [character-profile.js](../../src/application/character-profile.js)。魔法以外は [SKILL_CATALOG.md](SKILL_CATALOG.md) に載せます。
 

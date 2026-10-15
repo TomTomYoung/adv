@@ -64,6 +64,15 @@ export const editors=[
     "hint": "仲間の能力と追加魔物を編集します。画像や全体の参照整合は再生成後に確認します。"
   },
   {
+    "id": "expedition-content",
+    "file": "expedition-content.json",
+    "page": "expedition-content.html",
+    "family": "expedition",
+    "title": "給油設備・中継所・技能教習",
+    "group": "迷宮",
+    "hint": "既存区画への設備配置、携行油、技能宝石、購入技能と職業の対応を編集します。"
+  },
+  {
     "id": "jobs",
     "file": "jobs.json",
     "page": "jobs.html",

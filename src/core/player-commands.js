@@ -1,3 +1,4 @@
+import {expeditionView,expeditionAction} from './expedition.js';
 import {treasurePlan} from './treasures.js';
 import {dungeonViews,dungeonAction,dungeonCell} from './dungeons.js';
 import {questEvents,questEventPlan,openQuestEvent,eventVisible} from './quest-events.js';
@@ -20,9 +21,9 @@ export function commandTargets(engine,command='interact'){
     const signature=extra.signature??inspectionSignature([name,text,actions.map(a=>[a.label,a.enabled,a.reason])]);
     targets.push({id,name,text,actions,signature,record:receiptKey(state,id),...extra});
   };
-  for(const system of dungeonViews(data,state)){
+  for(const system of [...dungeonViews(data,state),expeditionView(data,state)].filter(Boolean)){
     if(command==='portable'){
-      if(system.portable)add(`portable:${system.id}`,system.portable.name,flameText(system.portable),system.portable.actions);
+      if(system.portable)add(`portable:${system.id}`,system.portable.name,system.portable.text??flameText(system.portable),system.portable.actions);
       continue;
     }
     if(command==='environment'){
@@ -102,6 +103,7 @@ function performTarget(engine,target,action){
   if(action.intent.type==='quest.event')changed=openQuestEvent(engine,action.intent.quest,action.intent.id);
   else if(action.intent.type==='field.object')changed=engine.trigger('interact',action.intent.id);
   else if(action.intent.type==='location.enter')changed=engine.enterLocation(action.intent.id);
+  else if(action.intent.type==='expedition.action')changed=expeditionAction(engine,action.intent);
   else changed=dungeonAction(engine,action.intent);
   if(!changed){s.inspectionActive=null;return false;}
   finishInspection(engine);processFieldEvents(engine);
