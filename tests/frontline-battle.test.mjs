@@ -52,9 +52,9 @@ test('a living front prevents promotion; a fallen front advances only at next fu
  nextRound(g);assert.equal(frontPosition(g.state,b.enemies[1]).depth,0);assert.equal(b.round,2);assert.equal(b.frontline.events.filter(e=>e.type==='advance'&&e.side==='enemies').length,2);
 });
 test('voluntary retreat consumes one slot, permits rear destination, then returns at next full turn',()=>{
- const {g,b}=setup('rear_only');const form=structuredClone(g.state.partyFrontlineFormation),rng=g.state.rng;
+ const {g,b}=setup('no_front');const form=structuredClone(g.state.partyFrontlineFormation),rng=g.state.rng;
  assert.equal(g.dispatch({type:'battle',action:'move',to:{depth:0}}),false);assert.equal(g.state.rng,rng);
- assert.ok(g.dispatch({type:'battle',action:'move',to:{depth:2}}));assert.equal(frontPosition(g.state,g.state.actors.ada).depth,2);assert.equal(b.round,1);assert.equal(b.turnIndex,1);assert.deepEqual(g.state.partyFrontlineFormation,form);roundtrip(g);nextRound(g);assert.equal(frontPosition(g.state,g.state.actors.ada).depth,0);
+ assert.ok(g.dispatch({type:'battle',action:'move',to:{depth:2}}));assert.equal(frontPosition(g.state,g.state.actors.ada).depth,2);assert.equal(b.round,1);assert.equal(b.turnIndex,1);assert.deepEqual(g.state.partyFrontlineFormation,form);roundtrip(g);nextRound(g);assert.equal(frontPosition(g.state,g.state.actors.ada).depth,1);
 });
 test('moving to an occupied lane chooses nearest free lane; full rows reject without mutation',()=>{
  const {g,b}=setup('crowd');const unit=b.enemies[0];b.frontline.positions['enemy:enemy_0']={depth:2,lane:2};assert.deepEqual(frontlineMovePlan(g.state,unit,{depth:0}).to,{depth:0,lane:0});

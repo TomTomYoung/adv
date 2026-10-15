@@ -1,3 +1,4 @@
+import {battleAlive,frontlineTargetState,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {unitKey} from './buffs.js';
 import {frontPosition,traceFrontline} from './battle-frontline.js';
 import {frontlineProfile,orderFrontlineTargets,seriesFactor} from './frontline-targeting.js';
@@ -10,12 +11,12 @@ export function resolveFrontlineAttack(engine,source,targets,skill,id,{snapshot,
  let stopped=false,hitIndex=0;
  for(let i=0;i<ordered.length;i++){
   const target=ordered[i],key=unitKey(target),before=target.hp,p=frontPosition(s,target),old=initial.get(key);
-  if(profile.resolution==='sequential'&&(target.hp<=0||profile.reevaluate==='position'&&(p.depth!==old.depth||p.lane!==old.lane))){traceFrontline(engine,'hit_skipped',{target:key,reason:target.hp<=0?'戦闘不能':'位置が変化',remaining:ordered.length-i-1});continue;}
+  if(profile.resolution==='sequential'&&(!frontlineTargetState(s,target,profile)||profile.reevaluate==='position'&&(p.depth!==old.depth||p.lane!==old.lane))){traceFrontline(engine,'hit_skipped',{target:key,reason:!frontlineTargetState(s,target,profile)?'対象状態が変化':'位置が変化',remaining:ordered.length-i-1});continue;}
   const factor=seriesFactor(profile.damageSeries,hitIndex),context={factor,basis:profile.damageSeries.basis,finalBase,snapshot:profile.resolution==='simultaneous'?snapshots.get(key):snapshot(target)};
-  const result=hit(target,context);results.push(result);
+  const result=hit(target,context);syncFrontlineDefeats(engine);results.push(result);
   traceFrontline(engine,'hit',{source:unitKey(source),target:key,skill:id,index:hitIndex+1,factor,damage:result.damage??0,hpBefore:before,hpAfter:target.hp,remaining:ordered.length-i-1});hitIndex++;
   if(profile.resolution==='sequential'&&result.hit){
-   const cancel=react(target,'onHit',source);if(cancel||source.hp<=0){stopped=true;traceFrontline(engine,'attack_stopped',{reason:cancel?'反応による後続命中中止':'行動者が戦闘不能',remaining:ordered.length-i-1});break;}
+   const cancel=react(target,'onHit',source);if(cancel||!battleAlive(s,source)){stopped=true;traceFrontline(engine,'attack_stopped',{reason:cancel?'反応による後続命中中止':'行動者が戦闘不能または離脱',remaining:ordered.length-i-1});break;}
   }
  }
  if(profile.resolution==='simultaneous')for(let i=0;i<ordered.length;i++)if(results[i]?.hit)react(ordered[i],'onHit',source);
