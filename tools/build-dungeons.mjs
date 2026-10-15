@@ -1,3 +1,4 @@
+import {buildQuestOrder} from './build-quest-order.mjs';
 import {buildBattleGrid} from './build-battle-grid.mjs';
 import {buildDungeonPackages} from './build-dungeon-packages.mjs';
 import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
@@ -68,6 +69,7 @@ export async function buildDungeons(){
   await buildWorld(root);
   await buildCellLayers(root);
   await buildDungeonPackages(root);
+  await buildQuestOrder(root);
   await buildQuestInterruptions(root);
   await buildBattleGrid(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);

@@ -1,3 +1,4 @@
+import {questOrderErrors} from './quest-order.js';
 import {frontlineDefinitionErrors} from './battle-frontline.js';
 import {gridDefinitionErrors} from './battle-grid.js';
 import {preemptiveValid} from './battle-turns.js';
@@ -134,6 +135,7 @@ export function validateContent(data){
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   errors.push(...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
+  errors.push(...questOrderErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
   for(const id of data.game.initial.members)reference(data.actors,id,'initial.members');

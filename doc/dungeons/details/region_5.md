@@ -1,6 +1,6 @@
 # 灰時計の書庫
 
-更新日: 2026-10-14。作品版1.25.0。ID `region_5`、推奨Lv.5、2区画。
+更新日: 2026-10-15。作品版1.25.0。ID `region_5`、推奨Lv.5、2区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 
@@ -76,45 +76,45 @@
 
 配布イベントがこの迷宮のマップに配置されている依頼です。q001〜q004は物語内の出発・到着を実移動へ接続しています。q005以降は受付や訪問地点の配置を含み、全場面が別々の実座標に接続されているわけではありません。装置を動かしただけで証拠や結末を自動確定しません。
 
-[q041 返却日のない本](../../scenarios/QUEST_CATALOG.md#q041-返却日のない本)：灰時計の書庫・地下1層。
+表示041 / [q041 返却日のない本](../../scenarios/QUEST_CATALOG.md#q041-返却日のない本)：灰時計の書庫・地下1層。
 
-[q042 砂時計の残業](../../scenarios/QUEST_CATALOG.md#q042-砂時計の残業)：灰時計の書庫・地下1層。
+表示042 / [q042 砂時計の残業](../../scenarios/QUEST_CATALOG.md#q042-砂時計の残業)：灰時計の書庫・地下1層。
 
-[q043 墨を食う火](../../scenarios/QUEST_CATALOG.md#q043-墨を食う火)：灰時計の書庫・地下1層。
+表示043 / [q043 墨を食う火](../../scenarios/QUEST_CATALOG.md#q043-墨を食う火)：灰時計の書庫・地下1層。
 
-[q044 未来の訃報](../../scenarios/QUEST_CATALOG.md#q044-未来の訃報)：灰時計の書庫・地下1層。
+表示044 / [q044 未来の訃報](../../scenarios/QUEST_CATALOG.md#q044-未来の訃報)：灰時計の書庫・地下1層。
 
-[q045 白紙の相続](../../scenarios/QUEST_CATALOG.md#q045-白紙の相続)：灰時計の書庫・地下1層。
+表示045 / [q045 白紙の相続](../../scenarios/QUEST_CATALOG.md#q045-白紙の相続)：灰時計の書庫・地下1層。
 
-[q046 迷子の索引](../../scenarios/QUEST_CATALOG.md#q046-迷子の索引)：灰時計の書庫・地下2層。
+表示046 / [q046 迷子の索引](../../scenarios/QUEST_CATALOG.md#q046-迷子の索引)：灰時計の書庫・地下2層。
 
-[q047 一頁の戦争](../../scenarios/QUEST_CATALOG.md#q047-一頁の戦争)：灰時計の書庫・地下2層。
+表示047 / [q047 一頁の戦争](../../scenarios/QUEST_CATALOG.md#q047-一頁の戦争)：灰時計の書庫・地下2層。
 
-[q048 眠る校正者](../../scenarios/QUEST_CATALOG.md#q048-眠る校正者)：灰時計の書庫・地下2層。
+表示048 / [q048 眠る校正者](../../scenarios/QUEST_CATALOG.md#q048-眠る校正者)：灰時計の書庫・地下2層。
 
-[q049 忘却の栞](../../scenarios/QUEST_CATALOG.md#q049-忘却の栞)：灰時計の書庫・地下2層・灰時計の書庫・地下1層。
+表示049 / [q049 忘却の栞](../../scenarios/QUEST_CATALOG.md#q049-忘却の栞)：灰時計の書庫・地下2層・灰時計の書庫・地下1層。
 
-[q050 止まった終章](../../scenarios/QUEST_CATALOG.md#q050-止まった終章)：灰時計の書庫・地下2層。
+表示050 / [q050 止まった終章](../../scenarios/QUEST_CATALOG.md#q050-止まった終章)：灰時計の書庫・地下2層。
 
-[q141 音の出ない優勝旗](../../scenarios/QUEST_CATALOG.md#q141-音の出ない優勝旗)：灰時計の書庫・地下1層。
+表示141 / [q141 音の出ない優勝旗](../../scenarios/QUEST_CATALOG.md#q141-音の出ない優勝旗)：灰時計の書庫・地下1層。
 
-[q142 偽物職人の本物](../../scenarios/QUEST_CATALOG.md#q142-偽物職人の本物)：灰時計の書庫・地下1層。
+表示142 / [q142 偽物職人の本物](../../scenarios/QUEST_CATALOG.md#q142-偽物職人の本物)：灰時計の書庫・地下1層。
 
-[q143 辛くない火吹き料理](../../scenarios/QUEST_CATALOG.md#q143-辛くない火吹き料理)：灰時計の書庫・地下1層。
+表示143 / [q143 辛くない火吹き料理](../../scenarios/QUEST_CATALOG.md#q143-辛くない火吹き料理)：灰時計の書庫・地下1層。
 
-[q144 祭の悪役](../../scenarios/QUEST_CATALOG.md#q144-祭の悪役)：灰時計の書庫・地下1層。
+表示144 / [q144 祭の悪役](../../scenarios/QUEST_CATALOG.md#q144-祭の悪役)：灰時計の書庫・地下1層。
 
-[q145 花を咲かせない庭](../../scenarios/QUEST_CATALOG.md#q145-花を咲かせない庭)：灰時計の書庫・地下1層。
+表示145 / [q145 花を咲かせない庭](../../scenarios/QUEST_CATALOG.md#q145-花を咲かせない庭)：灰時計の書庫・地下1層。
 
-[q146 染め直せない軍服](../../scenarios/QUEST_CATALOG.md#q146-染め直せない軍服)：灰時計の書庫・地下2層。
+表示146 / [q146 染め直せない軍服](../../scenarios/QUEST_CATALOG.md#q146-染め直せない軍服)：灰時計の書庫・地下2層。
 
-[q147 一番遅い配達](../../scenarios/QUEST_CATALOG.md#q147-一番遅い配達)：灰時計の書庫・地下2層。
+表示147 / [q147 一番遅い配達](../../scenarios/QUEST_CATALOG.md#q147-一番遅い配達)：灰時計の書庫・地下2層。
 
-[q148 贋金より軽い金](../../scenarios/QUEST_CATALOG.md#q148-贋金より軽い金)：灰時計の書庫・地下2層。
+表示148 / [q148 贋金より軽い金](../../scenarios/QUEST_CATALOG.md#q148-贋金より軽い金)：灰時計の書庫・地下2層。
 
-[q149 売らない剣](../../scenarios/QUEST_CATALOG.md#q149-売らない剣)：灰時計の書庫・地下2層。
+表示149 / [q149 売らない剣](../../scenarios/QUEST_CATALOG.md#q149-売らない剣)：灰時計の書庫・地下2層。
 
-[q150 大道芸人の弟子](../../scenarios/QUEST_CATALOG.md#q150-大道芸人の弟子)：灰時計の書庫・地下2層。
+表示150 / [q150 大道芸人の弟子](../../scenarios/QUEST_CATALOG.md#q150-大道芸人の弟子)：灰時計の書庫・地下2層。
 
 現地調査「閉じた頁と開いた通路」／q049：借りた知識で第1層の封印通路を開く手順を確認した。貸出による技の封印と、栞がどの頁を封じたかの調査を分けて記す。
 

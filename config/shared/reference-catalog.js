@@ -31876,6 +31876,7 @@ export const referenceData={
     "data/maps/region_9_f1.json",
     "data/maps/region_9_f2.json",
     "data/presentation.json",
+    "data/quest-order.json",
     "data/quests/q001.json",
     "data/quests/q002.json",
     "data/quests/q003.json",

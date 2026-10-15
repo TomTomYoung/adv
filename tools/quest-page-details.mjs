@@ -1,3 +1,4 @@
+import {orderedQuests,questDisplayNumber} from '../src/core/quest-order.js';
 import {catalogContentHash,questCatalog,questEventId,questPages} from './quest-catalog.mjs';
 import {describePlace} from './location-catalog.mjs';
 import {questPageNotes} from '../authoring/quest-page-notes.mjs';
@@ -15,12 +16,13 @@ const sceneLink=(q,id)=>q.model.graph.some(n=>n.id===id)
 
 export function questPageIndex(data){
   const out=['# q001〜q010 個別クエスト','',
-    '[シナリオ文書へ戻る](scenarios/README.md) ／ [全200件のカタログ](QUEST_CATALOG.md)','',
+    `[シナリオ文書へ戻る](scenarios/README.md) ／ [全${Object.keys(data.quests).length}件のカタログ](QUEST_CATALOG.md)`,'',
     '本文、選択肢、結末、イベントID、人物・物品の所在、現地配置を各ページへ集約します。q003〜q010には行為ごとの条件・費用・状態変化と、編集時の確認事項も掲載します。','',
     'q001〜q004は探索・施設への実到着に接続済みです。q005〜q010は開始・調査イベントの実配置と物語内の所在管理があり、物語内の各移動の実マップ接続は未整備です。',''];
-  for(const [id,file] of Object.entries(questPages)){
+  for(const {id} of orderedQuests(data).filter(q=>questPages[q.id])){
+    const file=questPages[id];
     const q=data.quests[id],journeys=currentJourneys(q).length;
-    out.push(`[${id} ${q.title}](${file})：${q.model.graph.length}場面・${Object.keys(q.outcomes).length}結末。${journeys?`${journeys}本の実移動行為。`:'各移動の実マップ接続は未整備。'}`,'');
+    out.push(`表示${String(questDisplayNumber(data,id)).padStart(3,'0')} / [${id} ${q.title}](${file})：${q.model.graph.length}場面・${Object.keys(q.outcomes).length}結末。${journeys?`${journeys}本の実移動行為。`:'各移動の実マップ接続は未整備。'}`,'');
   }
   out.push('## 保守','',
     'ページ本文は配布JSON、解説は [quest-page-notes.mjs](../authoring/quest-page-notes.mjs)、生成器は [quest-page-details.mjs](../tools/quest-page-details.mjs) と [quest-page.mjs](../tools/quest-page.mjs) が正本です。`npm run build:catalog` で再生成します。ゲーム内容を変える場合は物語原稿・配置原稿を編集して `npm run build:scenarios` を実行します。','',

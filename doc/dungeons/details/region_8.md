@@ -1,6 +1,6 @@
 # 鉄胎の機関廟
 
-更新日: 2026-10-14。作品版1.25.0。ID `region_8`、推奨Lv.8、2区画。
+更新日: 2026-10-15。作品版1.25.0。ID `region_8`、推奨Lv.8、2区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 
@@ -82,45 +82,45 @@
 
 配布イベントがこの迷宮のマップに配置されている依頼です。q001〜q004は物語内の出発・到着を実移動へ接続しています。q005以降は受付や訪問地点の配置を含み、全場面が別々の実座標に接続されているわけではありません。装置を動かしただけで証拠や結末を自動確定しません。
 
-[q071 止まれない門番](../../scenarios/QUEST_CATALOG.md#q071-止まれない門番)：鉄胎の機関廟・地下1層。
+表示071 / [q071 止まれない門番](../../scenarios/QUEST_CATALOG.md#q071-止まれない門番)：鉄胎の機関廟・地下1層。
 
-[q072 油の洗礼](../../scenarios/QUEST_CATALOG.md#q072-油の洗礼)：鉄胎の機関廟・地下1層。
+表示072 / [q072 油の洗礼](../../scenarios/QUEST_CATALOG.md#q072-油の洗礼)：鉄胎の機関廟・地下1層。
 
-[q073 天使の予備腕](../../scenarios/QUEST_CATALOG.md#q073-天使の予備腕)：鉄胎の機関廟・地下1層。
+表示073 / [q073 天使の予備腕](../../scenarios/QUEST_CATALOG.md#q073-天使の予備腕)：鉄胎の機関廟・地下1層。
 
-[q074 祈祷の順番](../../scenarios/QUEST_CATALOG.md#q074-祈祷の順番)：鉄胎の機関廟・地下1層。
+表示074 / [q074 祈祷の順番](../../scenarios/QUEST_CATALOG.md#q074-祈祷の順番)：鉄胎の機関廟・地下1層。
 
-[q075 無給の聖者](../../scenarios/QUEST_CATALOG.md#q075-無給の聖者)：鉄胎の機関廟・地下1層。
+表示075 / [q075 無給の聖者](../../scenarios/QUEST_CATALOG.md#q075-無給の聖者)：鉄胎の機関廟・地下1層。
 
-[q076 鉄の子守歌](../../scenarios/QUEST_CATALOG.md#q076-鉄の子守歌)：鉄胎の機関廟・地下2層。
+表示076 / [q076 鉄の子守歌](../../scenarios/QUEST_CATALOG.md#q076-鉄の子守歌)：鉄胎の機関廟・地下2層。
 
-[q077 聖痕の配線](../../scenarios/QUEST_CATALOG.md#q077-聖痕の配線)：鉄胎の機関廟・地下2層。
+表示077 / [q077 聖痕の配線](../../scenarios/QUEST_CATALOG.md#q077-聖痕の配線)：鉄胎の機関廟・地下2層。
 
-[q078 部品の記憶](../../scenarios/QUEST_CATALOG.md#q078-部品の記憶)：鉄胎の機関廟・地下2層。
+表示078 / [q078 部品の記憶](../../scenarios/QUEST_CATALOG.md#q078-部品の記憶)：鉄胎の機関廟・地下2層。
 
-[q079 九十九回の再起動](../../scenarios/QUEST_CATALOG.md#q079-九十九回の再起動)：鉄胎の機関廟・地下2層。
+表示079 / [q079 九十九回の再起動](../../scenarios/QUEST_CATALOG.md#q079-九十九回の再起動)：鉄胎の機関廟・地下2層。
 
-[q080 鉄胎の継承](../../scenarios/QUEST_CATALOG.md#q080-鉄胎の継承)：鉄胎の機関廟・地下2層・鉄胎の機関廟・地下1層。
+表示080 / [q080 鉄胎の継承](../../scenarios/QUEST_CATALOG.md#q080-鉄胎の継承)：鉄胎の機関廟・地下2層・鉄胎の機関廟・地下1層。
 
-[q171 足音を持ち帰る](../../scenarios/QUEST_CATALOG.md#q171-足音を持ち帰る)：鉄胎の機関廟・地下1層。
+表示171 / [q171 足音を持ち帰る](../../scenarios/QUEST_CATALOG.md#q171-足音を持ち帰る)：鉄胎の機関廟・地下1層。
 
-[q172 名前を返す井戸](../../scenarios/QUEST_CATALOG.md#q172-名前を返す井戸)：鉄胎の機関廟・地下1層。
+表示172 / [q172 名前を返す井戸](../../scenarios/QUEST_CATALOG.md#q172-名前を返す井戸)：鉄胎の機関廟・地下1層。
 
-[q173 夜だけ帰る兵士](../../scenarios/QUEST_CATALOG.md#q173-夜だけ帰る兵士)：鉄胎の機関廟・地下1層。
+表示173 / [q173 夜だけ帰る兵士](../../scenarios/QUEST_CATALOG.md#q173-夜だけ帰る兵士)：鉄胎の機関廟・地下1層。
 
-[q174 泣かない葬列](../../scenarios/QUEST_CATALOG.md#q174-泣かない葬列)：鉄胎の機関廟・地下1層。
+表示174 / [q174 泣かない葬列](../../scenarios/QUEST_CATALOG.md#q174-泣かない葬列)：鉄胎の機関廟・地下1層。
 
-[q175 狩人を待つ獣](../../scenarios/QUEST_CATALOG.md#q175-狩人を待つ獣)：鉄胎の機関廟・地下1層。
+表示175 / [q175 狩人を待つ獣](../../scenarios/QUEST_CATALOG.md#q175-狩人を待つ獣)：鉄胎の機関廟・地下1層。
 
-[q176 神様の忘れ物](../../scenarios/QUEST_CATALOG.md#q176-神様の忘れ物)：鉄胎の機関廟・地下2層。
+表示176 / [q176 神様の忘れ物](../../scenarios/QUEST_CATALOG.md#q176-神様の忘れ物)：鉄胎の機関廟・地下2層。
 
-[q177 嘘をつかない鏡](../../scenarios/QUEST_CATALOG.md#q177-嘘をつかない鏡)：鉄胎の機関廟・地下2層。
+表示177 / [q177 嘘をつかない鏡](../../scenarios/QUEST_CATALOG.md#q177-嘘をつかない鏡)：鉄胎の機関廟・地下2層。
 
-[q178 扉の向こうの明日](../../scenarios/QUEST_CATALOG.md#q178-扉の向こうの明日)：鉄胎の機関廟・地下2層。
+表示178 / [q178 扉の向こうの明日](../../scenarios/QUEST_CATALOG.md#q178-扉の向こうの明日)：鉄胎の機関廟・地下2層。
 
-[q179 墓を増やす庭](../../scenarios/QUEST_CATALOG.md#q179-墓を増やす庭)：鉄胎の機関廟・地下2層。
+表示179 / [q179 墓を増やす庭](../../scenarios/QUEST_CATALOG.md#q179-墓を増やす庭)：鉄胎の機関廟・地下2層。
 
-[q180 最後の怪談](../../scenarios/QUEST_CATALOG.md#q180-最後の怪談)：鉄胎の機関廟・地下2層。
+表示180 / [q180 最後の怪談](../../scenarios/QUEST_CATALOG.md#q180-最後の怪談)：鉄胎の機関廟・地下2層。
 
 現地調査「動力の届く範囲」／q080：門扉系統への通電を確認した。動力を分配する操作と、中枢の命令を承認する署名は異なる手続きとして調べる。
 

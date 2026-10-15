@@ -21,8 +21,8 @@ const escape=g=>{const random=g.random;g.random=()=>0;assert.ok(g.dispatch({type
 const adjacent=(g,p)=>[[p.x-1,p.y,'east'],[p.x+1,p.y,'west'],[p.x,p.y-1,'south'],[p.x,p.y+1,'north']].find(([x,y])=>g.walkable(g.data.maps[p.map],x,y));
 const provision=g=>assert.ok(act(g,'garden','supplies'));
 
-test('all thirteen destinations are usable, preserve 200 quests and keep new areas separate from abyss effects',()=>{
-  const g=newGame();assert.equal(projectGame(g).dungeons.length,13);assert.equal(Object.keys(data.quests).length,200);
+test('all thirteen destinations are usable, preserve registered quests and keep new areas separate from abyss effects',()=>{
+  const g=newGame();assert.equal(projectGame(g).dungeons.length,13);assert.equal(Object.keys(data.quests).length,data.questOrder.ids.length);
   for(const dungeon of Object.values(data.dungeons)){
     assert.ok(g.dispatch({type:'travel',dungeon:dungeon.id}));assert.equal(g.state.dungeons.active.id,dungeon.id);roundtrip(g);g.returnTown();
   }

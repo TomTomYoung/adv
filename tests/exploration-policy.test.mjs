@@ -104,7 +104,7 @@ test('plain narration preserves quoted and named speech, copulas, verb classes a
  const named2={op:'say',speaker:'リネ',text:'お帰りなさい。無事でよかったです。'};assert.deepEqual(editNarration(named2),named2);
 });
 
-test('all 200 distributed quests use idempotent plain narration without changing VM operands',()=>{
+test('all registered distributed quests use idempotent plain narration without changing VM operands',()=>{
  let checked=0;
  function walk(v,key=''){
   if(typeof v==='string'&&proseKeys.has(key)){
@@ -113,7 +113,7 @@ test('all 200 distributed quests use idempotent plain narration without changing
   }else if(Array.isArray(v))v.forEach(x=>walk(x,key));
   else if(v&&typeof v==='object')for(const[k,x]of Object.entries(v))if(!(v.op==='say'&&(v.name||v.speaker||v.character)&&k==='text'))walk(x,k);
  }
- assert.equal(Object.keys(data.quests).length,200);for(const q of Object.values(data.quests)){assert.deepEqual(editNarration(q),q);walk(q);}
+ assert.equal(Object.keys(data.quests).length,data.questOrder.ids.length);for(const q of Object.values(data.quests)){assert.deepEqual(editNarration(q),q);walk(q);}
  for(const s of Object.values(data.scripts))walk(s);assert.ok(checked>15000);
 });
 

@@ -1,6 +1,6 @@
 # 鏡沈みの礼拝堂
 
-更新日: 2026-10-14。作品版1.25.0。ID `region_4`、推奨Lv.4、2区画。
+更新日: 2026-10-15。作品版1.25.0。ID `region_4`、推奨Lv.4、2区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 
@@ -72,45 +72,45 @@
 
 配布イベントがこの迷宮のマップに配置されている依頼です。q001〜q004は物語内の出発・到着を実移動へ接続しています。q005以降は受付や訪問地点の配置を含み、全場面が別々の実座標に接続されているわけではありません。装置を動かしただけで証拠や結末を自動確定しません。
 
-[q031 遅れる祈り](../../scenarios/QUEST_CATALOG.md#q031-遅れる祈り)：鏡沈みの礼拝堂・地下1層。
+表示031 / [q031 遅れる祈り](../../scenarios/QUEST_CATALOG.md#q031-遅れる祈り)：鏡沈みの礼拝堂・地下1層。
 
-[q032 片目の聖像](../../scenarios/QUEST_CATALOG.md#q032-片目の聖像)：鏡沈みの礼拝堂・地下1層。
+表示032 / [q032 片目の聖像](../../scenarios/QUEST_CATALOG.md#q032-片目の聖像)：鏡沈みの礼拝堂・地下1層。
 
-[q033 映らない巡礼者](../../scenarios/QUEST_CATALOG.md#q033-映らない巡礼者)：鏡沈みの礼拝堂・地下1層。
+表示033 / [q033 映らない巡礼者](../../scenarios/QUEST_CATALOG.md#q033-映らない巡礼者)：鏡沈みの礼拝堂・地下1層。
 
-[q034 赦しの領収書](../../scenarios/QUEST_CATALOG.md#q034-赦しの領収書)：鏡沈みの礼拝堂・地下1層。
+表示034 / [q034 赦しの領収書](../../scenarios/QUEST_CATALOG.md#q034-赦しの領収書)：鏡沈みの礼拝堂・地下1層。
 
-[q035 鏡の向こうの施し](../../scenarios/QUEST_CATALOG.md#q035-鏡の向こうの施し)：鏡沈みの礼拝堂・地下1層。
+表示035 / [q035 鏡の向こうの施し](../../scenarios/QUEST_CATALOG.md#q035-鏡の向こうの施し)：鏡沈みの礼拝堂・地下1層。
 
-[q036 七番目の歌声](../../scenarios/QUEST_CATALOG.md#q036-七番目の歌声)：鏡沈みの礼拝堂・地下2層。
+表示036 / [q036 七番目の歌声](../../scenarios/QUEST_CATALOG.md#q036-七番目の歌声)：鏡沈みの礼拝堂・地下2層。
 
-[q037 夜だけの告解](../../scenarios/QUEST_CATALOG.md#q037-夜だけの告解)：鏡沈みの礼拝堂・地下2層。
+表示037 / [q037 夜だけの告解](../../scenarios/QUEST_CATALOG.md#q037-夜だけの告解)：鏡沈みの礼拝堂・地下2層。
 
-[q038 聖水の沈殿](../../scenarios/QUEST_CATALOG.md#q038-聖水の沈殿)：鏡沈みの礼拝堂・地下2層。
+表示038 / [q038 聖水の沈殿](../../scenarios/QUEST_CATALOG.md#q038-聖水の沈殿)：鏡沈みの礼拝堂・地下2層。
 
-[q039 顔を売る仮面](../../scenarios/QUEST_CATALOG.md#q039-顔を売る仮面)：鏡沈みの礼拝堂・地下2層・鏡沈みの礼拝堂・地下1層。
+表示039 / [q039 顔を売る仮面](../../scenarios/QUEST_CATALOG.md#q039-顔を売る仮面)：鏡沈みの礼拝堂・地下2層・鏡沈みの礼拝堂・地下1層。
 
-[q040 砕けない祈り](../../scenarios/QUEST_CATALOG.md#q040-砕けない祈り)：鏡沈みの礼拝堂・地下2層。
+表示040 / [q040 砕けない祈り](../../scenarios/QUEST_CATALOG.md#q040-砕けない祈り)：鏡沈みの礼拝堂・地下2層。
 
-[q131 逆向きの足跡](../../scenarios/QUEST_CATALOG.md#q131-逆向きの足跡)：鏡沈みの礼拝堂・地下1層。
+表示131 / [q131 逆向きの足跡](../../scenarios/QUEST_CATALOG.md#q131-逆向きの足跡)：鏡沈みの礼拝堂・地下1層。
 
-[q132 宝箱の底の椅子](../../scenarios/QUEST_CATALOG.md#q132-宝箱の底の椅子)：鏡沈みの礼拝堂・地下1層。
+表示132 / [q132 宝箱の底の椅子](../../scenarios/QUEST_CATALOG.md#q132-宝箱の底の椅子)：鏡沈みの礼拝堂・地下1層。
 
-[q133 一段足りない階段](../../scenarios/QUEST_CATALOG.md#q133-一段足りない階段)：鏡沈みの礼拝堂・地下1層。
+表示133 / [q133 一段足りない階段](../../scenarios/QUEST_CATALOG.md#q133-一段足りない階段)：鏡沈みの礼拝堂・地下1層。
 
-[q134 敗者の宝物庫](../../scenarios/QUEST_CATALOG.md#q134-敗者の宝物庫)：鏡沈みの礼拝堂・地下1層。
+表示134 / [q134 敗者の宝物庫](../../scenarios/QUEST_CATALOG.md#q134-敗者の宝物庫)：鏡沈みの礼拝堂・地下1層。
 
-[q135 水底の朝食](../../scenarios/QUEST_CATALOG.md#q135-水底の朝食)：鏡沈みの礼拝堂・地下1層。
+表示135 / [q135 水底の朝食](../../scenarios/QUEST_CATALOG.md#q135-水底の朝食)：鏡沈みの礼拝堂・地下1層。
 
-[q136 翻訳しない扉](../../scenarios/QUEST_CATALOG.md#q136-翻訳しない扉)：鏡沈みの礼拝堂・地下2層。
+表示136 / [q136 翻訳しない扉](../../scenarios/QUEST_CATALOG.md#q136-翻訳しない扉)：鏡沈みの礼拝堂・地下2層。
 
-[q137 燃え残る図書館](../../scenarios/QUEST_CATALOG.md#q137-燃え残る図書館)：鏡沈みの礼拝堂・地下2層。
+表示137 / [q137 燃え残る図書館](../../scenarios/QUEST_CATALOG.md#q137-燃え残る図書館)：鏡沈みの礼拝堂・地下2層。
 
-[q138 行き止まりの探検家](../../scenarios/QUEST_CATALOG.md#q138-行き止まりの探検家)：鏡沈みの礼拝堂・地下2層。
+表示138 / [q138 行き止まりの探検家](../../scenarios/QUEST_CATALOG.md#q138-行き止まりの探検家)：鏡沈みの礼拝堂・地下2層。
 
-[q139 ふたつの出口](../../scenarios/QUEST_CATALOG.md#q139-ふたつの出口)：鏡沈みの礼拝堂・地下2層。
+表示139 / [q139 ふたつの出口](../../scenarios/QUEST_CATALOG.md#q139-ふたつの出口)：鏡沈みの礼拝堂・地下2層。
 
-[q140 迷宮の休業日](../../scenarios/QUEST_CATALOG.md#q140-迷宮の休業日)：鏡沈みの礼拝堂・地下2層。
+表示140 / [q140 迷宮の休業日](../../scenarios/QUEST_CATALOG.md#q140-迷宮の休業日)：鏡沈みの礼拝堂・地下2層。
 
 現地調査「仮面を運ぶ鏡路」／q039：鏡を経由する転移を確認した。仮面の移動を調べる際は、歩行経路と鏡の接続先を照合する。所有者や運搬者の特定は証言から行う。
 

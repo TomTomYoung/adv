@@ -1,3 +1,4 @@
+import {orderedQuests} from '../core/quest-order.js';
 import {frontlineState} from '../core/frontline-lifecycle.js';
 import {projectFrontline,frontlineItemView,projectFrontFormation} from './frontline-projection.js';
 import {isFrontline} from '../core/battle-frontline.js';
@@ -38,7 +39,7 @@ export function projectGame(engine){
   const fieldNotes=projectQuestNotes(d,s);
   const canEnter=id=>!dungeonEntryReason(d,s,id);
 
-  const quests=Object.values(d.quests).map(q=>({id:q.id,...projectQuestNavigation(d,s,q),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:q.number,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
+  const quests=orderedQuests(d).map((q,index)=>({id:q.id,...projectQuestNavigation(d,s,q),fieldNotes:fieldNotes.filter(n=>n.quest===q.id),fieldLinks:projectQuestLinks(d,s,q.id),number:index+1,title:q.title,client:q.client,brief:q.brief,region:q.region,regionName:d.regions.find(r=>r.id===q.region).name,recommendedLevel:q.recommendedLevel,stage:s.quests[q.id].stage,evidenceCount:s.quests[q.id].evidence.length,evidenceTotal:routeLocations(q).filter(l=>l.role!=='decision').length,unlocked:engine.unlocked(q),unlockHint:q.unlockHint,tracked:s.trackedQuest===q.id,locations:clone(routeLocations(q)),outcome:s.quests[q.id].outcome?clone((s.flags.legacyStoryRoutes?.[q.id]?q.legacyOutcomes??q.outcomes:q.outcomes)[s.quests[q.id].outcome]):null}));
   let dialog=null;
   if(s.waiting?.type==='presentation')dialog={...clone(s.presentation.message??{text:'',speaker:''}),type:'presentation'};
   if(['text','battle_result'].includes(s.waiting?.type))dialog={type:'text',text:s.waiting.text,speaker:s.waiting.speaker,...(s.waiting.speakerId?{speakerId:s.waiting.speakerId}:{})};
