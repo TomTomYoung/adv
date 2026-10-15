@@ -14217,6 +14217,930 @@ export const referenceData={
       "id": "q200.flow.visit"
     },
     {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_oilstore"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q201.v11.visit"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q201.v11.visit"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q202.v11.visit"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q202.v11.visit"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_oilstore"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q203.v11.visit"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q203.v11.visit"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q204.v11.visit"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q204.v11.visit"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q205.v11.visit"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_kilns"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q205.v11.visit"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q206.v11.visit"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q206.v11.visit"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q207.v11.visit"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q207.v11.visit"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_relay"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q208.v11.visit"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q208.v11.visit"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f2"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q209.v11.visit"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q209.v11.visit"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f3"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q210.v11.visit"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_last_patrol"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q210.v11.visit"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2,
+        "points",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f1"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2,
+        "points",
+        0,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "q210.v11.visit"
+    },
+    {
       "file": "battle-rewards.json",
       "path": [
         "drops",
@@ -31816,6 +32740,16 @@ export const referenceData={
     "config/quests/q198.events.json",
     "config/quests/q199.events.json",
     "config/quests/q200.events.json",
+    "config/quests/q201.events.json",
+    "config/quests/q202.events.json",
+    "config/quests/q203.events.json",
+    "config/quests/q204.events.json",
+    "config/quests/q205.events.json",
+    "config/quests/q206.events.json",
+    "config/quests/q207.events.json",
+    "config/quests/q208.events.json",
+    "config/quests/q209.events.json",
+    "config/quests/q210.events.json",
     "config/terrain-content.json",
     "config/voxel-content.json",
     "data/actors.json",
@@ -32077,6 +33011,16 @@ export const referenceData={
     "data/quests/q198.json",
     "data/quests/q199.json",
     "data/quests/q200.json",
+    "data/quests/q201.json",
+    "data/quests/q202.json",
+    "data/quests/q203.json",
+    "data/quests/q204.json",
+    "data/quests/q205.json",
+    "data/quests/q206.json",
+    "data/quests/q207.json",
+    "data/quests/q208.json",
+    "data/quests/q209.json",
+    "data/quests/q210.json",
     "data/regions.json",
     "data/scripts/cell-events.json",
     "data/scripts/common.json",
@@ -33824,6 +34768,66 @@ export const referenceData={
         "name": "排水隊",
         "sprite": "sprite_pumpcrew",
         "portrait": "npc_pumpcrew"
+      },
+      "q201_clerk": {
+        "name": "ナヴィア"
+      },
+      "q201_porter": {
+        "name": "エン"
+      },
+      "q202_trainee": {
+        "name": "トマ"
+      },
+      "q202_trainer": {
+        "name": "セナ"
+      },
+      "q203_seller": {
+        "name": "ゲル"
+      },
+      "q203_tester": {
+        "name": "ユハ"
+      },
+      "q204_scribe": {
+        "name": "エイン"
+      },
+      "q204_survivor": {
+        "name": "リュカ"
+      },
+      "q205_pupil": {
+        "name": "ノノ"
+      },
+      "q205_master": {
+        "name": "ダン"
+      },
+      "q206_sister": {
+        "name": "ミナ"
+      },
+      "q206_worker": {
+        "name": "ナギ"
+      },
+      "q207_surveyor": {
+        "name": "オセ"
+      },
+      "q207_assistant": {
+        "name": "ハル"
+      },
+      "q208_keeper": {
+        "name": "メア"
+      },
+      "q208_daughter": {
+        "name": "フユ"
+      },
+      "q209_guard": {
+        "name": "ゼド"
+      },
+      "q209_pupil": {
+        "name": "エル"
+      },
+      "q210_widow": {
+        "name": "スイ"
+      },
+      "q210_maker": {
+        "name": "リト"
       }
     },
     "dungeons": {
@@ -34640,6 +35644,36 @@ export const referenceData={
       },
       "q200": {
         "name": "帰還印の向こう側"
+      },
+      "q201": {
+        "name": "消された休み印"
+      },
+      "q202": {
+        "name": "片耳の合図"
+      },
+      "q203": {
+        "name": "油の底の水"
+      },
+      "q204": {
+        "name": "削れない帰還日"
+      },
+      "q205": {
+        "name": "灰を掻く音"
+      },
+      "q206": {
+        "name": "渡せなかった弁当"
+      },
+      "q207": {
+        "name": "二人で持つ測り竿"
+      },
+      "q208": {
+        "name": "誰のための消灯"
+      },
+      "q209": {
+        "name": "借り物の武勇"
+      },
+      "q210": {
+        "name": "火を待たない人"
       }
     },
     "events": {
@@ -35878,6 +36912,69 @@ export const referenceData={
       },
       "q200_scene": {
         "name": "帰還印の向こう側：帰還印の修理師トワ"
+      },
+      "q201_desk": {
+        "name": "油蔵の記帳台"
+      },
+      "q201_bench": {
+        "name": "交差路の休憩ベンチ"
+      },
+      "q202_entry": {
+        "name": "巡灯路の訓練札前"
+      },
+      "q202_post": {
+        "name": "交差路の合図杭"
+      },
+      "q203_desk": {
+        "name": "油蔵の検品台"
+      },
+      "q203_test": {
+        "name": "煤けた回廊の試験皿"
+      },
+      "q204_shelf": {
+        "name": "納骨所の記録机"
+      },
+      "q204_bench": {
+        "name": "交差路の荷待ち場"
+      },
+      "q205_bench": {
+        "name": "炭焼き窯の作業台"
+      },
+      "q205_ash": {
+        "name": "炭焼き窯の灰溜まり"
+      },
+      "q206_entry": {
+        "name": "巡灯路の差し入れ台"
+      },
+      "q206_rest": {
+        "name": "中継火の休息所脇"
+      },
+      "q207_base": {
+        "name": "最後の巡回路の基準石"
+      },
+      "q207_mark": {
+        "name": "最後の巡回路の測点"
+      },
+      "q208_rest": {
+        "name": "中継広間の小さな追悼台"
+      },
+      "q208_shelf": {
+        "name": "納骨所の私物棚"
+      },
+      "q209_hall": {
+        "name": "煤けた回廊の盾掛け"
+      },
+      "q209_entry": {
+        "name": "巡灯路の帰路札前"
+      },
+      "q210_altar": {
+        "name": "深火の祭壇の手前"
+      },
+      "q210_rest": {
+        "name": "最後の巡回路の道具台"
+      },
+      "q210_entry": {
+        "name": "巡灯路の帰り支度場"
       }
     },
     "cues": {
@@ -44471,6 +45568,426 @@ export const referenceData={
       "x": 8,
       "y": 1,
       "trigger": "interact"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q201_desk",
+      "name": "油蔵の記帳台",
+      "map": "kagaribi_oilstore",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q201_bench",
+      "name": "交差路の休憩ベンチ",
+      "map": "kagaribi_crossroads",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q202_entry",
+      "name": "巡灯路の訓練札前",
+      "map": "kagaribi_f1",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q202_post",
+      "name": "交差路の合図杭",
+      "map": "kagaribi_crossroads",
+      "x": 7,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q203_desk",
+      "name": "油蔵の検品台",
+      "map": "kagaribi_oilstore",
+      "x": 9,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q203_test",
+      "name": "煤けた回廊の試験皿",
+      "map": "kagaribi_f2",
+      "x": 3,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q204_shelf",
+      "name": "納骨所の記録机",
+      "map": "kagaribi_ossuary",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q204_bench",
+      "name": "交差路の荷待ち場",
+      "map": "kagaribi_crossroads",
+      "x": 9,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q205_bench",
+      "name": "炭焼き窯の作業台",
+      "map": "kagaribi_kilns",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q205_ash",
+      "name": "炭焼き窯の灰溜まり",
+      "map": "kagaribi_kilns",
+      "x": 11,
+      "y": 5,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q206_entry",
+      "name": "巡灯路の差し入れ台",
+      "map": "kagaribi_f1",
+      "x": 7,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q206_rest",
+      "name": "中継火の休息所脇",
+      "map": "kagaribi_relay",
+      "x": 5,
+      "y": 5,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q207_base",
+      "name": "最後の巡回路の基準石",
+      "map": "kagaribi_last_patrol",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q207_mark",
+      "name": "最後の巡回路の測点",
+      "map": "kagaribi_last_patrol",
+      "x": 9,
+      "y": 7,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q208_rest",
+      "name": "中継広間の小さな追悼台",
+      "map": "kagaribi_relay",
+      "x": 9,
+      "y": 5,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q208_shelf",
+      "name": "納骨所の私物棚",
+      "map": "kagaribi_ossuary",
+      "x": 7,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q209_hall",
+      "name": "煤けた回廊の盾掛け",
+      "map": "kagaribi_f2",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q209_entry",
+      "name": "巡灯路の帰路札前",
+      "map": "kagaribi_f1",
+      "x": 11,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        0
+      ],
+      "id": "q210_altar",
+      "name": "深火の祭壇の手前",
+      "map": "kagaribi_f3",
+      "x": 9,
+      "y": 7,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        1
+      ],
+      "id": "q210_rest",
+      "name": "最後の巡回路の道具台",
+      "map": "kagaribi_last_patrol",
+      "x": 9,
+      "y": 9,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
+    },
+    {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2,
+        "points",
+        0
+      ],
+      "eventPath": [
+        "events",
+        2
+      ],
+      "id": "q210_entry",
+      "name": "巡灯路の帰り支度場",
+      "map": "kagaribi_f1",
+      "x": 13,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "trigger": "interact"
     }
   ],
   "refs": [
@@ -45365,6 +46882,12 @@ export const referenceData={
     "flags.questResume.q194",
     "flags.questResume.q195",
     "flags.questResume.q199",
+    "flags.questResume.q201",
+    "flags.questResume.q202",
+    "flags.questResume.q203",
+    "flags.questResume.q205",
+    "flags.questResume.q208",
+    "flags.questResume.q210",
     "flags.region_10_f1_door_open",
     "flags.region_10_f2_door_open",
     "flags.region_1_f1_door_open",
@@ -45890,6 +47413,26 @@ export const referenceData={
     "quests.q199.stage",
     "quests.q200.outcome",
     "quests.q200.stage",
+    "quests.q201.outcome",
+    "quests.q201.stage",
+    "quests.q202.outcome",
+    "quests.q202.stage",
+    "quests.q203.outcome",
+    "quests.q203.stage",
+    "quests.q204.outcome",
+    "quests.q204.stage",
+    "quests.q205.outcome",
+    "quests.q205.stage",
+    "quests.q206.outcome",
+    "quests.q206.stage",
+    "quests.q207.outcome",
+    "quests.q207.stage",
+    "quests.q208.outcome",
+    "quests.q208.stage",
+    "quests.q209.outcome",
+    "quests.q209.stage",
+    "quests.q210.outcome",
+    "quests.q210.stage",
     "stories.q001.scene",
     "stories.q001.values.afraid",
     "stories.q001.values.darkness",
@@ -45996,6 +47539,75 @@ export const referenceData={
     "stories.q010.values.nearSaved",
     "stories.q010.values.pumpHandover",
     "stories.q010.values.testimony",
+    "stories.q201.scene",
+    "stories.q201.values.advance",
+    "stories.q201.values.heard",
+    "stories.q201.values.noteAt",
+    "stories.q201.values.partyAt",
+    "stories.q201.values.record",
+    "stories.q201.values.signed",
+    "stories.q202.scene",
+    "stories.q202.values.disclosed",
+    "stories.q202.values.method",
+    "stories.q202.values.plateAt",
+    "stories.q202.values.tested",
+    "stories.q202.values.traineeAt",
+    "stories.q203.scene",
+    "stories.q203.values.bottleAt",
+    "stories.q203.values.burned",
+    "stories.q203.values.disposal",
+    "stories.q203.values.portion",
+    "stories.q203.values.sample",
+    "stories.q203.values.tested",
+    "stories.q204.scene",
+    "stories.q204.values.consent",
+    "stories.q204.values.copyAt",
+    "stories.q204.values.record",
+    "stories.q204.values.statementAt",
+    "stories.q205.scene",
+    "stories.q205.values.future",
+    "stories.q205.values.plateAt",
+    "stories.q205.values.recovered",
+    "stories.q205.values.told",
+    "stories.q206.scene",
+    "stories.q206.values.delivery",
+    "stories.q206.values.explained",
+    "stories.q206.values.mealAt",
+    "stories.q206.values.partyAt",
+    "stories.q206.values.resignationTold",
+    "stories.q206.values.workerAt",
+    "stories.q207.scene",
+    "stories.q207.values.assistantAt",
+    "stories.q207.values.filing",
+    "stories.q207.values.joint",
+    "stories.q207.values.partyAt",
+    "stories.q207.values.remeasured",
+    "stories.q207.values.sheetAt",
+    "stories.q208.scene",
+    "stories.q208.values.choice",
+    "stories.q208.values.installed",
+    "stories.q208.values.lampLit",
+    "stories.q208.values.nameVisible",
+    "stories.q208.values.namecardAt",
+    "stories.q208.values.partyAt",
+    "stories.q208.values.screenAt",
+    "stories.q209.scene",
+    "stories.q209.values.account",
+    "stories.q209.values.admitted",
+    "stories.q209.values.guardAt",
+    "stories.q209.values.pupilAt",
+    "stories.q209.values.reportAt",
+    "stories.q209.values.returned",
+    "stories.q209.values.witnessed",
+    "stories.q210.scene",
+    "stories.q210.values.boxAt",
+    "stories.q210.values.boxReturned",
+    "stories.q210.values.consent",
+    "stories.q210.values.decision",
+    "stories.q210.values.home",
+    "stories.q210.values.letterAt",
+    "stories.q210.values.partyAt",
+    "stories.q210.values.widowAt",
     "vars.compromise",
     "vars.contract",
     "vars.informed",
@@ -56262,6 +57874,394 @@ export const referenceData={
       "name": "帰還印の向こう側",
       "file": "data/quests/q200.json"
     },
+    "q201.v11.entry": {
+      "name": "ナヴィアは帳面の一行だけに乾いた布を当てていた。「数字は合っています。休み印だけ",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.witness": {
+      "name": "エンは指に巻いた布をほどいた。「休めと言ったのは向こうです。怠けたことにするなら",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.reason": {
+      "name": "覚え書きを見たナヴィアは、帳面を隠さなかった。「休みを載せると欠勤分が引かれる。",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.return": {
+      "name": "エンの前へ戻った。公簿を直さずにおくなら、仕事の証拠は本人の手に残す必要がある。",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.end.corrected": {
+      "name": "ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エ",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.end.advanced": {
+      "name": "ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.end.private": {
+      "name": "エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.visit": {
+      "name": "消された休み印",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.reason.advance.shortage": {
+      "name": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここ",
+      "file": "data/quests/q201.json"
+    },
+    "q201.v11.reason.advance.resume": {
+      "name": "20Gを使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q201.json"
+    },
+    "q202.v11.entry": {
+      "name": "トマは声をかけるたび、右耳をこちらへ向けた。「聞こえなかった、と言うと、聞く気が",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.lesson": {
+      "name": "トマが左耳のことを話すと、セナは鐘を置いた。「では、どこからなら届くかを調べよう",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.result": {
+      "name": "左後方の声には応答がなかった。正面の声と手の合図には、トマは一度ずつ答えた。「目",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.end.paired": {
+      "name": "セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっ",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.end.visual": {
+      "name": "トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.end.retrain": {
+      "name": "訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかっ",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.visit": {
+      "name": "片耳の合図",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.result.pair.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q202.json"
+    },
+    "q202.v11.result.pair.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q202.json"
+    },
+    "q203.v11.entry": {
+      "name": "ゲルは封をした小瓶を両手で包んでいた。「水を売ったと言われたら、次はありません」",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.inspect": {
+      "name": "ユハは瓶を台に置き、揺れがおさまるのを待った。底に透明な一目盛り、その上に油が二",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.portion": {
+      "name": "試験皿に上澄み二目盛りを分けた。瓶には底の水が一目盛り残っている。ユハは一本の松",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.result": {
+      "name": "上澄み一目盛りは燃えた。試験皿に油が一目盛り、瓶に水が一目盛り残る。「使える油も",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.return": {
+      "name": "ゲルは戻ってきた瓶を見た。底の水は、振らなければ隠れない。燃焼試験をしていないこ",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.limited": {
+      "name": "瓶の中に残ったのは水だけだ。ゲルは一目盛りの水を光へかざした。「燃えた分だけの話",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.end.returned": {
+      "name": "ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.end.limited": {
+      "name": "一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはし",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.end.public": {
+      "name": "水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.visit": {
+      "name": "油の底の水",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.portion.burn.shortage": {
+      "name": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q203.json"
+    },
+    "q203.v11.portion.burn.resume": {
+      "name": "予備灯油1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q203.json"
+    },
+    "q204.v11.entry": {
+      "name": "エインは削り刀を帳面の脇へ置いた。「この名の人が荷を運んでいるそうです。間違いな",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.meeting": {
+      "name": "写しを見たリュカは、自分の名を指した。「生きてる。でも、居場所は書かないで」。事",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.report": {
+      "name": "リュカは自分で署名し、証言を渡した。働いている区画は本文に書かない。「帳面を直し",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.filing": {
+      "name": "エインの前に戻った。削り刀はまだ机の上にある。元の未帰還報告を残し、何が後から確",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.pending": {
+      "name": "署名を求めず、写しを持って戻った。元の報告に死亡確認がないことは、この机の書類だ",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.end.addendum": {
+      "name": "エインは古い欄を削らず、本人の同意を得た生存確認を追記した。所在は載せなかった。",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.end.sealed": {
+      "name": "証言は担当書記だけが開ける封に収められ、公開欄は死亡未確認へ訂正された。生存確認",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.end.pending": {
+      "name": "追悼欄には、元の報告が未帰還であり、死亡確認をしていないと追記された。リュカの生",
+      "file": "data/quests/q204.json"
+    },
+    "q204.v11.visit": {
+      "name": "削れない帰還日",
+      "file": "data/quests/q204.json"
+    },
+    "q205.v11.entry": {
+      "name": "ノノは配合板の輪郭を指で描いた。「あれを見ながらなら、同じように焼ける」。ダンは",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.ash": {
+      "name": "灰虫が巣材を掻き寄せている。その下に、角が焦げた配合板が見える。虫を退けて拾うか",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.recovered": {
+      "name": "配合板を手元へ引き寄せた。裏には「今の木では崩れる」とダンの字で書かれていた。古",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.talk": {
+      "name": "ダンは板の裏を見て、捨てたことを認めた。「同じように焼くな。俺がそれで失敗した」",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.end.revise": {
+      "name": "ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.end.preserve": {
+      "name": "板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使え",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.end.stop": {
+      "name": "ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.visit": {
+      "name": "灰を掻く音",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.ash.hook.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q205.json"
+    },
+    "q205.v11.ash.hook.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q205.json"
+    },
+    "q206.v11.entry": {
+      "name": "ミナは包みの結び目を一つ緩めた。「手袋でも開けられるように」。弟がまだ勤務中だと",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.offer": {
+      "name": "ナギは包みに触れなかった。「辞めたんです。もらったら、明日も行くってことになる」",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.gift": {
+      "name": "「続けろとは言ってなかった？」。ミナが実際に言った頼みを伝えると、ナギは結び目の",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.home": {
+      "name": "二人でミナの前へ戻った。包みはまだ探索隊が持っている。ナギが先に口を開いた。「明",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.returned": {
+      "name": "弁当を持ち帰ると、ミナは包みの重さを受け止めるように手を出した。ナギの退職理由を",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.end.gift": {
+      "name": "弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えた",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.end.together": {
+      "name": "ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけ",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.end.returned": {
+      "name": "弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝",
+      "file": "data/quests/q206.json"
+    },
+    "q206.v11.visit": {
+      "name": "渡せなかった弁当",
+      "file": "data/quests/q206.json"
+    },
+    "q207.v11.entry": {
+      "name": "オセは測り竿の端を自分の足に押しつけていた。「場所が悪かっただけだ」。ハルは基準",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.calibrated": {
+      "name": "オセ一人では竿の先が揺れた。ハルが支えると基準石の目盛りに合った。「数字は、手の",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.measure": {
+      "name": "測点へ着いた。ハルが竿の先端を支え、オセが目盛りを読む準備をする。前の紙はオセの",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.result": {
+      "name": "測り直した値はハルの旧値と一致した。オセの紙の狭い値は採用できない。「図面には二",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.end.joint": {
+      "name": "オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.end.withdrawn": {
+      "name": "オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面と",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.end.unverified": {
+      "name": "二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証",
+      "file": "data/quests/q207.json"
+    },
+    "q207.v11.visit": {
+      "name": "二人で持つ測り竿",
+      "file": "data/quests/q207.json"
+    },
+    "q208.v11.entry": {
+      "name": "メアは小灯の横へ父親の名札を立てていた。「仕事の帰りに、読めるようにしたんです」",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.request": {
+      "name": "フユは、父が同僚を助けたことを否定しなかった。「でも、家でされたことまで、それで",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.decide": {
+      "name": "メアに申し出を伝えると、彼女は小灯の位置を見た。「ここを通るたび、礼をしてもらっ",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.return": {
+      "name": "フユの前へ戻った。名札と覆いを持っている。灯を囲む仲間の記憶まで消す約束はしてい",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.end.screen": {
+      "name": "覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めな",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.end.off": {
+      "name": "メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.end.private": {
+      "name": "名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てると",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.visit": {
+      "name": "誰のための消灯",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.decide.screen.shortage": {
+      "name": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてか",
+      "file": "data/quests/q208.json"
+    },
+    "q208.v11.decide.screen.resume": {
+      "name": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q208.json"
+    },
+    "q209.v11.entry": {
+      "name": "エルは盾の傷を指して「この一撃で倒したんですよね」と言った。ゼドは盾を裏返した。",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.challenge": {
+      "name": "近くをうろつく灰蝋の魔物に探索隊が対処し、ゼドとエルは退路側から手順を見ることに",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.witness": {
+      "name": "今回の魔物を退けた。エルは、探索隊が戦い、ゼドが退路側に立っていたと分けて記した",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.home": {
+      "name": "ゼドとエルを伴って巡灯路へ戻った。途中の戦いがあれば探索隊の戦績であり、過去の噂",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.end.battle": {
+      "name": "エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.end.escort": {
+      "name": "ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.end.limited": {
+      "name": "エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された",
+      "file": "data/quests/q209.json"
+    },
+    "q209.v11.visit": {
+      "name": "借り物の武勇",
+      "file": "data/quests/q209.json"
+    },
+    "q210.v11.entry": {
+      "name": "スイは夫への手紙を畳み直していた。「戻るとは、誰も確かめていないんでしょう。でも",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.ritual": {
+      "name": "スイは「戻ってくる合図にしないなら」とうなずいた。使うのは探索隊の普通の松明で、",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.ready": {
+      "name": "スイは手紙を懐へ入れた。「箱を取りに行きます」。それは夫のことを忘れる約束ではな",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.box": {
+      "name": "リトは箱の蓋を一度開けて見せた。「直したのは蝶番だけです」。スイは開閉する音を聞",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.packed": {
+      "name": "箱はスイの手に戻った。手紙をしまうと決めた場合は、自分で中へ納める。それ以外なら",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.home": {
+      "name": "巡灯路の帰り支度場へ着いた。スイは自分の箱を置き、手袋を直した。「今日は帰ります",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.end.letter": {
+      "name": "スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明では",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.end.ritual": {
+      "name": "普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.end.hope": {
+      "name": "スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.visit": {
+      "name": "火を待たない人",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.ritual.light.shortage": {
+      "name": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから",
+      "file": "data/quests/q210.json"
+    },
+    "q210.v11.ritual.light.resume": {
+      "name": "予備灯油1個を使う作業の続きだ。準備を確かめよう。",
+      "file": "data/quests/q210.json"
+    },
     "voxel.shaft.exit.v1": {
       "name": "voxel.shaft.exit.v1",
       "file": "config/voxel-content.json"
@@ -62011,6 +64011,174 @@ export const referenceData={
         0
       ],
       "id": "q200_scene"
+    },
+    "events/q201_desk": {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q201_desk"
+    },
+    "events/q201_bench": {
+      "file": "quests/q201.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q201_bench"
+    },
+    "events/q202_entry": {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q202_entry"
+    },
+    "events/q202_post": {
+      "file": "quests/q202.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q202_post"
+    },
+    "events/q203_desk": {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q203_desk"
+    },
+    "events/q203_test": {
+      "file": "quests/q203.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q203_test"
+    },
+    "events/q204_shelf": {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q204_shelf"
+    },
+    "events/q204_bench": {
+      "file": "quests/q204.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q204_bench"
+    },
+    "events/q205_bench": {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q205_bench"
+    },
+    "events/q205_ash": {
+      "file": "quests/q205.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q205_ash"
+    },
+    "events/q206_entry": {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q206_entry"
+    },
+    "events/q206_rest": {
+      "file": "quests/q206.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q206_rest"
+    },
+    "events/q207_base": {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q207_base"
+    },
+    "events/q207_mark": {
+      "file": "quests/q207.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q207_mark"
+    },
+    "events/q208_rest": {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q208_rest"
+    },
+    "events/q208_shelf": {
+      "file": "quests/q208.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q208_shelf"
+    },
+    "events/q209_hall": {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q209_hall"
+    },
+    "events/q209_entry": {
+      "file": "quests/q209.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q209_entry"
+    },
+    "events/q210_altar": {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        0
+      ],
+      "id": "q210_altar"
+    },
+    "events/q210_rest": {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        1
+      ],
+      "id": "q210_rest"
+    },
+    "events/q210_entry": {
+      "file": "quests/q210.events.json",
+      "path": [
+        "events",
+        2
+      ],
+      "id": "q210_entry"
     },
     "scripts/q001.wall.q001_empty_west": {
       "file": "quests/q001.events.json",

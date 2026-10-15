@@ -35,14 +35,14 @@ test('unmigrated quest effects remain exact apart from narration, journeys and e
  }
  // New reusable terrain event, not a migrated quest script. Its behavior is covered by cell-catalog.test.mjs.
  assert.deepEqual(data.scripts['cell.poison_step'].commands,[{op:'actor.damage',target:'party',amount:3},{op:'narrate',text:'毒の沼地を踏んだ。'}]);
- for(const [id,q] of Object.entries(quests))if(q.number>10)assert.equal(structureHash(q),before.quests[id],id);
+ for(const [id,q] of Object.entries(quests))if(q.number>10&&q.number<=200)assert.equal(structureHash(q),before.quests[id],id);
  for(const [id,script] of Object.entries(scripts))if(before.scripts[id]&&id!=='cell.poison_step'&&!id.startsWith('q001.')&&!id.startsWith('q003.')&&!id.startsWith('q004.')&&!/^(?:region_[123]_f[12]\.stairs|kagaribi_f[123]\.(?:up|down)|voxel\.)/.test(id))assert.equal(structureHash(script),before.scripts[id],id);
  for(const [map,objects] of Object.entries(before.objects)){
   if(['region_1_f1','region_1_f2','waterworks_shaft'].includes(map))continue;
   const replacedStairs=['kagaribi_f1','kagaribi_f2','kagaribi_f3','region_2_f1','region_2_f2','region_3_f1','region_3_f2'].includes(map);
   // 1.25 adds a route sign and the altar-side shortcut; their interactions are covered by kagaribi-expansion.test.mjs.
   const added={kagaribi_f2:['route_sign'],kagaribi_f3:['altar_latch']};
-  const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest)&&!added[map]?.includes(o.id));
+  const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest)&&!(o.quest&&data.quests[o.quest].number>200)&&!added[map]?.includes(o.id));
   assert.equal(current.length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q003_')&&!id.startsWith('q004_')&&!(replacedStairs&&['stairs','up','down'].includes(id))).length,map);
   // Only the new placement metadata is excluded from this historical script/state baseline.
   for(const {interactionRange,...object} of current)assert.equal(structureHash(object),objects[object.id],`${map}/${object.id}`);

@@ -2,21 +2,23 @@
 
 2026-09-26: [q004の実移動](Q004_WORLD_ROUTE.md)を実装済み。
 
-作品版1.20.0、確認日2026-09-25。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
+作品版1.25.0、確認日2026-10-15。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
 
 ## 本文と人物
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：全200本・629結末の索引。全件に「【ダンジョン名／町名】[場所]：経過」を掲載し、移動・再訪・分岐を概観できます。q001〜q010は個別ページへリンク、q011〜q020は全文、q021〜q200は概要・経過・結末。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：全210本・659結末の索引。全件に「【ダンジョン名／町名】[場所]：経過」を掲載し、移動・再訪・分岐を概観できます。q001〜q010は個別ページへリンク、q011〜q020・q201〜q210は全文、q021〜q200は概要・経過・結末。
 
 [quests/README.md](quests/README.md)：q001〜q010の個別ページ一覧。本文・選択後の処理・イベントID・場所・分岐・結末を集約。q003〜q010には人物と証拠の所在、行為ごとの条件・費用・状態変化、資材不足時の再開、編集時の確認事項も掲載します。
 
-[CHARACTERS.md](CHARACTERS.md)：36人のNPC・肖像、依頼人索引。仲間の編成は [COMPANION_CATALOG.md](../battle/COMPANION_CATALOG.md)。
+[CHARACTERS.md](CHARACTERS.md)：56人のNPC（36人に専用画像）、依頼人索引。仲間の編成は [COMPANION_CATALOG.md](../battle/COMPANION_CATALOG.md)。
+
+[KAGARIBI_TEN_QUESTS.md](KAGARIBI_TEN_QUESTS.md)：篝火迷宮の追加10編。人物の動機・固定過去・介入・結末・編集元。
 
 ## 設計と実行
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：モデルの適用範囲、正本、生成手順、常体化と探索到達。
 
-[SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：q001〜q010の人物・物品・所在・行為と結末条件。
+[SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：q001〜q010・q201〜q210の人物・物品・所在・行為と結末条件。
 
 [EXPLORATION_AND_PROSE_1_11.md](EXPLORATION_AND_PROSE.md)：探索による到達・地の文の常体化、現行への更新と未接続の範囲。
 

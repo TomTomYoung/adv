@@ -135,6 +135,17 @@ export function migrateSave(original,data){
     if(migrated.state.battleModePreference===undefined)migrated.state.battleModePreference='auto';
     if(migrated.state.battle&&migrated.state.battle.mode===undefined)migrated.state.battle.mode='classic';
     migrateFrontlineLifecycle(migrated.state);
+    // Only an entirely absent, explicitly shipped cohort can be appended.
+    // Validate the old state first: missing old quests or partial new cohorts
+    // remain corruption, rather than being silently reset to available.
+    for(const {ids} of data.game.questAdditions??[]){
+      if(!isRecord(migrated.state.quests)||!ids?.length||!ids.every(id=>data.quests[id]&&!Object.hasOwn(migrated.state.quests,id)&&!Object.hasOwn(migrated.state.stories??{},id)))continue;
+      const legacy={...data,quests:Object.fromEntries(Object.entries(data.quests).filter(([id])=>!ids.includes(id)))};
+      const upgraded=upgradeStoryRevisions(migrated,legacy);
+      if(validateSave(upgraded,legacy).length)continue;
+      migrated=clone(upgraded);
+      for(const id of ids)migrated.state.quests[id]={stage:'available',evidence:[],outcome:null};
+    }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
   if(data.game.migrations?.[original?.contentVersion]?.environmentRevision)return migrated;

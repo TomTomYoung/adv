@@ -56,7 +56,28 @@ try{
   await page.screenshot({path:path.join(output,`post-${width}.png`)});
   checkpoint=`${width}: exit`;console.log(checkpoint);
   await page.getByRole('button',{name:'詰所を出る',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.location.map),'kagaribi_crossroads');
-  checks.push({width,height,views:4,postPurchase:true,exit:true,horizontalOverflow:false});await page.close();
+  // New people intentionally have no borrowed artwork. Both renderers must
+  // show their own names without requesting an undefined image URL.
+  for(const layout of ['scene','classic'])for(let n=201;n<=210;n++){
+   const id=`q${n}`;checkpoint=`${width}: ${layout}/${id}`;
+   const cast=await page.evaluate(async({id,layout})=>{
+    const {GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js');
+    const {GameView}=await import('./src/view/view.js'),{SceneView}=await import('./src/view/scene-view.js');
+    const data=g.data;view.destroy();window.g=new GameEngine(data);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
+    g.accept('q001');(g.state.flags.legacyStoryRoutes??={}).q001=true;g.complete('q001','compromise');
+    if(!g.accept(id))throw Error('Cannot accept '+id);
+    const q=data.quests[id],p=q.story.worldPlaces[q.story.scenes.entry.place];g.teleport(p.map,p.x,p.y);g.run(q.model.entryScript);
+    const app=document.querySelector('#app');app.dataset.view=layout;
+    window.view=new (layout==='classic'?GameView:SceneView)(app,intent=>{g.dispatch(intent);show();},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});
+    window.show=()=>view.render(projectGame(g));show();
+    return projectGame(g).dialog.scene.cast.map(c=>({id:c.id,name:c.name}));
+   },{id,layout});
+   await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+   for(const c of cast){const person=page.locator(`[data-character="${c.id}"]`);assert.ok((await person.textContent()).includes(c.name));assert.equal(await person.locator('img').count(),0);}
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,checkpoint);
+   if(n===201||n===210)await page.screenshot({path:path.join(output,`${id}-${layout}-${width}.png`)});
+  }
+  checks.push({width,height,views:4,postPurchase:true,exit:true,newQuestScenes:20,horizontalOverflow:false});await page.close();
  }
  assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2)+'\n');console.log(JSON.stringify({checks,errors,output},null,2));
 }finally{clearTimeout(deadline);await browser?.close();server.closeAllConnections();await new Promise(r=>server.close(r));}

@@ -18,10 +18,11 @@ function start(id,{rich=true,walk=true,absent=null,join=null}={}){
  const g=newGame(1907);
  if(rich){g.award(0,data.system.xpBase*24*25);g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;g.healAll();}
  if(data.quests[id].number<=100)for(const q of Object.values(data.quests).filter(q=>q.number<data.quests[id].number)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
+ if(data.quests[id].number>=201){g.accept('q001');(g.state.flags.legacyStoryRoutes??={}).q001=true;g.complete('q001','compromise');}
  if(absent)assert.ok(g.dispatch({type:'party',action:'leave',actor:absent}));
  if(join)assert.ok(g.dispatch({type:'party',action:'join',actor:join}));
  assert.ok(g.dispatch({type:'accept',id}));
- if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true});else{const d=data.quests[id].story,p=d?.worldPlaces?.[d.scenes.entry.place];if(p?.kind==='dungeon')g.teleport(p.map,p.x,p.y);g.run(visit(id));drain(g);}
+ if(walk)exploreSpot(g,data.quests[id].locations.find(l=>l.role==='decision'),{heal:true,maintain:data.quests[id].number>200});else{const d=data.quests[id].story,p=d?.worldPlaces?.[d.scenes.entry.place];if(p?.kind==='dungeon')g.teleport(p.map,p.x,p.y);g.run(visit(id));drain(g);}
  return g;
 }
 function choose(g,id){assert.ok(g.dispatch({type:'choose',id}),`${id}: ${g.state.waiting?.text??g.state.flags.quest?.[g.state.trackedQuest]?.node}`);drain(g);}
@@ -95,7 +96,7 @@ for(const q of Object.values(data.quests))test(`${q.id} ${q.title}: every ending
 
 test('all quests offer an initial route and can be saved with no money or supplies',()=>{
  for(const q of Object.values(data.quests)){
-  const g=start(q.id,{walk:false});g.state.gold=0;g.state.inventory=q.id==='q001'?{kagaribi_torch:1,kagaribi_ember:0}:{};
+  const g=start(q.id,{walk:false});g.state.gold=0;g.state.inventory=g.state.dungeons.active?.id==='kagaribi'?{kagaribi_torch:1,kagaribi_ember:0}:{};
   assert.ok(options(g).some(o=>o.id!=='pause'&&enabled(g,o)),q.id);
   g.load(g.save());assert.equal(g.state.waiting.type,'choice');
  }
@@ -132,7 +133,7 @@ test('q190 one sealed site is not three and its completed recovery cannot be cla
  assert.equal(g.state.quests.q190.outcome,'collect');assert.equal(g.state.flags.quest.q190.sites,3);
 });
 test('q100 still requires the original 99 completions, even after the additional 100',()=>{
- const g=newGame();for(const q of Object.values(data.quests).filter(q=>q.number>100)){g.dispatch({type:'accept',id:q.id});g.complete(q.id,Object.entries(q.outcomes).find(([,o])=>!o.requires)[0]);}
+ const g=newGame();for(const q of Object.values(data.quests).filter(q=>q.number>100&&q.number<=200)){g.dispatch({type:'accept',id:q.id});g.complete(q.id,Object.entries(q.outcomes).find(([,o])=>!o.requires)[0]);}
  assert.equal(g.state.vars.completed,100);assert.equal(g.unlocked(data.quests.q100),false);
  for(const q of Object.values(data.quests).filter(q=>q.number<100)){g.dispatch({type:'accept',id:q.id});if(q.story)(g.state.flags.legacyStoryRoutes??={})[q.id]=true;g.complete(q.id,'compromise');}
  assert.equal(g.unlocked(data.quests.q100),true);

@@ -114,7 +114,7 @@ test('board and journal expose one named entrance action, main quest controls, d
   const g=newGame();goTownLocation(g,'hikarigaeri_guild');g.accept('q001');g.accept('q002');
   const intents=[],v=Object.assign(Object.create(GameView.prototype),{dungeonFilter:'kagaribi',query:'',filter:'open',act:i=>{intents.push(i);return g.dispatch(i);}}),root=new Element('div');
   let model=projectGame(g);v.quests(root,model);const buttons=root.queryAll('button');
-  assert.equal(root.queryAll('article').length,1);assert.doesNotMatch(root.textContent,/灯守の地下水道.*開始地点|入口から現地調査へ向かう|この依頼を追う/);
+  assert.equal(root.queryAll('article').length,model.quests.filter(q=>q.dungeonIds.includes('kagaribi')&&q.stage!=='completed').length);assert.doesNotMatch(root.queryAll('article')[0].textContent,/灯守の地下水道.*開始地点|入口から現地調査へ向かう|この依頼を追う/);
   const entrance=buttons.find(b=>b.textContent==='迷宮の入口へ向かう（篝火の迷宮）');assert.equal(entrance.disabled,false);assert.doesNotMatch(root.textContent,/篝火広場から出発/);
   entrance.click();assert.deepEqual(intents.pop(),{type:'quest.travel',id:'q001'});assert.equal(g.state.location.map,'kagaribi_f1');
   g.returnTown();goTownLocation(g,'hikarigaeri_guild');

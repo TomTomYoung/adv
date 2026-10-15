@@ -1,0 +1,1394 @@
+{
+  "schemaVersion": 1,
+  "id": "q201",
+  "number": 201,
+  "title": "消された休み印",
+  "client": "油蔵の記帳係ナヴィア",
+  "brief": "油蔵の勤務帳から休み印が一つ消えている。記帳係は、交差路で待つ運搬人にその日のことを聞いてほしいという。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 2,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q201_desk",
+      "title": "油蔵の記帳台",
+      "points": [
+        {
+          "map": "kagaribi_oilstore",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q201.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q201.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q201_bench",
+      "title": "交差路の休憩ベンチ",
+      "points": [
+        {
+          "map": "kagaribi_crossroads",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q201.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q201.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_oilstore",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q201_desk",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "corrected": {
+      "gold": 57,
+      "xp": 51,
+      "label": "消した人の名で訂正する",
+      "text": "ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エンの休憩は、本人の怠慢と決めつけられない記録になった。"
+    },
+    "advanced": {
+      "gold": 57,
+      "xp": 51,
+      "label": "前渡し金を用意する責任を負う",
+      "text": "ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。"
+    },
+    "private": {
+      "gold": 57,
+      "xp": 51,
+      "label": "本人の手元に証言を残す",
+      "text": "エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。"
+    }
+  },
+  "scripts": {
+    "q201.v11.entry": {
+      "storyQuest": "q201",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q201",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ナヴィアは帳面の一行だけに乾いた布を当てていた。「数字は合っています。休み印だけ、確かめてきてください」。交差路で待つエンには、まだ給金を渡していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "交差路へ行き、エン本人から話を聞く",
+              "storyAction": {
+                "quest": "q201",
+                "action": "entry_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q201",
+                  "action": "entry_ask"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q201.v11.witness": {
+      "storyQuest": "q201",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q201",
+          "scene": "witness"
+        },
+        {
+          "op": "say",
+          "text": "エンは指に巻いた布をほどいた。「休めと言ったのは向こうです。怠けたことにするなら、せめて自分でそう書いてくれ」。彼は休憩時刻と理由を書いた紙を差し出す。「渡していい。ただ、俺の署名を勝手に足すな」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "覚え書きを預かり、油蔵へ戻る",
+              "storyAction": {
+                "quest": "q201",
+                "action": "witness_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q201",
+                  "action": "witness_take"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q201.v11.reason": {
+      "storyQuest": "q201",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q201",
+          "scene": "reason"
+        },
+        {
+          "op": "say",
+          "text": "覚え書きを見たナヴィアは、帳面を隠さなかった。「休みを載せると欠勤分が引かれる。だから消しました。命じたのは私です」。善意で消した印は、エンには怠慢を疑われた跡に見えていた。訂正しても減額の判断は別に残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "命令者の署名付きで訂正し、減額の扱いを保留して提出する",
+              "storyAction": {
+                "quest": "q201",
+                "action": "reason_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q201",
+                  "action": "reason_correct"
+                },
+                {
+                  "op": "jump",
+                  "script": "q201.v11.end.corrected"
+                }
+              ]
+            },
+            {
+              "id": "advance",
+              "text": "20Gを立て替え、記録を訂正して減額審査を待つ",
+              "storyAction": {
+                "quest": "q201",
+                "action": "reason_advance"
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q201",
+                  "action": "reason_advance"
+                },
+                {
+                  "op": "jump",
+                  "script": "q201.v11.end.advanced"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "公簿の訂正を保留し、覚え書きをエンへ返しに行く",
+              "storyAction": {
+                "quest": "q201",
+                "action": "reason_private"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q201",
+                  "action": "reason_private"
+                }
+              ]
+            },
+            {
+              "id": "advance_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q201.v11.reason.advance.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q201.v11.return": {
+      "storyQuest": "q201",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q201",
+          "scene": "return"
+        },
+        {
+          "op": "say",
+          "text": "エンの前へ戻った。公簿を直さずにおくなら、仕事の証拠は本人の手に残す必要がある。ナヴィアが印を消した理由も、彼にはまだ伝わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "explain",
+              "text": "理由を伝え、未訂正のままだと説明して覚え書きを返す",
+              "storyAction": {
+                "quest": "q201",
+                "action": "return_explain"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q201",
+                  "action": "return_explain"
+                },
+                {
+                  "op": "jump",
+                  "script": "q201.v11.end.private"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q201.v11.end.corrected": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q201",
+          "outcome": "corrected"
+        },
+        {
+          "op": "say",
+          "text": "ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エンの休憩は、本人の怠慢と決めつけられない記録になった。"
+        }
+      ]
+    },
+    "q201.v11.end.advanced": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q201",
+          "outcome": "advanced"
+        },
+        {
+          "op": "say",
+          "text": "ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。"
+        }
+      ]
+    },
+    "q201.v11.end.private": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q201",
+          "outcome": "private"
+        },
+        {
+          "op": "say",
+          "text": "エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。"
+        }
+      ]
+    },
+    "q201.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q201"
+          },
+          "cases": [
+            {
+              "equals": "q201.v11.reason.advance.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q201.v11.reason.advance.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q201.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q201.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "corrected",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エンの休憩は、本人の怠慢と決めつけられない記録になった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "advanced",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "private",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q201"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q201.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q201.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "witness",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q201.v11.witness"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "reason",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q201.v11.reason"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "return",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q201.v11.return"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q201.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q201.v11.reason.advance.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q201",
+          "value": "q201.v11.reason.advance.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q201.v11.reason.advance.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q201",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q201.v11.reason"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "エンは油を運び終えた後、手の皮が剥け、ナヴィアの指示で休憩した。 ナヴィアは休憩分の減額を恐れ、帳面の休み印を消した。支払いはまだ確定していない。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "エンは油を運び終えた後、手の皮が剥け、ナヴィアの指示で休憩した。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "ナヴィアは休憩分の減額を恐れ、帳面の休み印を消した。支払いはまだ確定していない。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q201.v11.entry",
+          "assertion": {
+            "title": "油蔵の記帳台",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "clerk"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "witness",
+          "script": "q201.v11.witness",
+          "assertion": {
+            "title": "交差路の休憩ベンチ",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "porter"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "reason",
+          "script": "q201.v11.reason",
+          "assertion": {
+            "title": "油蔵の記帳台",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "clerk"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "return",
+          "script": "q201.v11.return",
+          "assertion": {
+            "title": "交差路の休憩ベンチ",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "porter"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "油蔵の勤務帳から休み印が一つ消えている。記帳係は、交差路で待つ運搬人にその日のことを聞いてほしいという。"
+    },
+    "dramaticKernel": "働かなかった時間を正しく書くことで、働いた人の生活を削ってしまうとき、誰が訂正の責任を負うか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "エンは油を運び終えた後、手の皮が剥け、ナヴィアの指示で休憩した。 ナヴィアは休憩分の減額を恐れ、帳面の休み印を消した。支払いはまだ確定していない。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "witness",
+        "reason",
+        "return"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q201.v11.visit",
+    "progression": "運搬人の話を聞き、本人が書いた休憩の覚え書きを運ぶ。消した理由を聞いた後、訂正・立替え・私的保管の責任を選ぶ。",
+    "agents": [
+      {
+        "id": "clerk",
+        "character": "q201_clerk",
+        "name": "ナヴィア",
+        "goal": "休憩の記録を確かめ、運搬人の給金を止めない",
+        "initialLocation": "desk",
+        "belief": "休み印が残れば欠勤扱いにされる",
+        "fear": "他人のためだったという言い訳で改竄を認めること",
+        "knowledgeSource": "休憩を命じた本人。給金規則を読んだが、例外の申請をしていない。",
+        "publicGoal": "休憩の記録を確かめ、運搬人の給金を止めない",
+        "privateStake": "他人のためだったという言い訳で改竄を認めること"
+      },
+      {
+        "id": "porter",
+        "character": "q201_porter",
+        "name": "エン",
+        "goal": "休んだことも働いたことも自分の名で残す",
+        "initialLocation": "bench",
+        "belief": "記帳係は自分を怠け者だと思っている",
+        "fear": "署名を断れば次の仕事がなくなること",
+        "knowledgeSource": "休憩を命じられたことは知るが、休み印が消された理由は知らない。",
+        "publicGoal": "休んだことも働いたことも自分の名で残す",
+        "privateStake": "署名を断れば次の仕事がなくなること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q201.values.partyAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.clerkAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "clerk の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.porterAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "porter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.ledgerAt",
+        "type": "enum",
+        "initial": "clerk",
+        "values": [
+          "desk",
+          "bench",
+          "transit",
+          "party",
+          "clerk",
+          "porter",
+          "note"
+        ],
+        "meaning": "ledger の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.noteAt",
+        "type": "enum",
+        "initial": "porter",
+        "values": [
+          "desk",
+          "bench",
+          "transit",
+          "party",
+          "clerk",
+          "porter",
+          "ledger"
+        ],
+        "meaning": "note の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.heard",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "heard",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.signed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.advance",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "advance",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q201.values.record",
+        "type": "enum",
+        "initial": "open",
+        "values": [
+          "open",
+          "corrected",
+          "pending",
+          "private"
+        ],
+        "meaning": "record",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q201.v11.entry",
+        "assertion": {
+          "title": "油蔵の記帳台",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "clerk"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "witness",
+        "script": "q201.v11.witness",
+        "assertion": {
+          "title": "交差路の休憩ベンチ",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "porter"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "reason",
+        "script": "q201.v11.reason",
+        "assertion": {
+          "title": "油蔵の記帳台",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "clerk"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "return",
+        "script": "q201.v11.return",
+        "assertion": {
+          "title": "交差路の休憩ベンチ",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "porter"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ナヴィアは帳面の一行だけに乾いた布を当てていた。「数字は合っています。休み印だけ、確かめてきてください」。交差路で待つエンには、まだ給金を渡していない。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "交差路へ行き、エン本人から話を聞く",
+            "to": "witness",
+            "action": "entry_ask"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "text": "エンは指に巻いた布をほどいた。「休めと言ったのは向こうです。怠けたことにするなら、せめて自分でそう書いてくれ」。彼は休憩時刻と理由を書いた紙を差し出す。「渡していい。ただ、俺の署名を勝手に足すな」",
+        "options": [
+          {
+            "id": "take",
+            "text": "覚え書きを預かり、油蔵へ戻る",
+            "to": "reason",
+            "action": "witness_take"
+          }
+        ]
+      },
+      {
+        "id": "reason",
+        "text": "覚え書きを見たナヴィアは、帳面を隠さなかった。「休みを載せると欠勤分が引かれる。だから消しました。命じたのは私です」。善意で消した印は、エンには怠慢を疑われた跡に見えていた。訂正しても減額の判断は別に残る。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "命令者の署名付きで訂正し、減額の扱いを保留して提出する",
+            "to": "@corrected",
+            "action": "reason_correct"
+          },
+          {
+            "id": "advance",
+            "text": "20Gを立て替え、記録を訂正して減額審査を待つ",
+            "to": "@advanced",
+            "action": "reason_advance"
+          },
+          {
+            "id": "private",
+            "text": "公簿の訂正を保留し、覚え書きをエンへ返しに行く",
+            "to": "return",
+            "action": "reason_private"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "text": "エンの前へ戻った。公簿を直さずにおくなら、仕事の証拠は本人の手に残す必要がある。ナヴィアが印を消した理由も、彼にはまだ伝わっていない。",
+        "options": [
+          {
+            "id": "explain",
+            "text": "理由を伝え、未訂正のままだと説明して覚え書きを返す",
+            "to": "@private",
+            "action": "return_explain"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "油蔵の勤務帳から休み印が一つ消えている。記帳係は、交差路で待つ運搬人にその日のことを聞いてほしいという。",
+      "progression": "運搬人の話を聞き、本人が書いた休憩の覚え書きを運ぶ。消した理由を聞いた後、訂正・立替え・私的保管の責任を選ぶ。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q201.v11.reason",
+        "action": "advance",
+        "option": "advance_supplies",
+        "shortage": "q201.v11.reason.advance.shortage",
+        "resume": "q201.v11.reason.advance.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q201.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "desk": "油蔵の記帳台",
+      "bench": "交差路の休憩ベンチ",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "desk"
+      ],
+      [
+        "transit",
+        "bench"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "clerkAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "clerk の所在または保持者"
+      },
+      "porterAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "desk",
+          "bench",
+          "transit"
+        ],
+        "meaning": "porter の所在または保持者"
+      },
+      "ledgerAt": {
+        "type": "enum",
+        "initial": "clerk",
+        "values": [
+          "desk",
+          "bench",
+          "transit",
+          "party",
+          "clerk",
+          "porter",
+          "note"
+        ],
+        "meaning": "ledger の所在または保持者"
+      },
+      "noteAt": {
+        "type": "enum",
+        "initial": "porter",
+        "values": [
+          "desk",
+          "bench",
+          "transit",
+          "party",
+          "clerk",
+          "porter",
+          "ledger"
+        ],
+        "meaning": "note の所在または保持者"
+      },
+      "heard": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "heard"
+      },
+      "signed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed"
+      },
+      "advance": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "advance"
+      },
+      "record": {
+        "type": "enum",
+        "initial": "open",
+        "values": [
+          "open",
+          "corrected",
+          "pending",
+          "private"
+        ],
+        "meaning": "record"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "clerk": {
+        "holder": "clerkAt",
+        "kind": "person",
+        "character": "q201_clerk"
+      },
+      "porter": {
+        "holder": "porterAt",
+        "kind": "person",
+        "character": "q201_porter"
+      },
+      "ledger": {
+        "holder": "ledgerAt",
+        "kind": "item"
+      },
+      "note": {
+        "holder": "noteAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "rest": {
+        "text": "エンは油漏れの手当ての後、ナヴィアに命じられて休んだ。"
+      },
+      "erased": {
+        "text": "ナヴィアは休憩を欠勤と扱う支払規則を恐れ、自分の休憩命令の印を消した。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "油蔵の記帳台",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "clerk"
+          }
+        ],
+        "requires": true
+      },
+      "witness": {
+        "title": "交差路の休憩ベンチ",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "porter"
+          }
+        ],
+        "requires": true
+      },
+      "reason": {
+        "title": "油蔵の記帳台",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "clerk"
+          }
+        ],
+        "requires": true
+      },
+      "return": {
+        "title": "交差路の休憩ベンチ",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "porter"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_ask": {
+        "from": [
+          "entry"
+        ],
+        "to": "witness",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "rest",
+            "source": "porter",
+            "requires": true
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "witness_take": {
+        "from": [
+          "witness"
+        ],
+        "to": "reason",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "erased",
+            "source": "clerk",
+            "requires": true
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "note",
+            "from": "porter",
+            "to": "party"
+          }
+        ]
+      },
+      "reason_correct": {
+        "from": [
+          "reason"
+        ],
+        "ending": "corrected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "note",
+            "from": "party",
+            "to": "clerk"
+          },
+          {
+            "op": "set",
+            "key": "signed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "record",
+            "value": "corrected"
+          }
+        ],
+        "once": true
+      },
+      "reason_advance": {
+        "from": [
+          "reason"
+        ],
+        "ending": "advanced",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "note",
+            "from": "party",
+            "to": "clerk"
+          },
+          {
+            "op": "set",
+            "key": "signed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "advance",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "record",
+            "value": "pending"
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": true
+      },
+      "reason_private": {
+        "from": [
+          "reason"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "return_explain": {
+        "from": [
+          "return"
+        ],
+        "ending": "private",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "note",
+            "from": "party",
+            "to": "porter"
+          },
+          {
+            "op": "set",
+            "key": "heard",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "record",
+            "value": "private"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "corrected": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.record"
+            },
+            "right": "corrected"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.signed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.noteAt"
+            },
+            "right": "clerk"
+          }
+        ]
+      },
+      "advanced": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.record"
+            },
+            "right": "pending"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.advance"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.noteAt"
+            },
+            "right": "clerk"
+          }
+        ]
+      },
+      "private": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.record"
+            },
+            "right": "private"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.heard"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.noteAt"
+            },
+            "right": "porter"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q201.values.partyAt"
+            },
+            "right": "bench"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "desk": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_oilstore",
+        "x": 5,
+        "y": 1,
+        "event": "q201_desk"
+      },
+      "bench": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_crossroads",
+        "x": 5,
+        "y": 1,
+        "event": "q201_bench"
+      }
+    },
+    "revision": 1
+  }
+}

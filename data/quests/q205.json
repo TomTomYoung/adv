@@ -1,0 +1,1357 @@
+{
+  "schemaVersion": 1,
+  "id": "q205",
+  "number": 205,
+  "title": "灰を掻く音",
+  "client": "炭焼き見習いノノ",
+  "brief": "炭焼き見習いが、灰を掻く音のする窯の奥へ落ちた配合板を取り戻したがっている。師匠は探すなと言う。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q205_bench",
+      "title": "炭焼き窯の作業台",
+      "points": [
+        {
+          "map": "kagaribi_kilns",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q205.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q205.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q205_ash",
+      "title": "炭焼き窯の灰溜まり",
+      "points": [
+        {
+          "map": "kagaribi_kilns",
+          "x": 11,
+          "y": 5,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q205.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q205.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_kilns",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q205_bench",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "revise": {
+      "gold": 57,
+      "xp": 51,
+      "label": "違う炭を焼くために継ぐ",
+      "text": "ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功したわけでもない。師の失敗を隠さず、変えて使う許しを得た。"
+    },
+    "preserve": {
+      "gold": 57,
+      "xp": 51,
+      "label": "配合を仕事の記憶として返す",
+      "text": "板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。"
+    },
+    "stop": {
+      "gold": 57,
+      "xp": 51,
+      "label": "継がないことを本人が決める",
+      "text": "ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。"
+    }
+  },
+  "scripts": {
+    "q205.v11.entry": {
+      "storyQuest": "q205",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q205",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ノノは配合板の輪郭を指で描いた。「あれを見ながらなら、同じように焼ける」。ダンは灰のついた袖を払う。「拾わなくていい」。どちらも、最後に板を触ったのが誰かとは言わなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "go",
+              "text": "灰溜まりへ行き、板と音の正体を確かめる",
+              "storyAction": {
+                "quest": "q205",
+                "action": "entry_go"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q205",
+                  "action": "entry_go"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q205.v11.ash": {
+      "storyQuest": "q205",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q205",
+          "scene": "ash"
+        },
+        {
+          "op": "say",
+          "text": "灰虫が巣材を掻き寄せている。その下に、角が焦げた配合板が見える。虫を退けて拾うか、縁から縄を掛けて引き上げられそうだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "灰虫を退け、板を拾う",
+              "storyAction": {
+                "quest": "q205",
+                "action": "ash_fight"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "kagaribi_pests",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q205",
+                      "action": "ash_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q205.v11.recovered"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hook",
+              "text": "縄1本を灰溜まりへ渡し、板を引き上げる",
+              "storyAction": {
+                "quest": "q205",
+                "action": "ash_hook"
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q205",
+                  "action": "ash_hook"
+                },
+                {
+                  "op": "jump",
+                  "script": "q205.v11.recovered"
+                }
+              ]
+            },
+            {
+              "id": "hook_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q205.v11.ash.hook.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q205.v11.recovered": {
+      "storyQuest": "q205",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q205",
+          "scene": "recovered"
+        },
+        {
+          "op": "say",
+          "text": "配合板を手元へ引き寄せた。裏には「今の木では崩れる」とダンの字で書かれていた。古い手順が正しいかどうかは、板を取り戻しただけでは決まらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "配合板を持って作業台へ戻る",
+              "storyAction": {
+                "quest": "q205",
+                "action": "recovered_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q205",
+                  "action": "recovered_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q205.v11.talk": {
+      "storyQuest": "q205",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q205",
+          "scene": "talk"
+        },
+        {
+          "op": "say",
+          "text": "ダンは板の裏を見て、捨てたことを認めた。「同じように焼くな。俺がそれで失敗した」。ノノは板を裏返す。「なら、違うところを教えて」。ダンは、今の材料で試すなら自分の名を成功の保証に使わないことを条件にした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "revise",
+              "text": "失敗の注記を残し、ノノ自身の試験用として板を渡す",
+              "storyAction": {
+                "quest": "q205",
+                "action": "talk_revise"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q205",
+                  "action": "talk_revise"
+                },
+                {
+                  "op": "jump",
+                  "script": "q205.v11.end.revise"
+                }
+              ]
+            },
+            {
+              "id": "preserve",
+              "text": "焼く手順として使わず、昔の仕事の見本として師へ返す",
+              "storyAction": {
+                "quest": "q205",
+                "action": "talk_preserve"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q205",
+                  "action": "talk_preserve"
+                },
+                {
+                  "op": "jump",
+                  "script": "q205.v11.end.preserve"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "ノノに継承を断る意思を確かめ、板を保管場所へ戻す",
+              "storyAction": {
+                "quest": "q205",
+                "action": "talk_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q205",
+                  "action": "talk_stop"
+                },
+                {
+                  "op": "jump",
+                  "script": "q205.v11.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q205.v11.end.revise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q205",
+          "outcome": "revise"
+        },
+        {
+          "op": "say",
+          "text": "ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功したわけでもない。師の失敗を隠さず、変えて使う許しを得た。"
+        }
+      ]
+    },
+    "q205.v11.end.preserve": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q205",
+          "outcome": "preserve"
+        },
+        {
+          "op": "say",
+          "text": "板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。"
+        }
+      ]
+    },
+    "q205.v11.end.stop": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q205",
+          "outcome": "stop"
+        },
+        {
+          "op": "say",
+          "text": "ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。"
+        }
+      ]
+    },
+    "q205.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q205"
+          },
+          "cases": [
+            {
+              "equals": "q205.v11.ash.hook.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q205.v11.ash.hook.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q205.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q205.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "revise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功したわけでもない。師の失敗を隠さず、変えて使う許しを得た。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "preserve",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "stop",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q205"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q205.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q205.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ash",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q205.v11.ash"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "recovered",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q205.v11.recovered"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "talk",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q205.v11.talk"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q205.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q205.v11.ash.hook.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q205",
+          "value": "q205.v11.ash.hook.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q205.v11.ash.hook.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q205",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q205.v11.ash"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "ダンは乾いた木材用の配合を湿った代替材に使い、炭を崩れさせた。失敗した配合を弟子に継がせたくなくて板を灰溜まりへ捨てた。 灰を掻く音は巣材を探す灰虫による。既存の炉守り討伐や火台の記録とは別件である。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "ダンは乾いた木材用の配合を湿った代替材に使い、炭を崩れさせた。失敗した配合を弟子に継がせたくなくて板を灰溜まりへ捨てた。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "灰を掻く音は巣材を探す灰虫による。既存の炉守り討伐や火台の記録とは別件である。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q205.v11.entry",
+          "assertion": {
+            "title": "炭焼き窯の作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "pupil"
+              },
+              {
+                "entity": "master"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ash",
+          "script": "q205.v11.ash",
+          "assertion": {
+            "title": "炭焼き窯の灰溜まり",
+            "place": "ash",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "recovered",
+          "script": "q205.v11.recovered",
+          "assertion": {
+            "title": "炭焼き窯の灰溜まり",
+            "place": "ash",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "talk",
+          "script": "q205.v11.talk",
+          "assertion": {
+            "title": "炭焼き窯の作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "pupil"
+              },
+              {
+                "entity": "master"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "炭焼き見習いが、灰を掻く音のする窯の奥へ落ちた配合板を取り戻したがっている。師匠は探すなと言う。"
+    },
+    "dramaticKernel": "受け継ぐことは、師のやり方を変えないことなのか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "ダンは乾いた木材用の配合を湿った代替材に使い、炭を崩れさせた。失敗した配合を弟子に継がせたくなくて板を灰溜まりへ捨てた。 灰を掻く音は巣材を探す灰虫による。既存の炉守り討伐や火台の記録とは別件である。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "ash",
+        "recovered",
+        "talk"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q205.v11.visit",
+    "progression": "灰虫を退けるか縄で縁から板を引き上げる。板を持って戻り、変えて継ぐ、見本として残す、焼き方の継承を断るという三つの判断をする。",
+    "agents": [
+      {
+        "id": "pupil",
+        "character": "q205_pupil",
+        "name": "ノノ",
+        "goal": "師の仕事を引き継ぐため、配合板を回収する",
+        "initialLocation": "bench",
+        "belief": "板さえあれば同じ炭を焼ける",
+        "fear": "師から独り立ちを認められないこと",
+        "knowledgeSource": "今ある木材は昔と違うと気づいたが、配合を変える許しをまだ求めていない。",
+        "publicGoal": "師の仕事を引き継ぐため、配合板を回収する",
+        "privateStake": "師から独り立ちを認められないこと"
+      },
+      {
+        "id": "master",
+        "character": "q205_master",
+        "name": "ダン",
+        "goal": "失敗した配合を弟子へ押しつけない",
+        "initialLocation": "bench",
+        "belief": "失敗を見せなければ弟子は別の道へ行ける",
+        "fear": "最後の仕事で弟子を危険に巻き込むこと",
+        "knowledgeSource": "今の湿った木材に古い配合を使って失敗し、板を灰溜まりへ捨てた。",
+        "publicGoal": "失敗した配合を弟子へ押しつけない",
+        "privateStake": "最後の仕事で弟子を危険に巻き込むこと"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q205.values.partyAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.pupilAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "pupil の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.masterAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "master の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.plateAt",
+        "type": "enum",
+        "initial": "ash",
+        "values": [
+          "bench",
+          "ash",
+          "transit",
+          "party",
+          "pupil",
+          "master"
+        ],
+        "meaning": "plate の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.recovered",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recovered",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.told",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "told",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q205.values.future",
+        "type": "enum",
+        "initial": "open",
+        "values": [
+          "open",
+          "revise",
+          "preserve",
+          "stop"
+        ],
+        "meaning": "future",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q205.v11.entry",
+        "assertion": {
+          "title": "炭焼き窯の作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "pupil"
+            },
+            {
+              "entity": "master"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ash",
+        "script": "q205.v11.ash",
+        "assertion": {
+          "title": "炭焼き窯の灰溜まり",
+          "place": "ash",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "recovered",
+        "script": "q205.v11.recovered",
+        "assertion": {
+          "title": "炭焼き窯の灰溜まり",
+          "place": "ash",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "talk",
+        "script": "q205.v11.talk",
+        "assertion": {
+          "title": "炭焼き窯の作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "pupil"
+            },
+            {
+              "entity": "master"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ノノは配合板の輪郭を指で描いた。「あれを見ながらなら、同じように焼ける」。ダンは灰のついた袖を払う。「拾わなくていい」。どちらも、最後に板を触ったのが誰かとは言わなかった。",
+        "options": [
+          {
+            "id": "go",
+            "text": "灰溜まりへ行き、板と音の正体を確かめる",
+            "to": "ash",
+            "action": "entry_go"
+          }
+        ]
+      },
+      {
+        "id": "ash",
+        "text": "灰虫が巣材を掻き寄せている。その下に、角が焦げた配合板が見える。虫を退けて拾うか、縁から縄を掛けて引き上げられそうだ。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "灰虫を退け、板を拾う",
+            "to": "recovered",
+            "combat": true,
+            "action": "ash_fight"
+          },
+          {
+            "id": "hook",
+            "text": "縄1本を灰溜まりへ渡し、板を引き上げる",
+            "to": "recovered",
+            "action": "ash_hook"
+          }
+        ]
+      },
+      {
+        "id": "recovered",
+        "text": "配合板を手元へ引き寄せた。裏には「今の木では崩れる」とダンの字で書かれていた。古い手順が正しいかどうかは、板を取り戻しただけでは決まらない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "配合板を持って作業台へ戻る",
+            "to": "talk",
+            "action": "recovered_return"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "text": "ダンは板の裏を見て、捨てたことを認めた。「同じように焼くな。俺がそれで失敗した」。ノノは板を裏返す。「なら、違うところを教えて」。ダンは、今の材料で試すなら自分の名を成功の保証に使わないことを条件にした。",
+        "options": [
+          {
+            "id": "revise",
+            "text": "失敗の注記を残し、ノノ自身の試験用として板を渡す",
+            "to": "@revise",
+            "action": "talk_revise"
+          },
+          {
+            "id": "preserve",
+            "text": "焼く手順として使わず、昔の仕事の見本として師へ返す",
+            "to": "@preserve",
+            "action": "talk_preserve"
+          },
+          {
+            "id": "stop",
+            "text": "ノノに継承を断る意思を確かめ、板を保管場所へ戻す",
+            "to": "@stop",
+            "action": "talk_stop"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "炭焼き見習いが、灰を掻く音のする窯の奥へ落ちた配合板を取り戻したがっている。師匠は探すなと言う。",
+      "progression": "灰虫を退けるか縄で縁から板を引き上げる。板を持って戻り、変えて継ぐ、見本として残す、焼き方の継承を断るという三つの判断をする。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q205.v11.ash",
+        "action": "hook",
+        "option": "hook_supplies",
+        "shortage": "q205.v11.ash.hook.shortage",
+        "resume": "q205.v11.ash.hook.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q205.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "bench": "炭焼き窯の作業台",
+      "ash": "炭焼き窯の灰溜まり",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "bench"
+      ],
+      [
+        "transit",
+        "ash"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "pupilAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "pupil の所在または保持者"
+      },
+      "masterAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "bench",
+          "ash",
+          "transit"
+        ],
+        "meaning": "master の所在または保持者"
+      },
+      "plateAt": {
+        "type": "enum",
+        "initial": "ash",
+        "values": [
+          "bench",
+          "ash",
+          "transit",
+          "party",
+          "pupil",
+          "master"
+        ],
+        "meaning": "plate の所在または保持者"
+      },
+      "recovered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recovered"
+      },
+      "told": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "told"
+      },
+      "future": {
+        "type": "enum",
+        "initial": "open",
+        "values": [
+          "open",
+          "revise",
+          "preserve",
+          "stop"
+        ],
+        "meaning": "future"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "pupil": {
+        "holder": "pupilAt",
+        "kind": "person",
+        "character": "q205_pupil"
+      },
+      "master": {
+        "holder": "masterAt",
+        "kind": "person",
+        "character": "q205_master"
+      },
+      "plate": {
+        "holder": "plateAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "discard": {
+        "text": "配合板は失くしたのではなく、今の木材では失敗すると知ったダンが捨てた。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "炭焼き窯の作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "pupil"
+          },
+          {
+            "entity": "master"
+          }
+        ],
+        "requires": true
+      },
+      "ash": {
+        "title": "炭焼き窯の灰溜まり",
+        "place": "ash",
+        "cast": [],
+        "requires": true
+      },
+      "recovered": {
+        "title": "炭焼き窯の灰溜まり",
+        "place": "ash",
+        "cast": [],
+        "requires": true
+      },
+      "talk": {
+        "title": "炭焼き窯の作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "pupil"
+          },
+          {
+            "entity": "master"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_go": {
+        "from": [
+          "entry"
+        ],
+        "to": "ash",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ash"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "ash",
+          "companions": []
+        },
+        "depart": []
+      },
+      "ash_fight": {
+        "from": [
+          "ash"
+        ],
+        "to": "recovered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "ash",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "recovered",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "ash_hook": {
+        "from": [
+          "ash"
+        ],
+        "to": "recovered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "ash",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "recovered",
+            "value": true
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "recovered_return": {
+        "from": [
+          "recovered"
+        ],
+        "to": "talk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "discard",
+            "source": "master",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "told",
+            "value": true
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "talk_revise": {
+        "from": [
+          "talk"
+        ],
+        "ending": "revise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "party",
+            "to": "pupil"
+          },
+          {
+            "op": "set",
+            "key": "future",
+            "value": "revise"
+          }
+        ],
+        "once": true
+      },
+      "talk_preserve": {
+        "from": [
+          "talk"
+        ],
+        "ending": "preserve",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "party",
+            "to": "master"
+          },
+          {
+            "op": "set",
+            "key": "future",
+            "value": "preserve"
+          }
+        ],
+        "once": true
+      },
+      "talk_stop": {
+        "from": [
+          "talk"
+        ],
+        "ending": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "party",
+            "to": "bench"
+          },
+          {
+            "op": "set",
+            "key": "future",
+            "value": "stop"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "revise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.recovered"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.future"
+            },
+            "right": "revise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.plateAt"
+            },
+            "right": "pupil"
+          }
+        ]
+      },
+      "preserve": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.future"
+            },
+            "right": "preserve"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.plateAt"
+            },
+            "right": "master"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.told"
+            },
+            "right": true
+          }
+        ]
+      },
+      "stop": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.future"
+            },
+            "right": "stop"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.plateAt"
+            },
+            "right": "bench"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q205.values.told"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "bench": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_kilns",
+        "x": 5,
+        "y": 1,
+        "event": "q205_bench"
+      },
+      "ash": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_kilns",
+        "x": 11,
+        "y": 5,
+        "event": "q205_ash"
+      }
+    },
+    "revision": 1
+  }
+}

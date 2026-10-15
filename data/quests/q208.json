@@ -1,0 +1,1490 @@
+{
+  "schemaVersion": 1,
+  "id": "q208",
+  "number": 208,
+  "title": "誰のための消灯",
+  "client": "追悼灯の世話役メア",
+  "brief": "中継広間の小さな追悼灯を消してほしいという申し出が届いた。世話役は納骨所にいる申出人の意向を確かめてほしい。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q208_rest",
+      "title": "中継広間の小さな追悼台",
+      "points": [
+        {
+          "map": "kagaribi_relay",
+          "x": 9,
+          "y": 5,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q208.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q208.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q208_shelf",
+      "title": "納骨所の私物棚",
+      "points": [
+        {
+          "map": "kagaribi_ossuary",
+          "x": 7,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q208.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q208.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_relay",
+      "x": 9,
+      "y": 5,
+      "dungeon": "kagaribi",
+      "object": "q208_rest",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "screen": {
+      "gold": 57,
+      "xp": 51,
+      "label": "名前へ頭を下げずに通れる",
+      "text": "覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めないと決めた。小灯は内側に残り、迷宮の防護や明るさの仕組みは変えていない。"
+    },
+    "off": {
+      "gold": 57,
+      "xp": 51,
+      "label": "小灯だけを消す",
+      "text": "メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。"
+    },
+    "private": {
+      "gold": 57,
+      "xp": 51,
+      "label": "札の置き場所を本人へ返す",
+      "text": "名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。"
+    }
+  },
+  "scripts": {
+    "q208.v11.entry": {
+      "storyQuest": "q208",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q208",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "メアは小灯の横へ父親の名札を立てていた。「仕事の帰りに、読めるようにしたんです」。フユから届いたのは「消してください」という短い申し出だった。中継火そのものへの苦情ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "納骨所へ行き、フユに何を避けたいのか聞く",
+              "storyAction": {
+                "quest": "q208",
+                "action": "entry_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q208",
+                  "action": "entry_ask"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q208.v11.request": {
+      "storyQuest": "q208",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q208",
+          "scene": "request"
+        },
+        {
+          "op": "say",
+          "text": "フユは、父が同僚を助けたことを否定しなかった。「でも、家でされたことまで、それで良かったことにしないで」。灯の前で毎回頭を下げるよう求められるのがつらいという。「隠すか、消すか、札を返して。仲間だった話まで奪う気はない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "本人が用意した覆いを預かり、三つの希望を世話役へ伝えに戻る",
+              "storyAction": {
+                "quest": "q208",
+                "action": "request_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q208",
+                  "action": "request_take"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q208.v11.decide": {
+      "storyQuest": "q208",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q208",
+          "scene": "decide"
+        },
+        {
+          "op": "say",
+          "text": "メアに申し出を伝えると、彼女は小灯の位置を見た。「ここを通るたび、礼をしてもらっていた」。覚えていたい同僚と、娘が頭を下げる義務は、同じものではなかった。覆いで名を隠すには固定用の縄が要る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "screen",
+              "text": "縄1本で覆いを固定し、通路から名が見えないようにする",
+              "storyAction": {
+                "quest": "q208",
+                "action": "decide_screen"
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q208",
+                  "action": "decide_screen"
+                },
+                {
+                  "op": "jump",
+                  "script": "q208.v11.end.screen"
+                }
+              ]
+            },
+            {
+              "id": "off",
+              "text": "世話役の同意を得て私設の小灯を消し、札を伏せて預ける",
+              "storyAction": {
+                "quest": "q208",
+                "action": "decide_off"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q208",
+                  "action": "decide_off"
+                },
+                {
+                  "op": "jump",
+                  "script": "q208.v11.end.off"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "名札を預かり、フユへ返しに行く",
+              "storyAction": {
+                "quest": "q208",
+                "action": "decide_private"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q208",
+                  "action": "decide_private"
+                }
+              ]
+            },
+            {
+              "id": "screen_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q208.v11.decide.screen.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q208.v11.return": {
+      "storyQuest": "q208",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q208",
+          "scene": "return"
+        },
+        {
+          "op": "say",
+          "text": "フユの前へ戻った。名札と覆いを持っている。灯を囲む仲間の記憶まで消す約束はしていないが、本人に参加を求める札は持ち帰れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "名札と覆いを返し、公開の追悼から外したことを伝える",
+              "storyAction": {
+                "quest": "q208",
+                "action": "return_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q208",
+                  "action": "return_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q208.v11.end.private"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q208.v11.end.screen": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q208",
+          "outcome": "screen"
+        },
+        {
+          "op": "say",
+          "text": "覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めないと決めた。小灯は内側に残り、迷宮の防護や明るさの仕組みは変えていない。"
+        }
+      ]
+    },
+    "q208.v11.end.off": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q208",
+          "outcome": "off"
+        },
+        {
+          "op": "say",
+          "text": "メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。"
+        }
+      ]
+    },
+    "q208.v11.end.private": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q208",
+          "outcome": "private"
+        },
+        {
+          "op": "say",
+          "text": "名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。"
+        }
+      ]
+    },
+    "q208.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q208"
+          },
+          "cases": [
+            {
+              "equals": "q208.v11.decide.screen.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q208.v11.decide.screen.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q208.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q208.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "screen",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めないと決めた。小灯は内側に残り、迷宮の防護や明るさの仕組みは変えていない。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "off",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "private",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q208"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q208.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q208.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "request",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q208.v11.request"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "decide",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q208.v11.decide"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "return",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q208.v11.return"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q208.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q208.v11.decide.screen.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q208",
+          "value": "q208.v11.decide.screen.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q208.v11.decide.screen.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q208",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q208.v11.decide"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "メアは亡き同僚の名を書いた札を私設の追悼灯へ置いた。フユに相談はしなかった。 父から暴力を受けたフユは追悼への参加を断りたい。追悼灯は普通の小灯であり、迷宮の防護火・中継火とは別物である。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "メアは亡き同僚の名を書いた札を私設の追悼灯へ置いた。フユに相談はしなかった。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "父から暴力を受けたフユは追悼への参加を断りたい。追悼灯は普通の小灯であり、迷宮の防護火・中継火とは別物である。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q208.v11.entry",
+          "assertion": {
+            "title": "中継広間の小さな追悼台",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "keeper"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "request",
+          "script": "q208.v11.request",
+          "assertion": {
+            "title": "納骨所の私物棚",
+            "place": "shelf",
+            "cast": [
+              {
+                "entity": "daughter"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "decide",
+          "script": "q208.v11.decide",
+          "assertion": {
+            "title": "中継広間の小さな追悼台",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "keeper"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "return",
+          "script": "q208.v11.return",
+          "assertion": {
+            "title": "納骨所の私物棚",
+            "place": "shelf",
+            "cast": [
+              {
+                "entity": "daughter"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "中継広間の小さな追悼灯を消してほしいという申し出が届いた。世話役は納骨所にいる申出人の意向を確かめてほしい。"
+    },
+    "dramaticKernel": "皆で偲ぶ場所に、偲ばれたくない関係の名前を置いてよいか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "メアは亡き同僚の名を書いた札を私設の追悼灯へ置いた。フユに相談はしなかった。 父から暴力を受けたフユは追悼への参加を断りたい。追悼灯は普通の小灯であり、迷宮の防護火・中継火とは別物である。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "request",
+        "decide",
+        "return"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q208.v11.visit",
+    "progression": "申出人の意向を聞き、名を隠す覆いを預かる。灯の防護効果を変えず、遮蔽、私設灯の消灯、名札の返却を選ぶ。",
+    "agents": [
+      {
+        "id": "keeper",
+        "character": "q208_keeper",
+        "name": "メア",
+        "goal": "亡き職人を仲間として覚えておく",
+        "initialLocation": "rest",
+        "belief": "名前を明るく読めるようにすることが遺族にも良い",
+        "fear": "追悼を迷惑だったと言われること",
+        "knowledgeSource": "フユの父を同僚として知る。家庭での暴力については知らない。",
+        "publicGoal": "亡き職人を仲間として覚えておく",
+        "privateStake": "追悼を迷惑だったと言われること"
+      },
+      {
+        "id": "daughter",
+        "character": "q208_daughter",
+        "name": "フユ",
+        "goal": "父の追悼への参加を求められずに働く",
+        "initialLocation": "shelf",
+        "belief": "灯を消してもらう以外に断り方がない",
+        "fear": "父を許したことにされること",
+        "knowledgeSource": "父の職場での働きは否定しないが、自分へ向けた暴力を忘れたくない。",
+        "publicGoal": "父の追悼への参加を求められずに働く",
+        "privateStake": "父を許したことにされること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q208.values.partyAt",
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.keeperAt",
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "keeper の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.daughterAt",
+        "type": "enum",
+        "initial": "shelf",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "daughter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.namecardAt",
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "screen",
+          "lamp"
+        ],
+        "meaning": "namecard の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.screenAt",
+        "type": "enum",
+        "initial": "shelf",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "namecard",
+          "lamp"
+        ],
+        "meaning": "screen の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.lampAt",
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "namecard",
+          "screen"
+        ],
+        "meaning": "lamp の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.lampLit",
+        "type": "boolean",
+        "initial": true,
+        "meaning": "私設の小灯が灯っている",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.nameVisible",
+        "type": "boolean",
+        "initial": true,
+        "meaning": "通路から名札が見える",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.request",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "request",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.installed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "installed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q208.values.choice",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "screen",
+          "off",
+          "private"
+        ],
+        "meaning": "choice",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q208.v11.entry",
+        "assertion": {
+          "title": "中継広間の小さな追悼台",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "keeper"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "request",
+        "script": "q208.v11.request",
+        "assertion": {
+          "title": "納骨所の私物棚",
+          "place": "shelf",
+          "cast": [
+            {
+              "entity": "daughter"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "decide",
+        "script": "q208.v11.decide",
+        "assertion": {
+          "title": "中継広間の小さな追悼台",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "keeper"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "return",
+        "script": "q208.v11.return",
+        "assertion": {
+          "title": "納骨所の私物棚",
+          "place": "shelf",
+          "cast": [
+            {
+              "entity": "daughter"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "メアは小灯の横へ父親の名札を立てていた。「仕事の帰りに、読めるようにしたんです」。フユから届いたのは「消してください」という短い申し出だった。中継火そのものへの苦情ではない。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "納骨所へ行き、フユに何を避けたいのか聞く",
+            "to": "request",
+            "action": "entry_ask"
+          }
+        ]
+      },
+      {
+        "id": "request",
+        "text": "フユは、父が同僚を助けたことを否定しなかった。「でも、家でされたことまで、それで良かったことにしないで」。灯の前で毎回頭を下げるよう求められるのがつらいという。「隠すか、消すか、札を返して。仲間だった話まで奪う気はない」",
+        "options": [
+          {
+            "id": "take",
+            "text": "本人が用意した覆いを預かり、三つの希望を世話役へ伝えに戻る",
+            "to": "decide",
+            "action": "request_take"
+          }
+        ]
+      },
+      {
+        "id": "decide",
+        "text": "メアに申し出を伝えると、彼女は小灯の位置を見た。「ここを通るたび、礼をしてもらっていた」。覚えていたい同僚と、娘が頭を下げる義務は、同じものではなかった。覆いで名を隠すには固定用の縄が要る。",
+        "options": [
+          {
+            "id": "screen",
+            "text": "縄1本で覆いを固定し、通路から名が見えないようにする",
+            "to": "@screen",
+            "action": "decide_screen"
+          },
+          {
+            "id": "off",
+            "text": "世話役の同意を得て私設の小灯を消し、札を伏せて預ける",
+            "to": "@off",
+            "action": "decide_off"
+          },
+          {
+            "id": "private",
+            "text": "名札を預かり、フユへ返しに行く",
+            "to": "return",
+            "action": "decide_private"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "text": "フユの前へ戻った。名札と覆いを持っている。灯を囲む仲間の記憶まで消す約束はしていないが、本人に参加を求める札は持ち帰れた。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "名札と覆いを返し、公開の追悼から外したことを伝える",
+            "to": "@private",
+            "action": "return_hand"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "中継広間の小さな追悼灯を消してほしいという申し出が届いた。世話役は納骨所にいる申出人の意向を確かめてほしい。",
+      "progression": "申出人の意向を聞き、名を隠す覆いを預かる。灯の防護効果を変えず、遮蔽、私設灯の消灯、名札の返却を選ぶ。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q208.v11.decide",
+        "action": "screen",
+        "option": "screen_supplies",
+        "shortage": "q208.v11.decide.screen.shortage",
+        "resume": "q208.v11.decide.screen.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q208.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "rest": "中継広間の小さな追悼台",
+      "shelf": "納骨所の私物棚",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "rest"
+      ],
+      [
+        "transit",
+        "shelf"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "keeperAt": {
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "keeper の所在または保持者"
+      },
+      "daughterAt": {
+        "type": "enum",
+        "initial": "shelf",
+        "values": [
+          "rest",
+          "shelf",
+          "transit"
+        ],
+        "meaning": "daughter の所在または保持者"
+      },
+      "namecardAt": {
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "screen",
+          "lamp"
+        ],
+        "meaning": "namecard の所在または保持者"
+      },
+      "screenAt": {
+        "type": "enum",
+        "initial": "shelf",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "namecard",
+          "lamp"
+        ],
+        "meaning": "screen の所在または保持者"
+      },
+      "lampAt": {
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "rest",
+          "shelf",
+          "transit",
+          "party",
+          "keeper",
+          "daughter",
+          "namecard",
+          "screen"
+        ],
+        "meaning": "lamp の所在または保持者"
+      },
+      "lampLit": {
+        "type": "boolean",
+        "initial": true,
+        "meaning": "私設の小灯が灯っている"
+      },
+      "nameVisible": {
+        "type": "boolean",
+        "initial": true,
+        "meaning": "通路から名札が見える"
+      },
+      "request": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "request"
+      },
+      "installed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "installed"
+      },
+      "choice": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "screen",
+          "off",
+          "private"
+        ],
+        "meaning": "choice"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "keeper": {
+        "holder": "keeperAt",
+        "kind": "person",
+        "character": "q208_keeper"
+      },
+      "daughter": {
+        "holder": "daughterAt",
+        "kind": "person",
+        "character": "q208_daughter"
+      },
+      "namecard": {
+        "holder": "namecardAt",
+        "kind": "item"
+      },
+      "screen": {
+        "holder": "screenAt",
+        "kind": "item"
+      },
+      "lamp": {
+        "holder": "lampAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "中継広間の小さな追悼台",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "keeper"
+          }
+        ],
+        "requires": true
+      },
+      "request": {
+        "title": "納骨所の私物棚",
+        "place": "shelf",
+        "cast": [
+          {
+            "entity": "daughter"
+          }
+        ],
+        "requires": true
+      },
+      "decide": {
+        "title": "中継広間の小さな追悼台",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "keeper"
+          }
+        ],
+        "requires": true
+      },
+      "return": {
+        "title": "納骨所の私物棚",
+        "place": "shelf",
+        "cast": [
+          {
+            "entity": "daughter"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_ask": {
+        "from": [
+          "entry"
+        ],
+        "to": "request",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shelf"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "shelf",
+          "companions": []
+        },
+        "depart": []
+      },
+      "request_take": {
+        "from": [
+          "request"
+        ],
+        "to": "decide",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "rest",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "screen",
+            "from": "shelf",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "request",
+            "value": true
+          }
+        ]
+      },
+      "decide_screen": {
+        "from": [
+          "decide"
+        ],
+        "ending": "screen",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "screen",
+            "from": "party",
+            "to": "rest"
+          },
+          {
+            "op": "set",
+            "key": "installed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "nameVisible",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "choice",
+            "value": "screen"
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "decide_off": {
+        "from": [
+          "decide"
+        ],
+        "ending": "off",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "screen",
+            "from": "party",
+            "to": "keeper"
+          },
+          {
+            "op": "set",
+            "key": "lampLit",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "nameVisible",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "choice",
+            "value": "off"
+          }
+        ],
+        "once": true
+      },
+      "decide_private": {
+        "from": [
+          "decide"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shelf"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "shelf",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "namecard",
+            "from": "keeper",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "nameVisible",
+            "value": false
+          }
+        ]
+      },
+      "return_hand": {
+        "from": [
+          "return"
+        ],
+        "ending": "private",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "namecard",
+            "from": "party",
+            "to": "daughter"
+          },
+          {
+            "op": "transfer",
+            "entity": "screen",
+            "from": "party",
+            "to": "daughter"
+          },
+          {
+            "op": "set",
+            "key": "choice",
+            "value": "private"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "screen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.choice"
+            },
+            "right": "screen"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.lampLit"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.nameVisible"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.installed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.screenAt"
+            },
+            "right": "rest"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.namecardAt"
+            },
+            "right": "keeper"
+          }
+        ]
+      },
+      "off": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.choice"
+            },
+            "right": "off"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.lampLit"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.nameVisible"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.screenAt"
+            },
+            "right": "keeper"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.namecardAt"
+            },
+            "right": "keeper"
+          }
+        ]
+      },
+      "private": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.choice"
+            },
+            "right": "private"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.nameVisible"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.namecardAt"
+            },
+            "right": "daughter"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.screenAt"
+            },
+            "right": "daughter"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q208.values.partyAt"
+            },
+            "right": "shelf"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "rest": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_relay",
+        "x": 9,
+        "y": 5,
+        "event": "q208_rest"
+      },
+      "shelf": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_ossuary",
+        "x": 7,
+        "y": 1,
+        "event": "q208_shelf"
+      }
+    },
+    "revision": 1
+  }
+}

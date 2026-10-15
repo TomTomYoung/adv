@@ -53,7 +53,7 @@ export function questRouteSummary(data,q,notes=routeNotes){
       throw Error(`${q.id}: route ${key} must be one nonempty line`);
     out.push(`* 【${routeArea(data,step)}】[${step.place}]：${step.text}`);
   }
-  if(q.number>=5){
+  if(!q.story?.worldPlaces&&q.number>=5){
     out.push('');
     out.push(route.steps.some(s=>s.regionAround)
       ?'場所の注記：周辺の居住区・集落への出張を含む本文上の経過。町名と各施設の実移動先は未設定。ゲーム上の起点は下記の実配置を参照。'

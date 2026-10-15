@@ -1,0 +1,1285 @@
+{
+  "schemaVersion": 1,
+  "id": "q207",
+  "number": 207,
+  "title": "二人で持つ測り竿",
+  "client": "測量師オセ",
+  "brief": "最後の巡回路の幅が、二人の測量で食い違った。測量師は前の数値を確かめる同行者を求めている。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q207_base",
+      "title": "最後の巡回路の基準石",
+      "points": [
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q207.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q207.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q207_mark",
+      "title": "最後の巡回路の測点",
+      "points": [
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 9,
+          "y": 7,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q207.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q207.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_last_patrol",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q207_base",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "joint": {
+      "gold": 57,
+      "xp": 51,
+      "label": "数字と、支えた手を記す",
+      "text": "オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守らなかったが、二人で確かめた数値を、次に図面へ移せる形で残した。"
+    },
+    "withdrawn": {
+      "gold": 57,
+      "xp": 51,
+      "label": "間違った値を先に引く",
+      "text": "オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。"
+    },
+    "unverified": {
+      "gold": 57,
+      "xp": 51,
+      "label": "測っていないと書く",
+      "text": "二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。"
+    }
+  },
+  "scripts": {
+    "q207.v11.entry": {
+      "storyQuest": "q207",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q207",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "オセは測り竿の端を自分の足に押しつけていた。「場所が悪かっただけだ」。ハルは基準石を指す。「まず、ここで同じ長さになるか」。二人の紙は、通路が狭いかどうかより先に食い違っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "check",
+              "text": "基準石で、一人持ちと二人持ちを比べる",
+              "storyAction": {
+                "quest": "q207",
+                "action": "entry_check"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q207",
+                  "action": "entry_check"
+                },
+                {
+                  "op": "jump",
+                  "script": "q207.v11.calibrated"
+                }
+              ]
+            },
+            {
+              "id": "unverified",
+              "text": "追加測定を引き受けず、食い違いを未確認として記す",
+              "storyAction": {
+                "quest": "q207",
+                "action": "entry_unverified"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q207",
+                  "action": "entry_unverified"
+                },
+                {
+                  "op": "jump",
+                  "script": "q207.v11.end.unverified"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q207.v11.calibrated": {
+      "storyQuest": "q207",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q207",
+          "scene": "calibrated"
+        },
+        {
+          "op": "say",
+          "text": "オセ一人では竿の先が揺れた。ハルが支えると基準石の目盛りに合った。「数字は、手の持ち主まで書くのか」とオセが言う。「一人で測った数字にするなら」とハルは答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "go",
+              "text": "二人と測り竿を伴い、実際の測点へ行く",
+              "storyAction": {
+                "quest": "q207",
+                "action": "calibrated_go"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q207",
+                  "action": "calibrated_go"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q207.v11.measure": {
+      "storyQuest": "q207",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q207",
+          "scene": "measure"
+        },
+        {
+          "op": "say",
+          "text": "測点へ着いた。ハルが竿の先端を支え、オセが目盛りを読む準備をする。前の紙はオセの手元にある。二人の関与を隠したまま、新しい数値だけ得ることは引き受けない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "read",
+              "text": "二人の作業で通路幅を測り直す",
+              "storyAction": {
+                "quest": "q207",
+                "action": "measure_read"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q207",
+                  "action": "measure_read"
+                },
+                {
+                  "op": "jump",
+                  "script": "q207.v11.result"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q207.v11.result": {
+      "storyQuest": "q207",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q207",
+          "scene": "result"
+        },
+        {
+          "op": "say",
+          "text": "測り直した値はハルの旧値と一致した。オセの紙の狭い値は採用できない。「図面には二人の名を出すか、俺の前の値を引っ込めるかだな」。ハルは新しい値の脇に署名する場所を空けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "joint",
+              "text": "二人の名で測量票を訂正し、ハルへ控えを渡す",
+              "storyAction": {
+                "quest": "q207",
+                "action": "result_joint"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q207",
+                  "action": "result_joint"
+                },
+                {
+                  "op": "jump",
+                  "script": "q207.v11.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "旧値の撤回だけを記し、新図面の提出は保留する",
+              "storyAction": {
+                "quest": "q207",
+                "action": "result_withdraw"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q207",
+                  "action": "result_withdraw"
+                },
+                {
+                  "op": "jump",
+                  "script": "q207.v11.end.withdrawn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q207.v11.end.joint": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q207",
+          "outcome": "joint"
+        },
+        {
+          "op": "say",
+          "text": "オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守らなかったが、二人で確かめた数値を、次に図面へ移せる形で残した。"
+        }
+      ]
+    },
+    "q207.v11.end.withdrawn": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q207",
+          "outcome": "withdrawn"
+        },
+        {
+          "op": "say",
+          "text": "オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。"
+        }
+      ]
+    },
+    "q207.v11.end.unverified": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q207",
+          "outcome": "unverified"
+        },
+        {
+          "op": "say",
+          "text": "二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。"
+        }
+      ]
+    },
+    "q207.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": false,
+          "then": [],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q207.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q207.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守らなかったが、二人で確かめた数値を、次に図面へ移せる形で残した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdrawn",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "unverified",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q207"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q207.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q207.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "calibrated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q207.v11.calibrated"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "measure",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q207.v11.measure"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "result",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q207.v11.result"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q207.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "前回のオセの測定は手の震えで竿が傾き、実際より狭い値になった。ハルは別の値を得たが、正式な図面には採用されなかった。 この依頼中に通路そのものは動かない。既存の地図や通路幅を変更する作業ではなく、二人の測量票を扱う。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "前回のオセの測定は手の震えで竿が傾き、実際より狭い値になった。ハルは別の値を得たが、正式な図面には採用されなかった。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "この依頼中に通路そのものは動かない。既存の地図や通路幅を変更する作業ではなく、二人の測量票を扱う。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q207.v11.entry",
+          "assertion": {
+            "title": "最後の巡回路の基準石",
+            "place": "base",
+            "cast": [
+              {
+                "entity": "surveyor"
+              },
+              {
+                "entity": "assistant"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "calibrated",
+          "script": "q207.v11.calibrated",
+          "assertion": {
+            "title": "最後の巡回路の基準石",
+            "place": "base",
+            "cast": [
+              {
+                "entity": "surveyor"
+              },
+              {
+                "entity": "assistant"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "measure",
+          "script": "q207.v11.measure",
+          "assertion": {
+            "title": "最後の巡回路の測点",
+            "place": "mark",
+            "cast": [
+              {
+                "entity": "surveyor"
+              },
+              {
+                "entity": "assistant"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "result",
+          "script": "q207.v11.result",
+          "assertion": {
+            "title": "最後の巡回路の測点",
+            "place": "mark",
+            "cast": [
+              {
+                "entity": "surveyor"
+              },
+              {
+                "entity": "assistant"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後の巡回路の幅が、二人の測量で食い違った。測量師は前の数値を確かめる同行者を求めている。"
+    },
+    "dramaticKernel": "正しい数字を出すために、誰の手を借りたかまで記録できるか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "前回のオセの測定は手の震えで竿が傾き、実際より狭い値になった。ハルは別の値を得たが、正式な図面には採用されなかった。 この依頼中に通路そのものは動かない。既存の地図や通路幅を変更する作業ではなく、二人の測量票を扱う。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "calibrated",
+        "measure",
+        "result"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q207.v11.visit",
+    "progression": "基準石で測り方を検証し、二人を測点へ伴う。再測定の共同署名、旧値の撤回、再測定をしない未確認返却を選ぶ。",
+    "agents": [
+      {
+        "id": "surveyor",
+        "character": "q207_surveyor",
+        "name": "オセ",
+        "goal": "誤った通路幅を訂正する",
+        "initialLocation": "base",
+        "belief": "助手の支えを認めたら一人で仕事を受けられなくなる",
+        "fear": "手の震えを知られ、契約を失うこと",
+        "knowledgeSource": "前回は震える手で竿を斜めに持ち、狭い値を記した。",
+        "publicGoal": "誤った通路幅を訂正する",
+        "privateStake": "手の震えを知られ、契約を失うこと"
+      },
+      {
+        "id": "assistant",
+        "character": "q207_assistant",
+        "name": "ハル",
+        "goal": "自分の測定を確認する機会を得る",
+        "initialLocation": "base",
+        "belief": "師は自分の読みを信用していない",
+        "fear": "働きを名前のない手伝いとして消されること",
+        "knowledgeSource": "前回の竿の傾きを見ており、基準石で確認しようと提案した。",
+        "publicGoal": "自分の測定を確認する機会を得る",
+        "privateStake": "働きを名前のない手伝いとして消されること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q207.values.partyAt",
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.surveyorAt",
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "surveyor の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.assistantAt",
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "assistant の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.rodAt",
+        "type": "enum",
+        "initial": "surveyor",
+        "values": [
+          "base",
+          "mark",
+          "transit",
+          "party",
+          "surveyor",
+          "assistant",
+          "sheet"
+        ],
+        "meaning": "rod の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.sheetAt",
+        "type": "enum",
+        "initial": "surveyor",
+        "values": [
+          "base",
+          "mark",
+          "transit",
+          "party",
+          "surveyor",
+          "assistant",
+          "rod"
+        ],
+        "meaning": "sheet の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.calibrated",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "calibrated",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.remeasured",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "remeasured",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.joint",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "joint",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q207.values.filing",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "joint",
+          "withdrawn",
+          "unverified"
+        ],
+        "meaning": "filing",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q207.v11.entry",
+        "assertion": {
+          "title": "最後の巡回路の基準石",
+          "place": "base",
+          "cast": [
+            {
+              "entity": "surveyor"
+            },
+            {
+              "entity": "assistant"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "calibrated",
+        "script": "q207.v11.calibrated",
+        "assertion": {
+          "title": "最後の巡回路の基準石",
+          "place": "base",
+          "cast": [
+            {
+              "entity": "surveyor"
+            },
+            {
+              "entity": "assistant"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "measure",
+        "script": "q207.v11.measure",
+        "assertion": {
+          "title": "最後の巡回路の測点",
+          "place": "mark",
+          "cast": [
+            {
+              "entity": "surveyor"
+            },
+            {
+              "entity": "assistant"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "result",
+        "script": "q207.v11.result",
+        "assertion": {
+          "title": "最後の巡回路の測点",
+          "place": "mark",
+          "cast": [
+            {
+              "entity": "surveyor"
+            },
+            {
+              "entity": "assistant"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "オセは測り竿の端を自分の足に押しつけていた。「場所が悪かっただけだ」。ハルは基準石を指す。「まず、ここで同じ長さになるか」。二人の紙は、通路が狭いかどうかより先に食い違っている。",
+        "options": [
+          {
+            "id": "check",
+            "text": "基準石で、一人持ちと二人持ちを比べる",
+            "to": "calibrated",
+            "action": "entry_check"
+          },
+          {
+            "id": "unverified",
+            "text": "追加測定を引き受けず、食い違いを未確認として記す",
+            "to": "@unverified",
+            "action": "entry_unverified"
+          }
+        ]
+      },
+      {
+        "id": "calibrated",
+        "text": "オセ一人では竿の先が揺れた。ハルが支えると基準石の目盛りに合った。「数字は、手の持ち主まで書くのか」とオセが言う。「一人で測った数字にするなら」とハルは答えた。",
+        "options": [
+          {
+            "id": "go",
+            "text": "二人と測り竿を伴い、実際の測点へ行く",
+            "to": "measure",
+            "action": "calibrated_go"
+          }
+        ]
+      },
+      {
+        "id": "measure",
+        "text": "測点へ着いた。ハルが竿の先端を支え、オセが目盛りを読む準備をする。前の紙はオセの手元にある。二人の関与を隠したまま、新しい数値だけ得ることは引き受けない。",
+        "options": [
+          {
+            "id": "read",
+            "text": "二人の作業で通路幅を測り直す",
+            "to": "result",
+            "action": "measure_read"
+          }
+        ]
+      },
+      {
+        "id": "result",
+        "text": "測り直した値はハルの旧値と一致した。オセの紙の狭い値は採用できない。「図面には二人の名を出すか、俺の前の値を引っ込めるかだな」。ハルは新しい値の脇に署名する場所を空けた。",
+        "options": [
+          {
+            "id": "joint",
+            "text": "二人の名で測量票を訂正し、ハルへ控えを渡す",
+            "to": "@joint",
+            "action": "result_joint"
+          },
+          {
+            "id": "withdraw",
+            "text": "旧値の撤回だけを記し、新図面の提出は保留する",
+            "to": "@withdrawn",
+            "action": "result_withdraw"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "最後の巡回路の幅が、二人の測量で食い違った。測量師は前の数値を確かめる同行者を求めている。",
+      "progression": "基準石で測り方を検証し、二人を測点へ伴う。再測定の共同署名、旧値の撤回、再測定をしない未確認返却を選ぶ。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    }
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "base": "最後の巡回路の基準石",
+      "mark": "最後の巡回路の測点",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "base"
+      ],
+      [
+        "transit",
+        "mark"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "surveyorAt": {
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "surveyor の所在または保持者"
+      },
+      "assistantAt": {
+        "type": "enum",
+        "initial": "base",
+        "values": [
+          "base",
+          "mark",
+          "transit"
+        ],
+        "meaning": "assistant の所在または保持者"
+      },
+      "rodAt": {
+        "type": "enum",
+        "initial": "surveyor",
+        "values": [
+          "base",
+          "mark",
+          "transit",
+          "party",
+          "surveyor",
+          "assistant",
+          "sheet"
+        ],
+        "meaning": "rod の所在または保持者"
+      },
+      "sheetAt": {
+        "type": "enum",
+        "initial": "surveyor",
+        "values": [
+          "base",
+          "mark",
+          "transit",
+          "party",
+          "surveyor",
+          "assistant",
+          "rod"
+        ],
+        "meaning": "sheet の所在または保持者"
+      },
+      "calibrated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "calibrated"
+      },
+      "remeasured": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "remeasured"
+      },
+      "joint": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "joint"
+      },
+      "filing": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "joint",
+          "withdrawn",
+          "unverified"
+        ],
+        "meaning": "filing"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "surveyor": {
+        "holder": "surveyorAt",
+        "kind": "person",
+        "character": "q207_surveyor"
+      },
+      "assistant": {
+        "holder": "assistantAt",
+        "kind": "person",
+        "character": "q207_assistant"
+      },
+      "rod": {
+        "holder": "rodAt",
+        "kind": "item"
+      },
+      "sheet": {
+        "holder": "sheetAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "tilt": {
+        "text": "基準石で竿を合わせると、オセ一人では先端が傾き、ハルが支えると目盛りが合う。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "最後の巡回路の基準石",
+        "place": "base",
+        "cast": [
+          {
+            "entity": "surveyor"
+          },
+          {
+            "entity": "assistant"
+          }
+        ],
+        "requires": true
+      },
+      "calibrated": {
+        "title": "最後の巡回路の基準石",
+        "place": "base",
+        "cast": [
+          {
+            "entity": "surveyor"
+          },
+          {
+            "entity": "assistant"
+          }
+        ],
+        "requires": true
+      },
+      "measure": {
+        "title": "最後の巡回路の測点",
+        "place": "mark",
+        "cast": [
+          {
+            "entity": "surveyor"
+          },
+          {
+            "entity": "assistant"
+          }
+        ],
+        "requires": true
+      },
+      "result": {
+        "title": "最後の巡回路の測点",
+        "place": "mark",
+        "cast": [
+          {
+            "entity": "surveyor"
+          },
+          {
+            "entity": "assistant"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_check": {
+        "from": [
+          "entry"
+        ],
+        "to": "calibrated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "calibrated",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "tilt",
+            "source": "assistant",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "entry_unverified": {
+        "from": [
+          "entry"
+        ],
+        "ending": "unverified",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "filing",
+            "value": "unverified"
+          }
+        ],
+        "once": true
+      },
+      "calibrated_go": {
+        "from": [
+          "calibrated"
+        ],
+        "to": "measure",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "surveyor",
+              "assistant"
+            ],
+            "path": [
+              "transit",
+              "mark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "mark",
+          "companions": [
+            "surveyor",
+            "assistant"
+          ]
+        },
+        "depart": []
+      },
+      "measure_read": {
+        "from": [
+          "measure"
+        ],
+        "to": "result",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "remeasured",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "joint",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "result_joint": {
+        "from": [
+          "result"
+        ],
+        "ending": "joint",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "sheet",
+            "from": "surveyor",
+            "to": "assistant"
+          },
+          {
+            "op": "set",
+            "key": "filing",
+            "value": "joint"
+          }
+        ],
+        "once": true
+      },
+      "result_withdraw": {
+        "from": [
+          "result"
+        ],
+        "ending": "withdrawn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "filing",
+            "value": "withdrawn"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "joint": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.filing"
+            },
+            "right": "joint"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.remeasured"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.joint"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.sheetAt"
+            },
+            "right": "assistant"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.assistantAt"
+            },
+            "right": "mark"
+          }
+        ]
+      },
+      "withdrawn": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.filing"
+            },
+            "right": "withdrawn"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.remeasured"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.sheetAt"
+            },
+            "right": "surveyor"
+          }
+        ]
+      },
+      "unverified": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.filing"
+            },
+            "right": "unverified"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.remeasured"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q207.values.partyAt"
+            },
+            "right": "base"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "base": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_last_patrol",
+        "x": 5,
+        "y": 1,
+        "event": "q207_base"
+      },
+      "mark": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_last_patrol",
+        "x": 9,
+        "y": 7,
+        "event": "q207_mark"
+      }
+    },
+    "revision": 1
+  }
+}

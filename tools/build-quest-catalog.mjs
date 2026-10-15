@@ -18,4 +18,4 @@ for(const id of Object.keys(questPages))for(const [file,content] of Object.entri
   await fs.writeFile(target,relocateDoc(content,file));
 }
 await fs.writeFile(path.join(root,'doc/scenarios/quests/README.md'),relocateDoc(questPageIndex(data),'scenarios/quests/README.md'));
-console.log('CATALOG: q001–q010 dedicated pages in scenarios/quests; q011–q020 scripts in the 200-quest catalog');
+console.log('CATALOG: q001–q010 dedicated pages in scenarios/quests; q011–q020 and q201–q210 scripts in the catalog');

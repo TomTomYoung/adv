@@ -1,0 +1,1199 @@
+{
+  "schemaVersion": 1,
+  "id": "q202",
+  "number": 202,
+  "title": "片耳の合図",
+  "client": "見習い灯番トマ",
+  "brief": "見習いトマは合図の試験に落ちた。もう一度、教習係のいる交差路まで同行してほしいという。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 2,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q202_entry",
+      "title": "巡灯路の訓練札前",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q202.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q202.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q202_post",
+      "title": "交差路の合図杭",
+      "points": [
+        {
+          "map": "kagaribi_crossroads",
+          "x": 7,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q202.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q202.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_f1",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q202_entry",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "paired": {
+      "gold": 57,
+      "xp": 51,
+      "label": "縄の返事を待つ",
+      "text": "セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっていない。トマは札を受け取り、初めて左側から呼ばれたときに「もう一度」と言った。"
+    },
+    "visual": {
+      "gold": 57,
+      "xp": 51,
+      "label": "向き合ってから送る",
+      "text": "トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。"
+    },
+    "retrain": {
+      "gold": 57,
+      "xp": 51,
+      "label": "延期の理由を本人の言葉で残す",
+      "text": "訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。"
+    }
+  },
+  "scripts": {
+    "q202.v11.entry": {
+      "storyQuest": "q202",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q202",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "トマは声をかけるたび、右耳をこちらへ向けた。「聞こえなかった、と言うと、聞く気がなかったことになる」。左耳のことを教習係に話すつもりだという。「代わりに言わないで。一緒にいてくれればいい」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "トマと交差路へ歩く",
+              "storyAction": {
+                "quest": "q202",
+                "action": "entry_walk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q202",
+                  "action": "entry_walk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q202.v11.lesson": {
+      "storyQuest": "q202",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q202",
+          "scene": "lesson"
+        },
+        {
+          "op": "say",
+          "text": "トマが左耳のことを話すと、セナは鐘を置いた。「では、どこからなら届くかを調べよう。聞けたふりは要らない」。彼女は正面と左後方から同じ言葉をかける試験を提案した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "二方向の声と、正面から見せる手の合図を試す",
+              "storyAction": {
+                "quest": "q202",
+                "action": "lesson_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q202",
+                  "action": "lesson_test"
+                },
+                {
+                  "op": "jump",
+                  "script": "q202.v11.result"
+                }
+              ]
+            },
+            {
+              "id": "defer",
+              "text": "今日は独り立ちを延期し、訓練札を預けたままにする",
+              "storyAction": {
+                "quest": "q202",
+                "action": "lesson_defer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q202",
+                  "action": "lesson_defer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q202.v11.end.retrain"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q202.v11.result": {
+      "storyQuest": "q202",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q202",
+          "scene": "result"
+        },
+        {
+          "op": "say",
+          "text": "左後方の声には応答がなかった。正面の声と手の合図には、トマは一度ずつ答えた。「目でも、背中は見えないね」とセナが言う。二人巡回なら縄の合図を加えられる。視覚合図なら、必ず向き合ってから送る手順を守る必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pair",
+              "text": "縄1本を合図用に渡し、二人巡回に限定した訓練札を受け取る",
+              "storyAction": {
+                "quest": "q202",
+                "action": "result_pair"
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q202",
+                  "action": "result_pair"
+                },
+                {
+                  "op": "jump",
+                  "script": "q202.v11.end.paired"
+                }
+              ]
+            },
+            {
+              "id": "visual",
+              "text": "正面で応答を確認する手順を書き、訓練札をトマに渡す",
+              "storyAction": {
+                "quest": "q202",
+                "action": "result_visual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q202",
+                  "action": "result_visual"
+                },
+                {
+                  "op": "jump",
+                  "script": "q202.v11.end.visual"
+                }
+              ]
+            },
+            {
+              "id": "pair_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q202.v11.result.pair.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q202.v11.end.paired": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q202",
+          "outcome": "paired"
+        },
+        {
+          "op": "say",
+          "text": "セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっていない。トマは札を受け取り、初めて左側から呼ばれたときに「もう一度」と言った。"
+        }
+      ]
+    },
+    "q202.v11.end.visual": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q202",
+          "outcome": "visual"
+        },
+        {
+          "op": "say",
+          "text": "トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。"
+        }
+      ]
+    },
+    "q202.v11.end.retrain": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q202",
+          "outcome": "retrain"
+        },
+        {
+          "op": "say",
+          "text": "訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。"
+        }
+      ]
+    },
+    "q202.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q202"
+          },
+          "cases": [
+            {
+              "equals": "q202.v11.result.pair.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q202.v11.result.pair.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q202.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q202.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "paired",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっていない。トマは札を受け取り、初めて左側から呼ばれたときに「もう一度」と言った。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "visual",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "retrain",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q202"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q202.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q202.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "lesson",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q202.v11.lesson"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "result",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q202.v11.result"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q202.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q202.v11.result.pair.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q202",
+          "value": "q202.v11.result.pair.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q202.v11.result.pair.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q202",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q202.v11.result"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "トマは左耳が聞こえにくいことを申告せず、左後方から鳴らされた試験の鐘に返事をしなかった。セナはそれを不注意だと判断した。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "トマは左耳が聞こえにくいことを申告せず、左後方から鳴らされた試験の鐘に返事をしなかった。セナはそれを不注意だと判断した。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q202.v11.entry",
+          "assertion": {
+            "title": "巡灯路の訓練札前",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "trainee"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "lesson",
+          "script": "q202.v11.lesson",
+          "assertion": {
+            "title": "交差路の合図杭",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "trainee"
+              },
+              {
+                "entity": "trainer"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "result",
+          "script": "q202.v11.result",
+          "assertion": {
+            "title": "交差路の合図杭",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "trainee"
+              },
+              {
+                "entity": "trainer"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "見習いトマは合図の試験に落ちた。もう一度、教習係のいる交差路まで同行してほしいという。"
+    },
+    "dramaticKernel": "合図に従わない人を変えるのか、合図の届き方を変えるのか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "トマは左耳が聞こえにくいことを申告せず、左後方から鳴らされた試験の鐘に返事をしなかった。セナはそれを不注意だと判断した。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "lesson",
+        "result"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q202.v11.visit",
+    "progression": "本人の申告を受けて教習係へ同行する。合図を実際に試し、二人巡回、視覚合図、独り立ち延期のいずれかを訓練札へ記す。",
+    "agents": [
+      {
+        "id": "trainee",
+        "character": "q202_trainee",
+        "name": "トマ",
+        "goal": "聞き落としを隠さず巡回を続ける",
+        "initialLocation": "entry",
+        "belief": "聞こえにくいと認めたら外される",
+        "fear": "一人前になる機会を失うこと",
+        "knowledgeSource": "幼い頃から左耳が聞こえにくい。試験の鐘は左後方から鳴った。q001の新人とは別人。",
+        "publicGoal": "聞き落としを隠さず巡回を続ける",
+        "privateStake": "一人前になる機会を失うこと"
+      },
+      {
+        "id": "trainer",
+        "character": "q202_trainer",
+        "name": "セナ",
+        "goal": "誰が担当しても伝わる手順を決める",
+        "initialLocation": "post",
+        "belief": "返事がなかったのは集中していなかったからだ",
+        "fear": "配慮を口実に危険な独り立ちを認めること",
+        "knowledgeSource": "試験結果は見たが、トマの聴力については聞いていない。",
+        "publicGoal": "誰が担当しても伝わる手順を決める",
+        "privateStake": "配慮を口実に危険な独り立ちを認めること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q202.values.partyAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.traineeAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "trainee の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.trainerAt",
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "trainer の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.plateAt",
+        "type": "enum",
+        "initial": "trainer",
+        "values": [
+          "entry",
+          "post",
+          "transit",
+          "party",
+          "trainee",
+          "trainer"
+        ],
+        "meaning": "plate の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.disclosed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "disclosed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.tested",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q202.values.method",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "paired",
+          "visual",
+          "retrain"
+        ],
+        "meaning": "method",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q202.v11.entry",
+        "assertion": {
+          "title": "巡灯路の訓練札前",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "trainee"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "lesson",
+        "script": "q202.v11.lesson",
+        "assertion": {
+          "title": "交差路の合図杭",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "trainee"
+            },
+            {
+              "entity": "trainer"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "result",
+        "script": "q202.v11.result",
+        "assertion": {
+          "title": "交差路の合図杭",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "trainee"
+            },
+            {
+              "entity": "trainer"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "トマは声をかけるたび、右耳をこちらへ向けた。「聞こえなかった、と言うと、聞く気がなかったことになる」。左耳のことを教習係に話すつもりだという。「代わりに言わないで。一緒にいてくれればいい」",
+        "options": [
+          {
+            "id": "walk",
+            "text": "トマと交差路へ歩く",
+            "to": "lesson",
+            "action": "entry_walk"
+          }
+        ]
+      },
+      {
+        "id": "lesson",
+        "text": "トマが左耳のことを話すと、セナは鐘を置いた。「では、どこからなら届くかを調べよう。聞けたふりは要らない」。彼女は正面と左後方から同じ言葉をかける試験を提案した。",
+        "options": [
+          {
+            "id": "test",
+            "text": "二方向の声と、正面から見せる手の合図を試す",
+            "to": "result",
+            "action": "lesson_test"
+          },
+          {
+            "id": "defer",
+            "text": "今日は独り立ちを延期し、訓練札を預けたままにする",
+            "to": "@retrain",
+            "action": "lesson_defer"
+          }
+        ]
+      },
+      {
+        "id": "result",
+        "text": "左後方の声には応答がなかった。正面の声と手の合図には、トマは一度ずつ答えた。「目でも、背中は見えないね」とセナが言う。二人巡回なら縄の合図を加えられる。視覚合図なら、必ず向き合ってから送る手順を守る必要がある。",
+        "options": [
+          {
+            "id": "pair",
+            "text": "縄1本を合図用に渡し、二人巡回に限定した訓練札を受け取る",
+            "to": "@paired",
+            "action": "result_pair"
+          },
+          {
+            "id": "visual",
+            "text": "正面で応答を確認する手順を書き、訓練札をトマに渡す",
+            "to": "@visual",
+            "action": "result_visual"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "見習いトマは合図の試験に落ちた。もう一度、教習係のいる交差路まで同行してほしいという。",
+      "progression": "本人の申告を受けて教習係へ同行する。合図を実際に試し、二人巡回、視覚合図、独り立ち延期のいずれかを訓練札へ記す。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q202.v11.result",
+        "action": "pair",
+        "option": "pair_supplies",
+        "shortage": "q202.v11.result.pair.shortage",
+        "resume": "q202.v11.result.pair.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q202.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "巡灯路の訓練札前",
+      "post": "交差路の合図杭",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "post"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "traineeAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "trainee の所在または保持者"
+      },
+      "trainerAt": {
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "post",
+          "transit"
+        ],
+        "meaning": "trainer の所在または保持者"
+      },
+      "plateAt": {
+        "type": "enum",
+        "initial": "trainer",
+        "values": [
+          "entry",
+          "post",
+          "transit",
+          "party",
+          "trainee",
+          "trainer"
+        ],
+        "meaning": "plate の所在または保持者"
+      },
+      "disclosed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "disclosed"
+      },
+      "tested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested"
+      },
+      "method": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "paired",
+          "visual",
+          "retrain"
+        ],
+        "meaning": "method"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "trainee": {
+        "holder": "traineeAt",
+        "kind": "person",
+        "character": "q202_trainee"
+      },
+      "trainer": {
+        "holder": "trainerAt",
+        "kind": "person",
+        "character": "q202_trainer"
+      },
+      "plate": {
+        "holder": "plateAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "side": {
+        "text": "左後方の声だけを聞き落とし、正面からの声には答えた。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "巡灯路の訓練札前",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "trainee"
+          }
+        ],
+        "requires": true
+      },
+      "lesson": {
+        "title": "交差路の合図杭",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "trainee"
+          },
+          {
+            "entity": "trainer"
+          }
+        ],
+        "requires": true
+      },
+      "result": {
+        "title": "交差路の合図杭",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "trainee"
+          },
+          {
+            "entity": "trainer"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_walk": {
+        "from": [
+          "entry"
+        ],
+        "to": "lesson",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "trainee"
+            ],
+            "path": [
+              "transit",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "post",
+          "companions": [
+            "trainee"
+          ]
+        },
+        "depart": []
+      },
+      "lesson_test": {
+        "from": [
+          "lesson"
+        ],
+        "to": "result",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "disclosed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "tested",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "side",
+            "source": "trainee",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "lesson_defer": {
+        "from": [
+          "lesson"
+        ],
+        "ending": "retrain",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "disclosed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "method",
+            "value": "retrain"
+          }
+        ],
+        "once": true
+      },
+      "result_pair": {
+        "from": [
+          "result"
+        ],
+        "ending": "paired",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "trainer",
+            "to": "trainee"
+          },
+          {
+            "op": "set",
+            "key": "method",
+            "value": "paired"
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "result_visual": {
+        "from": [
+          "result"
+        ],
+        "ending": "visual",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "plate",
+            "from": "trainer",
+            "to": "trainee"
+          },
+          {
+            "op": "set",
+            "key": "method",
+            "value": "visual"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "paired": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.tested"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.method"
+            },
+            "right": "paired"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.plateAt"
+            },
+            "right": "trainee"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.traineeAt"
+            },
+            "right": "post"
+          }
+        ]
+      },
+      "visual": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.tested"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.method"
+            },
+            "right": "visual"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.plateAt"
+            },
+            "right": "trainee"
+          }
+        ]
+      },
+      "retrain": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.disclosed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.method"
+            },
+            "right": "retrain"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.plateAt"
+            },
+            "right": "trainer"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q202.values.traineeAt"
+            },
+            "right": "post"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 5,
+        "y": 1,
+        "event": "q202_entry"
+      },
+      "post": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_crossroads",
+        "x": 7,
+        "y": 1,
+        "event": "q202_post"
+      }
+    },
+    "revision": 1
+  }
+}
