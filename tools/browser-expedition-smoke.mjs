@@ -29,6 +29,10 @@ try{
   await page.evaluate(()=>{g.dispatch({type:'location.move',id:g.data.game.world.townRoot});show();view.tab='regions';show();});
   await page.getByRole('button',{name:'巡回路の給油所から再開',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.location.map),'kagaribi_f1');
   await page.getByRole('button',{name:'任意調べる',exact:true}).click();await page.getByRole('button',{name:'巡回路の給油所',exact:true}).click();
+  // Narrow scene windows paginate the equipment description before showing choices.
+  for(let n=0;await page.evaluate(()=>typeof view.canChoose==='function'&&!view.canChoose());n++){
+   assert.ok(n<10,'camp description reaches its choices');await page.getByRole('button',{name:/^次のページ/}).click();
+  }
   await page.getByRole('button',{name:/^油を容量いっぱい汲む/}).waitFor();
   await page.screenshot({path:path.join(output,`camp-${layout}-${width}.png`)});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'camp horizontal overflow');
   await page.close();console.log(`EXPEDITION BROWSER OK: ${layout} ${width}`);
