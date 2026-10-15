@@ -6,7 +6,7 @@ import {questRouteSummary} from './quest-route-summary.mjs';
 const json=value=>JSON.stringify(value);
 const code=value=>'`'+String(value)+'`';
 const slug=text=>text.toLowerCase().replace(/[^\p{L}\p{N}\p{M}\s_-]/gu,'').trim().replace(/\s/g,'-');
-const detailed=q=>q.number<=20;
+const detailed=q=>q.number<=20||Boolean(q.story);
 const sceneTitle=(q,node)=>`${q.id} / ${node.id}${q.story?.scenes[node.id]?.title?' — '+q.story.scenes[node.id].title:''}`;
 const endingTitle=(q,id)=>`${q.id} 結末 ${id} — ${q.outcomes[id].label}`;
 export const questPages=Object.fromEntries(Array.from({length:10},(_,i)=>{
@@ -26,9 +26,9 @@ export function questCatalog(data,date,{questId}={}){
     `<!-- quest-catalog-source:${catalogContentHash(data)} -->`,'',
     '表示順の正本は [quest-order.json](../authoring/quest-order.json) です。掲載順と表示番号はこの一覧から決まり、見出し・リンク・進行状態の内部IDは固定です。','',
     `全${Object.keys(data.quests).length}件に「【ダンジョン名／町名】[場所]：経過」の箇条書きを掲載します。移動・再訪を進行順に記し、別経路と途中の結末は本文で区別します。すべての項目を順番に実行するという意味ではありません。座標と内部IDは実配置・個別ページで確認します。`,'',
-    'q001〜q010は[個別ページ一覧](scenarios/quests/README.md)から、全文・人物と証拠の所在・状態変化・結末条件・配置と経路を確認できます。q011〜q020の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は概要・経過・結末を掲載します。作者向けのため真相と結末を含みます。','',
-    'q001〜q004の町・ダンジョン間の実移動と、q005以降の本文上の移動を区別します。未接続の経過では依頼の配置先ダンジョンを大括りとし、周辺の居住区・集落への出張は「周辺」と記します。町名や施設の所在地を新たに確定するものではありません。地下関所の室内は町の表示方式でも灯守の地下水道に属します。','',
-    'q001〜q010はモデルv1.1と状態モデルadv-story-state/1、q011〜q020はモデルv1.0のcatalog1改稿です。過去の命令列や別名を現行場面として重複掲載しません。条件はJSON式をそのまま記載し、選択の表示条件と成立条件、行為の条件、結末の条件を区別します。','',
+    'q001〜q010は[個別ページ一覧](scenarios/quests/README.md)から、全文・人物と証拠の所在・状態変化・結末条件・配置と経路を確認できます。q011〜q020・q201〜q210の本文・選択肢・選択後の応答・条件分岐・戦闘後の継続は各項目に掲載します。q021〜q200は概要・経過・結末を掲載します。作者向けのため真相と結末を含みます。','',
+    'q001〜q004・q201〜q210の実移動と、その他の本文上の移動を区別します。未接続の経過では依頼の配置先ダンジョンを大括りとし、周辺の居住区・集落への出張は「周辺」と記します。町名や施設の所在地を新たに確定するものではありません。地下関所の室内は町の表示方式でも灯守の地下水道に属します。','',
+    'q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q011〜q020はモデルv1.0のcatalog1改稿です。過去の命令列や別名を現行場面として重複掲載しません。条件はJSON式をそのまま記載し、選択の表示条件と成立条件、行為の条件、結末の条件を区別します。','',
     '物語行為の詳細な所在・介助・費用・不変条件は各実装JSONのstoryを参照してください。「行為」は成立時に一括確定します。共通の中断選択肢はありません。資材不足は作業別の不足・再開経路へ分岐し、戦闘後の作業と支払いは勝利した場合だけ確定します。','',
     '[人物一覧](CHARACTERS.md) ／ [状態モデル](SCENARIO_MODEL_V11.md) ／ [シナリオ設計と編集手順](SCENARIO_DESIGN.md)','',
     '現在の実装から明示的に更新するコマンドは npm run build:catalog です。カタログへ直接加えた改稿は、先にauthoringの正本へ反映してから再生成してください。npm run build:docs は本文を上書きしません。',''];

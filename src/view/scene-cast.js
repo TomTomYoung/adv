@@ -5,7 +5,13 @@ function placement(c,index,count,cards){
   return {left:cards?'':`${d.x??({left:28,center:50,right:72}[d.position])??defaults(count)[index%8]}%`,bottom:cards?'':`${d.y??-2}%`,
     transform:`${cards?'':'translateX(-50%) '}rotate(${angle}deg) scale(${scale})`,opacity:String((d.opacity??1)*(c.remote ? .7 : 1))};
 }
-function portrait(c,cards){const img=document.createElement('img');img.src=cards?c.portrait??c.sprite:c.sprite??c.portrait;img.alt=c.name;img.decoding='async';img.style.transform=c.display?.flip?'scaleX(-1)':'';return img;}
+function portrait(c,cards){
+  const source=cards?c.portrait??c.sprite:c.sprite??c.portrait;
+  const img=document.createElement(source?'img':'span');
+  if(source){img.src=source;img.alt=c.name;img.decoding='async';}
+  else {img.hidden=true;img.setAttribute('aria-hidden','true');}
+  img.style.transform=c.display?.flip?'scaleX(-1)':'';return img;
+}
 function speaking(entry,c,scene,index){
   const active=c.id===scene.speakerId,cards=scene.mode==='cards';
   entry.figure.className=(cards?'story-person':'scene-actor')+(c.remote?' remote':'')+(active?' speaking':'');

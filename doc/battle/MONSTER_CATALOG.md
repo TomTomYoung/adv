@@ -1085,6 +1085,7 @@ kagaribi_roaming：煤ネズミ×1。逃走可。
 
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+戦闘開始命令：1スクリプト。q205.v11.ash。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ### 燭蝋スライム (kagaribi_wax_slime)
 
@@ -1105,9 +1106,11 @@ AIの選択順：
 
 kagaribi_wax：燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み35 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み35 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み35。
+戦闘開始命令：1スクリプト。q209.v11.challenge。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+戦闘開始命令：1スクリプト。q205.v11.ash。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ### 灯蛾 (kagaribi_ember_moth)
 

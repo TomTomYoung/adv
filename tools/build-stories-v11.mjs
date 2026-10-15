@@ -5,14 +5,18 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import stories1 from '../authoring/stories-v11-1.mjs';
 import stories2 from '../authoring/stories-v11-2.mjs';
-import characters from '../authoring/characters.mjs';
+import originalCharacters from '../authoring/characters.mjs';
+import kagaribiStories from '../authoring/stories-kagaribi.mjs';
+import {seedKagaribiStories} from './seed-kagaribi-stories.mjs';
 import {ref,eq} from '../authoring/story-kit.mjs';
 import {applyCatalogRevisions} from './apply-catalog-revisions.mjs';
 const root=path.resolve(import.meta.dirname,'..'),read=async f=>JSON.parse(await fs.readFile(path.join(root,f),'utf8')),write=async(f,v)=>fs.writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
 const standard={id:'game-scenario-model',version:'1.1',source:'https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4',adapter:'adv-story-state/1',revision:'2026-09-13',scope:'quest-episode'};
 const previous={id:'game-scenario-model',version:'1.0',source:'https://app.notion.com/p/v1-0-3d7c3c1966b381818a0fcb62493abcc3'};
-const drafts=[...stories1,...stories2],game=await read('data/game.json'),quests=[];
+const characters=[...originalCharacters,...kagaribiStories.flatMap(s=>s.castCards)];
+const drafts=[...stories1,...stories2,...kagaribiStories],game=await read('data/game.json'),quests=[];
 await applyCatalogRevisions(root);
+await seedKagaribiStories(root,game);
 const say=text=>({op:'say',text}),render=t=>Array.isArray(t)?t.flatMap(render):typeof t==='string'?[say(t)]:[{op:'if',condition:t.when,then:render(t.yes),else:render(t.no)}];
 for(const file of game.files.quests){
  const q=await read(file),s=drafts.find(s=>s.id===q.id);q.model.standard??=previous;
@@ -27,7 +31,7 @@ for(const file of game.files.quests){
   q.model.world={...q.model.world,truth:s.past.join(' '),history:s.past.map((text,i)=>({id:`fixed_${i}`,text})),initialState:'story.registry の initial。過去の真相と現在の所在を別に持つ。'};
   // Author constraints are metadata and documentation, not automatically narrated facts.
   if(s.authoringNotes)q.model.world.authoringNotes=s.authoringNotes;
-  q.model.agents=Object.entries(q.story.entities).filter(([,e])=>e.character).map(([id,e])=>{const c=characters.find(c=>c.id===e.character);return {id,character:c.id,name:c.name,goal:c.goal,initialLocation:q.story.registry[e.holder].initial};});
+  q.model.agents=Object.entries(q.story.entities).filter(([,e])=>e.character).map(([id,e])=>{const c=characters.find(c=>c.id===e.character);return {id,character:c.id,name:c.name,goal:c.goal,initialLocation:q.story.registry[e.holder].initial,...s.agentCards?.[id]};});
   q.model.stateRegistry=Object.entries(q.story.registry).map(([key,v])=>({path:`stories.${q.id}.values.${key}`,...v,writer:'story.action',scope:'quest',lifetime:'保存・再開・完了後まで保持'}));
   q.model.narrative={...q.model.narrative,units:s.nodes.map(n=>({id:n.id,script:sid(n.id),assertion:q.story.scenes[n.id]}))};q.model.beats=q.model.narrative.units;
   q.model.graph=s.nodes.map(n=>({id:n.id,text:n.text,...(s.sceneFlow?.[n.id]?{automatic:true}:{}),options:n.options.map(o=>({id:o.id,text:o.text,to:o.to,...(o.when?{when:o.when}:{}),...(o.combat?{combat:true}:{}),action:o.action}))}));
@@ -36,7 +40,7 @@ for(const file of game.files.quests){
   for(const n of s.nodes){
    const options=n.options.map(o=>{
     const effect=[{op:'story.action',quest:q.id,action:o.action},...(o.commands??[]),{op:'jump',script:sid(o.to.startsWith('@')?`end.${o.to.slice(1)}`:o.to)}];
-    const commands=q.story.actions[o.action].journey?[{op:'story.journey',quest:q.id,action:o.action}]:o.combat?[{op:'battle.start',encounter:`guard_${q.region}`,on_win:effect,on_escape:[say('退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。')],on_lose:[say('現場から救援された。依頼を再開すると、未完了の作業からやり直せる。')]}]:effect;
+    const commands=q.story.actions[o.action].journey?[{op:'story.journey',quest:q.id,action:o.action}]:o.combat?[{op:'battle.start',encounter:typeof o.combat==='string'?o.combat:`guard_${q.region}`,on_win:effect,on_escape:[say('退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。')],on_lose:[say('現場から救援された。依頼を再開すると、未完了の作業からやり直せる。')]}]:effect;
     return {id:o.id,text:o.text,storyAction:{quest:q.id,action:o.action},...(o.when?{condition:o.when}:{}),requirement:[o.requirement,...Object.entries(o.cost??{}).map(([k,n])=>`${{rope:'縄',torch:'松明',gold:'G'}[k]??k} ${n}消費`),...(o.combat?['戦闘・作業と消費は勝利時に確定']:[])].filter(Boolean).join(' ／ '),commands};
    });
    q.scripts[sid(n.id)]={storyQuest:q.id,commands:[{op:'story.scene',quest:q.id,scene:n.id},...(s.sceneCommands?.[n.id]??[]),...(s.sceneDialogue?.[n.id]??render(n.text)),...(s.sceneFlow?.[n.id]??[{op:'choice',options}])]};
@@ -51,7 +55,7 @@ for(const file of game.files.quests){
  await write(file,q);quests.push(q);
 }
 await applyQuestEvents(root);
-const assets=await read('data/assets.json');for(const c of characters)assets.images[c.portrait]=`assets/images/characters/generated/${c.id}.webp`;await write('data/assets.json',assets);
+const assets=await read('data/assets.json');for(const c of originalCharacters)assets.images[c.portrait]=`assets/images/characters/generated/${c.id}.webp`;await write('data/assets.json',assets);
 await write('data/characters.json',Object.fromEntries(characters.map(({design,...c})=>[c.id,{...c,visualDesign:design}])));
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';
 game.migrations['1.3.2']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true};await write('data/game.json',game);

@@ -1,0 +1,1349 @@
+{
+  "schemaVersion": 1,
+  "id": "q206",
+  "number": 206,
+  "title": "渡せなかった弁当",
+  "client": "差し入れを持つミナ",
+  "brief": "ミナが弟のナギへ弁当を届けたがっている。弟は勤務を終えたはずなのに、中継広間から上がってこない。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q206_entry",
+      "title": "巡灯路の差し入れ台",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 7,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q206.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q206.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q206_rest",
+      "title": "中継火の休息所脇",
+      "points": [
+        {
+          "map": "kagaribi_relay",
+          "x": 5,
+          "y": 5,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q206.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q206.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_f1",
+      "x": 7,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q206_entry",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "gift": {
+      "gold": 57,
+      "xp": 51,
+      "label": "差し入れを仕事の約束にしない",
+      "text": "弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えたことと、明日も働くことを同じ返事にしなかった。"
+    },
+    "together": {
+      "gold": 57,
+      "xp": 51,
+      "label": "食べる場所を一緒に戻す",
+      "text": "ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。"
+    },
+    "returned": {
+      "gold": 57,
+      "xp": 51,
+      "label": "拒まれたという返事を持ち帰る",
+      "text": "弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。"
+    }
+  },
+  "scripts": {
+    "q206.v11.entry": {
+      "storyQuest": "q206",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q206",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ミナは包みの結び目を一つ緩めた。「手袋でも開けられるように」。弟がまだ勤務中だと思っている。「返事まで頼むつもりはありません。食べられるなら渡してください」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "弁当を預かり、中継広間のナギへ届ける",
+              "storyAction": {
+                "quest": "q206",
+                "action": "entry_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q206",
+                  "action": "entry_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q206.v11.offer": {
+      "storyQuest": "q206",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q206",
+          "scene": "offer"
+        },
+        {
+          "op": "say",
+          "text": "ナギは包みに触れなかった。「辞めたんです。もらったら、明日も行くってことになる」。当番の引継ぎは済ませたという。帰れないのは道が塞がれたからではなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gift",
+              "text": "姉は勤務継続を条件にしていなかったと、受け取った言葉を伝える",
+              "storyAction": {
+                "quest": "q206",
+                "action": "offer_gift"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q206",
+                  "action": "offer_gift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q206.v11.gift"
+                }
+              ]
+            },
+            {
+              "id": "together",
+              "text": "弁当を持ったまま、ナギが自分で話せるよう一緒に入口へ戻る",
+              "storyAction": {
+                "quest": "q206",
+                "action": "offer_together"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q206",
+                  "action": "offer_together"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "受取りを断ったことだけを伝えると約束し、弁当を返しに行く",
+              "storyAction": {
+                "quest": "q206",
+                "action": "offer_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q206",
+                  "action": "offer_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q206.v11.gift": {
+      "storyQuest": "q206",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q206",
+          "scene": "gift"
+        },
+        {
+          "op": "say",
+          "text": "「続けろとは言ってなかった？」。ミナが実際に言った頼みを伝えると、ナギは結び目の緩んだところへ指を掛けた。「なら、食べたい。辞めた話は、自分でします」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "仕事の約束にせず、受取りに同意したナギへ弁当を渡す",
+              "storyAction": {
+                "quest": "q206",
+                "action": "gift_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q206",
+                  "action": "gift_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q206.v11.end.gift"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q206.v11.home": {
+      "storyQuest": "q206",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q206",
+          "scene": "home"
+        },
+        {
+          "op": "say",
+          "text": "二人でミナの前へ戻った。包みはまだ探索隊が持っている。ナギが先に口を開いた。「明日は、行かない」。ミナは結び目を見てから、弟の顔を見た。「じゃあ、今日はここで食べれば」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "退職を伝えた本人へ、姉の前で弁当を渡す",
+              "storyAction": {
+                "quest": "q206",
+                "action": "home_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q206",
+                  "action": "home_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q206.v11.end.together"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q206.v11.returned": {
+      "storyQuest": "q206",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q206",
+          "scene": "returned"
+        },
+        {
+          "op": "say",
+          "text": "弁当を持ち帰ると、ミナは包みの重さを受け止めるように手を出した。ナギの退職理由を説明する約束はしていない。「受け取らなかった。それだけは、分かった」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "受取りを断られたことを伝え、弁当をミナへ返す",
+              "storyAction": {
+                "quest": "q206",
+                "action": "returned_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q206",
+                  "action": "returned_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q206.v11.end.returned"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q206.v11.end.gift": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q206",
+          "outcome": "gift"
+        },
+        {
+          "op": "say",
+          "text": "弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えたことと、明日も働くことを同じ返事にしなかった。"
+        }
+      ]
+    },
+    "q206.v11.end.together": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q206",
+          "outcome": "together"
+        },
+        {
+          "op": "say",
+          "text": "ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。"
+        }
+      ]
+    },
+    "q206.v11.end.returned": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q206",
+          "outcome": "returned"
+        },
+        {
+          "op": "say",
+          "text": "弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。"
+        }
+      ]
+    },
+    "q206.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": false,
+          "then": [],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q206.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q206.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "gift",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えたことと、明日も働くことを同じ返事にしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "together",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q206"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q206.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q206.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "offer",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q206.v11.offer"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "gift",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q206.v11.gift"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q206.v11.home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q206.v11.returned"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q206.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "ナギは当番を終えて退職を申し出たが、姉にはまだ話していない。 ミナは勤務継続を条件にせず弁当を作った。中断中に腐敗や勤務の締切は進めない。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "ナギは当番を終えて退職を申し出たが、姉にはまだ話していない。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "ミナは勤務継続を条件にせず弁当を作った。中断中に腐敗や勤務の締切は進めない。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q206.v11.entry",
+          "assertion": {
+            "title": "巡灯路の差し入れ台",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "sister"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "offer",
+          "script": "q206.v11.offer",
+          "assertion": {
+            "title": "中継火の休息所脇",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "worker"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "gift",
+          "script": "q206.v11.gift",
+          "assertion": {
+            "title": "中継火の休息所脇",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "worker"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "home",
+          "script": "q206.v11.home",
+          "assertion": {
+            "title": "巡灯路の差し入れ台",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "sister"
+              },
+              {
+                "entity": "worker"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "returned",
+          "script": "q206.v11.returned",
+          "assertion": {
+            "title": "巡灯路の差し入れ台",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "sister"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "ミナが弟のナギへ弁当を届けたがっている。弟は勤務を終えたはずなのに、中継広間から上がってこない。"
+    },
+    "dramaticKernel": "帰ってほしい気持ちを、仕事を続けろという要求にしてしまわず届けられるか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "ナギは当番を終えて退職を申し出たが、姉にはまだ話していない。 ミナは勤務継続を条件にせず弁当を作った。中断中に腐敗や勤務の締切は進めない。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "offer",
+        "gift",
+        "home",
+        "returned"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q206.v11.visit",
+    "progression": "弁当を預かって弟へ届ける。受け取る意味を確かめ、贈り物として渡す、本人と一緒に戻る、断られたまま返すという異なる帰結を扱う。",
+    "agents": [
+      {
+        "id": "sister",
+        "character": "q206_sister",
+        "name": "ミナ",
+        "goal": "弟へ食事を届ける",
+        "initialLocation": "entry",
+        "belief": "弟は今日も勤務を続けている",
+        "fear": "世話を断られ、関係まで切れたと思うこと",
+        "knowledgeSource": "弟が退職を申し出たことは知らない。弁当は勤務の対価ではなく差し入れ。",
+        "publicGoal": "弟へ食事を届ける",
+        "privateStake": "世話を断られ、関係まで切れたと思うこと"
+      },
+      {
+        "id": "worker",
+        "character": "q206_worker",
+        "name": "ナギ",
+        "goal": "姉に辞めたことを自分で伝える",
+        "initialLocation": "rest",
+        "belief": "弁当を受け取れば仕事を続ける約束になる",
+        "fear": "心配を裏切ったと責められること",
+        "knowledgeSource": "当番を終えて退職を申し出た。今は中継広間で帰る決心がつかずにいる。",
+        "publicGoal": "姉に辞めたことを自分で伝える",
+        "privateStake": "心配を裏切ったと責められること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q206.values.partyAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.sisterAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "sister の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.workerAt",
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "worker の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.mealAt",
+        "type": "enum",
+        "initial": "sister",
+        "values": [
+          "entry",
+          "rest",
+          "transit",
+          "party",
+          "sister",
+          "worker"
+        ],
+        "meaning": "meal の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.explained",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "explained",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.resignationTold",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "resignationTold",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q206.values.delivery",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "gift",
+          "returned",
+          "together"
+        ],
+        "meaning": "delivery",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q206.v11.entry",
+        "assertion": {
+          "title": "巡灯路の差し入れ台",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "sister"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "offer",
+        "script": "q206.v11.offer",
+        "assertion": {
+          "title": "中継火の休息所脇",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "worker"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "gift",
+        "script": "q206.v11.gift",
+        "assertion": {
+          "title": "中継火の休息所脇",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "worker"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "home",
+        "script": "q206.v11.home",
+        "assertion": {
+          "title": "巡灯路の差し入れ台",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "sister"
+            },
+            {
+              "entity": "worker"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "returned",
+        "script": "q206.v11.returned",
+        "assertion": {
+          "title": "巡灯路の差し入れ台",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "sister"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ミナは包みの結び目を一つ緩めた。「手袋でも開けられるように」。弟がまだ勤務中だと思っている。「返事まで頼むつもりはありません。食べられるなら渡してください」",
+        "options": [
+          {
+            "id": "carry",
+            "text": "弁当を預かり、中継広間のナギへ届ける",
+            "to": "offer",
+            "action": "entry_carry"
+          }
+        ]
+      },
+      {
+        "id": "offer",
+        "text": "ナギは包みに触れなかった。「辞めたんです。もらったら、明日も行くってことになる」。当番の引継ぎは済ませたという。帰れないのは道が塞がれたからではなかった。",
+        "options": [
+          {
+            "id": "gift",
+            "text": "姉は勤務継続を条件にしていなかったと、受け取った言葉を伝える",
+            "to": "gift",
+            "action": "offer_gift"
+          },
+          {
+            "id": "together",
+            "text": "弁当を持ったまま、ナギが自分で話せるよう一緒に入口へ戻る",
+            "to": "home",
+            "action": "offer_together"
+          },
+          {
+            "id": "return",
+            "text": "受取りを断ったことだけを伝えると約束し、弁当を返しに行く",
+            "to": "returned",
+            "action": "offer_return"
+          }
+        ]
+      },
+      {
+        "id": "gift",
+        "text": "「続けろとは言ってなかった？」。ミナが実際に言った頼みを伝えると、ナギは結び目の緩んだところへ指を掛けた。「なら、食べたい。辞めた話は、自分でします」",
+        "options": [
+          {
+            "id": "hand",
+            "text": "仕事の約束にせず、受取りに同意したナギへ弁当を渡す",
+            "to": "@gift",
+            "action": "gift_hand"
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "text": "二人でミナの前へ戻った。包みはまだ探索隊が持っている。ナギが先に口を開いた。「明日は、行かない」。ミナは結び目を見てから、弟の顔を見た。「じゃあ、今日はここで食べれば」",
+        "options": [
+          {
+            "id": "hand",
+            "text": "退職を伝えた本人へ、姉の前で弁当を渡す",
+            "to": "@together",
+            "action": "home_hand"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "text": "弁当を持ち帰ると、ミナは包みの重さを受け止めるように手を出した。ナギの退職理由を説明する約束はしていない。「受け取らなかった。それだけは、分かった」",
+        "options": [
+          {
+            "id": "hand",
+            "text": "受取りを断られたことを伝え、弁当をミナへ返す",
+            "to": "@returned",
+            "action": "returned_hand"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "ミナが弟のナギへ弁当を届けたがっている。弟は勤務を終えたはずなのに、中継広間から上がってこない。",
+      "progression": "弁当を預かって弟へ届ける。受け取る意味を確かめ、贈り物として渡す、本人と一緒に戻る、断られたまま返すという異なる帰結を扱う。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    }
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "巡灯路の差し入れ台",
+      "rest": "中継火の休息所脇",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "rest"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "sisterAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "sister の所在または保持者"
+      },
+      "workerAt": {
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "entry",
+          "rest",
+          "transit"
+        ],
+        "meaning": "worker の所在または保持者"
+      },
+      "mealAt": {
+        "type": "enum",
+        "initial": "sister",
+        "values": [
+          "entry",
+          "rest",
+          "transit",
+          "party",
+          "sister",
+          "worker"
+        ],
+        "meaning": "meal の所在または保持者"
+      },
+      "explained": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "explained"
+      },
+      "resignationTold": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "resignationTold"
+      },
+      "delivery": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "gift",
+          "returned",
+          "together"
+        ],
+        "meaning": "delivery"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "sister": {
+        "holder": "sisterAt",
+        "kind": "person",
+        "character": "q206_sister"
+      },
+      "worker": {
+        "holder": "workerAt",
+        "kind": "person",
+        "character": "q206_worker"
+      },
+      "meal": {
+        "holder": "mealAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "巡灯路の差し入れ台",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "sister"
+          }
+        ],
+        "requires": true
+      },
+      "offer": {
+        "title": "中継火の休息所脇",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "worker"
+          }
+        ],
+        "requires": true
+      },
+      "gift": {
+        "title": "中継火の休息所脇",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "worker"
+          }
+        ],
+        "requires": true
+      },
+      "home": {
+        "title": "巡灯路の差し入れ台",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "sister"
+          },
+          {
+            "entity": "worker"
+          }
+        ],
+        "requires": true
+      },
+      "returned": {
+        "title": "巡灯路の差し入れ台",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "sister"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_carry": {
+        "from": [
+          "entry"
+        ],
+        "to": "offer",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "rest",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "sister",
+            "to": "party"
+          }
+        ]
+      },
+      "offer_gift": {
+        "from": [
+          "offer"
+        ],
+        "to": "gift",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "explained",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "offer_together": {
+        "from": [
+          "offer"
+        ],
+        "to": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "worker"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "worker"
+          ]
+        },
+        "depart": []
+      },
+      "offer_return": {
+        "from": [
+          "offer"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "gift_hand": {
+        "from": [
+          "gift"
+        ],
+        "ending": "gift",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "party",
+            "to": "worker"
+          },
+          {
+            "op": "set",
+            "key": "delivery",
+            "value": "gift"
+          }
+        ],
+        "once": true
+      },
+      "home_hand": {
+        "from": [
+          "home"
+        ],
+        "ending": "together",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "party",
+            "to": "worker"
+          },
+          {
+            "op": "set",
+            "key": "resignationTold",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "delivery",
+            "value": "together"
+          }
+        ],
+        "once": true
+      },
+      "returned_hand": {
+        "from": [
+          "returned"
+        ],
+        "ending": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "party",
+            "to": "sister"
+          },
+          {
+            "op": "set",
+            "key": "delivery",
+            "value": "returned"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "gift": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.delivery"
+            },
+            "right": "gift"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.explained"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.mealAt"
+            },
+            "right": "worker"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.workerAt"
+            },
+            "right": "rest"
+          }
+        ]
+      },
+      "together": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.delivery"
+            },
+            "right": "together"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.resignationTold"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.workerAt"
+            },
+            "right": "entry"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.mealAt"
+            },
+            "right": "worker"
+          }
+        ]
+      },
+      "returned": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.delivery"
+            },
+            "right": "returned"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.mealAt"
+            },
+            "right": "sister"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.workerAt"
+            },
+            "right": "rest"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q206.values.partyAt"
+            },
+            "right": "entry"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 7,
+        "y": 1,
+        "event": "q206_entry"
+      },
+      "rest": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_relay",
+        "x": 5,
+        "y": 5,
+        "event": "q206_rest"
+      }
+    },
+    "revision": 1
+  }
+}

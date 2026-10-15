@@ -49,7 +49,7 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 ## 内容
 
 1. 10地域・13ダンジョン、合計33件の2Dマップ。疑似3Dの通路と探索済み地図。
-1. 200件の日本語クエスト、579場面・629結末。救助後の再捜索、作業順による損失、実験、交渉、待機、帰還後の応答など、依頼ごとに進行を定義。
+1. 210件の日本語クエスト、634場面・659結末。救助後の再捜索、作業順による損失、実験、交渉、待機、帰還後の応答など、依頼ごとに進行を定義。
 1. 4人で開始。酒場「帰り火亭」で10人から最大5人を編成。ターン制戦闘、攻撃・術・防御・回復・毒・逃走、経験値と装備。
 1. 町、店、宿、無料の施療所、補給箱、施錠扉、鍵、罠、泉、階段、帰還印。
 1. 自動保存、3つの手動記録、JSONファイル書き出し・読込。会話・選択・戦闘中の継続位置も保存。
@@ -67,7 +67,7 @@ q001〜q010 をシナリオモデル v1.1 で改稿しました。人物と物�
 
 [フィールド・戦闘中イベント一覧](doc/scenarios/EVENT_CATALOG.md) / [セルの明るさ](doc/dungeons/FIELD_LIGHTING.md)
 
-[仕様・進捗・引き継ぎ](doc/README.md) / [UIの根本方針と現状](doc/ui/PHILOSOPHY_AND_STATUS.md) / [JSON命令リファレンス](doc/scenarios/SCRIPT_REFERENCE.md) / [ビュー契約](doc/ui/VIEW_CONTRACT.md) / [200件の索引](doc/scenarios/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
+[仕様・進捗・引き継ぎ](doc/README.md) / [UIの根本方針と現状](doc/ui/PHILOSOPHY_AND_STATUS.md) / [JSON命令リファレンス](doc/scenarios/SCRIPT_REFERENCE.md) / [ビュー契約](doc/ui/VIEW_CONTRACT.md) / [210件の索引](doc/scenarios/QUEST_CATALOG.md) / [素材の来歴](assets/PROVENANCE.md)
 
 [魔物一覧・画像](doc/battle/MONSTER_CATALOG.md) / [戦闘バランス計画・実測](doc/battle/BALANCE_PLAN.md) / [仲間一覧・肖像](doc/battle/COMPANION_CATALOG.md)
 
@@ -93,8 +93,10 @@ node --test tests/*.test.mjs
 
 q001の原稿は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-*.mjs`、人物設定は `authoring/characters.mjs` です。`npm run build:characters` は旧AIPaint素材を再生成し、新しい画像生成肖像への参照を維持します。画像生成用の英語・日本語プロンプトは `assets/source/characters/imagegen-prompts.json` に保存しています。
 
-全200件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
+全210件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 
 内容版1.18.0は旧セーブを移行しません。自動保存・スロット・ファイルの読込でエラーが出たら、最初から新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
 
 元のPhaser屋敷デモはGit履歴に保存されています。旧セーブ `phaserAdventureGameSave` は変更しませんが、新ゲームへは移行しません。
+
+篝火迷宮には追加10編（表示002〜011、固定ID q201〜q210）があります。「帰らない灯番」完了後に順不同で受注できます。[人物・分岐・編集元](doc/scenarios/KAGARIBI_TEN_QUESTS.md)。

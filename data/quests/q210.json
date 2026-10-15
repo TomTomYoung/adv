@@ -1,0 +1,1976 @@
+{
+  "schemaVersion": 1,
+  "id": "q210",
+  "number": 210,
+  "title": "火を待たない人",
+  "client": "祭壇で待つスイ",
+  "brief": "祭壇の手前で待ち続けるスイに、修理を終えた思い出の箱を受け取りに戻ってほしい。本人が帰ると決められるよう同行する。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q210_altar",
+      "title": "深火の祭壇の手前",
+      "points": [
+        {
+          "map": "kagaribi_f3",
+          "x": 9,
+          "y": 7,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q210.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q210.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q210_rest",
+      "title": "最後の巡回路の道具台",
+      "points": [
+        {
+          "map": "kagaribi_last_patrol",
+          "x": 9,
+          "y": 9,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q210.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q210.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q210_entry",
+      "title": "巡灯路の帰り支度場",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q210.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q210.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_f3",
+      "x": 9,
+      "y": 7,
+      "dungeon": "kagaribi",
+      "object": "q210_altar",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "letter": {
+      "gold": 57,
+      "xp": 51,
+      "label": "手紙の帰る場所を作る",
+      "text": "スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明ではない。待ち続けることだけを、夫との関係の残し方にしなくてよくなった。"
+    },
+    "ritual": {
+      "gold": 57,
+      "xp": 51,
+      "label": "今日の灯を自分で終える",
+      "text": "普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。"
+    },
+    "hope": {
+      "gold": 57,
+      "xp": 51,
+      "label": "信じる答えを保留して帰る",
+      "text": "スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。"
+    }
+  },
+  "scripts": {
+    "q210.v11.entry": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "スイは夫への手紙を畳み直していた。「戻るとは、誰も確かめていないんでしょう。でも、私が帰ったあとだったら」。修理人が箱を直して待っていると伝えると、初めて背後の通路を見た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "letter",
+              "text": "手紙を修理した箱へ納めて持ち帰る提案をする",
+              "storyAction": {
+                "quest": "q210",
+                "action": "entry_letter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "entry_letter"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ready"
+                }
+              ]
+            },
+            {
+              "id": "ritual",
+              "text": "蘇生の試みとは分け、普通の灯で待つ時間に区切りをつける",
+              "storyAction": {
+                "quest": "q210",
+                "action": "entry_ritual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "entry_ritual"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ritual"
+                }
+              ]
+            },
+            {
+              "id": "hope",
+              "text": "伝承を信じるかは決めず、今日は帰ってよいと伝える",
+              "storyAction": {
+                "quest": "q210",
+                "action": "entry_hope"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "entry_hope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ready"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.ritual": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "ritual"
+        },
+        {
+          "op": "say",
+          "text": "スイは「戻ってくる合図にしないなら」とうなずいた。使うのは探索隊の普通の松明で、祭壇の深火は移さない。火を見てから消すまでを、今日の待ち時間の終わりにする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "light",
+              "text": "松明1本を使って短く灯し、消してから帰り支度をする",
+              "storyAction": {
+                "quest": "q210",
+                "action": "ritual_light"
+              },
+              "requirement": "松明 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "ritual_light"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ready"
+                }
+              ]
+            },
+            {
+              "id": "light_supplies",
+              "text": "予備灯油1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ritual.light.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.ready": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "ready"
+        },
+        {
+          "op": "say",
+          "text": "スイは手紙を懐へ入れた。「箱を取りに行きます」。それは夫のことを忘れる約束ではなく、いま歩き出す返事だった。修理人は最後の巡回路の道具台にいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "スイと祭壇を離れ、修理人の道具台へ歩く",
+              "storyAction": {
+                "quest": "q210",
+                "action": "ready_walk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q210",
+                  "action": "ready_walk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.box": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "box"
+        },
+        {
+          "op": "say",
+          "text": "リトは箱の蓋を一度開けて見せた。「直したのは蝶番だけです」。スイは開閉する音を聞いた。夫の帰還を確かめる音ではないが、自分が持って帰れる物の音だった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "スイ本人に修理した箱を受け取ってもらう",
+              "storyAction": {
+                "quest": "q210",
+                "action": "box_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "box_take"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.packed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.packed": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "packed"
+        },
+        {
+          "op": "say",
+          "text": "箱はスイの手に戻った。手紙をしまうと決めた場合は、自分で中へ納める。それ以外なら、手紙は本人が持ったまま帰れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "letter",
+              "text": "本人の手で手紙を箱へ納め、巡灯路へ同行する",
+              "storyAction": {
+                "quest": "q210",
+                "action": "packed_letter"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.decision"
+                },
+                "right": "letter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q210",
+                  "action": "packed_letter"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "手紙の扱いを変えず、スイと巡灯路へ戻る",
+              "storyAction": {
+                "quest": "q210",
+                "action": "packed_return"
+              },
+              "condition": {
+                "op": "ne",
+                "left": {
+                  "ref": "stories.q210.values.decision"
+                },
+                "right": "letter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q210",
+                  "action": "packed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.home": {
+      "storyQuest": "q210",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q210",
+          "scene": "home"
+        },
+        {
+          "op": "say",
+          "text": "巡灯路の帰り支度場へ着いた。スイは自分の箱を置き、手袋を直した。「今日は帰ります」。亡夫が戻ったという知らせはない。帰ったあと、何を信じるかまで決めたとは言わなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "letter",
+              "text": "手紙を納めた箱と本人の到着を確かめ、同行を終える",
+              "storyAction": {
+                "quest": "q210",
+                "action": "home_letter"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.decision"
+                },
+                "right": "letter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "home_letter"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.end.letter"
+                }
+              ]
+            },
+            {
+              "id": "ritual",
+              "text": "普通の灯で区切りをつけた本人の帰路を確かめる",
+              "storyAction": {
+                "quest": "q210",
+                "action": "home_ritual"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.decision"
+                },
+                "right": "ritual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "home_ritual"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.end.ritual"
+                }
+              ]
+            },
+            {
+              "id": "hope",
+              "text": "希望を保ったまま帰る本人を見送り、同行を終える",
+              "storyAction": {
+                "quest": "q210",
+                "action": "home_hope"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.decision"
+                },
+                "right": "hope"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q210",
+                  "action": "home_hope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q210.v11.end.hope"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.end.letter": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q210",
+          "outcome": "letter"
+        },
+        {
+          "op": "say",
+          "text": "スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明ではない。待ち続けることだけを、夫との関係の残し方にしなくてよくなった。"
+        }
+      ]
+    },
+    "q210.v11.end.ritual": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q210",
+          "outcome": "ritual"
+        },
+        {
+          "op": "say",
+          "text": "普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。"
+        }
+      ]
+    },
+    "q210.v11.end.hope": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q210",
+          "outcome": "hope"
+        },
+        {
+          "op": "say",
+          "text": "スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。"
+        }
+      ]
+    },
+    "q210.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q210"
+          },
+          "cases": [
+            {
+              "equals": "q210.v11.ritual.light.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q210.v11.ritual.light.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q210.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q210.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "letter",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明ではない。待ち続けることだけを、夫との関係の残し方にしなくてよくなった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ritual",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "hope",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q210"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q210.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ritual",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.ritual"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "ready",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.ready"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "box",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.box"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "packed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.packed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "home",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q210.v11.home"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q210.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q210.v11.ritual.light.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q210",
+          "value": "q210.v11.ritual.light.resume"
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q210.v11.ritual.light.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q210",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q210.v11.ritual"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "スイは夫の死後、深火なら死者を戻すという伝承を聞いて祭壇へ来た。蘇生を見た証人や確かめた手順は得ていない。 リトは預かった思い出の箱の蝶番を直した。箱は深火の容器ではなく、蘇生の道具でもない。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "スイは夫の死後、深火なら死者を戻すという伝承を聞いて祭壇へ来た。蘇生を見た証人や確かめた手順は得ていない。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "リトは預かった思い出の箱の蝶番を直した。箱は深火の容器ではなく、蘇生の道具でもない。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q210.v11.entry",
+          "assertion": {
+            "title": "深火の祭壇の手前",
+            "place": "altar",
+            "cast": [
+              {
+                "entity": "widow"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ritual",
+          "script": "q210.v11.ritual",
+          "assertion": {
+            "title": "深火の祭壇の手前",
+            "place": "altar",
+            "cast": [
+              {
+                "entity": "widow"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ready",
+          "script": "q210.v11.ready",
+          "assertion": {
+            "title": "深火の祭壇の手前",
+            "place": "altar",
+            "cast": [
+              {
+                "entity": "widow"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "box",
+          "script": "q210.v11.box",
+          "assertion": {
+            "title": "最後の巡回路の道具台",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "widow"
+              },
+              {
+                "entity": "maker"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "packed",
+          "script": "q210.v11.packed",
+          "assertion": {
+            "title": "最後の巡回路の道具台",
+            "place": "rest",
+            "cast": [
+              {
+                "entity": "widow"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "home",
+          "script": "q210.v11.home",
+          "assertion": {
+            "title": "巡灯路の帰り支度場",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "widow"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祭壇の手前で待ち続けるスイに、修理を終えた思い出の箱を受け取りに戻ってほしい。本人が帰ると決められるよう同行する。"
+    },
+    "dramaticKernel": "願いがかなうと確かめられないまま、帰ることを選んでもよいか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "スイは夫の死後、深火なら死者を戻すという伝承を聞いて祭壇へ来た。蘇生を見た証人や確かめた手順は得ていない。 リトは預かった思い出の箱の蝶番を直した。箱は深火の容器ではなく、蘇生の道具でもない。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "ritual",
+        "ready",
+        "box",
+        "packed",
+        "home"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q210.v11.visit",
+    "progression": "伝承を実証したと断言せず、手紙を納める、普通の灯で区切りをつける、希望を保って帰るという本人の選択を支える。箱の受取りと入口までの同行を実際に行う。",
+    "agents": [
+      {
+        "id": "widow",
+        "character": "q210_widow",
+        "name": "スイ",
+        "goal": "夫への願いを捨てずに、ここを離れる理由を見つける",
+        "initialLocation": "altar",
+        "belief": "先に帰れば夫を見捨てたことになる",
+        "fear": "待った時間が全て無意味だったと思うこと",
+        "knowledgeSource": "深火の蘇生伝承を聞いて来たが、蘇生が起きたところは見ていない。遺体はこの場に持ち込んでいない。",
+        "publicGoal": "夫への願いを捨てずに、ここを離れる理由を見つける",
+        "privateStake": "待った時間が全て無意味だったと思うこと"
+      },
+      {
+        "id": "maker",
+        "character": "q210_maker",
+        "name": "リト",
+        "goal": "直した箱を持ち主へ返す",
+        "initialLocation": "rest",
+        "belief": "直る品物があることまで諦めてほしくない",
+        "fear": "箱を直したことで伝承を保証したと思われること",
+        "knowledgeSource": "スイの思い出の箱を預かり、蝶番だけを修理した。深火を移す容器ではない。",
+        "publicGoal": "直した箱を持ち主へ返す",
+        "privateStake": "箱を直したことで伝承を保証したと思われること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q210.values.partyAt",
+        "type": "enum",
+        "initial": "altar",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.widowAt",
+        "type": "enum",
+        "initial": "altar",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "widow の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.makerAt",
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "maker の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.letterAt",
+        "type": "enum",
+        "initial": "widow",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit",
+          "party",
+          "widow",
+          "maker",
+          "box"
+        ],
+        "meaning": "letter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.boxAt",
+        "type": "enum",
+        "initial": "maker",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit",
+          "party",
+          "widow",
+          "maker",
+          "letter"
+        ],
+        "meaning": "box の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.decision",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "letter",
+          "ritual",
+          "hope"
+        ],
+        "meaning": "decision",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.consent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.boxReturned",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "boxReturned",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q210.values.home",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "home",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q210.v11.entry",
+        "assertion": {
+          "title": "深火の祭壇の手前",
+          "place": "altar",
+          "cast": [
+            {
+              "entity": "widow"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ritual",
+        "script": "q210.v11.ritual",
+        "assertion": {
+          "title": "深火の祭壇の手前",
+          "place": "altar",
+          "cast": [
+            {
+              "entity": "widow"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ready",
+        "script": "q210.v11.ready",
+        "assertion": {
+          "title": "深火の祭壇の手前",
+          "place": "altar",
+          "cast": [
+            {
+              "entity": "widow"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "box",
+        "script": "q210.v11.box",
+        "assertion": {
+          "title": "最後の巡回路の道具台",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "widow"
+            },
+            {
+              "entity": "maker"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "packed",
+        "script": "q210.v11.packed",
+        "assertion": {
+          "title": "最後の巡回路の道具台",
+          "place": "rest",
+          "cast": [
+            {
+              "entity": "widow"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "home",
+        "script": "q210.v11.home",
+        "assertion": {
+          "title": "巡灯路の帰り支度場",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "widow"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "スイは夫への手紙を畳み直していた。「戻るとは、誰も確かめていないんでしょう。でも、私が帰ったあとだったら」。修理人が箱を直して待っていると伝えると、初めて背後の通路を見た。",
+        "options": [
+          {
+            "id": "letter",
+            "text": "手紙を修理した箱へ納めて持ち帰る提案をする",
+            "to": "ready",
+            "action": "entry_letter"
+          },
+          {
+            "id": "ritual",
+            "text": "蘇生の試みとは分け、普通の灯で待つ時間に区切りをつける",
+            "to": "ritual",
+            "action": "entry_ritual"
+          },
+          {
+            "id": "hope",
+            "text": "伝承を信じるかは決めず、今日は帰ってよいと伝える",
+            "to": "ready",
+            "action": "entry_hope"
+          }
+        ]
+      },
+      {
+        "id": "ritual",
+        "text": "スイは「戻ってくる合図にしないなら」とうなずいた。使うのは探索隊の普通の松明で、祭壇の深火は移さない。火を見てから消すまでを、今日の待ち時間の終わりにする。",
+        "options": [
+          {
+            "id": "light",
+            "text": "松明1本を使って短く灯し、消してから帰り支度をする",
+            "to": "ready",
+            "action": "ritual_light"
+          }
+        ]
+      },
+      {
+        "id": "ready",
+        "text": "スイは手紙を懐へ入れた。「箱を取りに行きます」。それは夫のことを忘れる約束ではなく、いま歩き出す返事だった。修理人は最後の巡回路の道具台にいる。",
+        "options": [
+          {
+            "id": "walk",
+            "text": "スイと祭壇を離れ、修理人の道具台へ歩く",
+            "to": "box",
+            "action": "ready_walk"
+          }
+        ]
+      },
+      {
+        "id": "box",
+        "text": "リトは箱の蓋を一度開けて見せた。「直したのは蝶番だけです」。スイは開閉する音を聞いた。夫の帰還を確かめる音ではないが、自分が持って帰れる物の音だった。",
+        "options": [
+          {
+            "id": "take",
+            "text": "スイ本人に修理した箱を受け取ってもらう",
+            "to": "packed",
+            "action": "box_take"
+          }
+        ]
+      },
+      {
+        "id": "packed",
+        "text": "箱はスイの手に戻った。手紙をしまうと決めた場合は、自分で中へ納める。それ以外なら、手紙は本人が持ったまま帰れる。",
+        "options": [
+          {
+            "id": "letter",
+            "text": "本人の手で手紙を箱へ納め、巡灯路へ同行する",
+            "to": "home",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q210.values.decision"
+              },
+              "right": "letter"
+            },
+            "action": "packed_letter"
+          },
+          {
+            "id": "return",
+            "text": "手紙の扱いを変えず、スイと巡灯路へ戻る",
+            "to": "home",
+            "when": {
+              "op": "ne",
+              "left": {
+                "ref": "stories.q210.values.decision"
+              },
+              "right": "letter"
+            },
+            "action": "packed_return"
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "text": "巡灯路の帰り支度場へ着いた。スイは自分の箱を置き、手袋を直した。「今日は帰ります」。亡夫が戻ったという知らせはない。帰ったあと、何を信じるかまで決めたとは言わなかった。",
+        "options": [
+          {
+            "id": "letter",
+            "text": "手紙を納めた箱と本人の到着を確かめ、同行を終える",
+            "to": "@letter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q210.values.decision"
+              },
+              "right": "letter"
+            },
+            "action": "home_letter"
+          },
+          {
+            "id": "ritual",
+            "text": "普通の灯で区切りをつけた本人の帰路を確かめる",
+            "to": "@ritual",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q210.values.decision"
+              },
+              "right": "ritual"
+            },
+            "action": "home_ritual"
+          },
+          {
+            "id": "hope",
+            "text": "希望を保ったまま帰る本人を見送り、同行を終える",
+            "to": "@hope",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q210.values.decision"
+              },
+              "right": "hope"
+            },
+            "action": "home_hope"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "祭壇の手前で待ち続けるスイに、修理を終えた思い出の箱を受け取りに戻ってほしい。本人が帰ると決められるよう同行する。",
+      "progression": "伝承を実証したと断言せず、手紙を納める、普通の灯で区切りをつける、希望を保って帰るという本人の選択を支える。箱の受取りと入口までの同行を実際に行う。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q210.v11.ritual",
+        "action": "light",
+        "option": "light_supplies",
+        "shortage": "q210.v11.ritual.light.shortage",
+        "resume": "q210.v11.ritual.light.resume",
+        "cost": {
+          "torch": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q210.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "altar": "深火の祭壇の手前",
+      "rest": "最後の巡回路の道具台",
+      "entry": "巡灯路の帰り支度場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "altar"
+      ],
+      [
+        "transit",
+        "rest"
+      ],
+      [
+        "transit",
+        "entry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "altar",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "widowAt": {
+        "type": "enum",
+        "initial": "altar",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "widow の所在または保持者"
+      },
+      "makerAt": {
+        "type": "enum",
+        "initial": "rest",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit"
+        ],
+        "meaning": "maker の所在または保持者"
+      },
+      "letterAt": {
+        "type": "enum",
+        "initial": "widow",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit",
+          "party",
+          "widow",
+          "maker",
+          "box"
+        ],
+        "meaning": "letter の所在または保持者"
+      },
+      "boxAt": {
+        "type": "enum",
+        "initial": "maker",
+        "values": [
+          "altar",
+          "rest",
+          "entry",
+          "transit",
+          "party",
+          "widow",
+          "maker",
+          "letter"
+        ],
+        "meaning": "box の所在または保持者"
+      },
+      "decision": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "letter",
+          "ritual",
+          "hope"
+        ],
+        "meaning": "decision"
+      },
+      "consent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent"
+      },
+      "boxReturned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "boxReturned"
+      },
+      "home": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "home"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "widow": {
+        "holder": "widowAt",
+        "kind": "person",
+        "character": "q210_widow"
+      },
+      "maker": {
+        "holder": "makerAt",
+        "kind": "person",
+        "character": "q210_maker"
+      },
+      "letter": {
+        "holder": "letterAt",
+        "kind": "item"
+      },
+      "box": {
+        "holder": "boxAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "深火の祭壇の手前",
+        "place": "altar",
+        "cast": [
+          {
+            "entity": "widow"
+          }
+        ],
+        "requires": true
+      },
+      "ritual": {
+        "title": "深火の祭壇の手前",
+        "place": "altar",
+        "cast": [
+          {
+            "entity": "widow"
+          }
+        ],
+        "requires": true
+      },
+      "ready": {
+        "title": "深火の祭壇の手前",
+        "place": "altar",
+        "cast": [
+          {
+            "entity": "widow"
+          }
+        ],
+        "requires": true
+      },
+      "box": {
+        "title": "最後の巡回路の道具台",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "widow"
+          },
+          {
+            "entity": "maker"
+          }
+        ],
+        "requires": true
+      },
+      "packed": {
+        "title": "最後の巡回路の道具台",
+        "place": "rest",
+        "cast": [
+          {
+            "entity": "widow"
+          }
+        ],
+        "requires": true
+      },
+      "home": {
+        "title": "巡灯路の帰り支度場",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "widow"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_letter": {
+        "from": [
+          "entry"
+        ],
+        "to": "ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "decision",
+            "value": "letter"
+          },
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_ritual": {
+        "from": [
+          "entry"
+        ],
+        "to": "ritual",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "entry_hope": {
+        "from": [
+          "entry"
+        ],
+        "to": "ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "decision",
+            "value": "hope"
+          },
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "ritual_light": {
+        "from": [
+          "ritual"
+        ],
+        "to": "ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "decision",
+            "value": "ritual"
+          },
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          }
+        ],
+        "cost": {
+          "torch": 1
+        },
+        "once": true
+      },
+      "ready_walk": {
+        "from": [
+          "ready"
+        ],
+        "to": "box",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "widow"
+            ],
+            "path": [
+              "transit",
+              "rest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "rest",
+          "companions": [
+            "widow"
+          ]
+        },
+        "depart": []
+      },
+      "box_take": {
+        "from": [
+          "box"
+        ],
+        "to": "packed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "box",
+            "from": "maker",
+            "to": "widow"
+          },
+          {
+            "op": "set",
+            "key": "boxReturned",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "packed_letter": {
+        "from": [
+          "packed"
+        ],
+        "to": "home",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q210.values.decision"
+          },
+          "right": "letter"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "widow"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "widow"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "widow",
+            "to": "box"
+          }
+        ]
+      },
+      "packed_return": {
+        "from": [
+          "packed"
+        ],
+        "to": "home",
+        "requires": {
+          "op": "ne",
+          "left": {
+            "ref": "stories.q210.values.decision"
+          },
+          "right": "letter"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "widow"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "widow"
+          ]
+        },
+        "depart": []
+      },
+      "home_letter": {
+        "from": [
+          "home"
+        ],
+        "ending": "letter",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q210.values.decision"
+          },
+          "right": "letter"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "home",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "home_ritual": {
+        "from": [
+          "home"
+        ],
+        "ending": "ritual",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q210.values.decision"
+          },
+          "right": "ritual"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "home",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "home_hope": {
+        "from": [
+          "home"
+        ],
+        "ending": "hope",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q210.values.decision"
+          },
+          "right": "hope"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "home",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "letter": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.home"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.consent"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxReturned"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.widowAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxAt"
+                },
+                "right": "widow"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.decision"
+            },
+            "right": "letter"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.letterAt"
+            },
+            "right": "box"
+          }
+        ]
+      },
+      "ritual": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.home"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.consent"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxReturned"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.widowAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxAt"
+                },
+                "right": "widow"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.decision"
+            },
+            "right": "ritual"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.letterAt"
+            },
+            "right": "widow"
+          }
+        ]
+      },
+      "hope": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.home"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.consent"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxReturned"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.widowAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q210.values.boxAt"
+                },
+                "right": "widow"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.decision"
+            },
+            "right": "hope"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q210.values.letterAt"
+            },
+            "right": "widow"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "altar": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f3",
+        "x": 9,
+        "y": 7,
+        "event": "q210_altar"
+      },
+      "rest": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_last_patrol",
+        "x": 9,
+        "y": 9,
+        "event": "q210_rest"
+      },
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 13,
+        "y": 1,
+        "event": "q210_entry"
+      }
+    },
+    "revision": 1
+  }
+}

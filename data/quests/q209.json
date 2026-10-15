@@ -1,0 +1,1303 @@
+{
+  "schemaVersion": 1,
+  "id": "q209",
+  "number": 209,
+  "title": "借り物の武勇",
+  "client": "護衛見習いエル",
+  "brief": "護衛見習いが、灰蝋の魔物を倒したという傭兵の実地教習に立ち会ってほしいと頼んできた。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q209_hall",
+      "title": "煤けた回廊の盾掛け",
+      "points": [
+        {
+          "map": "kagaribi_f2",
+          "x": 5,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q209.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q209.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q209_entry",
+      "title": "巡灯路の帰路札前",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 11,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q209.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q209.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_f2",
+      "x": 5,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q209_hall",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "battle": {
+      "gold": 57,
+      "xp": 51,
+      "label": "今日見た戦いだけを書く",
+      "text": "エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は証明されていない。盾の傷を武勇に数えず、それでも次の仕事を頼むかは見習い自身に残した。"
+    },
+    "escort": {
+      "gold": 57,
+      "xp": 51,
+      "label": "帰す仕事を教習にする",
+      "text": "ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。"
+    },
+    "limited": {
+      "gold": 57,
+      "xp": 51,
+      "label": "確認していない武勇には署名しない",
+      "text": "エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。"
+    }
+  },
+  "scripts": {
+    "q209.v11.entry": {
+      "storyQuest": "q209",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q209",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "エルは盾の傷を指して「この一撃で倒したんですよね」と言った。ゼドは盾を裏返した。「倒したところは、見せられない」。誰の盾かを尋ねると、借り物だと認めた。「前は、これで構えて逃がした。それだけだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "過去の噂は訂正した上で、今回の魔物との戦闘に立ち会う",
+              "storyAction": {
+                "quest": "q209",
+                "action": "entry_battle"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q209",
+                  "action": "entry_battle"
+                },
+                {
+                  "op": "jump",
+                  "script": "q209.v11.challenge"
+                }
+              ]
+            },
+            {
+              "id": "escort",
+              "text": "討伐の実演をせず、二人と安全確認をしながら巡灯路へ戻る",
+              "storyAction": {
+                "quest": "q209",
+                "action": "entry_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q209",
+                  "action": "entry_escort"
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "教習への立会いを断り、過去の討伐は確認できないと報告へ記す",
+              "storyAction": {
+                "quest": "q209",
+                "action": "entry_limited"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q209",
+                  "action": "entry_limited"
+                },
+                {
+                  "op": "jump",
+                  "script": "q209.v11.end.limited"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q209.v11.challenge": {
+      "storyQuest": "q209",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q209",
+          "scene": "challenge"
+        },
+        {
+          "op": "say",
+          "text": "近くをうろつく灰蝋の魔物に探索隊が対処し、ゼドとエルは退路側から手順を見ることになった。「今日倒せたとしても、前に倒した証拠にはならない」とゼドが言う。勝利するまで実演成功とは記せない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "探索隊が魔物を退け、二人に今回の戦闘を見届けてもらう",
+              "storyAction": {
+                "quest": "q209",
+                "action": "challenge_fight"
+              },
+              "requirement": "戦闘・作業と消費は勝利時に確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "kagaribi_wax",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q209",
+                      "action": "challenge_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q209.v11.witness"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。この作業の移動・受け渡し・支払いはまだ確定していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "現場から救援された。依頼を再開すると、未完了の作業からやり直せる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q209.v11.witness": {
+      "storyQuest": "q209",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q209",
+          "scene": "witness"
+        },
+        {
+          "op": "say",
+          "text": "今回の魔物を退けた。エルは、探索隊が戦い、ゼドが退路側に立っていたと分けて記した。見ていない過去を埋めるための戦績ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sign",
+              "text": "今回の探索隊の戦闘とゼドの見届けを、別々に報告へ記す",
+              "storyAction": {
+                "quest": "q209",
+                "action": "witness_sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q209",
+                  "action": "witness_sign"
+                },
+                {
+                  "op": "jump",
+                  "script": "q209.v11.end.battle"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q209.v11.home": {
+      "storyQuest": "q209",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q209",
+          "scene": "home"
+        },
+        {
+          "op": "say",
+          "text": "ゼドとエルを伴って巡灯路へ戻った。途中の戦いがあれば探索隊の戦績であり、過去の噂とは別だ。ゼドは曲がり角で立つ位置を教え、エルは「倒すところ」ではなく「戻るところ」の欄を作った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "歩いて帰った教習を記録し、討伐の噂も本人の言葉で訂正する",
+              "storyAction": {
+                "quest": "q209",
+                "action": "home_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q209",
+                  "action": "home_record"
+                },
+                {
+                  "op": "jump",
+                  "script": "q209.v11.end.escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q209.v11.end.battle": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q209",
+          "outcome": "battle"
+        },
+        {
+          "op": "say",
+          "text": "エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は証明されていない。盾の傷を武勇に数えず、それでも次の仕事を頼むかは見習い自身に残した。"
+        }
+      ]
+    },
+    "q209.v11.end.escort": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q209",
+          "outcome": "escort"
+        },
+        {
+          "op": "say",
+          "text": "ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。"
+        }
+      ]
+    },
+    "q209.v11.end.limited": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q209",
+          "outcome": "limited"
+        },
+        {
+          "op": "say",
+          "text": "エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。"
+        }
+      ]
+    },
+    "q209.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": false,
+          "then": [],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q209.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q209.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "battle",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は証明されていない。盾の傷を武勇に数えず、それでも次の仕事を頼むかは見習い自身に残した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "escort",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "limited",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q209"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q209.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q209.v11.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "challenge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q209.v11.challenge"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "witness",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q209.v11.witness"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q209.v11.home"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q209.v11.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "ゼドは過去の帰還護衛で戦わず、仲間から借りた傷のある盾を構えて荷運び人と退いた。討伐したというエルの誤解を訂正しなかった。 盾の古傷はゼドの戦績ではない。今回の戦闘結果を過去の討伐証明へ流用しない。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "ゼドは過去の帰還護衛で戦わず、仲間から借りた傷のある盾を構えて荷運び人と退いた。討伐したというエルの誤解を訂正しなかった。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "盾の古傷はゼドの戦績ではない。今回の戦闘結果を過去の討伐証明へ流用しない。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q209.v11.entry",
+          "assertion": {
+            "title": "煤けた回廊の盾掛け",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "guard"
+              },
+              {
+                "entity": "pupil"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "challenge",
+          "script": "q209.v11.challenge",
+          "assertion": {
+            "title": "煤けた回廊の盾掛け",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "guard"
+              },
+              {
+                "entity": "pupil"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "witness",
+          "script": "q209.v11.witness",
+          "assertion": {
+            "title": "煤けた回廊の盾掛け",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "guard"
+              },
+              {
+                "entity": "pupil"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "home",
+          "script": "q209.v11.home",
+          "assertion": {
+            "title": "巡灯路の帰路札前",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "guard"
+              },
+              {
+                "entity": "pupil"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "護衛見習いが、灰蝋の魔物を倒したという傭兵の実地教習に立ち会ってほしいと頼んできた。"
+    },
+    "dramaticKernel": "助けたことを、倒したことに言い換えないまま誇れるか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "ゼドは過去の帰還護衛で戦わず、仲間から借りた傷のある盾を構えて荷運び人と退いた。討伐したというエルの誤解を訂正しなかった。 盾の古傷はゼドの戦績ではない。今回の戦闘結果を過去の討伐証明へ流用しない。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "challenge",
+        "witness",
+        "home"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q209.v11.visit",
+    "progression": "見習いの前で護衛と討伐を区別する。今回の戦闘を実演するか、戦わず帰路を教えるか、立会いを断って確認範囲だけ記す。",
+    "agents": [
+      {
+        "id": "guard",
+        "character": "q209_guard",
+        "name": "ゼド",
+        "goal": "エルの信頼を失わずに護衛の仕事を続ける",
+        "initialLocation": "hall",
+        "belief": "討伐をしていない護衛は臆病だと思われる",
+        "fear": "逃げたことしか覚えられないこと",
+        "knowledgeSource": "以前は怪物と戦わず、仲間の盾を借りて荷運び人を帰した。討伐したという噂を訂正しなかった。",
+        "publicGoal": "エルの信頼を失わずに護衛の仕事を続ける",
+        "privateStake": "逃げたことしか覚えられないこと"
+      },
+      {
+        "id": "pupil",
+        "character": "q209_pupil",
+        "name": "エル",
+        "goal": "師の戦い方を実際に見て覚える",
+        "initialLocation": "hall",
+        "belief": "盾に傷があるなら持ち主が敵を倒した証拠だ",
+        "fear": "憧れた人を嘘つきと呼ぶしかなくなること",
+        "knowledgeSource": "討伐の現場は見ていない。噂と借りた盾の傷を根拠にゼドを評価した。",
+        "publicGoal": "師の戦い方を実際に見て覚える",
+        "privateStake": "憧れた人を嘘つきと呼ぶしかなくなること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q209.values.partyAt",
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.guardAt",
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "guard の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.pupilAt",
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "pupil の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.shieldAt",
+        "type": "enum",
+        "initial": "guard",
+        "values": [
+          "hall",
+          "entry",
+          "transit",
+          "party",
+          "guard",
+          "pupil",
+          "report"
+        ],
+        "meaning": "shield の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.reportAt",
+        "type": "enum",
+        "initial": "pupil",
+        "values": [
+          "hall",
+          "entry",
+          "transit",
+          "party",
+          "guard",
+          "pupil",
+          "shield"
+        ],
+        "meaning": "report の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.admitted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "admitted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.witnessed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.returned",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q209.values.account",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "battle",
+          "escort",
+          "limited"
+        ],
+        "meaning": "account",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q209.v11.entry",
+        "assertion": {
+          "title": "煤けた回廊の盾掛け",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "guard"
+            },
+            {
+              "entity": "pupil"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "challenge",
+        "script": "q209.v11.challenge",
+        "assertion": {
+          "title": "煤けた回廊の盾掛け",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "guard"
+            },
+            {
+              "entity": "pupil"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "witness",
+        "script": "q209.v11.witness",
+        "assertion": {
+          "title": "煤けた回廊の盾掛け",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "guard"
+            },
+            {
+              "entity": "pupil"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "home",
+        "script": "q209.v11.home",
+        "assertion": {
+          "title": "巡灯路の帰路札前",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "guard"
+            },
+            {
+              "entity": "pupil"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "エルは盾の傷を指して「この一撃で倒したんですよね」と言った。ゼドは盾を裏返した。「倒したところは、見せられない」。誰の盾かを尋ねると、借り物だと認めた。「前は、これで構えて逃がした。それだけだ」",
+        "options": [
+          {
+            "id": "battle",
+            "text": "過去の噂は訂正した上で、今回の魔物との戦闘に立ち会う",
+            "to": "challenge",
+            "action": "entry_battle"
+          },
+          {
+            "id": "escort",
+            "text": "討伐の実演をせず、二人と安全確認をしながら巡灯路へ戻る",
+            "to": "home",
+            "action": "entry_escort"
+          },
+          {
+            "id": "limited",
+            "text": "教習への立会いを断り、過去の討伐は確認できないと報告へ記す",
+            "to": "@limited",
+            "action": "entry_limited"
+          }
+        ]
+      },
+      {
+        "id": "challenge",
+        "text": "近くをうろつく灰蝋の魔物に探索隊が対処し、ゼドとエルは退路側から手順を見ることになった。「今日倒せたとしても、前に倒した証拠にはならない」とゼドが言う。勝利するまで実演成功とは記せない。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "探索隊が魔物を退け、二人に今回の戦闘を見届けてもらう",
+            "to": "witness",
+            "combat": true,
+            "action": "challenge_fight"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "text": "今回の魔物を退けた。エルは、探索隊が戦い、ゼドが退路側に立っていたと分けて記した。見ていない過去を埋めるための戦績ではない。",
+        "options": [
+          {
+            "id": "sign",
+            "text": "今回の探索隊の戦闘とゼドの見届けを、別々に報告へ記す",
+            "to": "@battle",
+            "action": "witness_sign"
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "text": "ゼドとエルを伴って巡灯路へ戻った。途中の戦いがあれば探索隊の戦績であり、過去の噂とは別だ。ゼドは曲がり角で立つ位置を教え、エルは「倒すところ」ではなく「戻るところ」の欄を作った。",
+        "options": [
+          {
+            "id": "record",
+            "text": "歩いて帰った教習を記録し、討伐の噂も本人の言葉で訂正する",
+            "to": "@escort",
+            "action": "home_record"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "護衛見習いが、灰蝋の魔物を倒したという傭兵の実地教習に立ち会ってほしいと頼んできた。",
+      "progression": "見習いの前で護衛と討伐を区別する。今回の戦闘を実演するか、戦わず帰路を教えるか、立会いを断って確認範囲だけ記す。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    }
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "hall": "煤けた回廊の盾掛け",
+      "entry": "巡灯路の帰路札前",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "hall"
+      ],
+      [
+        "transit",
+        "entry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "guardAt": {
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "guard の所在または保持者"
+      },
+      "pupilAt": {
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "entry",
+          "transit"
+        ],
+        "meaning": "pupil の所在または保持者"
+      },
+      "shieldAt": {
+        "type": "enum",
+        "initial": "guard",
+        "values": [
+          "hall",
+          "entry",
+          "transit",
+          "party",
+          "guard",
+          "pupil",
+          "report"
+        ],
+        "meaning": "shield の所在または保持者"
+      },
+      "reportAt": {
+        "type": "enum",
+        "initial": "pupil",
+        "values": [
+          "hall",
+          "entry",
+          "transit",
+          "party",
+          "guard",
+          "pupil",
+          "shield"
+        ],
+        "meaning": "report の所在または保持者"
+      },
+      "admitted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "admitted"
+      },
+      "witnessed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "witnessed"
+      },
+      "returned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned"
+      },
+      "account": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "battle",
+          "escort",
+          "limited"
+        ],
+        "meaning": "account"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "guard": {
+        "holder": "guardAt",
+        "kind": "person",
+        "character": "q209_guard"
+      },
+      "pupil": {
+        "holder": "pupilAt",
+        "kind": "person",
+        "character": "q209_pupil"
+      },
+      "shield": {
+        "holder": "shieldAt",
+        "kind": "item"
+      },
+      "report": {
+        "holder": "reportAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "煤けた回廊の盾掛け",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "guard"
+          },
+          {
+            "entity": "pupil"
+          }
+        ],
+        "requires": true
+      },
+      "challenge": {
+        "title": "煤けた回廊の盾掛け",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "guard"
+          },
+          {
+            "entity": "pupil"
+          }
+        ],
+        "requires": true
+      },
+      "witness": {
+        "title": "煤けた回廊の盾掛け",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "guard"
+          },
+          {
+            "entity": "pupil"
+          }
+        ],
+        "requires": true
+      },
+      "home": {
+        "title": "巡灯路の帰路札前",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "guard"
+          },
+          {
+            "entity": "pupil"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_battle": {
+        "from": [
+          "entry"
+        ],
+        "to": "challenge",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "admitted",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_escort": {
+        "from": [
+          "entry"
+        ],
+        "to": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guard",
+              "pupil"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "guard",
+            "pupil"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "admitted",
+            "value": true
+          }
+        ]
+      },
+      "entry_limited": {
+        "from": [
+          "entry"
+        ],
+        "ending": "limited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "admitted",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "account",
+            "value": "limited"
+          }
+        ],
+        "once": true
+      },
+      "challenge_fight": {
+        "from": [
+          "challenge"
+        ],
+        "to": "witness",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "witnessed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "witness_sign": {
+        "from": [
+          "witness"
+        ],
+        "ending": "battle",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "account",
+            "value": "battle"
+          }
+        ],
+        "once": true
+      },
+      "home_record": {
+        "from": [
+          "home"
+        ],
+        "ending": "escort",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "admitted",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "returned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "account",
+            "value": "escort"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "battle": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.account"
+            },
+            "right": "battle"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.witnessed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.admitted"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.reportAt"
+            },
+            "right": "pupil"
+          }
+        ]
+      },
+      "escort": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.account"
+            },
+            "right": "escort"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.returned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.guardAt"
+            },
+            "right": "entry"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.pupilAt"
+            },
+            "right": "entry"
+          }
+        ]
+      },
+      "limited": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.account"
+            },
+            "right": "limited"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.witnessed"
+            },
+            "right": false
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q209.values.admitted"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "hall": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f2",
+        "x": 5,
+        "y": 1,
+        "event": "q209_hall"
+      },
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 11,
+        "y": 1,
+        "event": "q209_entry"
+      }
+    },
+    "revision": 1
+  }
+}

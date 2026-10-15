@@ -19,24 +19,26 @@ import {installDOM} from './view-dom.mjs';
 
 const reordered=()=>{
   const d=structuredClone(data),moved=Array.from({length:10},(_,i)=>`q${i+101}`);
+  d.questOrder.ids=Object.values(d.quests).sort((a,b)=>a.number-b.number).map(q=>q.id);
   d.questOrder.ids=['q001',...moved,...d.questOrder.ids.filter(id=>id!=='q001'&&!moved.includes(id))];
   return d;
 };
 
-test('migration preserves every existing ID, displayed number and definition order',()=>{
+test('insertion preserves original source numbers and definition order',()=>{
   assert.equal(data.questOrder.ids.length,Object.keys(data.quests).length);
   assert.equal(referenceData.names.questOrder,undefined,'presentation metadata is not an entity collection');
-  assert.deepEqual(orderedQuests(data).map(q=>q.id),Object.keys(data.quests));
-  for(const q of projectGame(newGame()).quests)assert.equal(q.number,data.quests[q.id].number);
+  assert.deepEqual(Object.keys(data.quests).slice(0,200),Array.from({length:200},(_,i)=>`q${String(i+1).padStart(3,'0')}`));
+  assert.equal(questDisplayNumber(data,'q002'),12);
+  for(const q of Object.values(data.quests))assert.equal(q.number,Number(q.id.slice(1)));
 });
 
 test('ten new IDs can occupy display 002–011 without renaming q002 or mutating definitions',()=>{
   const d=structuredClone(data),original=JSON.stringify(d.quests),added=[];
-  for(let i=201;i<=210;i++){const id=`q${i}`;d.quests[id]={id,number:i};added.push(id);}
+  for(let i=211;i<=220;i++){const id=`q${i}`;d.quests[id]={id,number:i};added.push(id);}
   d.questOrder.ids.splice(1,0,...added);
   assert.deepEqual(questOrderErrors(d),[]);
   assert.deepEqual(orderedQuests(d).slice(1,11).map(q=>q.id),added);
-  assert.equal(questDisplayNumber(d,'q002'),12);
+  assert.equal(questDisplayNumber(d,'q002'),22);
   for(const id of added)delete d.quests[id];
   assert.equal(JSON.stringify(d.quests),original);
 });
@@ -95,7 +97,7 @@ test('loader rejects duplicate, missing, unknown and malformed registry entries'
   }
   assert.ok(questOrderErrors({...data,questOrder:undefined}).length);
   const legacy={...data,game:{...data.game,files:{...data.game.files,databases:{}}}};delete legacy.questOrder;
-  assert.deepEqual(orderedQuests(legacy).map(q=>q.id),data.questOrder.ids);
+  assert.deepEqual(orderedQuests(legacy).map(q=>q.id),Object.values(data.quests).sort((a,b)=>a.number-b.number).map(q=>q.id));
 });
 
 test('compiler registers an inserted quest without rewriting files or gameplay order, and rejects omissions before writes',async()=>{

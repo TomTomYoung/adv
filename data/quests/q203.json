@@ -1,0 +1,1672 @@
+{
+  "schemaVersion": 1,
+  "id": "q203",
+  "number": 203,
+  "title": "油の底の水",
+  "client": "油商ゲル",
+  "brief": "納入した油に水増しの疑いをかけられた商人が、封じた試料を検品係へ届けてほしいという。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 2,
+  "requires": {
+    "op": "eq",
+    "left": {
+      "ref": "quests.q001.stage"
+    },
+    "right": "completed"
+  },
+  "unlockHint": "「帰らない灯番」の完了後に受注できる。追加10件の受注順は自由。",
+  "events": [
+    {
+      "id": "q203_desk",
+      "title": "油蔵の検品台",
+      "points": [
+        {
+          "map": "kagaribi_oilstore",
+          "x": 9,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q203.v11.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q203.stage"
+        },
+        "right": "active"
+      }
+    },
+    {
+      "id": "q203_test",
+      "title": "煤けた回廊の試験皿",
+      "points": [
+        {
+          "map": "kagaribi_f2",
+          "x": 3,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "dungeon": "kagaribi",
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": false,
+      "interactionRange": "here",
+      "script": "q203.v11.visit",
+      "visibleWhen": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q203.stage"
+        },
+        "right": "active"
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_oilstore",
+      "x": 9,
+      "y": 1,
+      "dungeon": "kagaribi",
+      "object": "q203_desk",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "returned": {
+      "gold": 57,
+      "xp": 51,
+      "label": "混入だけを確かめて返す",
+      "text": "ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振らずに台へ置いた。弁明のために持たせた瓶が、次に説明しなければならない事実になった。"
+    },
+    "limited": {
+      "gold": 57,
+      "xp": 51,
+      "label": "使えた量を限って伝える",
+      "text": "一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。"
+    },
+    "public": {
+      "gold": 57,
+      "xp": 51,
+      "label": "残った水を審査へ預ける",
+      "text": "水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。"
+    }
+  },
+  "scripts": {
+    "q203.v11.entry": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ゲルは封をした小瓶を両手で包んでいた。「水を売ったと言われたら、次はありません」。雨の日に漏斗をしまい忘れたことは認める。「燃えるかどうかは、自分の言葉だけで通したくない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "試料瓶を預かり、回廊の検品係へ運ぶ",
+              "storyAction": {
+                "quest": "q203",
+                "action": "entry_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q203",
+                  "action": "entry_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.inspect": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "inspect"
+        },
+        {
+          "op": "say",
+          "text": "ユハは瓶を台に置き、揺れがおさまるのを待った。底に透明な一目盛り、その上に油が二目盛りある。「分かれたね。燃える量は別に試す。試料だけで全樽に判を押すことはできない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "燃焼試験をせず、分離した試料を商人へ返しに行く",
+              "storyAction": {
+                "quest": "q203",
+                "action": "inspect_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q203",
+                  "action": "inspect_return"
+                }
+              ]
+            },
+            {
+              "id": "pour",
+              "text": "上澄み二目盛りを試験皿へ分ける",
+              "storyAction": {
+                "quest": "q203",
+                "action": "inspect_pour"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q203",
+                  "action": "inspect_pour"
+                },
+                {
+                  "op": "jump",
+                  "script": "q203.v11.portion"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.portion": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "portion"
+        },
+        {
+          "op": "say",
+          "text": "試験皿に上澄み二目盛りを分けた。瓶には底の水が一目盛り残っている。ユハは一本の松明で、一目盛りだけを燃やす手順を示した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "burn",
+              "text": "松明1本を使い、一目盛りの燃焼を試す",
+              "storyAction": {
+                "quest": "q203",
+                "action": "portion_burn"
+              },
+              "requirement": "松明 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q203",
+                  "action": "portion_burn"
+                },
+                {
+                  "op": "jump",
+                  "script": "q203.v11.result"
+                }
+              ]
+            },
+            {
+              "id": "burn_supplies",
+              "text": "予備灯油1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "torch",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q203.v11.portion.burn.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.result": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "result"
+        },
+        {
+          "op": "say",
+          "text": "上澄み一目盛りは燃えた。試験皿に油が一目盛り、瓶に水が一目盛り残る。「使える油もあった。それと納入が適正だったことは、同じじゃない」。ユハは、残った試料をどこへ渡すか尋ねた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "limited",
+              "text": "残った瓶を商人へ返し、今回の試験範囲だけ伝える",
+              "storyAction": {
+                "quest": "q203",
+                "action": "result_limited"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q203",
+                  "action": "result_limited"
+                }
+              ]
+            },
+            {
+              "id": "public",
+              "text": "商人の納入名を添えて瓶を検品係へ預け、混入審査を依頼する",
+              "storyAction": {
+                "quest": "q203",
+                "action": "result_public"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q203",
+                  "action": "result_public"
+                },
+                {
+                  "op": "jump",
+                  "script": "q203.v11.end.public"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.return": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "return"
+        },
+        {
+          "op": "say",
+          "text": "ゲルは戻ってきた瓶を見た。底の水は、振らなければ隠れない。燃焼試験をしていないことも、油と水が分かれたことも、そのまま伝えられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "未試験であることを告げ、試料を返す",
+              "storyAction": {
+                "quest": "q203",
+                "action": "return_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q203",
+                  "action": "return_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q203.v11.end.returned"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.limited": {
+      "storyQuest": "q203",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q203",
+          "scene": "limited"
+        },
+        {
+          "op": "say",
+          "text": "瓶の中に残ったのは水だけだ。ゲルは一目盛りの水を光へかざした。「燃えた分だけの話、ですね」。残りの油一目盛りはユハの試験皿にあり、全樽の受入れは決まっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "瓶と試験結果を渡し、全樽の保証はしない",
+              "storyAction": {
+                "quest": "q203",
+                "action": "limited_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q203",
+                  "action": "limited_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q203.v11.end.limited"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.end.returned": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q203",
+          "outcome": "returned"
+        },
+        {
+          "op": "say",
+          "text": "ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振らずに台へ置いた。弁明のために持たせた瓶が、次に説明しなければならない事実になった。"
+        }
+      ]
+    },
+    "q203.v11.end.limited": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q203",
+          "outcome": "limited"
+        },
+        {
+          "op": "say",
+          "text": "一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。"
+        }
+      ]
+    },
+    "q203.v11.end.public": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q203",
+          "outcome": "public"
+        },
+        {
+          "op": "say",
+          "text": "水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。"
+        }
+      ]
+    },
+    "q203.v11.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q203"
+          },
+          "cases": [
+            {
+              "equals": "q203.v11.portion.burn.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q203.v11.portion.burn.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": false,
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q203.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q203.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "returned",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振らずに台へ置いた。弁明のために持たせた瓶が、次に説明しなければならない事実になった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "limited",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "public",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q203"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q203.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "inspect",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.inspect"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "portion",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.portion"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "result",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.result"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "return",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.return"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "limited",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q203.v11.limited"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q203.v11.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q203.v11.portion.burn.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q203",
+          "value": "q203.v11.portion.burn.resume"
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q203.v11.portion.burn.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q203",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "予備灯油1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q203.v11.portion"
+        }
+      ]
+    }
+  },
+  "model": {
+    "world": {
+      "truth": "ゲルは屋外に置いた漏斗を乾かさずに使い、納入油へ雨水を混入させた。故意の水増しではない。 試料瓶には上澄み二目盛りと底の水一目盛りが入っている。これは専用試料で、迷宮の既存の火台や所持品の油とは別物である。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "ゲルは屋外に置いた漏斗を乾かさずに使い、納入油へ雨水を混入させた。故意の水増しではない。"
+        },
+        {
+          "id": "fixed_1",
+          "text": "試料瓶には上澄み二目盛りと底の水一目盛りが入っている。これは専用試料で、迷宮の既存の火台や所持品の油とは別物である。"
+        }
+      ],
+      "initialState": "story.registry の initial。過去の真相と現在の所在を別に持つ。"
+    },
+    "narrative": {
+      "units": [
+        {
+          "id": "entry",
+          "script": "q203.v11.entry",
+          "assertion": {
+            "title": "油蔵の検品台",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "seller"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "inspect",
+          "script": "q203.v11.inspect",
+          "assertion": {
+            "title": "煤けた回廊の試験皿",
+            "place": "test",
+            "cast": [
+              {
+                "entity": "tester"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "portion",
+          "script": "q203.v11.portion",
+          "assertion": {
+            "title": "煤けた回廊の試験皿",
+            "place": "test",
+            "cast": [
+              {
+                "entity": "tester"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "result",
+          "script": "q203.v11.result",
+          "assertion": {
+            "title": "煤けた回廊の試験皿",
+            "place": "test",
+            "cast": [
+              {
+                "entity": "tester"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "return",
+          "script": "q203.v11.return",
+          "assertion": {
+            "title": "油蔵の検品台",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "seller"
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "limited",
+          "script": "q203.v11.limited",
+          "assertion": {
+            "title": "油蔵の検品台",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "seller"
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "納入した油に水増しの疑いをかけられた商人が、封じた試料を検品係へ届けてほしいという。"
+    },
+    "dramaticKernel": "使える部分がある品を、不良の原因と一緒に引き受けられるか。",
+    "adaptation": "独立した篝火迷宮の一編。人物の所在・物品・実移動・残る責任を追跡する。",
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-09-13",
+      "scope": "quest-episode"
+    },
+    "reveal": {
+      "newInformation": "ゲルは屋外に置いた漏斗を乾かさずに使い、納入油へ雨水を混入させた。故意の水増しではない。 試料瓶には上澄み二目盛りと底の水一目盛りが入っている。これは専用試料で、迷宮の既存の火台や所持品の油とは別物である。",
+      "gate": null,
+      "retroactiveTargets": [
+        "entry",
+        "inspect",
+        "portion",
+        "result",
+        "return",
+        "limited"
+      ],
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する"
+    },
+    "flowVersion": 3,
+    "entryScript": "q203.v11.visit",
+    "progression": "封じた試料を運び、分離を観察する。返却だけでも終えられる。上澄みを分けて松明で試験する場合は、使った量と保証の範囲を残す。",
+    "agents": [
+      {
+        "id": "seller",
+        "character": "q203_seller",
+        "name": "ゲル",
+        "goal": "不良を認めても取引を失わずに済ませる",
+        "initialLocation": "desk",
+        "belief": "混入を認めれば水増しと決めつけられる",
+        "fear": "働いて納めた油まで全て詐欺と呼ばれること",
+        "knowledgeSource": "雨ざらしの漏斗を使った。水が入った経緯は知るが、燃焼試験をしていない。",
+        "publicGoal": "不良を認めても取引を失わずに済ませる",
+        "privateStake": "働いて納めた油まで全て詐欺と呼ばれること"
+      },
+      {
+        "id": "tester",
+        "character": "q203_tester",
+        "name": "ユハ",
+        "goal": "使える量と使えない量を区別して記録する",
+        "initialLocation": "test",
+        "belief": "色だけで品質は保証できない",
+        "fear": "試験の成功を全樽の保証へ広げられること",
+        "knowledgeSource": "試験皿と目盛り管を持つ。納入時の作業は見ていない。",
+        "publicGoal": "使える量と使えない量を区別して記録する",
+        "privateStake": "試験の成功を全樽の保証へ広げられること"
+      }
+    ],
+    "stateRegistry": [
+      {
+        "path": "stories.q203.values.partyAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.sellerAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "seller の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.testerAt",
+        "type": "enum",
+        "initial": "test",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "tester の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.bottleAt",
+        "type": "enum",
+        "initial": "seller",
+        "values": [
+          "desk",
+          "test",
+          "transit",
+          "party",
+          "seller",
+          "tester",
+          "cup"
+        ],
+        "meaning": "bottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.cupAt",
+        "type": "enum",
+        "initial": "tester",
+        "values": [
+          "desk",
+          "test",
+          "transit",
+          "party",
+          "seller",
+          "tester",
+          "bottle"
+        ],
+        "meaning": "cup の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.sample",
+        "type": "integer",
+        "initial": 3,
+        "min": 0,
+        "max": 3,
+        "meaning": "試料の上澄みを含む総量（目盛り）",
+        "container": "bottle",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.portion",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "試験皿へ分けた油の量（目盛り）",
+        "container": "cup",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.burned",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "試験で燃焼した量（目盛り）",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.tested",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q203.values.disposal",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "returned",
+          "limited",
+          "public"
+        ],
+        "meaning": "disposal",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q203.v11.entry",
+        "assertion": {
+          "title": "油蔵の検品台",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "seller"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "inspect",
+        "script": "q203.v11.inspect",
+        "assertion": {
+          "title": "煤けた回廊の試験皿",
+          "place": "test",
+          "cast": [
+            {
+              "entity": "tester"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "portion",
+        "script": "q203.v11.portion",
+        "assertion": {
+          "title": "煤けた回廊の試験皿",
+          "place": "test",
+          "cast": [
+            {
+              "entity": "tester"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "result",
+        "script": "q203.v11.result",
+        "assertion": {
+          "title": "煤けた回廊の試験皿",
+          "place": "test",
+          "cast": [
+            {
+              "entity": "tester"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "return",
+        "script": "q203.v11.return",
+        "assertion": {
+          "title": "油蔵の検品台",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "seller"
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "limited",
+        "script": "q203.v11.limited",
+        "assertion": {
+          "title": "油蔵の検品台",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "seller"
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ゲルは封をした小瓶を両手で包んでいた。「水を売ったと言われたら、次はありません」。雨の日に漏斗をしまい忘れたことは認める。「燃えるかどうかは、自分の言葉だけで通したくない」",
+        "options": [
+          {
+            "id": "carry",
+            "text": "試料瓶を預かり、回廊の検品係へ運ぶ",
+            "to": "inspect",
+            "action": "entry_carry"
+          }
+        ]
+      },
+      {
+        "id": "inspect",
+        "text": "ユハは瓶を台に置き、揺れがおさまるのを待った。底に透明な一目盛り、その上に油が二目盛りある。「分かれたね。燃える量は別に試す。試料だけで全樽に判を押すことはできない」",
+        "options": [
+          {
+            "id": "return",
+            "text": "燃焼試験をせず、分離した試料を商人へ返しに行く",
+            "to": "return",
+            "action": "inspect_return"
+          },
+          {
+            "id": "pour",
+            "text": "上澄み二目盛りを試験皿へ分ける",
+            "to": "portion",
+            "action": "inspect_pour"
+          }
+        ]
+      },
+      {
+        "id": "portion",
+        "text": "試験皿に上澄み二目盛りを分けた。瓶には底の水が一目盛り残っている。ユハは一本の松明で、一目盛りだけを燃やす手順を示した。",
+        "options": [
+          {
+            "id": "burn",
+            "text": "松明1本を使い、一目盛りの燃焼を試す",
+            "to": "result",
+            "action": "portion_burn"
+          }
+        ]
+      },
+      {
+        "id": "result",
+        "text": "上澄み一目盛りは燃えた。試験皿に油が一目盛り、瓶に水が一目盛り残る。「使える油もあった。それと納入が適正だったことは、同じじゃない」。ユハは、残った試料をどこへ渡すか尋ねた。",
+        "options": [
+          {
+            "id": "limited",
+            "text": "残った瓶を商人へ返し、今回の試験範囲だけ伝える",
+            "to": "limited",
+            "action": "result_limited"
+          },
+          {
+            "id": "public",
+            "text": "商人の納入名を添えて瓶を検品係へ預け、混入審査を依頼する",
+            "to": "@public",
+            "action": "result_public"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "text": "ゲルは戻ってきた瓶を見た。底の水は、振らなければ隠れない。燃焼試験をしていないことも、油と水が分かれたことも、そのまま伝えられる。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "未試験であることを告げ、試料を返す",
+            "to": "@returned",
+            "action": "return_hand"
+          }
+        ]
+      },
+      {
+        "id": "limited",
+        "text": "瓶の中に残ったのは水だけだ。ゲルは一目盛りの水を光へかざした。「燃えた分だけの話、ですね」。残りの油一目盛りはユハの試験皿にあり、全樽の受入れは決まっていない。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "瓶と試験結果を渡し、全樽の保証はしない",
+            "to": "@limited",
+            "action": "limited_hand"
+          }
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "納入した油に水増しの疑いをかけられた商人が、封じた試料を検品係へ届けてほしいという。",
+      "progression": "封じた試料を運び、分離を観察する。返却だけでも終えられる。上澄みを分けて松明で試験する場合は、使った量と保証の範囲を残す。"
+    },
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q203.v11.portion",
+        "action": "burn",
+        "option": "burn_supplies",
+        "shortage": "q203.v11.portion.burn.shortage",
+        "resume": "q203.v11.portion.burn.resume",
+        "cost": {
+          "torch": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q203.v11.visit"
+    ]
+  },
+  "legacyOutcomes": {},
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "desk": "油蔵の検品台",
+      "test": "煤けた回廊の試験皿",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "desk"
+      ],
+      [
+        "transit",
+        "test"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "sellerAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "seller の所在または保持者"
+      },
+      "testerAt": {
+        "type": "enum",
+        "initial": "test",
+        "values": [
+          "desk",
+          "test",
+          "transit"
+        ],
+        "meaning": "tester の所在または保持者"
+      },
+      "bottleAt": {
+        "type": "enum",
+        "initial": "seller",
+        "values": [
+          "desk",
+          "test",
+          "transit",
+          "party",
+          "seller",
+          "tester",
+          "cup"
+        ],
+        "meaning": "bottle の所在または保持者"
+      },
+      "cupAt": {
+        "type": "enum",
+        "initial": "tester",
+        "values": [
+          "desk",
+          "test",
+          "transit",
+          "party",
+          "seller",
+          "tester",
+          "bottle"
+        ],
+        "meaning": "cup の所在または保持者"
+      },
+      "sample": {
+        "type": "integer",
+        "initial": 3,
+        "min": 0,
+        "max": 3,
+        "meaning": "試料の上澄みを含む総量（目盛り）",
+        "container": "bottle"
+      },
+      "portion": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "試験皿へ分けた油の量（目盛り）",
+        "container": "cup"
+      },
+      "burned": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "試験で燃焼した量（目盛り）"
+      },
+      "tested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested"
+      },
+      "disposal": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "returned",
+          "limited",
+          "public"
+        ],
+        "meaning": "disposal"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "seller": {
+        "holder": "sellerAt",
+        "kind": "person",
+        "character": "q203_seller"
+      },
+      "tester": {
+        "holder": "testerAt",
+        "kind": "person",
+        "character": "q203_tester"
+      },
+      "bottle": {
+        "holder": "bottleAt",
+        "kind": "item"
+      },
+      "cup": {
+        "holder": "cupAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "water": {
+        "text": "試料の底に水が分離し、上澄み二目盛りだけが試験に使える。"
+      },
+      "flame": {
+        "text": "今回分けた上澄み一目盛りは燃えた。全樽の品質を証明したわけではない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "volume",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "args": [
+              {
+                "ref": "stories.q203.values.sample"
+              },
+              {
+                "ref": "stories.q203.values.portion"
+              },
+              {
+                "ref": "stories.q203.values.burned"
+              }
+            ]
+          },
+          "right": 3
+        },
+        "message": "試料の量を増減させず、燃焼分も記録する"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "油蔵の検品台",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "seller"
+          }
+        ],
+        "requires": true
+      },
+      "inspect": {
+        "title": "煤けた回廊の試験皿",
+        "place": "test",
+        "cast": [
+          {
+            "entity": "tester"
+          }
+        ],
+        "requires": true
+      },
+      "portion": {
+        "title": "煤けた回廊の試験皿",
+        "place": "test",
+        "cast": [
+          {
+            "entity": "tester"
+          }
+        ],
+        "requires": true
+      },
+      "result": {
+        "title": "煤けた回廊の試験皿",
+        "place": "test",
+        "cast": [
+          {
+            "entity": "tester"
+          }
+        ],
+        "requires": true
+      },
+      "return": {
+        "title": "油蔵の検品台",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "seller"
+          }
+        ],
+        "requires": true
+      },
+      "limited": {
+        "title": "油蔵の検品台",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "seller"
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_carry": {
+        "from": [
+          "entry"
+        ],
+        "to": "inspect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "test"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "water",
+            "source": "tester",
+            "requires": true
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "test",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "seller",
+            "to": "party"
+          }
+        ]
+      },
+      "inspect_return": {
+        "from": [
+          "inspect"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "inspect_pour": {
+        "from": [
+          "inspect"
+        ],
+        "to": "portion",
+        "requires": true,
+        "effects": [
+          {
+            "op": "pour",
+            "from": "sample",
+            "to": "portion",
+            "amount": 2
+          }
+        ],
+        "once": true
+      },
+      "portion_burn": {
+        "from": [
+          "portion"
+        ],
+        "to": "result",
+        "requires": true,
+        "effects": [
+          {
+            "op": "consume",
+            "key": "portion",
+            "sink": "burned",
+            "amount": 1
+          },
+          {
+            "op": "set",
+            "key": "tested",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "flame",
+            "source": "tester",
+            "requires": true
+          }
+        ],
+        "cost": {
+          "torch": 1
+        },
+        "once": true
+      },
+      "result_limited": {
+        "from": [
+          "result"
+        ],
+        "to": "limited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "result_public": {
+        "from": [
+          "result"
+        ],
+        "ending": "public",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "party",
+            "to": "tester"
+          },
+          {
+            "op": "set",
+            "key": "disposal",
+            "value": "public"
+          }
+        ],
+        "once": true
+      },
+      "return_hand": {
+        "from": [
+          "return"
+        ],
+        "ending": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "party",
+            "to": "seller"
+          },
+          {
+            "op": "set",
+            "key": "disposal",
+            "value": "returned"
+          }
+        ],
+        "once": true
+      },
+      "limited_hand": {
+        "from": [
+          "limited"
+        ],
+        "ending": "limited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "party",
+            "to": "seller"
+          },
+          {
+            "op": "set",
+            "key": "disposal",
+            "value": "limited"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "returned": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.disposal"
+            },
+            "right": "returned"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.bottleAt"
+            },
+            "right": "seller"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.sample"
+            },
+            "right": 3
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.burned"
+            },
+            "right": 0
+          }
+        ]
+      },
+      "limited": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.disposal"
+            },
+            "right": "limited"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.tested"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.burned"
+            },
+            "right": 1
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.bottleAt"
+            },
+            "right": "seller"
+          }
+        ]
+      },
+      "public": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.disposal"
+            },
+            "right": "public"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.tested"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.bottleAt"
+            },
+            "right": "tester"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q203.values.sample"
+            },
+            "right": 1
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "desk": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_oilstore",
+        "x": 9,
+        "y": 1,
+        "event": "q203_desk"
+      },
+      "test": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f2",
+        "x": 3,
+        "y": 1,
+        "event": "q203_test"
+      }
+    },
+    "revision": 1
+  }
+}
