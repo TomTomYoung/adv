@@ -1,13 +1,14 @@
+import routeNotes from '../authoring/quest-route-notes.json' with {type:'json'};
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {data} from './helpers.mjs';
 import {questCatalog} from '../tools/quest-catalog.mjs';
 import {questRouteSummary,routeArea} from '../tools/quest-route-summary.mjs';
 
-test('all 200 catalog entries contain a readable route before implementation metadata',()=>{
+test('all registered catalog entries contain a readable route before implementation metadata',()=>{
   const catalog=questCatalog(data,'2026-09-27');
-  assert.equal((catalog.match(/^経過：$/gm)??[]).length,200);
-  assert.equal((catalog.match(/^\* 【[^】]+】\[[^\]]+\]：.+$/gm)??[]).length,522);
+  assert.equal((catalog.match(/^経過：$/gm)??[]).length,Object.keys(data.quests).length);
+  assert.equal((catalog.match(/^\* 【[^】]+】\[[^\]]+\]：.+$/gm)??[]).length,Object.keys(data.quests).reduce((n,id)=>n+routeNotes[id].steps.length,0));
   for(const q of Object.values(data.quests)){
     const section=catalog.split(`## ${q.id} `)[1].split('\n## ')[0];
     assert.ok(section.indexOf('経過：')<section.indexOf('モデル:'));

@@ -1,6 +1,7 @@
+import {orderedQuests} from '../src/core/quest-order.js';
 // Links are composed relative to doc/ and relocated by the writer.
 export function characterCatalog(data) {
-  const characters=Object.values(data.characters),quests=Object.values(data.quests);
+  const characters=Object.values(data.characters),quests=orderedQuests(data);
   const sprite=c=>data.assets.images[c.sprite??`sprite_${c.id}`];
   const out=['# 登場人物一覧','',
     '配布JSONの人物定義・素材参照から生成します。人物原稿は `authoring/characters.mjs`。q001〜q010の人物は安定したIDで定義し、同じリネを別人として増やさず、関所番と水門番を区別します。名無しの役割に本名を補わず、集団は集団実体として扱います。','',

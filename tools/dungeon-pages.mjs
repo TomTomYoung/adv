@@ -1,3 +1,4 @@
+import {orderedQuests,questDisplayNumber} from '../src/core/quest-order.js';
 import notes from '../authoring/dungeon-page-notes.json' with {type:'json'};
 import {questEvents} from '../src/core/quest-events.js';
 
@@ -132,8 +133,8 @@ export function dungeonPage(data,id,{date=new Date().toISOString().slice(0,10)}=
   for(const p of locations){const services=data.game.services.filter(s=>p.services?.includes(s.id));out.push(`${p.name}の施設機能：${services.map(s=>s.label).join('・')||'専用サービスなし'}。${p.parent?'同じ室内の親施設から移動します。':'退出時は元の戸口へ戻ります。'}`,'');}
  }
  out.push('## 関連クエストと現地調査','','配布イベントがこの迷宮のマップに配置されている依頼です。q001〜q004は物語内の出発・到着を実移動へ接続しています。q005以降は受付や訪問地点の配置を含み、全場面が別々の実座標に接続されているわけではありません。装置を動かしただけで証拠や結末を自動確定しません。','');
- const events=relatedEvents(data,d),ids=[...new Set(events.map(e=>e.quest))].sort();
- for(const qid of ids){const q=data.quests[qid],es=events.filter(e=>e.quest===qid),maps=[...new Set(es.flatMap(e=>e.points.filter(p=>d.maps.includes(p.map)).map(p=>p.map)))];out.push(`${questLink(q)}：${maps.map(mid=>mapName(data,mid)).join('・')}。`,'');}
+ const events=relatedEvents(data,d),ids=orderedQuests(data).filter(q=>events.some(e=>e.quest===q.id)).map(q=>q.id);
+ for(const qid of ids){const q=data.quests[qid],es=events.filter(e=>e.quest===qid),maps=[...new Set(es.flatMap(e=>e.points.filter(p=>d.maps.includes(p.map)).map(p=>p.map)))];out.push(`表示${String(questDisplayNumber(data,q.id)).padStart(3,'0')} / ${questLink(q)}：${maps.map(mid=>mapName(data,mid)).join('・')}。`,'');}
  if(!ids.length)out.push('現地に配置された番号付き依頼はありません。','');
  for(const e of events.filter(e=>e.note))out.push(`現地調査「${e.title}」／${e.quest}：${e.note.text}`,'',`調査地点：${e.points.filter(p=>d.maps.includes(p.map)).map(p=>point(data,p)).join('、')}。現在の装置状態などが記録条件を満たす必要があります。`,'');
  out.push('## 保存と帰還','',n.persistent,'',`内容版${data.game.version}の同版セーブで再開します。旧内容版は移行せず、読込失敗時は新規開始します。`,'',

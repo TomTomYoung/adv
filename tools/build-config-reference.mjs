@@ -10,7 +10,7 @@ export async function configReference(folder=root){
  for(const file of (await fs.readdir(path.join(folder,'config'))).filter(f=>f.endsWith('.json')).sort())sources[file]=await read('config/'+file);
  for(const file of (await fs.readdir(path.join(folder,'config/dungeons'))).filter(f=>f.endsWith('.json')).sort())sources['dungeons/'+file]=await read('config/dungeons/'+file);
  for(const [kind,file] of Object.entries(game.files.databases)){
-  const value=await read(file);if(!value||Array.isArray(value)||typeof value!=='object')continue;
+  const value=await read(file);if(kind==='questOrder'||!value||Array.isArray(value)||typeof value!=='object')continue;
   names[kind]=Object.fromEntries(Object.entries(value).map(([id,v])=>[id,{name:v?.name??v?.title??v?.label??id,...(v?.sprite?{sprite:v.sprite}:{}),...(v?.portrait?{portrait:v.portrait}:{})}]));
  }
  function walk(value){if(!value||typeof value!=='object')return;if(typeof value.ref==='string')refs.add(value.ref);if(['set','add','random.set'].includes(value.op)&&typeof value.target==='string')refs.add(value.target);if(value.op==='flag.set')refs.add('flags.'+value.key);for(const child of Object.values(value))walk(child);}

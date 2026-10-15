@@ -1,6 +1,6 @@
 # 塩哭きの廃坑
 
-更新日: 2026-10-14。作品版1.25.0。ID `region_2`、推奨Lv.2、2区画。
+更新日: 2026-10-15。作品版1.25.0。ID `region_2`、推奨Lv.2、2区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 
@@ -76,45 +76,45 @@
 
 配布イベントがこの迷宮のマップに配置されている依頼です。q001〜q004は物語内の出発・到着を実移動へ接続しています。q005以降は受付や訪問地点の配置を含み、全場面が別々の実座標に接続されているわけではありません。装置を動かしただけで証拠や結末を自動確定しません。
 
-[q011 塩の花嫁](../../scenarios/QUEST_CATALOG.md#q011-塩の花嫁)：塩哭きの廃坑・地下1層。
+表示011 / [q011 塩の花嫁](../../scenarios/QUEST_CATALOG.md#q011-塩の花嫁)：塩哭きの廃坑・地下1層。
 
-[q012 三つのつるはし](../../scenarios/QUEST_CATALOG.md#q012-三つのつるはし)：塩哭きの廃坑・地下1層。
+表示012 / [q012 三つのつるはし](../../scenarios/QUEST_CATALOG.md#q012-三つのつるはし)：塩哭きの廃坑・地下1層。
 
-[q013 呼吸する鉱脈](../../scenarios/QUEST_CATALOG.md#q013-呼吸する鉱脈)：塩哭きの廃坑・地下1層。
+表示013 / [q013 呼吸する鉱脈](../../scenarios/QUEST_CATALOG.md#q013-呼吸する鉱脈)：塩哭きの廃坑・地下1層。
 
-[q014 帰りの貨車](../../scenarios/QUEST_CATALOG.md#q014-帰りの貨車)：塩哭きの廃坑・地下1層。
+表示014 / [q014 帰りの貨車](../../scenarios/QUEST_CATALOG.md#q014-帰りの貨車)：塩哭きの廃坑・地下1層。
 
-[q015 泣く塩柱](../../scenarios/QUEST_CATALOG.md#q015-泣く塩柱)：塩哭きの廃坑・地下1層。
+表示015 / [q015 泣く塩柱](../../scenarios/QUEST_CATALOG.md#q015-泣く塩柱)：塩哭きの廃坑・地下1層。
 
-[q016 無音の発破](../../scenarios/QUEST_CATALOG.md#q016-無音の発破)：塩哭きの廃坑・地下2層。
+表示016 / [q016 無音の発破](../../scenarios/QUEST_CATALOG.md#q016-無音の発破)：塩哭きの廃坑・地下2層。
 
-[q017 二度掘られた墓](../../scenarios/QUEST_CATALOG.md#q017-二度掘られた墓)：塩哭きの廃坑・地下2層。
+表示017 / [q017 二度掘られた墓](../../scenarios/QUEST_CATALOG.md#q017-二度掘られた墓)：塩哭きの廃坑・地下2層。
 
-[q018 白い借金](../../scenarios/QUEST_CATALOG.md#q018-白い借金)：塩哭きの廃坑・地下2層。
+表示018 / [q018 白い借金](../../scenarios/QUEST_CATALOG.md#q018-白い借金)：塩哭きの廃坑・地下2層。
 
-[q019 底なしの計量器](../../scenarios/QUEST_CATALOG.md#q019-底なしの計量器)：塩哭きの廃坑・地下2層。
+表示019 / [q019 底なしの計量器](../../scenarios/QUEST_CATALOG.md#q019-底なしの計量器)：塩哭きの廃坑・地下2層。
 
-[q020 坑道の王冠](../../scenarios/QUEST_CATALOG.md#q020-坑道の王冠)：塩哭きの廃坑・地下2層。
+表示020 / [q020 坑道の王冠](../../scenarios/QUEST_CATALOG.md#q020-坑道の王冠)：塩哭きの廃坑・地下2層。
 
-[q111 白旗の荷馬車](../../scenarios/QUEST_CATALOG.md#q111-白旗の荷馬車)：塩哭きの廃坑・地下1層。
+表示111 / [q111 白旗の荷馬車](../../scenarios/QUEST_CATALOG.md#q111-白旗の荷馬車)：塩哭きの廃坑・地下1層。
 
-[q112 置いていく灯](../../scenarios/QUEST_CATALOG.md#q112-置いていく灯)：塩哭きの廃坑・地下1層。
+表示112 / [q112 置いていく灯](../../scenarios/QUEST_CATALOG.md#q112-置いていく灯)：塩哭きの廃坑・地下1層。
 
-[q113 雪解けを待たない男](../../scenarios/QUEST_CATALOG.md#q113-雪解けを待たない男)：塩哭きの廃坑・地下1層。
+表示113 / [q113 雪解けを待たない男](../../scenarios/QUEST_CATALOG.md#q113-雪解けを待たない男)：塩哭きの廃坑・地下1層。
 
-[q114 二人分の通行料](../../scenarios/QUEST_CATALOG.md#q114-二人分の通行料)：塩哭きの廃坑・地下1層。
+表示114 / [q114 二人分の通行料](../../scenarios/QUEST_CATALOG.md#q114-二人分の通行料)：塩哭きの廃坑・地下1層。
 
-[q115 追手のいない逃亡](../../scenarios/QUEST_CATALOG.md#q115-追手のいない逃亡)：塩哭きの廃坑・地下1層。
+表示115 / [q115 追手のいない逃亡](../../scenarios/QUEST_CATALOG.md#q115-追手のいない逃亡)：塩哭きの廃坑・地下1層。
 
-[q116 帰り道だけの地図](../../scenarios/QUEST_CATALOG.md#q116-帰り道だけの地図)：塩哭きの廃坑・地下2層。
+表示116 / [q116 帰り道だけの地図](../../scenarios/QUEST_CATALOG.md#q116-帰り道だけの地図)：塩哭きの廃坑・地下2層。
 
-[q117 空の棺の護送](../../scenarios/QUEST_CATALOG.md#q117-空の棺の護送)：塩哭きの廃坑・地下2層。
+表示117 / [q117 空の棺の護送](../../scenarios/QUEST_CATALOG.md#q117-空の棺の護送)：塩哭きの廃坑・地下2層。
 
-[q118 聞こえない救難笛](../../scenarios/QUEST_CATALOG.md#q118-聞こえない救難笛)：塩哭きの廃坑・地下2層。
+表示118 / [q118 聞こえない救難笛](../../scenarios/QUEST_CATALOG.md#q118-聞こえない救難笛)：塩哭きの廃坑・地下2層。
 
-[q119 寝返りの見張り](../../scenarios/QUEST_CATALOG.md#q119-寝返りの見張り)：塩哭きの廃坑・地下2層。
+表示119 / [q119 寝返りの見張り](../../scenarios/QUEST_CATALOG.md#q119-寝返りの見張り)：塩哭きの廃坑・地下2層。
 
-[q120 最後尾の旗](../../scenarios/QUEST_CATALOG.md#q120-最後尾の旗)：塩哭きの廃坑・地下2層。
+表示120 / [q120 最後尾の旗](../../scenarios/QUEST_CATALOG.md#q120-最後尾の旗)：塩哭きの廃坑・地下2層。
 
 現地調査「塩壁の向こうの退路」／q011：入口脇の塩壁を除いた通路を確認した。白い人型の標識を壊した記録ではなく、別地点の退路の記録である。
 

@@ -1,3 +1,4 @@
+import {orderedQuests,questDisplayNumber} from '../src/core/quest-order.js';
 import {describeJourneyArrival} from './location-catalog.mjs';
 
 const code=v=>'`'+v+'`';
@@ -43,8 +44,9 @@ export function eventCatalog(data){
  for(const s of sites)for(const e of s.command.events??[])add(`${code(e.id)}：${code(s.script)} / ${code(s.path.join('.'))}。判定 ${e.triggers.map(code).join(' / ')}。条件 ${code(JSON.stringify(e.condition??true))}。命令 ${e.commands.map(c=>code(c.op)).join(' → ')}。`);
  add('## フィールドのクエスト配置一覧');
  add('IDはクエストIDと配置IDの組で一意。配置と起動条件の正本は各クエストのevents。表示・操作条件の詳細はリンク先JSONを参照する。');
- for(const q of Object.values(data.quests)){
+ for(const q of orderedQuests(data)){
   add(`### ${q.id} ${q.title}`);
+  add(`表示番号: ${String(questDisplayNumber(data,q.id)).padStart(3,'0')}。内部IDは変更しません。`);
   for(const e of q.events??[])add(`${code(`${q.id}/${e.id}`)} ${e.title}：${e.points.length?e.points.map(p=>`${code(p.map)} (${p.x}, ${p.y}${p.z===undefined?'':`, ${p.z}`})${p.edge?` ${p.edge}面`:''}`).join(' / '):'セル指定なし'}。起動 ${code(e.trigger)} → ${code(e.script)}。[定義](../data/quests/${q.id}.json)。`);
  }
  add('## マップ共通の配置一覧');
