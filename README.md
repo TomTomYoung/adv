@@ -1,5 +1,7 @@
 # 灯帰りの迷宮
 
+2026-10-15: [給油・中継所・技能教習を実装（1.26.0）](doc/dungeons/EXPEDITION_IMPLEMENTATION.md)。9か所の修理設備、容量管理、途中出発、技能宝石と人物別教習を追加しました。
+
 [前中後衛のバトルテスター](battle-tester.html) ／ [操作・設定](doc/battle/FRONTLINE_BATTLE.md)。
 
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。

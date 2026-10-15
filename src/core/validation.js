@@ -1,3 +1,4 @@
+import {expeditionDefinitionErrors} from './expedition.js';
 import {questOrderErrors} from './quest-order.js';
 import {frontlineDefinitionErrors} from './battle-frontline.js';
 import {gridDefinitionErrors} from './battle-grid.js';
@@ -133,7 +134,7 @@ export function validateContent(data){
   };
   errors.push(...statusDefinitionsErrors(data));
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
-  errors.push(...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
+  errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   errors.push(...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
   errors.push(...questOrderErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');

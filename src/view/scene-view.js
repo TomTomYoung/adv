@@ -117,7 +117,7 @@ export class SceneView extends GameView{
       toggle.dataset.focus='dungeon-window-toggle';toggle.setAttribute('aria-pressed',String(this.windowsHidden));toolbar.append(toggle);
     }
     header.append(place,toolbar);hud.append(header);
-    const status=make('div','scene-status');status.append(make('span','',`${model.gold} G`));
+    const status=make('div','scene-status');status.append(make('span','',`${model.gold} G`));if(model.expedition)status.append(make('span','',`技能宝石 ${model.expedition.gems}`));
     if(model.tracked){const q=button(`${model.tracked.title}：${model.tracked.destination?.label??''}`,()=>this.openPanel('journal'),'scene-objective');status.append(q);}hud.append(status);
     if(model.battle){
       const holder=make('div');super.battle(holder,model);

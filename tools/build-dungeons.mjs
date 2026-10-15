@@ -5,6 +5,7 @@ import {buildQuestInterruptions} from './build-quest-interruptions.mjs';
 import {buildBattleRewards} from './build-battle-rewards.mjs';
 import {buildCellLayers} from './build-cell-layers.mjs';
 import {buildWorld} from './build-world.mjs';
+import {buildExpedition} from './build-expedition.mjs';
 import {buildConnectedMaps} from './build-connected-maps.mjs';
 import fs from 'node:fs/promises';
 import {buildDungeonArt} from './build-dungeon-art.mjs';
@@ -72,6 +73,7 @@ export async function buildDungeons(){
   await buildQuestOrder(root);
   await buildQuestInterruptions(root);
   await buildBattleGrid(root);
+  await buildExpedition(root);
   console.log(`Dungeons: ${Object.keys(definitions).length}, unique systems authored in JSON`);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await buildDungeons();

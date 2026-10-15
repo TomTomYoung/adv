@@ -1,3 +1,4 @@
+import {battleGems,addGems} from './expedition.js';
 import {battleAlive} from './frontline-lifecycle.js';
 import {clone,isRecord} from './expression.js';
 import {commandsAt,pushBranch,pump} from './script.js';
@@ -7,10 +8,11 @@ export function beginBattleResult(engine,battle){
   const {state:s,data:d}=engine;
   const gold=battle.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=battle.enemies.reduce((n,e)=>n+e.rewards.xp,0);
   const recipients=s.members.filter(id=>battleAlive({...s,battle},s.actors[id]));
+  const gems=battleGems(d,battle);addGems(s,gems);
   const levels=engine.award(gold,xp,recipients);
-  s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null};
+  s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null,gems};
   s.notice='';delete s.presentation.cast;delete s.presentation.message;
-  show(engine,`戦いに勝った！\n${recipients.map(id=>d.actors[id].name).join('、')}は、それぞれ${xp}の経験値を獲得した。\n${gold}ゴールドを手に入れた。`,'戦闘リザルト');
+  show(engine,`戦いに勝った！\n${recipients.map(id=>d.actors[id].name).join('、')}は、それぞれ${xp}の経験値を獲得した。\n${gold}ゴールドを手に入れた。${gems?`\n技能宝石を${gems}個手に入れた。`:''}`,'戦闘リザルト');
 }
 function show(engine,text,speaker){
   engine.state.waiting={type:'battle_result',text,speaker};engine.log(text);
@@ -68,6 +70,7 @@ export function battleResultErrors(data,s){
     const possible={};for(const id of data.encounters[r.encounter].enemies){const drop=data.enemies[id].drop;if(drop?.chance>0)possible[drop.item]=(possible[drop.item]??0)+1;}
     if(!Array.isArray(r.drops)||!r.drops.length||new Set(r.drops.map(v=>v?.item)).size!==r.drops.length||r.drops.some(v=>!isRecord(v)||!possible[v.item]||!Number.isInteger(v.count)||v.count<1||v.count>possible[v.item])||r.index>=r.drops.length||r.phase==='chest'&&r.index!==0)return fail();
   }
+  if(r.gems!==undefined&&(!Number.isSafeInteger(r.gems)||r.gems<0||r.gems>data.encounters[r.encounter].enemies.reduce((sum,id)=>sum+(data.expedition?.enemyGems[id]??0),0)))return fail();
   const c=r.continuation;if(!isRecord(c))return fail();
   if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==r.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape'||!s.vm.some(f=>f.script===c.frame.script&&f.scope===c.frame.scope&&f.index===c.index+1&&JSON.stringify(f.path)===JSON.stringify(c.frame.path)))return fail();}catch{return fail();}}
   return [];

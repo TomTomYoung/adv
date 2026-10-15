@@ -1,3 +1,5 @@
+import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe} from './expedition.js';
+import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
 import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
 import {stepBattle} from './battle.js';
 import {nextFormation,setFormation} from './battle-formation.js';
@@ -48,6 +50,7 @@ export class GameEngine {
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,level:1,xp:0,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     this.state.partyFormation=nextFormation(this.state.members);this.state.battleModePreference='auto';
     this.state.carried={};
+    if(data.expedition)this.state.expedition=freshExpedition();
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
@@ -93,6 +96,7 @@ export class GameEngine {
     if(next<0) throw new Error('所持数が足りません');
     const capped=Math.min(this.data.system.maxStack,next);if(this.data.items[item].slot)addGear(this.state,item,capped-(this.state.inventory[item]??0));
     this.state.inventory[item]=capped;
+    if(count>0)balanceOil(this.data,this.state);
     if(!this.dispatching)settleHoldings(this.data,this.state);
   }
   accept(id){
@@ -137,11 +141,12 @@ export class GameEngine {
   }
   teleport(mapId,x,y,facing='north',z=0,continueEntry=false){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    rememberOil(this.data,this.state);
     if(this.state.scouting?.recon?.map!==mapId)returnRecon(this);
     collapseAfterLeaving(this,this.state.location,{map:mapId,x,y});
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
-    this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
+    this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);restoreOil(this.data,this.state);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
     recordFieldEntry(this.state,continueEntry);
     signalFieldChange(this.data,this.state,'enter');
@@ -156,7 +161,7 @@ export class GameEngine {
   #arriveTown(emergency=false,quiet=false){
     clearScoutingTrip(this);
     collapseAfterLeaving(this,this.state.location,null);
-    leaveDungeon(this);
+    rememberOil(this.data,this.state);leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出した。救援費 ${cost}G。依頼と手掛かりは維持される。`);}
     this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
@@ -210,7 +215,7 @@ export class GameEngine {
     if(processFieldEvents(this))return true;
     if(dungeonDanger(this))return true;
     const map=this.map(),environment=dungeonEncounter(this.data,this.state);
-    if(!dungeonCell(this.data,this.state,map,x,y)?.parameters.safe&&!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate*camouflageRate(this.state))){
+    if(!campSafe(this.data,this.state)&&!dungeonCell(this.data,this.state,map,x,y)?.parameters.safe&&!this.objectAt(x,y).some(o=>o.safe) && this.state.steps%this.data.system.encounterCheckSteps===0 && this.random()<Math.min(1,(environment.encounterRate??(map.encounterRate+(this.state.light===0?this.data.system.darkEncounterBonus:0)))*this.partyEffect('encounterRate')*environment.rate*camouflageRate(this.state))){
       let encounter=map.encounter;
       const pool=environment.encounterPool??map.encounterPool;
       if(pool?.length){let roll=this.random()*pool.reduce((sum,e)=>sum+e.weight,0);encounter=pool.at(-1).encounter;for(const entry of pool){roll-=entry.weight;if(roll<0){encounter=entry.encounter;break;}}}
@@ -264,6 +269,7 @@ export class GameEngine {
       finishInspection(this);
       if(changed&&!['party.formation.set','battle.mode.set'].includes(intent.type))syncSkillGrowth(this);
       if(changed&&!['party.formation.set','battle.mode.set'].includes(intent.type)&&!commandPrompt&&this.state.waiting?.type!=='command'){processFieldEvents(this);if(intent.type!=='battle')dungeonDanger(this);this.cue(this.data.presentation?.bindings.actions[intent.type]);}
+      if(changed)balanceOil(this.data,this.state);
       return changed;
     }finally{this.dispatching=false;settleHoldings(this.data,this.state);}
   }
@@ -277,6 +283,9 @@ export class GameEngine {
     if(type==='party.frontline.set')return setFrontFormation(this,intent.actor,intent.depth,intent.lane);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='expedition.action')return expeditionAction(this,intent);
+    if(type==='skill.buy')return buySkill(this,intent);
+    if(type==='checkpoint.travel')return travelCheckpoint(this,intent.camp);
     if(type==='party.formation.set')return setFormation(this,intent.actor,intent.x,intent.y);
     if(type==='battle.mode.set'){if(!['auto','classic','grid','frontline'].includes(intent.mode))return false;this.state.battleModePreference=intent.mode;return true;}
     if(type==='location.move')return this.moveLocation(intent.id);
@@ -296,7 +305,7 @@ export class GameEngine {
       const plan=questEntryPlan(this.data,this.state,intent.id);
       if(!plan.ok){this.notify(plan.reason);return false;}
       const mapId=this.data.dungeons[plan.place.dungeon].entries.main.map,start=this.data.maps[mapId].entrance;
-      this.state.light=this.data.system.lightCapacity;
+      if(!managesOil(this.state))this.state.light=this.data.system.lightCapacity;
       this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='travel'&&this.state.mode==='town'){
@@ -306,7 +315,7 @@ export class GameEngine {
       const mapId=dungeon?.entries.main.map??region?.entrance;if(!mapId)return false;
       const owner=this.data.maps[mapId].dungeon;
       if(this.data.game.world&&!townLocation(this.data,this.state)?.dungeons?.includes(owner))return false;
-      this.state.light=this.data.system.lightCapacity;
+      if(!managesOil(this.state))this.state.light=this.data.system.lightCapacity;
       const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
