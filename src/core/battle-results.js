@@ -1,3 +1,4 @@
+import {battleAlive} from './frontline-lifecycle.js';
 import {clone,isRecord} from './expression.js';
 import {commandsAt,pushBranch,pump} from './script.js';
 
@@ -5,8 +6,8 @@ import {commandsAt,pushBranch,pump} from './script.js';
 export function beginBattleResult(engine,battle){
   const {state:s,data:d}=engine;
   const gold=battle.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=battle.enemies.reduce((n,e)=>n+e.rewards.xp,0);
-  const recipients=s.members.filter(id=>s.actors[id].hp>0);
-  const levels=engine.award(gold,xp);
+  const recipients=s.members.filter(id=>battleAlive({...s,battle},s.actors[id]));
+  const levels=engine.award(gold,xp,recipients);
   s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null};
   s.notice='';delete s.presentation.cast;delete s.presentation.message;
   show(engine,`戦いに勝った！\n${recipients.map(id=>d.actors[id].name).join('、')}は、それぞれ${xp}の経験値を獲得した。\n${gold}ゴールドを手に入れた。`,'戦闘リザルト');

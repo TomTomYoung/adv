@@ -80,9 +80,9 @@ export class GameEngine {
   healAll(ratio=1) {
     for(const id of this.state.members){const actor=this.state.actors[id],stats=this.stats(id);actor.hp=Math.max(actor.hp,Math.ceil(stats.hp*ratio));actor.mp=Math.max(actor.mp,Math.ceil(stats.mp*ratio));removeStatus(actor);}
   }
-  award(gold,xp){
+  award(gold,xp,recipients){
     this.state.gold=Math.max(0,Math.min(1e9,this.state.gold+gold));
-    const levels=awardExperience(this,xp);
+    const levels=awardExperience(this,xp,recipients);
     for(const row of levels)this.log(`${this.data.actors[row.actor].name}はレベル${row.level}になった。`);
     return levels;
   }

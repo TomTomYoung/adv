@@ -1,3 +1,4 @@
+import {battleAlive} from '../frontline-lifecycle.js';
 import {applyStatus} from '../status-effects.js';
 import {permission,costProblem,payCost} from '../jobs.js';
 import {voxelMapState,voxelLevel} from '../voxels.js';
@@ -17,13 +18,13 @@ export function waterLevel(ctx){
  return m.voxels?voxelLevel(voxelMapState(ctx.data,ctx.state,m),l):waterAt(ctx,m.id,l.x,l.y);
 }
 function markWet(ctx){
- if(waterLevel(ctx)>0)for(const id of ctx.state.members){const a=ctx.state.actors[id];if(a.hp>0&&!a.statuses.includes('wet'))applyStatus(ctx.data,ctx.state,a,'wet');}
+ if(waterLevel(ctx)>0)for(const id of ctx.state.members){const a=ctx.state.actors[id];if(battleAlive(ctx.state,a)&&!a.statuses.includes('wet'))applyStatus(ctx.data,ctx.state,a,'wet');}
 }
 function immerse(ctx){
  immerseAt(ctx.engine,waterLevel(ctx),ctx.run.protected);
 }
 export function immerseAt(engine,level,protectedWater){
- if(level>0)for(const id of engine.state.members){const a=engine.state.actors[id];if(a.hp>0&&!a.statuses.includes('wet'))applyStatus(engine.data,engine.state,a,'wet');}
+ if(level>0)for(const id of engine.state.members){const a=engine.state.actors[id];if(battleAlive(engine.state,a)&&!a.statuses.includes('wet'))applyStatus(engine.data,engine.state,a,'wet');}
  if(level===10&&!protectedWater){engine.notify('水没度10。呼吸を確保できず、隊は溺れました。');for(const id of engine.state.members)engine.state.actors[id].hp=0;engine.defeat();}
 }
 function advance(ctx){

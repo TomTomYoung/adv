@@ -18,8 +18,8 @@ export function layoutFrontlineSprites(entries,width,height,{rowScale=[1,.85,.7]
 export function renderFrontlineSprites(parent,enemies,positions,options={}){
  const stage=make('div','frontline-stage');stage.setAttribute('aria-label','前衛・中衛・後衛の敵');parent.append(stage);
  for(const depth of [2,1,0]){const row=make('span','frontline-row-label',depths[depth]);row.style.top=`${[87,63,37][depth]}%`;stage.append(row);}
- const entries=enemies.filter(e=>e.hp>0).map(e=>({...e,...positions[`enemy:${e.id}`]})),canvases=new Map();
- for(const e of entries){const c=make('canvas','frontline-sprite');c.dataset.fx=`enemy:${e.id}`;c.dataset.unit=`enemy:${e.id}`;c.setAttribute('role','img');c.setAttribute('aria-label',`${e.name}・${depths[e.depth]}`);if(options.targets?.includes(`enemy:${e.id}`))c.classList.add('affected');stage.append(c);canvases.set(e.id,c);}
+ const entries=enemies.filter(e=>e.state?e.state!=='removed':e.hp>0).map(e=>({...e,...positions[`enemy:${e.id}`]})),canvases=new Map();
+ for(const e of entries){const c=make('canvas','frontline-sprite');c.dataset.fx=`enemy:${e.id}`;c.dataset.unit=`enemy:${e.id}`;if(e.state==='down')c.classList.add('frontline-down');c.setAttribute('role','img');c.setAttribute('aria-label',`${e.name}・${depths[e.depth]}${e.state==='down'?'・戦闘不能':''}`);if(options.targets?.includes(`enemy:${e.id}`))c.classList.add('affected');stage.append(c);canvases.set(e.id,c);}
  if(typeof Image==='undefined'){stage.ready=Promise.resolve(stage);return stage;}
  const ready=Promise.all(entries.map(async e=>({...e,bounds:await spritePixels(e.sprite)}))).then(loaded=>{
   const draw=()=>{if(!stage.isConnected)return;const r=stage.getBoundingClientRect(),layout=layoutFrontlineSprites(loaded,r.width,r.height,options);
@@ -32,7 +32,7 @@ export function renderFrontlineSprites(parent,enemies,positions,options={}){
 export function frontlineScene(view,parent,m){
  const f=m.battle.frontline,pending=view.pendingBattleAction,entry=pending?(pending.intent.action==='item'?m.battle.items.find(x=>x.id===pending.intent.item):m.battle.skills.find(x=>x.id===pending.intent.skill)):null,choice=entry?.choices?.find(x=>x.id===view.gridChoice);
  renderFrontlineSprites(parent,m.battle.enemies,f.positions,{...f.presentation,targets:choice?.targets});
- const summary=make('div','frontline-party');for(const depth of [0,1,2]){const units=f.units.filter(u=>!u.enemy&&u.hp>0&&u.depth===depth);summary.append(make('span','',`${depths[depth]}：${units.map(u=>u.name).join('・')||'なし'}`));}parent.append(summary);
+ const summary=make('div','frontline-party');summary.append(make('span','',`味方の陣地：${f.rows}行`));for(let depth=0;depth<f.rows;depth++){const units=f.units.filter(u=>!u.enemy&&u.state!=='removed'&&u.depth===depth);summary.append(make('span','',`${depths[depth]}：${units.map(u=>u.name+(u.state==='down'?'（戦闘不能）':'')).join('・')||'なし'}`));}const removed=f.units.filter(u=>!u.enemy&&u.state==='removed');if(removed.length)summary.append(make('span','','戦闘離脱：'+removed.map(u=>u.name).join('・')));parent.append(summary);
 }
 export function renderFrontlineControls(view,parent,m){
  const pending=view.pendingBattleAction,moving=pending.intent.action==='move',entry=moving?null:pending.intent.action==='item'?m.battle.items.find(x=>x.id===pending.intent.item):m.battle.skills.find(x=>x.id===pending.intent.skill),choices=moving?m.battle.frontline.moves:entry?.choices??[],selected=choices.find(c=>c.id===view.gridChoice);

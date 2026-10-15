@@ -1,3 +1,4 @@
+import {battleAlive} from '../frontline-lifecycle.js';
 import {integer,closeTo} from './common.js';
 import {exact,idList,pointsValid,cellsValid,patchValid,patchTile,patchCell,sameCell,action,markers,panel} from './environment.js';
 const pockets=ctx=>[...ctx.spec.pockets,...ctx.spec.devices.filter(d=>ctx.persistent.raised.includes(d.id)).flatMap(d=>d.pockets)];
@@ -5,7 +6,7 @@ const submerged=ctx=>ctx.spec.water.some(p=>sameCell(p,ctx.state.location))&&!po
 function consume(ctx,n){
   if(!submerged(ctx)){ctx.run.air=ctx.spec.capacity;return;}
   ctx.run.air=Math.max(0,ctx.run.air-n);
-  if(ctx.run.air===0){for(const id of ctx.state.members){const a=ctx.state.actors[id];if(a.hp>0)a.hp=Math.max(0,a.hp-Math.max(1,Math.ceil(ctx.engine.stats(id).hp*ctx.spec.suffocation)));}ctx.engine.notify('空気が尽き、隊が窒息による損傷を受けました。空気の残る区画へ戻ってください。');}
+  if(ctx.run.air===0){for(const id of ctx.state.members){const a=ctx.state.actors[id];if(battleAlive(ctx.state,a))a.hp=Math.max(0,a.hp-Math.max(1,Math.ceil(ctx.engine.stats(id).hp*ctx.spec.suffocation)));}ctx.engine.notify('空気が尽き、隊が窒息による損傷を受けました。空気の残る区画へ戻ってください。');}
   else if(ctx.run.air<=ctx.spec.warning)ctx.engine.notify(`残り空気 ${ctx.run.air}。補給地点への帰路を確保してください。`);
 }
 function plan(ctx,intent){

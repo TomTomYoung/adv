@@ -1,3 +1,4 @@
+import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
 import {frontlineSaveErrors} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
 import {gridSaveErrors} from './battle-grid.js';
@@ -133,6 +134,7 @@ export function migrateSave(original,data){
     migrated=clone(migrated);if(migrated.state.partyFormation===undefined)migrated.state.partyFormation=nextFormation(migrated.state.members);
     if(migrated.state.battleModePreference===undefined)migrated.state.battleModePreference='auto';
     if(migrated.state.battle&&migrated.state.battle.mode===undefined)migrated.state.battle.mode='classic';
+    migrateFrontlineLifecycle(migrated.state);
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
   if(data.game.migrations?.[original?.contentVersion]?.environmentRevision)return migrated;
@@ -252,9 +254,9 @@ export function validateSave(save,data){
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
-      if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&e.hp===0))))fail('撃破記録不正');
+      if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
-      b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
+      b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.frontlineDefeat!==def.frontlineDefeat||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}

@@ -1,3 +1,4 @@
+import {battleAlive,frontlineState,frontlineRows} from './core/frontline-lifecycle.js';
 import {loadContent} from './core/loader.js';
 import {unitKey} from './core/buffs.js';
 import {frontlineUnits,depthNames} from './core/battle-frontline.js';
@@ -17,6 +18,8 @@ function roster(){
    selectField(row,'段',depthNames.map((n,i)=>[String(i),n]),u.depth,v=>u.depth=Number(v));
    selectField(row,'左右順',Array.from({length:5},(_,i)=>[String(i),String(i+1)]),u.lane,v=>u.lane=Number(v));
    for(const [key,label] of [['hp','HP'],['mp','MP'],['str','力'],['vit','防御'],['int','知力'],['agi','敏捷'],['range','攻撃レンジ']])inputField(row,label,u[key],'number',v=>u[key]=v);
+   selectField(row,'開始時',[['alive','生存'],['down','戦闘不能']],u.down?'down':'alive',v=>u.down=v==='down');
+   if(side==='enemies')selectField(row,'撃破時',[['remove','排除'],['remain','戦闘不能で残留']],u.remain?'remain':'remove',v=>u.remain=v==='remain');
    selectField(row,'状態',[['','なし'],...Object.values(base.statuses).map(s=>[s.id,s.name])],u.status,v=>u.status=v);
    if(side==='enemies')selectField(row,'被弾反応',[['no','なし'],['yes','防御して後続命中を中止']],u.reaction?'yes':'no',v=>u.reaction=v==='yes');
    const remove=node('button','削除');remove.disabled=config[side].length<=1;remove.addEventListener('click',()=>{config[side].splice(index,1);roster();});row.append(remove);parent.append(row);
@@ -24,7 +27,7 @@ function roster(){
  }
 }
 function loadInputs(){
- $('mode').value=config.mode;$('seed').value=config.seed;$('preemptive').value=config.preemptive?.side??'';
+ $('push-distance').value=config.knockback?.distance??1;$('collision-damage').value=config.knockback?.collisionDamage??25;$('objects').value=JSON.stringify(config.objects??[]);$('mode').value=config.mode;$('seed').value=config.seed;$('preemptive').value=config.preemptive?.side??'';
  const p=config.profile;for(const [id,value] of [['min-range',p.range.min],['range',p.range.max],['shape',p.area.shape],['resolution',p.resolution],['order',p.order],['series',p.damageSeries.mode],['basis',p.damageSeries.basis],['series-step',p.damageSeries.step],['reevaluate',p.reevaluate],['overlap',config.presentation.overlap]])$(id).value=value;
  $('friendly').checked=p.friendlyFire;config.presentation.rowScale.forEach((v,i)=>$('scale'+i).value=v);roster();
 }
@@ -34,7 +37,7 @@ function readProfile(){
 }
 function presentation(){return {overlap:Math.max(0,Math.min(.5,Number($('overlap').value))),rowScale:[0,1,2].map(i=>Math.max(.1,Math.min(1.5,Number($('scale'+i).value))))};}
 function readCase(){
- readProfile();config.mode=$('mode').value;config.seed=Number($('seed').value);config.preemptive=$('preemptive').value?{side:$('preemptive').value,actions:2}:null;config.presentation=presentation();
+ config.knockback={distance:Number($('push-distance').value),collisionDamage:Number($('collision-damage').value)};config.objects=JSON.parse($('objects').value||'[]');readProfile();config.mode=$('mode').value;config.seed=Number($('seed').value);config.preemptive=$('preemptive').value?{side:$('preemptive').value,actions:2}:null;config.presentation=presentation();
  const errors=validateTesterCase(base,config);if(errors.length)throw Error(errors.join('\n'));
  return structuredClone(config);
 }
@@ -44,8 +47,8 @@ function start(){try{
 function units(){return engine?.state.battle?frontlineUnits(engine.state):[];}
 function currentSkill(){const value=$('skill').value,source=$('attacker').value;if(value==='participant_attack')return source.startsWith('actor:')?`lab_${source.slice(6)}_attack`:`lab_${source.slice(6)}_attack`;return value;}
 function fillSelectors(force=false){
- const entries=units().filter(u=>u.hp>0).map(u=>[unitKey(u),`${u.instance?'敵':'味方'}：${u.name??engine.data.actors[u.id].name}`]);selectOptions($('attacker'),entries,force?testerCurrentUnit(engine):$('attacker').value);selectOptions($('target'),entries,$('target').value||entries.find(([k])=>k.startsWith('enemy:'))?.[0]);
- selectOptions($('skill'),[['lab_strike','設定攻撃'],['participant_attack','個体の攻撃レンジ'],['attack','通常攻撃（武器設定）'],['guard','防御']],$('skill').value);
+ const entries=units().filter(u=>battleAlive(engine.state,u)).map(u=>[unitKey(u),`${u.instance?'敵':'味方'}：${u.name??engine.data.actors[u.id].name}`]);selectOptions($('attacker'),entries,force?testerCurrentUnit(engine):$('attacker').value);selectOptions($('target'),units().filter(u=>frontlineState(engine.state,u)!=='removed').map(u=>[unitKey(u),`${u.name??engine.data.actors[u.id].name}${frontlineState(engine.state,u)==='down'?'（戦闘不能）':''}`]),$('target').value||entries.find(([k])=>k.startsWith('enemy:'))?.[0]);
+ selectOptions($('skill'),[['lab_strike','設定攻撃'],['participant_attack','個体の攻撃レンジ'],['attack','通常攻撃（武器設定）'],['guard','防御'],...Object.entries(engine?.data.skills??{}).filter(([id])=>['lab_revive','lab_remove','lab_exile','lab_push','lab_push_ally','lab_corpse_mp'].includes(id)).map(([id,s])=>[id,s.name])],$('skill').value);
 }
 function preview(){
  if(!engine?.state.battle){lastPlan=null;$('preview').textContent='戦闘が終了しました。Resetで再実行できます。';$('execute').disabled=true;return;}
@@ -57,11 +60,15 @@ function drawBattle(){
  const display=$('battle-display');display.replaceChildren();display.style.width=Math.max(280,Math.min(1400,Number($('width').value)))+'px';
  const b=engine?.state.battle;if(!b)return;
  const event=eventIndex===null?null:b.frontline?.events[eventIndex],positions=event?.positions??b.frontline?.positions??Object.fromEntries(units().map((u,i)=>[unitKey(u),b.grid?{depth:u.instance?2-b.grid.positions[unitKey(u)].y:b.grid.positions[unitKey(u)].y-3,lane:b.grid.positions[unitKey(u)].x}:{depth:0,lane:i%5}]));
- const enemies=b.enemies.map(e=>({id:e.instance,name:e.name,hp:event?.hp[unitKey(e)]??e.hp,sprite:engine.data.assets.images[e.sprite]}));renderFrontlineSprites(display,enemies,positions,{...presentation(),targets:lastPlan?.targets?.map(unitKey)});
- const counts=[];for(const enemy of [false,true])counts.push(`${enemy?'敵':'味方'}：${depthNames.map((name,depth)=>`${name}${units().filter(u=>Boolean(u.instance)===enemy&&(event?.hp[unitKey(u)]??u.hp)>0&&positions[unitKey(u)]?.depth===depth).length}人`).join(' / ')}`);$('counts').textContent=counts.join('　');
- if($('diagnostics').checked){const grid=node('div');grid.className='lab-diagnostics';for(let y=0;y<6;y++)for(let x=0;x<5;x++){const cell=node('span',`${y<3?'敵':'味方'} ${depthNames[y<3?2-y:y-3]} / 横${x+1}`),keys=units().filter(u=>Boolean(u.instance)===(y<3)&&positions[unitKey(u)]?.lane===x&&positions[unitKey(u)]?.depth===(y<3?2-y:y-3)).map(unitKey);if(lastPlan?.targets?.some(u=>keys.includes(unitKey(u))))cell.className='hit';grid.append(cell);}display.append(grid);}
+ const enemies=b.enemies.map(e=>({id:e.instance,name:e.name,hp:event?.hp[unitKey(e)]??e.hp,state:b.mode==='frontline'?(event?.states?.[unitKey(e)]??frontlineState(engine.state,e)):undefined,sprite:engine.data.assets.images[e.sprite]}));renderFrontlineSprites(display,enemies,positions,{...presentation(),targets:lastPlan?.targets?.map(unitKey)});
+ const rows=event?.rows??frontlineRows(engine.state),stateOf=u=>event?.states?.[unitKey(u)]??frontlineState(engine.state,u);const counts=[`味方${rows}行／敵3行`];for(const enemy of [false,true])counts.push(`${enemy?'敵':'味方'}：${depthNames.map((name,depth)=>`${name}${units().filter(u=>Boolean(u.instance)===enemy&&stateOf(u)==='alive'&&positions[unitKey(u)]?.depth===depth).length}人`).join(' / ')}`);counts.push('戦闘不能：'+units().filter(u=>stateOf(u)==='down').length+'人／離脱：'+units().filter(u=>stateOf(u)==='removed').length+'人');$('counts').textContent=counts.join('　');
+ if($('diagnostics').checked){const grid=node('div');grid.className='lab-diagnostics';for(let y=0;y<3+rows;y++)for(let x=0;x<5;x++){const cell=node('span',`${y<3?'敵':'味方'} ${depthNames[y<3?2-y:y-3]} / 横${x+1}`),keys=units().filter(u=>stateOf(u)!=='removed'&&Boolean(u.instance)===(y<3)&&positions[unitKey(u)]?.lane===x&&positions[unitKey(u)]?.depth===(y<3?2-y:y-3)).map(unitKey);if(lastPlan?.targets?.some(u=>keys.includes(unitKey(u))))cell.className='hit';const obstacle=b.frontline?.objects?.find(o=>o.side===(y<3?'enemies':'allies')&&o.depth===(y<3?2-y:y-3)&&o.lane===x);if(obstacle)cell.append(node('small','衝突物体：'+obstacle.id));cell.append(node('small',keys.map(k=>k+' '+stateOf(units().find(u=>unitKey(u)===k))).join(' / ')));grid.append(cell);}display.append(grid);}
 }
 function eventLabel(e){
+ if(e.type==='retreat')return `戦闘不能者の退避：${e.moves.map(m=>m.unit+' '+depthNames[m.from.depth]+'→'+depthNames[m.to.depth]+' 横'+(m.to.lane+1)).join(' / ')}`;
+ if(e.type==='shrink'||e.type==='expand')return `味方陣地 ${e.from}行→${e.to}行`;
+ if(e.type==='removed')return `戦闘離脱 ${e.unit}（${e.reason}）`;
+ if(e.type==='knockback')return `ノックバック ${e.unit}：${e.moves.length}段 ${e.collision?'衝突 '+e.collision.kind+' 追加ダメージ'+e.damage:'衝突なし'}`;
  if(e.type==='advance')return `T${e.round} ${e.side==='allies'?'味方':'敵'} 前進${e.step}歩目：${e.moves.map(m=>`${m.unit} ${depthNames[m.from.depth]}→${depthNames[m.to.depth]}`).join(' / ')}`;
  if(e.type==='hit')return `T${e.round} 命中${e.index} ${e.target} HP ${e.hpBefore}→${e.hpAfter}・ダメージ${e.damage}・残り${e.remaining}`;
  if(e.type==='reaction')return `反応 ${e.unit} ${e.skill}${e.cancelRemaining?'：後続命中中止要求':''}`;
@@ -72,7 +79,7 @@ function eventLabel(e){
 }
 function render(force=false){
  const b=engine?.state.battle;fillSelectors(force);$('round').textContent=b?`ターン ${b.round} ／ ${testerCurrentUnit(engine)??'終了'}`:'戦闘終了';preview();
- const list=$('participants');list.replaceChildren();for(const u of units()){const key=unitKey(u),p=b.frontline?.positions[key],button=node('button',`${u.name??engine.data.actors[u.id].name}${p?'・'+depthNames[p.depth]:''} HP${u.hp} MP${u.mp}`);button.setAttribute('aria-pressed',String(key===$('target').value));button.addEventListener('click',()=>{$('target').value=key;preview();});list.append(button);}
+ const list=$('participants');list.replaceChildren();for(const u of units()){const key=unitKey(u),p=b.frontline?.positions[key],button=node('button',`${u.name??engine.data.actors[u.id].name}${p?'・'+depthNames[p.depth]:''} HP${u.hp} MP${u.mp}・${{alive:'生存',down:'戦闘不能',removed:'戦闘離脱'}[frontlineState(engine.state,u)]}`);button.setAttribute('aria-pressed',String(key===$('target').value));button.addEventListener('click',()=>{$('target').value=key;preview();});list.append(button);}
  const log=$('event-log'),events=b?.frontline?.events??[];log.replaceChildren();events.forEach((e,i)=>{const li=node('li',eventLabel(e));if(i===eventIndex)li.className='selected';li.addEventListener('click',()=>{eventIndex=i;render();});log.append(li);});
  if(!events.length)for(const text of b?.log??[])log.append(node('li',text));
  $('event-position').textContent=eventIndex===null?'現在の状態':`イベント ${eventIndex+1} / ${events.length}`;$('debug').textContent=JSON.stringify({state:testerSnapshot(engine),selectedEvent:eventIndex===null?null:events[eventIndex],range:lastPlan?.requiredRange,targets:lastPlan?.targets?.map(unitKey)},null,2);

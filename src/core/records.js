@@ -1,3 +1,4 @@
+import {frontlineState,syncFrontlineDefeats} from './frontline-lifecycle.js';
 // Objective history. Script commands can read it, but cannot write it.
 export const freshRecords=(historyComplete=true)=>({historyComplete,battles:0,wins:0,escapes:0,losses:0,repels:0,interruptions:0,kills:{},encounters:{},baselines:{}});
 export function snapshotRecords(records){return {battles:records.battles,wins:records.wins,escapes:records.escapes,losses:records.losses,repels:records.repels??0,interruptions:records.interruptions??0,kills:{...records.kills},encounters:{...records.encounters}};}
@@ -10,8 +11,8 @@ export function recordCount(records,{metric,id,sinceQuest}){
 }
 export function recordDefeated(engine){
   const b=engine.state.battle,r=engine.state.records;
-  b.recordedKills??=[];
-  for(const enemy of b.enemies)if(enemy.hp===0&&!b.recordedKills.includes(enemy.instance)){
+  syncFrontlineDefeats(engine);b.recordedKills??=[];
+  for(const enemy of b.enemies)if((enemy.hp===0||b.mode==='frontline'&&frontlineState(engine.state,enemy)==='removed')&&!b.recordedKills.includes(enemy.instance)){
     b.recordedKills.push(enemy.instance);r.kills[enemy.id]=(r.kills[enemy.id]??0)+1;
   }
 }

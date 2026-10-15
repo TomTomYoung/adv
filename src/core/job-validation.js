@@ -35,7 +35,8 @@ export function skillDefinitionErrors(data,skill){
     if(['status','guard'].includes(effect.type)&&effect.level!==undefined&&!integer(effect.level,1,3))fail('状態異常Lv不正');
     if(['damage','heal','drain_mp','restore_mp'].includes(effect.type)&&effect.formula===undefined&&effect.amount===undefined)fail('効果量未定義');
     if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
-    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='stun'?['count','stack']:[])];
+    if(effect.type==='frontline_knockback'&&(!integer(effect.distance,1,3)||!integer(effect.collisionDamage,0,1000000)))fail('ノックバック距離・衝突ダメージ不正');
+    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='stun'?['count','stack']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
