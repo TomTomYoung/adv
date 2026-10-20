@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.26.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.27.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -60,13 +60,15 @@ power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・�
 
 `q001_decision` (2, 1) の新人、`q001_return` (9, 1) の巡灯路・北の帰路、`q001_return_south` (13, 5) の南の帰路、`q001_elder` (13, 3) の老人はセル進入で自動開始する。進行中の場面・目的地に対応するイベントだけが始まる。南は老人を介助するold_supportの帰路だけで有効で、往路の油切れ確認は北の (9, 1) だけ。上部の目的地と継続ボタンは削除済み。
 
-`q001-F-kuragari`：帰路の `old_support` で 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル に到着すると、共通入口 `q001.v11.visit` から `q001.v11.outage` へ進む。消灯会話の後、`kuragari_hunt` と強制戦闘。戦闘と救援会話は到着した実セルで続け、救援後は他の配置を通っても繰り返さない。
+`q001-F-kuragari`：帰路の `old_support` で 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル に到着すると、共通入口 `q001.v11.visit` から `q001.v11.outage` へ進む。消灯会話の後、`kuragari_hunt` と強制戦闘。戦闘と救援会話は到着した実セルで続け、救援後は他の配置を通っても繰り返さない。
 
 `q001-B-rookie`：同じ位置。第1ラウンド終了後に新人が登場して発言。セリフを送ると `outage_call` で新品油1を消費し、くらがり除けの携帯松明を25歩分点灯。`battle.end` → `on_interrupt` → `q001.v11.rescue` で現地の救助会話へ移る。1ラウンドより早い勝利・逃走・撃退も確定前にこのイベントを通る。新人救援前の全滅は町へ救助され、老人との再遭遇からやり直す。確定後の全滅では救援を巻き戻さない。[区間の巻き戻し](EVENT_CHECKPOINTS.md)。
 
 ## 登録済みの戦闘中イベント
 
 `q001-B-rookie`：`q001.v11.outage` / `commands.3`。判定 `round_start` / `before_end`。条件 `{"op":"or","args":[{"op":"gte","left":{"ref":"battle.round"},"right":2},{"op":"in","left":{"ref":"battle.pendingResult"},"right":["win","escape","repel"]}]}`。命令 `scene.cast` → `say` → `story.action` → `fire.portable.set` → `battle.end`。
+
+`fire_warning`：`kagaribi.altar_keeper` / `commands.0.else.1.options.0.commands.0`。判定 `round_start`。条件 `{"op":"eq","left":{"ref":"battle.round"},"right":3}`。命令 `narrate`。
 
 ## フィールドのクエスト配置一覧
 
@@ -2028,21 +2030,27 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_10_f2/door`：(13, 11) `door`、起動 `interact` → `region_10_f2.door`。[定義](../../data/maps/region_10_f2.json)。
 
-### kagaribi_f1 篝火の迷宮・灯番の巡回路
+### kagaribi_f1 篝火の迷宮・1F 灯番の巡回路
 
 `kagaribi_f1/exit`：(1, 1) `exit`、起動 `interact` → `kagaribi.exit`。[定義](../../data/maps/kagaribi_f1.json)。
 
 `kagaribi_f1/history`：(3, 1) `clue`、起動 `interact` → `kagaribi.history`。[定義](../../data/maps/kagaribi_f1.json)。
 
-### kagaribi_f2 篝火の迷宮・煤けた回廊
+`kagaribi_f1/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.kagaribi_f1.supply_rope`。[定義](../../data/maps/kagaribi_f1.json)。
+
+### kagaribi_f2 篝火の迷宮・5F 煤けた回廊
 
 `kagaribi_f2/route_sign`：(1, 7) `clue`、起動 `interact` → `kagaribi.note.route_sign`。[定義](../../data/maps/kagaribi_f2.json)。
 
-### kagaribi_f3 篝火の迷宮・深火の祭壇
+### kagaribi_f3 篝火の迷宮・10F 深火の祭壇
 
 `kagaribi_f3/legend`：(7, 7) `clue`、起動 `interact` → `kagaribi.legend`。[定義](../../data/maps/kagaribi_f3.json)。
 
 `kagaribi_f3/altar_latch`：(1, 7) `door`、起動 `interact` → `kagaribi.altar_latch`。[定義](../../data/maps/kagaribi_f3.json)。
+
+`kagaribi_f3/supply_rope`：(3, 1) `chest`、起動 `interact` → `treasure.package.kagaribi_f3.supply_rope`。[定義](../../data/maps/kagaribi_f3.json)。
+
+`kagaribi_f3/altar_keeper`：(5, 1) `decision`、起動 `interact` → `kagaribi.altar_keeper`。[定義](../../data/maps/kagaribi_f3.json)。
 
 ### prayerless_valley_f1 祈りの届かない谷
 
@@ -2068,7 +2076,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### region_1_gatehouse 灯守の地下水道・下層・奥の水門詰所
 
-### kagaribi_oilstore 篝火の迷宮・油蔵
+### kagaribi_oilstore 篝火の迷宮・2F 油蔵
 
 `kagaribi_oilstore/manifest`：(3, 1) `clue`、起動 `interact` → `kagaribi.oil_manifest`。[定義](../../data/maps/kagaribi_oilstore.json)。
 
@@ -2078,13 +2086,15 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `kagaribi_oilstore/relief`：(11, 1) `decision`、起動 `interact` → `kagaribi.relief`。[定義](../../data/maps/kagaribi_oilstore.json)。
 
-### kagaribi_crossroads 篝火の迷宮・交差路の詰所前
+### kagaribi_crossroads 篝火の迷宮・4F 交差路の詰所前
 
 `kagaribi_crossroads/cargo_latch`：(1, 9) `door`、起動 `interact` → `kagaribi.cargo_latch`。[定義](../../data/maps/kagaribi_crossroads.json)。
 
 `kagaribi_crossroads/crossroads_note`：(8, 5) `clue`、起動 `interact` → `kagaribi.note.crossroads_note`。[定義](../../data/maps/kagaribi_crossroads.json)。
 
-### kagaribi_kilns 篝火の迷宮・旧炭焼き場
+`kagaribi_crossroads/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.kagaribi_crossroads.supply_rope`。[定義](../../data/maps/kagaribi_crossroads.json)。
+
+### kagaribi_kilns 篝火の迷宮・6F 旧炭焼き場
 
 `kagaribi_kilns/kiln_latch`：(7, 1) `door`、起動 `interact` → `kagaribi.kiln_latch`。[定義](../../data/maps/kagaribi_kilns.json)。
 
@@ -2092,23 +2102,31 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `kagaribi_kilns/marks`：(3, 5) `clue`、起動 `interact` → `kagaribi.kiln_marks`。[定義](../../data/maps/kagaribi_kilns.json)。
 
-### kagaribi_relay 篝火の迷宮・中継篝火の広間
+### kagaribi_relay 篝火の迷宮・7F 中継篝火の広間
 
 `kagaribi_relay/relay_latch`：(1, 9) `door`、起動 `interact` → `kagaribi.relay_latch`。[定義](../../data/maps/kagaribi_relay.json)。
 
 `kagaribi_relay/relay_note`：(7, 5) `clue`、起動 `interact` → `kagaribi.note.relay_note`。[定義](../../data/maps/kagaribi_relay.json)。
 
-### kagaribi_last_patrol 篝火の迷宮・最後の巡回路
+`kagaribi_relay/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.kagaribi_relay.supply_rope`。[定義](../../data/maps/kagaribi_relay.json)。
+
+### kagaribi_last_patrol 篝火の迷宮・8F 最後の巡回路
 
 `kagaribi_last_patrol/last_note`：(7, 7) `clue`、起動 `interact` → `kagaribi.note.last_note`。[定義](../../data/maps/kagaribi_last_patrol.json)。
 
 `kagaribi_last_patrol/old_tools`：(3, 3) `clue`、起動 `interact` → `kagaribi.note.old_tools`。[定義](../../data/maps/kagaribi_last_patrol.json)。
 
-### kagaribi_ossuary 篝火の迷宮・帰らずの納骨堂
+### kagaribi_ossuary 篝火の迷宮・9F 帰らずの納骨堂
 
 `kagaribi_ossuary/inscription`：(11, 3) `clue`、起動 `interact` → `kagaribi.note.inscription`。[定義](../../data/maps/kagaribi_ossuary.json)。
 
 `kagaribi_ossuary/nameplate`：(11, 5) `clue`、起動 `interact` → `kagaribi.nameplate`。[定義](../../data/maps/kagaribi_ossuary.json)。
+
+`kagaribi_ossuary/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.kagaribi_ossuary.supply_rope`。[定義](../../data/maps/kagaribi_ossuary.json)。
+
+### kagaribi_manifold 篝火の迷宮・3F 配油分岐室
+
+`kagaribi_manifold/supply_rope`：(7, 5) `chest`、起動 `interact` → `treasure.package.kagaribi_manifold.supply_rope`。[定義](../../data/maps/kagaribi_manifold.json)。
 
 ## battle.startの定義位置
 
@@ -2783,6 +2801,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `q209.v11.challenge/commands.2.options.0.commands.0`：`q209.v11.challenge` / `commands.2.options.0.commands.0` → `kagaribi_wax`。
 
 `kagaribi.kiln_hunt/commands.0.else.1.options.0.commands.1`：`kagaribi.kiln_hunt` / `commands.0.else.1.options.0.commands.1` → `kagaribi_kiln_guard`。
+
+`kagaribi.altar_keeper/commands.0.else.1.options.0.commands.0`：`kagaribi.altar_keeper` / `commands.0.else.1.options.0.commands.0` → `kagaribi_altar_guardian`、戦闘中イベント `fire_warning`。
 
 ## 再生成
 

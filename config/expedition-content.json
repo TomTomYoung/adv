@@ -17,7 +17,8 @@
       "name": "巡回路の給油所",
       "gems": 120,
       "capacity": 180,
-      "requiresQuest": "q001"
+      "requiresQuest": "q001",
+      "relayEnabled": false
     },
     {
       "id": "kagaribi_crossroads",
@@ -27,10 +28,20 @@
       "y": 1,
       "facing": "east",
       "radius": 0,
-      "name": "交差路の補給営",
+      "name": "4F 交差路の補給営",
       "gems": 80,
       "capacity": 180,
-      "requiresQuest": "q001"
+      "requiresQuest": "q001",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "expedition.camps.kagaribi_manifold.supply"
+        },
+        "right": true
+      },
+      "requirement": "3F配油分岐室の給油管を修理してください。",
+      "xp": 800,
+      "shopTier": 1
     },
     {
       "id": "kagaribi_relay",
@@ -40,10 +51,20 @@
       "y": 1,
       "facing": "east",
       "radius": 0,
-      "name": "中継篝火の補給営",
+      "name": "7F 中継篝火の補給営",
       "gems": 120,
       "capacity": 270,
-      "requiresQuest": "q001"
+      "requiresQuest": "q001",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.kagaribi.kilnGate"
+        },
+        "right": true
+      },
+      "requirement": "6F炭焼き場で搬出口の掛け金を外してください。",
+      "xp": 1200,
+      "shopTier": 2
     },
     {
       "id": "water_landing",
@@ -122,6 +143,58 @@
       "gems": 100,
       "capacity": 180,
       "requiresQuest": "q001"
+    },
+    {
+      "dungeon": "kagaribi",
+      "facing": "east",
+      "radius": 0,
+      "capacity": 180,
+      "requiresQuest": "q001",
+      "id": "kagaribi_manifold",
+      "map": "kagaribi_manifold",
+      "x": 7,
+      "y": 5,
+      "name": "3F 配油分岐室の給油管",
+      "gems": 0,
+      "xp": 600,
+      "relayEnabled": false
+    },
+    {
+      "dungeon": "kagaribi",
+      "facing": "east",
+      "radius": 0,
+      "capacity": 180,
+      "requiresQuest": "q001",
+      "id": "kagaribi_ossuary",
+      "map": "kagaribi_ossuary",
+      "x": 1,
+      "y": 1,
+      "name": "9F 納骨堂の給油槽",
+      "gems": 0,
+      "relayEnabled": false
+    },
+    {
+      "dungeon": "kagaribi",
+      "facing": "east",
+      "radius": 0,
+      "capacity": 180,
+      "requiresQuest": "q001",
+      "id": "kagaribi_central",
+      "map": "kagaribi_f3",
+      "x": 3,
+      "y": 1,
+      "name": "10F 中央中継所",
+      "gems": 100,
+      "xp": 1800,
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "flags.kagaribi.altarGuardianWon"
+        },
+        "right": true
+      },
+      "requirement": "中央設備を守る「祭壇の火守」を倒してください。",
+      "shopTier": 2
     }
   ],
   "products": {
@@ -142,7 +215,8 @@
       "upgrades": {
         "2": "威力係数0.70→0.80。",
         "3": "威力係数0.80→0.90、MP6→5。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_stance_break": {
       "price": 140,
@@ -162,7 +236,8 @@
       "upgrades": {
         "2": "VIT低下20%→25%。",
         "3": "MP5→4。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_line_thrust": {
       "price": 120,
@@ -175,7 +250,8 @@
       "upgrades": {
         "2": "威力係数0.85→0.95。",
         "3": "威力係数0.95→1.05、MP6→5。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_chain_flame": {
       "price": 120,
@@ -188,7 +264,8 @@
       "upgrades": {
         "2": "威力係数0.75→0.85。",
         "3": "威力係数0.85→0.95、MP9→8。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_ice_needles": {
       "price": 120,
@@ -202,7 +279,8 @@
       "upgrades": {
         "2": "威力係数0.80→0.90。",
         "3": "威力係数0.90→1.00、MP7→6。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_chain_thunder": {
       "price": 120,
@@ -211,7 +289,8 @@
         "mage",
         "stormcaller",
         "runesmith"
-      ]
+      ],
+      "unlockTier": 1
     },
     "exp_paired_aid": {
       "price": 120,
@@ -236,7 +315,8 @@
       "upgrades": {
         "2": "回復12＋0.65INT→14＋0.75INT。",
         "3": "回復14＋0.75INT→16＋0.85INT。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_clearwater_aid": {
       "price": 120,
@@ -256,7 +336,8 @@
       "upgrades": {
         "2": "回復8＋0.5INT→12＋0.6INT。",
         "3": "対象1人→2人、MP5→7。"
-      }
+      },
+      "unlockTier": 1
     },
     "exp_tide_ward": {
       "price": 180,
@@ -265,14 +346,16 @@
         "cryomancer",
         "stormcaller",
         "runesmith"
-      ]
+      ],
+      "unlockTier": 2
     },
     "exp_tuning_beat": {
       "price": 120,
       "tier": 1,
       "jobs": [
         "bard"
-      ]
+      ],
+      "unlockTier": 1
     },
     "exp_precise_pierce": {
       "price": 180,
@@ -289,7 +372,8 @@
       "upgrades": {
         "2": "威力係数1.20→1.35。",
         "3": "威力係数1.35→1.50。"
-      }
+      },
+      "unlockTier": 2
     },
     "exp_linked_ward": {
       "price": 180,
@@ -304,7 +388,8 @@
       "upgrades": {
         "2": "対象2人→3人。",
         "3": "魔法被害軽減20%→25%。"
-      }
+      },
+      "unlockTier": 2
     }
   },
   "enemyGems": {
@@ -373,6 +458,7 @@
     "kagaribi_ash_guard": 10,
     "kagaribi_cinder_golem": 12,
     "kagaribi_chain_bone": 13,
-    "kagaribi_kiln_warden": 16
+    "kagaribi_kiln_warden": 16,
+    "kagaribi_altar_keeper": 40
   }
 }

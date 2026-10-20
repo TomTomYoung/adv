@@ -135,6 +135,7 @@ export function validateContent(data){
   errors.push(...statusDefinitionsErrors(data));
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
+  for(const c of data.expedition?.camps??[])if(c.condition!==undefined)expression(c.condition,`expedition.camps.${c.id}.condition`);
   errors.push(...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
   errors.push(...questOrderErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
@@ -153,7 +154,7 @@ export function validateContent(data){
   if(data.game.tavern){const ids=data.game.tavern.candidates;if(!Array.isArray(ids)||new Set(ids).size!==ids.length)fail('tavern','候補一覧が不正です');else for(const id of ids)reference(data.actors,id,'tavern');}
   for(const [id,e] of Object.entries(data.encounters)){if(!e.enemies?.length)fail(id,'敵が必要です');for(const enemy of e.enemies??[])reference(data.enemies,enemy,id);}
   for(const [id,item] of Object.entries(data.items)){if(item.script)reference(data.scripts,item.script,id);if(item.battleSkill)reference(data.skills,item.battleSkill,id);}
-  for(const good of data.shops.goods){reference(data.items,good.item,'shop');if(!Number.isInteger(good.price)||good.price<0)fail('shop','価格不正');}
+  for(const good of data.shops.goods){reference(data.items,good.item,'shop');if(!Number.isInteger(good.price)||good.price<0)fail('shop','価格不正');if(good.condition!==undefined)expression(good.condition,'shop.condition');}
   const serviceIds=new Set();
   for(const service of data.game.services){
     reference(data.scripts,service.script,'services');

@@ -15,6 +15,7 @@
   "maps": [
     "kagaribi_f1",
     "kagaribi_oilstore",
+    "kagaribi_manifold",
     "kagaribi_crossroads",
     "kagaribi_f2",
     "kagaribi_kilns",
@@ -314,7 +315,15 @@
             "x": 1,
             "y": 1,
             "side": "west"
-          }
+          },
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.legacyOilRoute"
+            },
+            "right": true
+          },
+          "requirement": "旧搬送管は閉鎖されている。配油分岐室を経由して4Fへ進む。"
         },
         {
           "id": "cargo_shortcut",
@@ -383,7 +392,27 @@
             "x": 1,
             "y": 1,
             "side": "west"
-          }
+          },
+          "condition": {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.kilnGate"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.legacySootRoute"
+                },
+                "right": true
+              }
+            ]
+          },
+          "requirement": "6F炭焼き場の搬出口を開くと、この帰路も通れる。"
         },
         {
           "id": "soot_kilns",
@@ -417,15 +446,7 @@
             "x": 15,
             "y": 1,
             "side": "east"
-          },
-          "condition": {
-            "op": "eq",
-            "left": {
-              "ref": "flags.kagaribi.kilnGate"
-            },
-            "right": true
-          },
-          "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+          }
         },
         {
           "id": "relay_shortcut",
@@ -482,7 +503,27 @@
             "x": 1,
             "y": 1,
             "side": "north"
-          }
+          },
+          "condition": {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.altarGate"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.legacyAltarRoute"
+                },
+                "right": true
+              }
+            ]
+          },
+          "requirement": "9F納骨堂を経由し、10F側の掛け金を外すと近道になる。"
         },
         {
           "id": "last_ossuary",
@@ -542,6 +583,36 @@
             "right": true
           },
           "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
+        },
+        {
+          "id": "oilstore_manifold",
+          "name": "3F配油分岐室への階段",
+          "kind": "stairs",
+          "a": {
+            "map": "kagaribi_oilstore",
+            "x": 15,
+            "y": 7
+          },
+          "b": {
+            "map": "kagaribi_manifold",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "id": "manifold_crossroads",
+          "name": "4F交差路への階段",
+          "kind": "stairs",
+          "a": {
+            "map": "kagaribi_manifold",
+            "x": 13,
+            "y": 7
+          },
+          "b": {
+            "map": "kagaribi_crossroads",
+            "x": 1,
+            "y": 3
+          }
         }
       ]
     }

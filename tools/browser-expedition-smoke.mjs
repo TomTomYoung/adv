@@ -11,6 +11,13 @@ const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.jso
 const shell='<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="src/view/style.css"><link rel="stylesheet" href="src/view/scene-style.css"><div id="app"></div></html>';
 const server=http.createServer(async(req,res)=>{try{const url=decodeURI(req.url.split('?')[0]);if(url==='/'){res.setHeader('Content-Type','text/html');res.end(shell);return;}const file=path.join(root,url);res.setHeader('Content-Type',types[path.extname(file)]??'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const errors=[];
+async function openCamp(page,name){
+ await page.getByRole('button',{name:'任意調べる',exact:true}).click();await page.getByRole('button',{name,exact:true}).click();
+ for(let n=0;await page.evaluate(()=>typeof view.canChoose==='function'&&!view.canChoose());n++){assert.ok(n<10);await page.getByRole('button',{name:/^次のページ/}).click();}
+}
+async function finishText(page){
+ for(let n=0;await page.evaluate(()=>g.state.waiting?.type==='text'||g.state.waiting?.command==='result');n++){assert.ok(n<30);await page.getByRole('button',{name:/^(次のページ|続きを読む)/}).click();}
+}
 try{
  browser=await chromium.launch({executablePath:process.env.ADV_BROWSER_EXECUTABLE,headless:true,args:['--no-sandbox','--disable-gpu']});
  for(const layout of ['scene','classic'])for(const width of [1280,390]){
@@ -18,23 +25,46 @@ try{
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
   await page.evaluate(async layout=>{
    const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{replaceView}=await import('./src/view/view-layout.js');
-   const data=await loadContent();delete data.quests.q001.story;window.g=new GameEngine(data);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});g.accept('q001');g.complete('q001','informed');g.teleport('kagaribi_f1',1,1,'east');
-   g.dispatch({type:'expedition.action',camp:'kagaribi_gate',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_gate',action:'relay'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
-   window.show=()=>view.render(projectGame(g));window.view=replaceView(null,layout,document.querySelector('#app'),intent=>{const ok=g.dispatch(intent);show();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});view.tab='shop';show();
+   const data=await loadContent();delete data.quests.q001.story;window.g=new GameEngine(data);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});g.accept('q001');g.complete('q001','informed');g.state.flags.kagaribi={kilnGate:true};g.teleport('kagaribi_relay',1,1,'east');
+   g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
+   window.show=()=>view.render(projectGame(g));window.refreshView=()=>{window.view=replaceView(window.view??null,layout,document.querySelector('#app'),intent=>{const ok=g.dispatch(intent);show();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});show();};refreshView();view.tab='shop';show();
   },layout);
   const card=page.locator('.skill-shop-card').filter({has:page.getByRole('heading',{name:'横列払い',exact:true})});await card.getByRole('button',{name:/Lv1を習得/}).click();
   assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_row_sweep),1);
   await page.screenshot({path:path.join(output,`shop-${layout}-${width}.png`)});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'shop horizontal overflow');
   await page.evaluate(()=>{g.dispatch({type:'location.move',id:g.data.game.world.townRoot});show();view.tab='regions';show();});
-  await page.getByRole('button',{name:'巡回路の給油所から再開',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.location.map),'kagaribi_f1');
-  await page.getByRole('button',{name:'任意調べる',exact:true}).click();await page.getByRole('button',{name:'巡回路の給油所',exact:true}).click();
+  await page.getByRole('button',{name:'7F 中継篝火の補給営から再開',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.location.map),'kagaribi_relay');
+  await page.getByRole('button',{name:'任意調べる',exact:true}).click();await page.getByRole('button',{name:'7F 中継篝火の補給営',exact:true}).click();
   // Narrow scene windows paginate the equipment description before showing choices.
   for(let n=0;await page.evaluate(()=>typeof view.canChoose==='function'&&!view.canChoose());n++){
    assert.ok(n<10,'camp description reaches its choices');await page.getByRole('button',{name:/^次のページ/}).click();
   }
   await page.getByRole('button',{name:/^油を容量いっぱい汲む/}).waitFor();
   await page.screenshot({path:path.join(output,`camp-${layout}-${width}.png`)});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'camp horizontal overflow');
+  await page.getByRole('button',{name:'対象一覧へ戻る',exact:true}).click();await page.getByRole('button',{name:'離れる',exact:true}).click();
+  // New 3F has a visible supply-only camp, with no unusable relay choice.
+  await page.evaluate(()=>{g.teleport('kagaribi_manifold',7,5,'east');g.give('rope',2);refreshView();});
+  await openCamp(page,'3F 配油分岐室の給油管');
+  assert.equal(await page.getByRole('button',{name:/^中継設備を起動/}).count(),0);
+  await page.getByRole('button',{name:/^給油設備を修理/}).click();assert.equal(await page.evaluate(()=>g.state.expedition.camps.kagaribi_manifold.supply),true);
+  await finishText(page);
+  await page.screenshot({path:path.join(output,`manifold-${layout}-${width}.png`)});
+  // The victory flag is supplied here; actual battle completion is covered in Core.
+  await page.evaluate(()=>{g.state.flags.kagaribi.altarGuardianWon=true;g.teleport('kagaribi_f3',3,1,'east');refreshView();});
+  await openCamp(page,'10F 中央中継所');
+  await page.getByRole('button',{name:/^給油設備を修理/}).click();
+  await finishText(page);await openCamp(page,'10F 中央中継所');
+  await page.getByRole('button',{name:/^中継設備を起動/}).click();assert.equal(await page.evaluate(()=>g.state.expedition.camps.kagaribi_central.relay),true);
+  await finishText(page);
+  await page.screenshot({path:path.join(output,`central-${layout}-${width}.png`)});
+  await page.evaluate(()=>{g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('exp_t2_ticket',1);refreshView();});
+  await page.getByRole('button',{name:/第2段階の武器を引き換える/}).click();
+  await page.evaluate(()=>{while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});show();});
+  for(let n=0;await page.evaluate(()=>typeof view.canChoose==='function'&&!view.canChoose());n++){assert.ok(n<10);await page.getByRole('button',{name:/^次のページ/}).click();}
+  await page.screenshot({path:path.join(output,`weapon-${layout}-${width}.png`)});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'weapon choices horizontal overflow');
+  await page.getByRole('button',{name:/水切り剣/}).click();assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_sword),1);assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_ticket),0);
   await page.close();console.log(`EXPEDITION BROWSER OK: ${layout} ${width}`);
  }
  assert.deepEqual(errors,[]);

@@ -23,11 +23,11 @@ function game(){
 }
 const at=(g,camp='kagaribi_gate')=>{const c=g.data.expedition.camps.find(c=>c.id===camp);g.teleport(c.map,c.x,c.y,c.facing);return c;};
 const action=(g,action,camp='kagaribi_gate')=>g.dispatch({type:'expedition.action',action,camp});
-const repair=(g,camp='kagaribi_gate')=>{at(g,camp);assert.ok(action(g,'repair',camp));};
+const repair=(g,camp='kagaribi_gate')=>{if(camp==='kagaribi_relay')g.state.flags.kagaribi={...g.state.flags.kagaribi,kilnGate:true};if(camp==='kagaribi_central')g.state.flags.kagaribi={...g.state.flags.kagaribi,altarGuardianWon:true};if(camp==='kagaribi_crossroads'&&!g.state.expedition.camps.kagaribi_manifold?.supply){g.give('rope',1);repair(g,'kagaribi_manifold');}at(g,camp);assert.ok(action(g,'repair',camp));};
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
 const town=g=>{assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.shopLocation);};
 function equipped(g,actor,item){g.give(item,1);assert.ok(g.dispatch({type:'equip',actor,item}));}
-function shop(){const g=game();repair(g);assert.ok(action(g,'relay'));town(g);equipped(g,'ada','iron_sword');equipped(g,'sera','staff');equipped(g,'il','staff');g.state.expedition.gems=10000;return g;}
+function shop(){const g=game();repair(g,'kagaribi_relay');assert.ok(action(g,'relay','kagaribi_relay'));town(g);equipped(g,'ada','iron_sword');equipped(g,'sera','staff');equipped(g,'il','staff');g.state.expedition.gems=10000;return g;}
 const buy=(g,actor,skill,level=1)=>g.dispatch({type:'skill.buy',actor,skill,level});
 
 test('supply equipment is revealed after q001, requires local rope, and rewards repair exactly once',()=>{
@@ -45,7 +45,7 @@ test('real inspect menu repairs, draws and activates a checkpoint without bypass
   const target=commandTargets(g,'inspect').find(t=>t.name==='巡回路の給油所');
   assert.ok(g.dispatch({type:'choose',id:commandDialog(g).options.find(o=>o.target===target.id).id}));
   assert.ok(g.dispatch({type:'choose',id:commandDialog(g).options.find(o=>o.intent?.action==='repair').id}));drain(g);
-  assert.equal(g.state.expedition.camps.kagaribi_gate.supply,true);assert.ok(action(g,'relay'));assert.ok(checkpointPlan(g,'kagaribi_gate').reason);roundtrip(g);
+  assert.equal(g.state.expedition.camps.kagaribi_gate.supply,true);assert.equal(action(g,'relay'),false);assert.ok(checkpointPlan(g,'kagaribi_gate').reason);roundtrip(g);
 });
 test('all bottles including personally carried ones share capacity and overflow is retained at the depot',()=>{
   const g=game();g.give('torch',10);g.state.carried={ada:{torch:5}};repair(g);
@@ -94,8 +94,8 @@ test('relay unlock and capacity persist; checkpoint starts require the real town
   assert.equal(g.dispatch({type:'checkpoint.travel',camp:'kagaribi_gate'}),false);roundtrip(g);
   g.state.dungeonRestrictions.push({dungeon:'kagaribi',action:'return',source:'test_seal',reason:'封印'});assert.equal(g.returnTown(),false);assert.equal(g.dispatch({type:'checkpoint.travel',camp:'kagaribi_relay'}),false);
 });
-test('all nine repaired camp locations are valid save and checkpoint destinations across four dungeons',()=>{
-  for(const c of data.expedition.camps){const g=game();repair(g,c.id);assert.ok(action(g,'relay',c.id));roundtrip(g);town(g);goTownLocation(g,g.data.game.world.townRoot);assert.ok(g.dispatch({type:'checkpoint.travel',camp:c.id}),c.id);assert.equal(g.state.location.map,c.map);roundtrip(g);}
+test('all supply points save correctly and only relay camps permit fresh checkpoint departures',()=>{
+  for(const c of data.expedition.camps){const g=game();repair(g,c.id);if(c.relayEnabled===false){assert.equal(action(g,'relay',c.id),false);roundtrip(g);continue;}assert.ok(action(g,'relay',c.id));roundtrip(g);town(g);goTownLocation(g,g.data.game.world.townRoot);assert.ok(g.dispatch({type:'checkpoint.travel',camp:c.id}),c.id);assert.equal(g.state.location.map,c.map);roundtrip(g);}
 });
 test('gems are committed on victory once, survive every result cursor, and are absent on defeat or escape',()=>{
   const g=game(),before=g.state.expedition.gems;g.startBattle('wild_waterwheel_beaver',{win:[],lose:[],escape:[]});const n=g.data.expedition.enemyGems.waterwheel_beaver;
@@ -149,7 +149,7 @@ test('1.25 saves before q201 additions gain the complete cohort without resettin
 });
 test('corrupted oil, checkpoint, gem and purchase state is rejected atomically',()=>{
   const g=shop();assert.ok(buy(g,'ada','exp_row_sweep'));roundtrip(g);const saved=g.save();
-  for(const corrupt of [s=>delete s.expedition,s=>s.expedition.gems=-1,s=>s.expedition.reserve=1e9,s=>s.expedition.capacity=450,s=>s.expedition.camps.fake={supply:true,relay:true},s=>s.expedition.camps.kagaribi_gate.supply=false,s=>s.expedition.learned.ada.exp_row_sweep=3,s=>s.expedition.learned.ada.attack=1,s=>s.expedition.lamp.effect='fake']){
+  for(const corrupt of [s=>delete s.expedition,s=>s.expedition.gems=-1,s=>s.expedition.reserve=1e9,s=>s.expedition.capacity=450,s=>s.expedition.camps.fake={supply:true,relay:true},s=>s.expedition.camps.kagaribi_relay.supply=false,s=>s.expedition.learned.ada.exp_row_sweep=3,s=>s.expedition.learned.ada.attack=1,s=>s.expedition.lamp.effect='fake']){
     const bad=JSON.parse(saved);corrupt(bad.state);assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),saved);
   }
 });
@@ -161,6 +161,6 @@ for(const layout of ['classic','scene'])test(`${layout}: skill shop selection is
     view=replaceView(null,layout,dom.root,dispatch,ui);view.tab='shop';view.render(projectGame(g));const before=g.save();
     const card=[...dom.root.querySelectorAll('.skill-shop-card')].find(c=>c.textContent.includes('横列払い'));assert.ok(card);assert.equal(g.save(),before);
     card.querySelector('button').click();assert.equal(intents.filter(i=>i.type==='skill.buy').length,1);assert.equal(g.state.expedition.learned.ada.exp_row_sweep,1);
-    goTownLocation(g,g.data.game.world.townRoot);view.render(projectGame(g));view.tab='regions';view.render(projectGame(g));const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent==='巡回路の給油所から再開');assert.ok(b);b.click();assert.equal(g.state.location.map,'kagaribi_f1');
+    goTownLocation(g,g.data.game.world.townRoot);view.render(projectGame(g));view.tab='regions';view.render(projectGame(g));const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent==='7F 中継篝火の補給営から再開');assert.ok(b);b.click();assert.equal(g.state.location.map,'kagaribi_relay');
   }finally{view?.destroy();dom.restore();}
 });

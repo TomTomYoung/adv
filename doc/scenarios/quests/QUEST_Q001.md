@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [クエストカタログへ戻る](../QUEST_CATALOG.md#q001-帰らない灯番) ／ [シナリオ本文](#q001-帰らない灯番) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.26.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:2d19392af8e0e8c978e1bfa93bb34bc9953cb9d940911c5f0efd77c9dc8536c2 -->
+<!-- quest-page-source:db0c806b643b2f9f61a7029baca9d25e6b7fa8f19dcd0ef79f387e05f2d85691 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 
@@ -16,7 +16,7 @@
 
 ## マップとイベント配置
 
-![篝火の迷宮・灯番の巡回路の座標とイベントID](../quest-maps/q001-kagaribi_f1.svg)
+![篝火の迷宮・1F 灯番の巡回路の座標とイベントID](../quest-maps/q001-kagaribi_f1.svg)
 
 図の原点は左上の (0, 0)。座標は [kagaribi_f1.json](../../../data/maps/kagaribi_f1.json) と一致する。enterイベントと物語の到着は実際に配置セルを踏むと開始する。interactイベントは配置セルに立って調べ、探索画面の印も同じ位置で表示する。封鎖扉など手前アクセスが必要な配置だけinteractionRangeに例外を明示する。地図の印は実配置セルを案内する。
 
@@ -43,7 +43,7 @@ flowchart TD
   post["灯番詰所 / q001-S-post / q001-E-informed / q001-E-compromise"]
   entrance["B1入口 (1, 1) / kagaribi_f1"]
   route["B1巡灯路・支道 / q001-S-entry〜gate"]
-  deeper["篝火の迷宮・油蔵・B1 (1, 1) / kagaribi_oilstore / q001対象外"]
+  deeper["篝火の迷宮・2F 油蔵・B2 (1, 1) / kagaribi_oilstore / q001対象外"]
   square <--> guild
   guild <--> post
   square <-->|迷宮へ入る・入口階段で戻る| entrance
@@ -53,35 +53,35 @@ flowchart TD
 
 受注は `hikarigaeri_guild` の依頼掲示板。受注中の依頼の「迷宮の入口へ向かう（篝火の迷宮）」は町のどの施設からでも使え、迷宮入口 `kagaribi_f1` (1, 1) へ入る。帰路は入口の `kagaribi.exit` を調べて広場へ戻り、組合、詰所の順に訪れる。詰所への実到着で自動的に `q001-S-post` に進む。
 
-B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 / `kagaribi_oilstore` (1, 1) に接続する。q001受注中の他区画への移動は帰還報告まで閉じ、未受注時の自由探索は可能。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../../../data/dungeons.json) を参照する。
+B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・2F 油蔵・B2 / `kagaribi_oilstore` (1, 1) に接続する。q001受注中の他区画への移動は帰還報告まで閉じ、未受注時の自由探索は可能。q001にはB2・B3の配置イベントがなく、下層への移動は完了条件に含まれない。ダンジョン全体は [data/dungeons.json](../../../data/dungeons.json) を参照する。
 
 ## 本編イベントの順序と実移動
 
-[q001-S-entry](#q001--entry--篝火の迷宮入口の灯)：篝火の迷宮・入口の灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q001-S-entry](#q001--entry--篝火の迷宮入口の灯)：篝火の迷宮・入口の灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
-選択 `talk` → `q001-S-dark`。行為 `entry_talk` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：探索隊のみ。
+選択 `talk` → `q001-S-dark`。行為 `entry_talk` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：探索隊のみ。
 
-[q001-S-dark](#q001--dark--油の尽きた巡灯路)：油の尽きた巡灯路。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+[q001-S-dark](#q001--dark--油の尽きた巡灯路)：油の尽きた巡灯路。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `inspect` → `q001-S-empty`。同じ地点で進む。
 
-[q001-S-empty](#q001--empty--油の尽きた巡灯路)：油の尽きた巡灯路。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+[q001-S-empty](#q001--empty--油の尽きた巡灯路)：油の尽きた巡灯路。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
-選択 `follow` → `q001-S-old`。行為 `empty_follow` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：探索隊のみ。
+選択 `follow` → `q001-S-old`。行為 `empty_follow` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：探索隊のみ。
 
-[q001-S-old](#q001--old--支道の最後の壁灯)：支道の最後の壁灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
+[q001-S-old](#q001--old--支道の最後の壁灯)：支道の最後の壁灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
 
-選択 `support` → `q001-S-outage`。行為 `old_support` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル に実際に到着して続行する。同行：老灯番。
+選択 `support` → `q001-S-outage`。行為 `old_support` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル に実際に到着して続行する。同行：老灯番。
 
-[q001-S-outage](#q001--outage--油の尽きた巡灯路)：油の尽きた巡灯路。行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
+[q001-S-outage](#q001--outage--油の尽きた巡灯路)：油の尽きた巡灯路。行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
 
 戦闘中の自動行為 `call` → `q001-S-rescue`。同じ地点で進む。
 
-[q001-S-rescue](#q001--rescue--油の尽きた巡灯路)：油の尽きた巡灯路。行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
+[q001-S-rescue](#q001--rescue--油の尽きた巡灯路)：油の尽きた巡灯路。行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
 
-選択 `home` → `q001-S-gate`。行為 `rescue_home` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：老灯番・新人灯番。
+選択 `home` → `q001-S-gate`。行為 `rescue_home` で出発し、篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して続行する。同行：老灯番・新人灯番。
 
-[q001-S-gate](#q001--gate--篝火の迷宮入口の灯)：篝火の迷宮・入口の灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q001-S-gate](#q001--gate--篝火の迷宮入口の灯)：篝火の迷宮・入口の灯。篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `report` → `q001-S-post`。行為 `gate_report` で出発し、灯番詰所 (`hikarigaeri_lamplighter_post`)。[ロケーション定義](../../../data/locations.json) に実際に到着して続行する。同行：老灯番・新人灯番。
 
@@ -107,7 +107,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 入口で待つ新人。実行時イベントID：`q001_decision`。スクリプト：`q001.v11.visit`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：指定セルへの進入で自動開始 (`enter`)。
 
@@ -121,7 +121,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 油切れの巡灯路。実行時イベントID：`q001_return`。スクリプト：`q001.v11.visit`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：指定セルへの進入で自動開始 (`enter`)。
 
@@ -135,7 +135,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 帰路の南側の曲がり角。実行時イベントID：`q001_return_south`。スクリプト：`q001.v11.visit`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：指定セルへの進入で自動開始 (`enter`)。
 
@@ -147,7 +147,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 最後の灯の下の老人。実行時イベントID：`q001_elder`。スクリプト：`q001.v11.visit`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：指定セルへの進入で自動開始 (`enter`)。
 
@@ -161,7 +161,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 西の壁松明。実行時イベントID：`q001_empty_west`。スクリプト：`q001.wall.q001_empty_west`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (8, 1) / イベント `q001_empty_west`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (8, 1) / イベント `q001_empty_west`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：現地で調べる (`interact`)。初期状態：`empty`。
 
@@ -220,7 +220,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 東の壁松明。実行時イベントID：`q001_empty_east`。スクリプト：`q001.wall.q001_empty_east`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q001_empty_east`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q001_empty_east`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：現地で調べる (`interact`)。初期状態：`empty`。
 
@@ -279,7 +279,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 老人を守る最後の壁松明。実行時イベントID：`q001_last_lamp`。スクリプト：`q001.wall.q001_last_lamp`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_last_lamp`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_last_lamp`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：現地で調べる (`interact`)。初期状態：`low`。
 
@@ -338,7 +338,7 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 灯を受け渡す準備。実行時イベントID：`kagaribi`。スクリプト：`dungeon.scene.kagaribi.v2`。
 
-配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (1, 1) / イベント `kagaribi`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (1, 1) / イベント `kagaribi`。[ダンジョン定義](../../../data/dungeons.json)。
 
 起動：操作メニューから現地調査 (`action`)。
 
@@ -425,21 +425,21 @@ B1 (13, 7) の `connections/patrol_oilstore` は 篝火の迷宮・油蔵・B1 /
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q001.json)。場面 8、結末 2。物語状態の改訂 4。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。入口で待つ新人。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。入口で待つ新人。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。油切れの巡灯路。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。油切れの巡灯路。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json)。帰路の南側の曲がり角。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json)。帰路の南側の曲がり角。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。最後の灯の下の老人。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。最後の灯の下の老人。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (8, 1) / イベント `q001_empty_west`。[ダンジョン定義](../../../data/dungeons.json)。西の壁松明。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (8, 1) / イベント `q001_empty_west`。[ダンジョン定義](../../../data/dungeons.json)。西の壁松明。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q001_empty_east`。[ダンジョン定義](../../../data/dungeons.json)。東の壁松明。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q001_empty_east`。[ダンジョン定義](../../../data/dungeons.json)。東の壁松明。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_last_lamp`。[ダンジョン定義](../../../data/dungeons.json)。老人を守る最後の壁松明。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_last_lamp`。[ダンジョン定義](../../../data/dungeons.json)。老人を守る最後の壁松明。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (1, 1) / イベント `kagaribi`。[ダンジョン定義](../../../data/dungeons.json)。灯を受け渡す準備。操作調査。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (1, 1) / イベント `kagaribi`。[ダンジョン定義](../../../data/dungeons.json)。灯を受け渡す準備。操作調査。
 
 参照施設: `post` → 灯番詰所 (`hikarigaeri_lamplighter_post`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -481,7 +481,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 新人灯番。
 
@@ -503,7 +503,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 選択 `talk`: 火を確かめ、老人を探しに行く。新人には入口の灯を守ってもらう
 
-出発: `entry_talk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `entry_talk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`dark`](#q001--dark--油の尽きた巡灯路) へ進み、到着時の処理を確定します。
 
@@ -513,7 +513,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-dark`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
 二つの壁松明は黒いままだ。手元の火が揺れるたび、通路の奥で何かが同じ距離だけ退く。まだ、その姿は火の内側に入ってこない。
 
@@ -529,13 +529,13 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-empty`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json)。
 
 火を芯へ寄せると、一瞬だけ先端が赤くなり、すぐ消えた。油受けは底まで乾いている。芯の向きや点火の仕方ではなく、壁松明の油そのものが尽きていた。二つ目も同じだ。手元の松明を掲げ、杖の音へ進む。
 
 選択 `follow`: 携行松明を頼りに、杖の音がする支道へ進む
 
-出発: `empty_follow`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `empty_follow`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`old`](#q001--old--支道の最後の壁灯) へ進み、到着時の処理を確定します。
 
@@ -545,7 +545,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-old`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 3) / イベント `q001_elder`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 老灯番。
 
@@ -573,7 +573,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 選択 `support`: 老人に肩を貸し、最後の壁灯があるうちに入口へ戻る
 
-出発: `old_support`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル。
+出発: `old_support`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むか、指定された通常遭遇が当選すると自動で [`outage`](#q001--outage--油の尽きた巡灯路) へ進み、到着時の処理を確定します。
 
@@ -583,7 +583,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-outage`。
 
-場面の現在地: 行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
+場面の現在地: 行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
 
 登場: 老灯番。
 
@@ -637,7 +637,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-rescue`。
 
-場面の現在地: 行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
+場面の現在地: 行為 `old_support` の実到着地点（篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (9, 1) / イベント `q001_return`。[ダンジョン定義](../../../data/dungeons.json) または 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 5) / イベント `q001_return_south`。[ダンジョン定義](../../../data/dungeons.json) または 移動中の通常歩行抽選で `kuragari_hunt` が当選した実遭遇セル）を保持し、その場で続行する。
 
 登場: 老灯番・新人灯番。
 
@@ -651,7 +651,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 選択 `home`: 新人の火を頼りに、三人で迷宮の入口へ戻る
 
-出発: `rescue_home`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `rescue_home`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`gate`](#q001--gate--篝火の迷宮入口の灯) へ進み、到着時の処理を確定します。
 
@@ -661,7 +661,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
 
 イベントID: `q001-S-gate`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (2, 1) / イベント `q001_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 老灯番・新人灯番。
 
@@ -744,7 +744,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
   "id": "kagaribi_f1",
   "region": 1,
   "floor": 1,
-  "name": "篝火の迷宮・灯番の巡回路",
+  "name": "篝火の迷宮・1F 灯番の巡回路",
   "tiles": [
     "###############",
     "#.............#",
@@ -786,6 +786,30 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
       "trigger": "interact",
       "script": "kagaribi.history",
       "interactionRange": "here"
+    },
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.kagaribi_f1.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
     }
   ],
   "initiallyKnown": [
@@ -1269,7 +1293,15 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
           "x": 1,
           "y": 1,
           "side": "west"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.kagaribi.legacyOilRoute"
+          },
+          "right": true
+        },
+        "requirement": "旧搬送管は閉鎖されている。配油分岐室を経由して4Fへ進む。"
       },
       {
         "id": "cargo_shortcut",
@@ -1338,7 +1370,27 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
           "x": 1,
           "y": 1,
           "side": "west"
-        }
+        },
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "flags.kagaribi.kilnGate"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "flags.kagaribi.legacySootRoute"
+              },
+              "right": true
+            }
+          ]
+        },
+        "requirement": "6F炭焼き場の搬出口を開くと、この帰路も通れる。"
       },
       {
         "id": "soot_kilns",
@@ -1372,15 +1424,7 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
           "x": 15,
           "y": 1,
           "side": "east"
-        },
-        "condition": {
-          "op": "eq",
-          "left": {
-            "ref": "flags.kagaribi.kilnGate"
-          },
-          "right": true
-        },
-        "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+        }
       },
       {
         "id": "relay_shortcut",
@@ -1437,7 +1481,27 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
           "x": 1,
           "y": 1,
           "side": "north"
-        }
+        },
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "flags.kagaribi.altarGate"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "flags.kagaribi.legacyAltarRoute"
+              },
+              "right": true
+            }
+          ]
+        },
+        "requirement": "9F納骨堂を経由し、10F側の掛け金を外すと近道になる。"
       },
       {
         "id": "last_ossuary",
@@ -1497,6 +1561,36 @@ AI向け注釈: 火と恐怖と所在を一貫して扱うための作者向け�
           "right": true
         },
         "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
+      },
+      {
+        "id": "oilstore_manifold",
+        "name": "3F配油分岐室への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_oilstore",
+          "x": 15,
+          "y": 7
+        },
+        "b": {
+          "map": "kagaribi_manifold",
+          "x": 1,
+          "y": 1
+        }
+      },
+      {
+        "id": "manifold_crossroads",
+        "name": "4F交差路への階段",
+        "kind": "stairs",
+        "a": {
+          "map": "kagaribi_manifold",
+          "x": 13,
+          "y": 7
+        },
+        "b": {
+          "map": "kagaribi_crossroads",
+          "x": 1,
+          "y": 3
+        }
       }
     ]
   },

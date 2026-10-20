@@ -707,7 +707,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "巡回記録：第一層は油蔵と交差路の詰所。第二層は煤けた回廊の東端から中継広間へ続く。炭焼き場の搬出口は短いが、強い魔物がいる。第三層は最後の巡回路から祭壇へ通じ、納骨堂は脇道にある。"
+          "text": "巡回記録：2F油蔵から3F配油分岐室を通り、4F交差路の詰所へ。5F煤けた回廊から6F炭焼き場、7F中継広間へ降りる。8F最後の巡回路から9F納骨堂を経て10F祭壇へ。掛け金を開けば帰り道を短縮できる。"
         },
         {
           "op": "narrate",
@@ -1105,6 +1105,448 @@
                   "text": "古い帰還簿には、種火を求めて潜った者の名が残っている。納骨堂に名札や記録があれば、ここで照合できる。"
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.altar_keeper": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "祭壇の火守は退いた。中央中継所を復旧できる。武器引換は町の旅道具店で使える。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "中央設備の前で、火守が炉蓋を閉じた。炉蓋を閉じる巡、単体へ火を放つ巡、全体へ炎嵐を放つ巡を繰り返す。三巡目は防御して備えられる。祭壇への通路は設備の脇を通っている。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "祭壇の火守に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "kagaribi_altar_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "kagaribi.altarGuardianWon",
+                          "value": true
+                        },
+                        {
+                          "op": "item.give",
+                          "item": "exp_t2_ticket",
+                          "count": 1
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "中央設備が静まった。第2段階の武器引換券を1枚受け取った。2歩西の中央中継所で給油管と搬送設備を復旧できる。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "火守は中央設備へ戻った。準備を整えて再挑戦できる。"
+                        }
+                      ],
+                      "events": [
+                        {
+                          "id": "fire_warning",
+                          "triggers": [
+                            "round_start"
+                          ],
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "battle.round"
+                            },
+                            "right": 3
+                          },
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "火守の炉口から炎が噴き始めた。この巡は全体への炎嵐が来る。以後も三巡ごとに同じ炎を放つ。"
+                            }
+                          ]
+                        }
+                      ],
+                      "on_interrupt": []
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.weapon_exchange": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "引換券1枚で武器1本。選ばず戻れば券は残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sword",
+              "text": "水切り剣（STR+11）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_sword",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_sword",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水切り剣を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "axe",
+              "text": "割晶斧（STR+13・AGI-1）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_axe",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_axe",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "割晶斧を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "spear",
+              "text": "水門槍（STR+10・AGI+2）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_spear",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_spear",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水門槍を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "dagger",
+              "text": "剪定短剣（STR+8・AGI+4）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_dagger",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_dagger",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "剪定短剣を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "fist",
+              "text": "砕晶手甲（STR+10・VIT+3）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_fist",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_fist",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "砕晶手甲を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "bow",
+              "text": "岸守り弓（STR+10・AGI+2）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_bow",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_bow",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "岸守り弓を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "staff",
+              "text": "導水の杖（INT+11・MP+7）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_staff",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_staff",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "導水の杖を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "tool",
+              "text": "密閉薬箱（INT+9・MP+6）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_tool",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_tool",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "密閉薬箱を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "instrument",
+              "text": "水響の琴（INT+8・AGI+3）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_instrument",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_instrument",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水響の琴を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "選ばずに戻る",
+              "commands": []
             }
           ]
         }

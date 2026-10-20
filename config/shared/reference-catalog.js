@@ -18,6 +18,7 @@ export const referenceData={
       "maps": [
         "kagaribi_f1",
         "kagaribi_oilstore",
+        "kagaribi_manifold",
         "kagaribi_crossroads",
         "kagaribi_f2",
         "kagaribi_kilns",
@@ -317,7 +318,15 @@ export const referenceData={
                 "x": 1,
                 "y": 1,
                 "side": "west"
-              }
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.kagaribi.legacyOilRoute"
+                },
+                "right": true
+              },
+              "requirement": "旧搬送管は閉鎖されている。配油分岐室を経由して4Fへ進む。"
             },
             {
               "id": "cargo_shortcut",
@@ -386,7 +395,27 @@ export const referenceData={
                 "x": 1,
                 "y": 1,
                 "side": "west"
-              }
+              },
+              "condition": {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.kilnGate"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.legacySootRoute"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "6F炭焼き場の搬出口を開くと、この帰路も通れる。"
             },
             {
               "id": "soot_kilns",
@@ -420,15 +449,7 @@ export const referenceData={
                 "x": 15,
                 "y": 1,
                 "side": "east"
-              },
-              "condition": {
-                "op": "eq",
-                "left": {
-                  "ref": "flags.kagaribi.kilnGate"
-                },
-                "right": true
-              },
-              "requirement": "炭焼き場側の掛け金を外せば、広間へ抜けられる。"
+              }
             },
             {
               "id": "relay_shortcut",
@@ -485,7 +506,27 @@ export const referenceData={
                 "x": 1,
                 "y": 1,
                 "side": "north"
-              }
+              },
+              "condition": {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.altarGate"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.kagaribi.legacyAltarRoute"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "9F納骨堂を経由し、10F側の掛け金を外すと近道になる。"
             },
             {
               "id": "last_ossuary",
@@ -545,6 +586,36 @@ export const referenceData={
                 "right": true
               },
               "requirement": "祭壇側から石の掛け金を外すと、帰路が短くなる。"
+            },
+            {
+              "id": "oilstore_manifold",
+              "name": "3F配油分岐室への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_oilstore",
+                "x": 15,
+                "y": 7
+              },
+              "b": {
+                "map": "kagaribi_manifold",
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "id": "manifold_crossroads",
+              "name": "4F交差路への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "kagaribi_manifold",
+                "x": 13,
+                "y": 7
+              },
+              "b": {
+                "map": "kagaribi_crossroads",
+                "x": 1,
+                "y": 3
+              }
             }
           ]
         }
@@ -4922,6 +4993,78 @@ export const referenceData={
       ],
       "kind": "eventCues",
       "id": "guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f1",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_f1"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f3",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_f3"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_crossroads"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_relay"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_ossuary"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_manifold"
     }
   ],
   "references": [
@@ -15801,6 +15944,16 @@ export const referenceData={
       "id": "torch"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_altar_keeper",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18481,6 +18634,66 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_3_f2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        9,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        9,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_manifold"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        10,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        10,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        11,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "kagaribi"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        11,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_f3"
     },
     {
       "file": "jobs.json",
@@ -21320,6 +21533,96 @@ export const referenceData={
       "id": "robe"
     },
     {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        10,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_sword"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        11,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_axe"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        12,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_spear"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        13,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_dagger"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        14,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_fist"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        15,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_bow"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        16,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_staff"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        17,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_tool"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "shopGoods",
+        18,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t1_instrument"
+    },
+    {
       "file": "kagaribi-content.json",
       "path": [
         "maps",
@@ -21372,6 +21675,18 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "kagaribi.history"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f1",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_f1"
     },
     {
       "file": "kagaribi-content.json",
@@ -21540,6 +21855,30 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "kagaribi.altar_latch"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f3",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_f3"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f3",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.altar_keeper"
     },
     {
       "file": "kagaribi-content.json",
@@ -21750,6 +22089,18 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_crossroads",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_crossroads"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
         "encounterPool",
         0,
         "encounter"
@@ -21942,6 +22293,18 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_relay",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_relay"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_relay",
         "encounterPool",
         0,
         "encounter"
@@ -22122,6 +22485,18 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_ossuary",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_ossuary"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_ossuary",
         "encounterPool",
         0,
         "encounter"
@@ -22152,6 +22527,84 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "kagaribi_deep_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_pests"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.supply_rope.kagaribi_manifold"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_pests"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_manifold_pair"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -22438,6 +22891,647 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "scripts",
+        "kagaribi.altar_keeper",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_altar_guardian"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_keeper",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        0,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        0,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_sword"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_sword"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        1,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        1,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_axe"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        1,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        1,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_axe"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        2,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        2,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_spear"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        2,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        2,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_spear"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        3,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        3,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_dagger"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        3,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        3,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_dagger"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        4,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        4,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_fist"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        4,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        4,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_fist"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        5,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        5,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_bow"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        5,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        5,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_bow"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        6,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        6,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_staff"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        6,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        6,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_staff"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        7,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        7,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_tool"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        7,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        7,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_tool"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        8,
+        "condition",
+        "args",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        8,
+        "condition",
+        "args",
+        1,
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_instrument"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        8,
+        "commands",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange",
+        "commands",
+        1,
+        "options",
+        8,
+        "commands",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_instrument"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "enemies",
         "kuragari",
         "sprite"
@@ -22638,6 +23732,52 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_altar_keeper",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "wraith"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_altar_keeper",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "firestorm"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_altar_keeper",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "fire"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_altar_keeper",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -22792,6 +23932,39 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "encounters",
+        "kagaribi_altar_guardian",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_altar_keeper"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_manifold_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_manifold_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ember_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "services",
         0,
         "script"
@@ -22828,6 +24001,16 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "kagaribi.memorial"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "services",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "kagaribi.weapon_exchange"
     },
     {
       "file": "locations.json",
@@ -25211,7 +26394,7 @@ export const referenceData={
         2
       ],
       "kind": "maps",
-      "id": "kagaribi_crossroads"
+      "id": "kagaribi_manifold"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -25220,7 +26403,7 @@ export const referenceData={
         3
       ],
       "kind": "maps",
-      "id": "kagaribi_f2"
+      "id": "kagaribi_crossroads"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -25229,7 +26412,7 @@ export const referenceData={
         4
       ],
       "kind": "maps",
-      "id": "kagaribi_kilns"
+      "id": "kagaribi_f2"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -25238,7 +26421,7 @@ export const referenceData={
         5
       ],
       "kind": "maps",
-      "id": "kagaribi_relay"
+      "id": "kagaribi_kilns"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -25247,7 +26430,7 @@ export const referenceData={
         6
       ],
       "kind": "maps",
-      "id": "kagaribi_last_patrol"
+      "id": "kagaribi_relay"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -25256,13 +26439,22 @@ export const referenceData={
         7
       ],
       "kind": "maps",
-      "id": "kagaribi_ossuary"
+      "id": "kagaribi_last_patrol"
     },
     {
       "file": "dungeons/kagaribi.json",
       "path": [
         "maps",
         8
+      ],
+      "kind": "maps",
+      "id": "kagaribi_ossuary"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "maps",
+        9
       ],
       "kind": "maps",
       "id": "kagaribi_f3"
@@ -25840,6 +27032,58 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "kagaribi_f3"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        13,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_oilstore"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        13,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_manifold"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        14,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_manifold"
+    },
+    {
+      "file": "dungeons/kagaribi.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        14,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "kagaribi_crossroads"
     },
     {
       "file": "dungeons/kagaribi.json",
@@ -33413,6 +34657,7 @@ export const referenceData={
     "data/maps/kagaribi_f3.json",
     "data/maps/kagaribi_kilns.json",
     "data/maps/kagaribi_last_patrol.json",
+    "data/maps/kagaribi_manifold.json",
     "data/maps/kagaribi_oilstore.json",
     "data/maps/kagaribi_ossuary.json",
     "data/maps/kagaribi_relay.json",
@@ -34278,6 +35523,63 @@ export const referenceData={
       },
       "kagaribi_nameplate": {
         "name": "煤けた灯番の名札"
+      },
+      "exp_t1_sword": {
+        "name": "補修隊の剣"
+      },
+      "exp_t2_sword": {
+        "name": "水切り剣"
+      },
+      "exp_t1_axe": {
+        "name": "炭割り斧"
+      },
+      "exp_t2_axe": {
+        "name": "割晶斧"
+      },
+      "exp_t1_spear": {
+        "name": "番所の槍"
+      },
+      "exp_t2_spear": {
+        "name": "水門槍"
+      },
+      "exp_t1_dagger": {
+        "name": "細工短剣"
+      },
+      "exp_t2_dagger": {
+        "name": "剪定短剣"
+      },
+      "exp_t1_fist": {
+        "name": "坑夫の拳帯"
+      },
+      "exp_t2_fist": {
+        "name": "砕晶手甲"
+      },
+      "exp_t1_bow": {
+        "name": "巡回弓"
+      },
+      "exp_t2_bow": {
+        "name": "岸守り弓"
+      },
+      "exp_t1_staff": {
+        "name": "灯芯の杖"
+      },
+      "exp_t2_staff": {
+        "name": "導水の杖"
+      },
+      "exp_t1_tool": {
+        "name": "整備薬箱"
+      },
+      "exp_t2_tool": {
+        "name": "密閉薬箱"
+      },
+      "exp_t1_instrument": {
+        "name": "補修リュート"
+      },
+      "exp_t2_instrument": {
+        "name": "水響の琴"
+      },
+      "exp_t2_ticket": {
+        "name": "第2段階の武器引換券"
       }
     },
     "enemies": {
@@ -34543,6 +35845,10 @@ export const referenceData={
       },
       "kagaribi_kiln_warden": {
         "name": "炉守りの亡霊",
+        "sprite": "wraith"
+      },
+      "kagaribi_altar_keeper": {
+        "name": "祭壇の火守",
         "sprite": "wraith"
       }
     },
@@ -34819,6 +36125,12 @@ export const referenceData={
       },
       "kagaribi_deep_pair": {
         "name": "kagaribi_deep_pair"
+      },
+      "kagaribi_altar_guardian": {
+        "name": "祭壇の火守"
+      },
+      "kagaribi_manifold_pair": {
+        "name": "配油管の魔物"
       }
     },
     "statuses": {
@@ -38130,7 +39442,7 @@ export const referenceData={
     },
     "kagaribi_f1": {
       "id": "kagaribi_f1",
-      "name": "篝火の迷宮・灯番の巡回路",
+      "name": "篝火の迷宮・1F 灯番の巡回路",
       "width": 15,
       "height": 9,
       "dungeon": "kagaribi",
@@ -38145,7 +39457,7 @@ export const referenceData={
     },
     "kagaribi_f2": {
       "id": "kagaribi_f2",
-      "name": "篝火の迷宮・煤けた回廊",
+      "name": "篝火の迷宮・5F 煤けた回廊",
       "width": 15,
       "height": 9,
       "dungeon": "kagaribi",
@@ -38160,7 +39472,7 @@ export const referenceData={
     },
     "kagaribi_f3": {
       "id": "kagaribi_f3",
-      "name": "篝火の迷宮・深火の祭壇",
+      "name": "篝火の迷宮・10F 深火の祭壇",
       "width": 15,
       "height": 9,
       "dungeon": "kagaribi",
@@ -38325,7 +39637,7 @@ export const referenceData={
     },
     "kagaribi_oilstore": {
       "id": "kagaribi_oilstore",
-      "name": "篝火の迷宮・油蔵",
+      "name": "篝火の迷宮・2F 油蔵",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38340,7 +39652,7 @@ export const referenceData={
     },
     "kagaribi_crossroads": {
       "id": "kagaribi_crossroads",
-      "name": "篝火の迷宮・交差路の詰所前",
+      "name": "篝火の迷宮・4F 交差路の詰所前",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38355,7 +39667,7 @@ export const referenceData={
     },
     "kagaribi_kilns": {
       "id": "kagaribi_kilns",
-      "name": "篝火の迷宮・旧炭焼き場",
+      "name": "篝火の迷宮・6F 旧炭焼き場",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38370,7 +39682,7 @@ export const referenceData={
     },
     "kagaribi_relay": {
       "id": "kagaribi_relay",
-      "name": "篝火の迷宮・中継篝火の広間",
+      "name": "篝火の迷宮・7F 中継篝火の広間",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38385,7 +39697,7 @@ export const referenceData={
     },
     "kagaribi_last_patrol": {
       "id": "kagaribi_last_patrol",
-      "name": "篝火の迷宮・最後の巡回路",
+      "name": "篝火の迷宮・8F 最後の巡回路",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38400,7 +39712,7 @@ export const referenceData={
     },
     "kagaribi_ossuary": {
       "id": "kagaribi_ossuary",
-      "name": "篝火の迷宮・帰らずの納骨堂",
+      "name": "篝火の迷宮・9F 帰らずの納骨堂",
       "width": 17,
       "height": 11,
       "dungeon": "kagaribi",
@@ -38410,6 +39722,21 @@ export const referenceData={
         "path": [
           "maps",
           "kagaribi_ossuary"
+        ]
+      }
+    },
+    "kagaribi_manifold": {
+      "id": "kagaribi_manifold",
+      "name": "篝火の迷宮・3F 配油分岐室",
+      "width": 15,
+      "height": 9,
+      "dungeon": "kagaribi",
+      "file": "data/maps/kagaribi_manifold.json",
+      "owner": {
+        "file": "kagaribi-content.json",
+        "path": [
+          "maps",
+          "kagaribi_manifold"
         ]
       }
     }
@@ -47081,6 +48408,7 @@ export const referenceData={
     "flags.flow.q200.intent",
     "flags.flow.q200.node",
     "flags.kagaribi.altarGate",
+    "flags.kagaribi.altarGuardianWon",
     "flags.kagaribi.cargoGate",
     "flags.kagaribi.cartCleared",
     "flags.kagaribi.crossroads_mainSeen",
@@ -48959,7 +50287,7 @@ export const referenceData={
       "file": "config/kagaribi-content.json"
     },
     "kagaribi.records": {
-      "name": "巡回記録：第一層は油蔵と交差路の詰所。第二層は煤けた回廊の東端から中継広間へ続く",
+      "name": "巡回記録：2F油蔵から3F配油分岐室を通り、4F交差路の詰所へ。5F煤けた回廊か",
       "file": "config/kagaribi-content.json"
     },
     "kagaribi.kiln_hunt": {
@@ -49002,6 +50330,14 @@ export const referenceData={
       "name": "kagaribi.memorial",
       "file": "config/kagaribi-content.json"
     },
+    "kagaribi.altar_keeper": {
+      "name": "kagaribi.altar_keeper",
+      "file": "config/kagaribi-content.json"
+    },
+    "kagaribi.weapon_exchange": {
+      "name": "引換券1枚で武器1本。選ばず戻れば券は残る。",
+      "file": "config/kagaribi-content.json"
+    },
     "prayerless_valley.exit": {
       "name": "prayerless_valley.exit",
       "file": "config/dungeon-content.json"
@@ -49038,8 +50374,32 @@ export const referenceData={
       "name": "落滴が発生した。",
       "file": "data/scripts/cell-events.json"
     },
+    "treasure.package.kagaribi_f1.supply_rope": {
+      "name": "treasure.package.kagaribi_f1.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.kagaribi_f3.supply_rope": {
+      "name": "treasure.package.kagaribi_f3.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
     "treasure.package.kagaribi_oilstore.tools": {
       "name": "treasure.package.kagaribi_oilstore.tools",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.kagaribi_crossroads.supply_rope": {
+      "name": "treasure.package.kagaribi_crossroads.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.kagaribi_relay.supply_rope": {
+      "name": "treasure.package.kagaribi_relay.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.kagaribi_ossuary.supply_rope": {
+      "name": "treasure.package.kagaribi_ossuary.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.kagaribi_manifold.supply_rope": {
+      "name": "treasure.package.kagaribi_manifold.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
@@ -59402,6 +60762,20 @@ export const referenceData={
         "kagaribi.memorial"
       ]
     },
+    "kagaribi.altar_keeper": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_keeper"
+      ]
+    },
+    "kagaribi.weapon_exchange": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange"
+      ]
+    },
     "voxel.shaft.exit.v1": {
       "file": "voxel-content.json",
       "path": [
@@ -59891,6 +61265,132 @@ export const referenceData={
       "path": [
         "items",
         "robe"
+      ]
+    },
+    "items/exp_t1_sword": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_sword"
+      ]
+    },
+    "items/exp_t2_sword": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_sword"
+      ]
+    },
+    "items/exp_t1_axe": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_axe"
+      ]
+    },
+    "items/exp_t2_axe": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_axe"
+      ]
+    },
+    "items/exp_t1_spear": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_spear"
+      ]
+    },
+    "items/exp_t2_spear": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_spear"
+      ]
+    },
+    "items/exp_t1_dagger": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_dagger"
+      ]
+    },
+    "items/exp_t2_dagger": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_dagger"
+      ]
+    },
+    "items/exp_t1_fist": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_fist"
+      ]
+    },
+    "items/exp_t2_fist": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_fist"
+      ]
+    },
+    "items/exp_t1_bow": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_bow"
+      ]
+    },
+    "items/exp_t2_bow": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_bow"
+      ]
+    },
+    "items/exp_t1_staff": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_staff"
+      ]
+    },
+    "items/exp_t2_staff": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_staff"
+      ]
+    },
+    "items/exp_t1_tool": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_tool"
+      ]
+    },
+    "items/exp_t2_tool": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_tool"
+      ]
+    },
+    "items/exp_t1_instrument": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t1_instrument"
+      ]
+    },
+    "items/exp_t2_instrument": {
+      "file": "jobs.json",
+      "path": [
+        "items",
+        "exp_t2_instrument"
       ]
     },
     "jobs/warrior": {
@@ -60803,6 +62303,13 @@ export const referenceData={
         "kagaribi_nameplate"
       ]
     },
+    "items/exp_t2_ticket": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "items",
+        "exp_t2_ticket"
+      ]
+    },
     "enemies/kuragari": {
       "file": "kagaribi-content.json",
       "path": [
@@ -60857,6 +62364,13 @@ export const referenceData={
       "path": [
         "enemies",
         "kagaribi_kiln_warden"
+      ]
+    },
+    "enemies/kagaribi_altar_keeper": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_altar_keeper"
       ]
     },
     "encounters/kuragari_hunt": {
@@ -60934,6 +62448,20 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_deep_pair"
+      ]
+    },
+    "encounters/kagaribi_altar_guardian": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_altar_guardian"
+      ]
+    },
+    "encounters/kagaribi_manifold_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_manifold_pair"
       ]
     },
     "sounds/se_step": {
@@ -65443,6 +66971,20 @@ export const referenceData={
         "kagaribi.memorial"
       ]
     },
+    "scripts/kagaribi.altar_keeper": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.altar_keeper"
+      ]
+    },
+    "scripts/kagaribi.weapon_exchange": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "scripts",
+        "kagaribi.weapon_exchange"
+      ]
+    },
     "scripts/voxel.shaft.exit.v1": {
       "file": "voxel-content.json",
       "path": [
@@ -65602,6 +67144,13 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_ossuary"
+      ]
+    },
+    "maps/kagaribi_manifold": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_manifold"
       ]
     },
     "locations/hikarigaeri_square": {

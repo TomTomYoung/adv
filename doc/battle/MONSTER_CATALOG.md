@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.26.0。配布中の敵は66定義、遭遇編成は91定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.27.0。配布中の敵は67定義、遭遇編成は93定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：20定義。
+[依頼に追加した敵](#依頼に追加した敵)：21定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -38,7 +38,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="くらがり">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・炉守りの亡霊・祭壇の火守。
 
 通常点灯の守りが届かないときは7成功歩ごとに基本22％で歩行抽選し、現状の候補はくらがり100％です。普通の火で通常魔物まで消えることはなく、通常遭遇の完全抑止は深火の効果です。q001の老人同行中は北・南の帰路配置で同じイベント戦闘を起こし、途中の通常抽選でくらがりに遭遇した場合も、その実セルで同じ戦闘と新人救援へ進みます。火切れだけでは即戦闘にせず、救援後は繰り返しません。撃退・救助による強制終了と撃破を区別します。[火と遭遇仕様](../dungeons/KAGARIBI_DUNGEON.md)。
 
@@ -826,7 +826,7 @@ story_122：谷の飛竜×1。逃走可。
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="腐肉鬼">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：解毒薬 1個 / 12.5％。
@@ -1002,7 +1002,7 @@ story_166：石喰い獣×1。逃走可。
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="足跡の追跡者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1081,11 +1081,14 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_roaming：煤ネズミ×1。逃走可。
-通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み50 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み50。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み50 / 篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み50 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
 
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
-通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
 戦闘開始命令：1スクリプト。q205.v11.ash。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み40。
 
 ### 燭蝋スライム (kagaribi_wax_slime)
 
@@ -1105,11 +1108,11 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_wax：燭蝋スライム×1。逃走可。
-通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み35 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み35 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み35。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み35 / 篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み35 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み35。
 戦闘開始命令：1スクリプト。q209.v11.challenge。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
-通常遭遇候補：篝火の迷宮・灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・交差路の詰所前 (kagaribi_crossroads)、重み15。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み15 / 篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
 戦闘開始命令：1スクリプト。q205.v11.ash。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ### 灯蛾 (kagaribi_ember_moth)
@@ -1131,10 +1134,13 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_moths：灯蛾×1。逃走可。
-通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み35 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み50。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み35 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み50。
 
 kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
-通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み15。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み15。
+
+kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
+通常遭遇候補：篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み40。
 
 ### 赤錆の番兵 (kagaribi_ash_guard)
 
@@ -1154,10 +1160,10 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_guards：赤錆の番兵×1。逃走可。
-通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み35 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み35。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み35 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み35。
 
 kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
-通常遭遇候補：篝火の迷宮・煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・中継篝火の広間 (kagaribi_relay)、重み15。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み15。
 
 ### 灰積みゴーレム (kagaribi_cinder_golem)
 
@@ -1177,10 +1183,10 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_golem：灰積みゴーレム×1。逃走可。
-通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み35 / 篝火の迷宮・旧炭焼き場 (kagaribi_kilns)、重み50 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み35 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み35。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み35 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み50 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み35 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み35。
 
 kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
-通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
 ### 鎖引き骸骨 (kagaribi_chain_bone)
 
@@ -1200,17 +1206,17 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_bones：鎖引き骸骨×1。逃走可。
-通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み50 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み50 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み50。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み50 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み50 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み50。
 
 kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
-通常遭遇候補：篝火の迷宮・深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
 ### 炉守りの亡霊 (kagaribi_kiln_warden)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="炉守りの亡霊">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・祭壇の火守。
 
 基礎能力：HP 95 / MP 8 / STR 16 / VIT 9 / AGI 8 / INT 14。報酬：20G / 48EXP。
 宝箱：予備灯油 1個 / 12.5％。
@@ -1225,6 +1231,28 @@ AIの選択順：
 
 kagaribi_kiln_guard：炉守りの亡霊×1。逃走可。
 戦闘開始命令：1スクリプト。kagaribi.kiln_hunt。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+### 祭壇の火守 (kagaribi_altar_keeper)
+
+<img src="../../assets/images/monsters/wraith.webp" width="160" alt="祭壇の火守">
+
+画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+
+基礎能力：HP 650 / MP 120 / STR 32 / VIT 20 / AGI 9 / INT 30。報酬：100G / 1200EXP。
+宝箱：傷薬 1個 / 100％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度30、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":0}：炎嵐 (firestorm)、MP9、対象は探索隊の生存者全員。
+2. 優先度20、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":2}：灯火の術 (fire)、MP4、対象は探索隊の生存者からランダムに1人。
+3. 優先度10、条件なし：防御 (guard)、MP0、対象は自身。
+
+遭遇と参照先：
+
+kagaribi_altar_guardian：祭壇の火守×1。逃走可。
+戦闘開始命令：1スクリプト。kagaribi.altar_keeper。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ## 地域の迷宮獣と守護者
 
@@ -1386,7 +1414,7 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="鏡沈みの礼拝堂の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1414,7 +1442,7 @@ boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="鏡沈みの礼拝堂の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 139 / MP 20 / STR 19 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1437,7 +1465,7 @@ boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="灰時計の書庫の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 67 / MP 8 / STR 18 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1465,7 +1493,7 @@ boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="灰時計の書庫の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・星欠けの地下観測所の迷宮獣・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 161 / MP 20 / STR 21 / VIT 8 / AGI 10 / INT 16。報酬：15G / 23EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1647,7 +1675,7 @@ boss_8：鉄胎の機関廟の守護者×1・鉄胎の機関廟の迷宮獣×1�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="星欠けの地下観測所の迷宮獣">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の守護者・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1675,7 +1703,7 @@ boss_9：星欠けの地下観測所の守護者×1・星欠けの地下観測�
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="星欠けの地下観測所の守護者">
 
 画像ID：wraith。実ファイル：[assets/images/monsters/wraith.webp](../../assets/images/monsters/wraith.webp)。
-画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊。
+画像共有：鏡沈みの礼拝堂の迷宮獣・鏡沈みの礼拝堂の守護者・灰時計の書庫の迷宮獣・灰時計の書庫の守護者・星欠けの地下観測所の迷宮獣・腐肉鬼・足跡の追跡者・くらがり・炉守りの亡霊・祭壇の火守。
 
 基礎能力：HP 247 / MP 20 / STR 29 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：野営糧食 1個 / 12.5％。

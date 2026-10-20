@@ -32,14 +32,14 @@ function enterPost(g){go(g,'kagaribi_crossroads',8,1);assert.ok(g.dispatch({type
 
 // Walk the published main route and both optional branches, with the same
 // successful-movement counter and fuel state that the real game uses.
-test('three floors contain nine connected districts reachable on foot, including the optional ossuary and deep ember',()=>{
- const g=start(),d=data.dungeons.kagaribi;assert.equal(d.maps.length,9);
- for(const f of [1,2,3])assert.equal(d.maps.filter(id=>data.maps[id].floor===f).length,3);
+test('ten floors contain ten connected districts reachable on foot, including the optional ossuary and deep ember',()=>{
+ const g=start(),d=data.dungeons.kagaribi;assert.equal(d.maps.length,10);
+ for(let f=1;f<=10;f++)assert.equal(d.maps.filter(id=>data.maps[id].floor===f).length,1);
  const run=g.state.dungeons.active.run,visited=[];
- for(const id of ['kagaribi_f1','kagaribi_oilstore','kagaribi_crossroads','kagaribi_f2','kagaribi_kilns','kagaribi_relay','kagaribi_last_patrol','kagaribi_ossuary','kagaribi_f3']){
+ for(const id of ['kagaribi_f1','kagaribi_oilstore','kagaribi_manifold','kagaribi_crossroads','kagaribi_f2','kagaribi_kilns','kagaribi_relay','kagaribi_last_patrol','kagaribi_ossuary','kagaribi_f3']){
   go(g,id,data.maps[id].entrance.x,data.maps[id].entrance.y);visited.push(g.state.location.map);assert.equal(g.state.dungeons.active.run,run);save(g);
  }
- assert.equal(new Set(visited).size,9);assert.ok(g.state.dungeons.active.steps>100);
+ assert.equal(new Set(visited).size,10);assert.ok(g.state.dungeons.active.steps>100);
  go(g,'kagaribi_f3',7,7);fire(g,'collect','origin');assert.equal(fireContext(data,g.state).run.ember.effect,'deep');
  fire(g,'extinguish');fire(g,'transplant');assert.equal(fireEnvironment(fireContext(data,g.state)).rate,0);
  inspectLatch(g,'kagaribi_f3',1,7,'altar_latch','west');assert.ok(flags(g).altarGate);save(g);
