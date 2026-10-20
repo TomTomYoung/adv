@@ -27,4 +27,8 @@ s.end('returned','混入だけを確かめて返す','ゲルに試料瓶を返�
 s.end('limited','使えた量を限って伝える','一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。',and(s.is('disposal','limited'),s.is('tested'),s.is('burned',1),s.is('bottleAt','seller')));
 s.end('public','残った水を審査へ預ける','水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。',and(s.is('disposal','public'),s.is('tested'),s.is('bottleAt','tester'),s.is('sample',1)));
 s.routeNotes=[['油蔵の検品台','ゲルから封じた試料瓶を預かる。'],['煤けた回廊の試験皿','水と油の分離を観察。未試験で返すか、上澄み二目盛りを分け、松明1本で一目盛りを燃やす。'],['油蔵／回廊','未試験または限定した結果を瓶とともに商人へ返す。審査を選ぶ場合は瓶を検品係へ渡す。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.returned,{gold:90,xp:240,gems:10});
+Object.assign(s.outcomes.limited,{gold:50,xp:240,gems:18});
+Object.assign(s.outcomes.public,{gold:60,xp:240,gems:24});
 export default worldRoutes(s,[['entry_carry','test',{depart:[give('bottle','seller','party')],arrive:[see('water','tester')]}],['inspect_return','desk'],['result_limited','desk']]);

@@ -21,4 +21,8 @@ s.end('battle','今日見た戦いだけを書く','エルの報告には、今�
 s.end('escort','帰す仕事を教習にする','ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。',and(s.is('account','escort'),s.is('returned'),s.is('guardAt','entry'),s.is('pupilAt','entry')));
 s.end('limited','確認していない武勇には署名しない','エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。',and(s.is('account','limited'),s.is('witnessed',false),s.is('admitted')));
 s.routeNotes=[['煤けた回廊の盾掛け','盾の古傷と討伐の噂を切り分け、ゼドの説明を聞く。'],['煤けた回廊の盾掛け','戦闘を選ぶ場合は探索隊が灰蝋の魔物を退け、今回の観測範囲だけ報告する。立会いを断る経路もある。'],['巡灯路の帰路札前','護衛教習を選ぶ場合は二人と歩いて戻り、帰還の仕事として記録する。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.battle,{gold:80,xp:340,gems:30});
+Object.assign(s.outcomes.escort,{gold:50,xp:340,gems:22});
+Object.assign(s.outcomes.limited,{gold:40,xp:340,gems:12});
 export default worldRoutes(s,[['entry_escort','entry',{companions:['guard','pupil'],depart:[set('admitted')]}]]);

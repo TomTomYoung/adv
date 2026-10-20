@@ -1,8 +1,8 @@
 {
   "id": "kagaribi_crossroads",
   "region": 1,
-  "floor": 1,
-  "name": "篝火の迷宮・交差路の詰所前",
+  "floor": 4,
+  "name": "篝火の迷宮・4F 交差路の詰所前",
   "tiles": [
     "#################",
     "#...............#",
@@ -23,7 +23,7 @@
   },
   "background": "corridor",
   "music": "exploration",
-  "encounter": "kagaribi_roaming",
+  "encounter": "kagaribi_oil_roaming",
   "encounterRate": 0.22,
   "objects": [
     {
@@ -47,19 +47,43 @@
       "script": "kagaribi.note.crossroads_note",
       "safe": true,
       "interactionRange": "here"
+    },
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.kagaribi_crossroads.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
     }
   ],
   "encounterPool": [
     {
-      "encounter": "kagaribi_roaming",
+      "encounter": "kagaribi_oil_roaming",
       "weight": 50
     },
     {
-      "encounter": "kagaribi_wax",
+      "encounter": "kagaribi_oil_slime",
       "weight": 35
     },
     {
-      "encounter": "kagaribi_pests",
+      "encounter": "kagaribi_oil_pair",
       "weight": 15
     }
   ],

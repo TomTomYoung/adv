@@ -1,4 +1,4 @@
-import {freshExpedition,expeditionSaveErrors} from './expedition.js';
+import {freshExpedition,expeditionSaveErrors,campTier} from './expedition.js';
 import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
 import {frontlineSaveErrors} from './battle-frontline.js';
 import {nextFormation} from './battle-formation.js';
@@ -74,6 +74,16 @@ function upgradeStoryRevisions(original,data){
   }
   return save;
 }
+function preserveKagaribiRoutes(save){
+  const s=save.state,visited=id=>Boolean(s.discovered[id]?.length||s.location?.map===id||id==='kagaribi_crossroads'&&s.townLocation==='kagaribi_post');
+  const old=s.flags.kagaribi??{},updates={};
+  if(visited('kagaribi_crossroads')||s.expedition?.camps.kagaribi_crossroads?.supply)updates.legacyOilRoute=true;
+  if(visited('kagaribi_relay')||s.expedition?.camps.kagaribi_relay?.supply)updates.legacySootRoute=true;
+  if(visited('kagaribi_f3'))updates.legacyAltarRoute=true;
+  const tier=campTier(s);if(tier)updates.legacyShopTier=tier;
+  if(Object.keys(updates).length)s.flags.kagaribi={...old,...updates};
+  return save;
+}
 function migrateContentSave(original,data){
   if(!isRecord(original))return original;
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
@@ -82,7 +92,14 @@ function migrateContentSave(original,data){
     const legacy={...data,expedition:undefined,game:{...data.game,version:original.contentVersion}};
     const previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
-    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return save;
+    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return migration.kagaribiRevision?preserveKagaribiRoutes(save):save;
+  }
+  if(migration.kagaribiRevision===1){
+    const legacy={...data,game:{...data.game,version:original.contentVersion}};
+    const previous=migrateSave(original,legacy);
+    if(validateSave(previous,legacy).length)return original;
+    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
+    return preserveKagaribiRoutes(save);
   }
   if(migration.environmentRevision){
     // Validate the old version's system membership before adding only the missing state.
@@ -155,7 +172,7 @@ export function migrateSave(original,data){
     }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
-  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;

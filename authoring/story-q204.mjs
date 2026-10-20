@@ -25,4 +25,8 @@ s.end('addendum','消さずに、生きている名を足す','エインは古�
 s.end('sealed','公開する訂正と封じる証言を分ける','証言は担当書記だけが開ける封に収められ、公開欄は死亡未確認へ訂正された。生存確認を誰もが読める形にはしなかった。書記には、封を守り、必要な訂正を続ける責任が残る。',and(s.is('record','sealed'),s.is('consent','sealed'),s.is('statementAt','scribe')));
 s.end('pending','分からないことを死亡にしない','追悼欄には、元の報告が未帰還であり、死亡確認をしていないと追記された。リュカの生存証言を提出したことにはしなかった。削り刀を使わずに、帳面が断定しすぎた部分を直した。',and(s.is('record','pending'),s.is('consent','none'),s.is('statementAt','survivor'),s.is('copyAt','scribe')));
 s.routeNotes=[['納骨所の記録机','未帰還報告から追悼欄へ写された名の照会を受ける。'],['交差路の荷待ち場','リュカに写しを見せ、所在の非公開と証言の扱いを確認する。'],['納骨所の記録机','公開同意付きの生存追記、封緘証言と死亡未確認への訂正、元資料だけによる訂正のいずれかを行う。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.addendum,{gold:60,xp:300,gems:18});
+Object.assign(s.outcomes.sealed,{gold:60,xp:300,gems:18});
+Object.assign(s.outcomes.pending,{gold:60,xp:300,gems:18});
 export default worldRoutes(s,[['entry_visit','bench',{depart:[give('copy','scribe','party')],arrive:[see('alive','survivor')]}],['report_carry','shelf'],['meeting_pending','shelf']]);

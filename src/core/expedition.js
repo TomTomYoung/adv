@@ -1,4 +1,4 @@
-import {clone,isRecord} from './expression.js';
+import {clone,isRecord,evaluate} from './expression.js';
 import {townLocation,dungeonInterior} from './world.js';
 import {dungeonEntryReason} from './quest-navigation.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
@@ -11,6 +11,7 @@ export const freshExpedition=()=>({version:1,managed:false,gems:0,capacity:180,r
 const campById=(data,id)=>data.expedition?.camps.find(c=>c.id===id);
 const taughtTargets=(data,state,actor,id)=>{let count=data.skills[id].maxTargets??1;for(let n=2;n<=(state.expedition.learned[actor]?.[id]??1);n++)count=data.skills[id].levels?.[n]?.maxTargets??count;return count;};
 export const campTier=state=>Math.max(0,...Object.values(state.expedition?.camps??{}).map(c=>c.relay?2:c.supply?1:0));
+export const expeditionShopTier=(data,state)=>Math.max(state.flags.kagaribi?.legacyShopTier??0,...data.expedition.camps.filter(c=>state.expedition?.camps[c.id]?.supply).map(c=>c.shopTier===2&&!state.expedition.camps[c.id].relay?1:c.shopTier??(c.dungeon==='kagaribi'?0:state.expedition.camps[c.id].relay?2:1)));
 export function purchasedGrants(data,state,actor){
   const a=state.actors[actor];if(!data.expedition||!a)return [];
   return Object.keys(state.expedition?.learned[actor]??{}).filter(id=>data.expedition.products[id]?.jobs.includes(a.job)).map(skill=>({skill,level:1,api:'battle.skill',target:data.skills[skill].target,maxTargets:taughtTargets(data,state,actor,skill),lifetime:'equipped'}));
@@ -22,6 +23,7 @@ export function skillPurchasePlan(data,state,actor,id,level){
   if(!e||!own(data.expedition.products,id)||!own(state.actors,actor)||!p||!a||!int(level,1,3))return {ok:false,reason:'技能・人物・段階を選び直してください。'};
   if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle||townLocation(data,state)?.id!==data.expedition.shopLocation)return {ok:false,reason:'町の技能店で習得できます。'};
   if(campTier(state)<p.tier)return {ok:false,reason:p.tier===1?'給油設備を修理すると販売が始まります。':'中継設備を起動すると販売が始まります。'};
+  if(p.unlockTier&&expeditionShopTier(data,state)<p.unlockTier)return {ok:false,reason:p.unlockTier===1?'篝火4Fの給油設備を修理すると販売が始まります。':'篝火7Fの給油設備を修理し、中継を起動すると販売が始まります。'};
   if(!p.jobs.includes(a.job))return {ok:false,reason:'現在の職業ではこの技能を使えません。'};
   if(skill.weaponTypes&&!skill.weaponTypes.includes(data.items[a.equipment.weapon]?.equipmentType))return {ok:false,reason:'対応する武器を装備してから選んでください。'};
   const bought=e.learned[actor]?.[id]??0,current=bought?Math.max(bought,a.skillProgress?.[id]?.level??1):0;
@@ -44,9 +46,10 @@ export function campPlan(data,state,intent){
   if(!e||state.waiting||state.battle||state.mode!=='dungeon')return {ok:false,reason:'探索中に操作してください。'};
   if(!c||!canInteractAt(data,state,c))return {ok:false,reason:'設備のあるセルで操作してください。'};
   if(c.requiresQuest&&state.quests[c.requiresQuest]?.stage!=='completed')return {ok:false,reason:'灯番の最初の依頼を終えると、配油設備の復旧を始められます。'};
+  if(intent.action==='repair'&&!progress?.supply&&c.condition!==undefined&&!evaluate(c.condition,state))return {ok:false,reason:c.requirement??'給油管の復旧条件を満たしてください。'};
   if(intent.action==='repair')return progress?.supply?{ok:false,reason:'給油設備は修理済みです。'}:(state.inventory.rope??0)<1?{ok:false,reason:'管を固定するロープが1本必要です。'}:{ok:true,c};
   if(!progress?.supply)return {ok:false,reason:'先に給油設備を修理してください。'};
-  if(intent.action==='relay')return progress.relay?{ok:false,reason:'中継設備は起動済みです。'}:{ok:true,c};
+  if(intent.action==='relay')return c.relayEnabled===false?{ok:false,reason:'ここは給油専用です。再出発は4F・7F・10Fの中継所から行えます。'}:progress.relay?{ok:false,reason:'中継設備は起動済みです。'}:{ok:true,c};
   if(intent.action==='draw')return oilRoom(data,state)>0?{ok:true,c}:{ok:false,reason:'隊の携行容量がいっぱいです。'};
   return {ok:false,reason:'未知の設備操作です。'};
 }
@@ -65,8 +68,8 @@ export function expeditionAction(engine,intent){
   const p=campPlan(data,state,intent);if(!p.ok){engine.notify(p.reason);return false;}
   const c=p.c,progress=e.camps[c.id]??={supply:false,relay:false};
   if(intent.action==='repair'){
-    engine.give('rope',-1);enableOil(data,state);progress.supply=true;addGems(state,c.gems);balanceOil(data,state);
-    engine.notify(`${c.name}の給油設備を修理しました。油を自由に汲めます。技能宝石${c.gems}個を受け取りました。余分な灯油は町の補給所で保管します。`);
+    engine.give('rope',-1);enableOil(data,state);progress.supply=true;addGems(state,c.gems);balanceOil(data,state);if(c.xp)engine.award(0,c.xp);
+    engine.notify(`${c.name}の給油設備を修理しました。油を自由に汲めます。技能宝石${c.gems}個${c.xp?`、生存隊員へ経験値${c.xp}`:''}を受け取りました。余分な灯油は町の補給所で保管します。`);
   }else if(intent.action==='relay'){
     progress.relay=true;e.capacity=Math.max(e.capacity,c.capacity??180);engine.notify(`${c.name}の中継設備を起動しました。次回は町からここへ出発できます。隊の携行容量は${e.capacity}単位です。`);
   }else {const n=oilRoom(data,state);e.reserve+=n;engine.notify(`油を${n}単位汲みました。携行${oilTotal(data,state)}/${e.capacity}。HP・MPは変化しません。`);}
@@ -85,7 +88,7 @@ export function expeditionView(data,state){
   if(!data.expedition||!state.expedition||state.mode!=='dungeon')return null;
   const e=state.expedition,visible=data.expedition.camps.filter(c=>!c.requiresQuest||state.quests[c.requiresQuest]?.stage==='completed'),camps=visible.filter(c=>canInteractAt(data,state,c));
   if(!camps.length&&!e.managed)return null;
-  const cards=camps.map(c=>({name:c.name,text:e.camps[c.id]?.supply?'給油設備は修理済みです。中継設備を起動すると次回の出発点になります。':'配油管が破損しています。ロープ1本で固定できます。',actions:[['repair','給油設備を修理（ロープ1）'],['relay','中継設備を起動'],['draw','油を容量いっぱい汲む（無料）']].map(([action,label])=>{const intent={type:'expedition.action',camp:c.id,action},p=campPlan(data,state,intent);return {label,intent,enabled:p.ok,reason:p.reason??'',consumes:action==='repair',explicit:true};})}));
+  const cards=camps.map(c=>({name:c.name,text:e.camps[c.id]?.supply?(c.relayEnabled===false?'修理済みの給油専用設備です。':'給油設備は修理済みです。中継設備を起動すると次回の出発点になります。'):'配油管が破損しています。ロープ1本で固定できます。',actions:[['repair','給油設備を修理（ロープ1）'],['relay','中継設備を起動'],['draw','油を容量いっぱい汲む（無料）']].filter(([action])=>action!=='relay'||c.relayEnabled!==false).map(([action,label])=>{const intent={type:'expedition.action',camp:c.id,action},p=campPlan(data,state,intent);return {label,intent,enabled:p.ok,reason:p.reason??'',consumes:action==='repair',explicit:true};})}));
   const lamp=oilLamp(data,state),actions=[],oilText=`携行 ${oilTotal(data,state)}/${e.capacity}単位 ／ 予備油 ${e.reserve} ／ 灯油瓶 ${state.inventory.torch??0}本。補給所の保管 ${e.storedOil+e.storedBottles*90}単位。`;
   if(e.managed){
     if(!oilFire(data,state))actions.push({label:'予備油を携行灯へ補充',intent:{type:'expedition.action',action:'refill'},enabled:!state.waiting&&!state.battle&&e.reserve>0&&lamp.fuel<lamp.capacity,consumes:true});
@@ -103,7 +106,7 @@ export function expeditionDefinitionErrors(data){
   if(!data.expedition)return [];
   const d=data.expedition,errors=[],bad=m=>errors.push(`expedition: ${m}`),ids=new Set();
   if(d.version!==1||d.oil?.item!=='torch'||d.oil?.units!==90||!data.locations[d.shopLocation]||!Array.isArray(d.camps)||!isRecord(d.products)||!isRecord(d.enemyGems))return ['expedition: 基本定義不正'];
-  for(const c of d.camps){if(!isRecord(c)){bad('設備不正');continue;}if(!/^[a-z][a-z0-9_]*$/.test(c.id)||ids.has(c.id)||!c.name||!['north','east','south','west'].includes(c.facing)||!data.dungeons[c.dungeon]?.maps.includes(c.map)||data.maps[c.map]?.tiles[c.y]?.[c.x]!=='.'||!int(c.x)||!int(c.y)||!int(c.radius,0,2)||!int(c.gems)||![180,270,330,390,450].includes(c.capacity??180)||c.requiresQuest&&!data.quests[c.requiresQuest])bad(`設備不正 ${c.id}`);ids.add(c.id);}
+  for(const c of d.camps){if(!isRecord(c)){bad('設備不正');continue;}if(!/^[a-z][a-z0-9_]*$/.test(c.id)||ids.has(c.id)||!c.name||!['north','east','south','west'].includes(c.facing)||!data.dungeons[c.dungeon]?.maps.includes(c.map)||data.maps[c.map]?.tiles[c.y]?.[c.x]!=='.'||!int(c.x)||!int(c.y)||!int(c.radius,0,2)||!int(c.gems)||![180,270,330,390,450].includes(c.capacity??180)||c.requiresQuest&&!data.quests[c.requiresQuest])bad(`設備不正 ${c.id}`);if(c.xp!==undefined&&!int(c.xp)||c.shopTier!==undefined&&!int(c.shopTier,1,2)||c.relayEnabled!==undefined&&typeof c.relayEnabled!=='boolean')bad(`設備の進行設定不正 ${c.id}`);ids.add(c.id);}
   for(const [id,p] of Object.entries(d.products))if(!isRecord(p)||!own(data.skills,id)||!Array.isArray(data.skills[id].weaponTypes)||!int(p.price,1)||!int(p.tier,1,2)||!Array.isArray(p.jobs)||!p.jobs.length||new Set(p.jobs).size!==p.jobs.length||p.jobs.some(j=>!data.jobs[j]||!data.skills[id].weaponTypes.some(w=>data.jobs[j].equipment.weapon.includes(w)))||data.skills[id].levelUp)bad(`商品不正 ${id}`);
   for(const [id,n] of Object.entries(d.enemyGems))if(!data.enemies[id]||!int(n)||n>0&&data.enemies[id].rewards.xp===0)bad(`宝石ドロップ不正 ${id}`);
   return errors;

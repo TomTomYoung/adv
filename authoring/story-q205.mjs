@@ -23,4 +23,8 @@ s.end('revise','違う炭を焼くために継ぐ','ノノは配合板を受け�
 s.end('preserve','配合を仕事の記憶として返す','板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。',and(s.is('future','preserve'),s.is('plateAt','master'),s.is('told')));
 s.end('stop','継がないことを本人が決める','ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。',and(s.is('future','stop'),s.is('plateAt','bench'),s.is('told')));
 s.routeNotes=[['炭焼き窯の作業台','ノノの回収依頼とダンの制止を聞く。'],['炭焼き窯の灰溜まり','灰虫との戦闘に勝つか、縄1本で配合板を引き上げる。敗北・逃走では板を取らない。'],['炭焼き窯の作業台','板を持って戻り、師が捨てた理由を聞く。弟子の試験用、師の記憶、継承を断った保管品として渡し先を決める。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.revise,{gold:50,xp:280,gems:24});
+Object.assign(s.outcomes.preserve,{gold:120,xp:280,gems:16});
+Object.assign(s.outcomes.stop,{gold:70,xp:280,gems:20});
 export default worldRoutes(s,[['entry_go','ash'],['recovered_return','bench',{arrive:[see('discard','master'),set('told')]}]]);

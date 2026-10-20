@@ -1,8 +1,8 @@
 # シナリオ一覧
 
-全 210 本・659 結末。作品版 1.26.0。更新日: 2026-10-15。
+全 210 本・659 結末。作品版 1.27.0。更新日: 2026-10-20。
 
-<!-- quest-catalog-source:2d19392af8e0e8c978e1bfa93bb34bc9953cb9d940911c5f0efd77c9dc8536c2 -->
+<!-- quest-catalog-source:f0a7a1e88ef02bc571e5504ecc75bdd1bb88f968998d60c49348abd1dcc6b7e8 -->
 
 表示順の正本は [quest-order.json](../../authoring/quest-order.json) です。掲載順と表示番号はこの一覧から決まり、見出し・リンク・進行状態の内部IDは固定です。
 
@@ -58,9 +58,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q201.json)。場面 4、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。油蔵の記帳台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。油蔵の記帳台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。交差路の休憩ベンチ。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。交差路の休憩ベンチ。現地イベント。
 
 固定された過去: エンは油を運び終えた後、手の皮が剥け、ナヴィアの指示で休憩した。 ナヴィアは休憩分の減額を恐れ、帳面の休み印を消した。支払いはまだ確定していない。
 
@@ -82,7 +82,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q201.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ナヴィア。
 
@@ -90,7 +90,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `ask`: 交差路へ行き、エン本人から話を聞く
 
-出発: `entry_ask`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_ask`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`witness`](#q201--witness--交差路の休憩ベンチ) へ進み、到着時の処理を確定します。
 
@@ -98,7 +98,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q201.v11.witness`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: エン。
 
@@ -106,7 +106,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `take`: 覚え書きを預かり、油蔵へ戻る
 
-出発: `witness_take`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `witness_take`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`reason`](#q201--reason--油蔵の記帳台) へ進み、到着時の処理を確定します。
 
@@ -114,7 +114,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q201.v11.reason`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (5, 1) / イベント `q201_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ナヴィア。
 
@@ -138,7 +138,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `private`: 公簿の訂正を保留し、覚え書きをエンへ返しに行く
 
-出発: `reason_private`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `reason_private`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`return`](#q201--return--交差路の休憩ベンチ) へ進み、到着時の処理を確定します。
 
@@ -156,7 +156,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q201.v11.return`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (5, 1) / イベント `q201_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: エン。
 
@@ -172,7 +172,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エンの休憩は、本人の怠慢と決めつけられない記録になった。
 
-57G / 51EXP
+70G / 200EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"corrected"},{"op":"eq","left":{"ref":"stories.q201.values.signed"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"clerk"}]}`
 
@@ -180,7 +180,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。
 
-57G / 51EXP
+40G / 200EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"pending"},{"op":"eq","left":{"ref":"stories.q201.values.advance"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"clerk"}]}`
 
@@ -188,7 +188,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。
 
-57G / 51EXP
+30G / 200EXP / 技能宝石8
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"private"},{"op":"eq","left":{"ref":"stories.q201.values.heard"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"porter"},{"op":"eq","left":{"ref":"stories.q201.values.partyAt"},"right":"bench"}]}`
 
@@ -208,9 +208,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q202.json)。場面 3、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (5, 1) / イベント `q202_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の訓練札前。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (5, 1) / イベント `q202_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の訓練札前。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。交差路の合図杭。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。交差路の合図杭。現地イベント。
 
 固定された過去: トマは左耳が聞こえにくいことを申告せず、左後方から鳴らされた試験の鐘に返事をしなかった。セナはそれを不注意だと判断した。
 
@@ -230,7 +230,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q202.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (5, 1) / イベント `q202_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (5, 1) / イベント `q202_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: トマ。
 
@@ -238,7 +238,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `walk`: トマと交差路へ歩く
 
-出発: `entry_walk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_walk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`lesson`](#q202--lesson--交差路の合図杭) へ進み、到着時の処理を確定します。
 
@@ -246,7 +246,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q202.v11.lesson`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: トマ・セナ。
 
@@ -268,7 +268,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q202.v11.result`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (7, 1) / イベント `q202_post`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: トマ・セナ。
 
@@ -304,7 +304,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっていない。トマは札を受け取り、初めて左側から呼ばれたときに「もう一度」と言った。
 
-57G / 51EXP
+50G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"paired"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainee"},{"op":"eq","left":{"ref":"stories.q202.values.traineeAt"},"right":"post"}]}`
 
@@ -312,7 +312,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。
 
-57G / 51EXP
+50G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"visual"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainee"}]}`
 
@@ -320,7 +320,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。
 
-57G / 51EXP
+80G / 220EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.disclosed"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"retrain"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainer"},{"op":"eq","left":{"ref":"stories.q202.values.traineeAt"},"right":"post"}]}`
 
@@ -340,9 +340,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q203.json)。場面 6、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。油蔵の検品台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。油蔵の検品台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。煤けた回廊の試験皿。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。煤けた回廊の試験皿。現地イベント。
 
 固定された過去: ゲルは屋外に置いた漏斗を乾かさずに使い、納入油へ雨水を混入させた。故意の水増しではない。 試料瓶には上澄み二目盛りと底の水一目盛りが入っている。これは専用試料で、迷宮の既存の火台や所持品の油とは別物である。
 
@@ -364,7 +364,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゲル。
 
@@ -372,7 +372,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `carry`: 試料瓶を預かり、回廊の検品係へ運ぶ
 
-出発: `entry_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`inspect`](#q203--inspect--煤けた回廊の試験皿) へ進み、到着時の処理を確定します。
 
@@ -380,7 +380,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.inspect`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ユハ。
 
@@ -388,7 +388,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `return`: 燃焼試験をせず、分離した試料を商人へ返しに行く
 
-出発: `inspect_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `inspect_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`return`](#q203--return--油蔵の検品台) へ進み、到着時の処理を確定します。
 
@@ -402,7 +402,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.portion`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ユハ。
 
@@ -432,7 +432,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.result`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (3, 1) / イベント `q203_test`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ユハ。
 
@@ -440,7 +440,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `limited`: 残った瓶を商人へ返し、今回の試験範囲だけ伝える
 
-出発: `result_limited`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `result_limited`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`limited`](#q203--limited--油蔵の検品台) へ進み、到着時の処理を確定します。
 
@@ -454,7 +454,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.return`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゲル。
 
@@ -470,7 +470,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q203.v11.limited`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・油蔵・B1 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・2F 油蔵・B2 (`kagaribi_oilstore`) / (9, 1) / イベント `q203_desk`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゲル。
 
@@ -486,7 +486,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振らずに台へ置いた。弁明のために持たせた瓶が、次に説明しなければならない事実になった。
 
-57G / 51EXP
+90G / 240EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"returned"},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"seller"},{"op":"eq","left":{"ref":"stories.q203.values.sample"},"right":3},{"op":"eq","left":{"ref":"stories.q203.values.burned"},"right":0}]}`
 
@@ -494,7 +494,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。
 
-57G / 51EXP
+50G / 240EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"limited"},{"op":"eq","left":{"ref":"stories.q203.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q203.values.burned"},"right":1},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"seller"}]}`
 
@@ -502,7 +502,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。
 
-57G / 51EXP
+60G / 240EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"public"},{"op":"eq","left":{"ref":"stories.q203.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"tester"},{"op":"eq","left":{"ref":"stories.q203.values.sample"},"right":1}]}`
 
@@ -522,9 +522,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q204.json)。場面 5、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。納骨所の記録机。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。納骨所の記録机。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。交差路の荷待ち場。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。交差路の荷待ち場。現地イベント。
 
 固定された過去: リュカは二年前の事故を生き延びたが、家へ戻ることを恐れて帰還を届けなかった。 エインは未帰還者の報告を追悼欄へ写した。遺体や死亡を確認した記録はない。既存の石棚の名札とは別の記録である。
 
@@ -546,7 +546,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q204.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: エイン。
 
@@ -554,7 +554,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `visit`: 欄の写しを持ち、交差路の本人を訪ねる
 
-出発: `entry_visit`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_visit`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`meeting`](#q204--meeting--交差路の荷待ち場) へ進み、到着時の処理を確定します。
 
@@ -562,7 +562,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q204.v11.meeting`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: リュカ。
 
@@ -582,7 +582,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `pending`: 署名は求めず、元の報告が未帰還だった点だけ訂正しに戻る
 
-出発: `meeting_pending`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `meeting_pending`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`pending`](#q204--pending--納骨所の記録机) へ進み、到着時の処理を確定します。
 
@@ -590,7 +590,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q204.v11.report`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (9, 1) / イベント `q204_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: リュカ。
 
@@ -598,7 +598,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `carry`: 証言と写しを納骨所へ運ぶ
 
-出発: `report_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `report_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`filing`](#q204--filing--納骨所の記録机) へ進み、到着時の処理を確定します。
 
@@ -606,7 +606,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q204.v11.filing`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: エイン。
 
@@ -636,7 +636,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q204.v11.pending`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (5, 1) / イベント `q204_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: エイン。
 
@@ -652,7 +652,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エインは古い欄を削らず、本人の同意を得た生存確認を追記した。所在は載せなかった。帰還を数え落とした履歴も、いま生きている名も、同じ帳面に残った。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"addendum"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"named"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"scribe"}]}`
 
@@ -660,7 +660,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 証言は担当書記だけが開ける封に収められ、公開欄は死亡未確認へ訂正された。生存確認を誰もが読める形にはしなかった。書記には、封を守り、必要な訂正を続ける責任が残る。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"sealed"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"sealed"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"scribe"}]}`
 
@@ -668,7 +668,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 追悼欄には、元の報告が未帰還であり、死亡確認をしていないと追記された。リュカの生存証言を提出したことにはしなかった。削り刀を使わずに、帳面が断定しすぎた部分を直した。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"pending"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"none"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"survivor"},{"op":"eq","left":{"ref":"stories.q204.values.copyAt"},"right":"scribe"}]}`
 
@@ -688,9 +688,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q205.json)。場面 4、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。炭焼き窯の作業台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。炭焼き窯の作業台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。炭焼き窯の灰溜まり。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。炭焼き窯の灰溜まり。現地イベント。
 
 固定された過去: ダンは乾いた木材用の配合を湿った代替材に使い、炭を崩れさせた。失敗した配合を弟子に継がせたくなくて板を灰溜まりへ捨てた。 灰を掻く音は巣材を探す灰虫による。既存の炉守り討伐や火台の記録とは別件である。
 
@@ -710,7 +710,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q205.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ノノ・ダン。
 
@@ -718,7 +718,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `go`: 灰溜まりへ行き、板と音の正体を確かめる
 
-出発: `entry_go`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_go`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`ash`](#q205--ash--炭焼き窯の灰溜まり) へ進み、到着時の処理を確定します。
 
@@ -726,7 +726,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q205.v11.ash`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
 
 灰虫が巣材を掻き寄せている。その下に、角が焦げた配合板が見える。虫を退けて拾うか、縁から縄を掛けて引き上げられそうだ。
 
@@ -776,13 +776,13 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q205.v11.recovered`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (11, 5) / イベント `q205_ash`。[ダンジョン定義](../../data/dungeons.json)。
 
 配合板を手元へ引き寄せた。裏には「今の木では崩れる」とダンの字で書かれていた。古い手順が正しいかどうかは、板を取り戻しただけでは決まらない。
 
 選択 `return`: 配合板を持って作業台へ戻る
 
-出発: `recovered_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `recovered_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`talk`](#q205--talk--炭焼き窯の作業台) へ進み、到着時の処理を確定します。
 
@@ -790,7 +790,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q205.v11.talk`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・旧炭焼き場・B2 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・6F 旧炭焼き場・B6 (`kagaribi_kilns`) / (5, 1) / イベント `q205_bench`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ノノ・ダン。
 
@@ -818,7 +818,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功したわけでもない。師の失敗を隠さず、変えて使う許しを得た。
 
-57G / 51EXP
+50G / 280EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.recovered"},"right":true},{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"revise"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"pupil"}]}`
 
@@ -826,7 +826,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。
 
-57G / 51EXP
+120G / 280EXP / 技能宝石16
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"preserve"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"master"},{"op":"eq","left":{"ref":"stories.q205.values.told"},"right":true}]}`
 
@@ -834,7 +834,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。
 
-57G / 51EXP
+70G / 280EXP / 技能宝石20
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"stop"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"bench"},{"op":"eq","left":{"ref":"stories.q205.values.told"},"right":true}]}`
 
@@ -854,9 +854,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q206.json)。場面 5、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の差し入れ台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の差し入れ台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。中継火の休息所脇。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。中継火の休息所脇。現地イベント。
 
 固定された過去: ナギは当番を終えて退職を申し出たが、姉にはまだ話していない。 ミナは勤務継続を条件にせず弁当を作った。中断中に腐敗や勤務の締切は進めない。
 
@@ -876,7 +876,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q206.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ミナ。
 
@@ -884,7 +884,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `carry`: 弁当を預かり、中継広間のナギへ届ける
 
-出発: `entry_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_carry`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`offer`](#q206--offer--中継火の休息所脇) へ進み、到着時の処理を確定します。
 
@@ -892,7 +892,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q206.v11.offer`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ナギ。
 
@@ -906,13 +906,13 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `together`: 弁当を持ったまま、ナギが自分で話せるよう一緒に入口へ戻る
 
-出発: `offer_together`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `offer_together`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`home`](#q206--home--巡灯路の差し入れ台) へ進み、到着時の処理を確定します。
 
 選択 `return`: 受取りを断ったことだけを伝えると約束し、弁当を返しに行く
 
-出発: `offer_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `offer_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`returned`](#q206--returned--巡灯路の差し入れ台) へ進み、到着時の処理を確定します。
 
@@ -920,7 +920,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q206.v11.gift`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (5, 5) / イベント `q206_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ナギ。
 
@@ -936,7 +936,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q206.v11.home`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ミナ・ナギ。
 
@@ -952,7 +952,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q206.v11.returned`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (7, 1) / イベント `q206_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ミナ。
 
@@ -968,7 +968,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えたことと、明日も働くことを同じ返事にしなかった。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"gift"},{"op":"eq","left":{"ref":"stories.q206.values.explained"},"right":true},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"worker"},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"rest"}]}`
 
@@ -976,7 +976,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"together"},{"op":"eq","left":{"ref":"stories.q206.values.resignationTold"},"right":true},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"worker"}]}`
 
@@ -984,7 +984,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"returned"},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"sister"},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"rest"},{"op":"eq","left":{"ref":"stories.q206.values.partyAt"},"right":"entry"}]}`
 
@@ -1004,9 +1004,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q207.json)。場面 4、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の基準石。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の基準石。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の測点。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の測点。現地イベント。
 
 固定された過去: 前回のオセの測定は手の震えで竿が傾き、実際より狭い値になった。ハルは別の値を得たが、正式な図面には採用されなかった。 この依頼中に通路そのものは動かない。既存の地図や通路幅を変更する作業ではなく、二人の測量票を扱う。
 
@@ -1028,7 +1028,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q207.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: オセ・ハル。
 
@@ -1050,7 +1050,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q207.v11.calibrated`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (5, 1) / イベント `q207_base`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: オセ・ハル。
 
@@ -1058,7 +1058,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `go`: 二人と測り竿を伴い、実際の測点へ行く
 
-出発: `calibrated_go`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `calibrated_go`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`measure`](#q207--measure--最後の巡回路の測点) へ進み、到着時の処理を確定します。
 
@@ -1066,7 +1066,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q207.v11.measure`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: オセ・ハル。
 
@@ -1082,7 +1082,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q207.v11.result`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 7) / イベント `q207_mark`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: オセ・ハル。
 
@@ -1104,7 +1104,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守らなかったが、二人で確かめた数値を、次に図面へ移せる形で残した。
 
-57G / 51EXP
+60G / 320EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"joint"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.joint"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.sheetAt"},"right":"assistant"},{"op":"eq","left":{"ref":"stories.q207.values.assistantAt"},"right":"mark"}]}`
 
@@ -1112,7 +1112,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。
 
-57G / 51EXP
+100G / 320EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"withdrawn"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.sheetAt"},"right":"surveyor"}]}`
 
@@ -1120,7 +1120,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。
 
-57G / 51EXP
+40G / 320EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"unverified"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":false},{"op":"eq","left":{"ref":"stories.q207.values.partyAt"},"right":"base"}]}`
 
@@ -1140,9 +1140,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q208.json)。場面 4、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。中継広間の小さな追悼台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。中継広間の小さな追悼台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。納骨所の私物棚。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。納骨所の私物棚。現地イベント。
 
 固定された過去: メアは亡き同僚の名を書いた札を私設の追悼灯へ置いた。フユに相談はしなかった。 父から暴力を受けたフユは追悼への参加を断りたい。追悼灯は普通の小灯であり、迷宮の防護火・中継火とは別物である。
 
@@ -1166,7 +1166,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q208.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: メア。
 
@@ -1174,7 +1174,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `ask`: 納骨所へ行き、フユに何を避けたいのか聞く
 
-出発: `entry_ask`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_ask`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`request`](#q208--request--納骨所の私物棚) へ進み、到着時の処理を確定します。
 
@@ -1182,7 +1182,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q208.v11.request`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: フユ。
 
@@ -1190,7 +1190,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `take`: 本人が用意した覆いを預かり、三つの希望を世話役へ伝えに戻る
 
-出発: `request_take`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `request_take`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`decide`](#q208--decide--中継広間の小さな追悼台) へ進み、到着時の処理を確定します。
 
@@ -1198,7 +1198,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q208.v11.decide`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・中継篝火の広間・B2 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・7F 中継篝火の広間・B7 (`kagaribi_relay`) / (9, 5) / イベント `q208_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: メア。
 
@@ -1222,7 +1222,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `private`: 名札を預かり、フユへ返しに行く
 
-出発: `decide_private`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `decide_private`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`return`](#q208--return--納骨所の私物棚) へ進み、到着時の処理を確定します。
 
@@ -1240,7 +1240,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q208.v11.return`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・帰らずの納骨堂・B3 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・9F 帰らずの納骨堂・B9 (`kagaribi_ossuary`) / (7, 1) / イベント `q208_shelf`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: フユ。
 
@@ -1256,7 +1256,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めないと決めた。小灯は内側に残り、迷宮の防護や明るさの仕組みは変えていない。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"screen"},{"op":"eq","left":{"ref":"stories.q208.values.lampLit"},"right":true},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.installed"},"right":true},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"rest"},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"keeper"}]}`
 
@@ -1264,7 +1264,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"off"},{"op":"eq","left":{"ref":"stories.q208.values.lampLit"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"keeper"},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"keeper"}]}`
 
@@ -1272,7 +1272,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"private"},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"daughter"},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"daughter"},{"op":"eq","left":{"ref":"stories.q208.values.partyAt"},"right":"shelf"}]}`
 
@@ -1292,9 +1292,9 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q209.json)。場面 4、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。煤けた回廊の盾掛け。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。煤けた回廊の盾掛け。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の帰路札前。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の帰路札前。現地イベント。
 
 固定された過去: ゼドは過去の帰還護衛で戦わず、仲間から借りた傷のある盾を構えて荷運び人と退いた。討伐したというエルの誤解を訂正しなかった。 盾の古傷はゼドの戦績ではない。今回の戦闘結果を過去の討伐証明へ流用しない。
 
@@ -1316,7 +1316,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q209.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゼド・エル。
 
@@ -1330,7 +1330,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `escort`: 討伐の実演をせず、二人と安全確認をしながら巡灯路へ戻る
 
-出発: `entry_escort`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `entry_escort`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`home`](#q209--home--巡灯路の帰路札前) へ進み、到着時の処理を確定します。
 
@@ -1344,7 +1344,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q209.v11.challenge`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゼド・エル。
 
@@ -1376,7 +1376,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q209.v11.witness`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・煤けた回廊・B2 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・5F 煤けた回廊・B5 (`kagaribi_f2`) / (5, 1) / イベント `q209_hall`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゼド・エル。
 
@@ -1392,7 +1392,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q209.v11.home`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (11, 1) / イベント `q209_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: ゼド・エル。
 
@@ -1408,7 +1408,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は証明されていない。盾の傷を武勇に数えず、それでも次の仕事を頼むかは見習い自身に残した。
 
-57G / 51EXP
+80G / 340EXP / 技能宝石30
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"battle"},{"op":"eq","left":{"ref":"stories.q209.values.witnessed"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.admitted"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.reportAt"},"right":"pupil"}]}`
 
@@ -1416,7 +1416,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。
 
-57G / 51EXP
+50G / 340EXP / 技能宝石22
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"escort"},{"op":"eq","left":{"ref":"stories.q209.values.returned"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.guardAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q209.values.pupilAt"},"right":"entry"}]}`
 
@@ -1424,7 +1424,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。
 
-57G / 51EXP
+40G / 340EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"limited"},{"op":"eq","left":{"ref":"stories.q209.values.witnessed"},"right":false},{"op":"eq","left":{"ref":"stories.q209.values.admitted"},"right":true}]}`
 
@@ -1444,11 +1444,11 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 モデル: 1.1。実装: [JSON](../../data/quests/q210.json)。場面 6、結末 3。物語状態の改訂 1。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・深火の祭壇・B3 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。深火の祭壇の手前。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・10F 深火の祭壇・B10 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。深火の祭壇の手前。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の道具台。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。最後の巡回路の道具台。現地イベント。
 
-実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の帰り支度場。現地イベント。
+実配置: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。巡灯路の帰り支度場。現地イベント。
 
 固定された過去: スイは夫の死後、深火なら死者を戻すという伝承を聞いて祭壇へ来た。蘇生を見た証人や確かめた手順は得ていない。 リトは預かった思い出の箱の蝶番を直した。箱は深火の容器ではなく、蘇生の道具でもない。
 
@@ -1470,7 +1470,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.entry`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・深火の祭壇・B3 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・10F 深火の祭壇・B10 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ。
 
@@ -1498,7 +1498,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.ritual`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・深火の祭壇・B3 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・10F 深火の祭壇・B10 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ。
 
@@ -1528,7 +1528,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.ready`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・深火の祭壇・B3 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・10F 深火の祭壇・B10 (`kagaribi_f3`) / (9, 7) / イベント `q210_altar`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ。
 
@@ -1536,7 +1536,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択 `walk`: スイと祭壇を離れ、修理人の道具台へ歩く
 
-出発: `ready_walk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `ready_walk`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`box`](#q210--box--最後の巡回路の道具台) へ進み、到着時の処理を確定します。
 
@@ -1544,7 +1544,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.box`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ・リト。
 
@@ -1560,7 +1560,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.packed`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・最後の巡回路・B3 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・8F 最後の巡回路・B8 (`kagaribi_last_patrol`) / (9, 9) / イベント `q210_rest`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ。
 
@@ -1570,7 +1570,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択条件: `{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"letter"}`
 
-出発: `packed_letter`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `packed_letter`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 出発の条件: `{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"letter"}`
 
@@ -1580,7 +1580,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 選択条件: `{"op":"ne","left":{"ref":"stories.q210.values.decision"},"right":"letter"}`
 
-出発: `packed_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
+出発: `packed_return`。移動先: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 出発の条件: `{"op":"ne","left":{"ref":"stories.q210.values.decision"},"right":"letter"}`
 
@@ -1590,7 +1590,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 実装場面: `q210.v11.home`。
 
-場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
+場面の現在地: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・1F 灯番の巡回路・B1 (`kagaribi_f1`) / (13, 1) / イベント `q210_entry`。[ダンジョン定義](../../data/dungeons.json)。
 
 登場: スイ。
 
@@ -1630,7 +1630,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明ではない。待ち続けることだけを、夫との関係の残し方にしなくてよくなった。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"letter"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"box"}]}`
 
@@ -1638,7 +1638,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"ritual"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"widow"}]}`
 
@@ -1646,7 +1646,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"hope"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"widow"}]}`
 

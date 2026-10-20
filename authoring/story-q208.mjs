@@ -21,4 +21,8 @@ s.end('screen','名前へ頭を下げずに通れる','覆いが固定され、�
 s.end('off','小灯だけを消す','メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。',and(s.is('choice','off'),s.is('lampLit',false),s.is('nameVisible',false),s.is('screenAt','keeper'),s.is('namecardAt','keeper')));
 s.end('private','札の置き場所を本人へ返す','名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。',and(s.is('choice','private'),s.is('nameVisible',false),s.is('namecardAt','daughter'),s.is('screenAt','daughter'),s.is('partyAt','shelf')));
 s.routeNotes=[['中継広間の追悼台','防護火とは別の私設小灯への消灯願いを受ける。'],['納骨所の私物棚','フユの意向を聞き、覆いを預かって中継広間へ戻る。'],['中継広間／納骨所','縄1本で遮蔽、私設小灯の消灯、名札の返却を選ぶ。返却の場合は札を運び、本人へ渡す。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.screen,{gold:60,xp:300,gems:18});
+Object.assign(s.outcomes.off,{gold:60,xp:300,gems:18});
+Object.assign(s.outcomes.private,{gold:60,xp:300,gems:18});
 export default worldRoutes(s,[['entry_ask','shelf'],['request_take','rest',{depart:[give('screen','shelf','party'),set('request')]}],['decide_private','shelf',{depart:[give('namecard','keeper','party'),set('nameVisible',false)]}]]);

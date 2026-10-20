@@ -9,6 +9,7 @@ import {questDisplayNumber} from '../src/core/quest-order.js';
 import drafts from '../authoring/stories-kagaribi.mjs';
 import {installDOM} from './view-dom.mjs';
 import {replaceView} from '../src/view/view-layout.js';
+import {validateContent} from '../src/core/validation.js';
 const choose=(g,id)=>{assert.ok(g.dispatch({type:'choose',id}),id);drain(g);};
 
 test('ten independent quests follow q001 in display order, require its return, and have complete model cards',()=>{
@@ -95,9 +96,30 @@ test('new people display their own names without requiring borrowed portraits or
 test('deep-fire legend has no resurrection or free ember side effect, and the letter remains inside its carried box',()=>{
   const g=prepareQuest('q210'),beforeEmber=g.state.inventory.kagaribi_ember??0;
   choose(g,'letter');choose(g,'walk');finishJourney(g);choose(g,'take');choose(g,'letter');
-  const saved=g.save();g.load(saved);finishJourney(g);choose(g,'letter');
+  const gems=g.state.expedition.gems;
+  const saved=g.save();g.load(saved);assert.equal(g.state.expedition.gems,gems);finishJourney(g);
+  const before={gold:g.state.gold,xp:g.state.actors.ada.xp,gems:g.state.expedition.gems};
+  choose(g,'letter');
+  assert.equal(g.state.gold,before.gold+80);assert.equal(g.state.actors.ada.xp,before.xp+360);assert.equal(g.state.expedition.gems,before.gems+24);
+  assert.ok(g.state.log.some(line=>line.includes('技能宝石24')));
   const v=g.state.stories.q210.values;
   assert.equal(v.widowAt,'entry');assert.equal(v.boxAt,'widow');assert.equal(v.letterAt,'box');
   assert.equal(g.state.inventory.kagaribi_ember??0,beforeEmber);
   const completed=g.save();assert.throws(()=>applyStoryAction(g,'q210','box_take'));assert.equal(g.save(),completed);
+  g.load(completed);assert.throws(()=>g.complete('q210','letter'));assert.equal(g.save(),completed);
+});
+
+test('shallow quest rewards distinguish work but keep consent and mourning choices equal',()=>{
+  const rewards=id=>Object.values(data.quests[id].outcomes).map(({gold,xp,gems})=>({gold,xp,gems}));
+  assert.deepEqual(rewards('q201'),[{gold:70,xp:200,gems:12},{gold:40,xp:200,gems:24},{gold:30,xp:200,gems:8}]);
+  for(const id of ['q204','q208','q210'])assert.ok(rewards(id).every(r=>JSON.stringify(r)===JSON.stringify(rewards(id)[0])));
+  for(const draft of drafts)for(const o of Object.values(data.quests[draft.id].outcomes))assert.ok(o.xp>=200&&o.gems>0);
+});
+
+test('invalid quest gem rewards are rejected, while omitted gems remain compatible',()=>{
+  for(const gems of [-1,1.5,1e9+1]){
+    const d=structuredClone(data);d.quests.q201.outcomes.corrected.gems=gems;
+    assert.ok(validateContent(d).some(e=>e.includes('q201/corrected')));
+  }
+  const d=structuredClone(data);delete d.quests.q201.outcomes.corrected.gems;assert.deepEqual(validateContent(d),[]);
 });

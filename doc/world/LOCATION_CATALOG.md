@@ -22,7 +22,7 @@
 
 親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
 
-機能: 取引。
+機能: 取引 / 第2段階の武器を引き換える。
 
 背景: [location_shop](../../assets/images/locations/shop.webp)。
 
@@ -184,4 +184,4 @@
 
 背景: [location_checkpoint](../../assets/images/locations/checkpoint.webp)。
 
-入退室地点: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・交差路の詰所前・B1 (`kagaribi_crossroads`) / (8, 1)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。
+入退室地点: 篝火の迷宮 (`kagaribi`) / 篝火の迷宮・4F 交差路の詰所前・B4 (`kagaribi_crossroads`) / (8, 1)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。

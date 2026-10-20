@@ -1,4 +1,4 @@
-import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe} from './expedition.js';
+import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe,addGems} from './expedition.js';
 import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
 import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
 import {stepBattle} from './battle.js';
@@ -115,9 +115,9 @@ export class GameEngine {
     if(this.state.flags.questResume?.[id])this.state.flags.questResume[id]=null;
     this.state.vars.completed=(this.state.vars.completed??0)+1;
     const key=`region_${q.region}`;this.state.vars[key]=(this.state.vars[key]??0)+1;
-    this.award(ending.gold,ending.xp);this.eventCue('complete');
+    this.award(ending.gold,ending.xp);addGems(this.state,ending.gems??0);this.eventCue('complete');
     this.state.journal.push({quest:id,title:q.title,type:'outcome',text:ending.text});
-    this.notify(`依頼完了：${q.title} / ${ending.label}（${ending.gold}G・${ending.xp}EXP）`);
+    this.notify(`依頼完了：${q.title} / ${ending.label}（${ending.gold}G・${ending.xp}EXP${ending.gems?`・技能宝石${ending.gems}`:''}）`);
   }
   evidence(id,key,text){
     const qs=this.state.quests[id];if(qs.stage!=='active')return;

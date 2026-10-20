@@ -4,7 +4,7 @@
       "id": "kagaribi_f1",
       "region": 1,
       "floor": 1,
-      "name": "篝火の迷宮・灯番の巡回路",
+      "name": "篝火の迷宮・1F 灯番の巡回路",
       "tiles": [
         "###############",
         "#.............#",
@@ -46,6 +46,29 @@
           "trigger": "interact",
           "script": "kagaribi.history",
           "interactionRange": "here"
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 1,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_f1",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
         }
       ],
       "initiallyKnown": [
@@ -128,8 +151,8 @@
     "kagaribi_f2": {
       "id": "kagaribi_f2",
       "region": 1,
-      "floor": 2,
-      "name": "篝火の迷宮・煤けた回廊",
+      "floor": 5,
+      "name": "篝火の迷宮・5F 煤けた回廊",
       "tiles": [
         "###############",
         "#.....#.......#",
@@ -148,7 +171,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_moths",
+      "encounter": "kagaribi_shallow_moths",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -165,15 +188,15 @@
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_moths",
+          "encounter": "kagaribi_shallow_moths",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_guards",
+          "encounter": "kagaribi_shallow_guards",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_patrol_pair",
+          "encounter": "kagaribi_shallow_patrol_pair",
           "weight": 15
         }
       ]
@@ -181,8 +204,8 @@
     "kagaribi_f3": {
       "id": "kagaribi_f3",
       "region": 1,
-      "floor": 3,
-      "name": "篝火の迷宮・深火の祭壇",
+      "floor": 10,
+      "name": "篝火の迷宮・10F 深火の祭壇",
       "tiles": [
         "###############",
         "#.............#",
@@ -201,7 +224,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_bones",
+      "encounter": "kagaribi_shallow_bones",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -224,19 +247,53 @@
           "script": "kagaribi.altar_latch",
           "edge": "west",
           "safe": true
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 3,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_f3",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
+        },
+        {
+          "id": "altar_keeper",
+          "name": "中央設備の火守",
+          "x": 5,
+          "y": 1,
+          "kind": "decision",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.altar_keeper"
         }
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_bones",
+          "encounter": "kagaribi_shallow_bones",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_golem",
+          "encounter": "kagaribi_shallow_golem",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_deep_pair",
+          "encounter": "kagaribi_shallow_deep_pair",
           "weight": 15
         }
       ]
@@ -244,8 +301,8 @@
     "kagaribi_oilstore": {
       "id": "kagaribi_oilstore",
       "region": 1,
-      "floor": 1,
-      "name": "篝火の迷宮・油蔵",
+      "floor": 2,
+      "name": "篝火の迷宮・2F 油蔵",
       "tiles": [
         "#################",
         "#.....###.......#",
@@ -266,7 +323,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_roaming",
+      "encounter": "kagaribi_oil_roaming",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -355,15 +412,15 @@
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_roaming",
+          "encounter": "kagaribi_oil_roaming",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_wax",
+          "encounter": "kagaribi_oil_slime",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_pests",
+          "encounter": "kagaribi_oil_pair",
           "weight": 15
         }
       ]
@@ -371,8 +428,8 @@
     "kagaribi_crossroads": {
       "id": "kagaribi_crossroads",
       "region": 1,
-      "floor": 1,
-      "name": "篝火の迷宮・交差路の詰所前",
+      "floor": 4,
+      "name": "篝火の迷宮・4F 交差路の詰所前",
       "tiles": [
         "#################",
         "#...............#",
@@ -393,7 +450,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_roaming",
+      "encounter": "kagaribi_oil_roaming",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -417,19 +474,42 @@
           "script": "kagaribi.note.crossroads_note",
           "safe": true,
           "interactionRange": "here"
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 1,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_crossroads",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
         }
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_roaming",
+          "encounter": "kagaribi_oil_roaming",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_wax",
+          "encounter": "kagaribi_oil_slime",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_pests",
+          "encounter": "kagaribi_oil_pair",
           "weight": 15
         }
       ]
@@ -437,8 +517,8 @@
     "kagaribi_kilns": {
       "id": "kagaribi_kilns",
       "region": 1,
-      "floor": 2,
-      "name": "篝火の迷宮・旧炭焼き場",
+      "floor": 6,
+      "name": "篝火の迷宮・6F 旧炭焼き場",
       "tiles": [
         "#################",
         "#...............#",
@@ -459,7 +539,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_golem",
+      "encounter": "kagaribi_shallow_golem",
       "encounterRate": 0.27,
       "objects": [
         {
@@ -530,15 +610,15 @@
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_golem",
+          "encounter": "kagaribi_shallow_golem",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_moths",
+          "encounter": "kagaribi_shallow_moths",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_patrol_pair",
+          "encounter": "kagaribi_shallow_patrol_pair",
           "weight": 15
         }
       ]
@@ -546,8 +626,8 @@
     "kagaribi_relay": {
       "id": "kagaribi_relay",
       "region": 1,
-      "floor": 2,
-      "name": "篝火の迷宮・中継篝火の広間",
+      "floor": 7,
+      "name": "篝火の迷宮・7F 中継篝火の広間",
       "tiles": [
         "#################",
         "#...............#",
@@ -568,7 +648,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_moths",
+      "encounter": "kagaribi_shallow_moths",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -592,19 +672,42 @@
           "script": "kagaribi.note.relay_note",
           "safe": true,
           "interactionRange": "here"
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 1,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_relay",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
         }
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_moths",
+          "encounter": "kagaribi_shallow_moths",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_guards",
+          "encounter": "kagaribi_shallow_guards",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_patrol_pair",
+          "encounter": "kagaribi_shallow_patrol_pair",
           "weight": 15
         }
       ]
@@ -612,8 +715,8 @@
     "kagaribi_last_patrol": {
       "id": "kagaribi_last_patrol",
       "region": 1,
-      "floor": 3,
-      "name": "篝火の迷宮・最後の巡回路",
+      "floor": 8,
+      "name": "篝火の迷宮・8F 最後の巡回路",
       "tiles": [
         "#################",
         "#...............#",
@@ -634,7 +737,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_bones",
+      "encounter": "kagaribi_shallow_bones",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -662,15 +765,15 @@
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_bones",
+          "encounter": "kagaribi_shallow_bones",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_golem",
+          "encounter": "kagaribi_shallow_golem",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_deep_pair",
+          "encounter": "kagaribi_shallow_deep_pair",
           "weight": 15
         }
       ]
@@ -678,8 +781,8 @@
     "kagaribi_ossuary": {
       "id": "kagaribi_ossuary",
       "region": 1,
-      "floor": 3,
-      "name": "篝火の迷宮・帰らずの納骨堂",
+      "floor": 9,
+      "name": "篝火の迷宮・9F 帰らずの納骨堂",
       "tiles": [
         "#################",
         "#...............#",
@@ -700,7 +803,7 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "kagaribi_bones",
+      "encounter": "kagaribi_shallow_bones",
       "encounterRate": 0.22,
       "objects": [
         {
@@ -723,20 +826,108 @@
           "trigger": "interact",
           "script": "kagaribi.nameplate",
           "interactionRange": "here"
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 1,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_ossuary",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
         }
       ],
       "encounterPool": [
         {
-          "encounter": "kagaribi_bones",
+          "encounter": "kagaribi_shallow_bones",
           "weight": 50
         },
         {
-          "encounter": "kagaribi_golem",
+          "encounter": "kagaribi_shallow_golem",
           "weight": 35
         },
         {
-          "encounter": "kagaribi_deep_pair",
+          "encounter": "kagaribi_shallow_deep_pair",
           "weight": 15
+        }
+      ]
+    },
+    "kagaribi_manifold": {
+      "id": "kagaribi_manifold",
+      "region": 1,
+      "floor": 3,
+      "name": "篝火の迷宮・3F 配油分岐室",
+      "tiles": [
+        "###############",
+        "#.............#",
+        "#.#####.#.###.#",
+        "#.....#.#...#.#",
+        "###.#.#.###.#.#",
+        "#...#.........#",
+        "#.#####.#.###.#",
+        "#.............#",
+        "###############"
+      ],
+      "entrance": {
+        "x": 1,
+        "y": 1,
+        "facing": "east"
+      },
+      "background": "corridor",
+      "music": "exploration",
+      "encounter": "kagaribi_oil_pair",
+      "encounterRate": 0.15,
+      "objects": [
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 7,
+          "y": 5,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "kagaribi.supply_rope.kagaribi_manifold",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+          }
+        }
+      ],
+      "encounterPool": [
+        {
+          "encounter": "kagaribi_oil_pair",
+          "weight": 60
+        },
+        {
+          "encounter": "kagaribi_shallow_manifold_pair",
+          "weight": 40
+        },
+        {
+          "encounter": "kagaribi_oil_roaming",
+          "weight": 20
         }
       ]
     }
@@ -1449,7 +1640,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "巡回記録：第一層は油蔵と交差路の詰所。第二層は煤けた回廊の東端から中継広間へ続く。炭焼き場の搬出口は短いが、強い魔物がいる。第三層は最後の巡回路から祭壇へ通じ、納骨堂は脇道にある。"
+          "text": "巡回記録：2F油蔵から3F配油分岐室を通り、4F交差路の詰所へ。5F煤けた回廊から6F炭焼き場、7F中継広間へ降りる。8F最後の巡回路から9F納骨堂を経て10F祭壇へ。掛け金を開けば帰り道を短縮できる。"
         },
         {
           "op": "narrate",
@@ -1851,6 +2042,448 @@
           ]
         }
       ]
+    },
+    "kagaribi.altar_keeper": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "祭壇の火守は退いた。中央中継所を復旧できる。武器引換は町の旅道具店で使える。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "中央設備の前で、火守が炉蓋を閉じた。炉蓋を閉じる巡、単体へ火を放つ巡、全体へ炎嵐を放つ巡を繰り返す。三巡目は防御して備えられる。祭壇への通路は設備の脇を通っている。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "祭壇の火守に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "kagaribi_altar_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "kagaribi.altarGuardianWon",
+                          "value": true
+                        },
+                        {
+                          "op": "item.give",
+                          "item": "exp_t2_ticket",
+                          "count": 1
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "中央設備が静まった。第2段階の武器引換券を1枚受け取った。2歩西の中央中継所で給油管と搬送設備を復旧できる。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "火守は中央設備へ戻った。準備を整えて再挑戦できる。"
+                        }
+                      ],
+                      "events": [
+                        {
+                          "id": "fire_warning",
+                          "triggers": [
+                            "round_start"
+                          ],
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "battle.round"
+                            },
+                            "right": 3
+                          },
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "火守の炉口から炎が噴き始めた。この巡は全体への炎嵐が来る。以後も三巡ごとに同じ炎を放つ。"
+                            }
+                          ]
+                        }
+                      ],
+                      "on_interrupt": []
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "kagaribi.weapon_exchange": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "引換券1枚で武器1本。選ばず戻れば券は残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sword",
+              "text": "水切り剣（STR+11）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_sword",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_sword",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水切り剣を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "axe",
+              "text": "割晶斧（STR+13・AGI-1）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_axe",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_axe",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "割晶斧を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "spear",
+              "text": "水門槍（STR+10・AGI+2）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_spear",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_spear",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水門槍を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "dagger",
+              "text": "剪定短剣（STR+8・AGI+4）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_dagger",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_dagger",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "剪定短剣を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "fist",
+              "text": "砕晶手甲（STR+10・VIT+3）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_fist",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_fist",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "砕晶手甲を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "bow",
+              "text": "岸守り弓（STR+10・AGI+2）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_bow",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_bow",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "岸守り弓を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "staff",
+              "text": "導水の杖（INT+11・MP+7）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_staff",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_staff",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "導水の杖を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "tool",
+              "text": "密閉薬箱（INT+9・MP+6）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_tool",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_tool",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "密閉薬箱を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "instrument",
+              "text": "水響の琴（INT+8・AGI+3）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "exp_t2_ticket"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_instrument",
+                      "count": 99
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "exp_t2_ticket",
+                  "count": 1
+                },
+                {
+                  "op": "item.give",
+                  "item": "exp_t2_instrument",
+                  "count": 1
+                },
+                {
+                  "op": "narrate",
+                  "text": "水響の琴を受け取った。隊の状態から装備できる。"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "選ばずに戻る",
+              "commands": []
+            }
+          ]
+        }
+      ]
     }
   },
   "items": {
@@ -1871,6 +2504,12 @@
       "name": "煤けた灯番の名札",
       "description": "納骨堂に残された名札。町の灯番詰所で帰還記録と照合できる。",
       "type": "key"
+    },
+    "exp_t2_ticket": {
+      "id": "exp_t2_ticket",
+      "name": "第2段階の武器引換券",
+      "type": "key",
+      "description": "旅道具店で第2段階の武器9種から1本を選べる。"
     }
   },
   "enemies": {
@@ -2137,6 +2776,264 @@
           "target": "weakest"
         }
       ]
+    },
+    "kagaribi_altar_keeper": {
+      "id": "kagaribi_altar_keeper",
+      "name": "祭壇の火守",
+      "sprite": "wraith",
+      "stats": {
+        "hp": 650,
+        "mp": 120,
+        "str": 32,
+        "vit": 20,
+        "agi": 9,
+        "int": 30
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 1200
+      },
+      "ai": [
+        {
+          "priority": 30,
+          "skill": "firestorm",
+          "target": "random",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                3
+              ]
+            },
+            "right": 0
+          }
+        },
+        {
+          "priority": 20,
+          "skill": "fire",
+          "target": "random",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                3
+              ]
+            },
+            "right": 2
+          }
+        },
+        {
+          "priority": 10,
+          "skill": "guard",
+          "target": "self"
+        }
+      ]
+    },
+    "kagaribi_oil_rat": {
+      "id": "kagaribi_oil_rat",
+      "name": "油染みの煤ネズミ",
+      "sprite": "monster_vault_mouse",
+      "stats": {
+        "hp": 54,
+        "mp": 0,
+        "str": 10,
+        "vit": 5,
+        "agi": 8,
+        "int": 3
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 12,
+        "xp": 50
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_oil_wax": {
+      "id": "kagaribi_oil_wax",
+      "name": "油蔵の燭蝋スライム",
+      "sprite": "slime",
+      "stats": {
+        "hp": 65,
+        "mp": 0,
+        "str": 11,
+        "vit": 5,
+        "agi": 4,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 14,
+        "xp": 60
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_soot_moth": {
+      "id": "kagaribi_soot_moth",
+      "name": "煤けた灯蛾",
+      "sprite": "monster_iris_butterfly",
+      "stats": {
+        "hp": 95,
+        "mp": 12,
+        "str": 16,
+        "vit": 7,
+        "agi": 12,
+        "int": 14
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 16,
+        "xp": 95
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "fire",
+          "target": "random",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "self.mp"
+            },
+            "right": 4
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_patrol_guard": {
+      "id": "kagaribi_patrol_guard",
+      "name": "巡回路の赤錆番兵",
+      "sprite": "skeleton",
+      "stats": {
+        "hp": 125,
+        "mp": 0,
+        "str": 18,
+        "vit": 10,
+        "agi": 5,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 22,
+        "xp": 110
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_kiln_golem": {
+      "id": "kagaribi_kiln_golem",
+      "name": "炭焼き場の灰積み",
+      "sprite": "construct",
+      "stats": {
+        "hp": 175,
+        "mp": 0,
+        "str": 22,
+        "vit": 13,
+        "agi": 3,
+        "int": 5
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 28,
+        "xp": 150
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
+    },
+    "kagaribi_ossuary_bone": {
+      "id": "kagaribi_ossuary_bone",
+      "name": "納骨堂の鎖引き",
+      "sprite": "skeleton",
+      "stats": {
+        "hp": 150,
+        "mp": 0,
+        "str": 23,
+        "vit": 11,
+        "agi": 11,
+        "int": 7
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1,
+        "light": 1,
+        "dark": 1
+      },
+      "rewards": {
+        "gold": 26,
+        "xp": 140
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "weakest"
+        }
+      ]
     }
   },
   "encounters": {
@@ -2230,6 +3127,130 @@
         "kagaribi_chain_bone",
         "kagaribi_cinder_golem"
       ]
+    },
+    "kagaribi_altar_guardian": {
+      "id": "kagaribi_altar_guardian",
+      "name": "祭壇の火守",
+      "enemies": [
+        "kagaribi_altar_keeper"
+      ],
+      "text": "炉蓋を閉じた火守が中央設備を守っている。三巡ごとの炎嵐に備える。",
+      "escape": true
+    },
+    "kagaribi_manifold_pair": {
+      "id": "kagaribi_manifold_pair",
+      "name": "配油管の魔物",
+      "enemies": [
+        "kagaribi_soot_rat",
+        "kagaribi_ember_moth"
+      ],
+      "enemyPositions": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "text": "配油管の下で煤ネズミが走り、後ろから灯蛾が火を吐く。",
+      "escape": true
+    },
+    "kagaribi_oil_roaming": {
+      "id": "kagaribi_oil_roaming",
+      "text": "給油管の脇に潜んでいた魔物が、灯りの届く通路へ出てきた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_oil_rat"
+      ]
+    },
+    "kagaribi_oil_slime": {
+      "id": "kagaribi_oil_slime",
+      "text": "給油管の脇に潜んでいた魔物が、灯りの届く通路へ出てきた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_oil_wax"
+      ]
+    },
+    "kagaribi_oil_pair": {
+      "id": "kagaribi_oil_pair",
+      "text": "給油管の脇に潜んでいた魔物が、灯りの届く通路へ出てきた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_oil_rat",
+        "kagaribi_oil_wax"
+      ]
+    },
+    "kagaribi_shallow_moths": {
+      "id": "kagaribi_shallow_moths",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_soot_moth"
+      ]
+    },
+    "kagaribi_shallow_guards": {
+      "id": "kagaribi_shallow_guards",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_patrol_guard"
+      ]
+    },
+    "kagaribi_shallow_golem": {
+      "id": "kagaribi_shallow_golem",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_kiln_golem"
+      ]
+    },
+    "kagaribi_shallow_bones": {
+      "id": "kagaribi_shallow_bones",
+      "text": "火の照らす通路から、魔物が現れた。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_ossuary_bone"
+      ]
+    },
+    "kagaribi_shallow_patrol_pair": {
+      "id": "kagaribi_shallow_patrol_pair",
+      "text": "火の届く通路で、二体の魔物が道を塞いだ。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_soot_moth",
+        "kagaribi_patrol_guard"
+      ]
+    },
+    "kagaribi_shallow_deep_pair": {
+      "id": "kagaribi_shallow_deep_pair",
+      "text": "火の届く通路で、二体の魔物が道を塞いだ。",
+      "escape": true,
+      "enemies": [
+        "kagaribi_ossuary_bone",
+        "kagaribi_kiln_golem"
+      ]
+    },
+    "kagaribi_shallow_manifold_pair": {
+      "id": "kagaribi_shallow_manifold_pair",
+      "name": "配油管の魔物",
+      "enemies": [
+        "kagaribi_oil_rat",
+        "kagaribi_soot_moth"
+      ],
+      "enemyPositions": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "text": "配油管の下で煤ネズミが走り、後ろから灯蛾が火を吐く。",
+      "escape": true
     }
   },
   "services": [
@@ -2259,6 +3280,12 @@
       "label": "古い帰還記録を照合する",
       "detail": "納骨堂で見つけた名札と、遺族に残された火入れ。",
       "script": "kagaribi.memorial"
+    },
+    {
+      "id": "kagaribi_weapon_exchange",
+      "label": "第2段階の武器を引き換える",
+      "script": "kagaribi.weapon_exchange",
+      "detail": "引換券1枚で、能力値を確認して武器1本を選ぶ。"
     }
   ]
 }

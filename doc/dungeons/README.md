@@ -1,5 +1,7 @@
 # 探索・ダンジョン
 
+現行1.27.0：[篝火1〜10Fの接続・設備・主・武器・実測台帳](KAGARIBI_TEN_FLOORS.md)。以下の日付付き項目は各時点の記録です。
+
 2026-10-15: [給油・中継所・技能教習を実装（1.26.0）](EXPEDITION_IMPLEMENTATION.md)。9か所の修理設備、容量管理、途中出発、技能宝石と人物別教習を追加しました。
 
 2026-10-15（4迷宮への拡張）: [4迷宮・各20FとLv30までの進行設計](FOUR_DUNGEON_PROGRESSION_DESIGN.md)。篝火・水道・廃坑・庭園の80階、4/7/10Fのキャンプ、11F以後の帰路、4迷宮15FでLv25・20F攻略でLv30の収支を具体化しました。[敵配置・武器・技能](../battle/FOUR_DUNGEON_COMBAT_DESIGN.md)と一組の設計です。80階の構成・新しい成長曲線は未実装で、給油・中継・技能購入の共通機能は[1.26.0の初回実装](EXPEDITION_IMPLEMENTATION.md)を参照してください。初案の「篝火20FでLv25」はこの案で更新します。
@@ -16,7 +18,7 @@
 
 2026-09-26: [水路拡張と地下関所](WATERWAY_EXPANSION.md)を実装済み。
 
-現行確認日: 2026-10-20。作品版1.26.0。前回の確認は2026-10-10、作品版1.25.0です。[文書全体へ戻る](../README.md)。
+現行確認日: 2026-10-20。作品版1.27.0。前回の確認は2026-10-10、作品版1.25.0です。[文書全体へ戻る](../README.md)。
 
 [CELL_LAYERS.md](CELL_LAYERS.md)：セル種30種類・共有エッジ4種類、作用タイミング、進入イベントの再発方式と地点ごとの上書き。
 
@@ -28,7 +30,7 @@
 
 [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：四辺の通行・境界、退避3Dと拡張の区別。
 
-[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：39件の2Dマップ、条件付き接続口・水密扉・区画給排水。
+[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：40件の2Dマップ、条件付き接続口・水密扉・区画給排水。
 
 [FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離減衰・遮光・画面とミニマップの照度。
 
