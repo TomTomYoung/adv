@@ -27,6 +27,7 @@ export function skillPurchasePlan(data,state,actor,id,level){
   if(campTier(state)<p.tier)return {ok:false,reason:p.tier===1?'給油設備を修理すると販売が始まります。':'中継設備を起動すると販売が始まります。'};
   if(p.unlockTier&&expeditionShopTier(data,state)<p.unlockTier)return {ok:false,reason:p.unlockTier===1?'篝火4Fの給油設備を修理すると販売が始まります。':'篝火7Fの給油設備を修理し、中継を起動すると販売が始まります。'};
   if(p.requiresCamp&&!e.camps[p.requiresCamp]?.supply)return {ok:false,reason:`${campById(data,p.requiresCamp).name}を修理すると販売が始まります。`};
+  if(p.requiresRelay&&!e.camps[p.requiresCamp]?.relay)return {ok:false,reason:`${campById(data,p.requiresCamp).name}の中継設備を起動すると販売が始まります。`};
   if(!p.jobs.includes(a.job))return {ok:false,reason:'現在の職業ではこの技能を使えません。'};
   if(skill.weaponTypes&&!skill.weaponTypes.includes(data.items[a.equipment.weapon]?.equipmentType))return {ok:false,reason:'対応する武器を装備してから選んでください。'};
   const bought=e.learned[actor]?.[id]??0,current=bought?Math.max(bought,a.skillProgress?.[id]?.level??1):0;
@@ -111,7 +112,7 @@ export function expeditionDefinitionErrors(data){
   const d=data.expedition,errors=[],bad=m=>errors.push(`expedition: ${m}`),ids=new Set();
   if(d.version!==1||d.oil?.item!=='torch'||d.oil?.units!==90||!data.locations[d.shopLocation]||!Array.isArray(d.camps)||!isRecord(d.products)||!isRecord(d.enemyGems))return ['expedition: 基本定義不正'];
   for(const c of d.camps){if(!isRecord(c)){bad('設備不正');continue;}if(!/^[a-z][a-z0-9_]*$/.test(c.id)||ids.has(c.id)||!c.name||!['north','east','south','west'].includes(c.facing)||!data.dungeons[c.dungeon]?.maps.includes(c.map)||data.maps[c.map]?.tiles[c.y]?.[c.x]!=='.'||!int(c.x)||!int(c.y)||!int(c.radius,0,2)||!int(c.gems)||![180,270,330,390,450].includes(c.capacity??180)||c.requiresQuest&&!data.quests[c.requiresQuest])bad(`設備不正 ${c.id}`);if(c.xp!==undefined&&!int(c.xp)||c.shopTier!==undefined&&!int(c.shopTier,1,2)||c.relayEnabled!==undefined&&typeof c.relayEnabled!=='boolean')bad(`設備の進行設定不正 ${c.id}`);ids.add(c.id);}
-  for(const [id,p] of Object.entries(d.products))if(!isRecord(p)||!skillDefinition(data,id)||!Array.isArray(skillDefinition(data,id).weaponTypes)||!int(p.price,1)||!int(p.tier,1,2)||!Array.isArray(p.jobs)||!p.jobs.length||new Set(p.jobs).size!==p.jobs.length||p.jobs.some(j=>!data.jobs[j]||!skillDefinition(data,id).weaponTypes.some(w=>data.jobs[j].equipment.weapon.includes(w)))||p.requiresCamp!==undefined&&!ids.has(p.requiresCamp)||skillDefinition(data,id).levelUp)bad(`商品不正 ${id}`);
+  for(const [id,p] of Object.entries(d.products))if(!isRecord(p)||!skillDefinition(data,id)||!Array.isArray(skillDefinition(data,id).weaponTypes)||!int(p.price,1)||!int(p.tier,1,2)||!Array.isArray(p.jobs)||!p.jobs.length||new Set(p.jobs).size!==p.jobs.length||p.jobs.some(j=>!data.jobs[j]||!skillDefinition(data,id).weaponTypes.some(w=>data.jobs[j].equipment.weapon.includes(w)))||p.requiresCamp!==undefined&&!ids.has(p.requiresCamp)||p.requiresRelay!==undefined&&(typeof p.requiresRelay!=='boolean'||!ids.has(p.requiresCamp))||skillDefinition(data,id).levelUp)bad(`商品不正 ${id}`);
   for(const [id,n] of Object.entries(d.enemyGems))if(!data.enemies[id]||!int(n)||n>0&&data.enemies[id].rewards.xp===0)bad(`宝石ドロップ不正 ${id}`);
   return errors;
 }
@@ -124,7 +125,7 @@ export function expeditionSaveErrors(data,state){
   const capacity=Math.max(180,...data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>c.capacity??180));if(e.capacity!==capacity)return fail();
   for(const [actor,skills] of Object.entries(e.learned)){
     if(!own(state.actors,actor)||!isRecord(skills))return fail();
-    for(const [id,n] of Object.entries(skills))if(!own(data.expedition.products,id)||!int(n,1,3)||n>1&&!skillDefinition(data,id).levels?.[n]||state.actors[actor].skillProgress?.[id]?.level!==n||campTier(state)<data.expedition.products[id].tier||data.expedition.products[id].requiresCamp&&!e.camps[data.expedition.products[id].requiresCamp]?.supply)return fail();
+    for(const [id,n] of Object.entries(skills))if(!own(data.expedition.products,id)||!int(n,1,3)||n>1&&!skillDefinition(data,id).levels?.[n]||state.actors[actor].skillProgress?.[id]?.level!==n||campTier(state)<data.expedition.products[id].tier||data.expedition.products[id].requiresCamp&&!e.camps[data.expedition.products[id].requiresCamp]?.supply||data.expedition.products[id].requiresRelay&&!e.camps[data.expedition.products[id].requiresCamp]?.relay)return fail();
   }
   if(!expeditionFieldSaveValid(data,state))return fail();
   return [];

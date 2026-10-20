@@ -36,6 +36,7 @@ test('exploration instruction has personal camp/job/weapon gates and grants only
  assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
  assert.equal(skillPurchasePlan(g.data,g.state,'nio','exp_route_survey',1).ok,false);
  repair(g,'kagaribi_relay');town(g);assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
+ repair(g,'water_landing');assert.ok(g.dispatch({type:'expedition.action',camp:'water_landing',action:'relay'}));town(g);assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false,'a different dungeon relay cannot substitute for 7F');
  g.teleport('kagaribi_relay',1,1);assert.ok(g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'}));repair(g,'kagaribi_central');town(g);
  assert.equal(skillPurchasePlan(g.data,g.state,'ada','exp_oil_spark',1).ok,false);
  assert.ok(g.dispatch({type:'unequip',actor:'sera',slot:'weapon'}));assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
@@ -46,6 +47,7 @@ test('exploration instruction has personal camp/job/weapon gates and grants only
   assert.equal(g.dispatch({type:'skill.buy',actor,skill:id,level:2}),false);
   assert.equal(cast(g,actor,id),false,'not usable in town');
  }
+ const invalid=JSON.parse(g.save());invalid.state.expedition.camps.kagaribi_relay.relay=false;invalid.state.expedition.capacity=180;assert.ok(validateSave(invalid,g.data).length,'purchased oil aid requires its own relay in saves too');
  roundtrip(g);assert.ok(g.dispatch({type:'job.change',actor:'sera',job:'priest'}));assert.equal(permission(g.data,g.state,'sera','exp_oil_spark','party.oil_saving'),null);
  assert.ok(g.dispatch({type:'job.change',actor:'sera',job:'lantern_keeper'}));assert.ok(permission(g.data,g.state,'sera','exp_oil_spark','party.oil_saving'));
 });
