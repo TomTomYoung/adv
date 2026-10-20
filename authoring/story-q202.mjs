@@ -20,4 +20,8 @@ s.end('paired','縄の返事を待つ','セナは訓練札に「二人巡回」�
 s.end('visual','向き合ってから送る','トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。',and(s.is('tested'),s.is('method','visual'),s.is('plateAt','trainee')));
 s.end('retrain','延期の理由を本人の言葉で残す','訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。',and(s.is('disclosed'),s.is('method','retrain'),s.is('plateAt','trainer'),s.is('traineeAt','post')));
 s.routeNotes=[['巡灯路','トマから左耳のことを聞き、本人が説明できるよう交差路へ同行する。'],['交差路の合図杭','申告後に試験を延期するか、方向を変えた声と手の合図を試す。'],['交差路の合図杭','試験結果を受け、縄1本を使う二人巡回か、正面で応答を確認する手順を訓練札に記す。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.paired,{gold:50,xp:220,gems:18});
+Object.assign(s.outcomes.visual,{gold:50,xp:220,gems:18});
+Object.assign(s.outcomes.retrain,{gold:80,xp:220,gems:10});
 export default worldRoutes(s,[['entry_walk','post',{companions:['trainee']}] ]);

@@ -2,7 +2,7 @@
 
 全 210 本・659 結末。作品版 1.27.0。更新日: 2026-10-20。
 
-<!-- quest-catalog-source:db0c806b643b2f9f61a7029baca9d25e6b7fa8f19dcd0ef79f387e05f2d85691 -->
+<!-- quest-catalog-source:f0a7a1e88ef02bc571e5504ecc75bdd1bb88f968998d60c49348abd1dcc6b7e8 -->
 
 表示順の正本は [quest-order.json](../../authoring/quest-order.json) です。掲載順と表示番号はこの一覧から決まり、見出し・リンク・進行状態の内部IDは固定です。
 
@@ -172,7 +172,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナヴィアは休憩を命じ、印を消した二つの行為に署名した。給金の結論は保留された。エンの休憩は、本人の怠慢と決めつけられない記録になった。
 
-57G / 51EXP
+70G / 200EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"corrected"},{"op":"eq","left":{"ref":"stories.q201.values.signed"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"clerk"}]}`
 
@@ -180,7 +180,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。
 
-57G / 51EXP
+40G / 200EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"pending"},{"op":"eq","left":{"ref":"stories.q201.values.advance"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"clerk"}]}`
 
@@ -188,7 +188,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。
 
-57G / 51EXP
+30G / 200EXP / 技能宝石8
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q201.values.record"},"right":"private"},{"op":"eq","left":{"ref":"stories.q201.values.heard"},"right":true},{"op":"eq","left":{"ref":"stories.q201.values.noteAt"},"right":"porter"},{"op":"eq","left":{"ref":"stories.q201.values.partyAt"},"right":"bench"}]}`
 
@@ -304,7 +304,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 セナは訓練札に「二人巡回」と書いた。縄の引き方は伝えたが、相棒の手配までは終わっていない。トマは札を受け取り、初めて左側から呼ばれたときに「もう一度」と言った。
 
-57G / 51EXP
+50G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"paired"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainee"},{"op":"eq","left":{"ref":"stories.q202.values.traineeAt"},"right":"post"}]}`
 
@@ -312,7 +312,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 トマの札には、正面で合図を送り、相手の応答を待つ手順が加わった。誰も聞こえ方を治してはいない。セナも合図を投げっぱなしにしない責任を引き受けた。
 
-57G / 51EXP
+50G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"visual"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainee"}]}`
 
@@ -320,7 +320,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 訓練札はセナの手元に残った。不注意の一語は取り消され、左側からの合図が届かなかったことと、再試験が必要なことが記された。トマは今日、独り立ちしなかった。
 
-57G / 51EXP
+80G / 220EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q202.values.disclosed"},"right":true},{"op":"eq","left":{"ref":"stories.q202.values.method"},"right":"retrain"},{"op":"eq","left":{"ref":"stories.q202.values.plateAt"},"right":"trainer"},{"op":"eq","left":{"ref":"stories.q202.values.traineeAt"},"right":"post"}]}`
 
@@ -486,7 +486,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ゲルに試料瓶を返した。水の混入は確かめたが、燃焼品質は試していない。商人は瓶を振らずに台へ置いた。弁明のために持たせた瓶が、次に説明しなければならない事実になった。
 
-57G / 51EXP
+90G / 240EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"returned"},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"seller"},{"op":"eq","left":{"ref":"stories.q203.values.sample"},"right":3},{"op":"eq","left":{"ref":"stories.q203.values.burned"},"right":0}]}`
 
@@ -494,7 +494,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 一目盛りの燃焼結果をゲルへ伝え、底の水が残る瓶を返した。取引全体のお墨付きにはしなかった。試験皿の油は検品係が保管し、残りの樽は別に検品する必要がある。
 
-57G / 51EXP
+50G / 240EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"limited"},{"op":"eq","left":{"ref":"stories.q203.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q203.values.burned"},"right":1},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"seller"}]}`
 
@@ -502,7 +502,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 水の残る瓶をユハへ渡し、納入名を添えた。燃えた一目盛りの結果も、不良の事実も記録に残る。水増しの故意を立証したわけではないが、ゲルには混入の経緯を公に説明する仕事が残った。
 
-57G / 51EXP
+60G / 240EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q203.values.disposal"},"right":"public"},{"op":"eq","left":{"ref":"stories.q203.values.tested"},"right":true},{"op":"eq","left":{"ref":"stories.q203.values.bottleAt"},"right":"tester"},{"op":"eq","left":{"ref":"stories.q203.values.sample"},"right":1}]}`
 
@@ -652,7 +652,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エインは古い欄を削らず、本人の同意を得た生存確認を追記した。所在は載せなかった。帰還を数え落とした履歴も、いま生きている名も、同じ帳面に残った。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"addendum"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"named"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"scribe"}]}`
 
@@ -660,7 +660,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 証言は担当書記だけが開ける封に収められ、公開欄は死亡未確認へ訂正された。生存確認を誰もが読める形にはしなかった。書記には、封を守り、必要な訂正を続ける責任が残る。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"sealed"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"sealed"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"scribe"}]}`
 
@@ -668,7 +668,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 追悼欄には、元の報告が未帰還であり、死亡確認をしていないと追記された。リュカの生存証言を提出したことにはしなかった。削り刀を使わずに、帳面が断定しすぎた部分を直した。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q204.values.record"},"right":"pending"},{"op":"eq","left":{"ref":"stories.q204.values.consent"},"right":"none"},{"op":"eq","left":{"ref":"stories.q204.values.statementAt"},"right":"survivor"},{"op":"eq","left":{"ref":"stories.q204.values.copyAt"},"right":"scribe"}]}`
 
@@ -818,7 +818,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ノノは配合板を受け取り、自分の試験であると書き足した。窯を再開したわけでも、成功したわけでもない。師の失敗を隠さず、変えて使う許しを得た。
 
-57G / 51EXP
+50G / 280EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.recovered"},"right":true},{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"revise"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"pupil"}]}`
 
@@ -826,7 +826,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 板はダンの手へ戻った。古い配合を今の材料へ使わないという条件が添えられた。「使えないから、なかったことにしなくてもいいか」。ノノは、師の最後の失敗も聞ける距離に残った。
 
-57G / 51EXP
+120G / 280EXP / 技能宝石16
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"preserve"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"master"},{"op":"eq","left":{"ref":"stories.q205.values.told"},"right":true}]}`
 
@@ -834,7 +834,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ノノは「今は焼く仕事を継がない」と自分で言い、板を作業台へ置いた。ダンが捨てて選択を奪う代わりに、弟子が選んだ。板は残り、将来まで道を閉じたとは約束しなかった。
 
-57G / 51EXP
+70G / 280EXP / 技能宝石20
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q205.values.future"},"right":"stop"},{"op":"eq","left":{"ref":"stories.q205.values.plateAt"},"right":"bench"},{"op":"eq","left":{"ref":"stories.q205.values.told"},"right":true}]}`
 
@@ -968,7 +968,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 弁当はナギの手へ渡った。退職を姉へ伝える役目は本人に残した。「食べたい」と言えたことと、明日も働くことを同じ返事にしなかった。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"gift"},{"op":"eq","left":{"ref":"stories.q206.values.explained"},"right":true},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"worker"},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"rest"}]}`
 
@@ -976,7 +976,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"together"},{"op":"eq","left":{"ref":"stories.q206.values.resignationTold"},"right":true},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"worker"}]}`
 
@@ -984,7 +984,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。
 
-57G / 51EXP
+24G / 220EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q206.values.delivery"},"right":"returned"},{"op":"eq","left":{"ref":"stories.q206.values.mealAt"},"right":"sister"},{"op":"eq","left":{"ref":"stories.q206.values.workerAt"},"right":"rest"},{"op":"eq","left":{"ref":"stories.q206.values.partyAt"},"right":"entry"}]}`
 
@@ -1104,7 +1104,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 オセとハルは同じ測量票に名を記した。控えはハルが持つ。一人で測ったという看板は守らなかったが、二人で確かめた数値を、次に図面へ移せる形で残した。
 
-57G / 51EXP
+60G / 320EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"joint"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.joint"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.sheetAt"},"right":"assistant"},{"op":"eq","left":{"ref":"stories.q207.values.assistantAt"},"right":"mark"}]}`
 
@@ -1112,7 +1112,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。
 
-57G / 51EXP
+100G / 320EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"withdrawn"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":true},{"op":"eq","left":{"ref":"stories.q207.values.sheetAt"},"right":"surveyor"}]}`
 
@@ -1120,7 +1120,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。
 
-57G / 51EXP
+40G / 320EXP / 技能宝石10
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q207.values.filing"},"right":"unverified"},{"op":"eq","left":{"ref":"stories.q207.values.remeasured"},"right":false},{"op":"eq","left":{"ref":"stories.q207.values.partyAt"},"right":"base"}]}`
 
@@ -1256,7 +1256,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 覆いが固定され、通路から名札が見えなくなった。メアは追悼への参加を通行人へ求めないと決めた。小灯は内側に残り、迷宮の防護や明るさの仕組みは変えていない。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"screen"},{"op":"eq","left":{"ref":"stories.q208.values.lampLit"},"right":true},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.installed"},"right":true},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"rest"},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"keeper"}]}`
 
@@ -1264,7 +1264,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 メアは私設の小灯を消し、名札を伏せた。中継火はそのままだ。同僚を忘れたのではなく、ここで毎回誰かを追悼へ巻き込むやり方を止めた。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"off"},{"op":"eq","left":{"ref":"stories.q208.values.lampLit"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"keeper"},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"keeper"}]}`
 
@@ -1272,7 +1272,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 名札と覆いはフユの手へ戻った。彼女は札を読まずに布へ包んだ。許したとも、捨てるとも言わなかった。次にどこへ置くかを他人が決めない状態になった。
 
-57G / 51EXP
+60G / 300EXP / 技能宝石18
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q208.values.choice"},"right":"private"},{"op":"eq","left":{"ref":"stories.q208.values.nameVisible"},"right":false},{"op":"eq","left":{"ref":"stories.q208.values.namecardAt"},"right":"daughter"},{"op":"eq","left":{"ref":"stories.q208.values.screenAt"},"right":"daughter"},{"op":"eq","left":{"ref":"stories.q208.values.partyAt"},"right":"shelf"}]}`
 
@@ -1408,7 +1408,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エルの報告には、今回戦った探索隊と見届けた二人の役割が残った。ゼドの過去の討伐は証明されていない。盾の傷を武勇に数えず、それでも次の仕事を頼むかは見習い自身に残した。
 
-57G / 51EXP
+80G / 340EXP / 技能宝石30
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"battle"},{"op":"eq","left":{"ref":"stories.q209.values.witnessed"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.admitted"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.reportAt"},"right":"pupil"}]}`
 
@@ -1416,7 +1416,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 ゼドは、昔も倒さずに帰したのだとエルへ話した。二人は実際に巡灯路へ戻り、今回の帰路を記録した。噂の武勇は減ったが、帰還護衛として何を教えられるかは見える形になった。
 
-57G / 51EXP
+50G / 340EXP / 技能宝石22
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"escort"},{"op":"eq","left":{"ref":"stories.q209.values.returned"},"right":true},{"op":"eq","left":{"ref":"stories.q209.values.guardAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q209.values.pupilAt"},"right":"entry"}]}`
 
@@ -1424,7 +1424,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 エルの報告には、過去の討伐を確認できず、今回の実演にも立ち会っていないと記された。ゼドを試すための戦いは起こさなかった。二人の関係の結論まで、探索隊が代わりに決めることもしなかった。
 
-57G / 51EXP
+40G / 340EXP / 技能宝石12
 
 物語の結末条件: `{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q209.values.account"},"right":"limited"},{"op":"eq","left":{"ref":"stories.q209.values.witnessed"},"right":false},{"op":"eq","left":{"ref":"stories.q209.values.admitted"},"right":true}]}`
 
@@ -1630,7 +1630,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 スイは手紙を箱へ納め、巡灯路まで戻った。箱の中身は故人への言葉で、蘇生の証明ではない。待ち続けることだけを、夫との関係の残し方にしなくてよくなった。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"letter"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"box"}]}`
 
@@ -1638,7 +1638,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"ritual"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"widow"}]}`
 
@@ -1646,7 +1646,7 @@ q001〜q010・q201〜q210はモデルv1.1と状態モデルadv-story-state/1、q
 
 スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。
 
-57G / 51EXP
+80G / 360EXP / 技能宝石24
 
 物語の結末条件: `{"op":"and","args":[{"op":"and","args":[{"op":"eq","left":{"ref":"stories.q210.values.home"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.consent"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.boxReturned"},"right":true},{"op":"eq","left":{"ref":"stories.q210.values.widowAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.partyAt"},"right":"entry"},{"op":"eq","left":{"ref":"stories.q210.values.boxAt"},"right":"widow"}]},{"op":"eq","left":{"ref":"stories.q210.values.decision"},"right":"hope"},{"op":"eq","left":{"ref":"stories.q210.values.letterAt"},"right":"widow"}]}`
 

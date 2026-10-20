@@ -117,7 +117,7 @@ export function questCatalog(data,date,{questId}={}){
     const notes=q.model.world.authoringNotes;
     if(notes){add(`AI向け注釈: ${notes.notice}`);add(`${notes.factsHeading??'事実'}:`);for(const fact of notes.facts)add(fact);}
     if(!detailed(q)){
-      for(const [id,o] of Object.entries(q.outcomes))add(`${id} — ${o.label}（${o.gold}G / ${o.xp}EXP）: ${o.text}`);
+      for(const [id,o] of Object.entries(q.outcomes))add(`${id} — ${o.label}（${o.gold}G / ${o.xp}EXP${o.gems?` / 技能宝石${o.gems}`:''}）: ${o.text}`);
       add(`進行: ${q.model.progression??'各場面の選択に従う。'}`);
       out.push('');continue;
     }
@@ -139,7 +139,7 @@ export function questCatalog(data,date,{questId}={}){
         commands(q,script.commands);
     }
     for(const [id,o] of Object.entries(q.outcomes)){
-      add(`### ${endingTitle(q,id)}`);if(questId)add(`イベントID: ${code(questEventId(q,'E',id))}。`);add(o.text);add(`${o.gold}G / ${o.xp}EXP`);condition('結末の成立条件',o.requires);condition('物語の結末条件',q.story?.endings[id]);
+      add(`### ${endingTitle(q,id)}`);if(questId)add(`イベントID: ${code(questEventId(q,'E',id))}。`);add(o.text);add(`${o.gold}G / ${o.xp}EXP${o.gems?` / 技能宝石${o.gems}`:''}`);condition('結末の成立条件',o.requires);condition('物語の結末条件',q.story?.endings[id]);
     }
   }
   return out.join('\n').replace(/\n{3,}/g,'\n\n').trimEnd()+'\n';

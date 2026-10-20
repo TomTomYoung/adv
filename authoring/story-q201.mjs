@@ -22,4 +22,8 @@ s.end('corrected','消した人の名で訂正する','ナヴィアは休憩を�
 s.end('advanced','前渡し金を用意する責任を負う','ナヴィアは訂正に署名し、探索隊の20Gをエンへの前渡し金として預かった。返済の約束は取っていない。記録も審査も残り、支払いの遅れだけを探索隊が引き受けた。',and(s.is('record','pending'),s.is('advance'),s.is('noteAt','clerk')));
 s.end('private','本人の手元に証言を残す','エンは覚え書きを折ってしまった。「助けるつもりなら、先に言えばよかったのに」。公簿は直らず、給金も未確定だ。少なくとも彼は、印を消した理由と、後で申し立てるための紙を持っている。',and(s.is('record','private'),s.is('heard'),s.is('noteAt','porter'),s.is('partyAt','bench')));
 s.routeNotes=[['油蔵の記帳台','消された休み印について依頼を受ける。'],['交差路の休憩ベンチ','エンの証言と覚え書きを受け取り、油蔵へ運ぶ。'],['油蔵／交差路','署名訂正、20Gの前渡し、本人への覚え書き返却を選ぶ。返却の場合は交差路まで歩く。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.corrected,{gold:70,xp:200,gems:12});
+Object.assign(s.outcomes.advanced,{gold:40,xp:200,gems:24});
+Object.assign(s.outcomes.private,{gold:30,xp:200,gems:8});
 export default worldRoutes(s,[['entry_ask','bench',{arrive:[see('rest','porter')]}],['witness_take','desk',{depart:[give('note','porter','party')],arrive:[see('erased','clerk')]}],['reason_private','bench']]);

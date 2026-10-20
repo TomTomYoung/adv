@@ -29,4 +29,8 @@ s.end('letter','手紙の帰る場所を作る','スイは手紙を箱へ納め�
 s.end('ritual','今日の灯を自分で終える','普通の松明を灯して消したスイは、修理した箱を持って戻った。儀式が夫へ届いたとは確かめていない。それでも、今日の待ち時間を自分で終える行為は、本人が選んで済ませた。',and(arrived,s.is('decision','ritual'),s.is('letterAt','widow')));
 s.end('hope','信じる答えを保留して帰る','スイは伝承への望みを捨てると約束せず、箱と手紙を持って戻った。帰ることを、夫を見捨てた証拠にはしなかった。深火が死者を戻すかどうかは、依然として確かめられていない。',and(arrived,s.is('decision','hope'),s.is('letterAt','widow')));
 s.routeNotes=[['深火の祭壇の手前','手紙を箱へ納める、普通の松明1本で待つ時間を区切る、希望を保って帰る、のいずれかを本人と決める。'],['最後の巡回路の道具台','本人と歩き、修理人から箱を本人へ返してもらう。手紙を納める経路では箱の内側へ保持先を移す。'],['巡灯路の帰り支度場','スイと実際に入口側へ戻って同行を完了する。深火の取得や蘇生成功は処理しない。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.letter,{gold:80,xp:360,gems:24});
+Object.assign(s.outcomes.ritual,{gold:80,xp:360,gems:24});
+Object.assign(s.outcomes.hope,{gold:80,xp:360,gems:24});
 export default worldRoutes(s,[['ready_walk','rest',{companions:['widow']}],['packed_letter','entry',{companions:['widow'],depart:[give('letter','widow','box')]}],['packed_return','entry',{companions:['widow']}] ]);

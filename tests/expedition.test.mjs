@@ -35,9 +35,9 @@ test('supply equipment is revealed after q001, requires local rope, and rewards 
   const g=game();at(g);const before=structuredClone(g.state.actors),rope=g.state.inventory.rope,gold=g.state.gold;
   g.state.location.x=2;assert.equal(action(g,'repair'),false);g.state.location.x=1;
   g.state.inventory.rope=0;assert.equal(action(g,'repair'),false);g.state.inventory.rope=rope;
-  assert.ok(action(g,'repair'));assert.equal(g.state.inventory.rope,rope-1);assert.equal(g.state.expedition.gems,120);
+  assert.ok(action(g,'repair'));assert.equal(g.state.inventory.rope,rope-1);assert.equal(g.state.expedition.gems,24);
   assert.equal(g.state.gold,gold);assert.deepEqual(g.state.actors,before);roundtrip(g);
-  assert.equal(action(g,'repair'),false);assert.equal(g.state.expedition.gems,120);assert.equal(g.state.inventory.rope,rope-1);
+  assert.equal(action(g,'repair'),false);assert.equal(g.state.expedition.gems,24);assert.equal(g.state.inventory.rope,rope-1);
   assert.ok(campSafe(g.data,g.state));assert.ok(projectGame(g).dungeon.objects.some(o=>o.id==='camp:kagaribi_gate'));
 });
 test('real inspect menu repairs, draws and activates a checkpoint without bypassing command prompts',()=>{

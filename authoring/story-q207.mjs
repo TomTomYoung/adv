@@ -22,4 +22,8 @@ s.end('joint','数字と、支えた手を記す','オセとハルは同じ測�
 s.end('withdrawn','間違った値を先に引く','オセは旧値を撤回し、測量票を持ち帰ることにした。二人の再測定は済んだが、新図面としての提出は保留した。誰の仕事として出すかを決めないまま、誤った数値だけが使われ続けることは止めた。',and(s.is('filing','withdrawn'),s.is('remeasured'),s.is('sheetAt','surveyor')));
 s.end('unverified','測っていないと書く','二つの数値の食い違いを未確認と記した。通路が動いたとも、どちらかが正しいとも保証しない。オセの紙もハルの読みも、その場では決着しなかった。',and(s.is('filing','unverified'),s.is('remeasured',false),s.is('partyAt','base')));
 s.routeNotes=[['最後の巡回路の基準石','食い違いを未確認のまま返すか、二人の竿の持ち方を比較する。'],['最後の巡回路の測点','検証後、二人と測点へ歩き、共同で測り直す。'],['最後の巡回路の測点','二人の名を載せる訂正か、旧値を撤回して新図面を保留する処理を行う。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.joint,{gold:60,xp:320,gems:24});
+Object.assign(s.outcomes.withdrawn,{gold:100,xp:320,gems:18});
+Object.assign(s.outcomes.unverified,{gold:40,xp:320,gems:10});
 export default worldRoutes(s,[['calibrated_go','mark',{companions:['surveyor','assistant']}] ]);

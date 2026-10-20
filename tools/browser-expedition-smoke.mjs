@@ -26,7 +26,7 @@ try{
   await page.evaluate(async layout=>{
    const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{replaceView}=await import('./src/view/view-layout.js');
    const data=await loadContent();delete data.quests.q001.story;window.g=new GameEngine(data);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});g.accept('q001');g.complete('q001','informed');g.state.flags.kagaribi={kilnGate:true};g.teleport('kagaribi_relay',1,1,'east');
-   g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
+   g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'});g.returnTown();g.state.expedition.gems=120;g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
    window.show=()=>view.render(projectGame(g));window.refreshView=()=>{window.view=replaceView(window.view??null,layout,document.querySelector('#app'),intent=>{const ok=g.dispatch(intent);show();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});show();};refreshView();view.tab='shop';show();
   },layout);
   const card=page.locator('.skill-shop-card').filter({has:page.getByRole('heading',{name:'横列払い',exact:true})});await card.getByRole('button',{name:/Lv1を習得/}).click();

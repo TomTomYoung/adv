@@ -15954,6 +15954,66 @@ export const referenceData={
       "id": "potion"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_oil_rat",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_oil_wax",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_soot_moth",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_patrol_guard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "ration"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_kiln_golem",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_ossuary_bone",
+        "item"
+      ],
+      "kind": "items",
+      "id": "rope"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -21752,7 +21812,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_moths"
+      "id": "kagaribi_shallow_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -21776,7 +21836,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_moths"
+      "id": "kagaribi_shallow_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -21788,7 +21848,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_guards"
+      "id": "kagaribi_shallow_guards"
     },
     {
       "file": "kagaribi-content.json",
@@ -21800,7 +21860,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_patrol_pair"
+      "id": "kagaribi_shallow_patrol_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -21830,7 +21890,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -21890,7 +21950,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -21902,7 +21962,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_golem"
+      "id": "kagaribi_shallow_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -21914,7 +21974,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_deep_pair"
+      "id": "kagaribi_shallow_deep_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -21944,7 +22004,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_oil_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -22004,7 +22064,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_oil_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -22016,7 +22076,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_wax"
+      "id": "kagaribi_oil_slime"
     },
     {
       "file": "kagaribi-content.json",
@@ -22028,7 +22088,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_pests"
+      "id": "kagaribi_oil_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22058,7 +22118,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_oil_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -22106,7 +22166,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_oil_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -22118,7 +22178,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_wax"
+      "id": "kagaribi_oil_slime"
     },
     {
       "file": "kagaribi-content.json",
@@ -22130,7 +22190,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_pests"
+      "id": "kagaribi_oil_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22160,7 +22220,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_golem"
+      "id": "kagaribi_shallow_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -22208,7 +22268,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_golem"
+      "id": "kagaribi_shallow_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -22220,7 +22280,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_moths"
+      "id": "kagaribi_shallow_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -22232,7 +22292,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_patrol_pair"
+      "id": "kagaribi_shallow_patrol_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22262,7 +22322,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_moths"
+      "id": "kagaribi_shallow_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -22310,7 +22370,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_moths"
+      "id": "kagaribi_shallow_moths"
     },
     {
       "file": "kagaribi-content.json",
@@ -22322,7 +22382,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_guards"
+      "id": "kagaribi_shallow_guards"
     },
     {
       "file": "kagaribi-content.json",
@@ -22334,7 +22394,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_patrol_pair"
+      "id": "kagaribi_shallow_patrol_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22364,7 +22424,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22400,7 +22460,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22412,7 +22472,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_golem"
+      "id": "kagaribi_shallow_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -22424,7 +22484,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_deep_pair"
+      "id": "kagaribi_shallow_deep_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22454,7 +22514,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22502,7 +22562,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_bones"
+      "id": "kagaribi_shallow_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22514,7 +22574,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_golem"
+      "id": "kagaribi_shallow_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -22526,7 +22586,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_deep_pair"
+      "id": "kagaribi_shallow_deep_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22556,7 +22616,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_pests"
+      "id": "kagaribi_oil_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22580,7 +22640,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_pests"
+      "id": "kagaribi_oil_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22592,7 +22652,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_manifold_pair"
+      "id": "kagaribi_shallow_manifold_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -22604,7 +22664,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_roaming"
+      "id": "kagaribi_oil_roaming"
     },
     {
       "file": "kagaribi-content.json",
@@ -23778,6 +23838,150 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_oil_rat",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_vault_mouse"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_rat",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_wax",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_wax",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_moth",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_iris_butterfly"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_moth",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "fire"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_moth",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_patrol_guard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "skeleton"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_patrol_guard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_golem",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_golem",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ossuary_bone",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "skeleton"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ossuary_bone",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -23961,6 +24165,160 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "kagaribi_ember_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_roaming",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_slime",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_wax"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_wax"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_moths",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_guards",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_patrol_guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_golem",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_kiln_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_bones",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ossuary_bone"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_patrol_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_patrol_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_patrol_guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_deep_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ossuary_bone"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_deep_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_kiln_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_manifold_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_oil_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_manifold_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_moth"
     },
     {
       "file": "kagaribi-content.json",
@@ -35850,6 +36208,30 @@ export const referenceData={
       "kagaribi_altar_keeper": {
         "name": "祭壇の火守",
         "sprite": "wraith"
+      },
+      "kagaribi_oil_rat": {
+        "name": "油染みの煤ネズミ",
+        "sprite": "monster_vault_mouse"
+      },
+      "kagaribi_oil_wax": {
+        "name": "油蔵の燭蝋スライム",
+        "sprite": "slime"
+      },
+      "kagaribi_soot_moth": {
+        "name": "煤けた灯蛾",
+        "sprite": "monster_iris_butterfly"
+      },
+      "kagaribi_patrol_guard": {
+        "name": "巡回路の赤錆番兵",
+        "sprite": "skeleton"
+      },
+      "kagaribi_kiln_golem": {
+        "name": "炭焼き場の灰積み",
+        "sprite": "construct"
+      },
+      "kagaribi_ossuary_bone": {
+        "name": "納骨堂の鎖引き",
+        "sprite": "skeleton"
       }
     },
     "encounters": {
@@ -36130,6 +36512,36 @@ export const referenceData={
         "name": "祭壇の火守"
       },
       "kagaribi_manifold_pair": {
+        "name": "配油管の魔物"
+      },
+      "kagaribi_oil_roaming": {
+        "name": "kagaribi_oil_roaming"
+      },
+      "kagaribi_oil_slime": {
+        "name": "kagaribi_oil_slime"
+      },
+      "kagaribi_oil_pair": {
+        "name": "kagaribi_oil_pair"
+      },
+      "kagaribi_shallow_moths": {
+        "name": "kagaribi_shallow_moths"
+      },
+      "kagaribi_shallow_guards": {
+        "name": "kagaribi_shallow_guards"
+      },
+      "kagaribi_shallow_golem": {
+        "name": "kagaribi_shallow_golem"
+      },
+      "kagaribi_shallow_bones": {
+        "name": "kagaribi_shallow_bones"
+      },
+      "kagaribi_shallow_patrol_pair": {
+        "name": "kagaribi_shallow_patrol_pair"
+      },
+      "kagaribi_shallow_deep_pair": {
+        "name": "kagaribi_shallow_deep_pair"
+      },
+      "kagaribi_shallow_manifold_pair": {
         "name": "配油管の魔物"
       }
     },
@@ -62373,6 +62785,48 @@ export const referenceData={
         "kagaribi_altar_keeper"
       ]
     },
+    "enemies/kagaribi_oil_rat": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_rat"
+      ]
+    },
+    "enemies/kagaribi_oil_wax": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_oil_wax"
+      ]
+    },
+    "enemies/kagaribi_soot_moth": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_moth"
+      ]
+    },
+    "enemies/kagaribi_patrol_guard": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_patrol_guard"
+      ]
+    },
+    "enemies/kagaribi_kiln_golem": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_kiln_golem"
+      ]
+    },
+    "enemies/kagaribi_ossuary_bone": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ossuary_bone"
+      ]
+    },
     "encounters/kuragari_hunt": {
       "file": "kagaribi-content.json",
       "path": [
@@ -62462,6 +62916,76 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_manifold_pair"
+      ]
+    },
+    "encounters/kagaribi_oil_roaming": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_roaming"
+      ]
+    },
+    "encounters/kagaribi_oil_slime": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_slime"
+      ]
+    },
+    "encounters/kagaribi_oil_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_oil_pair"
+      ]
+    },
+    "encounters/kagaribi_shallow_moths": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_moths"
+      ]
+    },
+    "encounters/kagaribi_shallow_guards": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_guards"
+      ]
+    },
+    "encounters/kagaribi_shallow_golem": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_golem"
+      ]
+    },
+    "encounters/kagaribi_shallow_bones": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_bones"
+      ]
+    },
+    "encounters/kagaribi_shallow_patrol_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_patrol_pair"
+      ]
+    },
+    "encounters/kagaribi_shallow_deep_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_deep_pair"
+      ]
+    },
+    "encounters/kagaribi_shallow_manifold_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_shallow_manifold_pair"
       ]
     },
     "sounds/se_step": {

@@ -189,7 +189,7 @@ export function validateContent(data){
     if(q.requires)expression(q.requires,id);for(const o of Object.values(q.outcomes??{}))if(o.requires)expression(o.requires,id);
     if(!q.model?.world?.truth||!q.model?.agents?.length||!Array.isArray(q.model?.reveal?.retroactiveTargets))fail(id,'シナリオモデルが不足しています');
     if(Object.keys(q.outcomes??{}).length<2)fail(id,'結末は2つ以上必要です');
-    for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0)fail(`${id}/${name}`,'結末・報酬不正');
+    for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0||outcome.gems!==undefined&&(!Number.isSafeInteger(outcome.gems)||outcome.gems<0||outcome.gems>1e9))fail(`${id}/${name}`,'結末・報酬不正');
     for(const spot of q.locations??[]){const m=data.maps[spot.map];if(!m?.objects.some(o=>o.id===spot.object))fail(id,'依頼の探索地点がありません');}
   }
   errors.push(...validateCellLayers(data,expression),...validateDungeons(data),...validateDungeonArt(data),...validateQuestEvents(data,expression),...validateConditionalFieldEvents(data,expression));

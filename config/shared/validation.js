@@ -20,7 +20,7 @@ const encounter=obj({...encounterGridProperties,preemptive:preemptiveSchema,id:s
 const status=obj({...actionStatusProperties,name:str,stepDamage:uint,turnDamage:uint},['name']);
 const ability=obj({...skillLevelProperties(effectSchema),...scoutingProperties,id:str,name:str,api:str,target:str,mp:uint,hp:uint,materials:dict(uint)},['id','name','api','target','mp']);
 const skill=obj({targeting:targetingSchema,frontlineTargeting:frontlineTargetingSchema,...skillLevelProperties(effectSchema),name:str,mp:uint,target:str,effects:array(effectSchema)},['name','mp','target','effects']);
-const outcome=obj({label:str,text:str,gold:uint,xp:uint});
+const outcome=obj({label:str,text:str,gold:uint,xp:uint,gems:{...uint,maximum:1e9}},['label','text','gold','xp']);
 export const browserRead=async path=>{const r=await fetch(new URL(`../../${path}`,import.meta.url),{cache:'no-cache'});if(!r.ok)throw Error(`読込失敗: ${path} (${r.status})`);return path.startsWith('config/')?r.text():r.json();};
 export function createDefinitions(read=browserRead){
   const cache=new Map();

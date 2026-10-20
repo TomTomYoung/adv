@@ -23,4 +23,8 @@ s.end('gift','差し入れを仕事の約束にしない','弁当はナギの手
 s.end('together','食べる場所を一緒に戻す','ナギは自分で退職を伝え、入口で弁当を受け取った。ミナが仕事探しまで引き受けたわけではない。それでも、明日の勤務の話をしなくても、一緒に食べる場所は残った。',and(s.is('delivery','together'),s.is('resignationTold'),s.is('workerAt','entry'),s.is('mealAt','worker')));
 s.end('returned','拒まれたという返事を持ち帰る','弁当はミナへ戻った。弟の代わりに事情を告白せず、受取りを断ったという返事だけを伝えた。姉の心配は解けていない。ナギにも、黙ったままで済んだという保証は与えなかった。',and(s.is('delivery','returned'),s.is('mealAt','sister'),s.is('workerAt','rest'),s.is('partyAt','entry')));
 s.routeNotes=[['巡灯路の差し入れ台','ミナから弁当を預かる。'],['中継火の休息所脇','ナギの退職と受取りをためらう理由を聞く。贈り物として渡す経路はここで完了する。'],['巡灯路の差し入れ台','同行を選んだ場合はナギと戻って本人が退職を伝える。返却を選んだ場合は探索隊だけで弁当を返す。']];
+// 探索隊への依頼報酬。物語内の給金・立替金・私物とは別に精算する。
+Object.assign(s.outcomes.gift,{gold:24,xp:220,gems:12});
+Object.assign(s.outcomes.together,{gold:24,xp:220,gems:18});
+Object.assign(s.outcomes.returned,{gold:24,xp:220,gems:12});
 export default worldRoutes(s,[['entry_carry','rest',{depart:[give('meal','sister','party')]}],['offer_together','entry',{companions:['worker']}],['offer_return','entry']]);

@@ -77,5 +77,5 @@ for(const mode of ['classic','grid','frontline'])test(`${mode}: guardian preview
 // or optional quest rewards are represented as a tuned full campaign.
 const {measureRoute}=await import('../tools/measure-kagaribi-route.mjs');
 for(const size of [4,5])test(`${size} members finish the deterministic equipment route without injected XP or healing`,()=>{
- const r=measureRoute(size);assert.equal(r.totalSteps,185);assert.equal(r.gems,460);assert.ok(r.actors.every(a=>a.level===12));assert.ok(r.route.slice(1).every(p=>p.arrivalOil>0));
+ const r=measureRoute(size);assert.equal(r.totalSteps,185);assert.equal(r.gems,220);assert.ok(r.actors.every(a=>a.level===12));assert.ok(r.route.slice(1).every(p=>p.arrivalOil>0));
 });
