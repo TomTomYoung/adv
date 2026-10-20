@@ -54,7 +54,9 @@ const buffEffectText=(data,id)=>{
   const values=[];
   for(const [key,n] of Object.entries(b.stats??{}))values.push(`${statLabels[key]??key} ×${n}`);
   for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
-  values.push(`持続 ${b.turns}ターン`);
+  if(b.physicalPower!==undefined)values.push(`次の行動の物理威力 ×${b.physicalPower}`);
+  if(b.physicalTaken!==undefined)values.push(`次の物理被害1回 ×${b.physicalTaken}`);
+  values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };
 function effectCalculation(data,skillId,effect,prefix='計算式'){
@@ -63,6 +65,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
     const element=elementLabels[effect.element]??effect.element??'未指定';
     return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正 × クリティカル補正))。防御Lv3では0。属性：${element}。`;
   }
+  if(effect.type==='purge_undead')return `${prefix}：Frontlineで戦闘不能のまま残る不死者の敵だけを除去。生存者には後続の光攻撃を適用し、味方は除去しません。`;
   if(effect.type==='heal'){
     const multiplier=(effect.itemHealing||skillId==='potion')?'アイテム回復補正':'回復威力補正';
     const scale=effect.scale??1;

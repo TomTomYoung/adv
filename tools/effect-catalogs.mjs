@@ -10,12 +10,14 @@ const buffEffect=def=>{
   const parts=[];
   for(const [key,n] of Object.entries(def.stats??{}))parts.push(`${statLabels[key]??key}×${n}`);
   for(const [element,n] of Object.entries(def.resist??{}))parts.push(`${elementLabels[element]??element}被ダメージ×${n}`);
+  if(def.physicalPower!==undefined)parts.push(`次の行動の物理威力×${def.physicalPower}`);
+  if(def.physicalTaken!==undefined)parts.push(`次の物理被害1回×${def.physicalTaken}`);
   return parts.join(' / ')||'数値補正なし';
 };
 const buffSources=(data,id)=>{
   const out=[];
   for(const [skillId,skill] of Object.entries(data.skills??{})){
-    const effects=[...(skill.effects??[]),...(skill.selfEffects??[])];
+    const effects=[...(skill.effects??[]),...(skill.selfEffects??[]),...Object.values(skill.levels??{}).flatMap(v=>[...(v.effects??[]),...(v.selfEffects??[])])];
     if(effects.some(e=>e.type==='buff'&&e.buff===id))out.push(`${skill.name} (${skillId})`);
   }
   return out;
@@ -23,9 +25,9 @@ const buffSources=(data,id)=>{
 function modifierCatalog(data,kind,{date}={}){
   const entries=Object.entries(data.buffs??{}).filter(([,def])=>buffKind(def)===kind);
   const title=kind==='buff'?'バフ一覧':'デバフ一覧',lines=[`# ${title}`,'',`更新日: ${date??'未記録'}。作品版${data.game.version}。全${entries.length}件。`,'',
-    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。持続の1ターンは、敵味方の混合AGIキューが一巡する全体ターンです。使用者だけの手番ではなく、全体ターン終了時に残り回数を1減らします。先制の各行動では減らしません。',''];
+    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。持続の1ターンは、敵味方の混合AGIキューが一巡する全体ターンです。使用者だけの手番ではなく、全体ターン終了時に残り回数を1減らします。先制の各行動では減らしません。next_action補正だけは全体ターンで減らさず、付与後の次の本人の行動機会に消費します。physical_hit補正は正の物理被害を受けた1回で消費し、被害0や魔法では消費しません。',''];
   for(const [id,def] of entries){
-    lines.push(`## ${def.name} (${id})`,'',`分類：${kind==='buff'?'バフ':'デバフ'}。`,`効果：${buffEffect(def)}。`,`持続：${def.turns}ターン。`,`付与元：${buffSources(data,id).join(' / ')||'直接定義'}。`,'');
+    lines.push(`## ${def.name} (${id})`,'',`分類：${kind==='buff'?'バフ':'デバフ'}。`,`効果：${buffEffect(def)}。`,`持続：${def.consume==='next_action'?'次の本人の行動機会まで（移動・防御・行動不能でも消費）':`${def.turns}ターン${def.consume==='physical_hit'?'以内の物理被害1回':''}`}。`,`付与元：${buffSources(data,id).join(' / ')||'直接定義'}。`,'');
   }
   return lines.join('\n').trimEnd()+'\n';
 }
@@ -67,9 +69,11 @@ const statusLevelText=(id,def,level)=>{
     if(effect.wetSuppressElements?.length)parts.push('雷・氷魔法は使用できるが発動しない');
     parts.push('水のない場所で炎を使うと乾く');
   }
+  if(def.physicalPower!==undefined)parts.push(`次の行動の物理威力×${def.physicalPower}`);
+  if(def.physicalTaken!==undefined)parts.push(`次の物理被害1回×${def.physicalTaken}`);
   return parts.join(' / ')||'個別効果なし';
 };
-const statusSkillSources=(data,id)=>Object.entries(data.skills??{}).filter(([,skill])=>[...(skill.effects??[]),...(skill.selfEffects??[])].some(e=>e.type==='status'&&e.status===id)).map(([skillId,skill])=>`${skill.name} (${skillId})`);
+const statusSkillSources=(data,id)=>Object.entries(data.skills??{}).filter(([,skill])=>[...(skill.effects??[]),...(skill.selfEffects??[]),...Object.values(skill.levels??{}).flatMap(v=>[...(v.effects??[]),...(v.selfEffects??[])])].some(e=>e.type==='status'&&e.status===id)).map(([skillId,skill])=>`${skill.name} (${skillId})`);
 export function statusCatalog(data,{date}={}){
   const entries=Object.entries(data.statuses??{}),lines=['# 状態異常一覧','',`更新日: ${date??'未記録'}。作品版${data.game.version}。共通管理の状態${entries.length}件（うち戦闘限定${entries.filter(([,e])=>e.battleOnly).length}件）＋防御・スタン2件。`,'',
     '状態異常Lvは全種類でLv1〜Lv3固定、Lv3が上限です。Lv未指定はLv1。全種類のLv1〜Lv3を設定済みです。ねむり・必中・鈍重・狂暴化・暴発・クリティカル関連4種の数値と持続・解除条件は2026-10-13時点の暫定値です。クリティカルは通常0%、発生時ダメージ2倍で、必中とは独立します。','',

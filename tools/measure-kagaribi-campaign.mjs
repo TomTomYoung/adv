@@ -6,9 +6,10 @@ import {pathTo,drain,inspect,goTownLocation,data} from '../tests/helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {activeActor,battleSkillPlan,enemyStats} from '../src/core/battle.js';
 import {projectBattleSkills} from '../src/application/job-projection.js';
-import {gridMovePlan,position,distance,gridCells} from '../src/core/battle-grid.js';
+import {gridMovePlan,position,gridCells} from '../src/core/battle-grid.js';
 import {frontPosition,frontlineMovePlan} from '../src/core/battle-frontline.js';
 import {statusControl} from '../src/core/status-effects.js';
+import {unitKey} from '../src/core/buffs.js';
 import {stunned} from '../src/core/battle-turns.js';
 import {oilTotal} from '../src/core/expedition-oil.js';
 import {validateSave} from '../src/core/save.js';
@@ -16,15 +17,29 @@ import {validateSave} from '../src/core/save.js';
 const choices={q001:{entry:'talk',dark:'inspect',empty:'follow',old:'support',outage:'call',rescue:'home',gate:'report',post:'repair'},q201:{entry:'ask',witness:'take',reason:'correct'},q202:{entry:'walk',lesson:'test',result:'visual'},q203:{entry:'carry',inspect:'pour',portion:'burn',result:'public'},q206:{entry:'carry',offer:'gift',gift:'hand'},q207:{entry:'check',calibrated:'go',measure:'read',result:'joint'},q209:{entry:'battle',challenge:'fight',witness:'sign'}};
 const quests=['q201','q202','q203','q209','q206','q207'];
 const weapons={ada:'sword',nio:'dagger',sera:'staff',il:'staff',berg:'spear'};
+// Search legal paths to an attack position, including lateral or temporarily
+// more distant steps. Only the returned first step is dispatched; previews do
+// not mutate the game, roll RNG or move units through occupied cells.
+export function campaignGridMove(g,a){
+ const s=g.state,b=s.battle,key=unitKey(a),origin=position(s,a),seen=new Set([`${origin.x},${origin.y}`]),queue=[{p:origin,first:null}];
+ const attacks=g.skills(a.id).filter(id=>g.data.skills[id].effects.some(e=>e.type==='damage'));
+ for(const {p,first} of queue){
+  if(first&&attacks.some(id=>b.enemies.some(e=>e.hp>0&&battleSkillPlan(g,a.id,id,e.instance,{origin:p}).ok)))return first;
+  const preview={...s,battle:{...b,grid:{...b.grid,positions:{...b.grid.positions,[key]:p}}}};
+  for(const to of gridCells())if(!seen.has(`${to.x},${to.y}`)&&gridMovePlan(preview,a,to).ok){seen.add(`${to.x},${to.y}`);queue.push({p:to,first:first??to});}
+ }
+ return null;
+}
 export class Campaign {
- constructor({seed=1907,size=4,mode='classic',optional=true}={}){
-  this.options={seed,size,mode,optional};this.g=new GameEngine(data,seed);drain(this.g);
-  this.report={...this.options,checkpoints:[],battles:[],purchases:[],consumed:{},mpSpent:0,rests:0,spentGold:0,spentGems:0,minOil:180};
+ constructor({seed=1907,size=4,mode='classic',optional=true,training=false}={}){
+  this.options={seed,size,mode,optional,training};this.g=new GameEngine(data,seed);drain(this.g);
+  this.report={...this.options,skillUses:{},checkpoints:[],battles:[],purchases:[],consumed:{},mpSpent:0,rests:0,spentGold:0,spentGems:0,minOil:180};
   this.visited=new Set();this.supplying=false;
  }
  act(intent){
   const g=this.g,before={gold:g.state.gold,item:g.state.inventory[intent.item]??0};
   assert.ok(g.dispatch(intent),JSON.stringify({intent,notice:g.state.notice,location:g.state.location,waiting:g.state.waiting}));
+  if(intent.type==='battle'&&intent.action==='skill')this.report.skillUses[intent.skill]=(this.report.skillUses[intent.skill]??0)+1;
   if(intent.type==='item'||intent.type==='battle'&&intent.action==='item')this.report.consumed[intent.item]=(this.report.consumed[intent.item]??0)+Math.max(0,before.item-(g.state.inventory[intent.item]??0));
   this.report.spentGold+=Math.max(0,before.gold-g.state.gold);drain(g);
   if(intent.type==='move'&&intent.direction==='forward'&&g.state.mode==='dungeon'&&g.state.expedition.managed)this.report.minOil=Math.min(this.report.minOil,oilTotal(data,g.state));
@@ -51,12 +66,11 @@ export class Campaign {
    }
    ranked.sort((a,b)=>b.score-a.score||a.mp-b.mp);let best=ranked[0];
    // Respect the announced third-round attack instead of reading random rolls.
-   if(b.encounter==='kagaribi_altar_guardian'&&b.round%3===0&&b.enemies[0].hp>100&&g.stats(id).agi>enemyStats(g,b.enemies[0]).agi)best={skill:'guard',mp:0};
+   if(b.encounter==='kagaribi_altar_guardian'&&b.round%3===0&&b.enemies[0].hp>100&&g.stats(id).agi>enemyStats(g,b.enemies[0]).agi)best={skill:battleSkillPlan(g,id,'exp_second_breath',id).ok?'exp_second_breath':'guard',mp:0};
    if(best){const before=a.mp;this.act({type:'battle',action:'skill',skill:best.skill,target:best.target});row.mp+=Math.max(0,before-a.mp);continue;}
    let to;
    if(b.mode==='grid'){
-    const enemies=b.enemies.filter(e=>e.hp>0),dist=p=>Math.min(...enemies.map(e=>distance(p,position(g.state,e))));
-    to=gridCells().filter(p=>gridMovePlan(g.state,a,p).ok&&dist(p)<dist(position(g.state,a))).sort((a,b)=>dist(a)-dist(b))[0];
+    to=campaignGridMove(g,a);
    }else if(b.mode==='frontline'){
     const depth=frontPosition(g.state,a).depth-1;if(frontlineMovePlan(g.state,a,{depth}).ok)to={depth};
    }
@@ -69,7 +83,7 @@ export class Campaign {
   const lamp=g.state.dungeons.active?.systems.fires.portable;
   if(lamp&&lamp.fuel<15&&g.state.expedition.reserve>0)this.act({type:'dungeon.action',system:'fires',action:lamp.lit?'refuel':'ignite',target:'portable'});
   for(const id of g.state.members){const a=g.state.actors[id];if(a.statuses.includes('poison')&&g.state.inventory.antidote>0)this.act({type:'item',item:'antidote',actor:id});if(a.hp>0&&a.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0)this.act({type:'item',item:'potion',actor:id});}
-  if(g.state.inventory.ration>0&&(g.state.actors.sera.mp<4||g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.5)))this.act({type:'item',item:'ration',actor:'ada'});
+  if(g.state.inventory.ration>0&&(g.state.members.some(id=>['priest','mage'].includes(g.state.actors[id].job)&&g.state.actors[id].hp>0&&g.state.actors[id].mp<8)||g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.5)))this.act({type:'item',item:'ration',actor:'ada'});
  }
  walk(x,y){
   const g=this.g;
@@ -115,7 +129,7 @@ export class Campaign {
   goTownLocation(g,'hikarigaeri_shop');
   if(g.state.expedition.camps.kagaribi_crossroads?.supply){
    for(const actor of g.state.members){const item=`exp_t1_${weapons[actor]}`;if(g.state.actors[actor].equipment.weapon===item)continue;if(g.state.gold<124)break;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
-   for(const [actor,skill] of [['ada','exp_row_sweep'],['il','exp_chain_flame'],['sera','exp_paired_aid']])if(!g.state.expedition.learned[actor]?.[skill]&&g.state.expedition.gems>=data.expedition.products[skill].price){const before=g.state.expedition.gems;if(g.dispatch({type:'skill.buy',actor,skill,level:1})){this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor,skill});}}
+   for(const [actor,skill] of this.options.training?[['ada','exp_second_breath'],['sera','exp_purging_pursuit']]:[['ada','exp_row_sweep'],['il','exp_chain_flame'],['sera','exp_paired_aid']])if(!g.state.expedition.learned[actor]?.[skill]&&g.state.expedition.gems>=data.expedition.products[skill].price){const before=g.state.expedition.gems;if(g.dispatch({type:'skill.buy',actor,skill,level:1})){this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor,skill});}}
   }
   for(const actor of g.state.members){const item=actor==='berg'?'mail':['sera','il'].includes(actor)?'robe':'leather';if(g.state.actors[actor].equipment.armor===item||!g.state.expedition.camps.kagaribi_crossroads?.supply||g.state.gold<204)continue;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
   for(const [item,n] of [['ration',3],['potion',3]])while((g.state.inventory[item]??0)<n&&g.state.gold>50)this.act({type:'buy',item});
@@ -140,8 +154,11 @@ export class Campaign {
   const g=this.g;this.act({type:'battle.mode.set',mode:this.options.mode});
   this.quest('q001');this.town();if(this.options.size===5){goTownLocation(g,'hikarigaeri_tavern');this.act({type:'party',action:'join',actor:'berg'});goTownLocation(g,data.game.world.townRoot);}
   if(this.options.optional)for(const id of quests){this.quest(id);this.town();}
+  if(this.options.training){this.act({type:'travel',dungeon:'kagaribi'});this.go('kagaribi_ossuary',1,1);this.town();this.checkpoint('9F training');}
   this.act({type:'travel',dungeon:'kagaribi'});this.go('kagaribi_f3',5,1);this.object('altar_keeper');this.choose('fight');assert.equal(g.state.flags.kagaribi.altarGuardianWon,true);this.supply();this.checkpoint('10F');this.town();
-  goTownLocation(g,'hikarigaeri_shop');this.act({type:'service',id:'kagaribi_weapon_exchange'});this.choose('sword');assert.equal(g.state.inventory.exp_t2_sword,1);this.checkpoint('returned');
+  goTownLocation(g,'hikarigaeri_shop');
+  if(this.options.training){this.act({type:'job.change',actor:'ada',job:'knight'});const before=g.state.expedition.gems;this.act({type:'skill.buy',actor:'ada',skill:'exp_parry_command',level:1});this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor:'ada',skill:'exp_parry_command'});}
+  this.act({type:'service',id:'kagaribi_weapon_exchange'});this.choose('sword');assert.equal(g.state.inventory.exp_t2_sword,1);this.checkpoint('returned');
   this.report.mpSpent=this.report.battles.reduce((n,b)=>n+b.mp,0);this.report.earnedGold=g.state.gold+this.report.spentGold-data.game.initial.gold;this.report.earnedGems=g.state.expedition.gems+this.report.spentGems;this.report.losses=g.state.records.losses;return this.report;
  }
 }

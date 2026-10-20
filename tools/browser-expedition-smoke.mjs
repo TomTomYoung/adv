@@ -65,6 +65,25 @@ try{
   await page.screenshot({path:path.join(output,`weapon-${layout}-${width}.png`)});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'weapon choices horizontal overflow');
   await page.getByRole('button',{name:/水切り剣/}).click();assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_sword),1);assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_ticket),0);
+  await finishText(page);
+  // Separate UI fixture for the three new lessons; earned spending is measured
+  // by the campaign suite, not by these supplied gems or victory flags.
+  await page.evaluate(()=>{g.state.expedition.gems=2000;g.give('rope',1);g.teleport('kagaribi_crossroads',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_crossroads',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});refreshView();view.tab='shop';view.skillShopActor='ada';show();});
+  const lesson=name=>page.locator('.skill-shop-card').filter({has:page.getByRole('heading',{name,exact:true})});
+  await lesson('再起の呼吸').getByRole('button',{name:/Lv1を習得/}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_second_breath),1);
+  await page.evaluate(()=>{view.skillShopActor='sera';show();});
+  assert.equal(await lesson('祓いの追撃').getByRole('button').isDisabled(),true);
+  assert.match(await lesson('祓いの追撃').textContent(),/9F/);
+  await page.evaluate(()=>{g.give('rope',1);g.teleport('kagaribi_ossuary',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_ossuary',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('staff',1);g.dispatch({type:'equip',actor:'sera',item:'staff'});refreshView();view.tab='shop';view.skillShopActor='sera';show();});
+  await lesson('祓いの追撃').getByRole('button',{name:/Lv1を習得/}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.learned.sera.exp_purging_pursuit),1);
+  await page.evaluate(()=>{g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:'hikarigaeri_tavern'});g.dispatch({type:'job.change',actor:'ada',job:'knight'});g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:'hikarigaeri_shop'});refreshView();view.tab='shop';view.skillShopActor='ada';show();});
+  await lesson('受け流しの号令').getByRole('button',{name:/Lv1を習得/}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_parry_command),1);
+  assert.ok(await lesson('受け流しの号令').evaluate(card=>card.querySelector('h3').getBoundingClientRect().width>=card.getBoundingClientRect().width*.9),'lesson heading uses the card width');
+  await lesson('受け流しの号令').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`training-${layout}-${width}.png`)});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'training shop horizontal overflow');
   await page.close();console.log(`EXPEDITION BROWSER OK: ${layout} ${width}`);
  }
  assert.deepEqual(errors,[]);

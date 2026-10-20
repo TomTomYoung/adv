@@ -16014,6 +16014,16 @@ export const referenceData={
       "id": "rope"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_ossuary_remnant",
+        "item"
+      ],
+      "kind": "items",
+      "id": "rope"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -21495,6 +21505,70 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "exp_second_breath",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_breath20"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_second_breath",
+        "levels",
+        "2",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_breath30"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_parry_command",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_parry80"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_parry_command",
+        "levels",
+        "3",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_parry70"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_purging_pursuit",
+        "effects",
+        1,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_purging_pursuit"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -22514,7 +22588,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_bones"
+      "id": "kagaribi_ossuary_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22562,7 +22636,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_bones"
+      "id": "kagaribi_ossuary_bones"
     },
     {
       "file": "kagaribi-content.json",
@@ -22586,7 +22660,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_shallow_deep_pair"
+      "id": "kagaribi_ossuary_deep_pair"
     },
     {
       "file": "kagaribi-content.json",
@@ -23982,6 +24056,28 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_ossuary_remnant",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "skeleton"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ossuary_remnant",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -24319,6 +24415,39 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "kagaribi_soot_moth"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ossuary_bones",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ossuary_remnant"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ossuary_deep_pair",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_ossuary_remnant"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ossuary_deep_pair",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_kiln_golem"
     },
     {
       "file": "kagaribi-content.json",
@@ -35478,6 +35607,9 @@ export const referenceData={
       },
       "exp_precise_pierce_3": {
         "name": "exp_precise_pierce_3"
+      },
+      "exp_purging_pursuit": {
+        "name": "exp_purging_pursuit"
       }
     },
     "skills": {
@@ -35744,6 +35876,15 @@ export const referenceData={
       },
       "exp_linked_ward": {
         "name": "連結護符"
+      },
+      "exp_second_breath": {
+        "name": "再起の呼吸"
+      },
+      "exp_parry_command": {
+        "name": "受け流しの号令"
+      },
+      "exp_purging_pursuit": {
+        "name": "祓いの追撃"
       }
     },
     "items": {
@@ -36232,6 +36373,10 @@ export const referenceData={
       "kagaribi_ossuary_bone": {
         "name": "納骨堂の鎖引き",
         "sprite": "skeleton"
+      },
+      "kagaribi_ossuary_remnant": {
+        "name": "納骨堂の残骸兵",
+        "sprite": "skeleton"
       }
     },
     "encounters": {
@@ -36543,6 +36688,12 @@ export const referenceData={
       },
       "kagaribi_shallow_manifold_pair": {
         "name": "配油管の魔物"
+      },
+      "kagaribi_ossuary_bones": {
+        "name": "kagaribi_ossuary_bones"
+      },
+      "kagaribi_ossuary_deep_pair": {
+        "name": "kagaribi_ossuary_deep_pair"
       }
     },
     "statuses": {
@@ -37011,6 +37162,18 @@ export const referenceData={
       },
       "exp_magic75": {
         "name": "連結護符"
+      },
+      "exp_breath20": {
+        "name": "再起の呼吸（次の行動）"
+      },
+      "exp_breath30": {
+        "name": "再起の呼吸（次の行動）"
+      },
+      "exp_parry80": {
+        "name": "受け流し（物理1回）"
+      },
+      "exp_parry70": {
+        "name": "受け流し（物理1回）"
       }
     },
     "fieldAbilities": {
@@ -62379,6 +62542,27 @@ export const referenceData={
         "exp_linked_ward"
       ]
     },
+    "skills/exp_second_breath": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_second_breath"
+      ]
+    },
+    "skills/exp_parry_command": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_parry_command"
+      ]
+    },
+    "skills/exp_purging_pursuit": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_purging_pursuit"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -62694,6 +62878,34 @@ export const referenceData={
         "exp_magic75"
       ]
     },
+    "buffs/exp_breath20": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_breath20"
+      ]
+    },
+    "buffs/exp_breath30": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_breath30"
+      ]
+    },
+    "buffs/exp_parry80": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_parry80"
+      ]
+    },
+    "buffs/exp_parry70": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_parry70"
+      ]
+    },
     "items/kagaribi_torch": {
       "file": "kagaribi-content.json",
       "path": [
@@ -62825,6 +63037,13 @@ export const referenceData={
       "path": [
         "enemies",
         "kagaribi_ossuary_bone"
+      ]
+    },
+    "enemies/kagaribi_ossuary_remnant": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_ossuary_remnant"
       ]
     },
     "encounters/kuragari_hunt": {
@@ -62986,6 +63205,20 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_shallow_manifold_pair"
+      ]
+    },
+    "encounters/kagaribi_ossuary_bones": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ossuary_bones"
+      ]
+    },
+    "encounters/kagaribi_ossuary_deep_pair": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_ossuary_deep_pair"
       ]
     },
     "sounds/se_step": {

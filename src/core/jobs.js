@@ -10,7 +10,7 @@ import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
 export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_APIS]);
-export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','stun','frontline_remove','frontline_knockback']);
+export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','stun','purge_undead','frontline_remove','frontline_knockback']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
 export const passives=(data,state,id)=>actorJob(data,state,id)?.passives??{};
