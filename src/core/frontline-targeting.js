@@ -35,6 +35,7 @@ export function frontlineTargetPlan(engine,source,skill,id,selection,{limit=skil
  let targets=units.filter(u=>frontlineTargetState(s,u,profile)&&allowed(u)&&cells.some(p=>{const q=areaPoint(frontPosition(s,u),Boolean(u.instance));return p.x===q.x&&p.y===q.y;}));
  if(profile.area.shape==='side_all')targets=targets.filter(u=>Boolean(u.instance)===enemy);
  if(skill.effects.some(e=>e.type==='cover'))targets=targets.filter(u=>u!==source&&!u.instance&&Math.abs(frontPosition(s,u).depth-from.depth)+Math.abs(frontPosition(s,u).lane-from.lane)<=1);
+ if(skill.effects.some(e=>e.type==='purge_undead'))targets=targets.filter(u=>u.hp>0||u.instance&&engine.data.enemies[u.id]?.undead);
  if(skill.effects.some(e=>e.type==='analyze'))targets=targets.filter(u=>u.instance);
  if(skill.requiresAnalyzed)targets=targets.filter(u=>u.instance&&s.battle.analyzed.includes(u.instance));
  targets=orderFrontlineTargets(s,targets,profile.order);

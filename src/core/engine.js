@@ -4,6 +4,8 @@ import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
 import {stepBattle} from './battle.js';
 import {nextFormation,setFormation} from './battle-formation.js';
 import {syncSkillGrowth} from './skill-levels.js';
+import {oilStepSaved,expireOilSaving,clearExpeditionTrip} from './expedition-field.js';
+import {advanceCampRoute} from './camp-route.js';
 import {stepScouting,returnRecon,clearScoutingTrip,camouflageRate,expireScoutingEffects} from './scouting.js';
 import {ignitionReason} from './fire-hazards.js';
 import {treasurePlan} from './treasures.js';
@@ -159,7 +161,7 @@ export class GameEngine {
   // Defeat rescue is forced recovery. Roll back unfinished event checkpoints
   // before synchronizing the party to its rescued location.
   #arriveTown(emergency=false,quiet=false){
-    clearScoutingTrip(this);
+    clearScoutingTrip(this);clearExpeditionTrip(this.state);
     collapseAfterLeaving(this,this.state.location,null);
     rememberOil(this.data,this.state);leaveDungeon(this);
     if(!quiet)this.eventCue('return');
@@ -199,10 +201,10 @@ export class GameEngine {
     return moved;
   }
   finishMove(point){
-    const effects=this.state.scouting?.effects;
+    const effects=this.state.scouting?.effects,oilSaving=this.state.expedition?.oilSaving;
     try{
     const loc=this.state.location,{x,y}=point,z=point.z??0;
-    const from={...loc};collapseAfterLeaving(this,from,{...loc,x,y});loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');const saveEvery=this.partyEffect('lightSaveEvery',Infinity);if(!dungeonReplacesLight(this.data,this.state)&&(!Number.isFinite(saveEvery)||this.state.steps%saveEvery!==0))this.state.light=Math.max(0,this.state.light-1);this.reveal();
+    const from={...loc};collapseAfterLeaving(this,from,{...loc,x,y});loc.x=x;loc.y=y;if(this.map().voxels)loc.z=z;syncWorldStories(this);this.state.steps++;this.eventCue('step');advanceCampRoute(this.state);if(!dungeonReplacesLight(this.data,this.state)&&!oilStepSaved(this))this.state.light=Math.max(0,this.state.light-1);this.reveal();
     for(const id of this.state.members){const actor=this.state.actors[id];if(actor.hp<=0)continue;const max=this.stats(id);for(const status of actor.statuses)applyStatusClock(this.data,this.state,actor,status,'steps',max,{lethal:false});}
     if(this.state.members.some(id=>this.state.actors[id].statuses.some(status=>['poison','virulent_poison','curse_poison','hollow_curse'].includes(status))))this.eventCue('field_poison');
     for(const id of this.state.members)if(this.state.actors[id].hp>0)tickStatuses(this.data,this.state,this.state.actors[id],'steps');
@@ -223,7 +225,7 @@ export class GameEngine {
       if(!encounterStoryJourney(this,encounter))this.startBattle(encounter,{win:[],escape:[],lose:[]},{enemyScale:environment.enemyScale});
     }
     return true;
-    }finally{expireScoutingEffects(this,effects);}
+    }finally{expireScoutingEffects(this,effects);expireOilSaving(this.state,oilSaving);}
   }
   interactionObjects(){return this.triggerCandidates('interact');}
   nearbyObjects(){

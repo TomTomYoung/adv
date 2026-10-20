@@ -1,3 +1,5 @@
+import {expeditionFieldCards,expeditionFieldSaveValid} from './expedition-field.js';
+import {skillDefinition} from './skill-levels.js';
 import {clone,isRecord,evaluate} from './expression.js';
 import {townLocation,dungeonInterior} from './world.js';
 import {dungeonEntryReason} from './quest-navigation.js';
@@ -9,21 +11,23 @@ const own=(o,k)=>typeof k==='string'&&Object.hasOwn(o??{},k);
 const int=(n,min=0,max=1e9)=>Number.isSafeInteger(n)&&n>=min&&n<=max;
 export const freshExpedition=()=>({version:1,managed:false,gems:0,capacity:180,reserve:0,storedOil:0,storedBottles:0,lamp:{fuel:90,effect:null},camps:{},learned:{}});
 const campById=(data,id)=>data.expedition?.camps.find(c=>c.id===id);
-const taughtTargets=(data,state,actor,id)=>{let count=data.skills[id].maxTargets??1;for(let n=2;n<=(state.expedition.learned[actor]?.[id]??1);n++)count=data.skills[id].levels?.[n]?.maxTargets??count;return count;};
+const taughtTargets=(data,state,actor,id)=>{let count=skillDefinition(data,id).maxTargets??1;for(let n=2;n<=(state.expedition.learned[actor]?.[id]??1);n++)count=skillDefinition(data,id).levels?.[n]?.maxTargets??count;return count;};
 export const campTier=state=>Math.max(0,...Object.values(state.expedition?.camps??{}).map(c=>c.relay?2:c.supply?1:0));
 export const expeditionShopTier=(data,state)=>Math.max(state.flags.kagaribi?.legacyShopTier??0,...data.expedition.camps.filter(c=>state.expedition?.camps[c.id]?.supply).map(c=>c.shopTier===2&&!state.expedition.camps[c.id].relay?1:c.shopTier??(c.dungeon==='kagaribi'?0:state.expedition.camps[c.id].relay?2:1)));
 export function purchasedGrants(data,state,actor){
   const a=state.actors[actor];if(!data.expedition||!a)return [];
-  return Object.keys(state.expedition?.learned[actor]??{}).filter(id=>data.expedition.products[id]?.jobs.includes(a.job)).map(skill=>({skill,level:1,api:'battle.skill',target:data.skills[skill].target,maxTargets:taughtTargets(data,state,actor,skill),lifetime:'equipped'}));
+  return Object.keys(state.expedition?.learned[actor]??{}).filter(id=>data.expedition.products[id]?.jobs.includes(a.job)).map(skill=>({skill,level:1,api:skillDefinition(data,skill).api??'battle.skill',target:skillDefinition(data,skill).target,maxTargets:taughtTargets(data,state,actor,skill),lifetime:'equipped'}));
 }
 export function addGems(state,amount){if(state.expedition)state.expedition.gems=Math.min(1e9,state.expedition.gems+amount);}
 export function battleGems(data,battle){return data.expedition?battle.enemies.reduce((sum,e)=>sum+(data.expedition.enemyGems[e.id]??0),0):0;}
 export function skillPurchasePlan(data,state,actor,id,level){
-  const e=state.expedition,p=data.expedition?.products[id],a=state.actors[actor],skill=data.skills[id];
+  const e=state.expedition,p=data.expedition?.products[id],a=state.actors[actor],skill=skillDefinition(data,id);
   if(!e||!own(data.expedition.products,id)||!own(state.actors,actor)||!p||!a||!int(level,1,3))return {ok:false,reason:'技能・人物・段階を選び直してください。'};
   if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle||townLocation(data,state)?.id!==data.expedition.shopLocation)return {ok:false,reason:'町の技能店で習得できます。'};
   if(campTier(state)<p.tier)return {ok:false,reason:p.tier===1?'給油設備を修理すると販売が始まります。':'中継設備を起動すると販売が始まります。'};
   if(p.unlockTier&&expeditionShopTier(data,state)<p.unlockTier)return {ok:false,reason:p.unlockTier===1?'篝火4Fの給油設備を修理すると販売が始まります。':'篝火7Fの給油設備を修理し、中継を起動すると販売が始まります。'};
+  if(p.requiresCamp&&!e.camps[p.requiresCamp]?.supply)return {ok:false,reason:`${campById(data,p.requiresCamp).name}を修理すると販売が始まります。`};
+  if(p.requiresRelay&&!e.camps[p.requiresCamp]?.relay)return {ok:false,reason:`${campById(data,p.requiresCamp).name}の中継設備を起動すると販売が始まります。`};
   if(!p.jobs.includes(a.job))return {ok:false,reason:'現在の職業ではこの技能を使えません。'};
   if(skill.weaponTypes&&!skill.weaponTypes.includes(data.items[a.equipment.weapon]?.equipmentType))return {ok:false,reason:'対応する武器を装備してから選んでください。'};
   const bought=e.learned[actor]?.[id]??0,current=bought?Math.max(bought,a.skillProgress?.[id]?.level??1):0;
@@ -39,7 +43,7 @@ export function buySkill(engine,intent){
   const e=state.expedition,a=state.actors[intent.actor];e.gems-=p.price;
   (e.learned[intent.actor]??={})[intent.skill]=intent.level;
   const progress=(a.skillProgress??={})[intent.skill]??={level:1,uses:0};progress.level=intent.level;
-  engine.notify(`${data.actors[intent.actor].name}が「${data.skills[intent.skill].name}」Lv${intent.level}を習得しました。`);return true;
+  engine.notify(`${data.actors[intent.actor].name}が「${skillDefinition(data,intent.skill).name}」Lv${intent.level}を習得しました。`);return true;
 }
 export function campPlan(data,state,intent){
   const e=state.expedition,c=campById(data,intent.camp),progress=e?.camps[c?.id];
@@ -90,6 +94,7 @@ export function expeditionView(data,state){
   if(!camps.length&&!e.managed)return null;
   const cards=camps.map(c=>({name:c.name,text:e.camps[c.id]?.supply?(c.relayEnabled===false?'修理済みの給油専用設備です。':'給油設備は修理済みです。中継設備を起動すると次回の出発点になります。'):'配油管が破損しています。ロープ1本で固定できます。',actions:[['repair','給油設備を修理（ロープ1）'],['relay','中継設備を起動'],['draw','油を容量いっぱい汲む（無料）']].filter(([action])=>action!=='relay'||c.relayEnabled!==false).map(([action,label])=>{const intent={type:'expedition.action',camp:c.id,action},p=campPlan(data,state,intent);return {label,intent,enabled:p.ok,reason:p.reason??'',consumes:action==='repair',explicit:true};})}));
   const lamp=oilLamp(data,state),actions=[],oilText=`携行 ${oilTotal(data,state)}/${e.capacity}単位 ／ 予備油 ${e.reserve} ／ 灯油瓶 ${state.inventory.torch??0}本。補給所の保管 ${e.storedOil+e.storedBottles*90}単位。`;
+  cards.push(...expeditionFieldCards(data,state));
   if(e.managed){
     if(!oilFire(data,state))actions.push({label:'予備油を携行灯へ補充',intent:{type:'expedition.action',action:'refill'},enabled:!state.waiting&&!state.battle&&e.reserve>0&&lamp.fuel<lamp.capacity,consumes:true});
     actions.push({label:'予備油90単位を灯油1瓶へ詰める',intent:{type:'expedition.action',action:'bottle'},enabled:!state.waiting&&!state.battle&&e.reserve>=90&&(state.inventory.torch??0)<data.system.maxStack,consumes:true});
@@ -100,14 +105,14 @@ export function expeditionView(data,state){
 export function projectExpedition(engine){
   const {data,state}=engine;if(!data.expedition||!state.expedition)return null;
   const e=state.expedition,shop=state.mode==='town'&&!dungeonInterior(data,state)&&townLocation(data,state)?.id===data.expedition.shopLocation;
-  return {gems:e.gems,shop,storedOil:e.storedOil+e.storedBottles*90,canWithdraw:shop&&!state.waiting&&!state.battle&&managesOil(state)&&oilRoom(data,state)>0&&(e.storedOil+e.storedBottles)>0,checkpoints:data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>({id:c.id,dungeon:c.dungeon,name:c.name,...checkpointPlan(engine,c.id)})).map(({c,...row})=>row),products:shop?Object.entries(data.expedition.products).map(([id,p])=>({id,...clone(p),name:data.skills[id].name,description:data.skills[id].description,mp:data.skills[id].mp,weapons:clone(data.skills[id].weaponTypes),actors:Object.keys(state.actors).map(actor=>{const current=e.learned[actor]?.[id]??0,level=current+1,maxed=current>=(data.skills[id].maxSkillLevel??1),plan=maxed?{ok:false,reason:'販売中の全段階を習得済みです。'}:skillPurchasePlan(data,state,actor,id,level);return {actor,name:data.actors[actor].name,current,level,maxed,upgrade:!maxed?p.upgrades?.[level]??'':'',price:plan.price??p.price*(level===1?1:level===2?2:4),enabled:plan.ok,reason:plan.reason??'',intent:{type:'skill.buy',actor,skill:id,level}};})})):[]};
+  return {gems:e.gems,shop,storedOil:e.storedOil+e.storedBottles*90,canWithdraw:shop&&!state.waiting&&!state.battle&&managesOil(state)&&oilRoom(data,state)>0&&(e.storedOil+e.storedBottles)>0,checkpoints:data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>({id:c.id,dungeon:c.dungeon,name:c.name,...checkpointPlan(engine,c.id)})).map(({c,...row})=>row),products:shop?Object.entries(data.expedition.products).map(([id,p])=>({id,...clone(p),name:skillDefinition(data,id).name,description:skillDefinition(data,id).description,mp:skillDefinition(data,id).mp,weapons:clone(skillDefinition(data,id).weaponTypes),actors:Object.keys(state.actors).map(actor=>{const current=e.learned[actor]?.[id]??0,level=current+1,maxed=current>=(skillDefinition(data,id).maxSkillLevel??1),plan=maxed?{ok:false,reason:'販売中の全段階を習得済みです。'}:skillPurchasePlan(data,state,actor,id,level);return {actor,name:data.actors[actor].name,current,level,maxed,upgrade:!maxed?p.upgrades?.[level]??'':'',price:plan.price??p.price*(level===1?1:level===2?2:4),enabled:plan.ok,reason:plan.reason??'',intent:{type:'skill.buy',actor,skill:id,level}};})})):[]};
 }
 export function expeditionDefinitionErrors(data){
   if(!data.expedition)return [];
   const d=data.expedition,errors=[],bad=m=>errors.push(`expedition: ${m}`),ids=new Set();
   if(d.version!==1||d.oil?.item!=='torch'||d.oil?.units!==90||!data.locations[d.shopLocation]||!Array.isArray(d.camps)||!isRecord(d.products)||!isRecord(d.enemyGems))return ['expedition: 基本定義不正'];
   for(const c of d.camps){if(!isRecord(c)){bad('設備不正');continue;}if(!/^[a-z][a-z0-9_]*$/.test(c.id)||ids.has(c.id)||!c.name||!['north','east','south','west'].includes(c.facing)||!data.dungeons[c.dungeon]?.maps.includes(c.map)||data.maps[c.map]?.tiles[c.y]?.[c.x]!=='.'||!int(c.x)||!int(c.y)||!int(c.radius,0,2)||!int(c.gems)||![180,270,330,390,450].includes(c.capacity??180)||c.requiresQuest&&!data.quests[c.requiresQuest])bad(`設備不正 ${c.id}`);if(c.xp!==undefined&&!int(c.xp)||c.shopTier!==undefined&&!int(c.shopTier,1,2)||c.relayEnabled!==undefined&&typeof c.relayEnabled!=='boolean')bad(`設備の進行設定不正 ${c.id}`);ids.add(c.id);}
-  for(const [id,p] of Object.entries(d.products))if(!isRecord(p)||!own(data.skills,id)||!Array.isArray(data.skills[id].weaponTypes)||!int(p.price,1)||!int(p.tier,1,2)||!Array.isArray(p.jobs)||!p.jobs.length||new Set(p.jobs).size!==p.jobs.length||p.jobs.some(j=>!data.jobs[j]||!data.skills[id].weaponTypes.some(w=>data.jobs[j].equipment.weapon.includes(w)))||data.skills[id].levelUp)bad(`商品不正 ${id}`);
+  for(const [id,p] of Object.entries(d.products))if(!isRecord(p)||!skillDefinition(data,id)||!Array.isArray(skillDefinition(data,id).weaponTypes)||!int(p.price,1)||!int(p.tier,1,2)||!Array.isArray(p.jobs)||!p.jobs.length||new Set(p.jobs).size!==p.jobs.length||p.jobs.some(j=>!data.jobs[j]||!skillDefinition(data,id).weaponTypes.some(w=>data.jobs[j].equipment.weapon.includes(w)))||p.requiresCamp!==undefined&&!ids.has(p.requiresCamp)||p.requiresRelay!==undefined&&(typeof p.requiresRelay!=='boolean'||!ids.has(p.requiresCamp))||skillDefinition(data,id).levelUp)bad(`商品不正 ${id}`);
   for(const [id,n] of Object.entries(d.enemyGems))if(!data.enemies[id]||!int(n)||n>0&&data.enemies[id].rewards.xp===0)bad(`宝石ドロップ不正 ${id}`);
   return errors;
 }
@@ -120,7 +125,8 @@ export function expeditionSaveErrors(data,state){
   const capacity=Math.max(180,...data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>c.capacity??180));if(e.capacity!==capacity)return fail();
   for(const [actor,skills] of Object.entries(e.learned)){
     if(!own(state.actors,actor)||!isRecord(skills))return fail();
-    for(const [id,n] of Object.entries(skills))if(!own(data.expedition.products,id)||!int(n,1,3)||n>1&&!data.skills[id].levels?.[n]||state.actors[actor].skillProgress?.[id]?.level!==n||campTier(state)<data.expedition.products[id].tier)return fail();
+    for(const [id,n] of Object.entries(skills))if(!own(data.expedition.products,id)||!int(n,1,3)||n>1&&!skillDefinition(data,id).levels?.[n]||state.actors[actor].skillProgress?.[id]?.level!==n||campTier(state)<data.expedition.products[id].tier||data.expedition.products[id].requiresCamp&&!e.camps[data.expedition.products[id].requiresCamp]?.supply||data.expedition.products[id].requiresRelay&&!e.camps[data.expedition.products[id].requiresCamp]?.relay)return fail();
   }
+  if(!expeditionFieldSaveValid(data,state))return fail();
   return [];
 }

@@ -34,5 +34,5 @@ export function fieldSkills(actor,dispatch){
   return wrap;
 }
 export function buffLabels(actor){
-  return [...(actor.buffs??[]).map(b=>`${b.name}・残${b.remaining}敵巡`),...(actor.covering??[]).map(c=>`${c.name}をかばう・残${c.remaining}敵巡`)];
+  return [...(actor.buffs??[]).map(b=>b.untilNextAction?b.name:`${b.name}・残${b.remaining}敵巡`),...(actor.covering??[]).map(c=>`${c.name}をかばう・残${c.remaining}敵巡`)];
 }

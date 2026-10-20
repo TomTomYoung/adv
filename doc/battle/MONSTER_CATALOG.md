@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.27.0。配布中の敵は73定義、遭遇編成は103定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.27.0。配布中の敵は74定義、遭遇編成は105定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：27定義。
+[依頼に追加した敵](#依頼に追加した敵)：28定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -1046,7 +1046,7 @@ story_175：鏡牙獣×1。逃走可。
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="戦場の骸骨獣">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 103 / MP 8 / STR 26 / VIT 12 / AGI 14 / INT 24。報酬：23G / 35EXP。
 宝箱：旅の槍 1個 / 3.125％。
@@ -1147,7 +1147,7 @@ kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="赤錆の番兵">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 57 / MP 0 / STR 13 / VIT 8 / AGI 5 / INT 5。報酬：10G / 21EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1193,7 +1193,7 @@ kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可�
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="鎖引き骸骨">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 68 / MP 0 / STR 15 / VIT 9 / AGI 7 / INT 7。報酬：12G / 26EXP。
 宝箱：補修用の縄 1個 / 12.5％。
@@ -1335,7 +1335,7 @@ kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="巡回路の赤錆番兵">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 125 / MP 0 / STR 18 / VIT 10 / AGI 5 / INT 5。報酬：22G / 110EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1374,14 +1374,17 @@ kagaribi_shallow_golem：炭焼き場の灰積み×1。逃走可。
 通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み35 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み50 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み35 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み35。
 
 kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み×1。逃走可。
-通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15。
+
+kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み×1。逃走可。
+通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
 ### 納骨堂の鎖引き (kagaribi_ossuary_bone)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="納骨堂の鎖引き">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の残骸兵。
 
 基礎能力：HP 150 / MP 0 / STR 23 / VIT 11 / AGI 11 / INT 7。報酬：26G / 140EXP。
 宝箱：補修用の縄 1個 / 12.5％。
@@ -1394,10 +1397,33 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_shallow_bones：納骨堂の鎖引き×1。逃走可。
-通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み50 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み50 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み50。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み50 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み50。
 
 kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み×1。逃走可。
-通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15 / 篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
+通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15。
+
+### 納骨堂の残骸兵 (kagaribi_ossuary_remnant)
+
+<img src="../../assets/images/monsters/skeleton.webp" width="160" alt="納骨堂の残骸兵">
+
+画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
+画像共有：塩哭きの廃坑の迷宮獣・塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+
+基礎能力：HP 150 / MP 0 / STR 23 / VIT 11 / AGI 11 / INT 7。報酬：26G / 140EXP。
+宝箱：補修用の縄 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_ossuary_bones：納骨堂の残骸兵×1。逃走可。
+通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み50。
+
+kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み×1。逃走可。
+通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
 ## 地域の迷宮獣と守護者
 
@@ -1457,7 +1483,7 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の迷宮獣">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の守護者・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 40 / MP 8 / STR 12 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1485,7 +1511,7 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の守護者">
 
 画像ID：skeleton。実ファイル：[assets/images/monsters/skeleton.webp](../../assets/images/monsters/skeleton.webp)。
-画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き。
+画像共有：塩哭きの廃坑の迷宮獣・戦場の骸骨獣・赤錆の番兵・鎖引き骸骨・巡回路の赤錆番兵・納骨堂の鎖引き・納骨堂の残骸兵。
 
 基礎能力：HP 96 / MP 20 / STR 15 / VIT 5 / AGI 7 / INT 10。報酬：9G / 14EXP。
 宝箱：野営糧食 1個 / 12.5％。

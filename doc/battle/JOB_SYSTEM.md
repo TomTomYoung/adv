@@ -336,7 +336,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 習得：Lv1 手当の祈り (battle.skill) / Lv5 帰路の祈り (battle.skill) / Lv10 解毒 (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
 特性：{"retreatCost":0.5}。割引は帰還印のみで、敗北時の救援費は変わりません。
 
-## 探索特技20定義
+## 探索特技22定義
 
 ### 周辺測量 (survey)
 
@@ -452,6 +452,14 @@ MP2。水没していない場所で炎を使い、隊全員の濡れを解除�
 技能Lv3の変更：{"radius":8,"hidden":3,"difficulty":3,"cells":24,"returnSteps":4,"disarmCount":2}。
 技能Lv2の成長条件：{"any":[{"kind":"uses","count":5},{"kind":"training","count":1}]}。
 技能Lv3の成長条件：{"all":[{"kind":"actor_level","level":10},{"any":[{"kind":"uses","count":15},{"kind":"training","count":2}]}]}。
+
+### 節油の種火 (exp_oil_spark)
+
+次の60歩、携行灯・携帯松明の油を2歩に1回節約する。灯番の節油とは有利な方だけを適用。火の種類は変えず、再使用は60歩へ更新。町への帰還で終了。 API: party.oil_saving。使用場所: dungeon。
+
+### 帰路測定 (exp_route_survey)
+
+発見済みで通行可能な道から、最寄りの修理済み給油設備への経路と歩数を測る。未知・閉鎖中の扉は通らない。移動に合わせて残り歩数を更新し、経路外・通行条件の変化時は再測定する。平面の迷宮で使用。 API: camp.route。使用場所: dungeon。
 
 <!-- /generated:jobs -->
 

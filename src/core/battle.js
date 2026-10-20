@@ -21,7 +21,7 @@ import {skillDefinitionErrors} from './job-validation.js';
 import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
-import {unitKey,buffStats,buffResistance,addBuff,tickBuffs} from './buffs.js';
+import {unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
 import {describeTarget,playBattleCue} from './feedback.js';
@@ -106,7 +106,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   if(skill.requiresAnalyzed&&targets.some(t=>!b.analyzed.includes(t.instance)))return fail('先にこの敵を魔物解析してください。');
   return {ok:true,skill,targets};
 }
-export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null){
+export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1){
   let damageTotal=0,critical=null,wakeChecked=false;
   const b=engine.state.battle,s=engine.state;
   if(isFrontline(s)&&!frontlinePresent(s,target))return 0;
@@ -114,6 +114,10 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   const targetStats=series?.snapshot.targetStats??(target.instance?enemyStats(engine,target):engine.stats(target.id));
   const powers=enemySource?{}:passives(engine.data,s,source.id),targetName=target.name??engine.data.actors[target.id]?.name;
   if(!dungeonEffectActive(engine.data,s,'skill',skillId)){(b?.log??s.log).push(`${skill.name}の効果は境界に遮られました。`);return;}
+  if(target.hp<=0&&skill.effects.some(e=>e.type==='purge_undead')){
+    if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
+    return 0;
+  }
   const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
   const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??statusAccuracy(engine.data,s,source)):1;
   if(accuracy<1&&engine.random()>=accuracy){if(series)series.didHit=false;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
@@ -139,11 +143,12 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
-      const power=dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
+      const power=(effect.element==='physical'?physicalPower:1)*dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
       if(series?.basis==='power'&&series.factor===0)damage=0;
+      if(effect.element==='physical')damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
@@ -188,6 +193,7 @@ function misfireTargets(engine,source,targets,skill,skillId,itemId){
   return next.map(t=>t.instance?t:coveredTarget(engine,t,skill));
 }
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
+  const physicalPower=actionPower(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(source));
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
   if(wetSkillBlocked(engine,source,skill)){
     (engine.state.battle?.log??engine.state.log).push(`${sourceName}の術は濡れに阻まれて発動しなかった。`);
@@ -197,11 +203,11 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   if(spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   const hit=(target,context)=>{
     const result=describeTarget(engine,unitKey(target));
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context);if(damage>0)result.damage=damage;result.hit=context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));return result;
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower);if(damage>0)result.damage=damage;result.hit=context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));return result;
   };
   const results=isFrontline(engine.state)?resolveFrontlineAttack(engine,source,targets,skill,skillId,{snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,react:(u,on,attacker)=>frontlineReact(engine,u,on,attacker)}):targets.map(target=>{
     const result=describeTarget(engine,unitKey(target));
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId);
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,null,physicalPower);
     if(damage>0)result.damage=damage;
     return result;
   });
@@ -345,7 +351,7 @@ function finishRound(engine){
   for(const id of s.members){const a=s.actors[id];if(!battleAlive(s,a))continue;const max=engine.stats(id);for(const status of a.statuses){const loss=applyStatusClock(engine.data,s,a,status,'turns',max);if(loss.hp||loss.mp)b.log.push(`${engine.data.actors[id].name}は${engine.data.statuses[status].name}で${loss.hp?`HP${loss.hp}`:''}${loss.hp&&loss.mp?'・':''}${loss.mp?`MP${loss.mp}`:''}を失った。`);}}
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(battleAlive(s,unit)){tickStatuses(engine.data,s,unit,'turns');recoverStatuses(engine,unit);}
-  tickBuffs(b);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
+  tickBuffs(b,engine.data);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
   triggerBattleEvent(engine,'round_start');
 }
@@ -381,8 +387,9 @@ export function continuePreemptive(engine){
   }
   advanceBattleTurns(engine);
 }
-function finishAction(engine,actorId){
+function finishAction(engine,actorId,consumed=[]){
   const s=engine.state,b=s.battle;if(!b)return;
+  b.buffs=b.buffs.filter(entry=>!consumed.includes(entry));
   if(b.preemptive?.side==='allies'){if(--b.preemptive.remaining===0)delete b.preemptive;}
   else{b.acted.push(actorId);b.turnIndex++;}
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
@@ -391,12 +398,12 @@ function finishAction(engine,actorId){
 }
 export function battleAction(engine,intent){
   const s=engine.state,b=s.battle,actorId=activeActor(engine);if(!b||b.event||s.waiting?.type!=='battle'||!actorId)return false;
-  const actor=s.actors[actorId];
+  const actor=s.actors[actorId],consumed=actionBuffs(engine.data,b,unitKey(actor));
   if(spatial(s)&&stunned(b,actor)&&intent.action!=='wait')return false;
-  if(consumeStun(engine,actor)){finishAction(engine,actorId);return true;}
+  if(consumeStun(engine,actor)){finishAction(engine,actorId,consumed);return true;}
   if(statusControl(engine.data,s,actor)){
     if(intent.action!=='wait')return false;
-    actionOverridden(engine,actor);if(s.battle===b)finishAction(engine,actorId);return true;
+    actionOverridden(engine,actor);if(s.battle===b)finishAction(engine,actorId,consumed);return true;
   }
   let selection;
   if(intent.action==='escape'){
@@ -414,15 +421,15 @@ export function battleAction(engine,intent){
   }else return false;
   // Only a valid, committed action rolls. Previews, invalid commands and menu
   // cancellation never consume RNG, costs or a slot.
-  if(actionOverridden(engine,actor)){if(s.battle===b)finishAction(engine,actorId);return true;}
+  if(actionOverridden(engine,actor)){if(s.battle===b)finishAction(engine,actorId,consumed);return true;}
   if(intent.action==='escape'){
     if(engine.random()<Math.min(1,engine.data.system.escapeRate+engine.partyEffect('escapeBonus',0,'max')))endBattle(engine,'escape');
-    else{b.log.push('退路を塞がれました。');finishAction(engine,actorId);}return true;
+    else{b.log.push('退路を塞がれました。');finishAction(engine,actorId,consumed);}return true;
   }
   if(intent.action==='move'&&isFrontline(s))moveFrontline(engine,actor,selection.to);
   else if(intent.action==='move'){b.grid.positions[unitKey(actor)]=selection.to;b.log.push(`${engine.data.actors[actorId].name}は移動した。`);}
   else performSkill(engine,actor,selection);
-  if(s.battle===b)finishAction(engine,actorId);
+  if(s.battle===b)finishAction(engine,actorId,consumed);
   return true;
 }
 

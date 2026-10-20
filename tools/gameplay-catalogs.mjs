@@ -54,7 +54,9 @@ const buffEffectText=(data,id)=>{
   const values=[];
   for(const [key,n] of Object.entries(b.stats??{}))values.push(`${statLabels[key]??key} ×${n}`);
   for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
-  values.push(`持続 ${b.turns}ターン`);
+  if(b.physicalPower!==undefined)values.push(`次の行動の物理威力 ×${b.physicalPower}`);
+  if(b.physicalTaken!==undefined)values.push(`次の物理被害1回 ×${b.physicalTaken}`);
+  values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };
 function effectCalculation(data,skillId,effect,prefix='計算式'){
@@ -63,6 +65,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
     const element=elementLabels[effect.element]??effect.element??'未指定';
     return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正 × クリティカル補正))。防御Lv3では0。属性：${element}。`;
   }
+  if(effect.type==='purge_undead')return `${prefix}：Frontlineで戦闘不能のまま残る不死者の敵だけを除去。生存者には後続の光攻撃を適用し、味方は除去しません。`;
   if(effect.type==='heal'){
     const multiplier=(effect.itemHealing||skillId==='potion')?'アイテム回復補正':'回復威力補正';
     const scale=effect.scale??1;
@@ -105,6 +108,8 @@ const fieldCalculation=(data,spec)=>{
   if(spec.api==='map.reveal'&&spec.radius!==undefined)return `計算式：記録範囲 = 現在地を中心とする半径${spec.radius}マス。`;
   if(spec.api==='inventory.convert')return `変換式：${materialText(data,spec.materials).join(' + ')}${spec.mp?` + MP${spec.mp}`:''} → ${outputText(data,spec.output)}。`;
   if(spec.api==='party.heal'&&spec.amount!==undefined)return `計算式：各生存隊員のHP回復量 = min(最大HP - 現在HP, ${spec.amount})。`;
+  if(spec.api==='party.oil_saving')return `計算式：MP${spec.mp}。次の60成功歩のうち2歩ごとに携行油の消費を1回省く。灯番の3歩節油とは重ねず、より有利な間隔だけを採用。`;
+  if(spec.api==='camp.route')return `計算式：MP${spec.mp}。既知かつ通行可能な平面セルと区画接続を各1歩として、最寄りの修理済み給油設備への最短経路を測る。未知・閉鎖中の扉を除外し、歩行で残り歩数を更新する。`;
   if(spec.api==='fire.kindling')return `計算式：数値ダメージなし。MP${spec.mp}を消費し、火効果 ${spec.effect} を点火する。`;
   if(spec.api==='water.traverse')return '計算式：数値ダメージなし。条件を満たす間、水没度10まで移動・呼吸を許可する。';
   if(spec.api==='party.dry')return '計算式：数値ダメージなし。隊員の濡れ状態を解除する。';

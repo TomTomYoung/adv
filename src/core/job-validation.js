@@ -94,12 +94,14 @@ export function validateJobs(data){
     if(!isRecord(buff)||buff.id!==id||!integer(buff.turns,1,10)||typeof buff.name!=='string'){fail(`buffs.${id}`,'バフ構造不正');continue;}
     if(!isRecord(buff.stats)||Object.entries(buff.stats).some(([key,n])=>!['str','vit','agi','int'].includes(key)||!finite(n,.1,3)))fail(id,'バフ能力不正');
     if(!isRecord(buff.resist)||Object.entries(buff.resist).some(([key,n])=>!ELEMENTS.includes(key)||!finite(n,0,1)))fail(id,'バフ耐性不正');
-    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist'].includes(key)))fail(id,'未知のバフ項目');
+    if(buff.physicalPower!==undefined&&(!finite(buff.physicalPower,1,3)||buff.consume!=='next_action')||buff.physicalTaken!==undefined&&(!finite(buff.physicalTaken,0,1)||buff.consume!=='physical_hit')||buff.consume!==undefined&&!['next_action','physical_hit'].includes(buff.consume))fail(id,'一回補正の倍率・消費条件不正');
+    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist','physicalPower','physicalTaken','consume'].includes(key)))fail(id,'未知のバフ項目');
   }
   for(const [id,skill] of Object.entries(data.skills)){for(const m of skillLevelDefinitionErrors(data,id,skill))fail(id,m);for(const variant of levelVariants(skill))for(const message of skillDefinitionErrors(data,variant))fail(`skills.${id}`,message);}
   for(const [id,spec] of Object.entries(data.fieldAbilities??{})){for(const m of skillLevelDefinitionErrors(data,id,spec))fail(id,m);for(const a of levelVariants(spec)){
     for(const m of scoutDefinitionErrors(a))fail(id,m);
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
+    if(['party.oil_saving','camp.route'].includes(a.api)&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined||!Array.isArray(a.weaponTypes)||!a.weaponTypes.length||a.weaponTypes.some(w=>!profile.equipmentTypes.weapon.includes(w))))fail(id,'遠征教習の対象・武器が不正です');
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
     if(a.api==='voxel.traverse'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'立体移動技能が不正です');
@@ -110,6 +112,7 @@ export function validateJobs(data){
     for(const field of ['materials','output'])if(a[field]!==undefined&&(!isRecord(a[field])||Object.entries(a[field]).some(([item,n])=>!own(data.items,item)||!integer(n,1,data.system.maxStack))))fail(id,'材料・出力不正');
   }
   }
+  for(const [id,enemy] of Object.entries(data.enemies))if(enemy.undead!==undefined&&typeof enemy.undead!=='boolean')fail(id,'不死者指定不正');
   for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
   return errors;
 }
