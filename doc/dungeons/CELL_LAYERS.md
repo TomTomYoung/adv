@@ -154,6 +154,6 @@
 
 ## 退避実装と次の作業
 
-旧3D・旧潮汐マップは従来の意味を [legacy-cell-layers.js](../../src/core/legacy-cell-layers.js) の専用アダプターへ隔離しました。通常データの `game.cellLayerVersion: 1` では使いません。退避原稿は変更せず、専用テストも維持します。旧内容版のセーブは移行せず、新規開始します。
+旧3D・旧潮汐マップは従来の意味を [legacy-cell-layers.js](../../src/core/legacy-cell-layers.js) の専用アダプターへ隔離しました。通常データの `game.cellLayerVersion: 1` では使いません。退避原稿は変更せず、専用テストも維持します。正常な1.25.0のセーブは1.26.0へ移行し、既存の状態を保持します。その他の内容版は移行対象外で、読込エラー時は新規開始します。
 
 環境変化の購読・再発条件・条件成立時の処理を共通イベントで管理します。通常のくらがりは歩行確率遭遇へ移行済みで、fieldEventsから無条件に開始しません。`fire_network.danger` は削除し、火は保護状態などの値を提供します。迷宮原稿のfieldEventsから `field.cell.parameters` と `field.illumination` を条件に使えます。[条件付きイベント](../scenarios/EVENT_SYSTEM.md)。セル進入イベントを増やす際も、同じ危険を二重登録しないでください。

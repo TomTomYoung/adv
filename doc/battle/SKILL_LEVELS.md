@@ -1,6 +1,6 @@
 # 技能レベルと成長条件
 
-実装日: 2026-10-13。内容版1.25.0。技能に、人物Lvや職業の習得条件とは別の技能Lvを導入する。大まかに3段階を標準とし、必要なら技能ごとに最大Lvを変えられる設計とする。
+導入日: 2026-10-13。導入時の内容版1.25.0。技能に、人物Lvや職業の習得条件とは別の技能Lvを導入する。大まかに3段階を標準とし、必要なら技能ごとに最大Lvを変えられる設計とする。
 
 [職業システム](JOB_SYSTEM.md) ／ [スキル一覧](SKILL_CATALOG.md) ／ [斥候](SCOUT_SKILLS.md)
 
@@ -60,11 +60,15 @@ levelUp はLv2になる条件、Lv3になる条件を段階ごとに持つ。条
 
 ## 現行の定義・保存
 
+2026-10-20確認、内容版1.26.0。以下の成長条件の仕組みに加え、旅道具店の[技能教習所](../dungeons/EXPEDITION_IMPLEMENTATION.md#技能宝石と教習)で人物別の購入技能12件を導入しています。このうち9件は技能Lv3まで宝石で強化でき、渡り雷・防潮刻印・調律拍はLv1のみです。購入技能は使用回数で自動強化されません。
+
 [config/jobs.json](../../config/jobs.json) が技能と成長条件の正本。`maxSkillLevel` は省略時3、1〜20。`levels` はLv2以降の差分を順に重ねる。名前・API・対象は変更できない。`levelUp` は移行先Lvをキーに持ち、途中段階を飛ばさない。
 
 条件の `kind` は `actor_level`（level）、`uses`（skill省略時は当技能、count）、`random`（on=skill/weapon/action、id、chance）、`weapon_uses`（weapon、count）、`action_uses`（action、count）、`event`（event保存キー）、`flag`（flag、value省略時true）、`training`（skill省略時は当技能、count）、`skill`（skill、level）、`companion`（actor）。`all`／`any` の配列で入れ子にできる。同伴者は出撃中かつ生存中の人物に限る。
 
 人物の任意項目 `skillProgress[技能ID] = {level, uses}` と `skillCounters = {weapons, actions, training}` を保存する。武器カウンターは物理ダメージ技能を実行した際の装備武器ID、行動カウンターは `jobProfile.skillActions` の登録IDで記録する。出撃外・未習得・費用不足・対象不成立は使用回数を増やさない。アイテムによる技能実行は技能使用回数に含めない。
+
+新規習得・有料強化は `skill.buy`（actor、skill、level）が条件と宝石の支払いを検査し、人物別の購入履歴へ確定します。既存の `skill.train` で訓練回数を増やすだけでは未習得技能の使用権限を得られません。
 
 `skill.train`（actor、skill）はショップ／訓練／NPCの既存スクリプトから訓練回数を増やす。金額・アイテム・会話等の必要条件と支払いは呼出元の既存 `if`／`gold.change` 等で定義する。`skill.action`（actor、action）は登録行動の発生を記録する。訓練の新施設を全町に一括配置したものではない。
 
