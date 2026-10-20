@@ -1,3 +1,5 @@
+import {expeditionFieldPlan,applyExpeditionField} from './expedition-field.js';
+import {EXPEDITION_FIELD_APIS} from './expedition-field-apis.js';
 import {purchasedGrants} from './expedition.js';
 import {effectiveSkill,recordSkillUse,skillLevel} from './skill-levels.js';
 import {scoutingPlan,applyScouting} from './scouting.js';
@@ -9,7 +11,7 @@ import {unequipGear} from './equipment.js';
 import {fireSkillPlan,kindlePortable} from './systems/fire-network.js';
 import {buffStats} from './buffs.js';
 export const STAT_KEYS=['hp','mp','str','vit','agi','int'];
-export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_APIS]);
+export const FIELD_APIS=new Set(['map.reveal','inventory.convert','fire.kindling','wall.break','archive.unlock','party.heal','voxel.traverse','water.traverse','party.dry',...SCOUT_APIS,...EXPEDITION_FIELD_APIS]);
 export const SKILL_EFFECTS=new Set(['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','stun','purge_undead','frontline_remove','frontline_knockback']);
 const owns=(obj,key)=>typeof key==='string'&&Object.hasOwn(obj??{},key);
 export const actorJob=(data,state,id)=>data.jobs?.[state.actors[id]?.job]??null;
@@ -112,6 +114,7 @@ export function fieldActionPlan(data,state,id,abilityId,target){
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
   if(['wall.break','archive.unlock','voxel.traverse','water.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const scouting=SCOUT_APIS.includes(ability.api)?scoutingPlan(data,state,id,ability,target):{};if(scouting.ok===false)return scouting;
+  const expedition=EXPEDITION_FIELD_APIS.includes(ability.api)?expeditionFieldPlan(data,state,ability):{};if(expedition.ok===false)return expedition;
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){
@@ -119,7 +122,7 @@ export function fieldActionPlan(data,state,id,abilityId,target){
     inventory[item]=(inventory[item]??0)+count;
     if(inventory[item]>data.system.maxStack)return {ok:false,reason:`${data.items[item].name}の袋が満杯です。`};
   }
-  return {ok:true,ability,inventory,usedLevel:skillLevel(state,id,abilityId),...scouting};
+  return {ok:true,ability,inventory,usedLevel:skillLevel(state,id,abilityId),...scouting,...expedition};
 }
 export function fieldAction(engine,id,abilityId,target){
   const plan=fieldActionPlan(engine.data,engine.state,id,abilityId,target);if(!plan.ok){engine.notify(plan.reason);return false;}
@@ -129,6 +132,7 @@ export function fieldAction(engine,id,abilityId,target){
   if(plan.ability.api==='fire.kindling'&&!kindlePortable(engine.data,engine.state,plan.ability.effect,engine)){recordSkillUse(engine,id,abilityId);return true;}
   if(plan.ability.api==='party.dry')for(const member of engine.state.members)removeStatus(engine.state.actors[member],'wet');
   if(plan.ability.api==='party.heal')for(const member of engine.state.members){const a=engine.state.actors[member];if(a.hp>0)a.hp=Math.min(engine.stats(member).hp,a.hp+plan.ability.amount);}
+  if(EXPEDITION_FIELD_APIS.includes(plan.ability.api))applyExpeditionField(engine,plan.ability,plan);
   recordSkillUse(engine,id,abilityId);
   if(SCOUT_APIS.includes(plan.ability.api))applyScouting(engine,id,plan.ability,plan);
   engine.eventCue(plan.ability.cue);engine.notify(`${engine.data.actors[id].name}は${plan.ability.name}を使いました。`);return true;

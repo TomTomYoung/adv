@@ -84,6 +84,28 @@ try{
   assert.ok(await lesson('受け流しの号令').evaluate(card=>card.querySelector('h3').getBoundingClientRect().width>=card.getBoundingClientRect().width*.9),'lesson heading uses the card width');
   await lesson('受け流しの号令').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`training-${layout}-${width}.png`)});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'training shop horizontal overflow');
+  // Purchased exploration lessons appear in character field actions, never in battle actions.
+  await page.evaluate(()=>{g.dispatch({type:'job.change',actor:'sera',job:'lantern_keeper'});g.give('bow',1);g.dispatch({type:'equip',actor:'nio',item:'bow'});g.healAll();view.skillShopActor='sera';show();});
+  await lesson('節油の種火').getByRole('button',{name:/Lv1を習得/}).click();
+  await page.evaluate(()=>{view.skillShopActor='nio';show();});
+  await lesson('帰路測定').getByRole('button',{name:/Lv1を習得/}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.learned.nio.exp_route_survey),1);
+  await page.evaluate(()=>{g.data.system.encounterCheckSteps=100000;g.teleport('kagaribi_f3',5,1,'east');refreshView();view.tab='party';view.partySelection={party:'sera'};view.partyPages={party:'magic'};show();});
+  await page.locator('.profile-entry').filter({has:page.getByRole('heading',{name:/^節油の種火/})}).getByRole('button',{name:'使う',exact:true}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.oilSaving.remaining),60);
+  await page.screenshot({path:path.join(output,`oil-skill-${layout}-${width}.png`)});
+  await page.locator('[data-focus="roster:party:nio"]').click();await page.getByRole('button',{name:'スキル',exact:true}).click();
+  await page.locator('.profile-entry').filter({has:page.getByRole('heading',{name:/^帰路測定/})}).getByRole('button',{name:'使う',exact:true}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.route.path.length-1),2);
+  assert.equal(await page.evaluate(()=>g.skills('nio').includes('exp_route_survey')),false);
+  await page.getByRole('button',{name:layout==='scene'?'閉じる':'探索',exact:true}).click();
+  await openCamp(page,'帰路測定');await page.screenshot({path:path.join(output,`route-${layout}-${width}.png`)});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'route horizontal overflow');
+  await page.getByRole('button',{name:'対象一覧へ戻る',exact:true}).click();await page.getByRole('button',{name:'離れる',exact:true}).click();
+  await page.getByRole('button',{name:'後ろへ',exact:true}).click();
+  assert.equal(await page.evaluate(()=>g.state.expedition.route.path.length-1),1);assert.equal(await page.evaluate(()=>g.state.expedition.oilSaving.remaining),59);
+  await page.evaluate(()=>{const saved=g.save();g.load(saved);show();});
+  await openCamp(page,'節油の種火');await page.screenshot({path:path.join(output,`oil-remaining-${layout}-${width}.png`)});
   await page.close();console.log(`EXPEDITION BROWSER OK: ${layout} ${width}`);
  }
  assert.deepEqual(errors,[]);

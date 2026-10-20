@@ -37236,6 +37236,12 @@ export const referenceData={
       },
       "recon": {
         "name": "偵察"
+      },
+      "exp_oil_spark": {
+        "name": "節油の種火"
+      },
+      "exp_route_survey": {
+        "name": "帰路測定"
       }
     },
     "characters": {
@@ -62701,6 +62707,20 @@ export const referenceData={
       "path": [
         "fieldAbilities",
         "recon"
+      ]
+    },
+    "fieldAbilities/exp_oil_spark": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "exp_oil_spark"
+      ]
+    },
+    "fieldAbilities/exp_route_survey": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "exp_route_survey"
       ]
     },
     "buffs/battle_cry": {

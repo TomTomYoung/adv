@@ -1,3 +1,4 @@
+import {oilStepSaved} from '../expedition-field.js';
 import {managesOil,oilFuelPlan} from '../expedition-oil.js';
 import {ignitionReason,attemptIgnition,activeFireHazards} from '../fire-hazards.js';
 import {edgeBetween} from '../edge-layers.js';
@@ -173,7 +174,7 @@ export const fireNetwork={
   },
   leave:ctx=>{ctx.persistent.ember=ctx.run.ember?{...ctx.run.ember}:null;ctx.state.inventory[ctx.spec.portable.item]=0;},
   step:ctx=>{
-    burn(ctx.run.portable,ctx.spec.portable.capacity,ctx.spec.portable.warnings,t=>ctx.engine.notify(t),'携帯松明');
+    if(!oilStepSaved(ctx.engine))burn(ctx.run.portable,ctx.spec.portable.capacity,ctx.spec.portable.warnings,t=>ctx.engine.notify(t),'携帯松明');
     // Nearby flames can go out in view even before the party reaches their cell.
     for(const f of ctx.spec.fixtures){const nearby=closeTo(ctx,f,'here-or-front');burn(ctx.persistent.fixtures[f.id],f.capacity,[],t=>{if(nearby)ctx.engine.notify(t);},f.name);}
   },

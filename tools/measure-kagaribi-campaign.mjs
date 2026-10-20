@@ -31,15 +31,15 @@ export function campaignGridMove(g,a){
  return null;
 }
 export class Campaign {
- constructor({seed=1907,size=4,mode='classic',optional=true,training=false}={}){
-  this.options={seed,size,mode,optional,training};this.g=new GameEngine(data,seed);drain(this.g);
+ constructor({seed=1907,size=4,mode='classic',optional=true,training=false,fieldTraining=false}={}){
+  this.options={seed,size,mode,optional,training,fieldTraining};this.g=new GameEngine(data,seed);drain(this.g);
   this.report={...this.options,skillUses:{},checkpoints:[],battles:[],purchases:[],consumed:{},mpSpent:0,rests:0,spentGold:0,spentGems:0,minOil:180};
   this.visited=new Set();this.supplying=false;
  }
  act(intent){
   const g=this.g,before={gold:g.state.gold,item:g.state.inventory[intent.item]??0};
   assert.ok(g.dispatch(intent),JSON.stringify({intent,notice:g.state.notice,location:g.state.location,waiting:g.state.waiting}));
-  if(intent.type==='battle'&&intent.action==='skill')this.report.skillUses[intent.skill]=(this.report.skillUses[intent.skill]??0)+1;
+  if(intent.type==='battle'&&intent.action==='skill'||intent.type==='job.action'){const id=intent.skill??intent.ability;this.report.skillUses[id]=(this.report.skillUses[id]??0)+1;}
   if(intent.type==='item'||intent.type==='battle'&&intent.action==='item')this.report.consumed[intent.item]=(this.report.consumed[intent.item]??0)+Math.max(0,before.item-(g.state.inventory[intent.item]??0));
   this.report.spentGold+=Math.max(0,before.gold-g.state.gold);drain(g);
   if(intent.type==='move'&&intent.direction==='forward'&&g.state.mode==='dungeon'&&g.state.expedition.managed)this.report.minOil=Math.min(this.report.minOil,oilTotal(data,g.state));
@@ -80,6 +80,7 @@ export class Campaign {
  }
  upkeep(){
   const g=this.g;if(g.state.waiting||g.state.battle||g.state.quests.q001.stage!=='completed')return;
+  if(this.options.fieldTraining&&g.state.expedition.learned.sera?.exp_oil_spark&&!this.report.skillUses.exp_oil_spark&&g.state.actors.sera.mp>=18)this.act({type:'job.action',actor:'sera',ability:'exp_oil_spark'});
   const lamp=g.state.dungeons.active?.systems.fires.portable;
   if(lamp&&lamp.fuel<15&&g.state.expedition.reserve>0)this.act({type:'dungeon.action',system:'fires',action:lamp.lit?'refuel':'ignite',target:'portable'});
   for(const id of g.state.members){const a=g.state.actors[id];if(a.statuses.includes('poison')&&g.state.inventory.antidote>0)this.act({type:'item',item:'antidote',actor:id});if(a.hp>0&&a.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0)this.act({type:'item',item:'potion',actor:id});}
@@ -125,11 +126,12 @@ export class Campaign {
  }
  town(){
   const g=this.g;this.exit();goTownLocation(g,'hikarigaeri_tavern');
+  if(this.options.fieldTraining&&g.state.expedition.camps.kagaribi_relay?.relay&&g.state.actors.sera.job!=='lantern_keeper')this.act({type:'job.change',actor:'sera',job:'lantern_keeper'});
   if(g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp||g.state.actors[id].mp<g.stats(id).mp)){this.act({type:'service',id:'inn'});this.report.rests++;}
   goTownLocation(g,'hikarigaeri_shop');
   if(g.state.expedition.camps.kagaribi_crossroads?.supply){
-   for(const actor of g.state.members){const item=`exp_t1_${weapons[actor]}`;if(g.state.actors[actor].equipment.weapon===item)continue;if(g.state.gold<124)break;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
-   for(const [actor,skill] of this.options.training?[['ada','exp_second_breath'],['sera','exp_purging_pursuit']]:[['ada','exp_row_sweep'],['il','exp_chain_flame'],['sera','exp_paired_aid']])if(!g.state.expedition.learned[actor]?.[skill]&&g.state.expedition.gems>=data.expedition.products[skill].price){const before=g.state.expedition.gems;if(g.dispatch({type:'skill.buy',actor,skill,level:1})){this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor,skill});}}
+   for(const actor of g.state.members){const item=`exp_t1_${this.options.fieldTraining&&actor==='nio'?'bow':weapons[actor]}`;if(g.state.actors[actor].equipment.weapon===item)continue;if(g.state.gold<124)break;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
+   for(const [actor,skill] of this.options.fieldTraining?[['sera','exp_oil_spark'],['nio','exp_route_survey']]:this.options.training?[['ada','exp_second_breath'],['sera','exp_purging_pursuit']]:[['ada','exp_row_sweep'],['il','exp_chain_flame'],['sera','exp_paired_aid']])if(!g.state.expedition.learned[actor]?.[skill]&&g.state.expedition.gems>=data.expedition.products[skill].price){const before=g.state.expedition.gems;if(g.dispatch({type:'skill.buy',actor,skill,level:1})){this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor,skill});}}
   }
   for(const actor of g.state.members){const item=actor==='berg'?'mail':['sera','il'].includes(actor)?'robe':'leather';if(g.state.actors[actor].equipment.armor===item||!g.state.expedition.camps.kagaribi_crossroads?.supply||g.state.gold<204)continue;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
   for(const [item,n] of [['ration',3],['potion',3]])while((g.state.inventory[item]??0)<n&&g.state.gold>50)this.act({type:'buy',item});
@@ -158,6 +160,7 @@ export class Campaign {
   this.act({type:'travel',dungeon:'kagaribi'});this.go('kagaribi_f3',5,1);this.object('altar_keeper');this.choose('fight');assert.equal(g.state.flags.kagaribi.altarGuardianWon,true);this.supply();this.checkpoint('10F');this.town();
   goTownLocation(g,'hikarigaeri_shop');
   if(this.options.training){this.act({type:'job.change',actor:'ada',job:'knight'});const before=g.state.expedition.gems;this.act({type:'skill.buy',actor:'ada',skill:'exp_parry_command',level:1});this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor:'ada',skill:'exp_parry_command'});}
+  if(this.options.fieldTraining){goTownLocation(g,data.game.world.townRoot);this.act({type:'checkpoint.travel',camp:'kagaribi_central'});this.walk(5,1);this.act({type:'job.action',actor:'nio',ability:'exp_route_survey'});this.report.measuredReturnSteps=g.state.expedition.route.path.length-1;const steps=g.state.steps;this.walk(3,1);assert.equal(g.state.steps-steps,this.report.measuredReturnSteps);assert.equal(g.state.expedition.route.path.length,1);this.checkpoint('field training');this.town();goTownLocation(g,'hikarigaeri_shop');}
   this.act({type:'service',id:'kagaribi_weapon_exchange'});this.choose('sword');assert.equal(g.state.inventory.exp_t2_sword,1);this.checkpoint('returned');
   this.report.mpSpent=this.report.battles.reduce((n,b)=>n+b.mp,0);this.report.earnedGold=g.state.gold+this.report.spentGold-data.game.initial.gold;this.report.earnedGems=g.state.expedition.gems+this.report.spentGems;this.report.losses=g.state.records.losses;return this.report;
  }

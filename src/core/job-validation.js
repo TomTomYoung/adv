@@ -101,6 +101,7 @@ export function validateJobs(data){
   for(const [id,spec] of Object.entries(data.fieldAbilities??{})){for(const m of skillLevelDefinitionErrors(data,id,spec))fail(id,m);for(const a of levelVariants(spec)){
     for(const m of scoutDefinitionErrors(a))fail(id,m);
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
+    if(['party.oil_saving','camp.route'].includes(a.api)&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined||!Array.isArray(a.weaponTypes)||!a.weaponTypes.length||a.weaponTypes.some(w=>!profile.equipmentTypes.weapon.includes(w))))fail(id,'遠征教習の対象・武器が不正です');
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
     if(a.api==='voxel.traverse'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'立体移動技能が不正です');
