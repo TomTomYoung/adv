@@ -2,7 +2,7 @@
 
 2026-09-26: [q004の実移動](Q004_WORLD_ROUTE.md)を実装済み。
 
-作品版1.25.0、確認日2026-10-15。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
+作品版1.26.0、確認日2026-10-20。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
 
 ## 本文と人物
 
@@ -20,7 +20,7 @@
 
 [SCENARIO_MODEL_V11.md](SCENARIO_MODEL_V11.md)：q001〜q010・q201〜q210の人物・物品・所在・行為と結末条件。
 
-[EXPLORATION_AND_PROSE_1_11.md](EXPLORATION_AND_PROSE.md)：探索による到達・地の文の常体化、現行への更新と未接続の範囲。
+[EXPLORATION_AND_PROSE.md](EXPLORATION_AND_PROSE.md)：探索による到達・地の文の常体化、現行への更新と未接続の範囲。
 
 [QUEST_EVENTS.md](QUEST_EVENTS.md)：クエスト固有配置、出現条件と操作条件、調査記録、保存。
 
@@ -30,7 +30,7 @@
 
 [EVENT_CATALOG.md](EVENT_CATALOG.md)：全クエスト・共通マップの配置と強制戦闘の索引。
 
-[SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：JSON DSLの53命令・31式演算子、状態参照・保存。
+[SCRIPT_REFERENCE.md](SCRIPT_REFERENCE.md)：JSON DSLの65命令・31式演算子、状態参照・保存。
 
 ## 配置図と保守
 

@@ -1,6 +1,6 @@
 # JSON DSL 実装リファレンス
 
-更新日: 2026-09-25。作品版1.20.0の53命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
+更新日: 2026-10-20。作品版1.26.0の65命令・31式演算子を対象とします。実装は src/core/script.js と expression.js、検証は validation.js、エディター補助は data/schemas/ です。旧設計原本は[legacy](../legacy/2026-09-14/JSON_SCRIPT_SPEC.md)へ保存しました。
 
 JSONのデータと許可された式を実行します。任意JavaScript・YAML入力・関数名の文字列評価は受け付けません。
 
@@ -159,7 +159,7 @@ battle.startは勝利・逃走時に、それぞれon_win/on_escapeを実行し�
 
 ## 依頼を追加する
 
-既存q001.jsonを参考に、新しいid/title/client/brief/locations/outcomes/model/scriptsを用意し、マップに調査イベントを設け、game.files.questsへ登録します。通常のエンジンは件数を固定していません。本作の検査には納品要件として200件のassertがあるため、意図的な増量時はその期待値も更新します。
+既存q001.jsonを参考に、新しいid/title/client/brief/locations/outcomes/model/scriptsを用意し、マップに調査イベントを設け、game.files.questsへ登録します。新しい依頼IDを `authoring/quest-order.json` の `ids` にも加え、掲載順を定義します。検査は全定義と表示順の一致を確認し、件数を200件に固定しません。変更後は `npm run build:catalog` で表示順・カタログなどを生成し、`npm run check:docs` で文書と配布データの整合を確認します。
 
 locationsのroleが証拠キーの一覧にもなります（decision以外）。クエストの獲得証拠キーはそこへ登録してください。ビューはevidenceTotalで実際の調査地点数を表示します。証拠地点がない場面型は「相談・調査」と表示します。
 
@@ -167,7 +167,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 ## 保存互換性
 
-旧内容版の記録は移行せず、読込エラー時は新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
+作品版1.26.0では、同版の保存を継続し、正常な1.25.0の保存だけを検証後に移行します。それ以外の旧内容版や不正な保存は読み込まず、新規開始します。待機中の継続はscript IDとcommands配列内の位置を参照します。既存scriptの配列順序を変えると古い保存位置が別命令を指す可能性があります。配信済みの作品を構造変更する際はcontentVersionを変え、旧記録を明示的に拒否するか移行コードを追加してください。文章のみの修正なら位置は変わりません。
 
 ## 1.3.1の戦績と場面継続
 
@@ -183,7 +183,7 @@ locationsのroleが証拠キーの一覧にもなります（decision以外）�
 
 追加依頼の現在場面は `flags.quest.<id>.node`、固有の選択・発言・行動履歴も同じ名前空間へ保存します。`quests.<id>.stage/outcome` と同じ意味のフラグは作りません。反復はjump、完了済み再訪は結果の表示だけにします。outcomesの任意requiresはquest.complete時にも検査します。
 
-他依頼の旧命令列は一部残っていますが、旧内容版の読込には使用しません。q001は改訂4の命令列へ置き換えました。
+他依頼の旧命令列は一部残っていますが、未対応の内容版を読み込むための一般的な移行経路は提供しません。現行で対応する内容版の移行は、上記の保存互換性に従います。q001は改訂4の命令列へ置き換えました。
 
 ## 1.1.0の戦闘データ拡張
 

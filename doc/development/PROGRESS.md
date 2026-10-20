@@ -8,7 +8,7 @@
 
 基点の[全体検証](https://github.com/TomTomYoung/adv/actions/runs/38775633995)は1204試験成功・失敗0・スキップ0です。PR #112最終head `530b67502c173b92d5c041cef5b9567fcd31cddb` と基点masterは同一treeで、[操作](https://github.com/TomTomYoung/adv/actions/runs/38775097225)、[人物演出](https://github.com/TomTomYoung/adv/actions/runs/38775096936)、[配信更新](https://github.com/TomTomYoung/adv/actions/runs/38775097165)のChromium検証が成功しています。[Pages配信](https://github.com/TomTomYoung/adv/actions/runs/38775632800)も成功済みです。これは既存実装の確認で、文書整理後の実行結果とは分けます。
 
-文書整理後は、4生成元の構文検査、配布データから生成した22文書との完全一致、既存の文書配置・魔物カタログ試験2件が成功しました。現行111文書の参照4582件は固定SHAのGitHubファイル一覧と照合し、1165件の見出しアンカーと索引を確認しました。保存原文は既存20件と今回6件の計26件で、全SHA-256が一致しました。設定原稿237件と編集HTMLの対応も欠落0件です。最終コミットに対する全体CI結果は本整理PRのChecksと[Actions](https://github.com/TomTomYoung/adv/actions)を参照してください。公開版の通しプレイは今回実施していません。
+文書整理後は、4生成元の構文検査、配布データから生成した22文書との完全一致、既存の文書配置・魔物カタログ試験2件が成功しました。現行111文書の参照4583件は固定SHAのGitHubファイル一覧と照合し、1165件の見出しアンカーと索引を確認しました。保存原文は既存20件と今回6件の計26件で、全SHA-256が一致しました。設定原稿237件と編集HTMLの対応も欠落0件です。最終コミットに対する全体CI結果は本整理PRのChecksと[Actions](https://github.com/TomTomYoung/adv/actions)を参照してください。公開版の通しプレイは今回実施していません。
 
 旧途中PR [#88](https://github.com/TomTomYoung/adv/pull/88)は、29ファイルを現行実装と照合し、後続[#90](https://github.com/TomTomYoung/adv/pull/90)で要件が反映済みであることを確認して閉じました。作成時の本文・コミット・作業ブランチは保持しています。
 
