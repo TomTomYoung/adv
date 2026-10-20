@@ -23,9 +23,9 @@ const buffSources=(data,id)=>{
 function modifierCatalog(data,kind,{date}={}){
   const entries=Object.entries(data.buffs??{}).filter(([,def])=>buffKind(def)===kind);
   const title=kind==='buff'?'バフ一覧':'デバフ一覧',lines=[`# ${title}`,'',`更新日: ${date??'未記録'}。作品版${data.game.version}。全${entries.length}件。`,'',
-    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。',''];
+    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。持続の1ターンは、敵味方の混合AGIキューが一巡する全体ターンです。使用者だけの手番ではなく、全体ターン終了時に残り回数を1減らします。先制の各行動では減らしません。',''];
   for(const [id,def] of entries){
-    lines.push(`## ${def.name} (${id})`,'',`分類：${kind==='buff'?'バフ':'デバフ'}。`,`効果：${buffEffect(def)}。`,`持続：${def.turns}敵巡。`,`付与元：${buffSources(data,id).join(' / ')||'直接定義'}。`,'');
+    lines.push(`## ${def.name} (${id})`,'',`分類：${kind==='buff'?'バフ':'デバフ'}。`,`効果：${buffEffect(def)}。`,`持続：${def.turns}ターン。`,`付与元：${buffSources(data,id).join(' / ')||'直接定義'}。`,'');
   }
   return lines.join('\n').trimEnd()+'\n';
 }

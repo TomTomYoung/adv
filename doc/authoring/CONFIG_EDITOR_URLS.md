@@ -1,6 +1,6 @@
 # 設定編集HTMLのGitHub Pages URL一覧
 
-更新日: 2026-09-25。統合マップ編集と原稿別編集HTML全226件への直接リンクです。
+更新日: 2026-10-20。統合マップ編集と原稿別編集HTML全237件への直接リンクです。
 
 [設定一覧・検索画面](https://tomtomyoung.github.io/adv/config/index.html)
 
@@ -17,7 +17,7 @@
 3. [セル種の管理](https://tomtomyoung.github.io/adv/config/cell-layers.html?collection=presets) — `config/cell-layers.json` の共有設定
 4. [道具・商品の編集](https://tomtomyoung.github.io/adv/config/terrain-content.html) — `config/terrain-content.json`
 
-以下は原稿別の編集URLです。
+以下は原稿別の編集URLです。クエスト配置は固定ID順で掲載します。ゲーム内の表示番号・掲載順は `authoring/quest-order.json` で別に管理します。
 
 ## 物語
 
@@ -38,6 +38,7 @@
 
 1. [追加迷宮の道具・敵・命令](https://tomtomyoung.github.io/adv/config/dungeon-content.html) — `config/dungeon-content.json`
 2. [篝火の道具・敵・命令](https://tomtomyoung.github.io/adv/config/kagaribi-content.html) — `config/kagaribi-content.json`
+3. [給油設備・中継所・技能教習](https://tomtomyoung.github.io/adv/config/expedition-content.html) — `config/expedition-content.json`
 
 ## 隊・戦闘
 
@@ -270,6 +271,16 @@
 198. [q198 旅の終わりの道標](https://tomtomyoung.github.io/adv/config/quests/q198.events.html) — `config/quests/q198.events.json`
 199. [q199 帰らない依頼人](https://tomtomyoung.github.io/adv/config/quests/q199.events.html) — `config/quests/q199.events.json`
 200. [q200 帰還印の向こう側](https://tomtomyoung.github.io/adv/config/quests/q200.events.html) — `config/quests/q200.events.json`
+201. [q201 消された休み印](https://tomtomyoung.github.io/adv/config/quests/q201.events.html) — `config/quests/q201.events.json`
+202. [q202 片耳の合図](https://tomtomyoung.github.io/adv/config/quests/q202.events.html) — `config/quests/q202.events.json`
+203. [q203 油の底の水](https://tomtomyoung.github.io/adv/config/quests/q203.events.html) — `config/quests/q203.events.json`
+204. [q204 削れない帰還日](https://tomtomyoung.github.io/adv/config/quests/q204.events.html) — `config/quests/q204.events.json`
+205. [q205 灰を掻く音](https://tomtomyoung.github.io/adv/config/quests/q205.events.html) — `config/quests/q205.events.json`
+206. [q206 渡せなかった弁当](https://tomtomyoung.github.io/adv/config/quests/q206.events.html) — `config/quests/q206.events.json`
+207. [q207 二人で持つ測り竿](https://tomtomyoung.github.io/adv/config/quests/q207.events.html) — `config/quests/q207.events.json`
+208. [q208 誰のための消灯](https://tomtomyoung.github.io/adv/config/quests/q208.events.html) — `config/quests/q208.events.json`
+209. [q209 借り物の武勇](https://tomtomyoung.github.io/adv/config/quests/q209.events.html) — `config/quests/q209.events.json`
+210. [q210 火を待たない人](https://tomtomyoung.github.io/adv/config/quests/q210.events.html) — `config/quests/q210.events.json`
 
 ## 一覧の更新
 

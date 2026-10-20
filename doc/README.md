@@ -1,24 +1,22 @@
 # adv ドキュメント
 
-2026-10-15: [給油・中継所・技能教習を実装（1.26.0）](dungeons/EXPEDITION_IMPLEMENTATION.md)。9か所の修理設備、容量管理、途中出発、技能宝石と人物別教習を追加しました。
+現行説明の照合日: 2026-10-20。作品版1.26.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
-2026-10-15（4迷宮への拡張）: [4迷宮・各20FとLv30までの進行設計](dungeons/FOUR_DUNGEON_PROGRESSION_DESIGN.md)と[敵配置・武器・購入技能](battle/FOUR_DUNGEON_COMBAT_DESIGN.md)を追加しました。篝火・地下水道・塩哭きの廃坑・地下庭園の80階、成長と報酬、16編成・24深層敵・12主、9武器種の4段階更新、32技能・30職の購入先を設計しています。ゲーム未実装・試遊前の提案です。
+## 現在の実装と続く設計
 
-2026-10-15: [篝火の設備復旧・深層探索・宝石と技能の設計案](dungeons/KAGARIBI_PROGRESSION_DESIGN.md)を追加しました。給油キャンプと中継階、1F〜20Fの進行案、経験値・宝石・技能店、追加10依頼の報酬案をまとめています。採用する方向と初期数値案を分けており、ゲーム未実装です。
+[給油・中継所・技能教習](dungeons/EXPEDITION_IMPLEMENTATION.md)は既存4迷宮の9設備に接続済みです。容量180→270、無料給油、次回の中継出発、技能宝石、人物別12技能と9技能のLv2/Lv3購入を利用できます。
 
-2026-10-13: ねむり・必中・鈍重・狂暴化・暴発・クリティカル関連4種をLv1〜Lv3付きで追加しました。行動制御・暴発対象変更・命中と独立したクリティカル判定、戦闘限定の解除、状態Lv・期限・回復経過の保存、設定編集と両ビューに接続しています。未指定だった数値と持続条件は[状態一覧](battle/STATUS_CATALOG.md)と[共通仕様](battle/STATUS_EFFECTS.md)に暫定値として明記しました。
+[4迷宮・各20FとLv30までの進行設計](dungeons/FOUR_DUNGEON_PROGRESSION_DESIGN.md)と[敵・武器・購入技能の設計](battle/FOUR_DUNGEON_COMBAT_DESIGN.md)は、篝火・地下水道・廃坑・庭園の80階を対象とする後続計画です。共通機能の実装後も、階層増築・EXP曲線・24深層敵・12主・36武器・残る20購入技能・深層帰路は未実装です。[篝火単独の初案](dungeons/KAGARIBI_PROGRESSION_DESIGN.md)は設計経緯として保持します。
 
-2026-10-13: [状態異常カタログ](battle/STATUS_CATALOG.md)の既存9種のLv2・Lv3を実装しました。行動阻害6種はレベル別の自然回復、防御は被ダメージ50%・25%・0%に対応します。
+[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCの絵は未制作です。全210クエストのうち、物語内の全行動を実移動へ接続した範囲はq001〜q004・q201〜q210です。
 
-2026-10-12: [進入イベントとトラップ](dungeons/TRAPS_AND_HAZARDS.md)の4発生方式・9パッケージ・漏水／ガス漏れ、[状態異常](battle/STATUS_EFFECTS.md)の共通処理、[トレジャーとサービス](dungeons/DUNGEON_PACKAGES.md)を実装しました。既存の工具箱・町の施設へ適用し、保存・設定編集・生成へ接続しています。詳細は[検証記録](development/PROGRESS.md)を参照してください。
+[Grid](battle/GRID_BATTLE.md)と[Frontline](battle/FRONTLINE_BATTLE.md)はClassicと共存します。Frontlineの可変行数・戦闘不能者退避・排除・ノックバックまで実装し、本編の具体的な編成・技能・数値を調整する段階です。[状態異常](battle/STATUS_EFFECTS.md)のLv1〜Lv3、[斥候技能](battle/SCOUT_SKILLS.md)、先制・スタンも実装済みです。
 
-全体確認日: 2026-10-01。ダンジョン情報の更新日: 2026-10-10。作品版1.25.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[引き継ぎ](HANDOFF.md)から確認してください。
+[進入イベントとトラップ](dungeons/TRAPS_AND_HAZARDS.md)、[トレジャーとサービス](dungeons/DUNGEON_PACKAGES.md)は共通部品へ接続済みです。[火の仕様](dungeons/FIRE_SYSTEM.md)と[灯番](battle/LANTERN_KEEPER.md)では、現在の燃料処理と、火台・油の効果合成や油攻撃・生成などの採用仕様を区別しています。
 
-原稿を編集する場合は[統合マップ編集](../config/map.html)と[編集仕様・正本の案内](authoring/README.md)へ進みます。ゲーム用JSONは原稿から生成します。
+[ランダム生成器](dungeons/DUNGEON_GENERATION.md)は地形・セルの生成と[実ゲーム試遊](../dungeon-generation-preview.html)に対応します。階層別環境、仕掛け生成と成立検査、候補の保管・比較・採用、原稿一式出力は未完了です。
 
-2026-10-11: [火の仕様](dungeons/FIRE_SYSTEM.md)に、油が照明範囲・燃費・敵避けを担うこと、プレーン油、固定火台の基本バフ、希少な携行火台、初期松明と篝火の固定火台のくらがり避けを追加しました。通常生成時だけの効果合成、移火・給油時の火の効果維持、最後に給油した油の効果への上書きを基準にします。[灯番のクラス仕様](battle/LANTERN_KEEPER.md)では、油攻撃・油の回復や生成・MP種火の戦闘／探索での使い分けを定義しています。採用仕様・検討候補・現行実装を分けており、新仕様のゲーム実装は未対応です。
-
-2026-10-10: [ダンジョンのランダム生成仕様](dungeons/DUNGEON_GENERATION.md)を現在の部分実装へ合わせました。[統合確認画面](../dungeon-generation-preview.html)で地形・セルを生成し、候補の確認、味方・魔物の設定、実ゲームでの試遊と戦闘ができます。階層別の環境設定、仕掛けの生成と成立検査、候補の保管・比較一覧・採用、原稿一式の出力は未完了です。
+原稿の編集は[統合マップ編集](../config/map.html)と[編集仕様・正本の案内](authoring/README.md)へ進みます。設定JSONは237件で、ゲーム用JSONと文書は正本から生成します。
 
 ## 分野別の入口
 
@@ -26,7 +24,7 @@
 
 [world/README.md](world/README.md)：町の施設・場所のID、町と物語の移動。
 
-[scenarios/README.md](scenarios/README.md)：200クエスト、q001〜q010個別ページ、人物、イベント、JSON命令。
+[scenarios/README.md](scenarios/README.md)：210クエスト、q001〜q010個別ページ、人物、イベント、JSON命令。
 
 [battle/README.md](battle/README.md)：職業、仲間、魔物、戦闘・探索バランス。
 
@@ -40,6 +38,6 @@
 
 ## 文書の保守
 
-同じ仕様は担当分野の文書で更新し、現状と引き継ぎから参照します。完了済み作業を次工程へ残さず、過去の検証は実施日と対象版を保ちます。保存原文は書き換えません。
+同じ仕様は担当分野の本文を更新し、現状と引き継ぎから参照します。冒頭への日付付き追記だけで古い本文を残す更新は行いません。完了済み作業を次工程へ残さず、過去の検証は実施日と対象版を保ちます。保存原文は書き換えません。
 
 生成文書の配置は `tools/doc-layout.mjs` で管理します。文書のみの再集計は `npm run build:docs`、クエスト本文・配置図も更新する場合は `npm run build:catalog`、検査は `npm run check:docs` です。詳細は[保守と検証](development/README.md)を参照してください。

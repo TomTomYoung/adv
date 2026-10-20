@@ -54,7 +54,7 @@ const buffEffectText=(data,id)=>{
   const values=[];
   for(const [key,n] of Object.entries(b.stats??{}))values.push(`${statLabels[key]??key} ×${n}`);
   for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
-  values.push(`持続 ${b.turns}敵巡`);
+  values.push(`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };
 function effectCalculation(data,skillId,effect,prefix='計算式'){

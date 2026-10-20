@@ -1,6 +1,6 @@
 # 編集対象JSONと正本の対応
 
-更新日: 2026-09-25。設定編集UIの対象は `config/` 配下の226原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全226件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](../README.md)。
+更新日: 2026-10-20。設定編集UIの対象は `config/` 配下の237原稿JSONです。[使い方と仕様](CONFIG_EDITORS.md)、[全237件のPages URL](CONFIG_EDITOR_URLS.md)、[文書索引](../README.md)。
 
 魔物別宝箱の正本は [battle-rewards.json](../../config/battle-rewards.json)、編集画面は [battle-rewards.html](../../config/battle-rewards.html) です。各魔物の品と0〜1の確率を編集し、build:dungeonsでdata/enemies.jsonへ反映します。
 
@@ -18,7 +18,7 @@
 
 ## 直接編集する原稿
 
-編集したい内容：クエストの配置・起動・表示条件、調査用の会話と処理 / 編集・出力するJSON：`config/quests/q001.events.json` 〜 `config/quests/q200.events.json`（200件） / 対象の主な項目：`events`、`scripts`
+編集したい内容：クエストの配置・起動・表示条件、調査用の会話と処理 / 編集・出力するJSON：`config/quests/q001.events.json` 〜 `config/quests/q210.events.json`（210件） / 対象の主な項目：`events`、`scripts`
 
 編集したい内容：迷宮の基本設定、火・水・装置・接続、条件付きイベント / 編集・出力するJSON：`config/dungeons/*.json`（下記13件） / 対象の主な項目：基本項目、`maps`、`entries`、`systems`、`fieldEvents`
 
@@ -31,6 +31,8 @@
 編集したい内容：追加迷宮の道具・魔物・遭遇・状態・処理・商品 / 編集・出力するJSON：`config/dungeon-content.json` / 対象の主な項目：`items`、`enemies`、`encounters`、`statuses`、`scripts`、`shopGoods`。別原稿に上書きされる `maps` は編集先を案内
 
 編集したい内容：仲間と追加魔物 / 編集・出力するJSON：`config/entities.json` / 対象の主な項目：`actors`、`monsters`
+
+編集したい内容：給油設備・中継所・携行油・技能宝石・人物別教習 / 編集・出力するJSON：`config/expedition-content.json` / 対象の主な項目：`oil`、`shopLocation`、`camps`、`products`、`enemyGems`。対応する編集画面は [expedition-content.html](../../config/expedition-content.html)
 
 編集したい内容：職業・技能・探索特技・消費・効果・装備 / 編集・出力するJSON：`config/jobs.json` / 対象の主な項目：`jobs`、`skills`、`fieldAbilities`、`buffs`、`items`、`equipmentPatches`、`formulas`、`initialJobs`、`shopGoods`、`profile`、`skillCues`
 
@@ -72,6 +74,6 @@
 
 `data/` は生成結果です。画像・道具・人物・技能の候補やSchemaを読むために参照しますが、編集画面から `data/maps/`、`data/quests/`、`data/scripts/`、各データベースへ出力しません。`config/shared/catalog.js` と `reference-catalog.js` も生成索引で、編集対象ではありません。
 
-q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-1.mjs` と `stories-v11-2.mjs`、q021以降は `authoring/structures-*.mjs` / `scenarios-*.mjs` が本筋の正本です。人物の正本は `authoring/characters.mjs`。これらをJSON原稿へ自動変換する仕様ではありません。該当処理を選んだ場合は参照専用と表示します。
+q001は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-1.mjs` と `stories-v11-2.mjs`、q021〜q200は `authoring/structures-*.mjs` / `scenarios-*.mjs` が本筋の正本です。q201〜q210の本筋と追加20人の `castCards` は `authoring/stories-kagaribi.mjs` です。既存人物の正本は `authoring/characters.mjs`。これらをJSON原稿へ自動変換する仕様ではありません。該当処理を選んだ場合は参照専用と表示します。
 
 画像・音声のバイナリ制作、制作記録・ハッシュ・プロンプト、テスト用固定JSON、保存原文、互換セーブ、文献索引、`package.json`、生成済みSchemaと文書集計も対象外です。未知の原稿項目は保持し、必要に応じて補助のJSON取り込みで扱います。

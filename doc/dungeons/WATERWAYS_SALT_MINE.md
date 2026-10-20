@@ -30,4 +30,4 @@
 
 区画と接続は `config/connected-maps.json` と `config/dungeons/region_1.json`、廃坑は `config/dungeons/region_2.json`、セルは `config/cell-layers.json`、道具・技能は `config/dungeon-content.json` と `config/jobs.json` が正本です。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
 
-排水状態は `state.dungeons.persistent.region_1.systems.water.controls` に保存します。control IDごとのtrueが給水、falseが排水済みです。破壊壁は該当部品の永続状態 `broken`、装備個体は `state.gear` に保存します。旧内容版の移行は行いません。検査結果は[PROGRESS.md](../development/PROGRESS.md)を参照してください。
+排水状態は `state.dungeons.persistent.region_1.systems.water.controls` に保存します。control IDごとのtrueが給水、falseが排水済みです。破壊壁は該当部品の永続状態 `broken`、装備個体は `state.gear` に保存します。正常な1.25.0のセーブは1.26.0へ移行し、既存の状態を保持します。その他の内容版は移行対象外で、読込エラー時は新規開始します。検査結果は[PROGRESS.md](../development/PROGRESS.md)を参照してください。
