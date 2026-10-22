@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q003-逆流する鐘) ／ [シナリオ本文](#q003-逆流する鐘) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編9場面・3結末。
+作品版 1.28.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編9場面・3結末。
 
-<!-- quest-page-source:bbb665b7630d75a941dc4d27c27ae3f626e8e88462d6eb5848d1d7559d9b6b92 -->
+<!-- quest-page-source:5af8f6cb4c75f677799f683b2c4b679959d8f8b907de4b4ac3693451fcdf13f9 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -20,9 +20,9 @@ compromiseは鐘を高所へ運び、浮子との接続を失った代わりに�
 
 9本の移動行為を実装済み。選択時は出発の処理だけを確定し、目的のセル・施設へ実際に到着して場面を続ける。同行者と運搬物、移動中の保存を扱う。
 
-`alarm`：低所の鐘室。灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+`alarm`：低所の鐘室。灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
-`passage`：冠水しかけた通路。灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
+`passage`：冠水しかけた通路。灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
 
 `high`：高所の待避場。地下水道上層・待避場 (`hikarigaeri_waterwatch`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -128,7 +128,7 @@ compromiseは鐘を高所へ運び、浮子との接続を失った代わりに�
 
 逆流する鐘：決着の場。実行ID `q003_decision`、起動 `interact`、スクリプト `q003.v11.visit`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q003.stage"},"right":"active"},{"op":"eq","left":{"ref":"quests.q003.stage"},"right":"completed"}]}`。操作条件：`true`。
 
@@ -138,7 +138,7 @@ compromiseは鐘を高所へ運び、浮子との接続を失った代わりに�
 
 低い通路に残る通行人。実行ID `q003_passage`、起動 `interact`、スクリプト `q003.v11.visit`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"eq","left":{"ref":"quests.q003.stage"},"right":"active"}`。操作条件：`true`。
 
@@ -154,9 +154,9 @@ compromiseは鐘を高所へ運び、浮子との接続を失った代わりに�
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q003.json)。場面 9、結末 3。物語状態の改訂 2。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。逆流する鐘：決着の場。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。逆流する鐘：決着の場。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。低い通路に残る通行人。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。低い通路に残る通行人。現地イベント。
 
 参照施設: `high` → 地下水道上層・待避場 (`hikarigaeri_waterwatch`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -204,7 +204,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-entry`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ソラ。
 
@@ -212,7 +212,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 選択 `warn`: 低い通路へ向かい、残っている通行人に声を掛ける
 
-出発: `entry_warn`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `entry_warn`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`warning`](#q003--warning--冠水しかけた通路) へ進み、到着時の処理を確定します。
 
@@ -222,7 +222,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-safe`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ソラ。
 
@@ -252,7 +252,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-mechanism`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ソラ。
 
@@ -284,13 +284,13 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 選択 `agree`: 夜間の放水量を減らし、残りを時間分散する合意を取る
 
-出発: `reservoir_agree`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `reservoir_agree`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`test`](#q003--test--低所の鐘室) へ進み、到着時の処理を確定します。
 
 選択 `relay`: 放水は変えず、鐘室へ戻って鐘とソラを迎えに行く
 
-出発: `reservoir_relay`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `reservoir_relay`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`collect`](#q003--collect--低所の鐘室) へ進み、到着時の処理を確定します。
 
@@ -300,7 +300,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-test`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ソラ。
 
@@ -336,7 +336,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-warning`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 通行人たち。
 
@@ -362,7 +362,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 選択 `return`: 見張りに避難者を任せ、鐘室へ戻る
 
-出発: `evacuated_return`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `evacuated_return`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`safe`](#q003--safe--低所の鐘室) へ進み、到着時の処理を確定します。
 
@@ -372,7 +372,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 イベントID: `q003-S-collect`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ソラ。
 
@@ -454,7 +454,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 [q003-S-entry](#q003--entry--低所の鐘室) → [q003-S-warning](#q003--warning--冠水しかけた通路)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・鐘と浮子の点検室・B1 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・5F 鐘と浮子の点検室・B5 (`region_1_inspection`) / (5, 1) / イベント `q003_passage`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
 
 出発時の効果：
 
@@ -534,7 +534,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 [q003-S-reservoir](#q003--reservoir--宿屋裏の汚水槽) → [q003-S-test](#q003--test--低所の鐘室)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
 
 出発時の効果：
 
@@ -548,7 +548,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 [q003-S-reservoir](#q003--reservoir--宿屋裏の汚水槽) → [q003-S-collect](#q003--collect--低所の鐘室)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
 
 出発時の効果：
 
@@ -590,7 +590,7 @@ AI向け注釈: 以下の事実はq003を成立させる世界設定上の制約
 
 [q003-S-evacuated](#q003--evacuated--高所の待避場) → [q003-S-safe](#q003--safe--低所の鐘室)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (7, 1) / イベント `q003_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：探索隊のみ。
 
 出発時の効果：
 
@@ -745,7 +745,15 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
           "x": 1,
           "y": 1,
           "facing": "east"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.waterway.dryStairOpen"
+          },
+          "right": true
+        },
+        "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
       },
       {
         "id": "lower_inlet",
@@ -813,6 +821,23 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
           "x": 1,
           "y": 1,
           "side": "west"
+        }
+      },
+      {
+        "id": "inspection_stair",
+        "name": "点検室の保守階段",
+        "kind": "stairs",
+        "a": {
+          "map": "region_1_inspection",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
+        },
+        "b": {
+          "map": "region_1_f2",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
         }
       }
     ]
@@ -907,7 +932,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
 
 ### region_1_f1 の全マップJSON
 
-灯守の地下水道・上層・入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・1F 入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -935,7 +960,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
   ],
   "dungeon": "region_1",
   "id": "region_1_f1",
-  "name": "灯守の地下水道・上層・入口操作室",
+  "name": "灯守の地下水道・1F 入口操作室",
   "floor": 1,
   "tiles": [
     "###########",
@@ -1067,7 +1092,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
 
 ### region_1_canal_a の全マップJSON
 
-灯守の地下水道・上層・第一水路・B1、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・2F 第一水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1095,8 +1120,8 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_a",
-  "name": "灯守の地下水道・上層・第一水路",
-  "floor": 1,
+  "name": "灯守の地下水道・2F 第一水路",
+  "floor": 2,
   "tiles": [
     "###########",
     "#.........#",
@@ -1154,7 +1179,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
 
 ### region_1_landing の全マップJSON
 
-灯守の地下水道・上層・荷揚げ場・B1、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・3F 荷揚げ場・B3、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1182,8 +1207,8 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
   ],
   "dungeon": "region_1",
   "id": "region_1_landing",
-  "name": "灯守の地下水道・上層・荷揚げ場",
-  "floor": 1,
+  "name": "灯守の地下水道・3F 荷揚げ場",
+  "floor": 3,
   "tiles": [
     "#################",
     "#.........#######",
@@ -1195,7 +1220,32 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
     "#.....###.#.....#",
     "#################"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1245,7 +1295,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
 
 ### region_1_canal_b の全マップJSON
 
-灯守の地下水道・上層・排水支路・B1、11×7セル。[配布JSON](../../../data/maps/region_1_canal_b.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・4F 排水支路・B4、11×7セル。[配布JSON](../../../data/maps/region_1_canal_b.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1273,8 +1323,8 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_b",
-  "name": "灯守の地下水道・上層・排水支路",
-  "floor": 1,
+  "name": "灯守の地下水道・4F 排水支路",
+  "floor": 4,
   "tiles": [
     "###########",
     "#.........#",
@@ -1284,7 +1334,32 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 5,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_canal_b.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1332,7 +1407,7 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
 
 ### region_1_inspection の全マップJSON
 
-灯守の地下水道・上層・鐘と浮子の点検室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_inspection.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・5F 鐘と浮子の点検室・B5、11×9セル。[配布JSON](../../../data/maps/region_1_inspection.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1360,8 +1435,8 @@ agreementとtestedを混同しない。鐘と浮子の故障を原因として�
   ],
   "dungeon": "region_1",
   "id": "region_1_inspection",
-  "name": "灯守の地下水道・上層・鐘と浮子の点検室",
-  "floor": 1,
+  "name": "灯守の地下水道・5F 鐘と浮子の点検室",
+  "floor": 5,
   "tiles": [
     "###########",
     "#.........#",

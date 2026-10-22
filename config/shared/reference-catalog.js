@@ -1295,7 +1295,7 @@ export const referenceData={
       "schemaVersion": 1,
       "id": "region_1",
       "name": "灯守の地下水道",
-      "description": "水密扉で仕切られた地下水道。浅瀬、深い水路、底の見えない溜まりに沿って岸を進み、荷揚げ場の地下関所へ向かう。",
+      "description": "給排水盤で水路を排水し、岸をたどる1〜10Fの地下水道。4・7・10Fのポンプとリフトを復旧し、大水門の水門獣へ挑む。3F荷揚げ場の地下関所は従来どおり利用できる。",
       "region": 1,
       "recommendedLevel": 1,
       "profile": "classic",
@@ -1487,7 +1487,15 @@ export const referenceData={
                 "x": 1,
                 "y": 1,
                 "facing": "east"
-              }
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.waterway.dryStairOpen"
+                },
+                "right": true
+              },
+              "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れます。"
             },
             {
               "id": "lower_inlet",
@@ -1555,6 +1563,23 @@ export const referenceData={
                 "x": 1,
                 "y": 1,
                 "side": "west"
+              }
+            },
+            {
+              "id": "inspection_stair",
+              "name": "点検室の保守階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_1_inspection",
+                "x": 9,
+                "y": 7,
+                "facing": "north"
+              },
+              "b": {
+                "map": "region_1_f2",
+                "x": 9,
+                "y": 7,
+                "facing": "north"
               }
             }
           ]
@@ -4954,6 +4979,66 @@ export const referenceData={
     ]
   },
   "unresolvedReferences": [
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_landing",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_landing"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_canal_b",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_canal_b"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_canal_c",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_canal_c"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_lower_landing",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_lower_landing"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_gatehouse",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_gatehouse"
+    },
     {
       "file": "jobs.json",
       "path": [
@@ -16024,6 +16109,16 @@ export const referenceData={
       "id": "rope"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_sluice_beast",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -16360,6 +16455,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_landing",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_landing"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_canal_b",
         "background"
       ],
@@ -16431,6 +16538,18 @@ export const referenceData={
       ],
       "kind": "dungeons",
       "id": "region_1"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_canal_b",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_canal_b"
     },
     {
       "file": "connected-maps.json",
@@ -16636,6 +16755,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_f2",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.dry_stair_latch"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_canal_c",
         "background"
       ],
@@ -16712,6 +16843,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_canal_c",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_canal_c"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_lower_landing",
         "background"
       ],
@@ -16788,6 +16931,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_lower_landing",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_lower_landing"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_canal_d",
         "background"
       ],
@@ -16935,6 +17090,30 @@ export const referenceData={
       ],
       "kind": "dungeons",
       "id": "region_1"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_gatehouse",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.sluice_beast"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_gatehouse",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.supply_rope.region_1_gatehouse"
     },
     {
       "file": "dungeon-art.json",
@@ -17200,6 +17379,52 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "waterway_sluice_beast",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_sluice_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_sluice_beast",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_sluice_beast",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "gate_slam"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_sluice_beast",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -17284,6 +17509,17 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "salt_eater"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_sluice_guardian",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_sluice_beast"
     },
     {
       "file": "dungeon-content.json",
@@ -17440,6 +17676,62 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "wild_jackknife"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.dry_stair_latch",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        1,
+        "asset"
+      ],
+      "kind": "audio",
+      "id": "se_door"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.sluice_beast",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "waterway_sluice_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.sluice_beast",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        1,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
     },
     {
       "file": "dungeon-content.json",
@@ -18764,6 +19056,66 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "kagaribi_f3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        12,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        12,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_canal_b"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        13,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        13,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_canal_c"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        14,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_1"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        14,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_gatehouse"
     },
     {
       "file": "jobs.json",
@@ -29089,6 +29441,32 @@ export const referenceData={
       "id": "region_1_gatehouse"
     },
     {
+      "file": "dungeons/region_1.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_inspection"
+    },
+    {
+      "file": "dungeons/region_1.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_1_f2"
+    },
+    {
       "file": "dungeons/region_10.json",
       "path": [
         "entries",
@@ -36377,6 +36755,10 @@ export const referenceData={
       "kagaribi_ossuary_remnant": {
         "name": "納骨堂の残骸兵",
         "sprite": "skeleton"
+      },
+      "waterway_sluice_beast": {
+        "name": "水門獣",
+        "sprite": "monster_sluice_crocodile"
       }
     },
     "encounters": {
@@ -36694,6 +37076,9 @@ export const referenceData={
       },
       "kagaribi_ossuary_deep_pair": {
         "name": "kagaribi_ossuary_deep_pair"
+      },
+      "waterway_sluice_guardian": {
+        "name": "大水門の水門獣"
       }
     },
     "statuses": {
@@ -39831,7 +40216,7 @@ export const referenceData={
   "maps": {
     "region_1_f1": {
       "id": "region_1_f1",
-      "name": "灯守の地下水道・上層・入口操作室",
+      "name": "灯守の地下水道・1F 入口操作室",
       "width": 11,
       "height": 9,
       "dungeon": "region_1",
@@ -39846,7 +40231,7 @@ export const referenceData={
     },
     "region_1_f2": {
       "id": "region_1_f2",
-      "name": "灯守の地下水道・下層・操作室",
+      "name": "灯守の地下水道・6F 操作室",
       "width": 11,
       "height": 9,
       "dungeon": "region_1",
@@ -40098,7 +40483,7 @@ export const referenceData={
     },
     "region_1_canal_a": {
       "id": "region_1_canal_a",
-      "name": "灯守の地下水道・上層・第一水路",
+      "name": "灯守の地下水道・2F 第一水路",
       "width": 11,
       "height": 7,
       "dungeon": "region_1",
@@ -40113,7 +40498,7 @@ export const referenceData={
     },
     "region_1_landing": {
       "id": "region_1_landing",
-      "name": "灯守の地下水道・上層・荷揚げ場",
+      "name": "灯守の地下水道・3F 荷揚げ場",
       "width": 17,
       "height": 9,
       "dungeon": "region_1",
@@ -40128,7 +40513,7 @@ export const referenceData={
     },
     "region_1_canal_b": {
       "id": "region_1_canal_b",
-      "name": "灯守の地下水道・上層・排水支路",
+      "name": "灯守の地下水道・4F 排水支路",
       "width": 11,
       "height": 7,
       "dungeon": "region_1",
@@ -40143,7 +40528,7 @@ export const referenceData={
     },
     "region_1_inspection": {
       "id": "region_1_inspection",
-      "name": "灯守の地下水道・上層・鐘と浮子の点検室",
+      "name": "灯守の地下水道・5F 鐘と浮子の点検室",
       "width": 11,
       "height": 9,
       "dungeon": "region_1",
@@ -40158,7 +40543,7 @@ export const referenceData={
     },
     "region_1_canal_c": {
       "id": "region_1_canal_c",
-      "name": "灯守の地下水道・下層・給金箱の水路",
+      "name": "灯守の地下水道・7F 給金箱の水路",
       "width": 11,
       "height": 7,
       "dungeon": "region_1",
@@ -40173,7 +40558,7 @@ export const referenceData={
     },
     "region_1_lower_landing": {
       "id": "region_1_lower_landing",
-      "name": "灯守の地下水道・下層・棺の待避場",
+      "name": "灯守の地下水道・8F 棺の待避場",
       "width": 11,
       "height": 9,
       "dungeon": "region_1",
@@ -40188,7 +40573,7 @@ export const referenceData={
     },
     "region_1_canal_d": {
       "id": "region_1_canal_d",
-      "name": "灯守の地下水道・下層・避難水路",
+      "name": "灯守の地下水道・9F 避難水路",
       "width": 11,
       "height": 7,
       "dungeon": "region_1",
@@ -40203,7 +40588,7 @@ export const referenceData={
     },
     "region_1_gatehouse": {
       "id": "region_1_gatehouse",
-      "name": "灯守の地下水道・下層・奥の水門詰所",
+      "name": "灯守の地下水道・10F 奥の水門詰所",
       "width": 11,
       "height": 9,
       "dungeon": "region_1",
@@ -49597,6 +49982,8 @@ export const referenceData={
     "flags.region_8_f2_door_open",
     "flags.region_9_f1_door_open",
     "flags.region_9_f2_door_open",
+    "flags.waterway.dryStairOpen",
+    "flags.waterway.sluiceBeastWon",
     "flags.worldSceneEffects.q001.entry",
     "flags.worldSceneEffects.q001.old",
     "flags.worldSceneEffects.q001.outage",
@@ -50927,6 +51314,14 @@ export const referenceData={
       "name": "moving_village.exit",
       "file": "config/dungeon-content.json"
     },
+    "waterway.dry_stair_latch": {
+      "name": "waterway.dry_stair_latch",
+      "file": "config/dungeon-content.json"
+    },
+    "waterway.sluice_beast": {
+      "name": "waterway.sluice_beast",
+      "file": "config/dungeon-content.json"
+    },
     "cell.poison_step": {
       "name": "毒の沼地を踏んだ。",
       "file": "config/cell-layers.json"
@@ -50961,6 +51356,26 @@ export const referenceData={
     },
     "treasure.package.kagaribi_f3.supply_rope": {
       "name": "treasure.package.kagaribi_f3.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_1_landing.supply_rope": {
+      "name": "treasure.package.region_1_landing.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_1_canal_b.supply_rope": {
+      "name": "treasure.package.region_1_canal_b.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_1_canal_c.supply_rope": {
+      "name": "treasure.package.region_1_canal_c.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_1_lower_landing.supply_rope": {
+      "name": "treasure.package.region_1_lower_landing.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_1_gatehouse.supply_rope": {
+      "name": "treasure.package.region_1_gatehouse.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "treasure.package.kagaribi_oilstore.tools": {
@@ -61126,6 +61541,20 @@ export const referenceData={
         "moving_village.exit"
       ]
     },
+    "waterway.dry_stair_latch": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.dry_stair_latch"
+      ]
+    },
+    "waterway.sluice_beast": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.sluice_beast"
+      ]
+    },
     "kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -61499,6 +61928,13 @@ export const referenceData={
         "salt_eater"
       ]
     },
+    "enemies/waterway_sluice_beast": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_sluice_beast"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -61546,6 +61982,13 @@ export const referenceData={
       "path": [
         "encounters",
         "salt_eater_feeding"
+      ]
+    },
+    "encounters/waterway_sluice_guardian": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_sluice_guardian"
       ]
     },
     "actors/ada": {
@@ -67529,6 +67972,20 @@ export const referenceData={
       "path": [
         "scripts",
         "moving_village.exit"
+      ]
+    },
+    "scripts/waterway.dry_stair_latch": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.dry_stair_latch"
+      ]
+    },
+    "scripts/waterway.sluice_beast": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "waterway.sluice_beast"
       ]
     },
     "scripts/kagaribi.exit": {

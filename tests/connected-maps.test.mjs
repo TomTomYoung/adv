@@ -83,7 +83,7 @@ test('authoring rejects water behind open stairs, misplaced doors, a flooded ent
     d=>d.dungeons.region_1.entries.main.map='region_1_canal_a',
     d=>d.dungeons.region_1.systems.water.controls.filter(c=>c.id==='upper_gate').forEach(c=>c.map='region_1_canal_a'),
     d=>d.dungeons.region_1.systems.water.controls.filter(c=>c.id==='upper_gate').forEach(c=>c.map='region_1_gatehouse'),
-    d=>d.dungeons.region_1.systems.connections.links.pop(),
+    d=>{d.dungeons.region_1.systems.connections.links=d.dungeons.region_1.systems.connections.links.filter(l=>l.id!=='deep_outlet');},
     d=>d.dungeons.region_1.systems.connections.links[0].b.x=99
   ];
   for(const mutate of mutations){const content=structuredClone(data);mutate(content);assert.ok(validateContent(content).length);}

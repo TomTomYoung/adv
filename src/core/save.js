@@ -84,6 +84,14 @@ function preserveKagaribiRoutes(save){
   if(Object.keys(updates).length)s.flags.kagaribi={...old,...updates};
   return save;
 }
+function preserveWaterwayRoutes(save,migration){
+  if(migration.waterwayRevision!==1)return save;
+  const s=save.state,lower=['region_1_f2','region_1_canal_c','region_1_lower_landing','region_1_canal_d','region_1_gatehouse'];
+  if(lower.some(id=>s.discovered[id]?.length||s.location?.map===id)||s.expedition?.camps.water_lower?.supply){
+    (s.flags.waterway??={}).dryStairOpen=true;
+  }
+  return save;
+}
 function migrateContentSave(original,data){
   if(!isRecord(original))return original;
   if(original.contentVersion===data.game.version)return upgradeStoryRevisions(original,data);
@@ -92,14 +100,14 @@ function migrateContentSave(original,data){
     const legacy={...data,expedition:undefined,game:{...data.game,version:original.contentVersion}};
     const previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
-    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return migration.kagaribiRevision?preserveKagaribiRoutes(save):save;
+    const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return preserveWaterwayRoutes(migration.kagaribiRevision?preserveKagaribiRoutes(save):save,migration);
   }
-  if(migration.kagaribiRevision===1){
+  if(migration.kagaribiRevision===1||migration.waterwayRevision===1){
     const legacy={...data,game:{...data.game,version:original.contentVersion}};
     const previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
     const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;
-    return preserveKagaribiRoutes(save);
+    return preserveWaterwayRoutes(migration.kagaribiRevision===1?preserveKagaribiRoutes(save):save,migration);
   }
   if(migration.environmentRevision){
     // Validate the old version's system membership before adding only the missing state.
@@ -172,7 +180,7 @@ export function migrateSave(original,data){
     }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
-  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision||data.game.migrations?.[original?.contentVersion]?.waterwayRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;

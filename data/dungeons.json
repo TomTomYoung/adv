@@ -1380,7 +1380,7 @@
     "schemaVersion": 1,
     "id": "region_1",
     "name": "灯守の地下水道",
-    "description": "水密扉で仕切られた地下水道。浅瀬、深い水路、底の見えない溜まりに沿って岸を進み、荷揚げ場の地下関所へ向かう。",
+    "description": "給排水盤で水路を排水し、岸をたどる1〜10Fの地下水道。4・7・10Fのポンプとリフトを復旧し、大水門の水門獣へ挑む。3F荷揚げ場の地下関所は従来どおり利用できる。",
     "region": 1,
     "recommendedLevel": 1,
     "profile": "classic",
@@ -1572,7 +1572,15 @@
               "x": 1,
               "y": 1,
               "facing": "east"
-            }
+            },
+            "condition": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.waterway.dryStairOpen"
+              },
+              "right": true
+            },
+            "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
           },
           {
             "id": "lower_inlet",
@@ -1640,6 +1648,23 @@
               "x": 1,
               "y": 1,
               "side": "west"
+            }
+          },
+          {
+            "id": "inspection_stair",
+            "name": "点検室の保守階段",
+            "kind": "stairs",
+            "a": {
+              "map": "region_1_inspection",
+              "x": 9,
+              "y": 7,
+              "facing": "north"
+            },
+            "b": {
+              "map": "region_1_f2",
+              "x": 9,
+              "y": 7,
+              "facing": "north"
             }
           }
         ]

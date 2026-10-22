@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q004-二枚目の通行証) ／ [シナリオ本文](#q004-二枚目の通行証) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編14場面・3結末。
+作品版 1.28.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編14場面・3結末。
 
-<!-- quest-page-source:bbb665b7630d75a941dc4d27c27ae3f626e8e88462d6eb5848d1d7559d9b6b92 -->
+<!-- quest-page-source:5af8f6cb4c75f677799f683b2c4b679959d8f8b907de4b4ac3693451fcdf13f9 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -20,7 +20,7 @@
 
 9本の移動行為を実装済み。選択時は出発の処理だけを確定し、目的のセル・施設へ実際に到着して場面を続ける。同行者と運搬物、移動中の保存を扱う。
 
-`outside`：関所の外。灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+`outside`：関所の外。灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 `desk`：公開窓口。地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -152,7 +152,7 @@
 
 関所の外で待つイナ。実行ID `q004_decision`、起動 `interact`、スクリプト `q004.v11.visit`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q004.stage"},"right":"active"},{"op":"eq","left":{"ref":"quests.q004.stage"},"right":"completed"}]}`。操作条件：`true`。
 
@@ -168,7 +168,7 @@
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q004.json)。場面 14、結末 3。物語状態の改訂 2。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。関所の外で待つイナ。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。関所の外で待つイナ。現地イベント。
 
 参照施設: `desk` → 地下関所の詰所 (`waterway_checkpoint`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -214,7 +214,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 イベントID: `q004-S-entry`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: イナ。
 
@@ -404,7 +404,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 選択 `leave`: 姉妹と詰所を出て、関所の外へ戻る
 
-出発: `issued_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `issued_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`issued_outside`](#q004--issued_outside--関所の外) へ進み、到着時の処理を確定します。
 
@@ -414,7 +414,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 イベントID: `q004-S-issued_outside`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: イナ・イナの姉。
 
@@ -440,7 +440,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 選択 `leave`: 姉妹と詰所を出て、関所の外へ戻る
 
-出発: `fine_release_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `fine_release_leave`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`fine_outside`](#q004--fine_outside--関所の外) へ進み、到着時の処理を確定します。
 
@@ -450,7 +450,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 イベントID: `q004-S-fine_outside`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: イナ・イナの姉。
 
@@ -510,7 +510,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 選択 `escort`: 姉を連れて受付を抜け、関所の外へ戻る
 
-出発: `force_freed_escort`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `force_freed_escort`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 この選択は出発処理だけを確定します。町では目的の施設へ入り、ダンジョンでは目的セルを踏むと自動で [`force_outside`](#q004--force_outside--関所の外) へ進み、到着時の処理を確定します。
 
@@ -520,7 +520,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 イベントID: `q004-S-force_outside`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: イナ・イナの姉。
 
@@ -752,7 +752,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 [q004-S-issued](#q004--issued--公開窓口) → [q004-S-issued_outside](#q004--issued_outside--関所の外)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナ (`ina`)・イナの姉 (`sister`)。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナ (`ina`)・イナの姉 (`sister`)。
 
 出発時の効果：
 
@@ -772,7 +772,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 [q004-S-fine_release](#q004--fine_release--公開窓口) → [q004-S-fine_outside](#q004--fine_outside--関所の外)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナ (`ina`)・イナの姉 (`sister`)。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナ (`ina`)・イナの姉 (`sister`)。
 
 出発時の効果：
 
@@ -800,7 +800,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 [q004-S-force_freed](#q004--force_freed--留置室) → [q004-S-force_outside](#q004--force_outside--関所の外)。条件 `true`。費用：なし。一度だけ確定する。
 
-移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナの姉 (`sister`)。
+移動先：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 5) / イベント `q004_decision`。[ダンジョン定義](../../../data/dungeons.json)。同行者：イナの姉 (`sister`)。
 
 出発時の効果：
 
@@ -979,7 +979,15 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
           "x": 1,
           "y": 1,
           "facing": "east"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.waterway.dryStairOpen"
+          },
+          "right": true
+        },
+        "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
       },
       {
         "id": "lower_inlet",
@@ -1047,6 +1055,23 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
           "x": 1,
           "y": 1,
           "side": "west"
+        }
+      },
+      {
+        "id": "inspection_stair",
+        "name": "点検室の保守階段",
+        "kind": "stairs",
+        "a": {
+          "map": "region_1_inspection",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
+        },
+        "b": {
+          "map": "region_1_f2",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
         }
       }
     ]
@@ -1141,7 +1166,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 ### region_1_f1 の全マップJSON
 
-灯守の地下水道・上層・入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・1F 入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1169,7 +1194,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_f1",
-  "name": "灯守の地下水道・上層・入口操作室",
+  "name": "灯守の地下水道・1F 入口操作室",
   "floor": 1,
   "tiles": [
     "###########",
@@ -1301,7 +1326,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 ### region_1_canal_a の全マップJSON
 
-灯守の地下水道・上層・第一水路・B1、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・2F 第一水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1329,8 +1354,8 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_a",
-  "name": "灯守の地下水道・上層・第一水路",
-  "floor": 1,
+  "name": "灯守の地下水道・2F 第一水路",
+  "floor": 2,
   "tiles": [
     "###########",
     "#.........#",
@@ -1388,7 +1413,7 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
 
 ### region_1_landing の全マップJSON
 
-灯守の地下水道・上層・荷揚げ場・B1、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・3F 荷揚げ場・B3、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1416,8 +1441,8 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_landing",
-  "name": "灯守の地下水道・上層・荷揚げ場",
-  "floor": 1,
+  "name": "灯守の地下水道・3F 荷揚げ場",
+  "floor": 3,
   "tiles": [
     "#################",
     "#.........#######",
@@ -1429,7 +1454,32 @@ AI向け注釈: 以下の事実はq004を成立させる世界設定上の制約
     "#.....###.#.....#",
     "#################"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
