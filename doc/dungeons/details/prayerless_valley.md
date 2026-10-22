@@ -1,6 +1,6 @@
 # 祈りの届かない谷
 
-更新日: 2026-10-20。作品版1.27.0。ID `prayerless_valley`、推奨Lv.10、1区画。
+更新日: 2026-10-22。作品版1.27.0。ID `prayerless_valley`、推奨Lv.10、1区画。
 
 [ダンジョンカタログ](../DUNGEON_CATALOG.md) ／ [専用ページ一覧](README.md) ／ [探索文書](../README.md)
 
